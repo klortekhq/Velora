@@ -456,7 +456,7 @@ private fun CredentialsLoginContent(
                     )
                 ) {
                     Text(
-                        text = if (isAuthenticating) "Authenticating..." else "Login",
+                        text = if (isAuthenticating) "Autenticando…" else "Iniciar sesión",
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -481,7 +481,7 @@ private fun CredentialsLoginContent(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     MobileText(
-                        text = if (isAuthenticating) "Authenticating..." else "Login",
+                        text = if (isAuthenticating) "Autenticando…" else "Iniciar sesión",
                         style = androidx.compose.material3.MaterialTheme.typography.labelLarge
                     )
                 }
@@ -832,7 +832,7 @@ private fun performCredentialsLogin(
     scope.launch {
         try {
             if (serverUrl.isBlank() || username.isBlank() || password.isBlank()) {
-                onError("Please fill in all fields")
+                onError("Rellena todos los campos")
                 return@launch
             }
 

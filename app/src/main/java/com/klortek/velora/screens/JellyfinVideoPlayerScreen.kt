@@ -3343,7 +3343,7 @@ fun JellyfinVideoPlayerScreen(
                                                     append(displayName)
                                                 }
                                             } else if (episodeNum != null) {
-                                                append("Episode ${episodeNum}")
+                                                append("Episodio ${episodeNum}")
                                                 if (displayName.isNotEmpty()) {
                                                     append(" · ")
                                                     append(displayName)
@@ -3549,7 +3549,7 @@ fun JellyfinVideoPlayerScreen(
                                         // Play/Pause button - DEFAULT FOCUS TARGET
                                         PlayerControlButton(
                                             icon = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                                            contentDescription = if (isPlaying) "Pause" else "Play",
+                                            contentDescription = if (isPlaying) "Pausa" else "Reproducir",
                                             size = if (isMobile) 64.dp else 48.dp,
                                             iconSize = if (isMobile) 32.dp else 24.dp,
                                             onClick = {
@@ -4479,7 +4479,7 @@ fun ExoPlayerSettingsMenu(
                     // Dialog title - changes based on current menu level
                     Text(
                         text = when (currentMenuLevel) {
-                            "subtitles" -> "Subtitles"
+                            "subtitles" -> "Subtítulos"
                             "audio" -> "Pistas de audio"
                             "speed" -> "Velocidad de reproducción"
                             "quality" -> "Calidad"
@@ -5254,7 +5254,7 @@ fun SubtitleSelectionDialog(
                     // "None" option
                     item {
                         SubtitleOptionItem(
-                            title = "None (Off)",
+                            title = "Ninguno (desactivados)",
                             isSelected = currentSubtitleIndex == null,
                             onClick = {
                                 onSubtitleSelected(null)

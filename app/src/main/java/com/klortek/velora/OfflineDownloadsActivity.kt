@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -59,6 +60,12 @@ class OfflineDownloadsActivity : ComponentActivity() {
     private fun OfflineDownloadsScreen(onBack: () -> Unit, onPlay: (OfflineDownload) -> Unit, onDelete: (OfflineDownload) -> Unit) {
         refresh
         val entries = OfflineDownloadManager.refresh(this)
+        LaunchedEffect(entries.any { !it.isComplete }) {
+            while (entries.any { !it.isComplete }) {
+                kotlinx.coroutines.delay(1500)
+                refresh++
+            }
+        }
         Column(Modifier.fillMaxSize().padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, "Atrás") }

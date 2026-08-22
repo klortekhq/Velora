@@ -196,7 +196,7 @@ fun TvSearchTextField(
     onQueryChange: (String) -> Unit,
     onQuerySubmit: () -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "Search...",
+    placeholder: String = "Buscar…",
     focusRequester: FocusRequester? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }

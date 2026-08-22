@@ -218,7 +218,7 @@ fun MpvControls(
                     // Play/Pause button - DEFAULT FOCUS TARGET
                     PlayerControlButton(
                         icon = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        contentDescription = if (isPlaying) "Pausa" else "Reproducir",
                         onClick = onPlayPause,
                         modifier = Modifier.focusRequester(playPauseFocusRequester)
                     )
@@ -334,9 +334,9 @@ fun MpvSettingsMenu(
                 ) {
                     Text(
                         text = when (currentMenuLevel) {
-                            "subtitles" -> "Subtitles"
+                            "subtitles" -> "Subtítulos"
                             "audio" -> "Pistas de audio"
-                            "speed" -> "Playback Speed"
+                            "speed" -> "Velocidad de reproducción"
                             else -> "Ajustes del reproductor"
                         },
                         style = MaterialTheme.typography.headlineMedium.copy(
@@ -365,7 +365,7 @@ fun MpvSettingsMenu(
                             ) {
                                 // Subtitles (Main)
                                 item {
-                                    val currentSubTrackName = subTracks.find { it.mpvId == selectedSub }?.name ?: "Off"
+                                    val currentSubTrackName = subTracks.find { it.mpvId == selectedSub }?.name ?: "Desactivados"
                                     androidx.tv.material3.ListItem(
                                         selected = false,
                                         onClick = { currentMenuLevel = "subtitles" },
@@ -381,7 +381,7 @@ fun MpvSettingsMenu(
                                                     modifier = Modifier.size(24.dp)
                                                 )
                                                 Text(
-                                                    text = "Subtitles",
+                                                    text = "Subtítulos",
                                                     style = MaterialTheme.typography.titleMedium.copy(
                                                         fontSize = MaterialTheme.typography.titleMedium.fontSize * 0.9f
                                                     )
@@ -401,7 +401,7 @@ fun MpvSettingsMenu(
                                 }
                                 // Audio (Main)
                                 item {
-                                    val currentAudioTrackName = audioTracks.find { it.mpvId == selectedAudio }?.name ?: "Default"
+                                    val currentAudioTrackName = audioTracks.find { it.mpvId == selectedAudio }?.name ?: "Predeterminado"
                                     androidx.tv.material3.ListItem(
                                         selected = false,
                                         onClick = { currentMenuLevel = "audio" },
@@ -450,7 +450,7 @@ fun MpvSettingsMenu(
                                                     modifier = Modifier.size(24.dp)
                                                 )
                                                 Text(
-                                                    text = "Playback Speed",
+                                                text = "Velocidad de reproducción",
                                                     style = MaterialTheme.typography.titleMedium.copy(
                                                         fontSize = MaterialTheme.typography.titleMedium.fontSize * 0.9f
                                                     )
@@ -519,7 +519,7 @@ fun MpvSettingsMenu(
                                         colors = listItemColors,
                                         headlineContent = {
                                             Text(
-                                                text = "None (Off)",
+                                                text = "Ninguno (desactivados)",
                                                 style = MaterialTheme.typography.bodyLarge.copy(
                                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
                                                 )
