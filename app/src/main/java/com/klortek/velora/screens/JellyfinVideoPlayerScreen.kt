@@ -1012,7 +1012,7 @@ fun JellyfinVideoPlayerScreen(
                                     com.klortek.velora.player.SubtitleMapper.buildLocalSubtitleConfiguration(
                                         filePath = downloadedSub.filePath,
                                         language = downloadedSub.language,
-                                        label = "${com.klortek.velora.subtitles.SubtitleLanguages.getDisplayName(downloadedSub.language)} (Downloaded)"
+                                        label = "${com.klortek.velora.subtitles.SubtitleLanguages.getDisplayName(downloadedSub.language)} (Descargado)"
                                     )
                                 } catch (e: Exception) {
                                     Log.w("JellyfinPlayer", "Failed to add downloaded subtitle ${downloadedSub.fileName}: ${e.message}")
@@ -5335,7 +5335,7 @@ fun SubtitleOptionItem(
         if (isSelected) {
             androidx.compose.material3.Icon(
                 imageVector = androidx.compose.material.icons.Icons.Default.Check,
-                contentDescription = "Selected",
+                contentDescription = "Seleccionado",
                 tint = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp).padding(end = 8.dp)
             )
@@ -5553,7 +5553,7 @@ fun SimpleOptionItem(
         if (isSelected) {
             androidx.compose.material3.Icon(
                 imageVector = Icons.Default.Check,
-                contentDescription = "Selected",
+                contentDescription = "Seleccionado",
                 tint = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp).padding(end = 8.dp)
             )

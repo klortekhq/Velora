@@ -235,7 +235,13 @@ private fun MobileHomeMediaRow(
                             Box(Modifier.align(Alignment.BottomStart).fillMaxWidth(progress).height(4.dp).background(MobileHomeCyan))
                         }
                     }
-                    Text(item.Name, color = Color.White, style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    val displayName = if (showProgress && !item.SeriesName.isNullOrBlank()) {
+                        val season = item.ParentIndexNumber?.let { "T$it" }.orEmpty()
+                        val episode = item.IndexNumber?.let { "E$it" }.orEmpty()
+                        val marker = listOf(season, episode).filter { it.isNotBlank() }.joinToString(" ")
+                        if (marker.isNotBlank()) "${item.SeriesName} · $marker\n${item.Name}" else "${item.SeriesName}\n${item.Name}"
+                    } else item.Name
+                    Text(displayName, color = Color.White, style = MaterialTheme.typography.bodySmall, maxLines = 3, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
