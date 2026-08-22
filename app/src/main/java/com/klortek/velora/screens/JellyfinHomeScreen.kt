@@ -126,6 +126,7 @@ import kotlinx.coroutines.withContext
 import com.klortek.velora.jellyfin.JellyfinItem
 import com.klortek.velora.jellyfin.JellyfinLibrary
 import com.klortek.velora.jellyfin.JellyfinRepository
+import com.klortek.velora.livetv.LiveTvClient
 import com.klortek.velora.continuewatching.ContinueWatchingDismissStore
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -231,6 +232,13 @@ fun JellyfinHomeScreen(
 
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
     val isMobileLayout = LocalConfiguration.current.screenWidthDp < 600
+    var showLiveTv by remember { mutableStateOf(false) }
+    LaunchedEffect(apiService, config.serverUrl, config.userId) {
+        showLiveTv = false
+        if (apiService != null && config.isConfigured()) {
+            showLiveTv = runCatching { LiveTvClient(config).getChannels().isNotEmpty() }.getOrDefault(false)
+        }
+    }
     // Show server entry screen if server URL is not configured
     if (showServerEntry) {
         ServerEntryScreen(
@@ -594,6 +602,21 @@ fun JellyfinHomeScreen(
     // Main content (navigation drawer removed due to performance issues - using tab bar instead)
     // Wrap with TV-optimized bring-into-view behavior for better focus handling
     if (isMobileLayout) {
+        if (selectedLibraryId != null) {
+            val selectedLibrary = libraries.firstOrNull { it.Id == selectedLibraryId }
+            if (selectedLibrary != null) {
+                MobileLibraryScreen(
+                    library = selectedLibrary,
+                    items = libraryItems[selectedLibrary.Id].orEmpty(),
+                    apiService = apiService,
+                    onBack = { selectedLibraryId = null },
+                    onItemClick = { item ->
+                        val resume = item.UserData?.PositionTicks?.div(10_000L) ?: 0L
+                        onItemClick(item, resume)
+                    }
+                )
+            }
+        } else {
         MobileHomeScreen(
             continueWatching = continueWatchingItems,
             recentMovies = mobileRecentMovies,
@@ -601,6 +624,7 @@ fun JellyfinHomeScreen(
             recentEpisodes = mobileRecentEpisodes,
             popular = mobilePopular,
             unwatched = mobileUnwatched,
+            libraries = libraries,
             apiService = apiService,
             onItemClick = { item ->
                 val resume = item.UserData?.PositionTicks?.div(10_000L) ?: 0L
@@ -608,8 +632,11 @@ fun JellyfinHomeScreen(
             },
             onSearch = { showSearch = true },
             onSettings = { showSettings = true },
-            onLiveTv = onLiveTvClick
+            onLiveTv = onLiveTvClick,
+            showLiveTv = showLiveTv,
+            onLibraryClick = { library -> selectedLibraryId = library.Id }
         )
+        }
     } else {
     TvBringIntoViewProvider {
     Box(Modifier.fillMaxSize()) {
@@ -1071,23 +1098,25 @@ fun JellyfinHomeScreen(
 
                 // Live TV is the single centralized entry point. It is placed
                 // after Películas/Series and never exposed as a separate IPTV tab.
-                TabRow(
-                    modifier = Modifier.padding(end = 14.dp),
-                    selectedTabIndex = -1,
-                    indicator = { _, _ -> }
-                ) {
-                    Tab(
-                        selected = false,
-                        onFocus = { },
-                        onClick = onLiveTvClick,
-                        colors = TabDefaults.underlinedIndicatorTabColors(),
-                        modifier = Modifier
+                if (showLiveTv) {
+                    TabRow(
+                        modifier = Modifier.padding(end = 14.dp),
+                        selectedTabIndex = -1,
+                        indicator = { _, _ -> }
                     ) {
-                        Text(
-                            text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.live_tv_nav),
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(end = 10.dp)
-                        )
+                        Tab(
+                            selected = false,
+                            onFocus = { },
+                            onClick = onLiveTvClick,
+                            colors = TabDefaults.underlinedIndicatorTabColors(),
+                            modifier = Modifier
+                        ) {
+                            Text(
+                                text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.live_tv_nav),
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(end = 10.dp)
+                            )
+                        }
                     }
                 }
             }

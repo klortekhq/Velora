@@ -103,6 +103,7 @@ class MpvTvPlayerActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enterImmersivePlayback()
         
         // Keep screen on
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -160,6 +161,23 @@ class MpvTvPlayerActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun enterImmersivePlayback() {
+        window.decorView.systemUiVisibility = (
+            android.view.View.SYSTEM_UI_FLAG_FULLSCREEN or
+                android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            )
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) enterImmersivePlayback()
     }
 
     override fun onPause() {
@@ -601,16 +619,28 @@ private fun MpvPlayerScreen(
                 // These are MPV runtime properties. setOptionString only changes
                 // startup options, so using it here made the button appear to
                 // cycle while the rendered video never changed.
-                fun setAspectOverride(value: String) =
+                fun setAspectOverride(value: String) {
                     MPVLib.setPropertyString("video-aspect-override", value)
-                fun setAspectMethod(value: String) =
+                    MPVLib.command(arrayOf("set", "video-aspect-override", value))
+                }
+                fun setAspectMethod(value: String) {
                     MPVLib.setPropertyString("video-aspect-method", value)
-                fun setPanScan(value: Double) =
+                    MPVLib.command(arrayOf("set", "video-aspect-method", value))
+                }
+                fun setPanScan(value: Double) {
                     MPVLib.setPropertyDouble("panscan", value)
-                fun setVideoUnscaled(value: Boolean) =
-                    MPVLib.setPropertyString("video-unscaled", if (value) "yes" else "no")
-                fun setKeepAspect(value: Boolean) =
-                    MPVLib.setPropertyString("keepaspect", if (value) "yes" else "no")
+                    MPVLib.command(arrayOf("set", "panscan", value.toString()))
+                }
+                fun setVideoUnscaled(value: Boolean) {
+                    val setting = if (value) "yes" else "no"
+                    MPVLib.setPropertyString("video-unscaled", setting)
+                    MPVLib.command(arrayOf("set", "video-unscaled", setting))
+                }
+                fun setKeepAspect(value: Boolean) {
+                    val setting = if (value) "yes" else "no"
+                    MPVLib.setPropertyString("keepaspect", setting)
+                    MPVLib.command(arrayOf("set", "keepaspect", setting))
+                }
 
                 when (currentAspectMode) {
                     AspectMode.FIT -> {

@@ -242,19 +242,10 @@ fun MpvControls(
 
                     Spacer(modifier = Modifier.width(32.dp))
 
-                    // CC (Subtitles) button - quick access to subtitles menu
-                    PlayerControlButton(
-                        icon = Icons.Filled.ClosedCaption,
-                        contentDescription = "Subtitles",
-                        onClick = { onOpenSettings("subtitles") }
-                    )
-
-                    Spacer(modifier = Modifier.width(32.dp))
-
-                    // Settings button
+                    // Unified playback settings: audio, subtitles, speed and quality.
                     PlayerControlButton(
                         icon = Icons.Filled.Settings,
-                        contentDescription = "Settings",
+                        contentDescription = "Ajustes de reproducción",
                         onClick = { onOpenSettings("main") }
                     )
                 }
