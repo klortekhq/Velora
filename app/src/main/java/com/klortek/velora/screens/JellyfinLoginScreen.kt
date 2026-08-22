@@ -126,7 +126,7 @@ fun JellyfinLoginScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Connecting to $serverName",
+                        text = "Conectando con $serverName",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -200,7 +200,7 @@ fun JellyfinLoginScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     MobileText(
-                        text = "Other options:",
+                        text = "Otras opciones:",
                         style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                         color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -217,7 +217,7 @@ fun JellyfinLoginScreen(
                                 enabled = !isAuthenticating,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                MobileText("Use Password", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                                MobileText("Usar contraseña", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                             }
                         }
 
@@ -230,7 +230,7 @@ fun JellyfinLoginScreen(
                                 enabled = !isAuthenticating,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                MobileText("Use QuickConnect", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                                MobileText("Usar Quick Connect", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                             }
                         }
 
@@ -247,7 +247,7 @@ fun JellyfinLoginScreen(
                             enabled = !isAuthenticating,
                             modifier = Modifier.weight(1f)
                         ) {
-                            MobileText("Cancel", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                                MobileText("Cancelar", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                         }
                     }
                 }
@@ -680,17 +680,17 @@ private fun QuickConnectLoginContent(
     val content = @Composable {
         // Instructions
         Text(
-            text = "Step 1: Open the Jellyfin app on your phone or browser",
+            text = "Paso 1: Abre Jellyfin en tu móvil o navegador",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "Step 2: Navigate to Quick Connect in user settings",
+            text = "Paso 2: Ve a Quick Connect en los ajustes de usuario",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "Step 3: Enter the code below",
+            text = "Paso 3: Introduce el código siguiente",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -704,7 +704,7 @@ private fun QuickConnectLoginContent(
 
         if (isPolling && quickConnectCode != null) {
             Text(
-                text = "Waiting for authorization...",
+                text = "Esperando autorización…",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                 modifier = Modifier.padding(top = 8.dp)
@@ -773,7 +773,7 @@ private fun QuickConnectCodeBox(
         }
     } else if (isUnavailable) {
         Text(
-            text = "QuickConnect unavailable",
+                text = "Quick Connect no disponible",
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.error,
             modifier = Modifier.padding(vertical = 16.dp)
@@ -791,7 +791,7 @@ private fun QuickConnectCodeBox(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Initializing...",
+                text = "Inicializando…",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

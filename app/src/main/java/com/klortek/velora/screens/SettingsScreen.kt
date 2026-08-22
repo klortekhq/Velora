@@ -1902,7 +1902,7 @@ fun SettingsScreen(
                             
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Animations",
+                                text = "Animaciones",
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
