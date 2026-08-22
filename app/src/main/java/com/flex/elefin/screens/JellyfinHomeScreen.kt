@@ -55,6 +55,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -367,6 +368,31 @@ fun JellyfinHomeScreen(
             repository.fetchRecentlyAddedShows()
             repository.fetchRecentlyAddedEpisodes()
             repository.fetchLibraries()
+        }
+    }
+
+    // Keep the saved session alive while Jellyfin is temporarily offline.
+    // Retry with exponential backoff instead of forcing the user through login again.
+    LaunchedEffect(repository, config.serverUrl) {
+        if (config.isConfigured() && repository != null) {
+            var retryDelayMs = 15_000L
+            while (isActive && repository.libraries.value.isEmpty()) {
+                delay(retryDelayMs)
+                if (!isActive) break
+
+                repository.fetchLibraries()
+                if (repository.libraries.value.isNotEmpty()) {
+                    repository.fetchContinueWatching()
+                    repository.fetchNextUp()
+                    repository.fetchRecentlyAddedMovies()
+                    repository.fetchRecentlyReleasedMovies()
+                    repository.fetchRecentlyAddedShows()
+                    repository.fetchRecentlyAddedEpisodes()
+                    break
+                }
+
+                retryDelayMs = (retryDelayMs * 2).coerceAtMost(5 * 60_000L)
+            }
         }
     }
     
