@@ -209,7 +209,7 @@ fun ItemDetailsSection(
             val directors = item.People?.filter { it.Type == "Director" }?.mapNotNull { it.Name } ?: emptyList()
             if (directors.isNotEmpty()) {
                 Text(
-                    text = "Director: ${directors.joinToString(", ")}",
+                    text = "Dirección: ${directors.joinToString(", ")}",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                     ),

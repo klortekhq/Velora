@@ -236,7 +236,7 @@ fun CastInfoScreen(
                                 personDetails?.birthDateValue?.let { birthDate ->
                                     val formattedDate = formatBirthDate(birthDate)
                                     Text(
-                                        text = "Born $formattedDate",
+                                        text = "Nacimiento: $formattedDate",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                     )
@@ -246,7 +246,7 @@ fun CastInfoScreen(
                                 personDetails?.deathDateValue?.let { deathDate ->
                                     val formattedDate = formatBirthDate(deathDate)
                                     Text(
-                                        text = "Died $formattedDate",
+                                        text = "Fallecimiento: $formattedDate",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                     )
@@ -321,7 +321,7 @@ fun CastInfoScreen(
                 if (tvShows.isNotEmpty()) {
                     item {
                         Text(
-                            text = "Shows",
+                                        text = "Series",
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.SemiBold,

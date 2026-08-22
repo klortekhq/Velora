@@ -145,7 +145,7 @@ fun SubtitleSelectorContentVertical(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Loading subtitles...",
+                text = "Cargando subtítulos...",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
@@ -166,7 +166,7 @@ fun SubtitleSelectorContentVertical(
                     },
                     headlineContent = {
                         Text(
-                            text = "None (Off)",
+                            text = "Ninguno (desactivados)",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     },
@@ -229,7 +229,7 @@ fun SubtitleSelectorContentVertical(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No subtitles available",
+                            text = "No hay subtítulos disponibles",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )

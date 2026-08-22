@@ -29,7 +29,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +71,6 @@ fun SearchScreen(
     showDebugOutlines: Boolean = false
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     var searchQuery by remember { mutableStateOf("") }
     var searchResults by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
@@ -97,13 +95,6 @@ fun SearchScreen(
                 searchQuery = spokenText
                 hasSubmittedSearch = true
                 focusManager.clearFocus(force = true)
-                // Trigger search automatically after voice input
-                scope.launch {
-                    performSearch(spokenText, apiService, jellyseerrApiService, jellyseerrSearchEnabled) { results ->
-                        searchResults = results
-                        isLoading = false
-                    }
-                }
             }
         }
     }
@@ -240,13 +231,6 @@ fun SearchScreen(
                             if (searchQuery.isNotBlank()) {
                                 hasSubmittedSearch = true
                                 focusManager.clearFocus(force = true)
-                                scope.launch {
-                                    isLoading = true
-                                    performSearch(searchQuery, apiService, jellyseerrApiService, jellyseerrSearchEnabled) { results ->
-                                        searchResults = results
-                                        isLoading = false
-                                    }
-                                }
                             }
                         }
                     ),
