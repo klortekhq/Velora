@@ -77,17 +77,6 @@ class MainActivity : ComponentActivity() {
                         initialTabAction = activeTabAction,
                         onTabActionHandled = { activeTabAction = null },
                         onItemClick = { item: JellyfinItem, resumePositionMs: Long ->
-                            // Check if this is a Jellyseerr item
-                            if (item.Id.startsWith("jellyseerr_")) {
-                                val tmdbId = item.Id.removePrefix("jellyseerr_").toIntOrNull()
-                                if (tmdbId != null) {
-                                    val mediaType = if (item.Type == "Series") "tv" else "movie"
-                                    val intent = JellyseerrDetailsActivity.createIntent(this@MainActivity, tmdbId, mediaType)
-                                    startActivity(intent)
-                                    return@JellyfinHomeScreen
-                                }
-                            }
-
                             // Route to appropriate details screen based on item type
                             val intent = when (item.Type) {
                                 "Series" -> {
@@ -138,6 +127,9 @@ class MainActivity : ComponentActivity() {
                         },
                         onLiveTvClick = {
                             startActivity(LiveTvActivity.createIntent(this@MainActivity))
+                        },
+                        onDownloadsClick = {
+                            startActivity(OfflineDownloadsActivity.createIntent(this@MainActivity))
                         },
                         onMusicClick = {
                             // Navigate to Music screen

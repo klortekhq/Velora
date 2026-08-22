@@ -42,6 +42,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         private const val EXTRA_SUBTITLE_STREAM_INDEX = "subtitle_stream_index"
         private const val EXTRA_AUDIO_STREAM_INDEX = "audio_stream_index"
         private const val EXTRA_IS_LIVE_TV = "is_live_tv"
+        private const val EXTRA_LOCAL_PATH = "local_path"
 
         fun createIntent(
             context: Context,
@@ -50,7 +51,8 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
             subtitleStreamIndex: Int? = null,
             audioStreamIndex: Int? = null,
             itemName: String? = null,
-            isLiveTv: Boolean = false
+            isLiveTv: Boolean = false,
+            localPath: String? = null
         ): Intent {
             return Intent(context, JellyfinVideoPlayerActivity::class.java).apply {
                 putExtra(EXTRA_ITEM_ID, itemId)
@@ -59,6 +61,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 audioStreamIndex?.let { putExtra(EXTRA_AUDIO_STREAM_INDEX, it) }
                 itemName?.let { putExtra(EXTRA_ITEM_NAME, it) }
                 putExtra(EXTRA_IS_LIVE_TV, isLiveTv)
+                localPath?.let { putExtra(EXTRA_LOCAL_PATH, it) }
             }
         }
     }
@@ -116,6 +119,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
 
         val itemId = intent.getStringExtra(EXTRA_ITEM_ID) ?: return
         val itemName = intent.getStringExtra(EXTRA_ITEM_NAME) ?: ""
+        val localPath = intent.getStringExtra(EXTRA_LOCAL_PATH)
         val isLiveTv = intent.getBooleanExtra(EXTRA_IS_LIVE_TV, false)
         val resumePositionMs = intent.getLongExtra(EXTRA_RESUME_POSITION_MS, 0L)
         val subtitleStreamIndex = if (intent.hasExtra(EXTRA_SUBTITLE_STREAM_INDEX)) {
@@ -124,6 +128,20 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         val audioStreamIndex = if (intent.hasExtra(EXTRA_AUDIO_STREAM_INDEX)) {
             intent.getIntExtra(EXTRA_AUDIO_STREAM_INDEX, -1).takeIf { it >= 0 }
         } else null
+
+        if (!localPath.isNullOrBlank()) {
+            val localIntent = MpvTvPlayerActivity.createIntent(
+                context = this,
+                url = localPath,
+                headers = "",
+                title = itemName,
+                itemId = itemId,
+                resumePositionMs = resumePositionMs
+            )
+            startActivity(localIntent)
+            finish()
+            return
+        }
 
         // Get Jellyfin configuration and API service
         val config = JellyfinConfig(this)

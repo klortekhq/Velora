@@ -256,7 +256,17 @@ fun MovieDetailsScreen(
                 if ((displayItem.UserData?.PositionTicks ?: 0L) > 0L) showMobileResumeDialog = true
                 else startMoviePlayback(0L)
             },
-            onRestart = { startMoviePlayback(0L) }
+            onRestart = { startMoviePlayback(0L) },
+            onDownload = {
+                val config = com.klortek.velora.jellyfin.JellyfinConfig(context)
+                if (config.isConfigured()) {
+                    com.klortek.velora.offline.OfflineDownloadManager.enqueue(
+                        context, config.serverUrl, config.accessToken, displayItem.Id, displayItem.Name, displayItem.Type ?: "Movie",
+                        mediaSourceId = displayItem.MediaSources?.firstOrNull()?.Id
+                    )
+                    android.widget.Toast.makeText(context, "Descarga iniciada", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }
         )
     } else {
     Box(modifier = Modifier.fillMaxSize()) {

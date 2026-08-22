@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.filled.Shuffle
@@ -59,7 +60,8 @@ fun MobileMovieDetailsLayout(
     apiService: JellyfinApiService?,
     onBack: (() -> Unit)?,
     onPlay: () -> Unit,
-    onRestart: (() -> Unit)? = null
+    onRestart: (() -> Unit)? = null,
+    onDownload: (() -> Unit)? = null
 ) {
     val context = LocalContext.current
     Box(Modifier.fillMaxSize()) {
@@ -78,7 +80,7 @@ fun MobileMovieDetailsLayout(
                 }
             }
             MobilePlayButton(onPlay)
-            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay)
+            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload)
             MobilePeople(item, apiService)
         }
     }
@@ -95,7 +97,8 @@ fun MobileSeriesDetailsLayout(
     onBack: (() -> Unit)?,
     onSeasonSelected: (Int) -> Unit,
     onPlay: (JellyfinItem?) -> Unit,
-    onRestart: ((JellyfinItem?) -> Unit)? = null
+    onRestart: ((JellyfinItem?) -> Unit)? = null,
+    onDownload: ((JellyfinItem) -> Unit)? = null
 ) {
     Box(Modifier.fillMaxSize()) {
         MobileBackdrop(backdropUrl, apiService, item.Name)
@@ -110,7 +113,8 @@ fun MobileSeriesDetailsLayout(
             MobilePlayButton { onPlay(episodes.firstOrNull { (it.UserData?.PositionTicks ?: 0L) > 0L } ?: episodes.firstOrNull()) }
             MobileActionRow(
                 onShuffle = { onPlay(episodes.shuffled().firstOrNull()) },
-                onRestart = { onRestart?.invoke(episodes.firstOrNull()) ?: onPlay(episodes.firstOrNull()) }
+                onRestart = { onRestart?.invoke(episodes.firstOrNull()) ?: onPlay(episodes.firstOrNull()) },
+                onDownload = episodes.firstOrNull()?.let { { onDownload?.invoke(it) } }
             )
             if (seasons.isNotEmpty()) {
                 Text("Temporadas", color = Color.White, style = MaterialTheme.typography.titleMedium)
@@ -123,7 +127,7 @@ fun MobileSeriesDetailsLayout(
             }
             Text("Episodios", color = Color.White, style = MaterialTheme.typography.titleMedium)
             episodes.forEach { episode ->
-                MobileEpisodeCard(episode, apiService) { onPlay(episode) }
+                MobileEpisodeCard(episode, apiService, { onDownload?.invoke(episode) }) { onPlay(episode) }
             }
             MobilePeople(item, apiService)
         }
@@ -150,10 +154,11 @@ fun MobileSeriesDetailsLayout(
     }
 }
 
-@Composable private fun MobileActionRow(onShuffle: () -> Unit, onRestart: () -> Unit) {
+@Composable private fun MobileActionRow(onShuffle: () -> Unit, onRestart: () -> Unit, onDownload: (() -> Unit)? = null) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         MobileActionButton("Aleatorio", Icons.Default.Shuffle, onShuffle)
         MobileActionButton("Reiniciar", Icons.Default.Replay, onRestart)
+        onDownload?.let { MobileActionButton("Descargar", Icons.Default.Download, it) }
     }
 }
 
@@ -177,10 +182,11 @@ fun MobileSeriesDetailsLayout(
     else Box(modifier.clip(RoundedCornerShape(14.dp)).background(Color.White.copy(alpha = .12f)))
 }
 
-@Composable private fun MobileEpisodeCard(episode: JellyfinItem, apiService: JellyfinApiService?, onClick: () -> Unit) {
+@Composable private fun MobileEpisodeCard(episode: JellyfinItem, apiService: JellyfinApiService?, onDownload: () -> Unit, onClick: () -> Unit) {
     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(Color.Black.copy(alpha = .42f)).clickable(onClick = onClick).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
         MobileArtwork(apiService?.getImageUrl(episode.Id, "Primary", null, maxWidth = 500, maxHeight = 280, quality = 82), apiService, episode.Name, Modifier.width(140.dp).aspectRatio(1.65f))
-        Column(Modifier.padding(start = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text("E${episode.IndexNumber ?: ""} · ${episode.Name}", color = Color.White, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(episode.formattedRuntime ?: "", color = Color.White.copy(alpha = .7f)); Text(episode.Overview ?: "", color = Color.White.copy(alpha = .78f), maxLines = 2, overflow = TextOverflow.Ellipsis) }
+        Column(Modifier.weight(1f).padding(start = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text("E${episode.IndexNumber ?: ""} · ${episode.Name}", color = Color.White, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(episode.formattedRuntime ?: "", color = Color.White.copy(alpha = .7f)); Text(episode.Overview ?: "", color = Color.White.copy(alpha = .78f), maxLines = 2, overflow = TextOverflow.Ellipsis) }
+        androidx.tv.material3.IconButton(onClick = onDownload) { Icon(Icons.Default.Download, "Descargar", tint = MobileCyan) }
     }
 }
 

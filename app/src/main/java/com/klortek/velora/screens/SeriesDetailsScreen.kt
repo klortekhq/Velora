@@ -456,6 +456,19 @@ fun SeriesDetailsScreen(
             onRestart = { episode ->
                 val target = episode ?: episodes.firstOrNull()
                 if (target != null) startMobileEpisode(target, 0L)
+            },
+            onDownload = { episode ->
+                val config = com.klortek.velora.jellyfin.JellyfinConfig(context)
+                if (config.isConfigured()) {
+                    com.klortek.velora.offline.OfflineDownloadManager.enqueue(
+                        context, config.serverUrl, config.accessToken, episode.Id, episode.Name, "Episode",
+                        mediaSourceId = episode.MediaSources?.firstOrNull()?.Id,
+                        seriesName = displayItem.Name,
+                        seasonNumber = episode.ParentIndexNumber,
+                        episodeNumber = episode.IndexNumber
+                    )
+                    android.widget.Toast.makeText(context, "Descarga iniciada", android.widget.Toast.LENGTH_SHORT).show()
+                }
             }
         )
     } else {
