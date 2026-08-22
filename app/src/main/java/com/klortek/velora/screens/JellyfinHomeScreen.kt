@@ -152,6 +152,7 @@ fun JellyfinHomeScreen(
     onItemClick: (JellyfinItem, Long) -> Unit = { _, _ -> },
     onMusicClick: () -> Unit = {},
     onLiveTvClick: () -> Unit = {},
+    onDownloadsClick: () -> Unit = {},
     onMoviesLibraryClick: (libraryId: String, libraryName: String) -> Unit = { _, _ -> },
     onTvShowsLibraryClick: (libraryId: String, libraryName: String) -> Unit = { _, _ -> },
     showDebugOutlines: Boolean = false,
@@ -635,6 +636,7 @@ fun JellyfinHomeScreen(
             },
             onSearch = { showSearch = true },
             onSettings = { showSettings = true },
+            onDownloads = onDownloadsClick,
             onLiveTv = onLiveTvClick,
             showLiveTv = showLiveTv,
             onLibraryClick = { library -> selectedLibraryId = library.Id }
@@ -2286,40 +2288,8 @@ fun JellyfinHomeScreen(
                         contentColor = MaterialTheme.colorScheme.onSurface
                     )
                 ) {
-                    // Create Jellyseerr API service if enabled
-                    // Create Jellyseerr API service if enabled
-                    val jellyseerrApiService = remember(
-                        settings.jellyseerrUrl, 
-                        settings.jellyseerrApiKey, 
-                        settings.jellyseerrSessionCookie,
-                        settings.jellyseerrAuthType,
-                        settings.jellyseerrEnabled
-                    ) {
-                        if (settings.isJellyseerrConfigured) {
-                            try {
-                                if (settings.jellyseerrAuthType == "credentials" && settings.jellyseerrSessionCookie.isNotBlank()) {
-                                    com.klortek.velora.jellyseerr.JellyseerrApiService.withCookie(
-                                        baseUrl = settings.jellyseerrUrl,
-                                        cookie = settings.jellyseerrSessionCookie
-                                    )
-                                } else {
-                                    com.klortek.velora.jellyseerr.JellyseerrApiService.withApiKey(
-                                        baseUrl = settings.jellyseerrUrl,
-                                        apiKey = settings.jellyseerrApiKey
-                                    )
-                                }
-                            } catch (e: Exception) {
-                                android.util.Log.e("JellyfinHomeScreen", "Error creating Jellyseerr API service", e)
-                                null
-                            }
-                        } else {
-                            null
-                        }
-                    }
-
                     SearchScreen(
                         apiService = apiService,
-                        jellyseerrApiService = jellyseerrApiService,
                         onItemClick = { item ->
                             showSearch = false
                             onItemClick(item, 0L)
@@ -2832,7 +2802,7 @@ fun JellyfinHorizontalCard(
     useGoogleTvCards: Boolean = false,
     lowPowerMode: Boolean = false,
     imageRefreshKey: Long = 0L,
-    externalImageUrl: String? = null // New parameter for external images (e.g., Jellyseerr)
+    externalImageUrl: String? = null
 ) {
     // For episodes, use series poster (Primary) if requested; otherwise use poster (Primary) for movies/shows
     // When animations disabled, simple cards, or Google TV cards enabled, force reduced resolution for better performance

@@ -84,6 +84,10 @@
             android:exported="false"
             android:screenOrientation="unspecified" />
         <activity
+            android:name=".OfflineDownloadsActivity"
+            android:exported="false"
+            android:screenOrientation="unspecified" />
+        <activity
             android:name=".player.mpv.MpvTvPlayerActivity"
             android:exported="false"
             android:screenOrientation="unspecified"

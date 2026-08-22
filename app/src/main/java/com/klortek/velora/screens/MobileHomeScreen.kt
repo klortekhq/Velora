@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Tv
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,6 +65,7 @@ fun MobileHomeScreen(
     onLibraryClick: (JellyfinLibrary) -> Unit,
     onSearch: () -> Unit,
     onSettings: () -> Unit,
+    onDownloads: () -> Unit,
     onLiveTv: () -> Unit,
     showLiveTv: Boolean
 ) {
@@ -79,6 +81,7 @@ fun MobileHomeScreen(
                 Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically) {
                     Spacer(Modifier.weight(1f))
                     if (showLiveTv) IconButton(onClick = onLiveTv) { Icon(Icons.Default.Tv, "Televisión en directo", tint = Color.White) }
+                    IconButton(onClick = onDownloads) { Icon(Icons.Default.Download, "Descargas", tint = Color.White) }
                     IconButton(onClick = onSearch) { Icon(Icons.Default.Search, "Buscar", tint = Color.White) }
                     IconButton(onClick = onSettings) { Icon(Icons.Default.Settings, "Ajustes", tint = Color.White) }
                 }
