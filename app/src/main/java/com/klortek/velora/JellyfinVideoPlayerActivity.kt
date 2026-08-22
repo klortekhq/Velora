@@ -104,6 +104,8 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enterImmersivePlayback()
         
         // Enable HDR mode BEFORE creating MPVView
         // This ensures the window is configured for HDR output
@@ -275,6 +277,23 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun enterImmersivePlayback() {
+        window.decorView.systemUiVisibility = (
+            android.view.View.SYSTEM_UI_FLAG_FULLSCREEN or
+                android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            )
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) enterImmersivePlayback()
     }
 
     // Removed onBackPressed - let Compose BackHandler handle it
