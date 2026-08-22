@@ -23,7 +23,6 @@
     <string name="live_tv_no_channels">Este servidor Jellyfin no tiene canales de TV en directo disponibles.</string>
     <string name="live_tv_no_program">Sin información de programación</string>
     <string name="live_tv_refresh">Actualizar canales</string>
-    <string name="live_tv_sources">%1$d fuentes</string>
     <string name="live_tv_channel_count">%1$d canales</string>
     <string name="back">Atrás</string>
     <string name="collections">Colecciones</string>
