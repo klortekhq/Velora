@@ -18,6 +18,7 @@
 
     <!-- Live TV -->
     <string name="live_tv">Televisión en directo</string>
+    <string name="live_tv_nav">IPTV</string>
     <string name="live_tv_loading">Cargando canales…</string>
     <string name="live_tv_error">No se pudo cargar la TV en directo</string>
     <string name="live_tv_no_channels">Este servidor Jellyfin no tiene canales de TV en directo disponibles.</string>

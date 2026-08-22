@@ -892,7 +892,7 @@ fun JellyfinHomeScreen(
                         modifier = Modifier
                     ) {
                         Text(
-                            text = androidx.compose.ui.res.stringResource(com.flex.elefin.R.string.live_tv),
+                            text = androidx.compose.ui.res.stringResource(com.flex.elefin.R.string.live_tv_nav),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(end = 10.dp)
                         )
