@@ -95,7 +95,7 @@
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation" />
         <provider
             android:name="androidx.core.content.FileProvider"
-                android:authorities="com.ruvik.velora.fileprovider"
+                android:authorities="com.klortek.velora.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -115,4 +115,3 @@
     </application>
 
 </manifest>
-

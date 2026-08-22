@@ -3,11 +3,10 @@
     <!-- Background color -->
     <item android:drawable="@color/splash_background" />
     
-    <!-- Velora branding in the center; do not use the legacy launcher icon here. -->
+    <!-- Full-screen Velora artwork for Android TV and Fire TV. -->
     <item>
         <bitmap
-            android:gravity="center"
-            android:src="@drawable/velora_banner_320" />
+            android:gravity="fill"
+            android:src="@drawable/velora_banner_1280" />
     </item>
 </layer-list>
-
