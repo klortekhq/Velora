@@ -877,7 +877,6 @@ fun JellyfinHomeScreen(
                 
 
                 // Live TV - kept as a separate route so the original home/library architecture stays untouched.
-                var liveTvFocused by remember { mutableStateOf(false) }
                 TabRow(
                     modifier = Modifier.padding(end = 14.dp),
                     selectedTabIndex = -1,
@@ -888,17 +887,9 @@ fun JellyfinHomeScreen(
                         onFocus = { },
                         onClick = onLiveTvClick,
                         colors = TabDefaults.underlinedIndicatorTabColors(),
+                        // Live TV remains a normal navigation label; it must not
+                        // render the large focused cyan/white pill seen in the old UI.
                         modifier = Modifier
-                            .onFocusChanged { focusState ->
-                                liveTvFocused = focusState.isFocused || focusState.hasFocus
-                            }
-                            .then(
-                                if (liveTvFocused) {
-                                    Modifier.background(Color.White, RoundedCornerShape(4.dp))
-                                } else {
-                                    Modifier
-                                }
-                            )
                     ) {
                         Text(
                             text = androidx.compose.ui.res.stringResource(com.flex.elefin.R.string.live_tv),
