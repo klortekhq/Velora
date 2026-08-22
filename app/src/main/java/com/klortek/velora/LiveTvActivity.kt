@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -102,6 +103,7 @@ private fun LiveTvScreen(
     BackHandler(onBack = onBack)
 
     val context = LocalContext.current
+    val isMobile = LocalConfiguration.current.screenWidthDp < 600
     val client = remember(config.serverUrl, config.accessToken, config.userId) {
         LiveTvClient(config)
     }
@@ -131,7 +133,7 @@ private fun LiveTvScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 42.dp, vertical = 28.dp)
+            .padding(horizontal = if (isMobile) 16.dp else 42.dp, vertical = if (isMobile) 16.dp else 28.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -150,21 +152,21 @@ private fun LiveTvScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.width(18.dp))
+            Spacer(modifier = Modifier.width(if (isMobile) 10.dp else 18.dp))
 
             Icon(
                 imageVector = Icons.Default.LiveTv,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(34.dp)
+                modifier = Modifier.size(if (isMobile) 28.dp else 34.dp)
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(if (isMobile) 8.dp else 12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stringResource(R.string.live_tv),
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = if (isMobile) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -192,7 +194,7 @@ private fun LiveTvScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(if (isMobile) 14.dp else 24.dp))
 
         when {
             isLoading -> {
@@ -243,6 +245,7 @@ private fun LiveTvScreen(
                         LiveTvChannelRow(
                             channel = channel,
                             client = client,
+                            compact = isMobile,
                             onClick = { onPlay(channel) }
                         )
                     }
@@ -256,6 +259,7 @@ private fun LiveTvScreen(
 private fun LiveTvChannelRow(
     channel: LiveTvChannel,
     client: LiveTvClient,
+    compact: Boolean = false,
     onClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -294,12 +298,12 @@ private fun LiveTvChannelRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 18.dp, vertical = 12.dp),
+                .padding(horizontal = if (compact) 10.dp else 18.dp, vertical = if (compact) 10.dp else 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(width = 104.dp, height = 58.dp)
+                    .size(width = if (compact) 84.dp else 104.dp, height = if (compact) 48.dp else 58.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(Color.White.copy(alpha = 0.06f)),
                 contentAlignment = Alignment.Center
@@ -320,13 +324,13 @@ private fun LiveTvChannelRow(
                 )
             }
 
-            Spacer(modifier = Modifier.width(18.dp))
+            Spacer(modifier = Modifier.width(if (compact) 10.dp else 18.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = channel.Name,
-                        style = MaterialTheme.typography.titleLarge,
+                        style = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
@@ -341,7 +345,7 @@ private fun LiveTvChannelRow(
                 Text(
                     text = program?.Name?.takeIf { it.isNotBlank() }
                         ?: stringResource(R.string.live_tv_no_program),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = if (compact) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -352,7 +356,7 @@ private fun LiveTvChannelRow(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             modifier = Modifier
-                                .width(230.dp)
+                                .width(if (compact) 140.dp else 230.dp)
                                 .height(4.dp)
                                 .clip(RoundedCornerShape(50))
                                 .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.14f))
