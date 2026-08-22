@@ -1,5 +1,5 @@
 <resources>
-    <!-- Existing Elefin resources translated -->
+    <!-- Velora resources translated -->
     <string name="app_name">Velora</string>
     <string name="browse_title">Velora</string>
     <string name="related_movies">Vídeos relacionados</string>
@@ -42,3 +42,4 @@
     <string name="continue_watching_mark_watched">Marcar como visto</string>
     <string name="cancel">Cancelar</string>
 </resources>
+
