@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.ruvik.velora"
+    namespace = "com.klortek.velora"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.ruvik.velora"
+        applicationId = "com.klortek.velora"
         minSdk = 21
         targetSdk = 36
 
@@ -172,4 +172,3 @@ dependencies {
     // Uses embedded libmpv.so and libplayer.so from jniLibs folder
     // Requires .so files to be placed in app/src/main/jniLibs/{abi}/
 }
-
