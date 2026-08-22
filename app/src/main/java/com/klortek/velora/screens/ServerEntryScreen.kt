@@ -185,14 +185,14 @@ fun ServerEntryScreen(
         ) {
             // Title
             Text(
-                text = "Enter Server Address",
+                text = "Introducir dirección del servidor",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             
             // Label
             Text(
-                text = "Valid server address",
+                text = "Dirección válida del servidor",
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (addressFocused)
                     Color(0xFF9C27B0) // Purple label when focused for better visibility
@@ -205,7 +205,7 @@ fun ServerEntryScreen(
             TvTextField(
                 value = serverAddress,
                 onValueChange = { serverAddress = it },
-                label = "Server Address",
+                label = "Dirección del servidor",
                 enabled = !isConnecting && prefillAddress == null,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Uri,
@@ -290,7 +290,7 @@ fun ServerEntryScreen(
                         )
                     ) {
                         Text(
-                            text = if (isScanning) "Scanning..." else "Auto Detect",
+                        text = if (isScanning) "Buscando..." else "Detectar automáticamente",
                             style = MaterialTheme.typography.labelLarge
                         )
                     }
@@ -312,7 +312,7 @@ fun ServerEntryScreen(
                         modifier = Modifier.weight(1f)
                     ) {
                         MobileText(
-                            text = if (isScanning) "Scanning..." else "Auto Detect",
+                            text = if (isScanning) "Buscando..." else "Detectar automáticamente",
                             style = androidx.compose.material3.MaterialTheme.typography.labelLarge
                         )
                     }
@@ -339,7 +339,7 @@ fun ServerEntryScreen(
             // Discovered servers list
             if (discoveredServers.isNotEmpty()) {
                 Text(
-                    text = "Discovered Servers",
+                    text = "Servidores encontrados",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)

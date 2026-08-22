@@ -3535,7 +3535,7 @@ fun JellyfinVideoPlayerScreen(
                                         // Rewind button
                                         PlayerControlButton(
                                             icon = Icons.Filled.FastRewind,
-                                            contentDescription = "Rewind 15s",
+                                                            contentDescription = "Retroceder 15 segundos",
                                             size = if (isMobile) 52.dp else 48.dp,
                                             iconSize = if (isMobile) 26.dp else 24.dp,
                                             onClick = {
@@ -3564,7 +3564,7 @@ fun JellyfinVideoPlayerScreen(
                                         // Fast forward button
                                         PlayerControlButton(
                                             icon = Icons.Filled.FastForward,
-                                            contentDescription = "Forward 15s",
+                                            contentDescription = "Avanzar 15 segundos",
                                             size = if (isMobile) 52.dp else 48.dp,
                                             iconSize = if (isMobile) 26.dp else 24.dp,
                                             onClick = {
@@ -4218,7 +4218,7 @@ fun JellyfinVideoPlayerScreen(
                             Spacer(modifier = Modifier.height(12.dp))
                             
                             Text(
-                                text = "This video uses 10-bit AV1 encoding which requires special hardware or software support not available on this device.",
+                                    text = "Este vídeo usa codificación AV1 de 10 bits y necesita compatibilidad de hardware o software que no está disponible en este dispositivo.",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Color.White.copy(alpha = 0.8f),
                                 modifier = Modifier.padding(horizontal = 8.dp)
@@ -4234,7 +4234,7 @@ fun JellyfinVideoPlayerScreen(
                                     .padding(16.dp)
                             ) {
                                 Text(
-                                    text = "Solutions:",
+                                    text = "Soluciones:",
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color(0xFF4ECDC4),
                                     fontWeight = FontWeight.Bold
@@ -4274,7 +4274,7 @@ fun JellyfinVideoPlayerScreen(
                                     contentColor = Color.White
                                 )
                             ) {
-                                Text("Go Back")
+                                Text("Volver")
                             }
                         }
                     }

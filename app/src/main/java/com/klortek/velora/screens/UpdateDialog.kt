@@ -89,7 +89,7 @@ fun UpdateDialog(
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
                     Text(
-                        text = "Update Available",
+                        text = "Actualización disponible",
                         style = if (isTv) MaterialTheme.typography.headlineMedium else androidx.compose.material3.MaterialTheme.typography.titleLarge,
                         color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
                     )
@@ -101,7 +101,7 @@ fun UpdateDialog(
                             .verticalScroll(rememberScrollState())
                     ) {
                         Text(
-                            text = "A new version is available: ${release.name}\n\n${release.body ?: "Bug fixes and improvements."}",
+                            text = "Hay una nueva versión disponible: ${release.name}\n\n${release.body ?: "Correcciones y mejoras."}",
                             style = if (isTv) MaterialTheme.typography.bodyLarge else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                             color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                         )
@@ -110,13 +110,13 @@ fun UpdateDialog(
                     // Download progress or error message
                     if (installationStarted) {
                         Text(
-                            text = "Installation started. The system installer will appear shortly.",
+                            text = "Instalación iniciada. El instalador del sistema aparecerá en breve.",
                             style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                             color = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary
                         )
                     } else if (isDownloading) {
                         Text(
-                            text = "Downloading update... $downloadProgress%",
+                            text = "Descargando actualización... $downloadProgress%",
                             style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                             color = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary
                         )
@@ -191,7 +191,7 @@ fun UpdateDialog(
                                 enabled = !isDownloading
                             ) {
                                 Text(
-                                    text = if (isDownloading) "Downloading..." else "Update Now",
+                                    text = if (isDownloading) "Descargando..." else "Actualizar ahora",
                                     style = MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = FontWeight.Bold
                                     )
@@ -204,7 +204,7 @@ fun UpdateDialog(
                                 enabled = !isDownloading
                             ) {
                                 Text(
-                                    text = "Later",
+                                    text = "Más tarde",
                                     style = MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = FontWeight.Bold
                                     )
@@ -217,7 +217,7 @@ fun UpdateDialog(
                                 enabled = !isDownloading
                             ) {
                                 androidx.compose.material3.Text(
-                                    text = if (isDownloading) "Downloading..." else "Update Now",
+                                    text = if (isDownloading) "Descargando..." else "Actualizar ahora",
                                     style = androidx.compose.material3.MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = FontWeight.Bold
                                     )
@@ -230,7 +230,7 @@ fun UpdateDialog(
                                 enabled = !isDownloading
                             ) {
                                 androidx.compose.material3.Text(
-                                    text = "Later",
+                                    text = "Más tarde",
                                     style = androidx.compose.material3.MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = FontWeight.Bold
                                     )
