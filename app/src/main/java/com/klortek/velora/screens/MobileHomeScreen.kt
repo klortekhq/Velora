@@ -166,8 +166,8 @@ fun MobileLibraryScreen(
 @Composable
 private fun MobileHomeHero(item: JellyfinItem?, apiService: JellyfinApiService?) {
     if (item == null || apiService == null) return
-    val url = apiService.getImageUrl(item.Id, "Backdrop", null, maxWidth = 1280, maxHeight = 720, quality = 88) ?: return
-    Box(Modifier.fillMaxWidth().height(430.dp)) {
+    val url = apiService.getImageUrl(item.Id, "Backdrop", null, maxWidth = 960, maxHeight = 540, quality = 80) ?: return
+    Box(Modifier.fillMaxWidth().height(380.dp)) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current).data(url).headers(apiService.getImageRequestHeaders()).memoryCachePolicy(CachePolicy.ENABLED).diskCachePolicy(CachePolicy.ENABLED).build(),
             contentDescription = item.Name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop
@@ -188,9 +188,9 @@ private fun MobileHomeMediaRow(
         Text(title, color = Color.White, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(horizontal = 18.dp))
         LazyRow(contentPadding = PaddingValues(horizontal = 18.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             items(items, key = { it.Id }) { item ->
-                val image = apiService?.getImageUrl(item.Id, "Primary", null, maxWidth = 420, maxHeight = 620, quality = 84)
+                val image = apiService?.getImageUrl(item.Id, "Primary", null, maxWidth = 320, maxHeight = 480, quality = 78)
                 Column(Modifier.width(132.dp).clickable { onItemClick(item) }, verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Box(Modifier.fillMaxWidth().height(196.dp).clip(RoundedCornerShape(12.dp)).background(Color.White.copy(alpha = .1f))) {
+                    Box(Modifier.fillMaxWidth().height(188.dp).clip(RoundedCornerShape(12.dp)).background(Color.White.copy(alpha = .1f))) {
                         if (image != null && apiService != null) AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(image).headers(apiService.getImageRequestHeaders()).memoryCachePolicy(CachePolicy.ENABLED).diskCachePolicy(CachePolicy.ENABLED).build(), contentDescription = item.Name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
                         if (showProgress) {
                             val progress = ((item.UserData?.PlayedPercentage ?: 0.0) / 100.0).toFloat().coerceIn(0f, 1f)
