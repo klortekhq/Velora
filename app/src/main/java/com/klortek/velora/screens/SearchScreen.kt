@@ -291,7 +291,7 @@ fun SearchScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Mic,
-                    contentDescription = "Voice Search",
+                    contentDescription = "Búsqueda por voz",
                     modifier = Modifier.size(24.dp)
                 )
             }

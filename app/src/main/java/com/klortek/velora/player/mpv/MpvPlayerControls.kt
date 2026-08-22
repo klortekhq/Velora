@@ -209,7 +209,7 @@ fun MpvControls(
                     // Rewind button
                     PlayerControlButton(
                         icon = Icons.Filled.FastRewind,
-                        contentDescription = "Rewind 15s",
+                        contentDescription = "Retroceder 15 segundos",
                         onClick = onFastRewind
                     )
 
@@ -228,7 +228,7 @@ fun MpvControls(
                     // Fast forward button
                     PlayerControlButton(
                         icon = Icons.Filled.FastForward,
-                        contentDescription = "Forward 15s",
+                        contentDescription = "Avanzar 15 segundos",
                         onClick = onFastForward
                     )
 
@@ -886,7 +886,7 @@ private fun TrackMenuItem(
         if (isSelected) {
             androidx.tv.material3.Icon(
                 imageVector = Icons.Filled.Check,
-                contentDescription = "Selected",
+                contentDescription = "Seleccionado",
                 tint = Color(0xFF9C27B0)
             )
         }

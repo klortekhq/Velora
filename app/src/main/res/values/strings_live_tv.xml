@@ -20,7 +20,7 @@
     <string name="recently_added_episodes_in">Episodios añadidos recientemente en %1$s</string>
     <string name="continue_watching_actions">Acciones de Seguir viendo</string>
     <string name="continue_watching_remove">Quitar de Seguir viendo</string>
-    <string name="continue_watching_remove_explanation">Hide this item in Velora without changing your playback progress. It will return if you play it again.</string>
+    <string name="continue_watching_remove_explanation">Oculta este elemento en Velora sin cambiar el progreso. Volverá a aparecer cuando lo reproduzcas de nuevo.</string>
     <string name="continue_watching_mark_watched">Marcar como visto</string>
     <string name="cancel">Cancelar</string>
 </resources>
