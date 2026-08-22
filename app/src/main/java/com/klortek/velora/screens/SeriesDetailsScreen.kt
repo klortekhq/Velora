@@ -782,7 +782,7 @@ fun SeriesTopContainer(
                                                 .verticalScroll(rememberScrollState())
                                         ) {
                                             Text(
-                                                text = "Synopsis",
+                                text = "Sinopsis",
                                                 style = MaterialTheme.typography.headlineMedium,
                                                 color = MaterialTheme.colorScheme.onSurface,
                                                 modifier = Modifier.padding(bottom = 16.dp)
@@ -1321,7 +1321,7 @@ fun SeriesBottomContainer(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No episodes available",
+                                            text = "No hay episodios disponibles",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
@@ -2988,7 +2988,7 @@ fun EpisodeSubtitleSelectionDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Loading subtitles...",
+                                text = "Cargando subtítulos…",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                             )
@@ -3020,7 +3020,7 @@ fun EpisodeSubtitleSelectionDialog(
                                     colors = listItemColors,
                                     headlineContent = {
                                         Text(
-                                            text = "None (Off)",
+                                            text = "Ninguno (desactivados)",
                                             style = MaterialTheme.typography.bodyMedium.copy(
                                                 fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                             )
@@ -3090,7 +3090,7 @@ fun EpisodeSubtitleSelectionDialog(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Text(
-                                            text = "No subtitles available",
+                                        text = "No hay subtítulos disponibles",
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                         )
@@ -3103,7 +3103,7 @@ fun EpisodeSubtitleSelectionDialog(
                                 item {
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "Downloaded Subtitles",
+                                        text = "Subtítulos descargados",
                                         style = MaterialTheme.typography.labelMedium.copy(
                                             fontSize = MaterialTheme.typography.labelMedium.fontSize * 0.8f
                                         ),
@@ -3180,7 +3180,7 @@ fun EpisodeSubtitleSelectionDialog(
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        text = "Download Subtitles",
+                        text = "Descargar subtítulos",
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                                         )

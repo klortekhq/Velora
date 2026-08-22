@@ -25,6 +25,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Replay
+import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.ui.Alignment
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -56,7 +58,8 @@ fun MobileMovieDetailsLayout(
     backdropUrl: String,
     apiService: JellyfinApiService?,
     onBack: (() -> Unit)?,
-    onPlay: () -> Unit
+    onPlay: () -> Unit,
+    onRestart: (() -> Unit)? = null
 ) {
     val context = LocalContext.current
     Box(Modifier.fillMaxSize()) {
@@ -75,7 +78,7 @@ fun MobileMovieDetailsLayout(
                 }
             }
             MobilePlayButton(onPlay)
-            MobileActionRow()
+            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay)
             MobilePeople(item, apiService)
         }
     }
@@ -91,7 +94,8 @@ fun MobileSeriesDetailsLayout(
     apiService: JellyfinApiService?,
     onBack: (() -> Unit)?,
     onSeasonSelected: (Int) -> Unit,
-    onPlay: (JellyfinItem?) -> Unit
+    onPlay: (JellyfinItem?) -> Unit,
+    onRestart: ((JellyfinItem?) -> Unit)? = null
 ) {
     Box(Modifier.fillMaxSize()) {
         MobileBackdrop(backdropUrl, apiService, item.Name)
@@ -104,7 +108,10 @@ fun MobileSeriesDetailsLayout(
             MobileMetadata(item)
             item.Overview?.takeIf { it.isNotBlank() }?.let { Text(it, color = Color.White.copy(alpha = .9f), maxLines = 5, overflow = TextOverflow.Ellipsis) }
             MobilePlayButton { onPlay(episodes.firstOrNull { (it.UserData?.PositionTicks ?: 0L) > 0L } ?: episodes.firstOrNull()) }
-            MobileActionRow()
+            MobileActionRow(
+                onShuffle = { onPlay(episodes.shuffled().firstOrNull()) },
+                onRestart = { onRestart?.invoke(episodes.firstOrNull()) ?: onPlay(episodes.firstOrNull()) }
+            )
             if (seasons.isNotEmpty()) {
                 Text("Temporadas", color = Color.White, style = MaterialTheme.typography.titleMedium)
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp), contentPadding = PaddingValues(vertical = 2.dp)) {
@@ -143,9 +150,19 @@ fun MobileSeriesDetailsLayout(
     }
 }
 
-@Composable private fun MobileActionRow() {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-        listOf("Aleatorio", "Reiniciar", "Transmitir", "Tráiler", "Más").forEach { label -> Text(label, color = Color.White.copy(alpha = .9f), style = MaterialTheme.typography.labelMedium) }
+@Composable private fun MobileActionRow(onShuffle: () -> Unit, onRestart: () -> Unit) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        MobileActionButton("Aleatorio", Icons.Default.Shuffle, onShuffle)
+        MobileActionButton("Reiniciar", Icons.Default.Replay, onRestart)
+    }
+}
+
+@Composable private fun MobileActionButton(label: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable(onClick = onClick)) {
+        Box(Modifier.size(48.dp).clip(CircleShape).background(Color.White.copy(alpha = .14f)), contentAlignment = Alignment.Center) {
+            Icon(icon, label, tint = Color.White)
+        }
+        Text(label, color = Color.White.copy(alpha = .9f), style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 4.dp))
     }
 }
 

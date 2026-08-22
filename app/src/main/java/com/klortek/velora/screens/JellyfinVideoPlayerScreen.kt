@@ -4782,7 +4782,7 @@ fun ExoPlayerSettingsMenu(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "Loading subtitles...",
+                                    text = "Cargando subtítulos…",
                                     style = MaterialTheme.typography.bodyMedium.copy(
                                         fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                                     ),
@@ -4805,7 +4805,7 @@ fun ExoPlayerSettingsMenu(
                                     colors = listItemColors,
                                     headlineContent = {
                                         Text(
-                                            text = "None (Off)",
+                                        text = "Ninguno (desactivados)",
                                             style = MaterialTheme.typography.bodyLarge.copy(
                                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
                                             )
@@ -4887,7 +4887,7 @@ fun ExoPlayerSettingsMenu(
                             if (downloadedSubtitles.isNotEmpty()) {
                                 item {
                                     Text(
-                                        text = "Downloaded Subtitles",
+                                        text = "Subtítulos descargados",
                                         style = MaterialTheme.typography.titleSmall.copy(
                                             fontSize = MaterialTheme.typography.titleSmall.fontSize * 0.8f
                                         ),
@@ -5031,7 +5031,7 @@ fun NextUpOverlay(
             ) {
                 // Title
                 Text(
-                    text = "Up Next",
+                    text = "A continuación",
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
@@ -5070,7 +5070,7 @@ fun NextUpOverlay(
                 
                 // Countdown
                 Text(
-                    text = "Autoplay in $countdown…",
+                    text = "Reproducción automática en $countdown…",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White.copy(alpha = 0.7f),
                     modifier = Modifier.padding(top = 8.dp)
@@ -5230,7 +5230,7 @@ fun SubtitleSelectionDialog(
         ) {
             // Title
             androidx.compose.material3.Text(
-                text = "Select Subtitle",
+                text = "Seleccionar subtítulos",
                 style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -5295,7 +5295,7 @@ fun SubtitleSelectionDialog(
                 ),
                 modifier = Modifier.focusable()
             ) {
-                androidx.compose.material3.Text("Close", color = Color.White)
+                androidx.compose.material3.Text("Cerrar", color = Color.White)
             }
         }
     }
@@ -5386,7 +5386,7 @@ fun AudioSelectionDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             androidx.compose.material3.Text(
-                text = "Select Audio Track",
+                text = "Seleccionar pista de audio",
                 style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -5436,7 +5436,7 @@ fun AudioSelectionDialog(
                 ),
                 modifier = Modifier.focusable()
             ) {
-                androidx.compose.material3.Text("Close", color = Color.White)
+                androidx.compose.material3.Text("Cerrar", color = Color.White)
             }
         }
     }
@@ -5512,7 +5512,7 @@ fun SpeedSelectionDialog(
                 ),
                 modifier = Modifier.focusable()
             ) {
-                androidx.compose.material3.Text("Close", color = Color.White)
+                androidx.compose.material3.Text("Cerrar", color = Color.White)
             }
         }
     }
