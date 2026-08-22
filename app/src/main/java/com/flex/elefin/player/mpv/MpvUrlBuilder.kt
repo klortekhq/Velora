@@ -16,7 +16,7 @@ object MpvUrlBuilder {
     fun buildHeaders(
         accessToken: String,
         deviceId: String,
-        clientName: String = "Elefin",
+        clientName: String = "Velora",
         version: String = BuildConfig.VERSION_NAME
     ): String = buildString {
         append("User-Agent: $clientName/MPV\r\n")
@@ -90,3 +90,4 @@ object MpvUrlBuilder {
         return "$baseUrl/Items/$itemId/Download?api_key=$accessToken&mediaSourceId=${mediaSourceId ?: itemId}"
     }
 }
+
