@@ -624,7 +624,7 @@ fun BottomContainer(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Chapters",
+                        text = "Capítulos",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -886,7 +886,7 @@ fun ChapterCard(
                                     .headers(headerMap)
                                     .crossfade(true)
                                     .build(),
-                                contentDescription = chapter.Name ?: "Chapter ${chapterIndex + 1}",
+                                contentDescription = chapter.Name ?: "Capítulo ${chapterIndex + 1}",
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .clip(RoundedCornerShape(8.dp)),
@@ -937,7 +937,7 @@ fun ChapterCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Play from chapter",
+                                contentDescription = "Reproducir desde el capítulo",
                                 modifier = Modifier.size(24.dp),
                                 tint = Color.White
                             )
@@ -950,7 +950,7 @@ fun ChapterCard(
         
         // Chapter name below the card
         Text(
-            text = chapter.Name ?: "Chapter ${chapterIndex + 1}",
+            text = chapter.Name ?: "Capítulo ${chapterIndex + 1}",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
             maxLines = 2,
@@ -1062,7 +1062,7 @@ fun SubtitleSelectionDialog(
                 ) {
                     // Dialog title - 30% smaller
                     Text(
-                        text = "Select Subtitles",
+                        text = "Seleccionar subtítulos",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -1089,7 +1089,7 @@ fun SubtitleSelectionDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Loading subtitles...",
+                                text = "Cargando subtítulos…",
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                 ),
@@ -1112,7 +1112,7 @@ fun SubtitleSelectionDialog(
                                     colors = listItemColors,
                                     headlineContent = {
                                         Text(
-                                            text = "None (Off)",
+                                            text = "Ninguno (desactivados)",
                                             style = MaterialTheme.typography.bodyLarge.copy(
                                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.7f
                                             )
@@ -1175,7 +1175,7 @@ fun SubtitleSelectionDialog(
                             if (subtitleStreams.isEmpty() && downloadedSubtitles.isEmpty()) {
                                 item {
                                     Text(
-                                        text = "No subtitles available",
+                                        text = "No hay subtítulos disponibles",
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                         ),
@@ -1190,7 +1190,7 @@ fun SubtitleSelectionDialog(
                                 item {
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "Downloaded Subtitles",
+                                        text = "Subtítulos descargados",
                                         style = MaterialTheme.typography.labelMedium.copy(
                                             fontSize = MaterialTheme.typography.labelMedium.fontSize * 0.8f
                                         ),
@@ -1266,7 +1266,7 @@ fun SubtitleSelectionDialog(
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        text = "Download Subtitles",
+                                        text = "Descargar subtítulos",
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                                         )
@@ -1454,7 +1454,7 @@ fun AudioSelectionDialog(
                 ) {
                     // Dialog title
                     Text(
-                        text = "Select Audio Track",
+                        text = "Seleccionar pista de audio",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -1695,7 +1695,7 @@ fun ActionButtonsRow(
         }
     }
     
-    val playButtonLabel = if (isResumable) "Play From Start" else "Play"
+    val playButtonLabel = if (isResumable) "Reproducir desde el principio" else "Reproducir"
     
     Row(
         modifier = modifier

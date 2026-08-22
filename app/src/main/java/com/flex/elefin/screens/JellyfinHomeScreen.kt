@@ -41,12 +41,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.exponentialDecay
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.ui.draw.rotate
 import com.flex.elefin.components.DigitalClock
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.Composable
@@ -88,10 +85,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.SwapVert
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.window.Dialog
@@ -830,92 +825,6 @@ fun JellyfinHomeScreen(
                     )
                 }
                 
-                // Refresh/Sort button - to the right of search button
-                // Shows refresh button on home screen, sort button when library is selected
-                val infiniteTransition = rememberInfiniteTransition(label = "refresh_rotation")
-                val rotationAngle by infiniteTransition.animateFloat(
-                    initialValue = 0f,
-                    targetValue = 360f,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(1000, delayMillis = 0),
-                        repeatMode = androidx.compose.animation.core.RepeatMode.Restart
-                    ),
-                    label = "refresh_rotation_angle"
-                )
-                
-                val isLibrarySelected = selectedLibraryId != null
-                
-                IconButton(
-                    onClick = {
-                        if (isLibrarySelected) {
-                            // Show sort dialog when library is selected
-                            showSortDialog = true
-                        } else {
-                            // Refresh when on home screen
-                            if (!isRefreshing && repository != null) {
-                                isRefreshing = true
-                                scope.launch {
-                                    try {
-                                        // Clear image cache for home screen cards so new images can be downloaded
-                                        withContext(kotlinx.coroutines.Dispatchers.IO) {
-                                            val imageLoader = context.imageLoader
-                                            imageLoader.diskCache?.clear()
-                                            imageLoader.memoryCache?.clear()
-                                            Log.d("JellyfinHomeScreen", "Image cache cleared for home screen refresh")
-                                        }
-                                        
-                                        // Trigger server-side library scan and refresh all media rows
-                                        repository.triggerLibraryScanAndRefresh()
-                                        
-                                        // Also refresh libraries in case new ones were added
-                                        repository.fetchLibraries()
-                                        
-                                        Log.d("JellyfinHomeScreen", "Manual refresh completed")
-                                    } catch (e: Exception) {
-                                        Log.e("JellyfinHomeScreen", "Manual refresh error", e)
-                                    } finally {
-                                        isRefreshing = false
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    enabled = !isRefreshing || isLibrarySelected,
-                    colors = IconButtonDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        contentColor = MaterialTheme.colorScheme.onSurface,
-                        disabledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f),
-                        disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                    ),
-                    modifier = Modifier
-                        .padding(end = 14.dp) // Reduced from 20 to 14
-                        .size(34.dp) // Same size as settings button (34dp)
-                ) {
-                    if (isLibrarySelected) {
-                        // Show sort icon when library is selected
-                        Icon(
-                            imageVector = Icons.Default.SwapVert,
-                            contentDescription = "Ordenar",
-                            modifier = Modifier.size(14.dp) // Reduced from 20dp to 14dp
-                        )
-                    } else {
-                        // Show refresh icon on home screen
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = if (isRefreshing) "Actualizando..." else "Actualizar",
-                            modifier = Modifier
-                                .size(14.dp) // Reduced from 20dp to 14dp
-                                .then(
-                                    if (isRefreshing) {
-                                        Modifier.rotate(rotationAngle)
-                                    } else {
-                                        Modifier
-                                    }
-                                )
-                        )
-                    }
-                }
-                
                 // Home button - styled like tab row items with underline
                 var homeFocused by remember { mutableStateOf(false) }
                 val homeSelected = selectedLibraryId == null && selectedCollectionId == null
@@ -968,7 +877,6 @@ fun JellyfinHomeScreen(
                 
 
                 // Live TV - kept as a separate route so the original home/library architecture stays untouched.
-                var liveTvFocused by remember { mutableStateOf(false) }
                 TabRow(
                     modifier = Modifier.padding(end = 14.dp),
                     selectedTabIndex = -1,
@@ -979,20 +887,12 @@ fun JellyfinHomeScreen(
                         onFocus = { },
                         onClick = onLiveTvClick,
                         colors = TabDefaults.underlinedIndicatorTabColors(),
+                        // Live TV remains a normal navigation label; it must not
+                        // render the large focused cyan/white pill seen in the old UI.
                         modifier = Modifier
-                            .onFocusChanged { focusState ->
-                                liveTvFocused = focusState.isFocused || focusState.hasFocus
-                            }
-                            .then(
-                                if (liveTvFocused) {
-                                    Modifier.background(Color.White, RoundedCornerShape(4.dp))
-                                } else {
-                                    Modifier
-                                }
-                            )
                     ) {
                         Text(
-                            text = androidx.compose.ui.res.stringResource(com.flex.elefin.R.string.live_tv),
+                            text = androidx.compose.ui.res.stringResource(com.flex.elefin.R.string.live_tv_nav),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(end = 10.dp)
                         )
