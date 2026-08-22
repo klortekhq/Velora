@@ -82,7 +82,9 @@ fun SearchScreen(
     
     // Get settings
     val settings = remember { com.klortek.velora.jellyfin.AppSettings(context) }
-    val jellyseerrSearchEnabled = remember { settings.jellyseerrSearchEnabled }
+    // Discovery/Jellyseerr is intentionally disabled in Velora. Search is
+    // always backed by the user's Jellyfin libraries only.
+    val jellyseerrSearchEnabled = false
     
     // Voice recognition launcher
     val voiceLauncher = rememberLauncherForActivityResult(

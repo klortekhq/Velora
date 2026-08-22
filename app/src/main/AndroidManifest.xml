@@ -84,11 +84,6 @@
             android:exported="false"
             android:screenOrientation="unspecified" />
         <activity
-            android:name=".JellyseerrDetailsActivity"
-            android:exported="false"
-            android:screenOrientation="unspecified" />
-
-        <activity
             android:name=".player.mpv.MpvTvPlayerActivity"
             android:exported="false"
             android:screenOrientation="unspecified"
