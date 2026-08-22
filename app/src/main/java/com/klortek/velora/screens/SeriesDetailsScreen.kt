@@ -177,6 +177,7 @@ fun SeriesDetailsScreen(
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     var refreshTrigger by remember { mutableStateOf(0) }
     var showSettings by remember { mutableStateOf(false) }
+    var mobileResumeEpisode by remember { mutableStateOf<JellyfinItem?>(null) }
     
     androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
         val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
@@ -404,6 +405,34 @@ fun SeriesDetailsScreen(
         apiService?.getImageUrl(backgroundItem.Id, "Backdrop", null, maxWidth = 1920, maxHeight = 1080, quality = 90) ?: ""
     }
 
+    val startMobileEpisode: (JellyfinItem, Long) -> Unit = { target, positionMs ->
+        context.startActivity(
+            JellyfinVideoPlayerActivity.createIntent(
+                context,
+                target.Id,
+                positionMs,
+                settings.getSubtitlePreference(target.Id)
+            )
+        )
+    }
+
+    mobileResumeEpisode?.let { target ->
+        if (isMobileLayout && (target.UserData?.PositionTicks ?: 0L) > 0L) {
+            ResumeEpisodeDialog(
+                episode = target,
+                onDismiss = { mobileResumeEpisode = null },
+                onResume = {
+                    mobileResumeEpisode = null
+                    startMobileEpisode(target, (target.UserData?.PositionTicks ?: 0L) / 10_000L)
+                },
+                onPlayFromStart = {
+                    mobileResumeEpisode = null
+                    startMobileEpisode(target, 0L)
+                }
+            )
+        }
+    }
+
     if (isMobileLayout) {
         MobileSeriesDetailsLayout(
             item = displayItem,
@@ -417,14 +446,16 @@ fun SeriesDetailsScreen(
             onPlay = { episode ->
                 val target = episode ?: episodes.firstOrNull()
                 if (target != null) {
-                    val intent = JellyfinVideoPlayerActivity.createIntent(
-                        context,
-                        target.Id,
-                        ((target.UserData?.PositionTicks ?: 0L) / 10_000L),
-                        settings.getSubtitlePreference(target.Id)
-                    )
-                    context.startActivity(intent)
+                    if ((target.UserData?.PositionTicks ?: 0L) > 0L) {
+                        mobileResumeEpisode = target
+                    } else {
+                        startMobileEpisode(target, 0L)
+                    }
                 }
+            },
+            onRestart = { episode ->
+                val target = episode ?: episodes.firstOrNull()
+                if (target != null) startMobileEpisode(target, 0L)
             }
         )
     } else {
