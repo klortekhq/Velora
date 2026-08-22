@@ -138,7 +138,7 @@ fun MobileSeriesDetailsLayout(
 }
 
 @Composable private fun MobilePlayButton(onClick: () -> Unit) {
-    Button(onClick = onClick, modifier = Modifier.fillMaxWidth().height(54.dp), shape = RoundedCornerShape(28.dp), colors = ButtonDefaults.colors(containerColor = Color.White, contentColor = Color(0xFF168DB4))) {
+    Button(onClick = onClick, modifier = Modifier.fillMaxWidth().height(54.dp), colors = ButtonDefaults.colors(containerColor = Color.White, contentColor = Color(0xFF168DB4))) {
         Icon(Icons.Default.PlayArrow, "Reproducir", Modifier.size(22.dp)); Spacer(Modifier.width(8.dp)); Text("Reproducir", fontWeight = FontWeight.SemiBold)
     }
 }
