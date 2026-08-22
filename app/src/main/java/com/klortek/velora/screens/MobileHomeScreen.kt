@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -42,6 +45,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinItem
+import com.klortek.velora.jellyfin.JellyfinLibrary
 
 private val MobileHomeBackground = Color(0xFF090B10)
 private val MobileHomeCyan = Color(0xFF18C9F1)
@@ -54,34 +58,107 @@ fun MobileHomeScreen(
     recentEpisodes: List<JellyfinItem>,
     popular: List<JellyfinItem>,
     unwatched: List<JellyfinItem>,
+    libraries: List<JellyfinLibrary>,
     apiService: JellyfinApiService?,
     onItemClick: (JellyfinItem) -> Unit,
+    onLibraryClick: (JellyfinLibrary) -> Unit,
     onSearch: () -> Unit,
     onSettings: () -> Unit,
-    onLiveTv: () -> Unit
+    onLiveTv: () -> Unit,
+    showLiveTv: Boolean
 ) {
     val hero = continueWatching.firstOrNull() ?: recentMovies.firstOrNull() ?: recentShows.firstOrNull()
     Box(Modifier.fillMaxSize().background(MobileHomeBackground)) {
         MobileHomeHero(hero, apiService)
         LazyColumn(
-            contentPadding = PaddingValues(top = 18.dp, bottom = 28.dp),
+            contentPadding = PaddingValues(top = 18.dp, bottom = 96.dp),
             verticalArrangement = Arrangement.spacedBy(22.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             item {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("Velora", style = MaterialTheme.typography.headlineSmall, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                    IconButton(onClick = onLiveTv) { Icon(Icons.Default.Tv, "Televisión en directo", tint = Color.White) }
+                    Spacer(Modifier.weight(1f))
+                    if (showLiveTv) IconButton(onClick = onLiveTv) { Icon(Icons.Default.Tv, "Televisión en directo", tint = Color.White) }
                     IconButton(onClick = onSearch) { Icon(Icons.Default.Search, "Buscar", tint = Color.White) }
                     IconButton(onClick = onSettings) { Icon(Icons.Default.Settings, "Ajustes", tint = Color.White) }
                 }
             }
+            item { MobileMediaPanel(libraries, onLibraryClick, onSearch) }
             if (continueWatching.isNotEmpty()) item { MobileHomeMediaRow("Seguir viendo", continueWatching, apiService, onItemClick, showProgress = true) }
             if (recentMovies.isNotEmpty()) item { MobileHomeMediaRow("Películas añadidas recientemente", recentMovies, apiService, onItemClick) }
             if (recentShows.isNotEmpty()) item { MobileHomeMediaRow("Series añadidas recientemente", recentShows, apiService, onItemClick) }
             if (recentEpisodes.isNotEmpty()) item { MobileHomeMediaRow("Episodios añadidos recientemente", recentEpisodes, apiService, onItemClick) }
             if (unwatched.isNotEmpty()) item { MobileHomeMediaRow("Sin terminar", unwatched, apiService, onItemClick) }
             if (popular.isNotEmpty()) item { MobileHomeMediaRow("Más populares", popular, apiService, onItemClick) }
+        }
+    }
+}
+
+@Composable
+private fun MobileMediaPanel(
+    libraries: List<JellyfinLibrary>,
+    onLibraryClick: (JellyfinLibrary) -> Unit,
+    onSearch: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(Color.White.copy(alpha = .1f)).clickable(onClick = onSearch).padding(horizontal = 18.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Search, "Buscar películas y series", tint = Color.White.copy(alpha = .8f))
+            Text("Buscar películas y series", color = Color.White.copy(alpha = .8f), modifier = Modifier.padding(start = 12.dp))
+        }
+        if (libraries.isNotEmpty()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+                libraries.filter { it.CollectionType.equals("movies", true) || it.CollectionType.equals("tvshows", true) }.take(2).forEach { library ->
+                    Box(Modifier.weight(1f).height(108.dp).clip(RoundedCornerShape(18.dp)).background(Color.White.copy(alpha = .1f)).clickable { onLibraryClick(library) }) {
+                        Text(
+                            if (library.CollectionType.equals("tvshows", true)) "Series" else "Películas",
+                            color = Color.White, fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MobileLibraryScreen(
+    library: JellyfinLibrary,
+    items: List<JellyfinItem>,
+    apiService: JellyfinApiService?,
+    onBack: () -> Unit,
+    onItemClick: (JellyfinItem) -> Unit
+) {
+    Column(Modifier.fillMaxSize().background(MobileHomeBackground).navigationBarsPadding()) {
+        Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onBack) { Text("‹", color = Color.White, style = MaterialTheme.typography.headlineMedium) }
+            Text(if (library.CollectionType.equals("tvshows", true)) "Series" else "Películas", color = Color.White, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        }
+        if (items.isEmpty()) {
+            Text("No hay contenido disponible", color = Color.White.copy(alpha = .75f), modifier = Modifier.align(Alignment.CenterHorizontally).padding(32.dp))
+        } else {
+            androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+                columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(minSize = 132.dp),
+                contentPadding = PaddingValues(horizontal = 18.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                gridItems(items, key = { it.Id }) { item ->
+                    val image = apiService?.getImageUrl(item.Id, "Primary", null, maxWidth = 420, maxHeight = 620, quality = 84)
+                    Column(Modifier.clickable { onItemClick(item) }) {
+                        Box(Modifier.fillMaxWidth().aspectRatio(.68f).clip(RoundedCornerShape(14.dp)).background(Color.White.copy(alpha = .1f))) {
+                            if (image != null && apiService != null) AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(image).headers(apiService.getImageRequestHeaders()).memoryCachePolicy(CachePolicy.ENABLED).diskCachePolicy(CachePolicy.ENABLED).build(), contentDescription = item.Name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                        }
+                        Text(item.Name, color = Color.White, style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 5.dp))
+                    }
+                }
+            }
         }
     }
 }
