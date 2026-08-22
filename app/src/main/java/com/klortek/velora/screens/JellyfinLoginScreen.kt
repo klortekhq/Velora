@@ -258,7 +258,7 @@ fun JellyfinLoginScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Other options:",
+                        text = "Otras opciones:",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(end = 8.dp)
@@ -277,7 +277,7 @@ fun JellyfinLoginScreen(
                                 }
                             }
                         ) {
-                            Text("Use Password")
+                            Text("Usar contraseña")
                         }
                     }
 
@@ -294,7 +294,7 @@ fun JellyfinLoginScreen(
                                 }
                             }
                         ) {
-                            Text("Use QuickConnect")
+                            Text("Usar Quick Connect")
                         }
                     }
 
