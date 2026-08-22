@@ -947,7 +947,7 @@ fun MoviesLibraryScreen(
                     val details = instantHighlightedItemDetails ?: item
                     val runtimeText = formatRuntime(details.RunTimeTicks)
                     val yearText = details.ProductionYear?.toString() ?: ""
-                    val genreText = details.Genres?.take(3)?.joinToString(", ") ?: ""
+                    val genreText = details.Genres?.take(3)?.joinToString(", ") { localizedGenreName(it) } ?: ""
                     
                     Column(
                         modifier = Modifier
@@ -1354,7 +1354,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 1 row
                             if (genreMovies1.isNotEmpty() && selectedGenre1.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de $selectedGenre1",
+                                    text = "Mejores películas de ${localizedGenreName(selectedGenre1)}",
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1397,7 +1397,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 2 row
                             if (genreMovies2.isNotEmpty() && selectedGenre2.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de $selectedGenre2",
+                                    text = "Mejores películas de ${localizedGenreName(selectedGenre2)}",
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1440,7 +1440,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 3 row
                             if (genreMovies3.isNotEmpty() && selectedGenre3.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de $selectedGenre3",
+                                    text = "Mejores películas de ${localizedGenreName(selectedGenre3)}",
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1483,7 +1483,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 4 row
                             if (genreMovies4.isNotEmpty() && selectedGenre4.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de $selectedGenre4",
+                                    text = "Mejores películas de ${localizedGenreName(selectedGenre4)}",
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1526,7 +1526,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 5 row
                             if (genreMovies5.isNotEmpty() && selectedGenre5.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de $selectedGenre5",
+                                    text = "Mejores películas de ${localizedGenreName(selectedGenre5)}",
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
