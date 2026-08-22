@@ -72,6 +72,7 @@ import java.util.Locale
 enum class AspectMode(val label: String) {
     FIT("Fit"),
     FILL("Fill"),
+    FOUR_THREE("4:3"),
     LETTERBOX("16:9"),
     CINEMA("Cinema"),
     STRETCH("Stretch"),
@@ -900,3 +901,4 @@ private fun TrackMenuItem(
         }
     }
 }
+
