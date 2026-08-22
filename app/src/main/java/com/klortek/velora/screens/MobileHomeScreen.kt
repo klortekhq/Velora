@@ -165,7 +165,7 @@ fun MobileLibraryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .widthIn(max = 1080.dp)
-                    .align(Alignment.TopCenter)
+                    .align(Alignment.CenterHorizontally)
             ) {
                 gridItems(items, key = { it.Id }) { item ->
                     val image = remember(item.Id, apiService) {
