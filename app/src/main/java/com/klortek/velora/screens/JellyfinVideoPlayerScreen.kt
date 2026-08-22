@@ -133,11 +133,11 @@ import com.klortek.velora.theme.*
 
 // Picture mode / aspect ratio options
 enum class AspectMode(val label: String) {
-    FIT("Fit"),              // Natural letterbox - fits video in screen with black bars
-    FILL("Fill"),            // Crop to fill screen - removes black bars by cropping
+    FIT("Ajustar"),          // Natural letterbox - fits video in screen with black bars
+    FILL("Rellenar"),        // Crop to fill screen - removes black bars by cropping
     LETTERBOX("16:9"),       // Force 16:9 letterbox - maintains aspect ratio in 16:9 frame
-    CINEMA("Cinema"),        // Cinema scope 2.39:1 - movie theater style with wide black bars
-    STRETCH("Stretch"),      // Stretch both axes - distorts to fill screen
+    CINEMA("Cine"),          // Cinema scope 2.39:1 - movie theater style with wide black bars
+    STRETCH("Estirar"),      // Stretch both axes - distorts to fill screen
     ORIGINAL("Original");    // Display at native resolution without scaling
 
     fun next(): AspectMode {
