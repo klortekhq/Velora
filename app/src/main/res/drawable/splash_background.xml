@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background color -->
+    <item android:drawable="@color/splash_background" />
+    
+    <!-- Velora branding in the center; do not use the legacy launcher icon here. -->
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/velora_banner_320" />
+    </item>
+</layer-list>
+
