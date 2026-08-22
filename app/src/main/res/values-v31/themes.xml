@@ -9,4 +9,3 @@
         <item name="android:windowSplashScreenIconBackgroundColor">@color/splash_background</item>
     </style>
 </resources>
-
