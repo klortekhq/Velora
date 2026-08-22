@@ -462,7 +462,9 @@ fun JellyfinHomeScreen(
         if (autoRefreshEnabled && repository != null) {
             while (true) {
                 // Wait for the specified interval (convert minutes to milliseconds)
-                delay(autoRefreshIntervalMinutes * 60 * 1000L)
+                // Never let background refresh compete with D-pad navigation or playback.
+                // A ten-minute floor also prevents accidental aggressive polling on TV devices.
+                delay(maxOf(autoRefreshIntervalMinutes, 10) * 60 * 1000L)
 
                 // Check if auto-refresh is still enabled (user might have disabled it)
                 autoRefreshEnabled = settings.autoRefreshEnabled
