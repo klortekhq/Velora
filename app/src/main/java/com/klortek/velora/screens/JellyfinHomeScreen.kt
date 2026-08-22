@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -957,7 +958,9 @@ fun JellyfinHomeScreen(
                             !it.Name.equals("Collections", ignoreCase = true) &&
                             !it.Name.equals("Televisión en directo", ignoreCase = true) &&
                             !it.Name.equals("Live TV", ignoreCase = true) &&
-                            !it.Name.equals("IPTV", ignoreCase = true)
+                            !it.Name.equals("IPTV", ignoreCase = true) &&
+                            // Playlists and other server helper libraries are not media tabs.
+                            it.CollectionType?.lowercase() in setOf("movies", "tvshows", "music", "homevideos", "musicvideos")
                         }.map { null to it.Id })
                         // Add a single "Collections" tab if collections exist
                         // Use a unique identifier to avoid conflicts with library names
@@ -976,7 +979,7 @@ fun JellyfinHomeScreen(
                 
                 if (allTabs.isNotEmpty()) {
                     TabRow(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
                         selectedTabIndex = if (selectedLibraryId != null || selectedCollectionId == "__COLLECTIONS__") selectedTabIndex else -1,
                         separator = { Spacer(modifier = Modifier.width(11.dp)) }, // Reduced from 16dp to 11dp (30% smaller)
                         indicator = { tabPositions, doesTabRowHaveFocus ->
