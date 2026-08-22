@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,6 +27,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Tv
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,14 +74,14 @@ fun MobileHomeScreen(
 ) {
     val hero = continueWatching.firstOrNull() ?: recentMovies.firstOrNull() ?: recentShows.firstOrNull()
     Box(Modifier.fillMaxSize().background(MobileHomeBackground)) {
-        MobileHomeHero(hero, apiService)
+        MobileHomeHero(hero, apiService, onItemClick)
         LazyColumn(
-            contentPadding = PaddingValues(top = 18.dp, bottom = 96.dp),
+            contentPadding = PaddingValues(top = 18.dp, bottom = 112.dp),
             verticalArrangement = Arrangement.spacedBy(22.dp),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().navigationBarsPadding()
         ) {
             item {
-                Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically) {
                     Spacer(Modifier.weight(1f))
                     if (showLiveTv) IconButton(onClick = onLiveTv) { Icon(Icons.Default.Tv, "Televisión en directo", tint = Color.White) }
                     IconButton(onClick = onDownloads) { Icon(Icons.Default.Download, "Descargas", tint = Color.White) }
@@ -94,6 +97,7 @@ fun MobileHomeScreen(
             if (unwatched.isNotEmpty()) item { MobileHomeMediaRow("Sin terminar", unwatched, apiService, onItemClick) }
             if (popular.isNotEmpty()) item { MobileHomeMediaRow("Más populares", popular, apiService, onItemClick) }
         }
+        MobileBottomNavigation(onHome = {}, onMedia = onSearch, onDownloads = onDownloads, modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
@@ -167,15 +171,46 @@ fun MobileLibraryScreen(
 }
 
 @Composable
-private fun MobileHomeHero(item: JellyfinItem?, apiService: JellyfinApiService?) {
+private fun MobileHomeHero(item: JellyfinItem?, apiService: JellyfinApiService?, onItemClick: (JellyfinItem) -> Unit) {
     if (item == null || apiService == null) return
     val url = apiService.getImageUrl(item.Id, "Backdrop", null, maxWidth = 960, maxHeight = 540, quality = 80) ?: return
-    Box(Modifier.fillMaxWidth().height(380.dp)) {
+    Box(Modifier.fillMaxWidth().height(390.dp).clickable { onItemClick(item) }) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current).data(url).headers(apiService.getImageRequestHeaders()).memoryCachePolicy(CachePolicy.ENABLED).diskCachePolicy(CachePolicy.ENABLED).build(),
             contentDescription = item.Name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop
         )
-        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, MobileHomeBackground.copy(alpha = .35f), MobileHomeBackground))))
+        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, MobileHomeBackground.copy(alpha = .38f), MobileHomeBackground))))
+        Column(
+            modifier = Modifier.align(Alignment.BottomStart).padding(horizontal = 20.dp, vertical = 28.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(if (item.Type == "Episode") item.SeriesName ?: item.Name else item.Name, color = Color.White, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            if (item.Type == "Episode") {
+                Text("S${item.ParentIndexNumber ?: "?"} E${item.IndexNumber ?: "?"} · ${item.Name}", color = Color.White.copy(alpha = .86f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+            Text("Continuar viendo", color = MobileHomeCyan, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+        }
+    }
+}
+
+@Composable
+private fun MobileBottomNavigation(onHome: () -> Unit, onMedia: () -> Unit, onDownloads: () -> Unit, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier.fillMaxWidth().navigationBarsPadding().background(Color(0xEE171A21)).padding(horizontal = 16.dp, vertical = 10.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        MobileBottomNavigationItem(Icons.Default.Home, "Inicio", onHome, selected = true)
+        MobileBottomNavigationItem(Icons.Default.VideoLibrary, "Mis medios", onMedia)
+        MobileBottomNavigationItem(Icons.Default.Download, "Descargas", onDownloads)
+    }
+}
+
+@Composable
+private fun MobileBottomNavigationItem(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit, selected: Boolean = false) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clip(RoundedCornerShape(18.dp)).clickable(onClick = onClick).padding(horizontal = 22.dp, vertical = 4.dp)) {
+        Icon(icon, label, tint = if (selected) MobileHomeCyan else Color.White.copy(alpha = .82f), modifier = Modifier.size(24.dp))
+        Text(label, color = if (selected) MobileHomeCyan else Color.White.copy(alpha = .82f), style = MaterialTheme.typography.labelSmall)
     }
 }
 
