@@ -2258,7 +2258,8 @@ fun EpisodeActionButtonsRow(
                 }
             }
             
-            // Trailer button - always shows
+            // Trailers are intentionally hidden in Velora.
+            if (false) {
             var trailerFocused by remember { mutableStateOf(false) }
             
             Button(
@@ -2319,6 +2320,8 @@ fun EpisodeActionButtonsRow(
                         modifier = Modifier.padding(horizontal = 12.dp)
                     )
                 }
+            }
+
             }
 
             // Mark as Watched/Unwatched button
