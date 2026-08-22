@@ -2291,7 +2291,9 @@ fun SettingsScreen(
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    SettingsCategory.entries.forEach { category ->
+                    SettingsCategory.entries
+                        .filterNot { it == SettingsCategory.JELLYSEERR || it == SettingsCategory.TRAILERS }
+                        .forEach { category ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -2338,7 +2340,9 @@ fun SettingsScreen(
                                 .verticalScroll(rememberScrollState()),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            SettingsCategory.entries.forEach { category ->
+                            SettingsCategory.entries
+                                .filterNot { it == SettingsCategory.JELLYSEERR || it == SettingsCategory.TRAILERS }
+                                .forEach { category ->
                                 CategoryItem(
                                     category = category,
                                     isSelected = selectedCategory == category,

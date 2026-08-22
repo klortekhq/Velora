@@ -2133,7 +2133,7 @@ fun MoviesLibraryScreen(
                                 
                                 showSettings = false 
                             },
-                            initialCategory = SettingsCategory.JELLYSEERR
+                            initialCategory = SettingsCategory.ADVANCED
                         )
                     }
                 }

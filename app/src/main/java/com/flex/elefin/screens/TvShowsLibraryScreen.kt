@@ -2231,7 +2231,7 @@ fun TvShowsLibraryScreen(
                                         
                                         showSettings = false 
                                     },
-                                    initialCategory = SettingsCategory.JELLYSEERR
+                                    initialCategory = SettingsCategory.ADVANCED
                                 )
                             }
                         }
