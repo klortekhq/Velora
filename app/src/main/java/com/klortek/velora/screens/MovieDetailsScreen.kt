@@ -151,6 +151,7 @@ fun MovieDetailsScreen(
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     var refreshTrigger by remember { mutableStateOf(0) }
     var showSettings by remember { mutableStateOf(false) }
+    var showMobileResumeDialog by remember { mutableStateOf(false) }
     
     androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
         val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
@@ -219,6 +220,32 @@ fun MovieDetailsScreen(
         }
     }
 
+    val startMoviePlayback: (Long) -> Unit = { positionMs ->
+        context.startActivity(
+            JellyfinVideoPlayerActivity.createIntent(
+                context = context,
+                itemId = displayItem.Id,
+                resumePositionMs = positionMs,
+                itemName = displayItem.Name
+            )
+        )
+    }
+
+    if (showMobileResumeDialog && isMobileLayout && (displayItem.UserData?.PositionTicks ?: 0L) > 0L) {
+        ResumeEpisodeDialog(
+            episode = displayItem,
+            onDismiss = { showMobileResumeDialog = false },
+            onResume = {
+                showMobileResumeDialog = false
+                startMoviePlayback((displayItem.UserData?.PositionTicks ?: 0L) / 10_000L)
+            },
+            onPlayFromStart = {
+                showMobileResumeDialog = false
+                startMoviePlayback(0L)
+            }
+        )
+    }
+
     if (isMobileLayout) {
         MobileMovieDetailsLayout(
             item = displayItem,
@@ -226,14 +253,10 @@ fun MovieDetailsScreen(
             apiService = apiService,
             onBack = onBackPressed,
             onPlay = {
-                val intent = JellyfinVideoPlayerActivity.createIntent(
-                    context = context,
-                    itemId = displayItem.Id,
-                    resumePositionMs = ((displayItem.UserData?.PositionTicks ?: 0L) / 10_000L),
-                    itemName = displayItem.Name
-                )
-                context.startActivity(intent)
-            }
+                if ((displayItem.UserData?.PositionTicks ?: 0L) > 0L) showMobileResumeDialog = true
+                else startMoviePlayback(0L)
+            },
+            onRestart = { startMoviePlayback(0L) }
         )
     } else {
     Box(modifier = Modifier.fillMaxSize()) {
