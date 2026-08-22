@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.ui.Alignment
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -67,7 +68,13 @@ fun MobileMovieDetailsLayout(
     Box(Modifier.fillMaxSize()) {
         MobileBackdrop(backdropUrl, apiService, item.Name)
         Column(
-            modifier = Modifier.fillMaxSize().background(MobileBackground.copy(alpha = 0.62f)).verticalScroll(rememberScrollState()).padding(20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .widthIn(max = 980.dp)
+                .align(Alignment.TopCenter)
+                .background(MobileBackground.copy(alpha = 0.62f))
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             MobileBackButton(onBack)
@@ -103,7 +110,13 @@ fun MobileSeriesDetailsLayout(
     Box(Modifier.fillMaxSize()) {
         MobileBackdrop(backdropUrl, apiService, item.Name)
         Column(
-            modifier = Modifier.fillMaxSize().background(MobileBackground.copy(alpha = .64f)).verticalScroll(rememberScrollState()).padding(20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .widthIn(max = 980.dp)
+                .align(Alignment.TopCenter)
+                .background(MobileBackground.copy(alpha = .64f))
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             MobileBackButton(onBack)
@@ -184,7 +197,10 @@ fun MobileSeriesDetailsLayout(
 
 @Composable private fun MobileEpisodeCard(episode: JellyfinItem, apiService: JellyfinApiService?, onDownload: () -> Unit, onClick: () -> Unit) {
     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(Color.Black.copy(alpha = .42f)).clickable(onClick = onClick).padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-        MobileArtwork(apiService?.getImageUrl(episode.Id, "Primary", null, maxWidth = 500, maxHeight = 280, quality = 82), apiService, episode.Name, Modifier.width(140.dp).aspectRatio(1.65f))
+        val image = remember(episode.Id, apiService) {
+            apiService?.getImageUrl(episode.Id, "Primary", null, maxWidth = 500, maxHeight = 280, quality = 82)
+        }
+        MobileArtwork(image, apiService, episode.Name, Modifier.width(140.dp).aspectRatio(1.65f))
         Column(Modifier.weight(1f).padding(start = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text("E${episode.IndexNumber ?: ""} · ${episode.Name}", color = Color.White, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(episode.formattedRuntime ?: "", color = Color.White.copy(alpha = .7f)); Text(episode.Overview ?: "", color = Color.White.copy(alpha = .78f), maxLines = 2, overflow = TextOverflow.Ellipsis) }
         androidx.tv.material3.IconButton(onClick = onDownload) { Icon(Icons.Default.Download, "Descargar", tint = MobileCyan) }
     }
