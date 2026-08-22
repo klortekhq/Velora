@@ -1003,7 +1003,7 @@ fun TvShowsLibraryScreen(
                             val details = instantHighlightedItemDetails ?: item
                             val runtimeText = formatRuntime(details.RunTimeTicks)
                             val yearText = details.ProductionYear?.toString() ?: ""
-                            val genreText = details.Genres?.take(3)?.joinToString(", ") ?: ""
+                            val genreText = details.Genres?.take(3)?.joinToString(", ") { localizedGenreName(it) } ?: ""
                             
                             // For episodes, show series name and episode info
                             val displayTitle = if (item.Type == "Episode") {
@@ -1449,7 +1449,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 1 (randomly selected genre)
                                     if (filteredGenreShows1.isNotEmpty() && selectedGenre1.isNotEmpty()) {
                                         Text(
-                                            text = "Más de $selectedGenre1",
+                                            text = "Más de ${localizedGenreName(selectedGenre1)}",
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1492,7 +1492,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 2 (randomly selected genre)
                                     if (filteredGenreShows2.isNotEmpty() && selectedGenre2.isNotEmpty()) {
                                         Text(
-                                            text = "Más de $selectedGenre2",
+                                            text = "Más de ${localizedGenreName(selectedGenre2)}",
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1535,7 +1535,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 3 (randomly selected genre)
                                     if (filteredGenreShows3.isNotEmpty() && selectedGenre3.isNotEmpty()) {
                                         Text(
-                                            text = "Más de $selectedGenre3",
+                                            text = "Más de ${localizedGenreName(selectedGenre3)}",
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1578,7 +1578,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 4 (randomly selected genre)
                                     if (filteredGenreShows4.isNotEmpty() && selectedGenre4.isNotEmpty()) {
                                         Text(
-                                            text = "Más de $selectedGenre4",
+                                            text = "Más de ${localizedGenreName(selectedGenre4)}",
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1621,7 +1621,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 5 (randomly selected genre)
                                     if (filteredGenreShows5.isNotEmpty() && selectedGenre5.isNotEmpty()) {
                                         Text(
-                                            text = "Más de $selectedGenre5",
+                                            text = "Más de ${localizedGenreName(selectedGenre5)}",
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
