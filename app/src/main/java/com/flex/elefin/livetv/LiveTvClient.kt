@@ -103,7 +103,7 @@ class LiveTvClient(private val config: JellyfinConfig) {
         header("X-Emby-Token", accessToken)
         header(
             "X-Emby-Authorization",
-            "MediaBrowser Client=\"Elefin\", Device=\"Android TV\", DeviceId=\"${config.deviceId}\", Version=\"${BuildConfig.VERSION_NAME}\""
+            "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"${config.deviceId}\", Version=\"${BuildConfig.VERSION_NAME}\""
         )
     }
 }
@@ -136,3 +136,4 @@ private fun parseJellyfinDate(value: String?): Date? {
         null
     }
 }
+
