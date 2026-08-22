@@ -1,0 +1,44 @@
+<resources>
+    <!-- Existing Elefin resources translated -->
+    <string name="app_name">Velora</string>
+    <string name="browse_title">Velora</string>
+    <string name="related_movies">Vídeos relacionados</string>
+    <string name="grid_view">Vista de cuadrícula</string>
+    <string name="error_fragment">Error</string>
+    <string name="personal_settings">Ajustes personales</string>
+    <string name="watch_trailer_1">Ver tráiler</string>
+    <string name="watch_trailer_2">GRATIS</string>
+    <string name="rent_1">Alquilar por día</string>
+    <string name="rent_2">Desde 1,99 $</string>
+    <string name="buy_1">Comprar</string>
+    <string name="buy_2">POR 9,99 $</string>
+    <string name="movie">Película</string>
+    <string name="error_fragment_message">Se ha producido un error</string>
+    <string name="dismiss_error">Cerrar</string>
+
+    <!-- Live TV -->
+    <string name="live_tv">Televisión en directo</string>
+    <string name="live_tv_loading">Cargando canales…</string>
+    <string name="live_tv_error">No se pudo cargar la TV en directo</string>
+    <string name="live_tv_no_channels">Este servidor Jellyfin no tiene canales de TV en directo disponibles.</string>
+    <string name="live_tv_no_program">Sin información de programación</string>
+    <string name="live_tv_refresh">Actualizar canales</string>
+    <string name="live_tv_sources">%1$d fuentes</string>
+    <string name="live_tv_channel_count">%1$d canales</string>
+    <string name="back">Atrás</string>
+    <string name="collections">Colecciones</string>
+    <string name="continue_watching">Seguir viendo</string>
+    <string name="next_up">A continuación</string>
+    <string name="recently_added_movies">Películas añadidas recientemente</string>
+    <string name="recently_added_named">Añadido recientemente: %1$s</string>
+    <string name="recently_released_movies">Películas estrenadas recientemente</string>
+    <string name="recently_added_shows">Series añadidas recientemente</string>
+    <string name="recently_added_shows_in">Series añadidas recientemente en %1$s</string>
+    <string name="recently_added_episodes">Episodios añadidos recientemente</string>
+    <string name="recently_added_episodes_in">Episodios añadidos recientemente en %1$s</string>
+    <string name="continue_watching_actions">Acciones de Seguir viendo</string>
+    <string name="continue_watching_remove">Quitar de Seguir viendo</string>
+    <string name="continue_watching_remove_explanation">Oculta este elemento en Velora sin cambiar tu progreso. Volverá a aparecer si lo reproduces de nuevo.</string>
+    <string name="continue_watching_mark_watched">Marcar como visto</string>
+    <string name="cancel">Cancelar</string>
+</resources>
