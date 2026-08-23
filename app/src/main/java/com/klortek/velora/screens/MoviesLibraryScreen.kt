@@ -638,7 +638,7 @@ fun MoviesLibraryScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = 22.dp) // Reduced by 30% (32 * 0.7 = 22.4, rounded to 22)
+                .padding(top = if (isTv) 22.dp else 52.dp)
                 .then(
                     if (debugOutlinesEnabled) {
                         Modifier.border(4.dp, Color.Red)
