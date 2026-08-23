@@ -31,7 +31,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Tv
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.VideoLibrary
+import androidx.compose.material.icons.filled.Movie
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -75,6 +75,8 @@ fun MobileHomeScreen(
     onDownloads: () -> Unit,
     onLiveTv: () -> Unit,
     showLiveTv: Boolean,
+    onMovies: () -> Unit,
+    onSeries: () -> Unit,
     onContinueWatchingLongClick: (JellyfinItem) -> Unit = {}
 ) {
     Box(Modifier.fillMaxSize().background(MobileHomeBackground)) {
@@ -117,7 +119,19 @@ fun MobileHomeScreen(
             if (unwatched.isNotEmpty()) item { MobileHomeMediaRow("Sin terminar", unwatched, apiService, onItemClick) }
             if (popular.isNotEmpty()) item { MobileHomeMediaRow("Más populares", popular, apiService, onItemClick) }
         }
-        MobileBottomNavigation(onHome = {}, onMedia = { libraries.firstOrNull()?.let(onLibraryClick) ?: onSearch() }, onDownloads = onDownloads, modifier = Modifier.align(Alignment.BottomCenter))
+        val movieLibrary = libraries.firstOrNull { it.CollectionType.equals("movies", true) }
+        val seriesLibrary = libraries.firstOrNull { it.CollectionType.equals("tvshows", true) }
+        MobileBottomNavigation(
+            onHome = {},
+            onMovies = { movieLibrary?.let { onMovies() } ?: onSearch() },
+            onSeries = { seriesLibrary?.let { onSeries() } ?: onSearch() },
+            onLiveTv = onLiveTv,
+            showMovies = movieLibrary != null,
+            showSeries = seriesLibrary != null,
+            showLiveTv = showLiveTv,
+            onDownloads = onDownloads,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -230,21 +244,32 @@ private fun MobileHomeHero(item: JellyfinItem?, apiService: JellyfinApiService?,
 }
 
 @Composable
-private fun MobileBottomNavigation(onHome: () -> Unit, onMedia: () -> Unit, onDownloads: () -> Unit, modifier: Modifier = Modifier) {
+private fun MobileBottomNavigation(
+    onHome: () -> Unit,
+    onMovies: () -> Unit,
+    onSeries: () -> Unit,
+    onLiveTv: () -> Unit,
+    showMovies: Boolean,
+    showSeries: Boolean,
+    showLiveTv: Boolean,
+    onDownloads: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier.fillMaxWidth().navigationBarsPadding().background(Color(0xEE171A21)).padding(horizontal = 16.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        MobileBottomNavigationItem(Icons.Default.Home, "Inicio", onHome, selected = true)
-        MobileBottomNavigationItem(Icons.Default.VideoLibrary, "Mis medios", onMedia)
-        MobileBottomNavigationItem(Icons.Default.Download, "Descargas", onDownloads)
+        MobileBottomNavigationItem(Icons.Default.Home, "Inicio", onHome, selected = true, modifier = Modifier.weight(1f))
+        if (showMovies) MobileBottomNavigationItem(Icons.Default.Movie, "Películas", onMovies, modifier = Modifier.weight(1f))
+        if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, "Series", onSeries, modifier = Modifier.weight(1f))
+        if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, "TV", onLiveTv, modifier = Modifier.weight(1f))
+        MobileBottomNavigationItem(Icons.Default.Download, "Descargas", onDownloads, modifier = Modifier.weight(1f))
     }
 }
 
 @Composable
-private fun MobileBottomNavigationItem(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit, selected: Boolean = false) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clip(RoundedCornerShape(18.dp)).clickable(onClick = onClick).padding(horizontal = 22.dp, vertical = 4.dp)) {
+private fun MobileBottomNavigationItem(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit, selected: Boolean = false, modifier: Modifier = Modifier) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.clip(RoundedCornerShape(18.dp)).clickable(onClick = onClick).padding(horizontal = 2.dp, vertical = 4.dp)) {
         Icon(icon, label, tint = if (selected) MobileHomeCyan else Color.White.copy(alpha = .82f), modifier = Modifier.size(24.dp))
         Text(label, color = if (selected) MobileHomeCyan else Color.White.copy(alpha = .82f), style = MaterialTheme.typography.labelSmall)
     }

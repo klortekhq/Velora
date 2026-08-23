@@ -645,6 +645,12 @@ fun JellyfinHomeScreen(
             onDownloads = onDownloadsClick,
             onLiveTv = onLiveTvClick,
             showLiveTv = showLiveTv,
+            onMovies = {
+                libraries.firstOrNull { it.CollectionType.equals("movies", true) }?.let { selectedLibraryId = it.Id }
+            },
+            onSeries = {
+                libraries.firstOrNull { it.CollectionType.equals("tvshows", true) }?.let { selectedLibraryId = it.Id }
+            },
             onContinueWatchingLongClick = { item -> continueWatchingActionItem = item },
             onLibraryClick = { library -> selectedLibraryId = library.Id }
         )
