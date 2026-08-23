@@ -158,8 +158,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
             return
         }
 
-        // Check if MPV is enabled in settings
-        if (settings.isMpvEnabled || isLiveTv) {
+        // ExoPlayer is the default for every playback type, including Live TV.
+        // MPV is only selected explicitly in Ajustes. ExoPlayer's existing
+        // error listener can still hand off to MPV when fallbackToMpv is enabled.
+        if (settings.isMpvEnabled) {
             val serverUrl = config.serverUrl.removeSuffix("/")
             val accessToken = config.accessToken ?: ""
             
@@ -292,6 +294,70 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
 
                 startActivity(intent)
                 finish()
+            }
+            return
+        }
+
+        // Live TV uses Jellyfin's resolved PlaybackInfo source. Do not force MPV
+        // here: ExoPlayer handles Jellyfin HLS/TS streams natively and keeps the
+        // same track, subtitle and aspect-ratio controls as normal playback.
+        if (isLiveTv) {
+            lifecycleScope.launch {
+                val serverUrl = config.serverUrl.removeSuffix("/")
+                val accessToken = config.accessToken ?: ""
+                val playbackInfo = apiService.getPlaybackInfo(
+                    itemId = itemId,
+                    mediaSourceId = null,
+                    subtitleStreamIndex = subtitleStreamIndex,
+                    autoOpenLiveStream = false
+                )
+                val liveSource = playbackInfo?.MediaSources?.firstOrNull()
+                val liveMediaSourceId = liveSource?.Id
+                val liveStreamId = liveSource?.LiveStreamId
+                val directSource = liveSource?.Path
+                val finalUrl = if (liveSource?.SupportsDirectPlay == true &&
+                    !directSource.isNullOrBlank() &&
+                    (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
+                    MpvUrlBuilder.buildLiveTvDirectSourceUrl(directSource)
+                } else if (!liveMediaSourceId.isNullOrBlank() && !liveStreamId.isNullOrBlank()) {
+                    MpvUrlBuilder.buildLiveTvStreamUrl(
+                        serverUrl = serverUrl,
+                        itemId = itemId,
+                        accessToken = accessToken,
+                        mediaSourceId = liveMediaSourceId,
+                        liveStreamId = liveStreamId
+                    )
+                } else {
+                    null
+                }
+
+                if (finalUrl == null) {
+                    android.util.Log.e("VideoPlayer", "Live TV PlaybackInfo did not return a playable ExoPlayer source")
+                    runOnUiThread {
+                        android.widget.Toast.makeText(
+                            this@JellyfinVideoPlayerActivity,
+                            getString(R.string.live_tv_playback_error),
+                            android.widget.Toast.LENGTH_LONG
+                        ).show()
+                        finish()
+                    }
+                    return@launch
+                }
+
+                android.util.Log.d("VideoPlayer", "ExoPlayer Live TV source selected: $finalUrl")
+                setContent {
+                    JellyfinAppTheme {
+                        JellyfinVideoPlayerScreen(
+                            item = JellyfinItem(Id = itemId, Name = itemName),
+                            apiService = apiService,
+                            onBack = { finish() },
+                            resumePositionMs = resumePositionMs,
+                            subtitleStreamIndex = subtitleStreamIndex,
+                            audioStreamIndex = audioStreamIndex,
+                            initialMediaUrl = finalUrl
+                        )
+                    }
+                }
             }
             return
         }
