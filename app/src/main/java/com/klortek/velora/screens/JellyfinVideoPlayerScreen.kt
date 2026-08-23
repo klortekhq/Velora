@@ -455,6 +455,7 @@ fun JellyfinVideoPlayerScreen(
     var nextEpisodeId by remember { mutableStateOf<String?>(null) } // Next episode ID for autoplay
     var nextEpisodeDetails by remember { mutableStateOf<JellyfinItem?>(null) } // Next episode details
     var currentAspectMode by remember { mutableStateOf(AspectMode.FIT) } // Picture mode / aspect ratio
+    var videoAspectRatio by remember { mutableStateOf(16f / 9f) }
     var videoResolution by remember { mutableStateOf("") } // Current video resolution string
     
     
@@ -2530,6 +2531,13 @@ fun JellyfinVideoPlayerScreen(
             while (true) {
                 currentPosition = player.currentPosition
                 duration = player.duration.coerceAtLeast(0L)
+                val size = player.videoSize
+                if (size.width > 0 && size.height > 0) {
+                    val detectedRatio = size.width.toFloat() / size.height.toFloat()
+                    if (kotlin.math.abs(videoAspectRatio - detectedRatio) > 0.01f) {
+                        videoAspectRatio = detectedRatio
+                    }
+                }
                 delay(500) // Update every 500ms
             }
         }
@@ -3669,11 +3677,19 @@ fun JellyfinVideoPlayerScreen(
                 )
             }
 
-            // Player at the top in 16:9 aspect ratio
+            // The outer mobile player must follow the selected mode too. A
+            // fixed 16:9 box used to hide changes made by the aspect selector.
+            val mobilePlayerAspect = when (currentAspectMode) {
+                AspectMode.FOUR_THREE -> 4f / 3f
+                AspectMode.LETTERBOX -> 16f / 9f
+                AspectMode.CINEMA -> 2.39f
+                AspectMode.FIT, AspectMode.ORIGINAL -> videoAspectRatio
+                AspectMode.FILL, AspectMode.STRETCH -> 16f / 9f
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
+                    .aspectRatio(mobilePlayerAspect)
             ) {
                 playerContent(Modifier.fillMaxSize())
             }
