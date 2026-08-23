@@ -64,6 +64,12 @@ import com.klortek.velora.jellyfin.AppSettings
 private val MobileHomeBackground = Color(0xFF090B10)
 private val MobileHomeCyan = Color(0xFF18C9F1)
 
+private enum class MobileLibrarySortMode {
+    Name, DateAdded, PremiereDate, Runtime, CriticRating, CommunityRating
+}
+
+private enum class MobilePlaybackFilter { All, Watched, Unwatched }
+
 @Composable
 fun MobileHomeScreen(
     continueWatching: List<JellyfinItem>,
@@ -189,14 +195,46 @@ fun MobileLibraryScreen(
             }
         )
     }
+    var mobileSortMode by remember {
+        mutableStateOf(
+            when (settings.getSortType()) {
+                "DateAdded" -> MobileLibrarySortMode.DateAdded
+                "DateReleased" -> MobileLibrarySortMode.PremiereDate
+                else -> MobileLibrarySortMode.Name
+            }
+        )
+    }
     var sortDescending by remember { mutableStateOf(false) }
+    var favoritesOnly by remember { mutableStateOf(false) }
+    var playbackFilter by remember { mutableStateOf(MobilePlaybackFilter.All) }
     var showSortDialog by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableStateOf(if (recommendations.isNotEmpty()) 0 else 1) }
-    val sortedItems = remember(items, sortType, sortDescending) {
-        val result = when (sortType) {
-            SortType.DateAdded -> items.sortedBy { it.DateCreated ?: "" }
-            SortType.DateReleased -> items.sortedBy { it.PremiereDate ?: "" }
-            SortType.Alphabetically -> items.sortedBy { it.Name.lowercase() }
+    val sortedItems = remember(items, sortType, mobileSortMode, sortDescending, favoritesOnly, playbackFilter) {
+        val filtered = items.filter { item ->
+            val favorite = item.UserData?.IsFavorite == true
+            val favoriteMatch = !favoritesOnly || favorite
+            val playbackMatch = when (playbackFilter) {
+                MobilePlaybackFilter.All -> true
+                MobilePlaybackFilter.Watched -> item.UserData?.Played == true
+                MobilePlaybackFilter.Unwatched -> item.UserData?.Played != true
+            }
+            favoriteMatch && playbackMatch
+        }
+        val effectiveSort = when (mobileSortMode) {
+            MobileLibrarySortMode.Name -> SortType.Alphabetically
+            MobileLibrarySortMode.DateAdded -> SortType.DateAdded
+            MobileLibrarySortMode.PremiereDate -> SortType.DateReleased
+            else -> SortType.Alphabetically
+        }
+        val result = when (effectiveSort) {
+            SortType.DateAdded -> filtered.sortedBy { it.DateCreated ?: "" }
+            SortType.DateReleased -> filtered.sortedBy { it.PremiereDate ?: "" }
+            SortType.Alphabetically -> when (mobileSortMode) {
+                MobileLibrarySortMode.Runtime -> filtered.sortedBy { it.RunTimeTicks ?: 0L }
+                MobileLibrarySortMode.CriticRating -> filtered.sortedBy { it.CriticRating ?: 0f }
+                MobileLibrarySortMode.CommunityRating -> filtered.sortedBy { it.CommunityRating ?: 0f }
+                else -> filtered.sortedBy { it.Name.lowercase() }
+            }
         }
         if (sortDescending) result.asReversed() else result
     }
@@ -286,6 +324,7 @@ fun MobileLibraryScreen(
                         Text("Ordenar y filtrar", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                         Text("Ordenar por", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
                         MobileLibrarySortOption("Nombre", sortType == SortType.Alphabetically) {
+                            mobileSortMode = MobileLibrarySortMode.Name
                             sortType = SortType.Alphabetically
                             settings.setSortType("Alphabetically")
                         }
@@ -294,9 +333,25 @@ fun MobileLibraryScreen(
                             settings.setSortType("DateAdded")
                         }
                         MobileLibrarySortOption("Fecha de estreno", sortType == SortType.DateReleased) {
+                            mobileSortMode = MobileLibrarySortMode.PremiereDate
                             sortType = SortType.DateReleased
                             settings.setSortType("DateReleased")
                         }
+                        MobileLibrarySortOption("Duración", mobileSortMode == MobileLibrarySortMode.Runtime) {
+                            mobileSortMode = MobileLibrarySortMode.Runtime
+                        }
+                        MobileLibrarySortOption("Valoración de la crítica", mobileSortMode == MobileLibrarySortMode.CriticRating) {
+                            mobileSortMode = MobileLibrarySortMode.CriticRating
+                        }
+                        MobileLibrarySortOption("Valoración de la comunidad", mobileSortMode == MobileLibrarySortMode.CommunityRating) {
+                            mobileSortMode = MobileLibrarySortMode.CommunityRating
+                        }
+                        Text("Filtros", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+                        MobileLibraryCheckOption("Favoritos", favoritesOnly) { favoritesOnly = !favoritesOnly }
+                        Text("Estado de reproducción", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
+                        MobileLibrarySortOption("Todos", playbackFilter == MobilePlaybackFilter.All) { playbackFilter = MobilePlaybackFilter.All }
+                        MobileLibrarySortOption("Vistos", playbackFilter == MobilePlaybackFilter.Watched) { playbackFilter = MobilePlaybackFilter.Watched }
+                        MobileLibrarySortOption("No vistos", playbackFilter == MobilePlaybackFilter.Unwatched) { playbackFilter = MobilePlaybackFilter.Unwatched }
                         Text("Dirección", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
                         MobileLibrarySortOption("Ascendente", !sortDescending) { sortDescending = false }
                         MobileLibrarySortOption("Descendente", sortDescending) { sortDescending = true }
@@ -335,6 +390,17 @@ private fun MobileLibrarySortOption(label: String, selected: Boolean, onClick: (
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(if (selected) "●" else "○", color = if (selected) MobileHomeCyan else Color.White.copy(alpha = .7f), style = MaterialTheme.typography.titleMedium)
+        Text(label, color = Color.White, modifier = Modifier.padding(start = 12.dp))
+    }
+}
+
+@Composable
+private fun MobileLibraryCheckOption(label: String, selected: Boolean, onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(if (selected) "☑" else "☐", color = if (selected) MobileHomeCyan else Color.White.copy(alpha = .7f), style = MaterialTheme.typography.titleMedium)
         Text(label, color = Color.White, modifier = Modifier.padding(start = 12.dp))
     }
 }
