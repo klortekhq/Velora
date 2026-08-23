@@ -8,6 +8,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -148,17 +149,18 @@ private fun LiveTvScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                onClick = onBack,
-                colors = IconButtonDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = stringResource(R.string.back)
-                )
+            if (isMobile) {
+                LiveTvTouchButton(Icons.Default.ArrowBack, stringResource(R.string.back), onBack)
+            } else {
+                IconButton(
+                    onClick = onBack,
+                    colors = IconButtonDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                ) {
+                    Icon(Icons.Default.ArrowBack, stringResource(R.string.back))
+                }
             }
 
             Spacer(modifier = Modifier.width(if (isMobile) 8.dp else 12.dp))
@@ -188,18 +190,24 @@ private fun LiveTvScreen(
                 }
             }
 
-            IconButton(
-                onClick = { refreshKey++ },
-                enabled = !isLoading,
-                colors = IconButtonDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface
+            if (isMobile) {
+                LiveTvTouchButton(
+                    Icons.Default.Refresh,
+                    stringResource(R.string.live_tv_refresh),
+                    onClick = { if (!isLoading) refreshKey++ },
+                    enabled = !isLoading
                 )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = stringResource(R.string.live_tv_refresh)
-                )
+            } else {
+                IconButton(
+                    onClick = { refreshKey++ },
+                    enabled = !isLoading,
+                    colors = IconButtonDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                ) {
+                    Icon(Icons.Default.Refresh, stringResource(R.string.live_tv_refresh))
+                }
             }
         }
 
@@ -310,6 +318,7 @@ private fun LiveTvChannelRow(
                 }
             )
             .then(focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier)
+            .then(if (compact) Modifier.clickable(onClick = onClick) else Modifier)
     ) {
         Row(
             modifier = Modifier
@@ -396,5 +405,24 @@ private fun LiveTvChannelRow(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun LiveTvTouchButton(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    description: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    Box(
+        modifier = Modifier
+            .size(52.dp)
+            .clip(RoundedCornerShape(26.dp))
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = if (enabled) 1f else .45f))
+            .clickable(enabled = enabled, onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(icon, description, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(26.dp))
     }
 }
