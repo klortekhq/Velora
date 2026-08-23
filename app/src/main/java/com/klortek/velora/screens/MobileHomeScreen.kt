@@ -173,6 +173,7 @@ private fun MobileMediaPanel(
 fun MobileLibraryScreen(
     library: JellyfinLibrary,
     items: List<JellyfinItem>,
+    recommendations: List<JellyfinItem> = emptyList(),
     apiService: JellyfinApiService?,
     onBack: () -> Unit,
     onItemClick: (JellyfinItem) -> Unit
@@ -190,6 +191,7 @@ fun MobileLibraryScreen(
     }
     var sortDescending by remember { mutableStateOf(false) }
     var showSortDialog by remember { mutableStateOf(false) }
+    var selectedTab by remember { mutableStateOf(if (recommendations.isNotEmpty()) 0 else 1) }
     val sortedItems = remember(items, sortType, sortDescending) {
         val result = when (sortType) {
             SortType.DateAdded -> items.sortedBy { it.DateCreated ?: "" }
@@ -204,7 +206,16 @@ fun MobileLibraryScreen(
             Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 18.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBack) { Text("‹", color = Color.White, style = MaterialTheme.typography.headlineMedium) }
+            Box(
+                modifier = Modifier
+                    .size(52.dp)
+                    .clip(RoundedCornerShape(26.dp))
+                    .background(Color.White.copy(alpha = .12f))
+                    .clickable(onClick = onBack),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("‹", color = Color.White, style = MaterialTheme.typography.headlineMedium)
+            }
             Text(
                 if (library.CollectionType.equals("tvshows", true)) "Series" else "Películas",
                 color = Color.White,
@@ -223,7 +234,15 @@ fun MobileLibraryScreen(
                 Text("↕", color = MobileHomeCyan, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             }
         }
-        if (items.isEmpty()) {
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            MobileLibraryTab("Recomendaciones", selectedTab == 0 && recommendations.isNotEmpty()) { selectedTab = 0 }
+            MobileLibraryTab("Todo", selectedTab == 1 || recommendations.isEmpty()) { selectedTab = 1 }
+        }
+        val visibleItems = if (selectedTab == 0 && recommendations.isNotEmpty()) recommendations else sortedItems
+        if (visibleItems.isEmpty()) {
             Text("No hay contenido disponible", color = Color.White.copy(alpha = .75f), modifier = Modifier.align(Alignment.CenterHorizontally).padding(32.dp))
         } else {
             androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
@@ -236,7 +255,7 @@ fun MobileLibraryScreen(
                     .widthIn(max = 1080.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
-                gridItems(sortedItems, key = { it.Id }) { item ->
+                gridItems(visibleItems, key = { it.Id }) { item ->
                     val image = remember(item.Id, apiService) {
                         apiService?.getImageUrl(item.Id, "Primary", null, maxWidth = 420, maxHeight = 620, quality = 84)
                     }
@@ -290,6 +309,20 @@ fun MobileLibraryScreen(
             }
         }
     }
+}
+
+@Composable
+private fun MobileLibraryTab(label: String, selected: Boolean, onClick: () -> Unit) {
+    Text(
+        label,
+        color = if (selected) Color(0xFF071218) else Color.White.copy(alpha = .85f),
+        fontWeight = FontWeight.SemiBold,
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(if (selected) MobileHomeCyan else Color.White.copy(alpha = .08f))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 18.dp, vertical = 10.dp)
+    )
 }
 
 @Composable

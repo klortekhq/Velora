@@ -618,6 +618,7 @@ fun JellyfinHomeScreen(
                 MobileLibraryScreen(
                     library = selectedLibrary,
                     items = libraryItems[selectedLibrary.Id].orEmpty(),
+                    recommendations = if (selectedLibrary.CollectionType.equals("tvshows", true)) mobileRecentShows else mobileRecentMovies,
                     apiService = apiService,
                     onBack = { selectedLibraryId = null },
                     onItemClick = { item ->
