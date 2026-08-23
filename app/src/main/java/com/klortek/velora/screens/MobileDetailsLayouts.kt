@@ -110,7 +110,7 @@ fun MobileMovieDetailsLayout(
                 "Reparto" -> MobilePeople(item, apiService)
                 "Equipo" -> MobileCrew(item, apiService)
                 "Detalles" -> MobileFileDetails(item)
-                "Similares" -> MobileSimilarMovies(similarMovies, apiService, onClick = onPlay)
+                "Similares" -> MobileSimilarMovies(similarMovies, apiService)
                 else -> MobilePeople(item, apiService)
             }
         }
@@ -290,15 +290,25 @@ private fun MobileFileDetails(item: JellyfinItem) {
 }
 
 @Composable
-private fun MobileSimilarMovies(items: List<JellyfinItem>, apiService: JellyfinApiService?, onClick: () -> Unit) {
+private fun MobileSimilarMovies(items: List<JellyfinItem>, apiService: JellyfinApiService?) {
     if (items.isEmpty()) {
         Text("No hay títulos similares disponibles", color = Color.White.copy(alpha = .72f))
         return
     }
+    val context = LocalContext.current
     LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         items(items, key = { it.Id }) { movie ->
             val image = remember(movie.Id, apiService) { apiService?.getImageUrl(movie.Id, "Primary", null, maxWidth = 320, maxHeight = 480, quality = 80) }
-            Column(Modifier.width(132.dp).clickable(onClick = onClick)) {
+            Column(Modifier.width(132.dp).clickable {
+                context.startActivity(
+                    com.klortek.velora.JellyfinVideoPlayerActivity.createIntent(
+                        context = context,
+                        itemId = movie.Id,
+                        resumePositionMs = movie.UserData?.PositionTicks?.let { it / 10_000L } ?: 0L,
+                        itemName = movie.Name
+                    )
+                )
+            }) {
                 MobileArtwork(image, apiService, movie.Name, Modifier.fillMaxWidth().height(188.dp))
                 Text(movie.Name, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 5.dp))
             }
