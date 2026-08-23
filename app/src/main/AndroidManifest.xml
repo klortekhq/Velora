@@ -10,7 +10,6 @@
 
     <!-- Query for MPV players to check if installed (Android 11+ package visibility) -->
     <queries>
-        <package android:name="com.flex.mpvelefin" />
         <package android:name="is.xyz.mpv" />
     </queries>
 

@@ -19,8 +19,8 @@ import com.klortek.velora.BuildConfig
  */
 object MpvVeloraLauncher {
     private const val TAG = "MpvVeloraLauncher"
-    private const val MPV_EXTERNAL_PACKAGE = "com.flex.mpvelefin"
-    private const val MPV_EXTERNAL_ACTIVITY = "com.flex.mpvelefin.MpvPlayerActivity"
+    private const val MPV_EXTERNAL_PACKAGE = "is.xyz.mpv"
+    private const val MPV_EXTERNAL_ACTIVITY = "is.xyz.mpv.MpvActivity"
     
     /**
      * Check if MPV is available (always true now as it is embedded).
