@@ -22,12 +22,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.filled.Shuffle
+import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.filled.Cast
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.ui.Alignment
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,6 +48,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
@@ -54,8 +60,11 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinItem
+import com.klortek.velora.jellyfin.RemoteSessionInfo
+import com.klortek.velora.jellyfin.AppSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 
 private val MobileBackground = Color(0xFF090A0D)
 private val MobileCyan = Color(0xFF16C8F2)
@@ -72,6 +81,8 @@ fun MobileMovieDetailsLayout(
 ) {
     var selectedSection by remember { mutableStateOf("Reparto") }
     var similarMovies by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
+    var showAudioDialog by remember { mutableStateOf(false) }
+    var showRemoteDialog by remember { mutableStateOf(false) }
     LaunchedEffect(item.Id, item.Genres, apiService) {
         val genre = item.Genres?.firstOrNull()
         if (apiService != null && genre != null) {
@@ -104,7 +115,7 @@ fun MobileMovieDetailsLayout(
                 }
             }
             MobilePlayButton(onPlay)
-            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload)
+            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload, onAudio = { showAudioDialog = true }, onRemote = { showRemoteDialog = true }, hasAudio = (item.MediaSources?.firstOrNull()?.MediaStreams?.count { it.Type == "Audio" } ?: 0) > 1)
             MobileDetailTabs(selectedSection) { selectedSection = it }
             when (selectedSection) {
                 "Reparto" -> MobilePeople(item, apiService)
@@ -116,6 +127,8 @@ fun MobileMovieDetailsLayout(
             }
         }
     }
+    if (showAudioDialog) MobileAudioSelectionDialog(item, { showAudioDialog = false })
+    if (showRemoteDialog) MobileRemotePlaybackDialog(item, apiService, { showRemoteDialog = false })
 }
 
 @Composable
@@ -192,10 +205,12 @@ fun MobileSeriesDetailsLayout(
     }
 }
 
-@Composable private fun MobileActionRow(onShuffle: () -> Unit, onRestart: () -> Unit, onDownload: (() -> Unit)? = null) {
+@Composable private fun MobileActionRow(onShuffle: () -> Unit, onRestart: () -> Unit, onDownload: (() -> Unit)? = null, onAudio: (() -> Unit)? = null, onRemote: (() -> Unit)? = null, hasAudio: Boolean = false) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         MobileActionButton("Aleatorio", Icons.Default.Shuffle, onShuffle)
         MobileActionButton("Reiniciar", Icons.Default.Replay, onRestart)
+        if (hasAudio) MobileActionButton("Audio", Icons.Default.VolumeUp, onAudio ?: {})
+        MobileActionButton("Transmitir", Icons.Default.Cast, onRemote ?: {})
         onDownload?.let { MobileActionButton("Descargar", Icons.Default.Download, it) }
     }
 }
@@ -206,6 +221,74 @@ fun MobileSeriesDetailsLayout(
             Icon(icon, label, tint = Color.White)
         }
         Text(label, color = Color.White.copy(alpha = .9f), style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 4.dp))
+    }
+}
+
+@Composable
+private fun MobileAudioSelectionDialog(item: JellyfinItem, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val streams = item.MediaSources?.firstOrNull()?.MediaStreams?.filter { it.Type == "Audio" }.orEmpty()
+    val settings = remember(context) { AppSettings(context) }
+    var selected by remember { mutableStateOf(settings.getAudioPreference(item.Id)) }
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .62f)), contentAlignment = Alignment.BottomCenter) {
+            Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)).background(Color(0xFF17191D)).padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Pista de audio", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                if (streams.isEmpty()) Text("No hay pistas de audio disponibles", color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
+                LazyColumn { items(streams, key = { it.Index ?: it.hashCode() }) { stream ->
+                    val index = stream.Index
+                    val title = stream.DisplayTitle ?: stream.DisplayLanguage ?: stream.Language ?: "Audio"
+                    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable {
+                        selected = index
+                        settings.setAudioPreference(item.Id, index)
+                        onDismiss()
+                    }.padding(horizontal = 10.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(if (selected == index) Icons.Default.Check else Icons.Default.VolumeUp, title, tint = if (selected == index) MobileCyan else Color.White.copy(alpha = .7f), modifier = Modifier.size(24.dp))
+                        Column(Modifier.padding(start = 14.dp)) {
+                            Text(title, color = Color.White, fontWeight = FontWeight.SemiBold)
+                            stream.Codec?.let { Text(it.uppercase(), color = Color.White.copy(alpha = .62f), style = MaterialTheme.typography.bodySmall) }
+                        }
+                    }
+                } }
+                Text("Cancelar", color = MobileCyan, modifier = Modifier.fillMaxWidth().clickable(onClick = onDismiss).padding(vertical = 14.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinApiService?, onDismiss: () -> Unit) {
+    var sessions by remember { mutableStateOf<List<RemoteSessionInfo>>(emptyList()) }
+    var loading by remember { mutableStateOf(true) }
+    var sentTo by remember { mutableStateOf<String?>(null) }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    LaunchedEffect(apiService) {
+        sessions = apiService?.getControllableSessions().orEmpty()
+        loading = false
+    }
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .62f)), contentAlignment = Alignment.BottomCenter) {
+            Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)).background(Color(0xFF17191D)).padding(22.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("Reproducción remota", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                when {
+                    loading -> Text("Buscando dispositivos…", color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
+                    sessions.isEmpty() -> Text("No hay dispositivos disponibles", color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
+                    else -> sessions.forEach { session ->
+                        Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Color.White.copy(alpha = .06f)).clickable {
+                            session.Id?.let { id -> scope.launch { if (apiService?.playOnRemoteSession(id, item.Id, item.UserData?.PositionTicks?.div(10_000L) ?: 0L) == true) sentTo = session.DeviceName } }
+                        }.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.Cast, "Dispositivo", tint = MobileCyan, modifier = Modifier.size(28.dp))
+                            Column(Modifier.padding(start = 14.dp).weight(1f)) {
+                                Text(session.DeviceName ?: "Dispositivo", color = Color.White, fontWeight = FontWeight.SemiBold)
+                                Text(listOfNotNull(session.UserName, session.Client).joinToString(" · "), color = Color.White.copy(alpha = .62f), style = MaterialTheme.typography.bodySmall)
+                            }
+                            if (sentTo == session.DeviceName) Icon(Icons.Default.Check, "Enviado", tint = MobileCyan)
+                        }
+                    }
+                }
+                Text("Cerrar", color = MobileCyan, modifier = Modifier.fillMaxWidth().clickable(onClick = onDismiss).padding(vertical = 12.dp))
+            }
+        }
     }
 }
 
