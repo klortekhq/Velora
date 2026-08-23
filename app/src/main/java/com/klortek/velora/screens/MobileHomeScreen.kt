@@ -91,10 +91,10 @@ fun MobileHomeScreen(
             item {
                 Row(Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically) {
                     Spacer(Modifier.weight(1f))
-                    if (showLiveTv) IconButton(onClick = onLiveTv) { Icon(Icons.Default.Tv, "Televisión en directo", tint = Color.White) }
-                    IconButton(onClick = onDownloads) { Icon(Icons.Default.Download, "Descargas", tint = Color.White) }
-                    IconButton(onClick = onSearch) { Icon(Icons.Default.Search, "Buscar", tint = Color.White) }
-                    IconButton(onClick = onSettings) { Icon(Icons.Default.Settings, "Ajustes", tint = Color.White) }
+                    if (showLiveTv) MobileHeaderAction(Icons.Default.Tv, "Televisión en directo", onLiveTv)
+                    MobileHeaderAction(Icons.Default.Download, "Descargas", onDownloads)
+                    MobileHeaderAction(Icons.Default.Search, "Buscar", onSearch)
+                    MobileHeaderAction(Icons.Default.Settings, "Ajustes", onSettings)
                 }
             }
             item { MobileMediaPanel(libraries, onLibraryClick, onSearch) }
@@ -105,8 +105,17 @@ fun MobileHomeScreen(
             if (unwatched.isNotEmpty()) item { MobileHomeMediaRow("Sin terminar", unwatched, apiService, onItemClick) }
             if (popular.isNotEmpty()) item { MobileHomeMediaRow("Más populares", popular, apiService, onItemClick) }
         }
-        MobileBottomNavigation(onHome = {}, onMedia = onSearch, onDownloads = onDownloads, modifier = Modifier.align(Alignment.BottomCenter))
+        MobileBottomNavigation(onHome = {}, onMedia = { libraries.firstOrNull()?.let(onLibraryClick) ?: onSearch() }, onDownloads = onDownloads, modifier = Modifier.align(Alignment.BottomCenter))
     }
+}
+
+@Composable
+private fun MobileHeaderAction(icon: androidx.compose.ui.graphics.vector.ImageVector, description: String, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier.size(52.dp).clip(RoundedCornerShape(26.dp))
+            .background(Color.White.copy(alpha = .08f)).clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) { Icon(icon, description, tint = Color.White, modifier = Modifier.size(25.dp)) }
 }
 
 @Composable
