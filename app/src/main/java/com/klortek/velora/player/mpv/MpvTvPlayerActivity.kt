@@ -993,7 +993,6 @@ private fun MpvPlayerScreen(
 
                             // Still keep these as reinforcement
                             MPVLib.setOptionString("osc", "no")
-                            MPVLib.setOptionString("input-touch", "no")
                             MPVLib.setOptionString("input-default-bindings", "no")
                             MPVLib.setOptionString("input-builtin-bindings", "no")
 
@@ -1489,7 +1488,6 @@ private fun writeMpvTvConfig(dir: File) {
     val mpvText = """
         # Velora Android TV config
         osc=no
-        input-touch=no
         input-default-bindings=no
         input-builtin-bindings=no
         load-scripts=no
