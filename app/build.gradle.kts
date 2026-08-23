@@ -24,6 +24,24 @@ android {
         }
     }
 
+    // Keep one shared Jellyfin/ExoPlayer core while publishing genuinely
+    // independent installs for TV/Fire TV and mobile/tablet.
+    flavorDimensions += "platform"
+    productFlavors {
+        create("tv") {
+            dimension = "platform"
+            applicationIdSuffix = ".tv"
+            versionNameSuffix = "-tv"
+            buildConfigField("boolean", "TV_BUILD", "true")
+        }
+        create("mobile") {
+            dimension = "platform"
+            applicationIdSuffix = ".mobile"
+            versionNameSuffix = "-mobile"
+            buildConfigField("boolean", "TV_BUILD", "false")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
