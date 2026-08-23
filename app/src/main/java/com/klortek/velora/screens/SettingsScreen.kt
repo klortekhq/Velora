@@ -156,7 +156,7 @@ fun SettingsScreen(
     // Check if the optional external MPV player is installed.
     LaunchedEffect(mpvInstallCheckTrigger) {
         isMpvInstalled = try {
-            context.packageManager.getPackageInfo("com.flex.mpvelefin", 0)
+            context.packageManager.getPackageInfo("is.xyz.mpv", 0)
             true
         } catch (e: PackageManager.NameNotFoundException) {
             false
@@ -170,7 +170,7 @@ fun SettingsScreen(
             repeat(10) { // Check for up to ~30 seconds
                 kotlinx.coroutines.delay(3000)
                 val nowInstalled = try {
-                    context.packageManager.getPackageInfo("com.flex.mpvelefin", 0)
+                    context.packageManager.getPackageInfo("is.xyz.mpv", 0)
                     true
                 } catch (e: PackageManager.NameNotFoundException) {
                     false
