@@ -1800,6 +1800,26 @@ fun ResumeEpisodeDialog(
                         )
                     }
                 }
+
+                // Keep an explicit escape action visible in the dialog.  The
+                // Android back gesture/button also dismisses the dialog through
+                // DialogProperties, but users should not have to discover that.
+                Button(
+                    onClick = onDismiss,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 44.dp),
+                    colors = ButtonDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    contentPadding = PaddingValues(horizontal = 18.dp, vertical = 10.dp)
+                ) {
+                    Text(
+                        "Atrás",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
             }
         }
     }
