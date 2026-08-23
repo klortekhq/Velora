@@ -4039,7 +4039,32 @@ fun JellyfinVideoPlayerScreen(
         }
     } else {
         // Fullscreen mode
-        playerContent(Modifier.fillMaxSize())
+        // Keep the selected presentation frame in fullscreen too. Previously
+        // only the portrait container used the selected aspect ratio, while
+        // landscape fullscreen always constrained the player to the display.
+        val fullscreenAspect = when (currentAspectMode) {
+            AspectMode.FOUR_THREE -> 4f / 3f
+            AspectMode.LETTERBOX -> 16f / 9f
+            AspectMode.CINEMA -> 2.39f
+            AspectMode.FIT, AspectMode.ORIGINAL -> videoAspectRatio
+            AspectMode.FILL, AspectMode.STRETCH -> null
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black),
+            contentAlignment = Alignment.Center
+        ) {
+            if (fullscreenAspect != null) {
+                playerContent(
+                    Modifier
+                        .fillMaxHeight()
+                        .aspectRatio(fullscreenAspect)
+                )
+            } else {
+                playerContent(Modifier.fillMaxSize())
+            }
+        }
     }
 
     // Settings menu with subtitle picker
