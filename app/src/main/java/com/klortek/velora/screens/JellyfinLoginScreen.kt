@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.MaterialTheme
@@ -420,7 +422,7 @@ private fun CredentialsLoginContent(
                     enabled = !isAuthenticating && username.isNotBlank() && password.isNotBlank(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(64.dp)
+                        .height(72.dp)
                         .focusRequester(loginButtonFocusRequester)
                         .onFocusChanged { loginButtonFocused = it.isFocused }
                         .onKeyEvent { keyEvent ->
@@ -454,12 +456,22 @@ private fun CredentialsLoginContent(
                             MaterialTheme.colorScheme.onPrimary
                         else
                             MaterialTheme.colorScheme.onPrimaryContainer
-                    )
+                    ),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 0.dp)
                 ) {
-                    Text(
-                        text = if (isAuthenticating) "Autenticando…" else "Iniciar sesión",
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = if (isAuthenticating) "Autenticando…" else "Iniciar sesión",
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                lineHeight = 20.sp
+                            ),
+                            maxLines = 1,
+                            softWrap = false
+                        )
+                    }
                 }
 
                 if (errorMessage != null) {
