@@ -2209,8 +2209,9 @@ fun JellyfinHomeScreen(
             ) {
                 androidx.tv.material3.Surface(
                     modifier = Modifier
+                    .then(if (isMobileLayout) Modifier.fillMaxSize().padding(12.dp) else Modifier
                         .width((LocalContext.current.resources.displayMetrics.widthPixels * 0.8f).dp)
-                        .height((LocalContext.current.resources.displayMetrics.heightPixels * 0.8f).dp),
+                        .height((LocalContext.current.resources.displayMetrics.heightPixels * 0.8f).dp)),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
                     colors = androidx.tv.material3.SurfaceDefaults.colors(
                         containerColor = MaterialTheme.colorScheme.surface,
@@ -2295,8 +2296,9 @@ fun JellyfinHomeScreen(
             ) {
                 androidx.tv.material3.Surface(
                     modifier = Modifier
-                        .width((LocalContext.current.resources.displayMetrics.widthPixels * 0.9f).dp)
-                        .height((LocalContext.current.resources.displayMetrics.heightPixels * 0.9f).dp),
+                        .then(if (isMobileLayout) Modifier.fillMaxSize().padding(12.dp) else Modifier
+                            .width((LocalContext.current.resources.displayMetrics.widthPixels * 0.9f).dp)
+                            .height((LocalContext.current.resources.displayMetrics.heightPixels * 0.9f).dp)),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
                     colors = androidx.tv.material3.SurfaceDefaults.colors(
                         containerColor = MaterialTheme.colorScheme.surface,
