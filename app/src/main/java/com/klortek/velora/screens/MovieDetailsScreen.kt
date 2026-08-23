@@ -226,7 +226,8 @@ fun MovieDetailsScreen(
                 context = context,
                 itemId = displayItem.Id,
                 resumePositionMs = positionMs,
-                itemName = displayItem.Name
+                itemName = displayItem.Name,
+                audioStreamIndex = com.klortek.velora.jellyfin.AppSettings(context).getAudioPreference(displayItem.Id)
             )
         )
     }

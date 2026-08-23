@@ -295,6 +295,21 @@ data class JellyfinLibrary(
     val ImageTags: Map<String, String>? = null
 )
 
+@Serializable
+data class RemoteSessionInfo(
+    val Id: String? = null,
+    val DeviceName: String? = null,
+    val Client: String? = null,
+    val UserName: String? = null,
+    val PlayState: RemotePlayState? = null
+)
+
+@Serializable
+data class RemotePlayState(
+    val IsPaused: Boolean? = null,
+    val PositionTicks: Long? = null
+)
+
 class JellyfinApiService(
     private val baseUrl: String,
     private val accessToken: String,
@@ -324,6 +339,26 @@ class JellyfinApiService(
             socketTimeout = 15_000
         }
     }
+
+    suspend fun getControllableSessions(): List<RemoteSessionInfo> = runCatching {
+        val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+        client.get(URLBuilder().takeFrom("${base}Sessions").apply {
+            parameters.append("ControllableByUserId", userId)
+        }.buildString()) {
+            header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+        }.body<List<RemoteSessionInfo>>()
+            .filter { !it.Id.isNullOrBlank() && !it.DeviceName.isNullOrBlank() }
+    }.getOrDefault(emptyList())
+
+    suspend fun playOnRemoteSession(sessionId: String, itemId: String, positionMs: Long = 0L): Boolean = runCatching {
+        val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+        client.post("${base}Sessions/$sessionId/Playing") {
+            header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+            contentType(ContentType.Application.Json)
+            setBody("{\"ItemIds\":[\"$itemId\"],\"PlayCommand\":\"PlayNow\",\"StartPositionTicks\":${positionMs * 10000}}")
+        }
+        true
+    }.getOrDefault(false)
 
     suspend fun getContinueWatching(limit: Int = 20): List<JellyfinItem> {
         return try {
