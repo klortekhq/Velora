@@ -33,7 +33,10 @@ import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +47,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.MaterialTheme
@@ -54,6 +59,7 @@ import coil.request.ImageRequest
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinItem
 import com.klortek.velora.jellyfin.JellyfinLibrary
+import com.klortek.velora.jellyfin.AppSettings
 
 private val MobileHomeBackground = Color(0xFF090B10)
 private val MobileHomeCyan = Color(0xFF18C9F1)
@@ -186,10 +192,51 @@ fun MobileLibraryScreen(
     onBack: () -> Unit,
     onItemClick: (JellyfinItem) -> Unit
 ) {
+    val context = LocalContext.current
+    val settings = remember { AppSettings(context) }
+    var sortType by remember {
+        mutableStateOf(
+            when (settings.getSortType()) {
+                "DateAdded" -> SortType.DateAdded
+                "DateReleased" -> SortType.DateReleased
+                else -> SortType.Alphabetically
+            }
+        )
+    }
+    var sortDescending by remember { mutableStateOf(false) }
+    var showSortDialog by remember { mutableStateOf(false) }
+    val sortedItems = remember(items, sortType, sortDescending) {
+        val result = when (sortType) {
+            SortType.DateAdded -> items.sortedBy { it.DateCreated ?: "" }
+            SortType.DateReleased -> items.sortedBy { it.PremiereDate ?: "" }
+            SortType.Alphabetically -> items.sortedBy { it.Name.lowercase() }
+        }
+        if (sortDescending) result.asReversed() else result
+    }
+
     Column(Modifier.fillMaxSize().background(MobileHomeBackground).navigationBarsPadding()) {
-        Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 18.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             IconButton(onClick = onBack) { Text("‹", color = Color.White, style = MaterialTheme.typography.headlineMedium) }
-            Text(if (library.CollectionType.equals("tvshows", true)) "Series" else "Películas", color = Color.White, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(
+                if (library.CollectionType.equals("tvshows", true)) "Series" else "Películas",
+                color = Color.White,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(Color.White.copy(alpha = .1f))
+                    .clickable { showSortDialog = true },
+                contentAlignment = Alignment.Center
+            ) {
+                Text("↕", color = MobileHomeCyan, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            }
         }
         if (items.isEmpty()) {
             Text("No hay contenido disponible", color = Color.White.copy(alpha = .75f), modifier = Modifier.align(Alignment.CenterHorizontally).padding(32.dp))
@@ -204,7 +251,7 @@ fun MobileLibraryScreen(
                     .widthIn(max = 1080.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
-                gridItems(items, key = { it.Id }) { item ->
+                gridItems(sortedItems, key = { it.Id }) { item ->
                     val image = remember(item.Id, apiService) {
                         apiService?.getImageUrl(item.Id, "Primary", null, maxWidth = 420, maxHeight = 620, quality = 84)
                     }
@@ -217,6 +264,60 @@ fun MobileLibraryScreen(
                 }
             }
         }
+    }
+
+    if (showSortDialog) {
+        Dialog(onDismissRequest = { showSortDialog = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+            Box(
+                Modifier.fillMaxSize().background(Color.Black.copy(alpha = .72f)),
+                contentAlignment = Alignment.Center
+            ) {
+                androidx.compose.material3.Surface(
+                    modifier = Modifier.fillMaxWidth(.9f),
+                    shape = RoundedCornerShape(24.dp),
+                    color = Color(0xFF171A21),
+                    contentColor = Color.White
+                ) {
+                    Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("Ordenar y filtrar", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        Text("Ordenar por", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+                        MobileLibrarySortOption("Nombre", sortType == SortType.Alphabetically) {
+                            sortType = SortType.Alphabetically
+                            settings.setSortType("Alphabetically")
+                        }
+                        MobileLibrarySortOption("Fecha de incorporación", sortType == SortType.DateAdded) {
+                            sortType = SortType.DateAdded
+                            settings.setSortType("DateAdded")
+                        }
+                        MobileLibrarySortOption("Fecha de estreno", sortType == SortType.DateReleased) {
+                            sortType = SortType.DateReleased
+                            settings.setSortType("DateReleased")
+                        }
+                        Text("Dirección", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+                        MobileLibrarySortOption("Ascendente", !sortDescending) { sortDescending = false }
+                        MobileLibrarySortOption("Descendente", sortDescending) { sortDescending = true }
+                        androidx.compose.material3.OutlinedButton(
+                            onClick = { showSortDialog = false },
+                            modifier = Modifier.fillMaxWidth().padding(top = 12.dp)
+                        ) { Text("Atrás") }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MobileLibrarySortOption(label: String, selected: Boolean, onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp))
+            .background(if (selected) MobileHomeCyan.copy(alpha = .18f) else Color.Transparent)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(if (selected) "●" else "○", color = if (selected) MobileHomeCyan else Color.White.copy(alpha = .7f), style = MaterialTheme.typography.titleMedium)
+        Text(label, color = Color.White, modifier = Modifier.padding(start = 12.dp))
     }
 }
 
