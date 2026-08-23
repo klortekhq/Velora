@@ -1,7 +1,9 @@
 package com.klortek.velora.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -72,7 +74,8 @@ fun MobileHomeScreen(
     onSettings: () -> Unit,
     onDownloads: () -> Unit,
     onLiveTv: () -> Unit,
-    showLiveTv: Boolean
+    showLiveTv: Boolean,
+    onContinueWatchingLongClick: (JellyfinItem) -> Unit = {}
 ) {
     Box(Modifier.fillMaxSize().background(MobileHomeBackground)) {
         // Mobile home is a scrollable Plex-style dashboard.  Do not render the
@@ -98,7 +101,16 @@ fun MobileHomeScreen(
                 }
             }
             item { MobileMediaPanel(libraries, onLibraryClick, onSearch) }
-            if (continueWatching.isNotEmpty()) item { MobileHomeMediaRow("Seguir viendo", continueWatching, apiService, onItemClick, showProgress = true) }
+            if (continueWatching.isNotEmpty()) item {
+                MobileHomeMediaRow(
+                    title = "Seguir viendo",
+                    items = continueWatching,
+                    apiService = apiService,
+                    onItemClick = onItemClick,
+                    onLongClick = onContinueWatchingLongClick,
+                    showProgress = true
+                )
+            }
             if (recentMovies.isNotEmpty()) item { MobileHomeMediaRow("Películas añadidas recientemente", recentMovies, apiService, onItemClick) }
             if (recentShows.isNotEmpty()) item { MobileHomeMediaRow("Series añadidas recientemente", recentShows, apiService, onItemClick) }
             if (recentEpisodes.isNotEmpty()) item { MobileHomeMediaRow("Episodios añadidos recientemente", recentEpisodes, apiService, onItemClick) }
@@ -239,11 +251,13 @@ private fun MobileBottomNavigationItem(icon: androidx.compose.ui.graphics.vector
 }
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 private fun MobileHomeMediaRow(
     title: String,
     items: List<JellyfinItem>,
     apiService: JellyfinApiService?,
     onItemClick: (JellyfinItem) -> Unit,
+    onLongClick: ((JellyfinItem) -> Unit)? = null,
     showProgress: Boolean = false
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -253,7 +267,15 @@ private fun MobileHomeMediaRow(
                 val image = remember(item.Id, apiService) {
                     apiService?.getImageUrl(item.Id, "Primary", null, maxWidth = 320, maxHeight = 480, quality = 78)
                 }
-                Column(Modifier.width(132.dp).clickable { onItemClick(item) }, verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                Column(
+                    Modifier
+                        .width(132.dp)
+                        .combinedClickable(
+                            onClick = { onItemClick(item) },
+                            onLongClick = onLongClick?.let { callback -> { callback(item) } }
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
                     Box(Modifier.fillMaxWidth().height(188.dp).clip(RoundedCornerShape(12.dp)).background(Color.White.copy(alpha = .1f))) {
                         if (image != null && apiService != null) AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(image).headers(apiService.getImageRequestHeaders()).memoryCachePolicy(CachePolicy.ENABLED).diskCachePolicy(CachePolicy.ENABLED).build(), contentDescription = item.Name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
                         if (showProgress) {
