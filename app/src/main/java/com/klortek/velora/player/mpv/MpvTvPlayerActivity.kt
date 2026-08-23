@@ -619,9 +619,12 @@ private fun MpvPlayerScreen(
                 // These are MPV runtime properties. setOptionString only changes
                 // startup options, so using it here made the button appear to
                 // cycle while the rendered video never changed.
-                fun setAspectOverride(value: String) {
-                    MPVLib.setPropertyString("video-aspect-override", value)
-                    MPVLib.command(arrayOf("set", "video-aspect-override", value))
+                fun setAspectOverride(value: Double) {
+                    // video-aspect-override is a numeric MPV property. Sending
+                    // "no" through the string setter made the UI cycle while
+                    // MPV silently kept the previous geometry.
+                    MPVLib.setPropertyDouble("video-aspect-override", value)
+                    MPVLib.command(arrayOf("set", "video-aspect-override", value.toString()))
                 }
                 fun setAspectMethod(value: String) {
                     MPVLib.setPropertyString("video-aspect-method", value)
@@ -644,40 +647,40 @@ private fun MpvPlayerScreen(
 
                 when (currentAspectMode) {
                     AspectMode.FIT -> {
-                        setAspectOverride("no")
+                        setAspectOverride(0.0)
                         setAspectMethod("container")
                         setPanScan(0.0)
                         setVideoUnscaled(false)
                     }
                     AspectMode.FILL -> {
-                        setAspectOverride("no")
+                        setAspectOverride(0.0)
                         setAspectMethod("container")
                         setPanScan(1.0)
                         setVideoUnscaled(false)
                     }
                     AspectMode.FOUR_THREE -> {
-                        setAspectOverride("4:3")
+                        setAspectOverride(4.0 / 3.0)
                         setPanScan(0.0)
                         setVideoUnscaled(false)
                     }
                     AspectMode.LETTERBOX -> {
-                        setAspectOverride("16:9")
+                        setAspectOverride(16.0 / 9.0)
                         setPanScan(0.0)
                         setVideoUnscaled(false)
                     }
                     AspectMode.CINEMA -> {
-                        setAspectOverride("2.39:1")
+                        setAspectOverride(2.39)
                         setPanScan(0.0)
                         setVideoUnscaled(false)
                     }
                     AspectMode.STRETCH -> {
-                        setAspectOverride("no")
+                        setAspectOverride(0.0)
                         setKeepAspect(false)
                         setPanScan(0.0)
                         setVideoUnscaled(false)
                     }
                     AspectMode.ORIGINAL -> {
-                        setAspectOverride("no")
+                        setAspectOverride(0.0)
                         setAspectMethod("container")
                         setPanScan(0.0)
                         setVideoUnscaled(true)
