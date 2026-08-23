@@ -133,7 +133,7 @@ private fun LiveTvScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = if (isMobile) 16.dp else 42.dp, vertical = if (isMobile) 16.dp else 28.dp)
+            .padding(horizontal = if (isMobile) 16.dp else 34.dp, vertical = if (isMobile) 12.dp else 18.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -152,21 +152,21 @@ private fun LiveTvScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.width(if (isMobile) 10.dp else 18.dp))
+            Spacer(modifier = Modifier.width(if (isMobile) 8.dp else 12.dp))
 
             Icon(
                 imageVector = Icons.Default.LiveTv,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(if (isMobile) 28.dp else 34.dp)
+                modifier = Modifier.size(if (isMobile) 26.dp else 28.dp)
             )
 
-            Spacer(modifier = Modifier.width(if (isMobile) 8.dp else 12.dp))
+            Spacer(modifier = Modifier.width(if (isMobile) 6.dp else 8.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stringResource(R.string.live_tv),
-                    style = if (isMobile) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.headlineLarge,
+                    style = if (isMobile) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -194,7 +194,7 @@ private fun LiveTvScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(if (isMobile) 14.dp else 24.dp))
+        Spacer(modifier = Modifier.height(if (isMobile) 12.dp else 14.dp))
 
         when {
             isLoading -> {
@@ -238,7 +238,7 @@ private fun LiveTvScreen(
 
             else -> {
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(channels, key = { it.Id }) { channel ->
@@ -298,12 +298,12 @@ private fun LiveTvChannelRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = if (compact) 10.dp else 18.dp, vertical = if (compact) 10.dp else 12.dp),
+                .padding(horizontal = if (compact) 10.dp else 14.dp, vertical = if (compact) 8.dp else 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(width = if (compact) 84.dp else 104.dp, height = if (compact) 48.dp else 58.dp)
+                    .size(width = if (compact) 84.dp else 88.dp, height = if (compact) 48.dp else 46.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(Color.White.copy(alpha = 0.06f)),
                 contentAlignment = Alignment.Center
@@ -324,13 +324,13 @@ private fun LiveTvChannelRow(
                 )
             }
 
-            Spacer(modifier = Modifier.width(if (compact) 10.dp else 18.dp))
+            Spacer(modifier = Modifier.width(if (compact) 10.dp else 12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = channel.Name,
-                        style = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge,
+                        style = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
@@ -340,31 +340,31 @@ private fun LiveTvChannelRow(
 
                 }
 
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
                     text = program?.Name?.takeIf { it.isNotBlank() }
                         ?: stringResource(R.string.live_tv_no_program),
-                    style = if (compact) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge,
+                    style = if (compact) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.78f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
                 if (progress != null || timeRange != null) {
-                    Spacer(modifier = Modifier.height(7.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             modifier = Modifier
-                                .width(if (compact) 140.dp else 230.dp)
-                                .height(4.dp)
+                                .width(if (compact) 140.dp else 190.dp)
+                                .height(3.dp)
                                 .clip(RoundedCornerShape(50))
                                 .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.14f))
                         ) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth(progress ?: 0f)
-                                    .height(4.dp)
+                                    .height(3.dp)
                                     .background(MaterialTheme.colorScheme.primary)
                             )
                         }
