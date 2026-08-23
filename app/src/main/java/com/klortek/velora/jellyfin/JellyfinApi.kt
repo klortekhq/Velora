@@ -242,6 +242,7 @@ data class UserData(
     @SerialName("PlaybackPositionTicks")
     val PositionTicks: Long? = null,
     val Played: Boolean? = null,
+    val IsFavorite: Boolean? = null,
     val UnplayedItemCount: Int? = null, // Number of unwatched episodes for Series
     val LastPlayedDate: String? = null // ISO date string for when item was last played
 )
