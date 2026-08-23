@@ -56,7 +56,13 @@ object MpvUrlBuilder {
         }
     }
 
-    /** Build the Jellyfin Live TV HLS endpoint after PlaybackInfo opens the live stream. */
+    /**
+     * Build the direct Jellyfin Live TV HLS endpoint.
+     *
+     * Live TV must use the Jellyfin master manifest with the MediaSourceId and
+     * LiveStreamId returned by PlaybackInfo. The server creates/opens the
+     * upstream stream as part of that request.
+     */
     fun buildLiveTvStreamUrl(
         serverUrl: String,
         itemId: String,
@@ -68,14 +74,29 @@ object MpvUrlBuilder {
         return buildString {
             append("$baseUrl/Videos/$itemId/master.m3u8?")
             append("api_key=$accessToken")
-            mediaSourceId?.takeIf { it.isNotBlank() }?.let { append("&mediaSourceId=$it") }
-            liveStreamId?.takeIf { it.isNotBlank() }?.let { append("&liveStreamId=$it") }
-            append("&enableAutoStreamCopy=true")
-            append("&allowVideoStreamCopy=true")
-            append("&allowAudioStreamCopy=true")
+            // Jellyfin otherwise derives AudioCodec from the M3U source and
+            // can emit the invalid `AudioCodec=m3u8` query. Explicit HLS
+            // codecs keep the manifest valid while Jellyfin still decides
+            // whether the upstream can be copied or must be remuxed.
+            mediaSourceId?.takeIf { it.isNotBlank() }?.let { append("&MediaSourceId=$it") }
+            liveStreamId?.takeIf { it.isNotBlank() }?.let { append("&LiveStreamId=$it") }
+            append("&VideoCodec=h264")
+            append("&AudioCodec=aac")
+            append("&TranscodingProtocol=hls")
+            append("&TranscodingContainer=ts")
+            append("&EnableAutoStreamCopy=true")
+            append("&AllowVideoStreamCopy=true")
+            append("&AllowAudioStreamCopy=true")
         }
     }
-    
+
+    /**
+     * Direct Play URL returned by Jellyfin's Live TV PlaybackInfo.
+     * We do not read or parse the provider M3U in the app; Jellyfin resolves
+     * the selected channel and returns this source URL through its API.
+     */
+    fun buildLiveTvDirectSourceUrl(sourcePath: String): String = sourcePath
+
     /**
      * Build direct download URL for Jellyfin.
      * This is the most compatible option.

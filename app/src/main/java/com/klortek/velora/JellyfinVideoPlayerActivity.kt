@@ -170,11 +170,17 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 var extraSubtitleUrl: String? = null
                 val headers = "X-Emby-Token: $accessToken" // Basic header needed
 
-                // Fetch PlaybackInfo to check for transcoding needs and subtitle details
+                // Jellyfin must open an M3U/Acestream Live TV source first so
+                // it can return the MediaSourceId and LiveStreamId required by
+                // its master HLS manifest. VOD keeps the existing source flow.
                 val playbackInfo = apiService.getPlaybackInfo(
                     itemId = itemId,
                     mediaSourceId = if (isLiveTv) null else itemId,
-                    subtitleStreamIndex = subtitleStreamIndex
+                    subtitleStreamIndex = subtitleStreamIndex,
+                    // Resolve the channel metadata immediately. Direct Play
+                    // can then start from Jellyfin's returned source without
+                    // waiting for a server-side HLS allocation.
+                    autoOpenLiveStream = !isLiveTv
                 )
                 
                 val mediaSource = playbackInfo?.MediaSources?.firstOrNull()
@@ -188,19 +194,35 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 )
 
                 if (isLiveTv) {
-                    val transcodeUrl = mediaSource?.TranscodingUrl
-                    finalUrl = if (!transcodeUrl.isNullOrBlank()) {
-                        if (transcodeUrl.startsWith("http")) transcodeUrl else "$serverUrl$transcodeUrl"
-                    } else {
-                        MpvUrlBuilder.buildLiveTvStreamUrl(
+                    val liveSource = playbackInfo?.MediaSources?.firstOrNull()
+                    val liveMediaSourceId = liveSource?.Id
+                    val liveStreamId = liveSource?.LiveStreamId
+                    val directSource = liveSource?.Path
+                    if (liveSource?.SupportsDirectPlay == true && !directSource.isNullOrBlank() &&
+                        (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
+                        finalUrl = MpvUrlBuilder.buildLiveTvDirectSourceUrl(directSource)
+                        android.util.Log.d("VideoPlayer", "Live TV Direct Play source selected from Jellyfin PlaybackInfo")
+                    } else if (!liveMediaSourceId.isNullOrBlank() && !liveStreamId.isNullOrBlank()) {
+                        finalUrl = MpvUrlBuilder.buildLiveTvStreamUrl(
                             serverUrl = serverUrl,
                             itemId = itemId,
                             accessToken = accessToken,
-                            mediaSourceId = mediaSource?.Id,
-                            liveStreamId = mediaSource?.LiveStreamId
+                            mediaSourceId = liveMediaSourceId,
+                            liveStreamId = liveStreamId
                         )
+                        android.util.Log.d("VideoPlayer", "Live TV HLS fallback selected with PlaybackInfo stream identifiers")
+                    } else {
+                        android.util.Log.e("VideoPlayer", "Live TV PlaybackInfo did not return a playable source")
+                        runOnUiThread {
+                            android.widget.Toast.makeText(
+                                this@JellyfinVideoPlayerActivity,
+                                getString(R.string.live_tv_playback_error),
+                                android.widget.Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        finish()
+                        return@launch
                     }
-                    android.util.Log.d("VideoPlayer", "Live TV playback URL resolved from Jellyfin PlaybackInfo")
                 } else if (enforceTranscoding) {
                     android.util.Log.d("VideoPlayer", "🔄 Enforcing Transcoding (Codec: $videoCodec)")
                     // Use the TranscodingUrl from PlaybackInfo (includes burned subs if requested)

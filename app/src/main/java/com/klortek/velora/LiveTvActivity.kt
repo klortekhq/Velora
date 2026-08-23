@@ -39,6 +39,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -115,6 +117,7 @@ private fun LiveTvScreen(
     var isLoading by remember { mutableStateOf(true) }
     var loadError by remember { mutableStateOf<String?>(null) }
     var channels by remember { mutableStateOf<List<LiveTvChannel>>(emptyList()) }
+    val firstChannelFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(client, refreshKey) {
         isLoading = true
@@ -126,6 +129,12 @@ private fun LiveTvScreen(
             loadError = e.message ?: e.javaClass.simpleName
         } finally {
             isLoading = false
+        }
+    }
+
+    LaunchedEffect(channels) {
+        if (channels.isNotEmpty()) {
+            firstChannelFocusRequester.requestFocus()
         }
     }
 
@@ -246,6 +255,11 @@ private fun LiveTvScreen(
                             channel = channel,
                             client = client,
                             compact = isMobile,
+                            focusRequester = if (channel == channels.firstOrNull()) {
+                                firstChannelFocusRequester
+                            } else {
+                                null
+                            },
                             onClick = { onPlay(channel) }
                         )
                     }
@@ -260,6 +274,7 @@ private fun LiveTvChannelRow(
     channel: LiveTvChannel,
     client: LiveTvClient,
     compact: Boolean = false,
+    focusRequester: FocusRequester? = null,
     onClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -294,6 +309,7 @@ private fun LiveTvChannelRow(
                     Modifier
                 }
             )
+            .then(focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier)
     ) {
         Row(
             modifier = Modifier
