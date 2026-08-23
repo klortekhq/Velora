@@ -360,16 +360,32 @@ private fun MobileCrew(item: JellyfinItem, apiService: JellyfinApiService?) {
 @Composable
 private fun MobileFileDetails(item: JellyfinItem) {
     val source = item.MediaSources?.firstOrNull()
+    val streams = source?.MediaStreams.orEmpty()
+    val video = streams.firstOrNull { it.Type == "Video" }
+    val audio = streams.filter { it.Type == "Audio" }
+    val resolution = if (video?.Width != null && video.Height != null) "${video.Width} × ${video.Height}" else null
+    val frameRate = video?.RealFrameRate ?: video?.AverageFrameRate
+    val videoDetails = listOfNotNull(video?.Codec?.uppercase(), resolution, frameRate?.let { "${String.format("%.2f", it)} fps" }, video?.VideoRangeType ?: video?.VideoRange).joinToString("  ·  ")
+    val audioDetails = audio.mapNotNull { stream ->
+        val language = stream.DisplayLanguage ?: stream.Language
+        val codec = stream.Codec?.uppercase()
+        listOfNotNull(language, codec).joinToString("  ·  ").takeIf { it.isNotBlank() }
+    }.distinct()
     Column(
         modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
             .background(Color.Black.copy(alpha = .28f)).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text("Información del archivo", color = Color.White, fontWeight = FontWeight.Bold)
-        Text(
-            listOfNotNull(source?.Container?.uppercase()).joinToString("  ·  ").ifBlank { "Información no disponible" },
-            color = Color.White.copy(alpha = .78f)
-        )
+        Text("Vídeo", color = MobileCyan, fontWeight = FontWeight.SemiBold)
+        Text(videoDetails.ifBlank { "Información de vídeo no disponible" }, color = Color.White.copy(alpha = .78f))
+        Text("Audio", color = MobileCyan, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
+        if (audioDetails.isEmpty()) Text("Información de audio no disponible", color = Color.White.copy(alpha = .78f))
+        else audioDetails.forEach { Text(it, color = Color.White.copy(alpha = .78f)) }
+        source?.Container?.takeIf { it.isNotBlank() }?.let {
+            Text("Formato", color = MobileCyan, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
+            Text(it.uppercase(), color = Color.White.copy(alpha = .78f))
+        }
     }
 }
 
