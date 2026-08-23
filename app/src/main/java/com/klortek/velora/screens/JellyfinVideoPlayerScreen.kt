@@ -2537,6 +2537,10 @@ fun JellyfinVideoPlayerScreen(
     
     // Apply aspect mode to PlayerView when it changes
     LaunchedEffect(currentAspectMode, playerViewRef.value) {
+        // In GL enhancement mode the GL surface is the real video surface;
+        // PlayerView only carries subtitles and controls. Keep both paths in
+        // sync so the selector visibly changes the image in either mode.
+        glSurfaceViewRef.value?.setAspectMode(currentAspectMode.name)
         playerViewRef.value?.let { pv ->
             // Get the content frame (AspectRatioFrameLayout) from PlayerView
             val contentFrame = pv.findViewById<AspectRatioFrameLayout>(androidx.media3.ui.R.id.exo_content_frame)
@@ -3167,6 +3171,7 @@ fun JellyfinVideoPlayerScreen(
                                 val glSurfaceView = if (view is FrameLayout) {
                                     val gl = view.getChildAt(0) as? GLVideoSurfaceView
                                     glSurfaceViewRef.value = gl
+                                    gl?.setAspectMode(currentAspectMode.name)
                                     playerViewRef.value = view.getChildAt(1) as? PlayerView
                                     gl
                                 } else {

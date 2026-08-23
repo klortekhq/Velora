@@ -49,6 +49,21 @@ class GLVideoSurfaceView @JvmOverloads constructor(
     private var videoWidth: Int = 0
     private var videoHeight: Int = 0
     private var aspectRatioVertexBuffer: FloatBuffer? = null
+    @Volatile private var aspectMode: String = "FIT"
+
+    /**
+     * Applies the same picture modes exposed by the ExoPlayer controls to the
+     * GL presentation surface. Previously only PlayerView was updated, while
+     * GL mode renders the actual video on this view, making the button appear
+     * to do nothing.
+     */
+    fun setAspectMode(mode: String) {
+        queueEvent {
+            aspectMode = mode
+            updateAspectRatioVertexBuffer()
+            requestRender()
+        }
+    }
     
     /**
      * Set a callback to be notified when the GL surface is ready.
@@ -91,14 +106,26 @@ class GLVideoSurfaceView @JvmOverloads constructor(
         val scaleX: Float
         val scaleY: Float
         
-        if (videoAspect > viewportAspect) {
-            // Video is wider than viewport - letterbox (black bars top/bottom)
+        if (aspectMode == "FILL") {
+            // Crop the source to the whole viewport.
             scaleX = 1.0f
-            scaleY = viewportAspect / videoAspect
-        } else {
-            // Video is taller than viewport - pillarbox (black bars left/right)
-            scaleX = videoAspect / viewportAspect
             scaleY = 1.0f
+        } else {
+            // Forced modes change the presentation frame; FIT/ORIGINAL use
+            // the source aspect ratio and preserve the complete image.
+            val presentationAspect = when (aspectMode) {
+                "FOUR_THREE" -> 4f / 3f
+                "LETTERBOX" -> 16f / 9f
+                "CINEMA" -> 2.39f
+                else -> videoAspect
+            }
+            if (presentationAspect > viewportAspect) {
+                scaleX = 1.0f
+                scaleY = viewportAspect / presentationAspect
+            } else {
+                scaleX = presentationAspect / viewportAspect
+                scaleY = 1.0f
+            }
         }
         
         Log.d(TAG, "🎬 Aspect ratio: video=$videoAspect, viewport=$viewportAspect, scale=($scaleX, $scaleY)")
