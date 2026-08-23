@@ -105,16 +105,6 @@ fun MobileHomeScreen(
                 .align(Alignment.TopCenter)
                 .navigationBarsPadding()
         ) {
-            item {
-                Row(Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Spacer(Modifier.weight(1f))
-                    if (showLiveTv) MobileHeaderAction(Icons.Default.Tv, "Televisión en directo", onLiveTv)
-                    MobileHeaderAction(Icons.Default.Download, "Descargas", onDownloads)
-                    MobileHeaderAction(Icons.Default.Search, "Buscar", onSearch)
-                    MobileHeaderAction(Icons.Default.Settings, "Ajustes", onSettings)
-                }
-            }
-            item { MobileMediaPanel(libraries, onLibraryClick, onSearch) }
             if (continueWatching.isNotEmpty()) item {
                 MobileHomeMediaRow(
                     title = "Seguir viendo",
@@ -141,6 +131,8 @@ fun MobileHomeScreen(
             showSeries = seriesLibrary != null,
             showLiveTv = showLiveTv,
             onDownloads = onDownloads,
+            onSearch = onSearch,
+            onSettings = onSettings,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
@@ -438,6 +430,8 @@ private fun MobileBottomNavigation(
     showSeries: Boolean,
     showLiveTv: Boolean,
     onDownloads: () -> Unit,
+    onSearch: () -> Unit,
+    onSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -448,7 +442,9 @@ private fun MobileBottomNavigation(
         if (showMovies) MobileBottomNavigationItem(Icons.Default.Movie, "Películas", onMovies, modifier = Modifier.weight(1f))
         if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, "Series", onSeries, modifier = Modifier.weight(1f))
         if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, "TV", onLiveTv, modifier = Modifier.weight(1f))
+        MobileBottomNavigationItem(Icons.Default.Search, "Buscar", onSearch, modifier = Modifier.weight(1f))
         MobileBottomNavigationItem(Icons.Default.Download, "Descargas", onDownloads, modifier = Modifier.weight(1f))
+        MobileBottomNavigationItem(Icons.Default.Settings, "Ajustes", onSettings, modifier = Modifier.weight(1f))
     }
 }
 
