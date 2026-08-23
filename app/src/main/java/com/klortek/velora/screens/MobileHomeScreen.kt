@@ -121,7 +121,6 @@ fun MobileHomeScreen(
             }
             if (recentMovies.isNotEmpty()) item { MobileHomeMediaRow("Películas añadidas recientemente", recentMovies, apiService, onItemClick) }
             if (recentShows.isNotEmpty()) item { MobileHomeMediaRow("Series añadidas recientemente", recentShows, apiService, onItemClick) }
-            if (recentEpisodes.isNotEmpty()) item { MobileHomeMediaRow("Episodios añadidos recientemente", recentEpisodes, apiService, onItemClick) }
             if (unwatched.isNotEmpty()) item { MobileHomeMediaRow("Sin terminar", unwatched, apiService, onItemClick) }
             if (popular.isNotEmpty()) item { MobileHomeMediaRow("Más populares", popular, apiService, onItemClick) }
         }
