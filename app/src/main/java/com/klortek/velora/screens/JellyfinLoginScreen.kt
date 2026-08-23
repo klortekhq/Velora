@@ -411,15 +411,16 @@ private fun CredentialsLoginContent(
         val context = LocalContext.current
         val isTv = remember(context) { DeviceUtils.isTvDevice(context) }
         if (isTv) {
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Button(
                     onClick = onLogin,
                     enabled = !isAuthenticating && username.isNotBlank() && password.isNotBlank(),
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
                         .focusRequester(loginButtonFocusRequester)
                         .onFocusChanged { loginButtonFocused = it.isFocused }
                         .onKeyEvent { keyEvent ->
@@ -466,7 +467,7 @@ private fun CredentialsLoginContent(
                         text = errorMessage,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(start = 8.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     )
                 }
             }
