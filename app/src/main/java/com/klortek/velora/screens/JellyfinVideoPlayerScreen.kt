@@ -4505,8 +4505,11 @@ fun ExoPlayerSettingsMenu(
         ) {
             androidx.tv.material3.Surface(
                 modifier = Modifier
-                    .fillMaxWidth(0.4f)
-                    .fillMaxHeight(0.6f),
+                    // 40% is suitable for a TV dialog but leaves only a
+                    // postage stamp on a phone, causing every label to wrap
+                    // one word per line. Give touch devices a readable panel.
+                    .fillMaxWidth(if (isMobile) 0.9f else 0.4f)
+                    .fillMaxHeight(if (isMobile) 0.62f else 0.6f),
                 shape = RoundedCornerShape(16.dp),
                 colors = androidx.tv.material3.SurfaceDefaults.colors(
                     containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f), // Semi-transparent surface
@@ -4516,7 +4519,7 @@ fun ExoPlayerSettingsMenu(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(24.dp)
+                        .padding(if (isMobile) 20.dp else 24.dp)
                 ) {
                     // Dialog title - changes based on current menu level
                     Text(
