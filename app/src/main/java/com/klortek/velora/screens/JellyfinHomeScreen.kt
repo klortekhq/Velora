@@ -1106,6 +1106,7 @@ fun JellyfinHomeScreen(
                 // Live TV is the single centralized entry point. It is placed
                 // after Películas/Series and never exposed as a separate IPTV tab.
                 if (showLiveTv) {
+                    var liveTvFocused by remember { mutableStateOf(false) }
                     TabRow(
                         modifier = Modifier.padding(end = 14.dp),
                         selectedTabIndex = -1,
@@ -1117,11 +1118,25 @@ fun JellyfinHomeScreen(
                             onClick = onLiveTvClick,
                             colors = TabDefaults.underlinedIndicatorTabColors(),
                             modifier = Modifier
+                                .onFocusChanged { focusState ->
+                                    liveTvFocused = focusState.isFocused || focusState.hasFocus
+                                }
+                                .then(
+                                    if (liveTvFocused) {
+                                        Modifier.background(Color.White, RoundedCornerShape(4.dp))
+                                    } else {
+                                        Modifier
+                                    }
+                                )
                         ) {
                             Text(
                                 text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.live_tv_nav),
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.padding(end = 10.dp)
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.90f
+                                ),
+                                color = if (liveTvFocused) Color.Black else Color.White,
+                                modifier = Modifier.padding(horizontal = 13.dp, vertical = 6.dp)
                             )
                         }
                     }
