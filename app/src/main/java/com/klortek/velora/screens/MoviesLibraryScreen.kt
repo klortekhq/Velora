@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
@@ -638,7 +639,8 @@ fun MoviesLibraryScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = if (isTv) 22.dp else 52.dp)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(top = if (isTv) 22.dp else 12.dp)
                 .then(
                     if (debugOutlinesEnabled) {
                         Modifier.border(4.dp, Color.Red)
@@ -647,7 +649,7 @@ fun MoviesLibraryScreen(
                     }
                 )
         ) {
-            Row(
+            if (isTv) Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -929,6 +931,26 @@ fun MoviesLibraryScreen(
                 
                 // Digital clock on the far right
                 DigitalClock(use24HourFormat = use24HourTime)
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    androidx.compose.material3.IconButton(onClick = onBackPressed) {
+                        androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás", tint = Color.White)
+                    }
+                    Text(libraryName, color = Color.White, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Spacer(Modifier.weight(1f))
+                    androidx.compose.material3.IconButton(onClick = { showSearch = true }) {
+                        androidx.compose.material3.Icon(Icons.Default.Search, "Buscar", tint = Color.White)
+                    }
+                    androidx.compose.material3.IconButton(onClick = { showSortDialog = true }) {
+                        androidx.compose.material3.Icon(Icons.Default.SwapVert, "Ordenar y filtrar", tint = Color.White)
+                    }
+                    androidx.compose.material3.IconButton(onClick = { showSettings = true }) {
+                        androidx.compose.material3.Icon(Icons.Default.Settings, "Ajustes", tint = Color.White)
+                    }
+                }
             }
         }
         

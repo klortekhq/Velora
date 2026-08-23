@@ -89,6 +89,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
@@ -2375,6 +2376,50 @@ fun SortDialog(
     selectedGenre: String? = null,
     onGenreSelected: ((String?) -> Unit)? = null
 ) {
+    val context = LocalContext.current
+    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+
+    // Touch-first library controls for phones and tablets. The TV dialog below
+    // remains unchanged for D-pad navigation.
+    if (!isTv) {
+        Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+            Box(
+                modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.72f)),
+                contentAlignment = Alignment.Center
+            ) {
+                androidx.compose.material3.Surface(
+                    modifier = Modifier.fillMaxWidth(0.92f).fillMaxHeight(0.82f),
+                    shape = RoundedCornerShape(24.dp),
+                    color = Color(0xFF171A20),
+                    contentColor = Color(0xFFF5F7FA)
+                ) {
+                    Column(Modifier.fillMaxSize().padding(22.dp)) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            androidx.compose.material3.IconButton(onClick = onDismiss) {
+                                androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás", tint = Color.White)
+                            }
+                            androidx.compose.material3.Text("Ordenar y filtrar", color = Color.White, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        }
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp), contentPadding = PaddingValues(vertical = 8.dp)) {
+                            item { androidx.compose.material3.Text("Ordenar por", color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)) }
+                            item { MobileSortOption("Nombre", currentSortType == SortType.Alphabetically) { onSortSelected(SortType.Alphabetically) } }
+                            item { MobileSortOption("Fecha de incorporación", currentSortType == SortType.DateAdded) { onSortSelected(SortType.DateAdded) } }
+                            item { MobileSortOption("Fecha de estreno", currentSortType == SortType.DateReleased) { onSortSelected(SortType.DateReleased) } }
+                            if (availableGenres.isNotEmpty() && onGenreSelected != null) {
+                                item { androidx.compose.material3.Text("Filtrar por género", color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 20.dp, bottom = 4.dp)) }
+                                item { MobileSortOption("Todos los géneros", selectedGenre == null) { onGenreSelected(null) } }
+                                items(availableGenres) { genre ->
+                                    MobileSortOption(localizedGenreName(genre), selectedGenre == genre) { onGenreSelected(genre) }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return
+    }
+
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -2517,6 +2562,19 @@ fun SortDialog(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun MobileSortOption(label: String, selected: Boolean, onClick: () -> Unit) {
+    androidx.compose.material3.Surface(
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable(onClick = onClick),
+        color = if (selected) Color(0xFF123D4A) else Color.Transparent
+    ) {
+        Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+            androidx.compose.material3.RadioButton(selected = selected, onClick = onClick, colors = androidx.compose.material3.RadioButtonDefaults.colors(selectedColor = Color(0xFF25B8E8), unselectedColor = Color(0xFFB8C1CC)))
+            androidx.compose.material3.Text(label, color = Color(0xFFF5F7FA), modifier = Modifier.padding(start = 8.dp))
         }
     }
 }
