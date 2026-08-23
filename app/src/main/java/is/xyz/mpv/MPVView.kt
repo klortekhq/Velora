@@ -30,6 +30,7 @@ class MPVView(context: Context, attrs: AttributeSet? = null) : SurfaceView(conte
     private var voInUse: String = "gpu"
     private var httpHeaders: String? = null
     private var isInitialized = false
+    private var surfaceAttached = false
 
     constructor(context: Context) : this(context, null)
 
@@ -93,10 +94,10 @@ class MPVView(context: Context, attrs: AttributeSet? = null) : SurfaceView(conte
         MPVLib.setOptionString("keep-open", "yes")  // Keep player open after playback ends
         MPVLib.setOptionString("idle", "yes")  // Stay idle instead of exiting
 
+        isInitialized = true
         holder.addCallback(this)
         observeProperties()
-        
-        isInitialized = true
+
         Log.d(TAG, "MPV initialized successfully")
         
         // Log subtitle-related properties for debugging
@@ -218,6 +219,7 @@ class MPVView(context: Context, attrs: AttributeSet? = null) : SurfaceView(conte
         if (!isInitialized) return
         
         holder.removeCallback(this)
+        surfaceAttached = false
         MPVLib.destroy()
         isInitialized = false
         Log.d(TAG, "MPV destroyed")
@@ -245,21 +247,36 @@ class MPVView(context: Context, attrs: AttributeSet? = null) : SurfaceView(conte
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
-        Log.d(TAG, "Surface created, attaching to MPV")
+        // SurfaceView can dispatch surfaceCreated before the native window is
+        // actually valid on Fire TV. Attach and enable GPU output on the next
+        // UI turn, retrying briefly instead of letting mpv initialize against a
+        // null ANativeWindow.
+        post { attachSurfaceWhenReady(holder, 0) }
+    }
+
+    private fun attachSurfaceWhenReady(holder: SurfaceHolder, attempt: Int) {
+        if (!isInitialized || surfaceAttached) return
+        if (!holder.surface.isValid) {
+            if (attempt < 20) postDelayed({ attachSurfaceWhenReady(holder, attempt + 1) }, 50L)
+            else Log.e(TAG, "Surface never became valid; MPV video output remains disabled")
+            return
+        }
+
+        Log.d(TAG, "Surface ready, attaching to MPV")
         MPVLib.attachSurface(holder.surface)
         MPVLib.setOptionString("force-window", "yes")
-        
-        // Enable VO now that surface is ready
         MPVLib.setPropertyString("vo", voInUse)
+        surfaceAttached = true
 
-        if (filePath != null) {
-            MPVLib.command(arrayOf("loadfile", filePath as String))
+        filePath?.let { path ->
+            MPVLib.command(arrayOf("loadfile", path))
             filePath = null
         }
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         Log.d(TAG, "Surface destroyed, detaching from MPV")
+        surfaceAttached = false
         MPVLib.setPropertyString("vo", "null")
         MPVLib.setPropertyString("force-window", "no")
         MPVLib.detachSurface()
