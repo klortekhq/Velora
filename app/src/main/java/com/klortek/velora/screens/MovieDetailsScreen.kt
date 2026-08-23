@@ -235,6 +235,7 @@ fun MovieDetailsScreen(
     if (showMobileResumeDialog && isMobileLayout && (displayItem.UserData?.PositionTicks ?: 0L) > 0L) {
         ResumeEpisodeDialog(
             episode = displayItem,
+            isMobile = true,
             onDismiss = { showMobileResumeDialog = false },
             onResume = {
                 showMobileResumeDialog = false

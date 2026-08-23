@@ -94,6 +94,9 @@ import androidx.tv.material3.Surface
 import androidx.tv.material3.SurfaceDefaults
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
+import androidx.compose.material3.Button as MobileButton
+import androidx.compose.material3.OutlinedButton as MobileOutlinedButton
+import androidx.compose.material3.ButtonDefaults as MobileButtonDefaults
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.IconButtonDefaults
 import androidx.tv.material3.ListItem
@@ -420,6 +423,7 @@ fun SeriesDetailsScreen(
         if (isMobileLayout && (target.UserData?.PositionTicks ?: 0L) > 0L) {
             ResumeEpisodeDialog(
                 episode = target,
+                isMobile = true,
                 onDismiss = { mobileResumeEpisode = null },
                 onResume = {
                     mobileResumeEpisode = null
@@ -1727,7 +1731,8 @@ fun ResumeEpisodeDialog(
     episode: JellyfinItem,
     onDismiss: () -> Unit,
     onResume: () -> Unit,
-    onPlayFromStart: () -> Unit
+    onPlayFromStart: () -> Unit,
+    isMobile: Boolean = false
 ) {
     Dialog(
         onDismissRequest = onDismiss,
@@ -1747,6 +1752,67 @@ fun ResumeEpisodeDialog(
                 contentColor = MaterialTheme.colorScheme.onSurface
             )
         ) {
+            if (isMobile) {
+                // TV Material3 controls are focus-first and can miss touch
+                // events on phones. Use regular Material3 touch targets here.
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = localizeEpisodeTitle(episode.Name),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 3,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        MobileButton(
+                            onClick = onResume,
+                            modifier = Modifier
+                                .weight(1f)
+                                .heightIn(min = 56.dp),
+                            shape = RoundedCornerShape(28.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp)
+                        ) {
+                            Text("Reanudar", maxLines = 1)
+                        }
+                        MobileButton(
+                            onClick = onPlayFromStart,
+                            modifier = Modifier
+                                .weight(1f)
+                                .heightIn(min = 56.dp),
+                            shape = RoundedCornerShape(28.dp),
+                            colors = MobileButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            ),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                "Reproducir desde el principio",
+                                maxLines = 2,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                        }
+                    }
+                    MobileOutlinedButton(
+                        onClick = onDismiss,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 52.dp),
+                        shape = RoundedCornerShape(28.dp)
+                    ) {
+                        Text("Atrás")
+                    }
+                }
+            } else {
             Column(
                 modifier = Modifier
                     .padding(20.dp),
@@ -1820,6 +1886,7 @@ fun ResumeEpisodeDialog(
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
+            }
             }
         }
     }
