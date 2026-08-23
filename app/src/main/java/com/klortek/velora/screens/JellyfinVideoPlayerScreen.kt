@@ -439,6 +439,7 @@ fun JellyfinVideoPlayerScreen(
     var hasRetriedWithHls by remember { mutableStateOf(false) } // Track if we've retried with HLS for parser errors
     var currentMediaSource by remember { mutableStateOf<MediaSource?>(null) }
     var showSettingsMenu by remember { mutableStateOf(false) }
+    var showAspectModeMenu by remember { mutableStateOf(false) }
     var settingsMenuInitialLevel by remember { mutableStateOf("main") } // Track which submenu to open to
     var showControls by remember { mutableStateOf(false) } // Custom Compose controls overlay
     var currentPosition by remember { mutableStateOf(0L) } // Current playback position in ms
@@ -3666,7 +3667,11 @@ fun JellyfinVideoPlayerScreen(
                                         AspectModeButton(
                                             currentMode = currentAspectMode,
                                             onClick = {
-                                                currentAspectMode = currentAspectMode.next()
+                                                // A picker is more reliable than cycling through tiny labels,
+                                                // especially with touch and with a TV remote. It also makes the
+                                                // active mode unambiguous while testing the actual resize.
+                                                showControls = false
+                                                showAspectModeMenu = true
                                             }
                                         )
                                         
@@ -4111,6 +4116,85 @@ fun JellyfinVideoPlayerScreen(
                 )
             } else {
                 playerContent(Modifier.fillMaxSize())
+            }
+        }
+    }
+
+    if (showAspectModeMenu) {
+        Dialog(
+            onDismissRequest = { showAspectModeMenu = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.68f)),
+                contentAlignment = Alignment.Center
+            ) {
+                androidx.compose.material3.Surface(
+                    modifier = Modifier
+                        .fillMaxWidth(if (isMobile) 0.88f else 0.48f)
+                        .heightIn(max = 620.dp),
+                    shape = RoundedCornerShape(24.dp),
+                    color = Color(0xFF171A21),
+                    contentColor = Color.White
+                ) {
+                    Column(
+                        modifier = Modifier.padding(22.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        androidx.compose.material3.Text(
+                            text = "Formato de imagen",
+                            style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                        androidx.compose.material3.Text(
+                            text = "Selecciona cómo quieres ver el vídeo",
+                            style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                            color = Color.White.copy(alpha = 0.72f),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        AspectMode.values().forEach { mode ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(14.dp))
+                                    .background(
+                                        if (mode == currentAspectMode) {
+                                            Color.Cyan.copy(alpha = 0.22f)
+                                        } else Color.Transparent
+                                    )
+                                    .clickable {
+                                        currentAspectMode = mode
+                                        showAspectModeMenu = false
+                                    }
+                                    .focusable()
+                                    .padding(horizontal = 14.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                androidx.compose.material3.Icon(
+                                    imageVector = if (mode == currentAspectMode) Icons.Filled.Check else Icons.Filled.AspectRatio,
+                                    contentDescription = null,
+                                    tint = if (mode == currentAspectMode) Color.Cyan else Color.White.copy(alpha = 0.8f),
+                                    modifier = Modifier.size(22.dp)
+                                )
+                                androidx.compose.material3.Text(
+                                    text = mode.label,
+                                    color = Color.White,
+                                    style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier.padding(start = 12.dp)
+                                )
+                            }
+                        }
+                        androidx.compose.material3.OutlinedButton(
+                            onClick = { showAspectModeMenu = false },
+                            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                        ) {
+                            androidx.compose.material3.Text("Cancelar")
+                        }
+                    }
+                }
             }
         }
     }
