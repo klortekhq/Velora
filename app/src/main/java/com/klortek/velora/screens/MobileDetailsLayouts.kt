@@ -328,7 +328,11 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
     val people = item.People?.filter { it.Type == "Actor" }?.take(12).orEmpty()
     if (people.isNotEmpty()) {
         Text("Reparto", color = Color.White, style = MaterialTheme.typography.titleMedium)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) { items(people, key = { it.Id ?: it.Name }) { MobileCastMemberCard(person = it, apiService = apiService) } }
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            items(people.size, key = { index -> "cast-${people[index].Id ?: people[index].Name}-$index" }) { index ->
+                MobileCastMemberCard(person = people[index], apiService = apiService)
+            }
+        }
     }
 }
 
@@ -362,7 +366,10 @@ private fun MobileCrew(item: JellyfinItem, apiService: JellyfinApiService?) {
         Text("No hay información del equipo", color = Color.White.copy(alpha = .72f))
     } else {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            items(crew.take(12), key = { it.Id ?: it.Name }) { MobileCastMemberCard(person = it, apiService = apiService) }
+            val visibleCrew = crew.take(12)
+            items(visibleCrew.size, key = { index -> "crew-${visibleCrew[index].Id ?: visibleCrew[index].Name}-$index" }) { index ->
+                MobileCastMemberCard(person = visibleCrew[index], apiService = apiService)
+            }
         }
     }
 }
