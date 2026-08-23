@@ -1,5 +1,6 @@
 package com.klortek.velora.screens
 
+import android.app.Activity
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
@@ -119,6 +120,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.compose.material.icons.filled.AspectRatio
+import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.ClosedCaption
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -2466,10 +2469,28 @@ fun JellyfinVideoPlayerScreen(
         }
     }
 
+    // Detect mobile vs TV and orientation for fullscreen/back behavior.
+    val isMobile = remember { !DeviceUtils.isTvDevice(context) }
+    val configuration = LocalConfiguration.current
+    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    val isPortraitMode = isMobile && isPortrait
+    val toggleMobileFullscreen = {
+        (context as? Activity)?.requestedOrientation = if (isPortraitMode) {
+            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        showControls = false
+    }
+
     // BackHandler to handle back button
     BackHandler(enabled = true) {
-        // Exit player on back button
-        onBack()
+        if (isMobile && !isPortraitMode) {
+            (context as? Activity)?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            showControls = false
+        } else {
+            onBack()
+        }
     }
 
     // Get series name if this is an episode
@@ -2511,9 +2532,6 @@ fun JellyfinVideoPlayerScreen(
         }
     }
     
-    // Detect mobile vs TV for touch vs D-pad controls
-    val isMobile = remember { !DeviceUtils.isTvDevice(context) }
-
     // Track last interaction time to reset auto-hide timer
     var controlsInteractionKey by remember { mutableStateOf(0) }
     
@@ -2597,10 +2615,6 @@ fun JellyfinVideoPlayerScreen(
         }
     }
     
-    val configuration = LocalConfiguration.current
-    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-    val isPortraitMode = isMobile && isPortrait
-
     val playerContent = @Composable { playerModifier: Modifier ->
         Box(
             modifier = playerModifier
@@ -3472,7 +3486,7 @@ fun JellyfinVideoPlayerScreen(
                                                     color = Color.Black.copy(alpha = 0.5f),
                                                     shape = RoundedCornerShape(50)
                                                 )
-                                                .clickable { onBack() },
+                                                .clickable { toggleMobileFullscreen() },
                                             contentAlignment = Alignment.Center
                                         ) {
                                             androidx.compose.material3.Icon(
@@ -3498,6 +3512,40 @@ fun JellyfinVideoPlayerScreen(
                                                 modifier = Modifier.weight(1f)
                                             )
                                         }
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(50))
+                                                .clickable { toggleMobileFullscreen() },
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            androidx.compose.material3.Icon(
+                                                imageVector = Icons.Filled.FullscreenExit,
+                                                contentDescription = "Salir de pantalla completa",
+                                                tint = Color.White,
+                                                modifier = Modifier.size(24.dp)
+                                            )
+                                        }
+                                    }
+                                }
+
+                                if (isMobile && isPortraitMode) {
+                                    Box(
+                                        modifier = Modifier
+                                            .align(Alignment.TopEnd)
+                                            .statusBarsPadding()
+                                            .padding(top = 12.dp, end = 16.dp)
+                                            .size(44.dp)
+                                            .background(Color.Black.copy(alpha = 0.55f), RoundedCornerShape(50))
+                                            .clickable { toggleMobileFullscreen() },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        androidx.compose.material3.Icon(
+                                            imageVector = Icons.Filled.Fullscreen,
+                                            contentDescription = "Pantalla completa",
+                                            tint = Color.White,
+                                            modifier = Modifier.size(26.dp)
+                                        )
                                     }
                                 }
                                 
