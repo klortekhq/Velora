@@ -328,7 +328,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
     val people = item.People?.filter { it.Type == "Actor" }?.take(12).orEmpty()
     if (people.isNotEmpty()) {
         Text("Reparto", color = Color.White, style = MaterialTheme.typography.titleMedium)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) { items(people) { CastMemberCard(person = it, apiService = apiService) } }
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) { items(people, key = { it.Id ?: it.Name }) { MobileCastMemberCard(person = it, apiService = apiService) } }
     }
 }
 
@@ -362,8 +362,50 @@ private fun MobileCrew(item: JellyfinItem, apiService: JellyfinApiService?) {
         Text("No hay información del equipo", color = Color.White.copy(alpha = .72f))
     } else {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            items(crew.take(12)) { CastMemberCard(person = it, apiService = apiService) }
+            items(crew.take(12), key = { it.Id ?: it.Name }) { MobileCastMemberCard(person = it, apiService = apiService) }
         }
+    }
+}
+
+/** Touch-first card: the shared TV Card depends on focus semantics and did
+ * not reliably receive taps in the mobile details layout. */
+@Composable
+private fun MobileCastMemberCard(person: com.klortek.velora.jellyfin.Person, apiService: JellyfinApiService?) {
+    val context = LocalContext.current
+    val imageUrl = person.Id?.let { id ->
+        apiService?.getImageUrl(id, "Primary", person.PrimaryImageTag, maxWidth = 220, maxHeight = 220, quality = 84)
+    }
+    Column(
+        modifier = Modifier.width(82.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(72.dp)
+                .clip(CircleShape)
+                .background(Color.White.copy(alpha = .14f))
+                .clickable(enabled = person.Id != null) {
+                    person.Id?.let { id ->
+                        context.startActivity(com.klortek.velora.CastInfoActivity.createIntent(context, id, person.Name, person.Type))
+                    }
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            if (!imageUrl.isNullOrBlank() && apiService != null) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context).data(imageUrl)
+                        .headers(apiService.getImageRequestHeaders())
+                        .memoryCachePolicy(CachePolicy.ENABLED)
+                        .diskCachePolicy(CachePolicy.ENABLED).build(),
+                    contentDescription = person.Name,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+        Text(person.Name, color = Color.White.copy(alpha = .9f), style = MaterialTheme.typography.bodySmall,
+            maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
     }
 }
 
