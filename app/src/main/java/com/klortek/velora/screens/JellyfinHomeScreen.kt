@@ -76,6 +76,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
@@ -639,6 +644,7 @@ fun JellyfinHomeScreen(
             onDownloads = onDownloadsClick,
             onLiveTv = onLiveTvClick,
             showLiveTv = showLiveTv,
+            onContinueWatchingLongClick = { item -> continueWatchingActionItem = item },
             onLibraryClick = { library -> selectedLibraryId = library.Id }
         )
         }
@@ -3302,6 +3308,38 @@ fun JellyfinHorizontalCardWithProgress(
     // Calculate progress percentage
     val progress = item.UserData?.PlayedPercentage?.toFloat()?.div(100f) ?: 0f
     val context = LocalContext.current
+    val longPressStartedAt = remember { mutableStateOf(0L) }
+    val longPressTriggered = remember { mutableStateOf(false) }
+    val dpadLongPressModifier = if (onLongClick != null) {
+        Modifier.onPreviewKeyEvent { event ->
+            val isConfirmKey = event.key == Key.Enter || event.key == Key.DirectionCenter
+            if (!isConfirmKey) return@onPreviewKeyEvent false
+
+            val now = System.currentTimeMillis()
+            when (event.type) {
+                KeyEventType.KeyDown -> {
+                    if (longPressStartedAt.value == 0L) longPressStartedAt.value = now
+                    val heldLongEnough = now - longPressStartedAt.value >= 550L
+                    if (heldLongEnough && !longPressTriggered.value) {
+                        longPressTriggered.value = true
+                        onLongClick.invoke()
+                        true
+                    } else {
+                        false
+                    }
+                }
+                KeyEventType.KeyUp -> {
+                    val wasLongPress = longPressTriggered.value
+                    longPressStartedAt.value = 0L
+                    longPressTriggered.value = false
+                    wasLongPress
+                }
+                else -> false
+            }
+        }
+    } else {
+        Modifier
+    }
     
     // Google TV style card - lightweight with subtle scale animation
     if (useGoogleTvCards) {
@@ -3313,6 +3351,7 @@ fun JellyfinHorizontalCardWithProgress(
             onLongClick = onLongClick,
             modifier = Modifier
                 .width(161.dp)
+                .then(dpadLongPressModifier)
                 .onFocusChanged { focusState ->
                     isFocused = focusState.isFocused
                     onFocusChanged?.invoke(focusState.isFocused)
@@ -3397,6 +3436,7 @@ fun JellyfinHorizontalCardWithProgress(
             onLongClick = onLongClick,
             modifier = Modifier
                 .width(161.dp)
+                .then(dpadLongPressModifier)
                 .onFocusChanged { focusState ->
                     isFocused = focusState.isFocused
                     onFocusChanged?.invoke(focusState.isFocused)
@@ -3477,6 +3517,7 @@ fun JellyfinHorizontalCardWithProgress(
                     onClick = onClick,
                     onLongClick = onLongClick,
                     interactionSource = it,
+                    modifier = dpadLongPressModifier,
                     colors = CardDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent)
                 ) {
                     Box(modifier = Modifier
