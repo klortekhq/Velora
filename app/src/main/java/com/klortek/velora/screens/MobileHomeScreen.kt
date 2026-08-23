@@ -74,9 +74,11 @@ fun MobileHomeScreen(
     onLiveTv: () -> Unit,
     showLiveTv: Boolean
 ) {
-    val hero = continueWatching.firstOrNull() ?: recentMovies.firstOrNull() ?: recentShows.firstOrNull()
     Box(Modifier.fillMaxSize().background(MobileHomeBackground)) {
-        MobileHomeHero(hero, apiService, onItemClick)
+        // Mobile home is a scrollable Plex-style dashboard.  Do not render the
+        // TV hero layer here: it is a separate, fixed-height surface that used
+        // to sit behind the LazyColumn and leave the selected episode title
+        // permanently overlaid on the first rows.
         LazyColumn(
             contentPadding = PaddingValues(top = 18.dp, bottom = 112.dp),
             verticalArrangement = Arrangement.spacedBy(22.dp),
