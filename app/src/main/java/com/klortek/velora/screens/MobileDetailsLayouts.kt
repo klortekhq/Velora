@@ -109,6 +109,7 @@ fun MobileMovieDetailsLayout(
             when (selectedSection) {
                 "Reparto" -> MobilePeople(item, apiService)
                 "Equipo" -> MobileCrew(item, apiService)
+                "Estudios" -> Text("No hay información de estudios disponible", color = Color.White.copy(alpha = .72f))
                 "Detalles" -> MobileFileDetails(item)
                 "Similares" -> MobileSimilarMovies(similarMovies, apiService)
                 else -> MobilePeople(item, apiService)
