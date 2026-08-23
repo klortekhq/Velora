@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -435,16 +437,22 @@ private fun MobileBottomNavigation(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().navigationBarsPadding().background(Color(0xEE171A21)).padding(horizontal = 16.dp, vertical = 10.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .background(Color(0xEE171A21))
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        MobileBottomNavigationItem(Icons.Default.Home, "Inicio", onHome, selected = true, modifier = Modifier.weight(1f))
-        if (showMovies) MobileBottomNavigationItem(Icons.Default.Movie, "Películas", onMovies, modifier = Modifier.weight(1f))
-        if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, "Series", onSeries, modifier = Modifier.weight(1f))
-        if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, "TV", onLiveTv, modifier = Modifier.weight(1f))
-        MobileBottomNavigationItem(Icons.Default.Search, "Buscar", onSearch, modifier = Modifier.weight(1f))
-        MobileBottomNavigationItem(Icons.Default.Download, "Descargas", onDownloads, modifier = Modifier.weight(1f))
-        MobileBottomNavigationItem(Icons.Default.Settings, "Ajustes", onSettings, modifier = Modifier.weight(1f))
+        val itemModifier = Modifier.width(76.dp)
+        MobileBottomNavigationItem(Icons.Default.Home, "Inicio", onHome, selected = true, modifier = itemModifier)
+        if (showMovies) MobileBottomNavigationItem(Icons.Default.Movie, "Películas", onMovies, modifier = itemModifier)
+        if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, "Series", onSeries, modifier = itemModifier)
+        if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, "TV", onLiveTv, modifier = itemModifier)
+        MobileBottomNavigationItem(Icons.Default.Search, "Buscar", onSearch, modifier = itemModifier)
+        MobileBottomNavigationItem(Icons.Default.Download, "Descargas", onDownloads, modifier = itemModifier)
+        MobileBottomNavigationItem(Icons.Default.Settings, "Ajustes", onSettings, modifier = itemModifier)
     }
 }
 
