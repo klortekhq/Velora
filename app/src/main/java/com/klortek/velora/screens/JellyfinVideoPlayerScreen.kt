@@ -135,6 +135,7 @@ import com.klortek.velora.theme.*
 enum class AspectMode(val label: String) {
     FIT("Ajustar"),          // Natural letterbox - fits video in screen with black bars
     FILL("Rellenar"),        // Crop to fill screen - removes black bars by cropping
+    FOUR_THREE("4:3"),        // Force a 4:3 viewing frame
     LETTERBOX("16:9"),       // Force 16:9 letterbox - maintains aspect ratio in 16:9 frame
     CINEMA("Cine"),          // Cinema scope 2.39:1 - movie theater style with wide black bars
     STRETCH("Estirar"),      // Stretch both axes - distorts to fill screen
@@ -2545,6 +2546,10 @@ fun JellyfinVideoPlayerScreen(
                     pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
                     contentFrame?.setAspectRatio(0f) // Reset to video's natural aspect ratio
                 }
+                AspectMode.FOUR_THREE -> {
+                    pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                    contentFrame?.setAspectRatio(4f / 3f)
+                }
                 AspectMode.LETTERBOX -> {
                     // Force 16:9 letterbox - video fits inside a 16:9 frame with black bars
                     pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
@@ -2568,6 +2573,9 @@ fun JellyfinVideoPlayerScreen(
             }
             
             Log.d("ExoPlayer", "Applied aspect mode: ${currentAspectMode.label}, contentFrame: ${contentFrame != null}")
+            contentFrame?.requestLayout()
+            pv.requestLayout()
+            pv.invalidate()
         }
     }
     
@@ -3185,6 +3193,10 @@ fun JellyfinVideoPlayerScreen(
                                             pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
                                             contentFrame?.setAspectRatio(0f)
                                         }
+                                        AspectMode.FOUR_THREE -> {
+                                            pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                                            contentFrame?.setAspectRatio(4f / 3f)
+                                        }
                                         AspectMode.LETTERBOX -> {
                                             pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                                             contentFrame?.setAspectRatio(16f / 9f)
@@ -3202,6 +3214,9 @@ fun JellyfinVideoPlayerScreen(
                                             contentFrame?.setAspectRatio(0f)
                                         }
                                     }
+                                    contentFrame?.requestLayout()
+                                    pv.requestLayout()
+                                    pv.invalidate()
                                     
                                     // Ensure view is focusable and can receive key events
                                     if (!pv.isFocusable) {
@@ -3590,13 +3605,13 @@ fun JellyfinVideoPlayerScreen(
                                         
                                         Spacer(modifier = Modifier.width(if (isMobile) 24.dp else 32.dp))
                                         
-                                        // CC (Subtitles) button
+                                        // Unified playback settings: audio and subtitles
                                         PlayerControlButton(
-                                            icon = Icons.Filled.ClosedCaption,
-                                            contentDescription = "Subtítulos",
+                                            icon = Icons.Filled.Settings,
+                                            contentDescription = "Ajustes de reproducción",
                                             onClick = {
                                                 showControls = false
-                                                settingsMenuInitialLevel = "subtitles"
+                                                settingsMenuInitialLevel = "main"
                                                 showSettingsMenu = true
                                             }
                                         )
