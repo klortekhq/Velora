@@ -123,6 +123,14 @@ enum class SettingsCategory(val title: String, val icon: ImageVector) {
     ABOUT("Acerca de", Icons.Default.Info),
 }
 
+// Mobile settings uses an explicit high-contrast palette. The app theme is
+// TV-first and its inherited content colors are too subtle on phone panels.
+private val MobileSettingsBackground = Color(0xFF090B10)
+private val MobileSettingsText = Color(0xFFF5F7FA)
+private val MobileSettingsSecondaryText = Color(0xFFB8C1CC)
+private val MobileSettingsAccent = Color(0xFF25B8E8)
+private val MobileSettingsDivider = Color(0xFF303846)
+
 @OptIn(coil.annotation.ExperimentalCoilApi::class)
 @Composable
 fun SettingsScreen(
@@ -2220,7 +2228,7 @@ fun SettingsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(if (isTv) MaterialTheme.colorScheme.surface else MobileSettingsBackground)
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -2268,7 +2276,8 @@ fun SettingsScreen(
                     ) {
                         androidx.compose.material3.Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Atrás"
+                            contentDescription = "Atrás",
+                            tint = MobileSettingsText
                         )
                     }
 
@@ -2276,7 +2285,7 @@ fun SettingsScreen(
                         text = if (activeCategoryDetail != null) activeCategoryDetail!!.title else "Ajustes",
                         style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                        color = MobileSettingsText,
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
@@ -2306,17 +2315,17 @@ fun SettingsScreen(
                             androidx.compose.material3.Icon(
                                 imageVector = category.icon,
                                 contentDescription = null,
-                                tint = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                tint = MobileSettingsAccent,
                                 modifier = Modifier.size(24.dp)
                             )
                             androidx.compose.material3.Text(
                                 text = category.title,
                                 style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
-                                color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+                                color = MobileSettingsText
                             )
                         }
                         androidx.compose.material3.HorizontalDivider(
-                            color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+                            color = MobileSettingsDivider
                         )
                     }
                 }
@@ -2636,6 +2645,8 @@ private fun SettingToggle(
 ) {
     val context = LocalContext.current
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    val titleColor = if (isTv) MaterialTheme.colorScheme.onSurface else MobileSettingsText
+    val descriptionColor = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else MobileSettingsSecondaryText
 
     Row(
         modifier = Modifier
@@ -2646,17 +2657,13 @@ private fun SettingToggle(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                modifier = Modifier.padding(top = 4.dp)
-            )
+            if (isTv) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
+                Text(text = description, style = MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            } else {
+                androidx.compose.material3.Text(text = title, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge, color = titleColor)
+                androidx.compose.material3.Text(text = description, style = androidx.compose.material3.MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            }
         }
         
         if (isTv) {
@@ -2688,6 +2695,8 @@ private fun SettingSlider(
 ) {
     val context = LocalContext.current
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    val titleColor = if (isTv) MaterialTheme.colorScheme.onSurface else MobileSettingsText
+    val descriptionColor = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else MobileSettingsSecondaryText
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -2695,17 +2704,13 @@ private fun SettingSlider(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                modifier = Modifier.padding(top = 4.dp)
-            )
+            if (isTv) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
+                Text(text = description, style = MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            } else {
+                androidx.compose.material3.Text(text = title, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge, color = titleColor)
+                androidx.compose.material3.Text(text = description, style = androidx.compose.material3.MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            }
         }
         
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2755,6 +2760,8 @@ private fun SettingCycle(
 ) {
     val context = LocalContext.current
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    val titleColor = if (isTv) MaterialTheme.colorScheme.onSurface else MobileSettingsText
+    val descriptionColor = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else MobileSettingsSecondaryText
 
     Row(
         modifier = Modifier
@@ -2765,17 +2772,13 @@ private fun SettingCycle(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                modifier = Modifier.padding(top = 4.dp)
-            )
+            if (isTv) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
+                Text(text = description, style = MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            } else {
+                androidx.compose.material3.Text(text = title, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge, color = titleColor)
+                androidx.compose.material3.Text(text = description, style = androidx.compose.material3.MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            }
         }
         
         if (isTv) {
@@ -2807,6 +2810,8 @@ private fun SettingButton(
 ) {
     val context = LocalContext.current
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    val titleColor = if (isTv) MaterialTheme.colorScheme.onSurface else MobileSettingsText
+    val descriptionColor = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else MobileSettingsSecondaryText
 
     Row(
         modifier = Modifier
@@ -2817,17 +2822,13 @@ private fun SettingButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                modifier = Modifier.padding(top = 4.dp)
-            )
+            if (isTv) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
+                Text(text = description, style = MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            } else {
+                androidx.compose.material3.Text(text = title, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge, color = titleColor)
+                androidx.compose.material3.Text(text = description, style = androidx.compose.material3.MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            }
         }
         
         if (isTv) {
