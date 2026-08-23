@@ -167,20 +167,6 @@ private fun MobileMediaPanel(
             Icon(Icons.Default.Search, "Buscar películas y series", tint = Color.White.copy(alpha = .8f))
             Text("Buscar películas y series", color = Color.White.copy(alpha = .8f), modifier = Modifier.padding(start = 12.dp))
         }
-        if (libraries.isNotEmpty()) {
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-                libraries.filter { it.CollectionType.equals("movies", true) || it.CollectionType.equals("tvshows", true) }.take(2).forEach { library ->
-                    Box(Modifier.weight(1f).height(108.dp).clip(RoundedCornerShape(18.dp)).background(Color.White.copy(alpha = .1f)).clickable { onLibraryClick(library) }) {
-                        Text(
-                            if (library.CollectionType.equals("tvshows", true)) "Series" else "Películas",
-                            color = Color.White, fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                }
-            }
-        }
     }
 }
 
