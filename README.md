@@ -1,41 +1,34 @@
 # Velora
 
-Cliente de Jellyfin para Android, Android TV y Fire TV, con interfaz cyan, navegación fluida con mando y experiencia móvil adaptada a cada pantalla.
+### Cliente Jellyfin para Android, móvil, tablet, Android TV y Fire TV
 
-## Identidad
+Velora es una aplicación independiente para disfrutar de bibliotecas Jellyfin con una interfaz rápida, limpia y adaptada a cada pantalla. La experiencia móvil está pensada para tocar y deslizar; la experiencia de televisión, para mando a distancia, D-pad y pantalla grande.
 
-- Nombre visible: **Velora**
-- Application ID: `com.klortek.velora`
-- Idioma principal: español, con fallback en inglés
-- Sin sponsors, donaciones ni branding de terceros
-- Crédito opcional: `By Ruvikitten`
+## Qué ofrece
 
-## Funciones principales
+- Inicio tipo streaming con **Seguir viendo**, películas y series añadidas recientemente y episodios recientes.
+- Fichas completas de películas y series con temporadas, episodios, reparto, estudios, detalles técnicos y títulos relacionados.
+- Reparto interactivo: al abrir una persona se muestran sus películas y series disponibles en Jellyfin.
+- Búsqueda, ordenación y filtros en español.
+- Sesión persistente y reconexión automática cuando el servidor vuelve a estar disponible.
+- Televisión en directo integrada en la navegación principal cuando el usuario tiene Live TV habilitada.
+- Canales individuales respetando el orden y los nombres recibidos de Jellyfin, sin agrupar ni normalizar fuentes IPTV.
+- EPG, programa actual, logos y progreso cuando el servidor los proporciona.
+- Descargas gestionadas dentro de la aplicación para reproducir contenido compatible sin conexión.
+- Interfaz cyan, navegación redondeada y layouts específicos para móvil y televisión.
 
-- Inicio tipo biblioteca: Seguir viendo, películas y series añadidas recientemente, episodios y bibliotecas.
-- Fichas de películas y series con reparto interactivo, temporadas, episodios, estudios, progreso y reproducción.
-- Al abrir un actor se muestran sus películas y series relacionadas cuando Jellyfin proporciona esa información.
-- Seguir viendo muestra la serie, temporada y episodio correspondientes.
-- Pulsación larga para quitar un elemento de Seguir viendo sin marcarlo como visto ni borrar su progreso.
-- La sesión se conserva entre reinicios y la app reintenta la conexión si el servidor no está disponible temporalmente.
-- Búsqueda y filtros traducidos al español.
-- Descargas móviles persistentes para reproducir películas y episodios sin conexión cuando Jellyfin autoriza la descarga.
-- Televisión en directo integrada en la pestaña **Televisión en directo**, únicamente si el usuario tiene Live TV habilitada en Jellyfin.
-- Canales Live TV individuales, sin agrupación ni normalización de nombres, respetando el orden recibido de Jellyfin.
-- EPG, programa actual, logos y progreso cuando Jellyfin los proporciona.
+## Reproducción
 
-## Reproductor Original First
+Velora sigue una estrategia **Original First**:
 
-La prioridad del reproductor es conservar la calidad original:
-
-1. Direct Play y MediaCodec por hardware.
+1. Direct Play con aceleración MediaCodec cuando el dispositivo es compatible.
 2. Remux o Direct Stream.
-3. Transcodificación Jellyfin solo cuando sea necesaria.
-4. FFmpeg como fallback.
+3. Transcodificación del servidor únicamente cuando es necesaria.
+4. FFmpeg como alternativa de reproducción.
 
-No se aplican degradaciones preventivas de resolución, bitrate, FPS, HDR o códec. Los efectos Fake HDR, shaders y postprocesado están desactivados por defecto.
+No se limita preventivamente la resolución, bitrate, FPS, HDR ni códec. HDR10, HDR10+, HLG, Dolby Vision, AV1, TrueHD y DTS-HD dependen del hardware, firmware, pantalla, licencias y capacidades del servidor.
 
-Durante la reproducción se puede seleccionar:
+Durante la reproducción se puede cambiar la calidad sin salir del reproductor:
 
 - Original — opción predeterminada
 - Automática
@@ -45,45 +38,61 @@ Durante la reproducción se puede seleccionar:
 - 720p / 5 Mbps
 - 480p / 2 Mbps
 
-La selección se puede cambiar durante la reproducción, conserva audio y subtítulos y se recuerda por usuario. También están disponibles los controles de aspecto, audio y subtítulos.
+También están disponibles los controles de aspecto, audio, subtítulos y ajustes del reproductor. Las preferencias de calidad se recuerdan por usuario y se conservan las pistas seleccionadas cuando Jellyfin lo permite.
 
-## Android TV y Fire TV
+## Plataformas
 
-- Navegación D-pad y botón Back adaptados a televisión.
-- Banner y recursos Leanback incluidos.
-- Pantalla completa durante la reproducción.
-- Interfaz optimizada para desplazamiento fluido y bajo consumo de memoria.
-- TV en directo centralizada, sin una pestaña IPTV separada.
+| Plataforma | Experiencia |
+| --- | --- |
+| Android móvil | Interfaz táctil, inicio por filas y reproducción a pantalla completa |
+| Tablet | Layout adaptable y navegación optimizada para pantallas grandes |
+| Android TV | D-pad, botón Back, foco visible y navegación horizontal |
+| Fire TV | Diseño Leanback, banner de TV y reproducción optimizada para el mando |
 
-## Rendimiento
+La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de que el usuario tiene esa función disponible. No existe una pestaña IPTV separada y la aplicación no lee directamente la lista M3U.
 
-Velora utiliza listas perezosas con claves estables, caché de imágenes en memoria y disco, cargas diferidas y actualizaciones controladas para evitar recomposiciones y llamadas de red innecesarias durante el desplazamiento.
+## Descargar
 
-La arquitectura toma como referencia patrones habituales de clientes nativos ligeros para dispositivos TV económicos, manteniendo Compose y el diseño de Velora.
+Las versiones compiladas se publican en [Releases](https://github.com/rubenqs12/Velora/releases). Para instalar manualmente en Android TV o Fire TV, descarga el APK correspondiente y realiza una instalación local.
 
-## Compilar
+## Compilar desde código fuente
 
 Requisitos:
 
 - JDK 17
-- Android SDK configurado
-- Android Studio o Gradle
+- Android SDK
+- Windows, macOS o Linux con Gradle disponible mediante el wrapper incluido
 
 ```bash
+git clone https://github.com/rubenqs12/Velora.git
+cd Velora
 ./gradlew :app:assembleDebug
+```
+
+Para generar una versión release unsigned:
+
+```bash
 ./gradlew :app:assembleRelease
 ```
 
-La release generada por defecto es unsigned y debe firmarse con una clave propia para distribuirla.
+La release unsigned debe firmarse con una clave propia antes de distribuirse.
 
-## Limitaciones reales
+## Rendimiento
 
-HDR10, HDR10+, HLG, Dolby Vision, AV1 por hardware y audio TrueHD/DTS-HD dependen del dispositivo, firmware, pantalla, licencias y capacidades anunciadas por Jellyfin. La aplicación no puede garantizar esos formatos en hardware que no los soporte.
+Velora utiliza Compose, listas perezosas con claves estables, carga diferida de imágenes, caché local y actualizaciones controladas para reducir recomposiciones, consumo de memoria y tráfico innecesario. La reproducción usa una única sesión de reproductor y evita reinicios de Activity al cambiar opciones durante la reproducción.
 
-La reproducción Live TV depende del endpoint Live TV de Jellyfin y de los permisos del usuario. Velora no lee directamente listas M3U desde la aplicación.
+## Estado del proyecto
 
-Las descargas offline dependen de que Jellyfin permita descargar el archivo solicitado.
+Velora está en desarrollo activo. Las pruebas se realizan en Android y en dispositivos Android TV/Fire TV; la reproducción concreta de HDR, Dolby Vision, audio passthrough, AV1 y Live TV puede variar según el dispositivo y el servidor Jellyfin.
+
+## Privacidad
+
+Velora se conecta al servidor Jellyfin que configura el usuario. No incluye sponsors, donaciones, publicidad ni servicios de terceros obligatorios.
 
 ## Créditos
 
-Velora es un cliente independiente para servidores Jellyfin. `By Ruvikitten`.
+Proyecto mantenido por **ruvik**. Para cualquier incidencia o propuesta, utiliza [Issues](https://github.com/rubenqs12/Velora/issues).
+
+## Licencia
+
+Consulta el archivo [LICENSE](LICENSE) para conocer los términos de distribución del proyecto y sus componentes.
