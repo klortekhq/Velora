@@ -156,6 +156,7 @@ fun JellyfinVideoPlayerScreen(
     resumePositionMs: Long = 0L,
     subtitleStreamIndex: Int? = null,
     audioStreamIndex: Int? = null,
+    initialMediaUrl: String? = null,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -403,7 +404,7 @@ fun JellyfinVideoPlayerScreen(
     }
     val playerViewRef = remember { mutableStateOf<PlayerView?>(null) }
     val glSurfaceViewRef = remember { mutableStateOf<GLVideoSurfaceView?>(null) }
-    var mediaUrl by remember { mutableStateOf<String?>(null) }
+    var mediaUrl by remember { mutableStateOf(initialMediaUrl) }
     var isLoading by remember { mutableStateOf(true) }
     var playerInitialized by remember { mutableStateOf(false) }
 
@@ -766,7 +767,10 @@ fun JellyfinVideoPlayerScreen(
                         }
                     }
 
-                    // Generate video playback URL
+                    // Generate video playback URL. Live TV may already have a
+                    // Jellyfin-resolved HLS/direct source supplied by the activity;
+                    // preserve it so ExoPlayer opens the channel instead of
+                    // replacing it with a VOD URL derived from the item id.
                     // If user selected external subtitle, disable HLS transcoding to force direct streaming
                     val effectiveNeedsTranscoding = if (forceDirectStreamForSubtitles) false else needsAudioTranscoding
                     val effectiveAudioCodec = if (forceDirectStreamForSubtitles) null else targetAudioCodec
@@ -789,7 +793,9 @@ fun JellyfinVideoPlayerScreen(
                         (transcodeHEVCSetting && isHEVCVideo)
                     )
                     
-                    val videoUrl = if (shouldRequestTranscoding && !forceDirectStreamForSubtitles) {
+                    val videoUrl = if (initialMediaUrl != null) {
+                        initialMediaUrl
+                    } else if (shouldRequestTranscoding && !forceDirectStreamForSubtitles) {
                         Log.d("JellyfinPlayer", "🔄 SERVER-SIDE TRANSCODING ENABLED")
                         Log.d("JellyfinPlayer", "   Source codec: $videoCodecName")
                         Log.d("JellyfinPlayer", "   Target codec: $transcodeTargetCodec @ ${transcodeMaxBitrate}Mbps")
