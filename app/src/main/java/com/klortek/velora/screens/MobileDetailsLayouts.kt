@@ -30,7 +30,11 @@ import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.ui.Alignment
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -50,6 +54,8 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 private val MobileBackground = Color(0xFF090A0D)
 private val MobileCyan = Color(0xFF16C8F2)
@@ -64,6 +70,17 @@ fun MobileMovieDetailsLayout(
     onRestart: (() -> Unit)? = null,
     onDownload: (() -> Unit)? = null
 ) {
+    var selectedSection by remember { mutableStateOf("Reparto") }
+    var similarMovies by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
+    LaunchedEffect(item.Id, item.Genres, apiService) {
+        val genre = item.Genres?.firstOrNull()
+        if (apiService != null && genre != null) {
+            similarMovies = withContext(Dispatchers.IO) {
+                runCatching { apiService.getMoviesByGenre(genre, excludeItemId = item.Id, limit = 12) }
+                    .getOrDefault(emptyList())
+            }
+        }
+    }
     val context = LocalContext.current
     Box(Modifier.fillMaxSize()) {
         MobileBackdrop(backdropUrl, apiService, item.Name)
@@ -88,7 +105,14 @@ fun MobileMovieDetailsLayout(
             }
             MobilePlayButton(onPlay)
             MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload)
-            MobilePeople(item, apiService)
+            MobileDetailTabs(selectedSection) { selectedSection = it }
+            when (selectedSection) {
+                "Reparto" -> MobilePeople(item, apiService)
+                "Equipo" -> MobileCrew(item, apiService)
+                "Detalles" -> MobileFileDetails(item)
+                "Similares" -> MobileSimilarMovies(similarMovies, apiService, onClick = onPlay)
+                else -> MobilePeople(item, apiService)
+            }
         }
     }
 }
@@ -211,5 +235,73 @@ fun MobileSeriesDetailsLayout(
     if (people.isNotEmpty()) {
         Text("Reparto", color = Color.White, style = MaterialTheme.typography.titleMedium)
         LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) { items(people) { CastMemberCard(person = it, apiService = apiService) } }
+    }
+}
+
+@Composable
+private fun MobileDetailTabs(selected: String, onSelected: (String) -> Unit) {
+    val tabs = listOf("Reparto", "Equipo", "Estudios", "Detalles", "Similares")
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 4.dp)
+    ) {
+        items(tabs) { tab ->
+            Text(
+                tab,
+                color = if (selected == tab) Color.White else Color.White.copy(alpha = .82f),
+                fontWeight = if (selected == tab) FontWeight.Bold else FontWeight.Normal,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(if (selected == tab) MobileCyan else Color.White.copy(alpha = .12f))
+                    .clickable { onSelected(tab) }
+                    .padding(horizontal = 16.dp, vertical = 10.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun MobileCrew(item: JellyfinItem, apiService: JellyfinApiService?) {
+    val crew = item.People?.filter { it.Type != "Actor" }.orEmpty()
+    if (crew.isEmpty()) {
+        Text("No hay información del equipo", color = Color.White.copy(alpha = .72f))
+    } else {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            items(crew.take(12)) { CastMemberCard(person = it, apiService = apiService) }
+        }
+    }
+}
+
+@Composable
+private fun MobileFileDetails(item: JellyfinItem) {
+    val source = item.MediaSources?.firstOrNull()
+    Column(
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
+            .background(Color.Black.copy(alpha = .28f)).padding(18.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text("Información del archivo", color = Color.White, fontWeight = FontWeight.Bold)
+        Text(
+            listOfNotNull(source?.Container?.uppercase()).joinToString("  ·  ").ifBlank { "Información no disponible" },
+            color = Color.White.copy(alpha = .78f)
+        )
+    }
+}
+
+@Composable
+private fun MobileSimilarMovies(items: List<JellyfinItem>, apiService: JellyfinApiService?, onClick: () -> Unit) {
+    if (items.isEmpty()) {
+        Text("No hay títulos similares disponibles", color = Color.White.copy(alpha = .72f))
+        return
+    }
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        items(items, key = { it.Id }) { movie ->
+            val image = remember(movie.Id, apiService) { apiService?.getImageUrl(movie.Id, "Primary", null, maxWidth = 320, maxHeight = 480, quality = 80) }
+            Column(Modifier.width(132.dp).clickable(onClick = onClick)) {
+                MobileArtwork(image, apiService, movie.Name, Modifier.fillMaxWidth().height(188.dp))
+                Text(movie.Name, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 5.dp))
+            }
+        }
     }
 }
