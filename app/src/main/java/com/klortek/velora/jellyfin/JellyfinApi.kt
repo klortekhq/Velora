@@ -178,8 +178,11 @@ data class MediaSource(
     val Id: String? = null,
     val LiveStreamId: String? = null,
     val Protocol: String? = null,
+    val Path: String? = null,
     val Container: String? = null,
     val TranscodingUrl: String? = null,
+    val SupportsDirectPlay: Boolean? = null,
+    val SupportsDirectStream: Boolean? = null,
     val MediaStreams: List<MediaStream>? = null
 )
 
@@ -335,8 +338,12 @@ class JellyfinApiService(
             })
         }
         engine {
-            connectTimeout = 10_000
-            socketTimeout = 15_000
+            // Opening a Jellyfin Live TV stream can legitimately take longer
+            // than a normal metadata request while the tuner/provider is
+            // allocating the live stream. Keep this bounded, but do not abort
+            // at 10–15 seconds and then hand MPV an unusable manifest URL.
+            connectTimeout = 45_000
+            socketTimeout = 45_000
         }
     }
 
@@ -1159,7 +1166,8 @@ class JellyfinApiService(
     suspend fun getPlaybackInfo(
         itemId: String,
         mediaSourceId: String? = null,
-        subtitleStreamIndex: Int? = null
+        subtitleStreamIndex: Int? = null,
+        autoOpenLiveStream: Boolean = true
     ): JellyfinPlaybackInfo? {
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
@@ -1167,7 +1175,7 @@ class JellyfinApiService(
                 parameters.append("UserId", userId)
                 parameters.append("StartTimeTicks", "0")
                 parameters.append("IsPlayback", "true")
-                parameters.append("AutoOpenLiveStream", "true")
+                parameters.append("AutoOpenLiveStream", autoOpenLiveStream.toString())
                 mediaSourceId?.takeIf { it.isNotBlank() }?.let {
                     parameters.append("MediaSourceId", it)
                 }
