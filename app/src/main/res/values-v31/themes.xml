@@ -1,12 +1,11 @@
 <resources>
     <!-- Android 12+ draws a system splash before the activity window. Use the
-         Velora launcher artwork here so the old Elefin elephant can never be
+         Velora launcher artwork here so legacy artwork can never be
          selected as the startup icon. -->
-    <style name="Theme.Elefin.Splash" parent="@style/Theme.Elefin">
+    <style name="Theme.Velora.Splash" parent="@style/Theme.Velora">
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:windowSplashScreenBackground">@color/splash_background</item>
         <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="android:windowSplashScreenIconBackgroundColor">@color/splash_background</item>
     </style>
 </resources>
-
