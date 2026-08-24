@@ -48,6 +48,9 @@ También están disponibles los controles de aspecto, audio, subtítulos y ajust
 | Tablet | Layout adaptable y navegación optimizada para pantallas grandes |
 | Android TV | D-pad, botón Back, foco visible y navegación horizontal |
 | Fire TV | Diseño Leanback, banner de TV y reproducción optimizada para el mando |
+| Samsung Tizen | Cliente web de TV con navegación por mando; `.wgt` al usar Tizen Studio |
+| LG webOS | Cliente web de TV con navegación por mando; `.ipk` con `ares-package` |
+| Hisense VIDAA | Bundle HTML5 para publicación en la tienda/portal VIDAA |
 
 La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de que el usuario tiene esa función disponible. No existe una pestaña IPTV separada y la aplicación no lee directamente la lista M3U.
 
@@ -60,9 +63,10 @@ Las versiones compiladas se publican en [Releases](https://github.com/rubenqs12/
 El cliente web común está en [`web/`](web/). Incluye conexión Jellyfin,
 biblioteca, búsqueda, Live TV y reproducción HTML5 responsive para navegador,
 móvil y tablet. Los adaptadores de empaquetado para Samsung Tizen, LG webOS y
-Hisense VIDAA están en [`web/platforms/`](web/platforms/). Samsung genera
-`.wgt` y webOS `.ipk` mediante sus SDK oficiales; la firma y el paquete VIDAA
-requieren certificados y herramientas del fabricante.
+Hisense VIDAA están en [`web/platforms/`](web/platforms/). Tizen genera `.wgt`
+cuando Tizen Studio está instalado; webOS genera `.ipk` con `ares-package`.
+VIDAA utiliza un bundle HTML5 alojado y su publicación requiere validación,
+región y certificado del portal VIDAA, no un `.vpk` universal.
 
 ## Compilar desde código fuente
 
