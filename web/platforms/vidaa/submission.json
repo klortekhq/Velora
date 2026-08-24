@@ -1,0 +1,15 @@
+{
+  "name": "Velora",
+  "id": "com.klortek.velora",
+  "version": "1.2.1",
+  "kind": "hosted-html5",
+  "entry": "index.html",
+  "vendor": "Klørtek",
+  "language": "es",
+  "remoteKeys": ["VK_LEFT", "VK_UP", "VK_RIGHT", "VK_DOWN", "VK_ENTER", "VK_BACK_SPACE"],
+  "requiresFullscreen": true,
+  "allowsPopups": false,
+  "referenceFirmware": "V0000.09.090.P0930",
+  "requiresVidAAValidation": true,
+  "installablePackage": false
+}
