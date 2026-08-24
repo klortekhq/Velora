@@ -1,5 +1,5 @@
 <resources>
-    <!-- Existing Elefin resources translated -->
+    <!-- Velora resources translated -->
     <string name="app_name">Velora</string>
     <string name="browse_title">Velora</string>
     <string name="related_movies">Vídeos relacionados</string>
@@ -18,13 +18,14 @@
 
     <!-- Live TV -->
     <string name="live_tv">Televisión en directo</string>
-    <string name="live_tv_nav">IPTV</string>
+    <string name="live_tv_nav">Televisión en directo</string>
     <string name="live_tv_loading">Cargando canales…</string>
     <string name="live_tv_error">No se pudo cargar la TV en directo</string>
     <string name="live_tv_no_channels">Este servidor Jellyfin no tiene canales de TV en directo disponibles.</string>
     <string name="live_tv_no_program">Sin información de programación</string>
     <string name="live_tv_refresh">Actualizar canales</string>
     <string name="live_tv_channel_count">%1$d canales</string>
+    <string name="live_tv_playback_error">No se pudo abrir este canal. Inténtalo de nuevo.</string>
     <string name="back">Atrás</string>
     <string name="collections">Colecciones</string>
     <string name="continue_watching">Seguir viendo</string>
