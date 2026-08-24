@@ -96,7 +96,7 @@ Velora está en desarrollo activo. Las pruebas se realizan en Android y en dispo
 
 ## Privacidad
 
-Velora se conecta al servidor Jellyfin que configura el usuario. No incluye sponsors, donaciones, publicidad ni servicios de terceros obligatorios.
+Velora se conecta al servidor Jellyfin que configura el usuario. No incluye patrocinadores, donaciones, publicidad ni servicios de terceros obligatorios.
 
 ## Créditos
 
