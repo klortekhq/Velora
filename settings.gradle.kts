@@ -23,9 +23,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "elefin"
+rootProject.name = "velora"
 include(":app")
 include(":decoder_av1")
 include(":newpipe-extractor")
 include(":timeago-parser")
- 

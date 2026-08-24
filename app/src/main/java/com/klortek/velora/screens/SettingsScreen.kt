@@ -61,6 +61,7 @@ import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import com.klortek.velora.jellyfin.AppSettings
+import com.klortek.velora.BuildConfig
 import coil.ImageLoader
 import coil.imageLoader
 import coil.disk.DiskCache
@@ -2183,7 +2184,12 @@ fun SettingsScreen(
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Text(
-                                    text = "By Ruvikitten",
+                                    text = "Versión ${BuildConfig.VERSION_NAME}",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                                )
+                                Text(
+                                    text = "By Klørtek",
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                 )

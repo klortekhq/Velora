@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Elefin will be documented in this file.
+All notable changes to Velora will be documented in this file.
 
 ---
 
@@ -149,8 +149,6 @@ All notable changes to Elefin will be documented in this file.
 
 ### Added
 
-- **Buy Me a Coffee Section**
-  - Added a new "Buy Me a Coffee" section to the **Settings** screen.
   - Features a "Support the Developer" message and a scanable QR code for donations.
 
 ### Improved
@@ -428,7 +426,7 @@ All notable changes to Elefin will be documented in this file.
 ### Added
 
 - **Jellyseerr Integration - Discover Tab**
-  - Requests Movies directly from the Elefin app (TV Shows support coming soon)
+  - Requests Movies directly from the Velora app (TV Shows support coming soon)
   - Replaced TMDB trending feature with Jellyseerr integration for richer discovery
   - New "Discover" tab in Movies and TV Shows libraries (replaces "Trending")
   - Displays three category rows: 🔥 Trending, Popular, and Upcoming
@@ -606,7 +604,7 @@ All notable changes to Elefin will be documented in this file.
   - New "Fallback to MPV Player" setting in Playback options
   - Automatically launches MPV player if ExoPlayer fails and transcoding is disabled
   - Provides seamless playback for problematic content without manual intervention
-  - Requires MPV-Elefin to be installed
+  - Requires MPV-Velora to be installed
 
 - **Movies Library Screen**
   - Dedicated screen for movie libraries, accessible from the home screen tab row
@@ -817,15 +815,15 @@ All notable changes to Elefin will be documented in this file.
 
 ### Added
 
-- **MPV-Elefin External Player Integration**
-  - New companion app `mpv-elefin` provides hardware-accelerated MPV playback
-  - Elefin automatically launches mpv-elefin when MPV player is enabled in settings
-  - Seamless handoff - Elefin passes video URL, headers, title, and resume position to mpv-elefin
-  - mpv-elefin handles all playback with YouTube TV-style controls
-  - Progress reporting back to Jellyfin handled by mpv-elefin
+- **MPV-Velora External Player Integration**
+  - New companion app `mpv-velora` provides hardware-accelerated MPV playback
+  - Velora automatically launches mpv-velora when MPV player is enabled in settings
+  - Seamless handoff - Velora passes video URL, headers, title, and resume position to mpv-velora
+  - mpv-velora handles all playback with YouTube TV-style controls
+  - Progress reporting back to Jellyfin handled by mpv-velora
 
-- **MpvElefinLauncher Helper**
-  - Checks if mpv-elefin is installed on the device
+- **MpvVeloraLauncher Helper**
+  - Checks if mpv-velora is installed on the device
   - Builds Jellyfin direct stream URLs with proper authentication
   - Constructs HTTP headers for Jellyfin API access
   - Passes resume position for seamless continue watching support
@@ -833,7 +831,7 @@ All notable changes to Elefin will be documented in this file.
 ### Changed
 
 - **MPV Player Architecture**
-  - MPV playback now uses external mpv-elefin app instead of embedded .so libraries
+  - MPV playback now uses external mpv-velora app instead of embedded .so libraries
   - Embedded .so approach was unstable - external app is the only reliable method
   - New `MpvUrlBuilder` for building Jellyfin stream URLs
   - Simplified codebase by removing complex MPV initialization logic
@@ -1009,10 +1007,10 @@ All notable changes to Elefin will be documented in this file.
 
 ### Changed
 - **Client Identification**
-  - Changed client name from "Android TV Material Catalog" to "Elefin"
+  - Changed client name from "Android TV Material Catalog" to "Velora"
   - Updated version reporting to match app version (1.1.5)
-  - Server dashboards now properly display "Elefin" as the client name
-  - Easier to identify and track Elefin sessions in Jellyfin server
+  - Server dashboards now properly display "Velora" as the client name
+  - Easier to identify and track Velora sessions in Jellyfin server
 
 - **ExoPlayer - Subtitle Settings**
   - Default subtitle size reduced from 55 to 30 for better readability

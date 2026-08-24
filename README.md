@@ -100,7 +100,7 @@ Velora se conecta al servidor Jellyfin que configura el usuario. No incluye spon
 
 ## Créditos
 
-Proyecto mantenido por **ruvik**. Para cualquier incidencia o propuesta, utiliza [Issues](https://github.com/rubenqs12/Velora/issues).
+Proyecto de Klørtek. Para cualquier incidencia o propuesta, utiliza [Issues](https://github.com/rubenqs12/Velora/issues).
 
 ## Licencia
 
