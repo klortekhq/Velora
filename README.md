@@ -55,6 +55,15 @@ La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de q
 
 Las versiones compiladas se publican en [Releases](https://github.com/rubenqs12/Velora/releases). Para instalar manualmente en Android TV o Fire TV, descarga el APK correspondiente y realiza una instalación local.
 
+## Cliente web y Smart TV
+
+El cliente web común está en [`web/`](web/). Incluye conexión Jellyfin,
+biblioteca, búsqueda, Live TV y reproducción HTML5 responsive para navegador,
+móvil y tablet. Los adaptadores de empaquetado para Samsung Tizen, LG webOS y
+Hisense VIDAA están en [`web/platforms/`](web/platforms/). Samsung genera
+`.wgt` y webOS `.ipk` mediante sus SDK oficiales; la firma y el paquete VIDAA
+requieren certificados y herramientas del fabricante.
+
 ## Compilar desde código fuente
 
 Requisitos:
