@@ -1,4 +1,4 @@
-# Building Media3 FFmpeg Extension for Elefin
+# Building Media3 FFmpeg Extension for Velora
 
 This guide explains how to build the FFmpeg extension for Media3 to enable:
 - **PGS subtitles** (.sup) - Image-based subtitles from Blu-ray rips
@@ -146,10 +146,10 @@ libraries/decoder_ffmpeg/build/outputs/aar/media3-decoder-ffmpeg-release.aar
 
 ```bash
 cp libraries/decoder_ffmpeg/build/outputs/aar/media3-decoder-ffmpeg-release.aar \
-   /path/to/elefin/app/libs/media3-decoder-ffmpeg.aar
+   /path/to/velora/app/libs/media3-decoder-ffmpeg.aar
 ```
 
-### Step 6: Update Elefin build.gradle.kts
+### Step 6: Update Velora build.gradle.kts
 
 ```kotlin
 dependencies {
@@ -168,12 +168,12 @@ Save this as `build_ffmpeg_extension.sh`:
 #!/bin/bash
 set -e
 
-echo "🔧 Building Media3 FFmpeg Extension for Elefin"
+echo "🔧 Building Media3 FFmpeg Extension for Velora"
 
 # Configuration
 MEDIA3_REPO="https://github.com/androidx/media.git"
 WORK_DIR="$HOME/media3_build"
-ELEFIN_DIR="/path/to/elefin"  # CHANGE THIS
+VELORA_DIR="/path/to/velora"  # CHANGE THIS
 ENABLED_ABIS=("arm64-v8a")    # Shield TV only
 
 # Check prerequisites
@@ -204,11 +204,11 @@ echo "📦 Building AAR..."
 cd "$WORK_DIR/media"
 ./gradlew :media3-decoder-ffmpeg:assembleRelease
 
-# Copy to Elefin
-echo "📋 Copying to Elefin..."
-mkdir -p "$ELEFIN_DIR/app/libs"
+# Copy to Velora
+echo "📋 Copying to Velora..."
+mkdir -p "$VELORA_DIR/app/libs"
 cp libraries/decoder_ffmpeg/build/outputs/aar/media3-decoder-ffmpeg-release.aar \
-   "$ELEFIN_DIR/app/libs/media3-decoder-ffmpeg.aar"
+   "$VELORA_DIR/app/libs/media3-decoder-ffmpeg.aar"
 
 echo "✅ Done! Add to build.gradle.kts:"
 echo "   implementation(files(\"libs/media3-decoder-ffmpeg.aar\"))"
@@ -234,7 +234,7 @@ import androidx.media3.decoder.ffmpeg.FfmpegLibrary
 
 // Before creating ExoPlayer
 @UnstableApi
-fun buildElefinPlayer(context: Context): ExoPlayer {
+fun buildVeloraPlayer(context: Context): ExoPlayer {
     // Check if FFmpeg is available
     val ffmpegAvailable = try {
         FfmpegLibrary.isAvailable()
@@ -330,7 +330,7 @@ Adding FFmpeg extension increases APK size:
 
 **Fastest method**: Use pre-built AAR from Media3 releases
 **Most control**: Build from source with custom FFmpeg flags
-**Best for Elefin**: Build arm64-v8a only for Shield TV
+**Best for Velora**: Build arm64-v8a only for Shield TV
 
 After setup, ExoPlayer will automatically use FFmpeg for:
 ✅ PGS subtitles (Blu-ray)
@@ -339,5 +339,5 @@ After setup, ExoPlayer will automatically use FFmpeg for:
 ✅ VobSub subtitles (DVD)
 ✅ 30+ additional codecs
 
-Your Elefin client will match **native Jellyfin clients** in codec support! 🎯
+Your Velora client will match **native Jellyfin clients** in codec support! 🎯
 
