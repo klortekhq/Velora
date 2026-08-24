@@ -15,7 +15,8 @@ await copyCommon(out);await cp(join(root,'platforms'),join(out,'platforms'),{rec
 const results=[];
 if(target==='samsung'||target==='all'){
   const stage=resolve(out,'samsung');await copyCommon(stage);await copyFile(join(root,'platforms','samsung','config.xml'),join(stage,'config.xml'));await copyFile(join(root,'platforms','samsung','icon.png'),join(stage,'icon.png'));
-  results.push(command('tizen',['build-web','--','.'],stage)&&command('tizen',['package','-t','wgt','--','.buildResult'],stage)?'Samsung WGT generado':'Samsung bundle preparado; falta Tizen CLI/perfil de firma');
+  command('tizen',['build-web','--','.'],stage);
+  results.push(command('tizen',['package','-t','wgt','--','.buildResult'],stage)?'Samsung WGT generado (perfil de desarrollo/emulador)':'Samsung bundle preparado; falta Tizen CLI/perfil de firma');
 }
 if(target==='webos'||target==='all'){
   const stage=resolve(out,'webos');await copyCommon(stage);await copyFile(join(root,'platforms','webos','appinfo.json'),join(stage,'appinfo.json'));await copyFile(join(root,'platforms','webos','icon.png'),join(stage,'icon.png'));
