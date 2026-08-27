@@ -32,7 +32,8 @@ jobs:
 
       - name: Compilar APK móvil/TV debug y release unsigned
         run: >-
-          ./gradlew :app:assembleMobileDebug :app:assembleTvDebug
+          ./gradlew :app:testMobileDebugUnitTest
+          :app:assembleMobileDebug :app:assembleTvDebug
           :app:assembleMobileRelease :app:assembleTvRelease
           --no-daemon --stacktrace
 
