@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Velora</string>
+    <string name="settings_language_reproduction">Sprache und Wiedergabe</string>
+    <string name="settings_app_language">App-Sprache</string>
+    <string name="settings_app_language_description">Automatisch verwendet die Sprache von Mobilgerät, Tablet, TV oder Fire TV.</string>
+    <string name="settings_audio_language">Bevorzugte Audiosprache</string>
+    <string name="settings_audio_language_description">Wähle die Audiosprache, die ExoPlayer/Jellyfin zuerst versucht.</string>
+    <string name="settings_audio_auto">Automatisch / Server</string>
+    <string name="settings_subtitle_mode">Untertitel</string>
+    <string name="settings_subtitle_mode_description">Deaktiviert, bevorzugt, erzwungen oder automatisch.</string>
+    <string name="settings_subtitle_off">Deaktiviert</string>
+    <string name="settings_subtitle_preferred">Bevorzugt</string>
+    <string name="settings_subtitle_forced">Erzwungen</string>
+    <string name="settings_subtitle_auto">Automatisch</string>
+    <string name="settings_subtitle_language">Untertitelsprache</string>
+    <string name="settings_subtitle_language_description">Automatisch folgt der Servereinstellung; andere Optionen bevorzugen diese Sprache, wenn verfügbar.</string>
+</resources>

@@ -16,8 +16,8 @@ android {
         targetSdk = 36
 
         // Version code: major * 10000 + minor * 100 + patch
-        versionCode = 10127
-        versionName = "1.1.27-velora-branding"
+        versionCode = 10202
+        versionName = "1.2.2"
 
         ndk {
             abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
@@ -84,6 +84,8 @@ android {
 }
 
 dependencies {
+
+    testImplementation("junit:junit:4.13.2")
 
     // -------------------------------------------------------------
     // AndroidX Core + Leanback

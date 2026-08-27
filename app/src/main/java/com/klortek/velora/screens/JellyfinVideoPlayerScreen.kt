@@ -306,22 +306,35 @@ fun JellyfinVideoPlayerScreen(
         }
     }
     
-    // Configure track selector with better track selection
+    // Configure track selector with the global language policy. ExoPlayer remains
+    // the default for every platform; FFmpeg is only an extension fallback.
+    val preferredAudioLanguage = settings.preferredAudioLanguage
+        .takeUnless { it == "auto" }
+        ?: java.util.Locale.getDefault().language
+    val preferredSubtitleLanguage = settings.preferredSubtitleLanguage
+        .takeUnless { it == "auto" }
+        ?: java.util.Locale.getDefault().language
+    val subtitleMode = settings.subtitleMode
+
     val trackSelector = remember {
         DefaultTrackSelector(context).apply {
             setParameters(
                 buildUponParameters()
                     .setForceHighestSupportedBitrate(true)
-                    // Audio preference - use system default language
-                    .setPreferredAudioLanguage(java.util.Locale.getDefault().language)
-                    // Subtitle preferences - disable ALL auto-selection but allow manual control
-                    .setSelectUndeterminedTextLanguage(false)  // Don't auto-select unknown language subs
-                    .setDisabledTextTrackSelectionFlags(C.SELECTION_FLAG_FORCED or C.SELECTION_FLAG_DEFAULT)  // Disable forced AND default auto-selection
-                    // ❌ DO NOT use setTrackTypeDisabled - it prevents "None" from working in ExoPlayer UI
-                    // Only select subtitles explicitly chosen by user or saved preference
-                    .setPreferredTextLanguage(null)  // No auto language preference
-                    .setPreferredTextRoleFlags(0)  // No role-based auto-selection
-                    .setIgnoredTextSelectionFlags(C.SELECTION_FLAG_FORCED or C.SELECTION_FLAG_DEFAULT)  // Ignore forced/default flags completely
+                    .setPreferredAudioLanguage(preferredAudioLanguage)
+                    .setSelectUndeterminedTextLanguage(subtitleMode == "auto")
+                    .setDisabledTextTrackSelectionFlags(
+                        if (subtitleMode == "off") C.SELECTION_FLAG_FORCED or C.SELECTION_FLAG_DEFAULT else 0
+                    )
+                    .setPreferredTextLanguage(if (subtitleMode == "off") null else preferredSubtitleLanguage)
+                    // Media3 has no ROLE_FLAG_FORCED constant. Jellyfin marks
+                    // forced subtitles with SELECTION_FLAG_FORCED; keeping
+                    // role flags neutral lets the selector retain that server
+                    // metadata while still honoring the preferred language.
+                    .setPreferredTextRoleFlags(0)
+                    .setIgnoredTextSelectionFlags(
+                        if (subtitleMode == "off") C.SELECTION_FLAG_FORCED or C.SELECTION_FLAG_DEFAULT else 0
+                    )
             )
         }
     }

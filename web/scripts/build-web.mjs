@@ -2,11 +2,14 @@ import { cp, rm, mkdir, copyFile, writeFile } from 'node:fs/promises';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { readFile } from 'node:fs/promises';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = resolve(root, '..');
 const out = resolve(repo, 'outputs', 'web');
 const target = process.argv[2] || 'all';
+const packageMetadata = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
+const version = packageMetadata.version;
 
 function command(name, args, cwd) {
   const result = spawnSync(name, args, {
@@ -77,6 +80,7 @@ if (target === 'vidaa' || target === 'all') {
   await makeLegacyBrowserCompatible(stage);
   await writeBuildMetadata(stage, {
     product: 'Velora',
+    version,
     platform: 'Hisense VIDAA',
     kind: 'hosted-html5',
     entry: 'index.html',

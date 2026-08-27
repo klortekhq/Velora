@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Velora</string>
+    <string name="settings_language_reproduction">Dil ve oynatma</string>
+    <string name="settings_app_language">Uygulama dili</string>
+    <string name="settings_app_language_description">Otomatik seçenek telefon, tablet, TV veya Fire TV dilini kullanır.</string>
+    <string name="settings_audio_language">Tercih edilen ses</string>
+    <string name="settings_audio_language_description">ExoPlayer ve Jellyfin icin tercih edilen ses dilini secin.</string>
+    <string name="settings_audio_auto">Otomatik / sunucu</string>
+    <string name="settings_subtitle_mode">Altyazılar</string>
+    <string name="settings_subtitle_mode_description">Kapalı, tercih edilen, zorunlu veya otomatik.</string>
+    <string name="settings_subtitle_off">Kapalı</string>
+    <string name="settings_subtitle_preferred">Tercih edilen</string>
+    <string name="settings_subtitle_forced">Zorunlu</string>
+    <string name="settings_subtitle_auto">Otomatik</string>
+    <string name="settings_subtitle_language">Altyazı dili</string>
+    <string name="settings_subtitle_language_description">Otomatik sunucu ayarını izler; diğer seçenekler kullanılabiliyorsa bu dili tercih eder.</string>
+</resources>

@@ -56,7 +56,7 @@ La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de q
 
 ## Descargar
 
-Las versiones compiladas se publican en [Releases](https://github.com/rubenqs12/Velora/releases). Para instalar manualmente en Android TV o Fire TV, descarga el APK correspondiente y realiza una instalación local.
+Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases). Para instalar manualmente en Android TV o Fire TV, descarga el APK correspondiente y realiza una instalación local.
 
 ## Cliente web y Smart TV
 
@@ -77,7 +77,7 @@ Requisitos:
 - Windows, macOS o Linux con Gradle disponible mediante el wrapper incluido
 
 ```bash
-git clone https://github.com/rubenqs12/Velora.git
+git clone https://github.com/klortekhq/Velora.git
 cd Velora
 ./gradlew :app:assembleDebug
 ```
@@ -104,7 +104,7 @@ Velora se conecta al servidor Jellyfin que configura el usuario. No incluye patr
 
 ## Créditos
 
-Proyecto de Klørtek. Para cualquier incidencia o propuesta, utiliza [Issues](https://github.com/rubenqs12/Velora/issues).
+Proyecto de Klørtek. Para cualquier incidencia o propuesta, utiliza [Issues](https://github.com/klortekhq/Velora/issues).
 
 ## Licencia
 

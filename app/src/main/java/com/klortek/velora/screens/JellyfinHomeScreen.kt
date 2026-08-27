@@ -140,6 +140,7 @@ import java.util.Locale
 import com.klortek.velora.ui.ArtworkPalette
 import com.klortek.velora.ui.PlexPaletteExtractor
 import com.klortek.velora.ui.PlexBackdropGradient
+import com.klortek.velora.platform.PlatformCapabilities
 import android.graphics.drawable.BitmapDrawable
 import coil.request.SuccessResult
 import kotlinx.coroutines.Dispatchers
@@ -643,7 +644,7 @@ fun JellyfinHomeScreen(
             },
             onSearch = { showSearch = true },
             onSettings = { showSettings = true },
-            onDownloads = onDownloadsClick,
+            onDownloads = if (PlatformCapabilities.supportsOfflineDownloads) onDownloadsClick else ({}),
             onLiveTv = onLiveTvClick,
             showLiveTv = showLiveTv,
             onMovies = {

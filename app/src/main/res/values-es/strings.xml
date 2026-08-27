@@ -42,4 +42,18 @@
     <string name="continue_watching_remove_explanation">Oculta este elemento en Velora sin cambiar tu progreso. Volverá a aparecer si lo reproduces de nuevo.</string>
     <string name="continue_watching_mark_watched">Marcar como visto</string>
     <string name="cancel">Cancelar</string>
+    <string name="settings_language_reproduction">Idioma y reproducción</string>
+    <string name="settings_app_language">Idioma de la aplicación</string>
+    <string name="settings_app_language_description">Automático sigue el idioma del móvil, tablet, TV o Fire TV.</string>
+    <string name="settings_audio_language">Audio preferido</string>
+    <string name="settings_audio_language_description">Selecciona el idioma de audio que ExoPlayer/Jellyfin intentará usar primero.</string>
+    <string name="settings_audio_auto">Automático / servidor</string>
+    <string name="settings_subtitle_mode">Subtítulos</string>
+    <string name="settings_subtitle_mode_description">Deshabilitados, preferidos, forzados o automáticos.</string>
+    <string name="settings_subtitle_off">Deshabilitados</string>
+    <string name="settings_subtitle_preferred">Preferidos</string>
+    <string name="settings_subtitle_forced">Forzados</string>
+    <string name="settings_subtitle_auto">Automáticos</string>
+    <string name="settings_subtitle_language">Idioma de subtítulos</string>
+    <string name="settings_subtitle_language_description">Automático sigue la preferencia del servidor; los demás fuerzan ese idioma cuando existe.</string>
 </resources>

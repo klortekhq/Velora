@@ -4,6 +4,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -318,7 +319,8 @@ class JellyfinApiService(
     private val baseUrl: String,
     private val accessToken: String,
     private val userId: String,
-    private val config: JellyfinConfig? = null
+    private val config: JellyfinConfig? = null,
+    private val languageTag: String = java.util.Locale.getDefault().toLanguageTag()
 ) {
     // Expose baseUrl, accessToken, userId for external use (e.g., MPV URL selector)
     val serverBaseUrl: String get() = baseUrl
@@ -332,6 +334,9 @@ class JellyfinApiService(
     private val CACHE_DURATION_MS = 5 * 60 * 1000L // 5 minutes cache
     
     private val client = HttpClient(Android) {
+        defaultRequest {
+            header(HttpHeaders.AcceptLanguage, languageTag)
+        }
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
