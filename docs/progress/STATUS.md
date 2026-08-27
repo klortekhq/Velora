@@ -57,7 +57,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Quality gates
 
-- `git diff --check`: pending after the next coherent patch.
+- `git diff --check`: passing for the current working tree.
 - Android `testMobileDebugUnitTest`, `assembleMobileDebug`,
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-27.
@@ -65,7 +65,13 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Web `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
 - Packaging and SHA-256: generated locally; see `outputs/` (ignored).
+- GitHub Android workflow now builds and publishes both mobile and TV debug /
+  unsigned-release variants from a version tag.
 - Independent critic review: pending.
+
+The requested historical base `c3a2e52506942597444468be78ba3281996a6576` is
+not present in this clone. The reproducible local patch is therefore against
+the actual branch base `418383f`.
 
 ## Latest local artifacts
 
