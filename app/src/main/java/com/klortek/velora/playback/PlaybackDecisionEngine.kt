@@ -12,18 +12,27 @@ data class PlaybackCapabilities(
     val videoCodecs: Set<String> = emptySet(),
     val audioCodecs: Set<String> = emptySet(),
     val hdrFormats: Set<String> = emptySet(),
+    val containers: Set<String> = emptySet(),
+    val audioPassthroughCodecs: Set<String> = emptySet(),
+    val audioPassthrough: Boolean = false,
+    val maxAudioChannels: Int? = null,
     val maxWidth: Int? = null,
     val maxHeight: Int? = null,
     val maxFrameRate: Double? = null
 )
 
 data class PlaybackSource(
+    val container: String? = null,
     val videoCodec: String? = null,
+    val videoProfile: String? = null,
+    val videoLevel: String? = null,
     val audioCodec: String? = null,
+    val audioChannels: Int? = null,
     val hdrFormat: String? = null,
     val width: Int? = null,
     val height: Int? = null,
     val frameRate: Double? = null,
+    val bitrateKbps: Int? = null,
     val subtitlesRequireTranscoding: Boolean = false
 )
 
@@ -43,23 +52,32 @@ object PlaybackDecisionEngine {
             source.audioCodec.lowercase() in capabilities.audioCodecs.map(String::lowercase)
         val hdrOk = source.hdrFormat == null || capabilities.hdrFormats.isEmpty() ||
             source.hdrFormat.lowercase() in capabilities.hdrFormats.map(String::lowercase)
+        val containerOk = source.container == null || capabilities.containers.isEmpty() ||
+            source.container.lowercase() in capabilities.containers.map(String::lowercase)
+        val channelsOk = capabilities.maxAudioChannels == null || source.audioChannels == null ||
+            source.audioChannels <= capabilities.maxAudioChannels
+        val passthroughAudioOk = source.audioCodec == null ||
+            source.audioCodec.lowercase() !in capabilities.audioPassthroughCodecs.map(String::lowercase) ||
+            capabilities.audioPassthrough
         val dimensionsOk = quality == PlaybackQuality.ORIGINAL || withinPreset(source, quality)
         val deviceLimitsOk = (capabilities.maxWidth == null || source.width == null || source.width <= capabilities.maxWidth) &&
             (capabilities.maxHeight == null || source.height == null || source.height <= capabilities.maxHeight) &&
             (capabilities.maxFrameRate == null || source.frameRate == null || source.frameRate <= capabilities.maxFrameRate)
 
-        if (capabilities.directPlay && codecOk && audioOk && hdrOk && dimensionsOk && deviceLimitsOk && !source.subtitlesRequireTranscoding) {
+        if (capabilities.directPlay && codecOk && audioOk && hdrOk && containerOk && channelsOk &&
+            passthroughAudioOk && dimensionsOk && deviceLimitsOk && !source.subtitlesRequireTranscoding) {
             return PlaybackPath.DIRECT_PLAY
         }
-        if (capabilities.directStream && codecOk && audioOk && hdrOk && !source.subtitlesRequireTranscoding) {
+        if (capabilities.directStream && codecOk && audioOk && hdrOk && containerOk && channelsOk &&
+            passthroughAudioOk && !source.subtitlesRequireTranscoding) {
             return PlaybackPath.DIRECT_STREAM
         }
-        if (capabilities.remux && codecOk && audioOk) return PlaybackPath.REMUX
+        if (capabilities.remux && codecOk && audioOk && channelsOk) return PlaybackPath.REMUX
         return if (capabilities.directStream || capabilities.directPlay) PlaybackPath.TRANSCODE else PlaybackPath.FALLBACK
     }
 
     private fun withinPreset(source: PlaybackSource, quality: PlaybackQuality): Boolean {
-        val max = when (quality) {
+        val maxBitrate = when (quality) {
             PlaybackQuality.FOUR_K -> 40_000
             PlaybackQuality.FULL_HD_20 -> 20_000
             PlaybackQuality.FULL_HD_10 -> 10_000
@@ -67,14 +85,13 @@ object PlaybackDecisionEngine {
             PlaybackQuality.SD_2 -> 2_000
             else -> Int.MAX_VALUE
         }
-        // Bitrate is intentionally not part of PlaybackSource yet; dimensions
-        // are the safe preset constraint until Jellyfin source metadata exposes it.
+        val bitrateOk = source.bitrateKbps == null || source.bitrateKbps <= maxBitrate
         return when (quality) {
-            PlaybackQuality.FOUR_K -> (source.width ?: 0) <= 3840
-            PlaybackQuality.FULL_HD_20, PlaybackQuality.FULL_HD_10 -> (source.width ?: 0) <= 1920
-            PlaybackQuality.HD_5 -> (source.width ?: 0) <= 1280
-            PlaybackQuality.SD_2 -> (source.width ?: 0) <= 854
-            else -> max > 0
+            PlaybackQuality.FOUR_K -> bitrateOk && (source.width ?: 0) <= 3840
+            PlaybackQuality.FULL_HD_20, PlaybackQuality.FULL_HD_10 -> bitrateOk && (source.width ?: 0) <= 1920
+            PlaybackQuality.HD_5 -> bitrateOk && (source.width ?: 0) <= 1280
+            PlaybackQuality.SD_2 -> bitrateOk && (source.width ?: 0) <= 854
+            else -> bitrateOk
         }
     }
 }

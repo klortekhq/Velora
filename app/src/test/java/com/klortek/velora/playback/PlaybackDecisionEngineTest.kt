@@ -15,7 +15,7 @@ class PlaybackDecisionEngineTest {
         assertEquals(
             PlaybackPath.DIRECT_PLAY,
             PlaybackDecisionEngine.decide(
-                PlaybackSource("hevc", "eac3", "hdr10", 3840, 2160, 24.0),
+                PlaybackSource(videoCodec = "hevc", audioCodec = "eac3", hdrFormat = "hdr10", width = 3840, height = 2160, frameRate = 24.0),
                 capable
             )
         )
@@ -26,7 +26,7 @@ class PlaybackDecisionEngineTest {
         assertEquals(
             PlaybackPath.DIRECT_PLAY,
             PlaybackDecisionEngine.decide(
-                PlaybackSource("hevc", "eac3", "hdr10", 7680, 4320, 24.0),
+                PlaybackSource(videoCodec = "hevc", audioCodec = "eac3", hdrFormat = "hdr10", width = 7680, height = 4320, frameRate = 24.0),
                 capable,
                 PlaybackQuality.ORIGINAL
             )
@@ -38,7 +38,7 @@ class PlaybackDecisionEngineTest {
         assertEquals(
             PlaybackPath.TRANSCODE,
             PlaybackDecisionEngine.decide(
-                PlaybackSource("av1", "aac", null, 1920, 1080),
+                PlaybackSource(videoCodec = "av1", audioCodec = "aac", width = 1920, height = 1080),
                 capable
             )
         )
@@ -49,8 +49,36 @@ class PlaybackDecisionEngineTest {
         assertEquals(
             PlaybackPath.REMUX,
             PlaybackDecisionEngine.decide(
-                PlaybackSource("h264", "aac", null, 1920, 1080, subtitlesRequireTranscoding = true),
+                PlaybackSource(videoCodec = "h264", audioCodec = "aac", width = 1920, height = 1080, subtitlesRequireTranscoding = true),
                 capable
+            )
+        )
+    }
+
+    @Test
+    fun selectedPresetRejectsSourceAboveItsBitrate() {
+        assertEquals(
+            PlaybackPath.DIRECT_STREAM,
+            PlaybackDecisionEngine.decide(
+                PlaybackSource(videoCodec = "h264", audioCodec = "aac", width = 1920, height = 1080, bitrateKbps = 30_000),
+                capable,
+                PlaybackQuality.FULL_HD_10
+            )
+        )
+    }
+
+    @Test
+    fun passthroughCodecRequiresExplicitDeviceSupport() {
+        val withPassthrough = capable.copy(
+            audioCodecs = setOf("aac", "eac3", "truehd"),
+            audioPassthroughCodecs = setOf("truehd"),
+            audioPassthrough = false
+        )
+        assertEquals(
+            PlaybackPath.REMUX,
+            PlaybackDecisionEngine.decide(
+                PlaybackSource(videoCodec = "hevc", audioCodec = "truehd", width = 1920, height = 1080),
+                withPassthrough
             )
         )
     }
