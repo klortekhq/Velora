@@ -13,3 +13,20 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Local IDE/build/test output; never ship generated artifacts or device captures.
+/.android/
+/.gradle-user-home/
+/.kotlin/
+/.vscode/
+/.idea/
+/build/
+/decoder_av1/build/
+/newpipe-extractor/build/
+/timeago-parser/bin/
+/timeago-parser/build/
+/app/release/
+/outputs/
+/*.log
+/build_*.txt
+/velora-fire-test.png

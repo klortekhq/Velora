@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.ui.Alignment
+import com.klortek.velora.platform.PlatformCapabilities
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -115,7 +116,7 @@ fun MobileMovieDetailsLayout(
                 }
             }
             MobilePlayButton(onPlay)
-            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload, onAudio = { showAudioDialog = true }, onRemote = { showRemoteDialog = true }, hasAudio = (item.MediaSources?.firstOrNull()?.MediaStreams?.count { it.Type == "Audio" } ?: 0) > 1)
+            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload.takeIf { PlatformCapabilities.supportsOfflineDownloads }, onAudio = { showAudioDialog = true }, onRemote = { showRemoteDialog = true }, hasAudio = (item.MediaSources?.firstOrNull()?.MediaStreams?.count { it.Type == "Audio" } ?: 0) > 1)
             MobileDetailTabs(selectedSection) { selectedSection = it }
             when (selectedSection) {
                 "Reparto" -> MobilePeople(item, apiService)
@@ -165,7 +166,9 @@ fun MobileSeriesDetailsLayout(
             MobileActionRow(
                 onShuffle = { onPlay(episodes.shuffled().firstOrNull()) },
                 onRestart = { onRestart?.invoke(episodes.firstOrNull()) ?: onPlay(episodes.firstOrNull()) },
-                onDownload = episodes.firstOrNull()?.let { { onDownload?.invoke(it) } }
+                onDownload = episodes.firstOrNull()?.let { episode ->
+                    { onDownload?.invoke(episode); Unit }
+                }.takeIf { PlatformCapabilities.supportsOfflineDownloads }
             )
             if (seasons.isNotEmpty()) {
                 Text("Temporadas", color = Color.White, style = MaterialTheme.typography.titleMedium)
@@ -178,7 +181,7 @@ fun MobileSeriesDetailsLayout(
             }
             Text("Episodios", color = Color.White, style = MaterialTheme.typography.titleMedium)
             episodes.forEach { episode ->
-                MobileEpisodeCard(episode, apiService, { onDownload?.invoke(episode) }) { onPlay(episode) }
+                MobileEpisodeCard(episode, apiService, { if (PlatformCapabilities.supportsOfflineDownloads) onDownload?.invoke(episode) }) { onPlay(episode) }
             }
             MobilePeople(item, apiService)
         }

@@ -9,8 +9,13 @@ import coil.request.CachePolicy
 
 import org.schabi.newpipe.extractor.NewPipe
 import com.klortek.velora.networking.VeloraDownloader
+import com.klortek.velora.i18n.VeloraLocale
 
 class VeloraApplication : Application(), ImageLoaderFactory {
+    override fun attachBaseContext(base: android.content.Context) {
+        super.attachBaseContext(VeloraLocale.wrap(base))
+    }
+
     override fun onCreate() {
         super.onCreate()
         NewPipe.init(VeloraDownloader())

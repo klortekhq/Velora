@@ -50,6 +50,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.foundation.Image
@@ -101,6 +102,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.tv.material3.Surface
 import androidx.tv.material3.SurfaceDefaults
 import com.klortek.velora.jellyfin.JellyfinConfig
+import com.klortek.velora.i18n.VeloraLocale
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
@@ -110,6 +112,7 @@ import androidx.core.content.FileProvider
 
 // Settings categories
 enum class SettingsCategory(val title: String, val icon: ImageVector) {
+    LANGUAGE("Idioma y reproducción", Icons.Default.Language),
     PLAYBACK("Reproducción", Icons.Default.PlayArrow),
     VIDEO("Vídeo", Icons.Default.Videocam),
     SUBTITLES("Audio y subtítulos", Icons.Default.Subtitles),
@@ -122,6 +125,11 @@ enum class SettingsCategory(val title: String, val icon: ImageVector) {
     TRAILERS("Tráilers", Icons.Default.Movie),
     ACCOUNT("Cuenta", Icons.Default.Person),
     ABOUT("Acerca de", Icons.Default.Info),
+}
+
+private fun SettingsCategory.localizedTitle(context: android.content.Context): String = when (this) {
+    SettingsCategory.LANGUAGE -> context.getString(com.klortek.velora.R.string.settings_language_reproduction)
+    else -> title
 }
 
 // Mobile settings uses an explicit high-contrast palette. The app theme is
@@ -245,6 +253,13 @@ fun SettingsScreen(
     // Logout confirmation
     var showLogoutConfirmation by remember { mutableStateOf(false) }
 
+    // Global language and playback preference state. These are shared by mobile,
+    // tablet, Android TV and Fire TV because they live in AppSettings.
+    var languageTag by remember { mutableStateOf(settings.languageTag) }
+    var preferredAudioLanguage by remember { mutableStateOf(settings.preferredAudioLanguage) }
+    var subtitleMode by remember { mutableStateOf(settings.subtitleMode) }
+    var preferredSubtitleLanguage by remember { mutableStateOf(settings.preferredSubtitleLanguage) }
+
     // Jellyseerr state variables
     var jellyseerrUrl by remember { mutableStateOf(settings.jellyseerrUrl) }
     var showJellyseerrUrlDialog by remember { mutableStateOf(false) }
@@ -282,6 +297,75 @@ fun SettingsScreen(
     @Composable
     fun SettingsOptions(category: SettingsCategory) {
         when (category) {
+                        SettingsCategory.LANGUAGE -> {
+                            val languageOptions = VeloraLocale.languages
+                            val audioOptions = listOf(VeloraLocale.AUTO) + languageOptions.filter { it.tag != VeloraLocale.AUTO }.map { it.tag }
+                            val subtitleLanguageOptions = listOf(VeloraLocale.AUTO) + languageOptions.filter { it.tag != VeloraLocale.AUTO }.map { it.tag }
+                            val languageLabel = languageOptions.firstOrNull { it.tag == languageTag }?.nativeLabel ?: languageTag
+                            val audioLabel = if (preferredAudioLanguage == VeloraLocale.AUTO) {
+                                context.getString(com.klortek.velora.R.string.settings_audio_auto)
+                            } else {
+                                languageOptions.firstOrNull { it.tag == preferredAudioLanguage }?.nativeLabel ?: preferredAudioLanguage
+                            }
+                            val subtitleLanguageLabel = if (preferredSubtitleLanguage == VeloraLocale.AUTO) {
+                                context.getString(com.klortek.velora.R.string.settings_audio_auto)
+                            } else {
+                                languageOptions.firstOrNull { it.tag == preferredSubtitleLanguage }?.nativeLabel ?: preferredSubtitleLanguage
+                            }
+                            val subtitleModeLabel = when (subtitleMode) {
+                                VeloraLocale.SUBTITLES_PREFERRED -> context.getString(com.klortek.velora.R.string.settings_subtitle_preferred)
+                                VeloraLocale.SUBTITLES_FORCED -> context.getString(com.klortek.velora.R.string.settings_subtitle_forced)
+                                VeloraLocale.SUBTITLES_AUTO -> context.getString(com.klortek.velora.R.string.settings_subtitle_auto)
+                                else -> context.getString(com.klortek.velora.R.string.settings_subtitle_off)
+                            }
+
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_app_language),
+                                description = context.getString(com.klortek.velora.R.string.settings_app_language_description),
+                                currentValue = languageLabel,
+                                onCycle = {
+                                    val currentIndex = languageOptions.indexOfFirst { it.tag == languageTag }.coerceAtLeast(0)
+                                    val next = languageOptions[(currentIndex + 1) % languageOptions.size].tag
+                                    languageTag = next
+                                    settings.languageTag = next
+                                    VeloraLocale.restart(context)
+                                }
+                            )
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_audio_language),
+                                description = context.getString(com.klortek.velora.R.string.settings_audio_language_description),
+                                currentValue = audioLabel,
+                                onCycle = {
+                                    val currentIndex = audioOptions.indexOf(preferredAudioLanguage).coerceAtLeast(0)
+                                    val next = audioOptions[(currentIndex + 1) % audioOptions.size]
+                                    preferredAudioLanguage = next
+                                    settings.preferredAudioLanguage = next
+                                }
+                            )
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitle_mode),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitle_mode_description),
+                                currentValue = subtitleModeLabel,
+                                onCycle = {
+                                    val options = listOf(VeloraLocale.SUBTITLES_OFF, VeloraLocale.SUBTITLES_PREFERRED, VeloraLocale.SUBTITLES_FORCED, VeloraLocale.SUBTITLES_AUTO)
+                                    val currentIndex = options.indexOf(subtitleMode).coerceAtLeast(0)
+                                    val next = options[(currentIndex + 1) % options.size]
+                                    subtitleMode = next
+                                    settings.subtitleMode = next
+                                }
+                            )
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitle_language),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitle_language_description),
+                                currentValue = subtitleLanguageLabel,
+                                onCycle = {
+                                    val currentIndex = subtitleLanguageOptions.indexOf(preferredSubtitleLanguage).coerceAtLeast(0)
+                                    val next = subtitleLanguageOptions[(currentIndex + 1) % subtitleLanguageOptions.size]
+                                    preferredSubtitleLanguage = next
+                                    settings.preferredSubtitleLanguage = next
+                                }
+                            )
+                        }
                         SettingsCategory.PLAYBACK -> {
                             // MPV Player Toggle
                             SettingToggle(
@@ -2288,7 +2372,7 @@ fun SettingsScreen(
                     }
 
                     androidx.compose.material3.Text(
-                        text = if (activeCategoryDetail != null) activeCategoryDetail!!.title else "Ajustes",
+                        text = if (activeCategoryDetail != null) activeCategoryDetail!!.localizedTitle(context) else "Ajustes",
                         style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = MobileSettingsText,
@@ -2325,7 +2409,7 @@ fun SettingsScreen(
                                 modifier = Modifier.size(24.dp)
                             )
                             androidx.compose.material3.Text(
-                                text = category.title,
+                                text = category.localizedTitle(context),
                                 style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
                                 color = MobileSettingsText
                             )
@@ -2386,7 +2470,7 @@ fun SettingsScreen(
                         ) {
                             // Category title
                             Text(
-                                text = selectedCategory.title,
+                                text = selectedCategory.localizedTitle(context),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
@@ -2592,6 +2676,7 @@ private fun CategoryItem(
     onClick: () -> Unit,
     onFocused: () -> Unit
 ) {
+    val context = LocalContext.current
     var isFocused by remember { mutableStateOf(false) }
     
     val backgroundColor = when {
@@ -2631,7 +2716,7 @@ private fun CategoryItem(
                 modifier = Modifier.size(20.dp) // Reduced icon size by ~17% (24 * 0.83 ≈ 20)
             )
             Text(
-                text = category.title,
+                text = category.localizedTitle(context),
                 style = MaterialTheme.typography.bodyMedium, // Smaller text style
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                 color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface

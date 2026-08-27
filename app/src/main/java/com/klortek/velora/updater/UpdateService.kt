@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 object UpdateService {
     private const val TAG = "UpdateService"
     
-    private const val GITHUB_USERNAME = "rubenqs12"
+    private const val GITHUB_USERNAME = "klortekhq"
     private const val GITHUB_REPO = "Velora"
     
     private val apiUrl = "https://api.github.com/repos/$GITHUB_USERNAME/$GITHUB_REPO/releases/latest"

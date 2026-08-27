@@ -1,13 +1,143 @@
 (function () {
   'use strict';
 
+  var LANGUAGE_OPTIONS = [
+    { value: 'auto', label: 'Automático', native: 'Automático' },
+    { value: 'es', label: 'Español', native: 'Español' },
+    { value: 'en', label: 'Inglés', native: 'English' },
+    { value: 'pt', label: 'Portugués', native: 'Português' },
+    { value: 'fr', label: 'Francés', native: 'Français' },
+    { value: 'de', label: 'Alemán', native: 'Deutsch' },
+    { value: 'it', label: 'Italiano', native: 'Italiano' },
+    { value: 'ja', label: 'Japonés', native: '日本語' },
+    { value: 'ko', label: 'Coreano', native: '한국어' },
+    { value: 'zh', label: 'Chino', native: '中文' },
+    { value: 'ru', label: 'Ruso', native: 'Русский' },
+    { value: 'ar', label: 'Árabe', native: 'العربية' },
+    { value: 'tr', label: 'Turco', native: 'Türkçe' }
+  ];
+
+  var TRANSLATIONS = {
+    es: {
+      server: 'Servidor', user: 'Usuario', password: 'Contraseña', signIn: 'Iniciar sesión',
+      connectServer: 'Conecta tu servidor Jellyfin', serverPlaceholder: 'https://servidor:8096',
+      library: 'Tu biblioteca', libraryDescription: 'Películas, series y televisión en directo',
+      searchPlaceholder: 'Buscar películas y series', search: 'Buscar', all: 'Todo', movies: 'Películas',
+      series: 'Series', live: 'Televisión en directo', back: 'Atrás', play: 'Reproducir',
+      close: 'Cerrar', noDescription: 'Sin descripción disponible.', refresh: 'Actualizar', logout: 'Salir',
+      loading: 'Cargando biblioteca…', retry: 'Reintentar', player: 'Reproductor', fullscreen: 'Pantalla completa',
+      settings: 'Ajustes', languageSettings: 'Idioma y reproducción', appLanguage: 'Idioma de la aplicación',
+      automatic: 'Automático (idioma del dispositivo)', preferredAudio: 'Audio preferido', audioAuto: 'Automático / servidor',
+      subtitles: 'Subtítulos', subtitleOff: 'Desactivados', subtitlePreferred: 'Preferidos', subtitleForced: 'Forzados',
+      subtitleAuto: 'Automáticos', subtitleLanguage: 'Idioma de subtítulos', save: 'Guardar', cancel: 'Cancelar',
+      saved: 'Preferencias guardadas', settingDescription: 'Se aplican al próximo contenido y se guardan en este dispositivo.',
+      loginError: 'No se pudo iniciar sesión', playbackError: 'El dispositivo no puede reproducir este formato directamente.'
+    },
+    en: {
+      server: 'Server', user: 'User', password: 'Password', signIn: 'Sign in', connectServer: 'Connect your Jellyfin server',
+      serverPlaceholder: 'https://server:8096', library: 'Your library', libraryDescription: 'Movies, series and live television',
+      searchPlaceholder: 'Search movies and series', search: 'Search', all: 'All', movies: 'Movies', series: 'Series',
+      live: 'Live TV', back: 'Back', play: 'Play', close: 'Close', noDescription: 'No description available.',
+      refresh: 'Refresh', logout: 'Sign out', loading: 'Loading library…', retry: 'Retry', player: 'Player',
+      fullscreen: 'Fullscreen', settings: 'Settings', languageSettings: 'Language and playback', appLanguage: 'App language',
+      automatic: 'Automatic (device language)', preferredAudio: 'Preferred audio', audioAuto: 'Automatic / server',
+      subtitles: 'Subtitles', subtitleOff: 'Disabled', subtitlePreferred: 'Preferred', subtitleForced: 'Forced',
+      subtitleAuto: 'Automatic', subtitleLanguage: 'Subtitle language', save: 'Save', cancel: 'Cancel',
+      saved: 'Preferences saved', settingDescription: 'Applied to new playback and saved on this device.',
+      loginError: 'Sign-in failed', playbackError: 'This device cannot play this format directly.'
+    },
+    pt: {
+      server: 'Servidor', user: 'Utilizador', password: 'Palavra-passe', signIn: 'Iniciar sessão', connectServer: 'Ligue o seu servidor Jellyfin',
+      serverPlaceholder: 'https://servidor:8096', library: 'A sua biblioteca', libraryDescription: 'Filmes, séries e televisão em direto',
+      searchPlaceholder: 'Pesquisar filmes e séries', search: 'Pesquisar', all: 'Tudo', movies: 'Filmes', series: 'Séries',
+      live: 'TV em direto', back: 'Voltar', play: 'Reproduzir', close: 'Fechar', noDescription: 'Sem descrição disponível.',
+      refresh: 'Atualizar', logout: 'Sair', loading: 'A carregar biblioteca…', retry: 'Tentar novamente', player: 'Reprodutor',
+      fullscreen: 'Ecrã inteiro', settings: 'Definições', languageSettings: 'Idioma e reprodução', appLanguage: 'Idioma da aplicação',
+      automatic: 'Automático (idioma do dispositivo)', preferredAudio: 'Áudio preferido', audioAuto: 'Automático / servidor',
+      subtitles: 'Legendas', subtitleOff: 'Desativadas', subtitlePreferred: 'Preferidas', subtitleForced: 'Forçadas',
+      subtitleAuto: 'Automáticas', subtitleLanguage: 'Idioma das legendas', save: 'Guardar', cancel: 'Cancelar',
+      saved: 'Preferências guardadas', settingDescription: 'Aplicadas à próxima reprodução e guardadas neste dispositivo.',
+      loginError: 'Não foi possível iniciar sessão', playbackError: 'Este dispositivo não consegue reproduzir este formato diretamente.'
+    },
+    fr: {
+      server: 'Serveur', user: 'Utilisateur', password: 'Mot de passe', signIn: 'Se connecter', connectServer: 'Connectez votre serveur Jellyfin',
+      serverPlaceholder: 'https://serveur:8096', library: 'Votre bibliothèque', libraryDescription: 'Films, séries et télévision en direct',
+      searchPlaceholder: 'Rechercher des films et séries', search: 'Rechercher', all: 'Tout', movies: 'Films', series: 'Séries',
+      live: 'TV en direct', back: 'Retour', play: 'Lire', close: 'Fermer', noDescription: 'Aucune description disponible.',
+      refresh: 'Actualiser', logout: 'Se déconnecter', loading: 'Chargement de la bibliothèque…', retry: 'Réessayer', player: 'Lecteur',
+      fullscreen: 'Plein écran', settings: 'Réglages', languageSettings: 'Langue et lecture', appLanguage: 'Langue de l’application',
+      automatic: 'Automatique (langue de l’appareil)', preferredAudio: 'Audio préféré', audioAuto: 'Automatique / serveur',
+      subtitles: 'Sous-titres', subtitleOff: 'Désactivés', subtitlePreferred: 'Préférés', subtitleForced: 'Forcés',
+      subtitleAuto: 'Automatiques', subtitleLanguage: 'Langue des sous-titres', save: 'Enregistrer', cancel: 'Annuler',
+      saved: 'Préférences enregistrées', settingDescription: 'Appliquées à la prochaine lecture et enregistrées sur cet appareil.',
+      loginError: 'Échec de la connexion', playbackError: 'Cet appareil ne peut pas lire ce format directement.'
+    },
+    de: {
+      server: 'Server', user: 'Benutzer', password: 'Passwort', signIn: 'Anmelden', connectServer: 'Jellyfin-Server verbinden',
+      serverPlaceholder: 'https://server:8096', library: 'Deine Bibliothek', libraryDescription: 'Filme, Serien und Live-Fernsehen',
+      searchPlaceholder: 'Filme und Serien suchen', search: 'Suchen', all: 'Alle', movies: 'Filme', series: 'Serien',
+      live: 'Live-TV', back: 'Zurück', play: 'Wiedergeben', close: 'Schließen', noDescription: 'Keine Beschreibung verfügbar.',
+      refresh: 'Aktualisieren', logout: 'Abmelden', loading: 'Bibliothek wird geladen…', retry: 'Erneut versuchen', player: 'Player',
+      fullscreen: 'Vollbild', settings: 'Einstellungen', languageSettings: 'Sprache und Wiedergabe', appLanguage: 'App-Sprache',
+      automatic: 'Automatisch (Gerätesprache)', preferredAudio: 'Bevorzugte Audiosprache', audioAuto: 'Automatisch / Server',
+      subtitles: 'Untertitel', subtitleOff: 'Deaktiviert', subtitlePreferred: 'Bevorzugt', subtitleForced: 'Erzwungen',
+      subtitleAuto: 'Automatisch', subtitleLanguage: 'Untertitelsprache', save: 'Speichern', cancel: 'Abbrechen',
+      saved: 'Einstellungen gespeichert', settingDescription: 'Für die nächste Wiedergabe angewendet und auf diesem Gerät gespeichert.',
+      loginError: 'Anmeldung fehlgeschlagen', playbackError: 'Dieses Gerät kann dieses Format nicht direkt wiedergeben.'
+    },
+    it: {
+      server: 'Server', user: 'Utente', password: 'Password', signIn: 'Accedi', connectServer: 'Collega il server Jellyfin',
+      serverPlaceholder: 'https://server:8096', library: 'La tua libreria', libraryDescription: 'Film, serie e televisione in diretta',
+      searchPlaceholder: 'Cerca film e serie', search: 'Cerca', all: 'Tutto', movies: 'Film', series: 'Serie', live: 'TV in diretta',
+      back: 'Indietro', play: 'Riproduci', close: 'Chiudi', noDescription: 'Nessuna descrizione disponibile.', refresh: 'Aggiorna',
+      logout: 'Esci', loading: 'Caricamento libreria…', retry: 'Riprova', player: 'Lettore', fullscreen: 'Schermo intero',
+      settings: 'Impostazioni', languageSettings: 'Lingua e riproduzione', appLanguage: 'Lingua dell’app', automatic: 'Automatico (lingua del dispositivo)',
+      preferredAudio: 'Audio preferito', audioAuto: 'Automatico / server', subtitles: 'Sottotitoli', subtitleOff: 'Disattivati', subtitlePreferred: 'Preferiti',
+      subtitleForced: 'Forzati', subtitleAuto: 'Automatici', subtitleLanguage: 'Lingua dei sottotitoli', save: 'Salva', cancel: 'Annulla',
+      saved: 'Preferenze salvate', settingDescription: 'Applicate alla prossima riproduzione e salvate su questo dispositivo.', loginError: 'Accesso non riuscito',
+      playbackError: 'Questo dispositivo non può riprodurre direttamente questo formato.'
+    },
+    ja: { server: 'サーバー', user: 'ユーザー', password: 'パスワード', signIn: 'ログイン', connectServer: 'Jellyfinサーバーに接続', serverPlaceholder: 'https://server:8096', library: 'ライブラリ', libraryDescription: '映画、シリーズ、ライブテレビ', searchPlaceholder: '映画とシリーズを検索', search: '検索', all: 'すべて', movies: '映画', series: 'シリーズ', live: 'ライブTV', back: '戻る', play: '再生', close: '閉じる', noDescription: '説明はありません。', refresh: '更新', logout: 'ログアウト', loading: 'ライブラリを読み込み中…', retry: '再試行', player: 'プレーヤー', fullscreen: '全画面', settings: '設定', languageSettings: '言語と再生', appLanguage: 'アプリの言語', automatic: '自動（端末の言語）', preferredAudio: '優先音声', audioAuto: '自動 / サーバー', subtitles: '字幕', subtitleOff: '無効', subtitlePreferred: '優先', subtitleForced: '強制', subtitleAuto: '自動', subtitleLanguage: '字幕の言語', save: '保存', cancel: 'キャンセル', saved: '設定を保存しました', settingDescription: '次の再生に適用され、この端末に保存されます。', loginError: 'ログインに失敗しました', playbackError: 'この端末はこの形式を直接再生できません。' },
+    ko: { server: '서버', user: '사용자', password: '비밀번호', signIn: '로그인', connectServer: 'Jellyfin 서버 연결', serverPlaceholder: 'https://server:8096', library: '라이브러리', libraryDescription: '영화, 시리즈 및 실시간 TV', searchPlaceholder: '영화 및 시리즈 검색', search: '검색', all: '전체', movies: '영화', series: '시리즈', live: '실시간 TV', back: '뒤로', play: '재생', close: '닫기', noDescription: '설명이 없습니다.', refresh: '새로고침', logout: '로그아웃', loading: '라이브러리 로드 중…', retry: '다시 시도', player: '플레이어', fullscreen: '전체 화면', settings: '설정', languageSettings: '언어 및 재생', appLanguage: '앱 언어', automatic: '자동 (기기 언어)', preferredAudio: '선호 오디오', audioAuto: '자동 / 서버', subtitles: '자막', subtitleOff: '사용 안 함', subtitlePreferred: '선호', subtitleForced: '강제', subtitleAuto: '자동', subtitleLanguage: '자막 언어', save: '저장', cancel: '취소', saved: '환경설정 저장됨', settingDescription: '다음 재생에 적용되며 이 기기에 저장됩니다.', loginError: '로그인하지 못했습니다', playbackError: '이 기기에서 이 형식을 직접 재생할 수 없습니다.' },
+    zh: { server: '服务器', user: '用户', password: '密码', signIn: '登录', connectServer: '连接 Jellyfin 服务器', serverPlaceholder: 'https://server:8096', library: '媒体库', libraryDescription: '电影、剧集和直播电视', searchPlaceholder: '搜索电影和剧集', search: '搜索', all: '全部', movies: '电影', series: '剧集', live: '直播电视', back: '返回', play: '播放', close: '关闭', noDescription: '暂无描述。', refresh: '刷新', logout: '退出登录', loading: '正在加载媒体库…', retry: '重试', player: '播放器', fullscreen: '全屏', settings: '设置', languageSettings: '语言与播放', appLanguage: '应用语言', automatic: '自动（设备语言）', preferredAudio: '首选音频', audioAuto: '自动 / 服务器', subtitles: '字幕', subtitleOff: '关闭', subtitlePreferred: '首选', subtitleForced: '强制', subtitleAuto: '自动', subtitleLanguage: '字幕语言', save: '保存', cancel: '取消', saved: '偏好已保存', settingDescription: '应用于下一次播放并保存在此设备上。', loginError: '登录失败', playbackError: '此设备无法直接播放此格式。' },
+    ru: { server: 'Сервер', user: 'Пользователь', password: 'Пароль', signIn: 'Войти', connectServer: 'Подключите сервер Jellyfin', serverPlaceholder: 'https://server:8096', library: 'Медиатека', libraryDescription: 'Фильмы, сериалы и прямой эфир', searchPlaceholder: 'Поиск фильмов и сериалов', search: 'Поиск', all: 'Все', movies: 'Фильмы', series: 'Сериалы', live: 'Прямой эфир', back: 'Назад', play: 'Воспроизвести', close: 'Закрыть', noDescription: 'Описание отсутствует.', refresh: 'Обновить', logout: 'Выйти', loading: 'Загрузка медиатеки…', retry: 'Повторить', player: 'Плеер', fullscreen: 'Полный экран', settings: 'Настройки', languageSettings: 'Язык и воспроизведение', appLanguage: 'Язык приложения', automatic: 'Автоматически (язык устройства)', preferredAudio: 'Предпочитаемое аудио', audioAuto: 'Автоматически / сервер', subtitles: 'Субтитры', subtitleOff: 'Отключены', subtitlePreferred: 'Предпочитаемые', subtitleForced: 'Принудительные', subtitleAuto: 'Автоматически', subtitleLanguage: 'Язык субтитров', save: 'Сохранить', cancel: 'Отмена', saved: 'Настройки сохранены', settingDescription: 'Применяются к следующему воспроизведению и сохраняются на устройстве.', loginError: 'Не удалось войти', playbackError: 'Устройство не может напрямую воспроизвести этот формат.' },
+    ar: { server: 'الخادم', user: 'المستخدم', password: 'كلمة المرور', signIn: 'تسجيل الدخول', connectServer: 'الاتصال بخادم Jellyfin', serverPlaceholder: 'https://server:8096', library: 'مكتبتك', libraryDescription: 'أفلام ومسلسلات وتلفزيون مباشر', searchPlaceholder: 'البحث عن الأفلام والمسلسلات', search: 'بحث', all: 'الكل', movies: 'أفلام', series: 'مسلسلات', live: 'تلفزيون مباشر', back: 'رجوع', play: 'تشغيل', close: 'إغلاق', noDescription: 'لا يوجد وصف.', refresh: 'تحديث', logout: 'تسجيل الخروج', loading: 'جارٍ تحميل المكتبة…', retry: 'إعادة المحاولة', player: 'المشغل', fullscreen: 'ملء الشاشة', settings: 'الإعدادات', languageSettings: 'اللغة والتشغيل', appLanguage: 'لغة التطبيق', automatic: 'تلقائي (لغة الجهاز)', preferredAudio: 'الصوت المفضل', audioAuto: 'تلقائي / الخادم', subtitles: 'الترجمات', subtitleOff: 'معطلة', subtitlePreferred: 'مفضلة', subtitleForced: 'إجبارية', subtitleAuto: 'تلقائية', subtitleLanguage: 'لغة الترجمة', save: 'حفظ', cancel: 'إلغاء', saved: 'تم حفظ التفضيلات', settingDescription: 'تُطبق على التشغيل التالي وتُحفظ على هذا الجهاز.', loginError: 'فشل تسجيل الدخول', playbackError: 'لا يمكن لهذا الجهاز تشغيل هذا التنسيق مباشرة.' },
+    tr: { server: 'Sunucu', user: 'Kullanıcı', password: 'Şifre', signIn: 'Giriş yap', connectServer: 'Jellyfin sunucunuzu bağlayın', serverPlaceholder: 'https://sunucu:8096', library: 'Kitaplığınız', libraryDescription: 'Filmler, diziler ve canlı televizyon', searchPlaceholder: 'Film ve dizi ara', search: 'Ara', all: 'Tümü', movies: 'Filmler', series: 'Diziler', live: 'Canlı TV', back: 'Geri', play: 'Oynat', close: 'Kapat', noDescription: 'Açıklama yok.', refresh: 'Yenile', logout: 'Çıkış yap', loading: 'Kitaplık yükleniyor…', retry: 'Tekrar dene', player: 'Oynatıcı', fullscreen: 'Tam ekran', settings: 'Ayarlar', languageSettings: 'Dil ve oynatma', appLanguage: 'Uygulama dili', automatic: 'Otomatik (cihaz dili)', preferredAudio: 'Tercih edilen ses', audioAuto: 'Otomatik / sunucu', subtitles: 'Altyazılar', subtitleOff: 'Kapalı', subtitlePreferred: 'Tercih edilen', subtitleForced: 'Zorunlu', subtitleAuto: 'Otomatik', subtitleLanguage: 'Altyazı dili', save: 'Kaydet', cancel: 'İptal', saved: 'Tercihler kaydedildi', settingDescription: 'Bir sonraki oynatmaya uygulanır ve bu cihaza kaydedilir.', loginError: 'Giriş yapılamadı', playbackError: 'Bu cihaz bu biçimi doğrudan oynatamıyor.' }
+  };
+
+  function languageCode() {
+    var selected = localStorage.veloraLanguage || 'auto';
+    if (selected !== 'auto') return selected;
+    var candidates = navigator.languages || [navigator.language || 'es'];
+    for (var i = 0; i < candidates.length; i += 1) {
+      var code = String(candidates[i] || '').toLowerCase().split('-')[0];
+      if (TRANSLATIONS[code]) return code;
+    }
+    return 'es';
+  }
+
+  function t(key) {
+    var current = TRANSLATIONS[languageCode()] || TRANSLATIONS.es;
+    return current[key] || TRANSLATIONS.es[key] || key;
+  }
+
+  function preference(key, fallback) {
+    return localStorage[key] || fallback;
+  }
+
+  function savePreference(key, value) {
+    localStorage[key] = value;
+  }
+
   var root = document.querySelector('#app');
   var state = {
     server: localStorage.veloraServer || '',
     token: localStorage.veloraToken || '',
     userId: localStorage.veloraUserId || '',
     items: [],
-    query: ''
+    query: '',
+    settingsOpen: false,
+    playingItem: null
   };
 
   function base() {
@@ -25,7 +155,8 @@
     var headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-Emby-Token': state.token
+      'X-Emby-Token': state.token,
+      'Accept-Language': languageCode()
     };
     Object.keys(request.headers || {}).forEach(function (key) {
       headers[key] = request.headers[key];
@@ -42,22 +173,45 @@
       '/Images/Primary?api_key=' + encodeURIComponent(state.token) + '&maxWidth=600';
   }
 
-  function stream(id) {
-    return base() + '/Videos/' + encodeURIComponent(id) +
-      '/stream?static=true&api_key=' + encodeURIComponent(state.token);
+  function stream(item) {
+    var params = [
+      'static=true',
+      'api_key=' + encodeURIComponent(state.token),
+      'mediasourceid=' + encodeURIComponent(item.MediaSources && item.MediaSources[0] ? item.MediaSources[0].Id : '')
+    ];
+    var streams = item.MediaSources && item.MediaSources[0] ? (item.MediaSources[0].MediaStreams || []) : [];
+    var audio = preference('veloraAudioLanguage', 'auto');
+    var audioStream = audio !== 'auto' && streams.find(function (candidate) {
+      return candidate.Type === 'Audio' && String(candidate.Language || '').toLowerCase().split('-')[0] === audio;
+    });
+    if (audioStream && audioStream.Index != null) params.push('AudioStreamIndex=' + encodeURIComponent(audioStream.Index));
+    var subtitleMode = preference('veloraSubtitleMode', 'off');
+    if (subtitleMode !== 'off') {
+      var subtitleLanguage = preference('veloraSubtitleLanguage', 'auto');
+      var subtitleStream = streams.find(function (candidate) {
+        if (candidate.Type !== 'Subtitle') return false;
+        if (subtitleLanguage === 'auto') return !!candidate.IsDefault || !!candidate.IsForced;
+        return String(candidate.Language || '').toLowerCase().split('-')[0] === subtitleLanguage;
+      });
+      if (subtitleStream && subtitleStream.Index != null) {
+        params.push('SubtitleStreamIndex=' + encodeURIComponent(subtitleStream.Index));
+        params.push('SubtitleMethod=Encode');
+      }
+    }
+    return base() + '/Videos/' + encodeURIComponent(item.Id) + '/stream?' + params.join('&');
   }
 
   function login() {
     root.innerHTML = '<section class="login" aria-labelledby="loginTitle">' +
       '<h1 id="loginTitle">Velora</h1>' +
-      '<p class="muted">Conecta tu servidor Jellyfin</p>' +
-      '<label for="server">Servidor</label>' +
-      '<input id="server" value="' + esc(state.server) + '" placeholder="https://servidor:8096" autocomplete="url">' +
-      '<label for="user">Usuario</label>' +
-      '<input id="user" placeholder="Usuario" autocomplete="username">' +
-      '<label for="password">Contraseña</label>' +
-      '<input id="password" type="password" placeholder="Contraseña" autocomplete="current-password">' +
-      '<button type="button" class="primary" id="signIn">Iniciar sesión</button>' +
+      '<p class="muted">' + esc(t('connectServer')) + '</p>' +
+      '<label for="server">' + esc(t('server')) + '</label>' +
+      '<input id="server" value="' + esc(state.server) + '" placeholder="' + esc(t('serverPlaceholder')) + '" autocomplete="url">' +
+      '<label for="user">' + esc(t('user')) + '</label>' +
+      '<input id="user" placeholder="' + esc(t('user')) + '" autocomplete="username">' +
+      '<label for="password">' + esc(t('password')) + '</label>' +
+      '<input id="password" type="password" placeholder="' + esc(t('password')) + '" autocomplete="current-password">' +
+      '<button type="button" class="primary" id="signIn">' + esc(t('signIn')) + '</button>' +
       '<p id="loginError" class="error" role="alert"></p>' +
       '</section>';
     document.querySelector('#signIn').onclick = authenticate;
@@ -74,11 +228,12 @@
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="1.2.1"'
+        'Accept-Language': languageCode(),
+        'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="1.2.2", Language="' + languageCode() + '"'
       },
       body: JSON.stringify({ Username: username, Password: document.querySelector('#password').value })
     }).then(function (response) {
-      if (!response.ok) throw Error('No se pudo iniciar sesión');
+      if (!response.ok) throw Error(t('loginError'));
       return response.json();
     }).then(function (data) {
       state.token = data.AccessToken;
@@ -102,7 +257,7 @@
     }
     var params = 'Recursive=true&IncludeItemTypes=Movie%2CSeries%2CLiveTvChannel&' +
       'SortBy=DateCreated&SortOrder=Descending&Limit=150&' +
-      'Fields=Overview%2CProductionYear%2CPrimaryImageAspectRatio';
+      'Fields=Overview%2CProductionYear%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData%2CSeriesName%2CSeriesId%2CIndexNumber%2CParentIndexNumber';
     return api('/Users/' + state.userId + '/Items?' + params).then(function (data) {
       state.items = data.Items || [];
     });
@@ -142,12 +297,12 @@
     closeDetails();
     root.insertAdjacentHTML('beforeend', '<div class="modal" id="details" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">' +
       '<div class="modal-card">' +
-      '<button type="button" class="close" id="detailsClose">Atrás</button>' +
+      '<button type="button" class="close" id="detailsClose">' + esc(t('back')) + '</button>' +
       '<img class="detail-image" src="' + image(item.Id) + '" alt="">' +
       '<h1 id="detailsTitle">' + esc(item.Name) + '</h1>' +
-      '<p class="muted">' + esc(item.ProductionYear || '') + (item.Type === 'Series' ? ' · Serie' : '') + '</p>' +
-      '<p>' + esc(item.Overview || 'Sin descripción disponible.') + '</p>' +
-      '<button type="button" class="primary" id="playItem">Reproducir</button>' +
+      '<p class="muted">' + esc(item.ProductionYear || '') + (item.Type === 'Series' ? ' · ' + esc(t('series')) : '') + '</p>' +
+      '<p>' + esc(item.Overview || t('noDescription')) + '</p>' +
+      '<button type="button" class="primary" id="playItem">' + esc(t('play')) + '</button>' +
       '</div></div>');
     document.querySelector('#detailsClose').onclick = closeDetails;
     document.querySelector('#playItem').onclick = function () {
@@ -182,20 +337,24 @@
     if (!player) return;
     if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
     player.remove();
+    state.playingItem = null;
   }
 
   function play(item) {
-    root.insertAdjacentHTML('beforeend', '<div class="video-wrap" id="player" role="dialog" aria-label="Reproductor">' +
-      '<video controls autoplay playsinline preload="metadata" src="' + stream(item.Id) + '"></video>' +
+    state.playingItem = item;
+    root.insertAdjacentHTML('beforeend', '<div class="video-wrap" id="player" role="dialog" aria-label="' + esc(t('player')) + '">' +
+      '<video controls autoplay playsinline preload="metadata" src="' + stream(item) + '"></video>' +
       '<div class="video-controls">' +
-      '<button type="button" id="fullscreen">Pantalla completa</button>' +
-      '<button type="button" id="playerClose">Cerrar</button>' +
+      '<button type="button" id="fullscreen">' + esc(t('fullscreen')) + '</button>' +
+      '<button type="button" id="playerSettings">' + esc(t('settings')) + '</button>' +
+      '<button type="button" id="playerClose">' + esc(t('close')) + '</button>' +
       '</div></div>');
     var player = document.querySelector('#player');
     var video = player.querySelector('video');
     player.querySelector('#playerClose').onclick = closePlayer;
     player.querySelector('#fullscreen').onclick = function () { setFullscreen(player, video); };
-    video.onerror = function () { toast('El dispositivo no puede reproducir este formato directamente.'); };
+    player.querySelector('#playerSettings').onclick = showSettings;
+    video.onerror = function () { toast(t('playbackError')); };
     video.onloadedmetadata = function () { player.querySelector('#fullscreen').focus(); };
   }
 
@@ -218,14 +377,14 @@
     var series = items.filter(function (item) { return item.Type === 'Series'; });
     var live = items.filter(function (item) { return item.Type === 'LiveTvChannel'; });
     document.querySelector('#content').innerHTML = '<div class="hero">' +
-      '<h1>Tu biblioteca</h1><p class="muted">Películas, series y televisión en directo</p>' +
-      '<div class="row"><input class="search" id="query" value="' + esc(state.query) + '" placeholder="Buscar películas y series">' +
-      '<button type="button" class="primary" id="search">Buscar</button></div></div>' +
-      '<nav class="tabs" aria-label="Biblioteca"><button type="button" class="active" data-tab="all">Todo</button>' +
-      '<button type="button" data-tab="movies">Películas</button><button type="button" data-tab="series">Series</button>' +
-      (live.length ? '<button type="button" data-tab="live">Televisión en directo</button>' : '') +
-      '</nav><div id="results">' + section('Películas', movies) + section('Series', series) +
-      section('Televisión en directo', live) + '</div>';
+      '<h1>' + esc(t('library')) + '</h1><p class="muted">' + esc(t('libraryDescription')) + '</p>' +
+      '<div class="row"><input class="search" id="query" value="' + esc(state.query) + '" placeholder="' + esc(t('searchPlaceholder')) + '">' +
+      '<button type="button" class="primary" id="search">' + esc(t('search')) + '</button></div></div>' +
+      '<nav class="tabs" aria-label="' + esc(t('library')) + '"><button type="button" class="active" data-tab="all">' + esc(t('all')) + '</button>' +
+      '<button type="button" data-tab="movies">' + esc(t('movies')) + '</button><button type="button" data-tab="series">' + esc(t('series')) + '</button>' +
+      (live.length ? '<button type="button" data-tab="live">' + esc(t('live')) + '</button>' : '') +
+      '</nav><div id="results">' + section(t('movies'), movies) + section(t('series'), series) +
+      section(t('live'), live) + '</div>';
 
     var submit = function () {
       state.query = document.querySelector('#query').value;
@@ -240,14 +399,76 @@
         Array.prototype.forEach.call(document.querySelectorAll('[data-tab]'), function (candidate) { candidate.classList.remove('active'); });
         tab.classList.add('active');
         var view = tab.getAttribute('data-tab');
-        document.querySelector('#results').innerHTML = view === 'movies' ? section('Películas', movies) :
-          view === 'series' ? section('Series', series) :
-          view === 'live' ? section('Televisión en directo', live) :
-          section('Películas', movies) + section('Series', series) + section('Televisión en directo', live);
+        document.querySelector('#results').innerHTML = view === 'movies' ? section(t('movies'), movies) :
+          view === 'series' ? section(t('series'), series) :
+          view === 'live' ? section(t('live'), live) :
+          section(t('movies'), movies) + section(t('series'), series) + section(t('live'), live);
         bindCards();
       };
     });
     bindCards();
+  }
+
+  function languageOptionMarkup(selected, includeAuto) {
+    return LANGUAGE_OPTIONS.filter(function (option) { return includeAuto || option.value !== 'auto'; }).map(function (option) {
+      return '<option value="' + esc(option.value) + '"' + (selected === option.value ? ' selected' : '') + '>' + esc(option.native) + '</option>';
+    }).join('');
+  }
+
+  function showSettings() {
+    if (document.querySelector('#settings')) return;
+    var selectedLanguage = preference('veloraLanguage', 'auto');
+    var audioLanguage = preference('veloraAudioLanguage', 'auto');
+    var subtitleMode = preference('veloraSubtitleMode', 'off');
+    var subtitleLanguage = preference('veloraSubtitleLanguage', 'auto');
+    root.insertAdjacentHTML('beforeend', '<div class="modal" id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">' +
+      '<div class="modal-card settings-card">' +
+      '<div class="settings-heading"><h2 id="settingsTitle">' + esc(t('settings')) + '</h2><button type="button" class="close" id="settingsClose">' + esc(t('close')) + '</button></div>' +
+      '<p class="muted">' + esc(t('settingDescription')) + '</p>' +
+      '<label for="appLanguage">' + esc(t('appLanguage')) + '</label>' +
+      '<select id="appLanguage">' + languageOptionMarkup(selectedLanguage, true) + '</select>' +
+      '<label for="audioLanguage">' + esc(t('preferredAudio')) + '</label>' +
+      '<select id="audioLanguage"><option value="auto"' + (audioLanguage === 'auto' ? ' selected' : '') + '>' + esc(t('audioAuto')) + '</option>' + languageOptionMarkup(audioLanguage, false) + '</select>' +
+      '<label for="subtitleMode">' + esc(t('subtitles')) + '</label>' +
+      '<select id="subtitleMode">' +
+      '<option value="off"' + (subtitleMode === 'off' ? ' selected' : '') + '>' + esc(t('subtitleOff')) + '</option>' +
+      '<option value="preferred"' + (subtitleMode === 'preferred' ? ' selected' : '') + '>' + esc(t('subtitlePreferred')) + '</option>' +
+      '<option value="forced"' + (subtitleMode === 'forced' ? ' selected' : '') + '>' + esc(t('subtitleForced')) + '</option>' +
+      '<option value="auto"' + (subtitleMode === 'auto' ? ' selected' : '') + '>' + esc(t('subtitleAuto')) + '</option>' +
+      '</select>' +
+      '<label for="subtitleLanguage">' + esc(t('subtitleLanguage')) + '</label>' +
+      '<select id="subtitleLanguage">' + languageOptionMarkup(subtitleLanguage, true) + '</select>' +
+      '<div class="settings-actions"><button type="button" class="primary" id="settingsSave">' + esc(t('save')) + '</button><button type="button" id="settingsCancel">' + esc(t('cancel')) + '</button></div>' +
+      '</div></div>');
+    document.querySelector('#settingsClose').onclick = closeSettings;
+    document.querySelector('#settingsCancel').onclick = closeSettings;
+    document.querySelector('#settingsSave').onclick = function () {
+      savePreference('veloraLanguage', document.querySelector('#appLanguage').value);
+      savePreference('veloraAudioLanguage', document.querySelector('#audioLanguage').value);
+      savePreference('veloraSubtitleMode', document.querySelector('#subtitleMode').value);
+      savePreference('veloraSubtitleLanguage', document.querySelector('#subtitleLanguage').value);
+      document.documentElement.lang = languageCode();
+      closeSettings();
+      var video = document.querySelector('#player video');
+      if (video && state.playingItem) {
+        var position = video.currentTime || 0;
+        video.src = stream(state.playingItem);
+        video.addEventListener('loadedmetadata', function resumePlayback() {
+          video.removeEventListener('loadedmetadata', resumePlayback);
+          try { video.currentTime = position; } catch (error) { /* stream may not seek yet */ }
+          video.play().catch(function () {});
+        });
+        video.load();
+      } else {
+        renderApp();
+      }
+    };
+  }
+
+  function closeSettings() {
+    var settings = document.querySelector('#settings');
+    if (settings) settings.remove();
+    state.settingsOpen = false;
   }
 
   function renderApp() {
@@ -255,9 +476,11 @@
       login();
       return Promise.resolve();
     }
+    document.documentElement.lang = languageCode();
     root.innerHTML = '<div class="shell"><header><div class="brand">Velora</div><div class="actions">' +
-      '<button type="button" id="refresh">Actualizar</button><button type="button" id="logout">Salir</button>' +
-      '</div></header><div id="content"><div class="empty">Cargando biblioteca…</div></div></div>';
+      '<button type="button" id="refresh">' + esc(t('refresh')) + '</button><button type="button" id="settingsButton">' + esc(t('settings')) + '</button><button type="button" id="logout">' + esc(t('logout')) + '</button>' +
+      '</div></header><div id="content"><div class="empty">' + esc(t('loading')) + '</div></div></div>';
+    document.querySelector('#settingsButton').onclick = showSettings;
     document.querySelector('#logout').onclick = function () {
       localStorage.removeItem('veloraToken');
       state.token = '';
@@ -268,15 +491,19 @@
     };
     return loadItems().then(renderHome).catch(function (exception) {
       document.querySelector('#content').innerHTML = '<div class="error">' + esc(exception.message) +
-        '<br><button type="button" class="primary" id="retry">Reintentar</button></div>';
+        '<br><button type="button" class="primary" id="retry">' + esc(t('retry')) + '</button></div>';
       document.querySelector('#retry').onclick = renderApp;
     });
   }
 
   document.addEventListener('velora:back', function (event) {
+    var settings = document.querySelector('#settings');
     var details = document.querySelector('#details');
     var player = document.querySelector('#player');
-    if (player) {
+    if (settings) {
+      closeSettings();
+      event.preventDefault();
+    } else if (player) {
       closePlayer();
       event.preventDefault();
     } else if (details) {

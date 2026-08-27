@@ -103,6 +103,10 @@ class AppSettings(context: Context) {
         private const val KEY_ROW_CARD_COUNT = "row_card_count"
         private const val KEY_NAVIGATION_SOUNDS_ENABLED = "navigation_sounds_enabled"
         private const val KEY_THEME_COLOR_HEX = "theme_color_hex"
+        private const val KEY_LANGUAGE_TAG = "language_tag"
+        private const val KEY_PREFERRED_AUDIO_LANGUAGE = "preferred_audio_language"
+        private const val KEY_SUBTITLE_MODE = "subtitle_mode"
+        private const val KEY_PREFERRED_SUBTITLE_LANGUAGE = "preferred_subtitle_language"
     }
 
     var isMpvEnabled: Boolean
@@ -450,12 +454,15 @@ class AppSettings(context: Context) {
     
     // Jellyseerr enabled - shows Discover tab with trending/popular/upcoming content
     var jellyseerrEnabled: Boolean
-        get() = prefs.getBoolean(KEY_JELLYSEERR_ENABLED, true) // Enabled by default when configured
+        // Discovery/request integrations are intentionally not part of Velora's
+        // product surface. Keep the legacy value readable for migration, but
+        // never enable the integration by default on a fresh install.
+        get() = prefs.getBoolean(KEY_JELLYSEERR_ENABLED, false)
         set(value) = prefs.edit().putBoolean(KEY_JELLYSEERR_ENABLED, value).apply()
 
     // Jellyseerr search integration enabled - shows Jellyseerr results in search
     var jellyseerrSearchEnabled: Boolean
-        get() = prefs.getBoolean("jellyseerr_search_enabled", true) // Enabled by default
+        get() = prefs.getBoolean("jellyseerr_search_enabled", false)
         set(value) = prefs.edit().putBoolean("jellyseerr_search_enabled", value).apply()
     
     // Check if Jellyseerr is properly configured
@@ -529,4 +536,24 @@ class AppSettings(context: Context) {
     var themeColorHex: String
         get() = prefs.getString(KEY_THEME_COLOR_HEX, "#25B8E8") ?: "#25B8E8"
         set(value) = prefs.edit().putString(KEY_THEME_COLOR_HEX, value).apply()
+
+    /** Application language. "auto" follows the Android/Fire TV system locale. */
+    var languageTag: String
+        get() = prefs.getString(KEY_LANGUAGE_TAG, "auto") ?: "auto"
+        set(value) = prefs.edit().putString(KEY_LANGUAGE_TAG, value).apply()
+
+    /** Preferred audio language. "auto" lets Jellyfin/ExoPlayer choose its default. */
+    var preferredAudioLanguage: String
+        get() = prefs.getString(KEY_PREFERRED_AUDIO_LANGUAGE, "auto") ?: "auto"
+        set(value) = prefs.edit().putString(KEY_PREFERRED_AUDIO_LANGUAGE, value).apply()
+
+    /** Subtitle policy: off, preferred, forced or auto. */
+    var subtitleMode: String
+        get() = prefs.getString(KEY_SUBTITLE_MODE, "off") ?: "off"
+        set(value) = prefs.edit().putString(KEY_SUBTITLE_MODE, value).apply()
+
+    /** Preferred subtitle language. "auto" follows the server/device preference. */
+    var preferredSubtitleLanguage: String
+        get() = prefs.getString(KEY_PREFERRED_SUBTITLE_LANGUAGE, "auto") ?: "auto"
+        set(value) = prefs.edit().putString(KEY_PREFERRED_SUBTITLE_LANGUAGE, value).apply()
 }

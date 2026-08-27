@@ -35,6 +35,7 @@ import androidx.tv.material3.Text
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.offline.OfflineDownload
 import com.klortek.velora.offline.OfflineDownloadManager
+import com.klortek.velora.platform.PlatformCapabilities
 
 class OfflineDownloadsActivity : ComponentActivity() {
     companion object {
@@ -43,6 +44,10 @@ class OfflineDownloadsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!PlatformCapabilities.supportsOfflineDownloads) {
+            finish()
+            return
+        }
         setContent {
             JellyfinAppTheme {
                 OfflineDownloadsScreen(
