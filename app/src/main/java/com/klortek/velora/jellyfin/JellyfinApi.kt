@@ -994,7 +994,8 @@ class JellyfinApiService(
         // IMPORTANT: MPV/FFmpeg requires correct parameter casing
         // - mediaSourceId (camelCase, not MediaSourceId)
         // - static (lowercase, not Static)
-        // Order: static first, then mediaSourceId, then api_key (conventional order)
+        // Authentication is sent by the MediaBrowser/X-Emby headers configured
+        // on the native player. Keep the access token out of the playback URL.
         val url = URLBuilder().takeFrom("${base}Videos/$itemId/stream").apply {
             subtitleStreamIndex?.let { 
                 // Add subtitle stream index if provided
@@ -1033,7 +1034,6 @@ class JellyfinApiService(
                         // Copy timestamps to avoid re-encoding
                         parameters.append("CopyTimestamps", "true")
                         parameters.append("mediaSourceId", sourceId)
-                        parameters.append("api_key", accessToken)
                     }.buildString()
                     android.util.Log.d("JellyfinAPI", "Using HLS for HDR video with audio transcoding to $targetAudioCodec (progressive playback): $hlsUrl")
                     return hlsUrl
@@ -1052,7 +1052,6 @@ class JellyfinApiService(
                         parameters.append("CopyTimestamps", "true")
                         parameters.append("maxStreamingBitrate", "1000000000")
                         parameters.append("mediaSourceId", sourceId)
-                        parameters.append("api_key", accessToken)
                     }.buildString()
                     android.util.Log.d("JellyfinAPI", "Using HLS for audio transcoding to $targetAudioCodec: $hlsUrl")
                     return hlsUrl
@@ -1075,8 +1074,6 @@ class JellyfinApiService(
             }
             // Add mediaSourceId with correct casing (camelCase, not MediaSourceId)
             parameters.append("mediaSourceId", sourceId)
-            // Add api_key last
-            parameters.append("api_key", accessToken)
         }.buildString()
         android.util.Log.d("JellyfinAPI", "Generated video playback URL: $url")
         return url

@@ -29,6 +29,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - Release metadata is synchronized at version 1.2.2 across Android, webOS,
   Samsung and VIDAA manifests.
+- The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
+  headers instead of putting the Jellyfin token in the playback query string.
 
 ## Explicitly incomplete or requiring verification
 
