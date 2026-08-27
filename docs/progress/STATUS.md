@@ -17,6 +17,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   explicit fallback/option in the current implementation.
 - A pure Kotlin `PlaybackDecisionEngine` now encodes Original First ordering
   and device/preset constraints for native backends.
+- `JellyfinPlaybackMapper` converts real `MediaSource`/`MediaStream` metadata
+  (container, codecs, HDR, dimensions, FPS, bitrate, multichannel audio and
+  subtitle type) into that common playback contract.
 - `PlatformCapabilities.supportsOfflineDownloads` is false for TV builds and
   gates mobile-only offline UI.
 - Jellyfin Live TV client and a conditional TV entry point exist.
@@ -61,7 +64,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Android `testMobileDebugUnitTest`, `assembleMobileDebug`,
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-27.
-- Android unit tests: 4 playback decision tests passing; instrumentation not run.
+- Android unit tests: 6 playback decision/metadata tests passed in the prior
+  run; the follow-up run was blocked by a Gradle cache `AccessDeniedException`
+  while closing Media3 jars, not by a test assertion. Instrumentation not run.
 - Web `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
 - Packaging and SHA-256: generated locally; see `outputs/` (ignored).
