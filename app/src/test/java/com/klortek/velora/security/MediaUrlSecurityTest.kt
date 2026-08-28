@@ -1,0 +1,46 @@
+package com.klortek.velora.security
+
+import com.klortek.velora.player.mpv.MpvUrlBuilder
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+class MediaUrlSecurityTest {
+    @Test
+    fun mpvPlaybackUrlsDoNotEmbedTheAccessToken() {
+        val stream = MpvUrlBuilder.buildStreamUrl(
+            serverUrl = "http://jellyfin.test:8096",
+            itemId = "movie-id",
+            accessToken = "secret-token",
+            mediaSourceId = "source-id"
+        )
+        val live = MpvUrlBuilder.buildLiveTvStreamUrl(
+            serverUrl = "http://jellyfin.test:8096",
+            itemId = "channel-id",
+            accessToken = "secret-token",
+            mediaSourceId = "source-id",
+            liveStreamId = "live-id"
+        )
+
+        assertFalse(stream.contains("secret-token"))
+        assertFalse(stream.contains("api_key", ignoreCase = true))
+        assertFalse(live.contains("secret-token"))
+        assertFalse(live.contains("api_key", ignoreCase = true))
+        assertTrue(stream.contains("mediaSourceId=source-id"))
+        assertTrue(live.contains("LiveStreamId=live-id"))
+    }
+
+    @Test
+    fun mpvDownloadUrlDoesNotEmbedTheAccessToken() {
+        val url = MpvUrlBuilder.buildDownloadUrl(
+            serverUrl = "http://jellyfin.test:8096",
+            itemId = "episode-id",
+            accessToken = "secret-token",
+            mediaSourceId = "source-id"
+        )
+
+        assertFalse(url.contains("secret-token"))
+        assertFalse(url.contains("api_key", ignoreCase = true))
+        assertTrue(url.contains("mediaSourceId=source-id"))
+    }
+}
