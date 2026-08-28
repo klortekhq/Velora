@@ -2050,12 +2050,13 @@ fun JellyfinHomeScreen(
                             }
                         }
                         
-                        // Recently Added Episodes rows - one per TV show library
+                        // Episodes are intentionally not shown on the home screen. They remain
+                        // reachable from the series detail page and Continue Watching.
                         val hasPrecedingRowsForEpisodes = hasPrecedingRowsForShows || tvShowLibraries.any { (recentlyAddedShowsByLibrary[it.Id] ?: emptyList()).isNotEmpty() }
                         tvShowLibraries.forEachIndexed { libraryIndex, library ->
                             val libraryEpisodes = recentlyAddedEpisodesByLibrary[library.Id] ?: emptyList()
                             
-                            if (libraryEpisodes.isNotEmpty()) {
+                            if (false && libraryEpisodes.isNotEmpty()) {
                                 item(key = "recently_added_episodes_${library.Id}", contentType = "media_row") {
                                     val isFirst = !hasPrecedingRowsForEpisodes && libraryIndex == 0
                                     val rowTitle = if (libraryIndex == 0) androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.recently_added_episodes) else androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.recently_added_episodes_in, library.Name)
