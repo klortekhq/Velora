@@ -33,6 +33,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   headers instead of putting the Jellyfin token in the playback query string.
 - The shared playback mapper/decision engine is now invoked from the Android
   MediaSource loading path and records the selected path for diagnostics.
+- Android playback capabilities now probe installed MediaCodec decoders and
+  display HDR types conservatively; unknown container/passthrough support is
+  left unspecified.
 - Aspect selection is applied to both the PlayerView and its real
   `AspectRatioFrameLayout`, including forced 4:3/16:9/cinema modes.
 
@@ -71,7 +74,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-27.
 - Android `testMobileDebugUnitTest` and `compileMobileDebugKotlin` passed on
-  2026-08-28; the build emitted only existing deprecation/KAPT warnings.
+  2026-08-28 after the capability probe fix; the build emitted only existing
+  deprecation/KAPT warnings.
   Instrumentation and real-device playback validation were not run.
 - Web `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
