@@ -6,7 +6,7 @@ Velora es una aplicación independiente para disfrutar de bibliotecas Jellyfin c
 
 ## Qué ofrece
 
-- Inicio tipo streaming con **Seguir viendo**, películas y series añadidas recientemente y episodios recientes.
+- Inicio tipo streaming con **Seguir viendo**, películas y series añadidas recientemente; los episodios se consultan desde la ficha de cada serie y **Seguir viendo**.
 - Fichas completas de películas y series con temporadas, episodios, reparto, estudios, detalles técnicos y títulos relacionados.
 - Reparto interactivo: al abrir una persona se muestran sus películas y series disponibles en Jellyfin.
 - Búsqueda, ordenación y filtros en español.

@@ -77,7 +77,6 @@ fun MobileHomeScreen(
     continueWatching: List<JellyfinItem>,
     recentMovies: List<JellyfinItem>,
     recentShows: List<JellyfinItem>,
-    recentEpisodes: List<JellyfinItem>,
     popular: List<JellyfinItem>,
     unwatched: List<JellyfinItem>,
     libraries: List<JellyfinLibrary>,
