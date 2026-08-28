@@ -54,7 +54,6 @@ import com.klortek.velora.player.SubtitleMapper
 import com.klortek.velora.player.GLVideoSurfaceView
 import com.klortek.velora.player.PlaybackQuality
 import com.klortek.velora.playback.JellyfinPlaybackMapper
-import com.klortek.velora.playback.PlaybackCapabilities
 import com.klortek.velora.playback.PlaybackDecisionEngine
 import com.klortek.velora.playback.PlaybackQuality as DecisionQuality
 import android.widget.FrameLayout
@@ -231,6 +230,9 @@ fun JellyfinVideoPlayerScreen(
             runCatching { PlaybackQuality.valueOf(settings.playbackQuality) }
                 .getOrDefault(PlaybackQuality.ORIGINAL)
         )
+    }
+    val detectedPlaybackCapabilities = remember(context) {
+        com.klortek.velora.playback.AndroidPlaybackCapabilities.detect(context)
     }
     
     // GL Enhancement settings
@@ -751,7 +753,7 @@ fun JellyfinVideoPlayerScreen(
                     val mappedSource = JellyfinPlaybackMapper.source(mediaSource, subtitleStreamIndex)
                     val mappedCapabilities = JellyfinPlaybackMapper.capabilities(
                         mediaSource = mediaSource,
-                        device = PlaybackCapabilities()
+                        device = detectedPlaybackCapabilities
                     )
                     val decisionQuality = when (playbackQuality) {
                         PlaybackQuality.ORIGINAL -> DecisionQuality.ORIGINAL
