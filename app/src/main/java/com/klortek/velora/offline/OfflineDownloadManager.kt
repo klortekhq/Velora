@@ -52,11 +52,8 @@ object OfflineDownloadManager {
         }
 
         val base = serverUrl.trimEnd('/')
-        val query = buildString {
-            append("api_key=").append(Uri.encode(token))
-            mediaSourceId?.let { append("&mediaSourceId=").append(Uri.encode(it)) }
-        }
-        val request = DownloadManager.Request(Uri.parse("$base/Items/$itemId/Download?$query"))
+        val query = mediaSourceId?.let { "?mediaSourceId=${Uri.encode(it)}" } ?: ""
+        val request = DownloadManager.Request(Uri.parse("$base/Items/$itemId/Download$query"))
             .addRequestHeader("X-Emby-Token", token)
             .setTitle(name)
             .setDescription(if (type == "Episode") "E${episodeNumber ?: ""} · Descarga de episodio" else "Descarga de película")

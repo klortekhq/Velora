@@ -31,6 +31,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
+- Android-managed downloads and the MPV fallback now also keep the Jellyfin
+  token in request headers rather than embedding it in playback/download URLs.
 - The shared playback mapper/decision engine is now invoked from the Android
   MediaSource loading path and records the selected path for diagnostics.
 - Android playback capabilities now probe installed MediaCodec decoders and

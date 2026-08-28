@@ -47,7 +47,6 @@ object MpvUrlBuilder {
             // Always use static=true for direct streaming without transcoding
             // Resume position is handled client-side by MPV seeking after load
             append("static=true")
-            append("&api_key=$accessToken")
             append("&mediaSourceId=${mediaSourceId ?: itemId}")
             append("&enableAutoStreamCopy=true")
             append("&allowVideoStreamCopy=true")
@@ -73,7 +72,6 @@ object MpvUrlBuilder {
         val baseUrl = serverUrl.removeSuffix("/")
         return buildString {
             append("$baseUrl/Videos/$itemId/master.m3u8?")
-            append("api_key=$accessToken")
             // Jellyfin otherwise derives AudioCodec from the M3U source and
             // can emit the invalid `AudioCodec=m3u8` query. Explicit HLS
             // codecs keep the manifest valid while Jellyfin still decides
@@ -108,6 +106,6 @@ object MpvUrlBuilder {
         mediaSourceId: String? = null
     ): String {
         val baseUrl = serverUrl.removeSuffix("/")
-        return "$baseUrl/Items/$itemId/Download?api_key=$accessToken&mediaSourceId=${mediaSourceId ?: itemId}"
+        return "$baseUrl/Items/$itemId/Download?mediaSourceId=${mediaSourceId ?: itemId}"
     }
 }
