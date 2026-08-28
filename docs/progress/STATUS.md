@@ -1,6 +1,6 @@
 # Velora implementation status
 
-Updated: 2026-08-27
+Updated: 2026-08-28
 
 This dashboard records verified repository state only. A feature is not marked
 complete merely because code or a previous build artifact exists.
@@ -31,6 +31,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
+- The shared playback mapper/decision engine is now invoked from the Android
+  MediaSource loading path and records the selected path for diagnostics.
+- Aspect selection is applied to both the PlayerView and its real
+  `AspectRatioFrameLayout`, including forced 4:3/16:9/cinema modes.
 
 ## Explicitly incomplete or requiring verification
 
@@ -66,9 +70,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Android `testMobileDebugUnitTest`, `assembleMobileDebug`,
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-27.
-- Android unit tests: 6 playback decision/metadata tests passed in the prior
-  run; the follow-up run was blocked by a Gradle cache `AccessDeniedException`
-  while closing Media3 jars, not by a test assertion. Instrumentation not run.
+- Android `testMobileDebugUnitTest` and `compileMobileDebugKotlin` passed on
+  2026-08-28; the build emitted only existing deprecation/KAPT warnings.
+  Instrumentation and real-device playback validation were not run.
 - Web `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
 - Packaging and SHA-256: generated locally; see `outputs/` (ignored).
@@ -84,7 +88,7 @@ the actual branch base `418383f`.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-Mobile-debug.apk` | `658AE0D44F521392A081F5C0B0B86EAB327D57E6C243B148BCE27BE8F95F7411` |
+| `Velora-Mobile-debug.apk` | `89726FFC0B3BAEE6410BD1247771EC5DAAA8E8D2B89215412D7566ED51E322A6` |
 | `Velora-TV-debug.apk` | `74BDD788D7D52764639D222A8DB27F155D873A9449D0995317BE78F44B0E3A7A` |
 | `Velora-Mobile-release-unsigned.apk` | `0C89B6C9642A98FFAE511440BF2CB91EAF5042D8DEC27B2741907C22DADF9FD7` |
 | `Velora-TV-release-unsigned.apk` | `C5955EC50ED99D2F92C409783E5975ABE06CBA8E6D697FFC7ECE0618338DBB78` |

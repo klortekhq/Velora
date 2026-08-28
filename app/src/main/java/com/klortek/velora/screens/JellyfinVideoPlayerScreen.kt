@@ -53,6 +53,10 @@ import com.klortek.velora.jellyfin.SkipMarkers
 import com.klortek.velora.player.SubtitleMapper
 import com.klortek.velora.player.GLVideoSurfaceView
 import com.klortek.velora.player.PlaybackQuality
+import com.klortek.velora.playback.JellyfinPlaybackMapper
+import com.klortek.velora.playback.PlaybackCapabilities
+import com.klortek.velora.playback.PlaybackDecisionEngine
+import com.klortek.velora.playback.PlaybackQuality as DecisionQuality
 import android.widget.FrameLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -148,6 +152,36 @@ enum class AspectMode(val label: String) {
         val modes = values()
         return modes[(ordinal + 1) % modes.size]
     }
+}
+
+/** Apply the presentation mode to the Media3 frame that measures the video. */
+@OptIn(UnstableApi::class)
+private fun applyAspectModeToPlayerView(
+    playerView: PlayerView,
+    mode: AspectMode
+) {
+    val contentFrame = playerView.findViewById<AspectRatioFrameLayout>(
+        androidx.media3.ui.R.id.exo_content_frame
+    ) ?: return
+
+    val (resizeMode, forcedRatio) = when (mode) {
+        AspectMode.FIT -> AspectRatioFrameLayout.RESIZE_MODE_FIT to 0f
+        AspectMode.FILL -> AspectRatioFrameLayout.RESIZE_MODE_FILL to 0f
+        AspectMode.FOUR_THREE -> AspectRatioFrameLayout.RESIZE_MODE_FIT to (4f / 3f)
+        AspectMode.LETTERBOX -> AspectRatioFrameLayout.RESIZE_MODE_FIT to (16f / 9f)
+        AspectMode.CINEMA -> AspectRatioFrameLayout.RESIZE_MODE_FIT to 2.39f
+        AspectMode.STRETCH -> AspectRatioFrameLayout.RESIZE_MODE_FILL to 0f
+        AspectMode.ORIGINAL -> AspectRatioFrameLayout.RESIZE_MODE_FIT to 0f
+    }
+
+    // Set both layers explicitly: the content frame owns the video-surface
+    // measurement, while PlayerView owns the public resize-mode contract.
+    playerView.resizeMode = resizeMode
+    contentFrame.resizeMode = resizeMode
+    contentFrame.setAspectRatio(forcedRatio)
+    contentFrame.requestLayout()
+    playerView.requestLayout()
+    playerView.invalidate()
 }
 
 @UnstableApi
@@ -709,6 +743,36 @@ fun JellyfinVideoPlayerScreen(
                     // Get the first media source
                     val mediaSource = details.MediaSources?.firstOrNull()
                     val mediaSourceId = mediaSource?.Id
+
+                    // Keep the shared decision contract in the real Android path. The
+                    // player still negotiates with Jellyfin using the selected quality,
+                    // while this classification records the least-destructive path for
+                    // diagnostics and future platform backends.
+                    val mappedSource = JellyfinPlaybackMapper.source(mediaSource, subtitleStreamIndex)
+                    val mappedCapabilities = JellyfinPlaybackMapper.capabilities(
+                        mediaSource = mediaSource,
+                        device = PlaybackCapabilities()
+                    )
+                    val decisionQuality = when (playbackQuality) {
+                        PlaybackQuality.ORIGINAL -> DecisionQuality.ORIGINAL
+                        PlaybackQuality.AUTO -> DecisionQuality.AUTOMATIC
+                        PlaybackQuality.UHD_4K -> DecisionQuality.FOUR_K
+                        PlaybackQuality.HD_20 -> DecisionQuality.FULL_HD_20
+                        PlaybackQuality.HD_10 -> DecisionQuality.FULL_HD_10
+                        PlaybackQuality.HD_720 -> DecisionQuality.HD_5
+                        PlaybackQuality.SD_480 -> DecisionQuality.SD_2
+                    }
+                    val playbackDecision = PlaybackDecisionEngine.decide(
+                        source = mappedSource,
+                        capabilities = mappedCapabilities,
+                        quality = decisionQuality
+                    )
+                    Log.d(
+                        "JellyfinPlayer",
+                        "Playback decision: $playbackDecision quality=${playbackQuality.label} " +
+                            "source=${mappedSource.container}/${mappedSource.videoCodec} " +
+                            "hdr=${mappedSource.hdrFormat ?: "SDR"}"
+                    )
 
                     // Original First: classify HDR from Jellyfin HDR/Dolby Vision metadata, not from a 4K+HEVC guess.
                     val videoStream = mediaSource?.MediaStreams?.firstOrNull { it.Type == "Video" }
@@ -1417,7 +1481,7 @@ fun JellyfinVideoPlayerScreen(
                                         
                                         // Generate MP4 transcoding URL (server will transcode to MP4)
                                         val base = if (apiService.serverBaseUrl.endsWith("/")) apiService.serverBaseUrl else "${apiService.serverBaseUrl}/"
-                                        val mp4Url = "${base}Videos/${item.Id}/stream.mp4?VideoCodec=h264&AudioCodec=aac&mediaSourceId=$mediaSourceId&api_key=${apiService.apiKey}"
+                                        val mp4Url = "${base}Videos/${item.Id}/stream.mp4?VideoCodec=h264&AudioCodec=aac&mediaSourceId=$mediaSourceId"
                                         
                                         // Create media source with transcoded MP4
                                         val httpDataSourceFactory = DefaultHttpDataSource.Factory()
@@ -2582,50 +2646,8 @@ fun JellyfinVideoPlayerScreen(
         // sync so the selector visibly changes the image in either mode.
         glSurfaceViewRef.value?.setAspectMode(currentAspectMode.name)
         playerViewRef.value?.let { pv ->
-            // Get the content frame (AspectRatioFrameLayout) from PlayerView
-            val contentFrame = pv.findViewById<AspectRatioFrameLayout>(androidx.media3.ui.R.id.exo_content_frame)
-            
-            when (currentAspectMode) {
-                AspectMode.FIT -> {
-                    // Fit video within screen, maintaining aspect ratio (black bars if needed)
-                    pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                    contentFrame?.setAspectRatio(0f) // Reset to video's natural aspect ratio
-                }
-                AspectMode.FILL -> {
-                    // Fill screen by cropping video (removes black bars)
-                    pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-                    contentFrame?.setAspectRatio(0f) // Reset to video's natural aspect ratio
-                }
-                AspectMode.FOUR_THREE -> {
-                    pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                    contentFrame?.setAspectRatio(4f / 3f)
-                }
-                AspectMode.LETTERBOX -> {
-                    // Force 16:9 letterbox - video fits inside a 16:9 frame with black bars
-                    pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                    contentFrame?.setAspectRatio(16f / 9f) // Force 16:9 container
-                }
-                AspectMode.CINEMA -> {
-                    // Cinema scope 2.39:1 - movie theater style with wide black bars top/bottom
-                    pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                    contentFrame?.setAspectRatio(2.39f / 1f) // Force cinemascope aspect ratio
-                }
-                AspectMode.STRETCH -> {
-                    // Stretch to fill screen (may distort video)
-                    pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-                    contentFrame?.setAspectRatio(0f)
-                }
-                AspectMode.ORIGINAL -> {
-                    // Display at native resolution without scaling
-                    pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                    contentFrame?.setAspectRatio(0f)
-                }
-            }
-            
-            Log.d("ExoPlayer", "Applied aspect mode: ${currentAspectMode.label}, contentFrame: ${contentFrame != null}")
-            contentFrame?.requestLayout()
-            pv.requestLayout()
-            pv.invalidate()
+            applyAspectModeToPlayerView(pv, currentAspectMode)
+            Log.d("ExoPlayer", "Applied aspect mode: ${currentAspectMode.label}")
         }
     }
     
@@ -3229,41 +3251,7 @@ fun JellyfinVideoPlayerScreen(
                                         pv.player = player
                                     }
                                     
-                                    // Re-apply current aspect mode / resize mode settings on update
-                                    val contentFrame = pv.findViewById<AspectRatioFrameLayout>(androidx.media3.ui.R.id.exo_content_frame)
-                                    when (currentAspectMode) {
-                                        AspectMode.FIT -> {
-                                            pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                                            contentFrame?.setAspectRatio(0f)
-                                        }
-                                        AspectMode.FILL -> {
-                                            pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-                                            contentFrame?.setAspectRatio(0f)
-                                        }
-                                        AspectMode.FOUR_THREE -> {
-                                            pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                                            contentFrame?.setAspectRatio(4f / 3f)
-                                        }
-                                        AspectMode.LETTERBOX -> {
-                                            pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                                            contentFrame?.setAspectRatio(16f / 9f)
-                                        }
-                                        AspectMode.CINEMA -> {
-                                            pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                                            contentFrame?.setAspectRatio(2.39f / 1f)
-                                        }
-                                        AspectMode.STRETCH -> {
-                                            pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-                                            contentFrame?.setAspectRatio(0f)
-                                        }
-                                        AspectMode.ORIGINAL -> {
-                                            pv.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                                            contentFrame?.setAspectRatio(0f)
-                                        }
-                                    }
-                                    contentFrame?.requestLayout()
-                                    pv.requestLayout()
-                                    pv.invalidate()
+                                    applyAspectModeToPlayerView(pv, currentAspectMode)
                                     
                                     // Ensure view is focusable and can receive key events
                                     if (!pv.isFocusable) {
