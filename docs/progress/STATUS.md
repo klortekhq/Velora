@@ -1,6 +1,6 @@
 # Velora implementation status
 
-Updated: 2026-08-28
+Updated: 2026-08-29
 
 This dashboard records verified repository state only. A feature is not marked
 complete merely because code or a previous build artifact exists.
@@ -38,6 +38,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   left unspecified.
 - Aspect selection is applied to both the PlayerView and its real
   `AspectRatioFrameLayout`, including forced 4:3/16:9/cinema modes.
+- The home UI does not render a separate recently-added episode row; episodes
+  remain reachable from series details and Continue Watching.
 
 ## Explicitly incomplete or requiring verification
 

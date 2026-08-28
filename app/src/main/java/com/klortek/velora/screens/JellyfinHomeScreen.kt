@@ -306,13 +306,15 @@ fun JellyfinHomeScreen(
     
     val recentlyAddedShowsByLibraryState = repository?.recentlyAddedShowsByLibrary?.collectAsState(initial = emptyMap())
     val recentlyAddedShowsByLibrary = recentlyAddedShowsByLibraryState?.value ?: emptyMap()
-    
+    // Retained for repository compatibility; the home UI deliberately does
+    // not expose a separate recently-added episode row.
     val recentlyAddedEpisodesByLibraryState = repository?.recentlyAddedEpisodesByLibrary?.collectAsState(initial = emptyMap())
     val recentlyAddedEpisodesByLibrary = recentlyAddedEpisodesByLibraryState?.value ?: emptyMap()
     
-    // Get TV show libraries (libraries that have shows or episodes)
+    // Get TV show libraries. Episodes remain available in series details and
+    // Continue Watching rather than in a separate home row.
     val tvShowLibraries = (movieLibrariesState?.value ?: emptyList()).filter { library ->
-        recentlyAddedShowsByLibrary.containsKey(library.Id) || recentlyAddedEpisodesByLibrary.containsKey(library.Id)
+        recentlyAddedShowsByLibrary.containsKey(library.Id)
     }.sortedBy { it.Name } // Sort by name for consistent ordering
 
     val mobileRecentMovies = remember(recentlyAddedMoviesByLibrary) {
@@ -320,9 +322,6 @@ fun JellyfinHomeScreen(
     }
     val mobileRecentShows = remember(recentlyAddedShowsByLibrary) {
         recentlyAddedShowsByLibrary.values.flatten().distinctBy { it.Id }.take(30)
-    }
-    val mobileRecentEpisodes = remember(recentlyAddedEpisodesByLibrary) {
-        recentlyAddedEpisodesByLibrary.values.flatten().distinctBy { it.Id }.take(30)
     }
     val mobilePopular = remember(mobileRecentMovies, mobileRecentShows) {
         (mobileRecentMovies + mobileRecentShows).distinctBy { it.Id }
@@ -633,7 +632,6 @@ fun JellyfinHomeScreen(
             continueWatching = continueWatchingItems,
             recentMovies = mobileRecentMovies,
             recentShows = mobileRecentShows,
-            recentEpisodes = mobileRecentEpisodes,
             popular = mobilePopular,
             unwatched = mobileUnwatched,
             libraries = libraries,
