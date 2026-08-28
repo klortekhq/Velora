@@ -968,10 +968,9 @@ class JellyfinApiService(
             
             // Device profile hints for quality
             parameters.append("mediaSourceId", sourceId)
-            parameters.append("api_key", accessToken)
         }.buildString()
-        
-        android.util.Log.d("JellyfinAPI", "🔄 Server transcoding URL: $hlsUrl")
+
+        android.util.Log.d("JellyfinAPI", "Server transcoding stream prepared")
         android.util.Log.d("JellyfinAPI", "   Video: $targetVideoCodec @ ${maxBitrateMbps}Mbps, Audio: $audioCodec @ 640kbps")
         android.util.Log.d("JellyfinAPI", "   Max Resolution: 3840x2160 (4K)")
         return hlsUrl
@@ -1139,7 +1138,7 @@ class JellyfinApiService(
         // Works for: external sidecar .srt files, embedded subtitles, forced subtitles
         val url = "$server/Videos/$itemId/$mediaSourceId/Subtitles/$streamIndex/Stream.$extension?api_key=$accessToken"
         
-        android.util.Log.d("JellyfinAPI", "✅ Subtitle URL (isExternal=$isExternal, codec=$codec, ext=$extension): $url")
+        android.util.Log.d("JellyfinAPI", "Subtitle stream prepared (isExternal=$isExternal, codec=$codec, ext=$extension)")
         return url
     }
     
