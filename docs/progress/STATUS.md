@@ -72,7 +72,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - `git diff --check`: passing for the current working tree.
 - Android `testMobileDebugUnitTest`, `assembleMobileDebug`,
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
-  passing on 2026-08-27.
+  passing on 2026-08-29.
 - Android `testMobileDebugUnitTest` and `compileMobileDebugKotlin` passed on
   2026-08-28 after the capability probe fix; the build emitted only existing
   deprecation/KAPT warnings.
@@ -92,7 +92,7 @@ the actual branch base `418383f`.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-Mobile-debug.apk` | `8DD83ECA430F8497C71EA550E2FD55B47131BC1469BCF7207C0C37A96F7BA398` |
-| `Velora-TV-debug.apk` | `141330C77C8DFFEFCE98C92F18BEAF623AEEA3EE3EA0661C432EBEC39BF87176` |
-| `Velora-Mobile-release-unsigned.apk` | `BE23B2A15B50501479901ACD0139653A96AE9B5EDD6BEA864FBFE0245787355D` |
-| `Velora-TV-release-unsigned.apk` | `6A592C4FB20E6D62C21FBC9C8F67DE90809833312E291065CD9A553C59296BB8` |
+| `Velora-Mobile-debug.apk` | `A47640FAEF55E3BE0DAB3B7DF4468D016BD39ABE282D57F8BFA983FA9A3893B6` |
+| `Velora-TV-debug.apk` | `5836983E0093565519B5D69FF00A6773152F29F0D296C3658D9F40DF1BC7DBF0` |
+| `Velora-Mobile-release-unsigned.apk` | `F3495E24B861C691E56185A6B0A57CC41861C5AB1AB6AEA9AA55A47B63CBFB62` |
+| `Velora-TV-release-unsigned.apk` | `A219F80FD6393C2D422D5330B697AD815E83341BE6C6AD59510687DDD71834DE` |
