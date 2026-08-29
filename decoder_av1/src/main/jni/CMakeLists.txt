@@ -27,6 +27,8 @@ set(ABSL_PROPAGATE_CXX_STD ON)
 # vendoring the unrelated Abseil dependency just to configure CMake.
 add_compile_definitions(LIBGAV1_THREADPOOL_USE_STD_MUTEX=1)
 set(LIBGAV1_THREADPOOL_USE_STD_MUTEX 1 CACHE STRING "Use the standard C++ mutex implementation" FORCE)
+set(LIBGAV1_ENABLE_EXAMPLES OFF CACHE BOOL "Disable libgav1 examples" FORCE)
+set(LIBGAV1_ENABLE_TESTS OFF CACHE BOOL "Disable libgav1 tests" FORCE)
 
 project(libgav1JNI C CXX)
 
