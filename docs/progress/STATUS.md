@@ -129,6 +129,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Release workflows now share a tag-scoped concurrency group, so Android and
   web assets update one release serially; web checksums use a distinct name
   and cannot overwrite the Android checksum manifest.
+- Release `v1.2.4` is published at https://github.com/klortekhq/Velora/releases/tag/v1.2.4
+  with mobile/TV debug and unsigned release APKs plus `SHA256SUMS.txt`; the
+  four APKs were rebuilt and verified before upload.
 
 ## Explicitly incomplete or requiring verification
 
@@ -188,6 +191,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   decoder on 2026-08-29.
 - Web `npm test` and `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
+- GitHub Release `v1.2.4` assets and their published checksums were verified
+  after upload.
 - Release `v1.2.3` was verified on GitHub with the four uniquely named APK
   assets and `SHA256SUMS.txt`; the release URL is
   `https://github.com/klortekhq/Velora/releases/tag/v1.2.3`.
