@@ -1,6 +1,8 @@
 # Velora
 
-### Cliente Jellyfin multiplataforma en desarrollo
+### Cliente Jellyfin multiplataforma
+
+Versión actual: **1.2.2** · Por **Klørtek**
 
 Velora es una aplicación independiente para disfrutar de bibliotecas Jellyfin con una interfaz rápida, limpia y adaptada a cada pantalla. La experiencia móvil está pensada para tocar y deslizar; la experiencia de televisión, para mando a distancia, D-pad y pantalla grande.
 
@@ -84,16 +86,20 @@ Requisitos:
 ```bash
 git clone https://github.com/klortekhq/Velora.git
 cd Velora
-./gradlew :app:assembleDebug
+./gradlew :app:testMobileDebugUnitTest \
+  :app:assembleMobileDebug :app:assembleTvDebug
 ```
 
-Para generar una versión release unsigned:
+Para generar los APK release unsigned de móvil/tablet y TV:
 
 ```bash
-./gradlew :app:assembleRelease
+./gradlew :app:assembleMobileRelease :app:assembleTvRelease
 ```
 
-La release unsigned debe firmarse con una clave propia antes de distribuirse.
+Las variantes debug son instalables para pruebas. Las variantes release
+generadas aquí no están firmadas; deben firmarse con una clave propia antes de
+distribuirse. El flujo de GitHub Actions ejecuta estas mismas tareas y publica
+los artefactos juntos cuando se crea una etiqueta `v*`.
 
 ## Rendimiento
 
