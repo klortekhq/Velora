@@ -38,4 +38,8 @@
     <string name="search_movies_series">Buscar películas y series</string>
     <string name="action_play">Reproducir</string>
     <string name="action_back">Atrás</string>
+    <string name="downloads_empty">No hay contenido descargado</string>
+    <string name="offline_available">Disponible sin conexión</string>
+    <string name="downloading_progress">Descargando… %1$d%%</string>
+    <string name="action_delete">Eliminar</string>
 </resources>

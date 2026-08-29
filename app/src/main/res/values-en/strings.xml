@@ -22,4 +22,8 @@
     <string name="search_movies_series">Search movies and series</string>
     <string name="action_play">Play</string>
     <string name="action_back">Back</string>
+    <string name="downloads_empty">No downloaded content</string>
+    <string name="offline_available">Available offline</string>
+    <string name="downloading_progress">Downloading… %1$d%%</string>
+    <string name="action_delete">Delete</string>
 </resources>

@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.Icon
@@ -78,17 +79,21 @@ class OfflineDownloadsActivity : ComponentActivity() {
                 Text("Descargas", style = MaterialTheme.typography.headlineSmall)
             }
             if (entries.isEmpty()) {
-                Text("No hay contenido descargado", color = Color.Gray, modifier = Modifier.padding(24.dp))
+                Text(stringResource(R.string.downloads_empty), color = Color.Gray, modifier = Modifier.padding(24.dp))
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxSize()) {
                     items(entries, key = { it.downloadId }) { entry ->
                         Row(Modifier.fillMaxWidth().clickable(enabled = entry.isComplete) { onPlay(entry) }.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
                                 Text(entry.name, style = MaterialTheme.typography.titleMedium)
-                                Text(if (entry.isComplete) "Disponible sin conexión" else "Descargando… ${entry.progress}%", color = Color.Gray)
+                                Text(
+                                    if (entry.isComplete) stringResource(R.string.offline_available)
+                                    else stringResource(R.string.downloading_progress, entry.progress),
+                                    color = Color.Gray
+                                )
                             }
                             if (entry.isComplete) IconButton(onClick = { onPlay(entry) }) { Icon(Icons.Default.PlayArrow, "Reproducir") }
-                            Button(onClick = { onDelete(entry) }) { Icon(Icons.Default.Delete, "Eliminar") }
+                            Button(onClick = { onDelete(entry) }) { Icon(Icons.Default.Delete, stringResource(R.string.action_delete)) }
                         }
                     }
                 }
