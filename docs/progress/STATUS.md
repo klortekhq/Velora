@@ -110,6 +110,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Original, Alta (1080p), Media (720p) and Baja (480p); the selected profile
   is persisted in the offline index and lower profiles explicitly request a
   Jellyfin transcode rather than being mislabeled as the original file.
+- A device-independent `OfflineStoragePolicy` now rejects invalid/overflowing
+  sizes and enforces both a safety reserve and configurable minimum-free-space
+  and managed-offline limits; it has deterministic unit coverage. Integration
+  with the download queue and settings UI is still pending.
 - Live TV now requests the current programme with the channel list and a
   bounded six-hour upcoming guide window, maps the next programme per channel,
   and renders the guide lazily in the existing virtualized `LazyColumn`; every
@@ -152,8 +156,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   and runtime validation remain incomplete.
 - Apple iOS/iPadOS/tvOS clients are not present/verified.
 - VIDAA support is not validated on a real device or certified runtime.
-- Offline queue/storage recovery, quality selection, integrity verification,
-  storage policy and full end-to-end offline journey are not yet verified;
+- Offline queue/storage recovery, integrity verification, settings integration
+  and the full end-to-end offline journey are not yet verified; the storage
+  policy contract itself now has unit coverage.
   the durable metadata foundation is now in place.
 - Theme music, a Jellyfin-first trailer resolver, persistent preview, and large-library
   virtualization need implementation and critic testing.
