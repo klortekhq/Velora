@@ -40,6 +40,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Authentication diagnostics no longer print full request URLs, auth headers,
   token-bearing error bodies, or generated playback URLs; MPV's legacy launcher
   also uses its authenticated request headers without an `api_key` query.
+- TMDB trailer diagnostics now redact user-provided API keys; the regression
+  test prevents secret values from returning to Logcat.
 - The web client now scopes Jellyfin tokens and user IDs to `sessionStorage`,
   migrates legacy localStorage values once, and removes the durable token copy;
   server URL and non-sensitive UI preferences remain persistent.
@@ -193,6 +195,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   VIDAA hosted HTML5 bundle generated.
 - GitHub Release `v1.2.4` assets and their published checksums were verified
   after upload.
+- Android `testMobileDebugUnitTest` passed after the TMDB log-redaction change;
+  the new security regression is included in the suite.
 - Release `v1.2.3` was verified on GitHub with the four uniquely named APK
   assets and `SHA256SUMS.txt`; the release URL is
   `https://github.com/klortekhq/Velora/releases/tag/v1.2.3`.
