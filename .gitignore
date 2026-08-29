@@ -27,6 +27,9 @@ local.properties
 /timeago-parser/build/
 /app/release/
 /outputs/
+/release-*/
+/release-assets-*/
+/SHA256SUMS-*.txt
 /*.log
 /build_*.txt
 /velora-fire-test.png
