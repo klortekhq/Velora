@@ -199,7 +199,12 @@ fun MobileSeriesDetailsLayout(
 }
 
 @Composable private fun MobileBackButton(onBack: (() -> Unit)?) {
-    androidx.tv.material3.IconButton(onClick = { onBack?.invoke() }, modifier = Modifier.size(48.dp)) { Icon(Icons.Default.ArrowBack, "Atrás", tint = Color.White) }
+    androidx.compose.material3.IconButton(
+        onClick = { onBack?.invoke() },
+        modifier = Modifier.size(52.dp)
+    ) {
+        androidx.compose.material3.Icon(Icons.Default.ArrowBack, "Atrás", tint = Color.White)
+    }
 }
 
 @Composable private fun MobilePlayButton(onClick: () -> Unit) {
@@ -229,9 +234,14 @@ fun MobileSeriesDetailsLayout(
 }
 
 @Composable private fun MobileActionButton(label: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable(onClick = onClick)) {
-        Box(Modifier.size(48.dp).clip(CircleShape).background(Color.White.copy(alpha = .14f)), contentAlignment = Alignment.Center) {
-            Icon(icon, label, tint = Color.White)
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.widthIn(min = 64.dp)) {
+        androidx.compose.material3.IconButton(
+            onClick = onClick,
+            modifier = Modifier.size(52.dp)
+        ) {
+            Box(Modifier.fillMaxSize().clip(CircleShape).background(Color.White.copy(alpha = .14f)), contentAlignment = Alignment.Center) {
+                androidx.compose.material3.Icon(icon, label, tint = Color.White)
+            }
         }
         Text(label, color = Color.White.copy(alpha = .9f), style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 4.dp))
     }
@@ -323,7 +333,11 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
         }
         MobileArtwork(image, apiService, episode.Name, Modifier.width(140.dp).aspectRatio(1.65f))
         Column(Modifier.weight(1f).padding(start = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text("E${episode.IndexNumber ?: ""} · ${episode.Name}", color = Color.White, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(episode.formattedRuntime ?: "", color = Color.White.copy(alpha = .7f)); Text(episode.Overview ?: "", color = Color.White.copy(alpha = .78f), maxLines = 2, overflow = TextOverflow.Ellipsis) }
-        androidx.compose.material3.IconButton(onClick = onDownload) { Icon(Icons.Default.Download, "Descargar", tint = MobileCyan) }
+        if (PlatformCapabilities.supportsOfflineDownloads) {
+            androidx.compose.material3.IconButton(onClick = onDownload) {
+                androidx.compose.material3.Icon(Icons.Default.Download, "Descargar", tint = MobileCyan)
+            }
+        }
     }
 }
 
