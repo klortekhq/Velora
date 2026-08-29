@@ -101,6 +101,13 @@ libgav1_track_configuration_variable(LIBGAV1_SANITIZE)
 libgav1_track_configuration_variable(LIBGAV1_GENERATED_SOURCES_DIRECTORY)
 
 # Controls use of std::mutex and absl::Mutex in ThreadPool.
+# Android ships the production decoder without libgav1's optional Abseil
+# dependency. Set this in the libgav1 scope as well as the JNI parent scope;
+# the vendored project uses this value while computing its own configuration.
+if(ANDROID OR IOS)
+  set(LIBGAV1_THREADPOOL_USE_STD_MUTEX 1 CACHE STRING
+      "Use the standard C++ mutex implementation" FORCE)
+endif()
 libgav1_track_configuration_variable(LIBGAV1_THREADPOOL_USE_STD_MUTEX)
 if((DEFINED
     LIBGAV1_THREADPOOL_USE_STD_MUTEX
