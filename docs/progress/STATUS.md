@@ -83,6 +83,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   watched state and genre; the selected sort mode is persisted consistently.
 - The mobile sort/filter panel is height-bounded and vertically scrollable, so
   long genre lists remain reachable on small phones and tablets.
+- TV movie and series libraries now expose the same expanded sort choices
+  (runtime, random, critic rating and community rating) and persist the
+  selected mode through the shared settings preference.
 - The home UI does not render a separate recently-added episode row; episodes
   remain reachable from series details and Continue Watching.
 - Offline download metadata now uses an app-private SQLite index with a
