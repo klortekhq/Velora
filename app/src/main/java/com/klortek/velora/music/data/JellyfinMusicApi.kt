@@ -282,7 +282,7 @@ class JellyfinMusicApi(
                     } else if (item.AlbumId != null) {
                         imageUrl(item.AlbumId)
                     } else null,
-                    streamUrl = "${base}Audio/${item.Id}/universal?UserId=$userId&Container=opus,webm|opus,mp3,aac,m4a|aac,m4b|aac,flac,webma,webm|webma,wav,ogg&TranscodingContainer=ts&TranscodingProtocol=hls&AudioCodec=aac&api_key=$accessToken",
+                    streamUrl = "${base}Audio/${item.Id}/universal?UserId=$userId&Container=opus,webm|opus,mp3,aac,m4a|aac,m4b|aac,flac,webma,webm|webma,wav,ogg&TranscodingContainer=ts&TranscodingProtocol=hls&AudioCodec=aac",
                     codec = audioStream?.Codec,
                     bitrate = audioStream?.BitRate ?: item.MediaSources?.firstOrNull()?.Bitrate,
                     sampleRate = audioStream?.SampleRate,
@@ -335,7 +335,7 @@ class JellyfinMusicApi(
                     } else if (item.AlbumId != null) {
                         imageUrl(item.AlbumId)
                     } else null,
-                    streamUrl = "${base}Audio/${item.Id}/universal?UserId=$userId&Container=opus,webm|opus,mp3,aac,m4a|aac,m4b|aac,flac,webma,webm|webma,wav,ogg&TranscodingContainer=ts&TranscodingProtocol=hls&AudioCodec=aac&api_key=$accessToken",
+                    streamUrl = "${base}Audio/${item.Id}/universal?UserId=$userId&Container=opus,webm|opus,mp3,aac,m4a|aac,m4b|aac,flac,webma,webm|webma,wav,ogg&TranscodingContainer=ts&TranscodingProtocol=hls&AudioCodec=aac",
                     codec = audioStream?.Codec,
                     bitrate = audioStream?.BitRate ?: item.MediaSources?.firstOrNull()?.Bitrate,
                     sampleRate = audioStream?.SampleRate,
@@ -425,7 +425,7 @@ class JellyfinMusicApi(
                     trackNumber = item.IndexNumber ?: 0,
                     durationMs = (item.RunTimeTicks ?: 0) / 10000,
                     imageUrl = if (item.AlbumId != null) imageUrl(item.AlbumId) else null,
-                    streamUrl = "${base}Audio/${item.Id}/universal?UserId=$userId&Container=opus,webm|opus,mp3,aac,m4a|aac,m4b|aac,flac,webma,webm|webma,wav,ogg&TranscodingContainer=ts&TranscodingProtocol=hls&AudioCodec=aac&api_key=$accessToken",
+                    streamUrl = "${base}Audio/${item.Id}/universal?UserId=$userId&Container=opus,webm|opus,mp3,aac,m4a|aac,m4b|aac,flac,webma,webm|webma,wav,ogg&TranscodingContainer=ts&TranscodingProtocol=hls&AudioCodec=aac",
                     codec = null,
                     bitrate = null,
                     sampleRate = null

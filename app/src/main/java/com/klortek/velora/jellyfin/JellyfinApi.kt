@@ -1134,9 +1134,10 @@ class JellyfinApiService(
         }
         
         // ✅ CORRECT URL FORMAT (CONFIRMED WORKING)
-        // Example: /Videos/{itemId}/{mediaSourceId}/Subtitles/{index}/Stream.srt?api_key=xxx
-        // Works for: external sidecar .srt files, embedded subtitles, forced subtitles
-        val url = "$server/Videos/$itemId/$mediaSourceId/Subtitles/$streamIndex/Stream.$extension?api_key=$accessToken"
+        // Authentication is supplied through request headers by the caller.
+        // Keeping the token out of the URL prevents it leaking through logs,
+        // caches, browser history and intermediary proxies.
+        val url = "$server/Videos/$itemId/$mediaSourceId/Subtitles/$streamIndex/Stream.$extension"
         
         android.util.Log.d("JellyfinAPI", "Subtitle stream prepared (isExternal=$isExternal, codec=$codec, ext=$extension)")
         return url
@@ -1277,11 +1278,11 @@ class JellyfinApiService(
     
     /**
      * Build correct Jellyfin subtitle URL for streaming subtitles.
-     * Format: /Videos/{itemId}/{mediaSourceId}/Subtitles/{index}/Stream?api_key=xxx
+     * Authentication is supplied through the Jellyfin request headers.
      */
     fun buildSubtitleUrl(itemId: String, mediaSourceId: String, index: Int): String {
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
-        return "${base}Videos/$itemId/$mediaSourceId/Subtitles/$index/Stream?api_key=$accessToken"
+        return "${base}Videos/$itemId/$mediaSourceId/Subtitles/$index/Stream"
     }
 
     suspend fun getLibraries(): List<JellyfinLibrary> {
