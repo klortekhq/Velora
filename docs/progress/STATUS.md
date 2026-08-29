@@ -82,6 +82,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Offline playback now enters the shared Media3/ExoPlayer screen directly and
   does not require a configured Jellyfin session; the explicit MPV setting and
   fallback remain available only for streamed playback.
+- Offline completion semantics have regression coverage for provider-backed
+  `content://` URIs, successful downloads without a filesystem path, and
+  incomplete entries.
 
 ## Explicitly incomplete or requiring verification
 
