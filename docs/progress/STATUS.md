@@ -65,6 +65,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 ## Explicitly incomplete or requiring verification
 
 - Android now has a tested locale catalog, translated core language/audio/subtitle settings, and resource-backed mobile navigation/search labels in Spanish, English, French and German; full source-wide internationalization is not yet verified because legacy hardcoded strings remain.
+- The mobile offline-download screen now also uses localized resources for empty, progress, availability and delete states in those four languages.
 - Jellyseerr/request and Discover legacy source remains only for migration
   compatibility and is now unreachable from the product surface; it should be
   removed in a later cleanup once migration coverage exists. TMDB remains only

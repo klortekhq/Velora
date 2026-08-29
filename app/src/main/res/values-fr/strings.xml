@@ -22,4 +22,8 @@
     <string name="search_movies_series">Rechercher des films et des séries</string>
     <string name="action_play">Lire</string>
     <string name="action_back">Retour</string>
+    <string name="downloads_empty">Aucun contenu téléchargé</string>
+    <string name="offline_available">Disponible hors connexion</string>
+    <string name="downloading_progress">Téléchargement… %1$d%%</string>
+    <string name="action_delete">Supprimer</string>
 </resources>

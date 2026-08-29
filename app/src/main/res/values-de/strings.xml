@@ -22,4 +22,8 @@
     <string name="search_movies_series">Filme und Serien suchen</string>
     <string name="action_play">Wiedergeben</string>
     <string name="action_back">Zurück</string>
+    <string name="downloads_empty">Keine heruntergeladenen Inhalte</string>
+    <string name="offline_available">Offline verfügbar</string>
+    <string name="downloading_progress">Wird heruntergeladen… %1$d%%</string>
+    <string name="action_delete">Löschen</string>
 </resources>
