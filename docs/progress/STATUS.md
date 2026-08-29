@@ -61,7 +61,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Explicitly incomplete or requiring verification
 
-- Full source-wide internationalization is not yet verified; legacy hardcoded
+- Android now has a tested locale catalog and translated core language/audio/subtitle settings; full source-wide internationalization is not yet verified, with legacy hardcoded
   strings remain.
 - Jellyseerr/request and Discover legacy source remains only for migration
   compatibility and is now unreachable from the product surface; it should be
