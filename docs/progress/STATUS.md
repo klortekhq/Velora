@@ -112,6 +112,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   bounded six-hour upcoming guide window, maps the next programme per channel,
   and renders the guide lazily in the existing virtualized `LazyColumn`; every
   channel row remains an actionable Jellyfin playback entry.
+- Live TV channels now expose Jellyfin-backed favorites and tag-based groups;
+  the Android screen provides touch/focus-safe filters and favorite toggles,
+  with deterministic JVM coverage for the filtering rules.
 - Web artwork URLs no longer contain the Jellyfin token; the browser requests
   artwork with `X-Emby-Token` and assigns a short-lived object URL, covered by
   the web regression test. Browser-native video streaming still uses the

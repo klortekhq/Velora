@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LiveTv
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -36,6 +39,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,6 +70,9 @@ import com.klortek.velora.livetv.LiveTvChannel
 import com.klortek.velora.livetv.LiveTvClient
 import com.klortek.velora.livetv.formatProgramTimeRange
 import com.klortek.velora.livetv.programProgress
+import com.klortek.velora.livetv.filterLiveTvChannels
+import com.klortek.velora.livetv.liveTvGroups
+import kotlinx.coroutines.launch
 
 class LiveTvActivity : ComponentActivity() {
     companion object {
@@ -118,6 +125,9 @@ private fun LiveTvScreen(
     var isLoading by remember { mutableStateOf(true) }
     var loadError by remember { mutableStateOf<String?>(null) }
     var channels by remember { mutableStateOf<List<LiveTvChannel>>(emptyList()) }
+    var favoritesOnly by remember { mutableStateOf(false) }
+    var selectedGroup by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
     val firstChannelFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(client, refreshKey) {
@@ -219,6 +229,28 @@ private fun LiveTvScreen(
 
         Spacer(modifier = Modifier.height(if (isMobile) 12.dp else 14.dp))
 
+        if (channels.isNotEmpty()) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                LiveTvFilterPill(stringResource(R.string.live_tv_all_channels), !favoritesOnly && selectedGroup == null) {
+                    favoritesOnly = false
+                    selectedGroup = null
+                }
+                LiveTvFilterPill(stringResource(R.string.live_tv_favorites), favoritesOnly) {
+                    favoritesOnly = !favoritesOnly
+                    if (favoritesOnly) selectedGroup = null
+                }
+                liveTvGroups(channels).forEach { group ->
+                    LiveTvFilterPill(group, selectedGroup.equals(group, ignoreCase = true)) {
+                        selectedGroup = if (selectedGroup.equals(group, ignoreCase = true)) null else group
+                        favoritesOnly = false
+                    }
+                }
+            }
+        }
+
         when {
             isLoading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -260,11 +292,12 @@ private fun LiveTvScreen(
             }
 
             else -> {
+                val visibleChannels = filterLiveTvChannels(channels, favoritesOnly, selectedGroup)
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(channels, key = { it.Id }) { channel ->
+                    items(visibleChannels, key = { it.Id }) { channel ->
                         LiveTvChannelRow(
                             channel = channel,
                             client = client,
@@ -274,7 +307,19 @@ private fun LiveTvScreen(
                             } else {
                                 null
                             },
-                            onClick = { onPlay(channel) }
+                            onClick = { onPlay(channel) },
+                            onToggleFavorite = {
+                                val favorite = channel.UserData?.IsFavorite != true
+                                scope.launch {
+                                    runCatching { client.setFavorite(channel.Id, favorite) }
+                                        .onSuccess {
+                                            channels = channels.map { current ->
+                                                if (current.Id == channel.Id) current.copy(UserData = com.klortek.velora.livetv.LiveTvUserData(favorite)) else current
+                                            }
+                                        }
+                                        .onFailure { loadError = it.message ?: "No se pudo actualizar el favorito" }
+                                }
+                            }
                         )
                     }
                 }
@@ -289,7 +334,8 @@ private fun LiveTvChannelRow(
     client: LiveTvClient,
     compact: Boolean = false,
     focusRequester: FocusRequester? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onToggleFavorite: () -> Unit
 ) {
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -368,7 +414,13 @@ private fun LiveTvChannelRow(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
                     )
-
+                    IconButton(onClick = onToggleFavorite) {
+                        Icon(
+                            imageVector = if (channel.UserData?.IsFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = stringResource(if (channel.UserData?.IsFavorite == true) R.string.live_tv_remove_favorite else R.string.live_tv_add_favorite),
+                            tint = if (channel.UserData?.IsFavorite == true) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = .65f)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(2.dp))
@@ -421,6 +473,20 @@ private fun LiveTvChannelRow(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun LiveTvFilterPill(label: String, selected: Boolean, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
+            .clickable(onClick = onClick)
+            .focusable()
+            .padding(horizontal = 14.dp, vertical = 8.dp)
+    ) {
+        Text(label, color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface, maxLines = 1)
     }
 }
 

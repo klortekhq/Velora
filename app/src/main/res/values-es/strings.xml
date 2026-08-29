@@ -27,6 +27,10 @@
     <string name="live_tv_refresh">Actualizar canales</string>
     <string name="live_tv_channel_count">%1$d canales</string>
     <string name="live_tv_playback_error">No se pudo abrir este canal. Inténtalo de nuevo.</string>
+    <string name="live_tv_all_channels">Todos</string>
+    <string name="live_tv_favorites">Favoritos</string>
+    <string name="live_tv_add_favorite">Añadir a favoritos</string>
+    <string name="live_tv_remove_favorite">Quitar de favoritos</string>
     <string name="back">Atrás</string>
     <string name="collections">Colecciones</string>
     <string name="continue_watching">Seguir viendo</string>
