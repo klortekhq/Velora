@@ -148,6 +148,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Release `v1.2.6` is published at https://github.com/klortekhq/Velora/releases/tag/v1.2.6
   with four rebuilt APK variants and a remotely verified `SHA256SUMS.txt`; it
   includes the pre-enqueue offline storage safety gate.
+- Release `v1.2.7` is published at https://github.com/klortekhq/Velora/releases/tag/v1.2.7
+  with four rebuilt APK variants and a remotely verified `SHA256SUMS.txt`; it
+  includes the mobile/tablet storage-limit selector and keeps that control out
+  of TV settings.
 - GitHub repository visibility is verified as public, with source, licensing,
   dashboard and release artifacts available at https://github.com/klortekhq/Velora.
 
