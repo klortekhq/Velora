@@ -4,6 +4,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import com.klortek.velora.platform.PlatformCapabilities
 import org.json.JSONArray
 import java.io.File
 
@@ -43,6 +44,9 @@ object OfflineDownloadManager {
         seasonNumber: Int? = null,
         episodeNumber: Int? = null
     ): OfflineDownload {
+        check(PlatformCapabilities.supportsOfflineDownloads) {
+            "Offline downloads are only supported on mobile and tablet builds"
+        }
         val existing = refresh(context).firstOrNull { it.itemId == itemId }
         if (existing != null) {
             if (existing.isComplete || existing.status == DownloadManager.STATUS_PENDING ||

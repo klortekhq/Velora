@@ -67,6 +67,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Offline download metadata now uses an app-private SQLite index with a
   one-time migration from the former JSON preference store; completed media
   metadata survives process recreation without depending on SharedPreferences.
+- The offline enqueue boundary now enforces the mobile/tablet capability guard
+  itself, so TV builds cannot start a download even if a future caller bypasses
+  the UI. The mobile episode download control also uses the mobile Material
+  control rather than the TV-specific control.
 
 ## Explicitly incomplete or requiring verification
 

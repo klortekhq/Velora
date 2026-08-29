@@ -323,7 +323,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
         }
         MobileArtwork(image, apiService, episode.Name, Modifier.width(140.dp).aspectRatio(1.65f))
         Column(Modifier.weight(1f).padding(start = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text("E${episode.IndexNumber ?: ""} · ${episode.Name}", color = Color.White, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(episode.formattedRuntime ?: "", color = Color.White.copy(alpha = .7f)); Text(episode.Overview ?: "", color = Color.White.copy(alpha = .78f), maxLines = 2, overflow = TextOverflow.Ellipsis) }
-        androidx.tv.material3.IconButton(onClick = onDownload) { Icon(Icons.Default.Download, "Descargar", tint = MobileCyan) }
+        androidx.compose.material3.IconButton(onClick = onDownload) { Icon(Icons.Default.Download, "Descargar", tint = MobileCyan) }
     }
 }
 
