@@ -2649,6 +2649,15 @@ fun JellyfinVideoPlayerScreen(
                     if (kotlin.math.abs(videoAspectRatio - detectedRatio) > 0.01f) {
                         videoAspectRatio = detectedRatio
                     }
+                    // Media3 reapplies the source ratio whenever a new
+                    // VideoSize arrives. That internal update could overwrite
+                    // the mode selected by the user, particularly after
+                    // entering fullscreen or switching streams. Reapply the
+                    // Velora mode after Media3 has processed the dimensions.
+                    playerViewRef.value?.let { playerView ->
+                        applyAspectModeToPlayerView(playerView, currentAspectMode)
+                    }
+                    glSurfaceViewRef.value?.setAspectMode(currentAspectMode.name)
                 }
                 delay(500) // Update every 500ms
             }

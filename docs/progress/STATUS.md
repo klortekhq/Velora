@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at version 1.2.7 across Android, webOS,
+- Release metadata is synchronized at version 1.2.8 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -46,6 +46,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   offline usage before replacing a failed entry, uses Jellyfin source size
   when available, and surfaces rejection without closing the app. The
   configurable maximum defaults to 25 GiB in `AppSettings`.
+- The Android player now reapplies the selected aspect mode after every Media3
+  `VideoSize` update, preventing fullscreen or stream changes from silently
+  restoring the source ratio.
 - The web client now scopes Jellyfin tokens and user IDs to `sessionStorage`,
   migrates legacy localStorage values once, and removes the durable token copy;
   server URL and non-sensitive UI preferences remain persistent.
@@ -235,8 +238,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   this machine has no Android SDK installed; no new Android hardware result is
   claimed. The Windows non-ASCII path guard is enabled in `gradle.properties`.
 - Packaging and SHA-256: generated locally; see `outputs/` (ignored).
-- Latest mobile debug APK from commit `81bb6ef`: SHA-256
-  `F98E3DB255E5F6E3A756439569E6E1E64A2030748EEE8EE460314CD33D2D135A`.
+- Latest mobile debug APK from the 1.2.8 build is listed in the release assets
+  below; no physical-device validation is claimed when ADB has no device.
 - GitHub Android workflow now builds and publishes both mobile and TV debug /
   unsigned-release variants from a version tag.
 - GitHub web workflow validates on `main`/pull requests and packages the common
@@ -253,7 +256,7 @@ the actual branch base `418383f`.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-Mobile-debug-8404e71.apk` | `AB107DE2ED6A43E8215A1389EA2AF30A8089C6D5C5290671EE6578F99223D926` |
-| `Velora-TV-debug.apk` | `4FF1E9AF9BE850E8FC7DAD7E88B232E15AFC490E9EAA59D80F1B8D6841188DD6` |
-| `Velora-Mobile-release-unsigned.apk` | `6DAE8005CD11C6D6FA2609AC82072F5ADB19A787E86249AAB60B6D74D23AC6AB` |
-| `Velora-TV-release-unsigned.apk` | `E03E9C79BF9EF672A64385D9B885286F738B002C41F311AFE8CBE82FDFB887F3` |
+| `Velora-mobile-debug.apk` | pending v1.2.8 release upload |
+| `Velora-tv-debug.apk` | pending v1.2.8 release upload |
+| `Velora-mobile-release-unsigned.apk` | pending v1.2.8 release upload |
+| `Velora-tv-release-unsigned.apk` | pending v1.2.8 release upload |
