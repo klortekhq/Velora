@@ -91,6 +91,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Offline completion semantics have regression coverage for provider-backed
   `content://` URIs, successful downloads without a filesystem path, and
   incomplete entries.
+- Live TV now requests the current programme with the channel list and a
+  bounded six-hour upcoming guide window, maps the next programme per channel,
+  and renders the guide lazily in the existing virtualized `LazyColumn`; every
+  channel row remains an actionable Jellyfin playback entry.
 
 ## Explicitly incomplete or requiring verification
 
@@ -109,6 +113,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   the durable metadata foundation is now in place.
 - Theme music, trailer resolver, persistent preview, and large-library
   virtualization need implementation and critic testing.
+- Live TV favorites, groups, channel zapping/previous-channel shortcut,
+  mini-player and full programme-details view still need implementation.
 - No hardware test result is claimed: the connected Fire TV/phone were not
   available to this automated run.
 

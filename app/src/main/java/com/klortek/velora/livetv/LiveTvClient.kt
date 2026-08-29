@@ -33,12 +33,14 @@ data class LiveTvChannel(
     val ChannelNumber: String? = null,
     val Type: String? = null,
     val ImageTags: Map<String, String>? = null,
-    val CurrentProgram: LiveTvProgram? = null
+    val CurrentProgram: LiveTvProgram? = null,
+    val UpcomingProgram: LiveTvProgram? = null
 )
 
 @Serializable
 data class LiveTvProgram(
     val Id: String? = null,
+    val ChannelId: String? = null,
     val Name: String? = null,
     val Overview: String? = null,
     val StartDate: String? = null,
@@ -46,6 +48,11 @@ data class LiveTvProgram(
     val IsLive: Boolean? = null,
     val IsSports: Boolean? = null,
     val IsNews: Boolean? = null
+)
+
+@Serializable
+data class LiveTvProgramsResponse(
+    val Items: List<LiveTvProgram> = emptyList()
 )
 
 class LiveTvClient(private val config: JellyfinConfig) {
@@ -88,6 +95,34 @@ class LiveTvClient(private val config: JellyfinConfig) {
         return client.get(url) {
             jellyfinHeaders()
         }.body<LiveTvChannelsResponse>().Items
+    }
+
+    /** Load only the next six hours so a large EPG is never rendered eagerly. */
+    suspend fun getUpcomingPrograms(channelIds: List<String>): Map<String, LiveTvProgram> {
+        if (!config.isConfigured() || channelIds.isEmpty()) return emptyMap()
+        val nowMillis = System.currentTimeMillis()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+        val now = dateFormat.format(Date(nowMillis))
+        val until = dateFormat.format(Date(nowMillis + 6 * 60 * 60 * 1000L))
+        val url = URLBuilder().takeFrom("$baseUrl/LiveTv/Programs").apply {
+            parameters.append("UserId", userId)
+            channelIds.forEach { parameters.append("ChannelIds", it) }
+            parameters.append("MinStartDate", now)
+            parameters.append("MaxStartDate", until)
+            parameters.append("MaxEndDate", until)
+            parameters.append("EnableImages", "false")
+            parameters.append("Fields", "Overview")
+            parameters.append("Limit", channelIds.size.coerceAtMost(500).toString())
+        }.buildString()
+
+        return client.get(url) { jellyfinHeaders() }
+            .body<LiveTvProgramsResponse>()
+            .Items
+            .filter { !it.ChannelId.isNullOrBlank() }
+            .groupBy { it.ChannelId!! }
+            .mapValues { (_, programs) -> programs.minByOrNull { it.StartDate.orEmpty() }!! }
     }
 
     fun channelImageUrl(channelId: String, maxWidth: Int = 320): String {

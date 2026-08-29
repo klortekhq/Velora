@@ -124,7 +124,13 @@ private fun LiveTvScreen(
         isLoading = true
         loadError = null
         try {
-            channels = client.getChannels()
+            val loadedChannels = client.getChannels()
+            val upcoming = runCatching {
+                client.getUpcomingPrograms(loadedChannels.map { it.Id })
+            }.getOrDefault(emptyMap())
+            channels = loadedChannels.map { channel ->
+                channel.copy(UpcomingProgram = upcoming[channel.Id])
+            }
         } catch (e: Exception) {
             android.util.Log.e("LiveTvActivity", "Could not load Live TV channels", e)
             loadError = e.message ?: e.javaClass.simpleName
@@ -375,6 +381,16 @@ private fun LiveTvChannelRow(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+
+                channel.UpcomingProgram?.Name?.takeIf { it.isNotBlank() }?.let { nextTitle ->
+                    Text(
+                        text = stringResource(R.string.live_tv_next_program, nextTitle),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.58f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
                 if (progress != null || timeRange != null) {
                     Spacer(modifier = Modifier.height(4.dp))
