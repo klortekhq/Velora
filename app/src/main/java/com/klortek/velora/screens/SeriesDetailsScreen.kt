@@ -461,7 +461,7 @@ fun SeriesDetailsScreen(
                 val target = episode ?: episodes.firstOrNull()
                 if (target != null) startMobileEpisode(target, 0L)
             },
-            onDownload = { episode ->
+            onDownload = { episode, quality ->
                 val config = com.klortek.velora.jellyfin.JellyfinConfig(context)
                 if (config.isConfigured()) {
                     com.klortek.velora.offline.OfflineDownloadManager.enqueue(
@@ -469,7 +469,8 @@ fun SeriesDetailsScreen(
                         mediaSourceId = episode.MediaSources?.firstOrNull()?.Id,
                         seriesName = displayItem.Name,
                         seasonNumber = episode.ParentIndexNumber,
-                        episodeNumber = episode.IndexNumber
+                        episodeNumber = episode.IndexNumber,
+                        quality = quality
                     )
                     android.widget.Toast.makeText(context, "Descarga iniciada", android.widget.Toast.LENGTH_SHORT).show()
                 }

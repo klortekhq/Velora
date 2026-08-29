@@ -259,12 +259,13 @@ fun MovieDetailsScreen(
                 else startMoviePlayback(0L)
             },
             onRestart = { startMoviePlayback(0L) },
-            onDownload = {
+            onDownload = { quality ->
                 val config = com.klortek.velora.jellyfin.JellyfinConfig(context)
                 if (config.isConfigured()) {
                     com.klortek.velora.offline.OfflineDownloadManager.enqueue(
                         context, config.serverUrl, config.accessToken, displayItem.Id, displayItem.Name, displayItem.Type ?: "Movie",
-                        mediaSourceId = displayItem.MediaSources?.firstOrNull()?.Id
+                        mediaSourceId = displayItem.MediaSources?.firstOrNull()?.Id,
+                        quality = quality
                     )
                     android.widget.Toast.makeText(context, "Descarga iniciada", android.widget.Toast.LENGTH_SHORT).show()
                 }

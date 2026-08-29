@@ -63,6 +63,7 @@ import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinItem
 import com.klortek.velora.jellyfin.RemoteSessionInfo
 import com.klortek.velora.jellyfin.AppSettings
+import com.klortek.velora.offline.OfflineDownloadQuality
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.launch
@@ -78,12 +79,13 @@ fun MobileMovieDetailsLayout(
     onBack: (() -> Unit)?,
     onPlay: () -> Unit,
     onRestart: (() -> Unit)? = null,
-    onDownload: (() -> Unit)? = null
+    onDownload: ((OfflineDownloadQuality) -> Unit)? = null
 ) {
     var selectedSection by remember { mutableStateOf("Reparto") }
     var similarMovies by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
     var showAudioDialog by remember { mutableStateOf(false) }
     var showRemoteDialog by remember { mutableStateOf(false) }
+    var showDownloadQualityDialog by remember { mutableStateOf(false) }
     LaunchedEffect(item.Id, item.Genres, apiService) {
         val genre = item.Genres?.firstOrNull()
         if (apiService != null && genre != null) {
@@ -116,7 +118,7 @@ fun MobileMovieDetailsLayout(
                 }
             }
             MobilePlayButton(onPlay)
-            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload.takeIf { PlatformCapabilities.supportsOfflineDownloads }, onAudio = { showAudioDialog = true }, onRemote = { showRemoteDialog = true }, hasAudio = (item.MediaSources?.firstOrNull()?.MediaStreams?.count { it.Type == "Audio" } ?: 0) > 1)
+            MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload?.let { { showDownloadQualityDialog = true } }.takeIf { PlatformCapabilities.supportsOfflineDownloads }, onAudio = { showAudioDialog = true }, onRemote = { showRemoteDialog = true }, hasAudio = (item.MediaSources?.firstOrNull()?.MediaStreams?.count { it.Type == "Audio" } ?: 0) > 1)
             MobileDetailTabs(selectedSection) { selectedSection = it }
             when (selectedSection) {
                 "Reparto" -> MobilePeople(item, apiService)
@@ -130,6 +132,10 @@ fun MobileMovieDetailsLayout(
     }
     if (showAudioDialog) MobileAudioSelectionDialog(item, { showAudioDialog = false })
     if (showRemoteDialog) MobileRemotePlaybackDialog(item, apiService, { showRemoteDialog = false })
+    if (showDownloadQualityDialog) OfflineDownloadQualityDialog(
+        onDismiss = { showDownloadQualityDialog = false },
+        onSelected = { quality -> showDownloadQualityDialog = false; onDownload?.invoke(quality) }
+    )
 }
 
 @Composable
@@ -144,8 +150,9 @@ fun MobileSeriesDetailsLayout(
     onSeasonSelected: (Int) -> Unit,
     onPlay: (JellyfinItem?) -> Unit,
     onRestart: ((JellyfinItem?) -> Unit)? = null,
-    onDownload: ((JellyfinItem) -> Unit)? = null
+    onDownload: ((JellyfinItem, OfflineDownloadQuality) -> Unit)? = null
 ) {
+    var pendingDownload by remember { mutableStateOf<JellyfinItem?>(null) }
     Box(Modifier.fillMaxSize()) {
         MobileBackdrop(backdropUrl, apiService, item.Name)
         Column(
@@ -167,7 +174,7 @@ fun MobileSeriesDetailsLayout(
                 onShuffle = { onPlay(episodes.shuffled().firstOrNull()) },
                 onRestart = { onRestart?.invoke(episodes.firstOrNull()) ?: onPlay(episodes.firstOrNull()) },
                 onDownload = episodes.firstOrNull()?.let { episode ->
-                    { onDownload?.invoke(episode); Unit }
+                    { pendingDownload = episode; Unit }
                 }.takeIf { PlatformCapabilities.supportsOfflineDownloads }
             )
             if (seasons.isNotEmpty()) {
@@ -181,10 +188,16 @@ fun MobileSeriesDetailsLayout(
             }
             Text("Episodios", color = Color.White, style = MaterialTheme.typography.titleMedium)
             episodes.forEach { episode ->
-                MobileEpisodeCard(episode, apiService, { if (PlatformCapabilities.supportsOfflineDownloads) onDownload?.invoke(episode) }) { onPlay(episode) }
+                MobileEpisodeCard(episode, apiService, { if (PlatformCapabilities.supportsOfflineDownloads) pendingDownload = episode }) { onPlay(episode) }
             }
             MobilePeople(item, apiService)
         }
+    }
+    pendingDownload?.let { episode ->
+        OfflineDownloadQualityDialog(
+            onDismiss = { pendingDownload = null },
+            onSelected = { quality -> pendingDownload = null; onDownload?.invoke(episode, quality) }
+        )
     }
 }
 
@@ -230,6 +243,36 @@ fun MobileSeriesDetailsLayout(
         if (hasAudio) MobileActionButton("Audio", Icons.Default.VolumeUp, onAudio ?: {})
         MobileActionButton("Transmitir", Icons.Default.Cast, onRemote ?: {})
         onDownload?.let { MobileActionButton("Descargar", Icons.Default.Download, it) }
+    }
+}
+
+@Composable
+private fun OfflineDownloadQualityDialog(
+    onDismiss: () -> Unit,
+    onSelected: (OfflineDownloadQuality) -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .64f)), contentAlignment = Alignment.BottomCenter) {
+            Column(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                    .background(Color(0xFF17191D)).padding(22.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Text("Calidad de descarga", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text("La calidad original no se convierte; las demás usan una copia optimizada.", color = Color.White.copy(alpha = .72f), style = MaterialTheme.typography.bodySmall)
+                OfflineDownloadQuality.entries.forEach { quality ->
+                    Row(
+                        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { onSelected(quality) }
+                            .padding(horizontal = 10.dp, vertical = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Default.Download, quality.label, tint = MobileCyan, modifier = Modifier.size(24.dp))
+                        Text(quality.label, color = Color.White, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 14.dp))
+                    }
+                }
+                Text("Cancelar", color = Color.White.copy(alpha = .82f), modifier = Modifier.fillMaxWidth().clickable { onDismiss() }.padding(14.dp))
+            }
+        }
     }
 }
 
