@@ -148,7 +148,11 @@ import kotlinx.coroutines.Dispatchers
 enum class SortType {
     Alphabetically,
     DateAdded,
-    DateReleased
+    DateReleased,
+    Runtime,
+    Random,
+    CriticRating,
+    CommunityRating
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -366,6 +370,10 @@ fun JellyfinHomeScreen(
         when (settings.getSortType()) {
             "DateAdded" -> SortType.DateAdded
             "DateReleased" -> SortType.DateReleased
+            "Runtime" -> SortType.Runtime
+            "Random" -> SortType.Random
+            "CriticRating" -> SortType.CriticRating
+            "CommunityRating" -> SortType.CommunityRating
             else -> SortType.Alphabetically
         }
     ) }
@@ -1250,6 +1258,10 @@ fun JellyfinHomeScreen(
                                 } ?: Long.MIN_VALUE
                             }
                         }
+                        SortType.Runtime -> unsortedItems.sortedBy { it.RunTimeTicks ?: 0L }
+                        SortType.Random -> unsortedItems.shuffled()
+                        SortType.CriticRating -> unsortedItems.sortedByDescending { it.CriticRating ?: -1f }
+                        SortType.CommunityRating -> unsortedItems.sortedByDescending { it.CommunityRating ?: -1f }
                     }
                     
                     // Filter shows with zero episodes if setting is enabled
@@ -2365,6 +2377,10 @@ fun JellyfinHomeScreen(
                     when (newSortType) {
                         SortType.DateAdded -> "DateAdded"
                         SortType.DateReleased -> "DateReleased"
+                        SortType.Runtime -> "Runtime"
+                        SortType.Random -> "Random"
+                        SortType.CriticRating -> "CriticRating"
+                        SortType.CommunityRating -> "CommunityRating"
                         else -> "Alphabetically"
                     }
                 )
@@ -2519,6 +2535,35 @@ fun SortDialog(
                                         )
                                     )
                                 }
+                            )
+                        }
+
+                        item {
+                            ListItem(
+                                selected = currentSortType == SortType.Runtime,
+                                onClick = { onSortSelected(SortType.Runtime) },
+                                headlineContent = { Text("Duración", style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
+                            )
+                        }
+                        item {
+                            ListItem(
+                                selected = currentSortType == SortType.Random,
+                                onClick = { onSortSelected(SortType.Random) },
+                                headlineContent = { Text("Aleatorio", style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
+                            )
+                        }
+                        item {
+                            ListItem(
+                                selected = currentSortType == SortType.CriticRating,
+                                onClick = { onSortSelected(SortType.CriticRating) },
+                                headlineContent = { Text("Valoración de la crítica", style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
+                            )
+                        }
+                        item {
+                            ListItem(
+                                selected = currentSortType == SortType.CommunityRating,
+                                onClick = { onSortSelected(SortType.CommunityRating) },
+                                headlineContent = { Text("Valoración de la comunidad", style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
                             )
                         }
 

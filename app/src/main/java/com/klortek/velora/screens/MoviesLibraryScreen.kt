@@ -204,7 +204,19 @@ fun MoviesLibraryScreen(
     var isRefreshing by remember { mutableStateOf(false) }
     
     // Sort state for library grid
-    var sortType by remember { mutableStateOf(SortType.Alphabetically) }
+    var sortType by remember {
+        mutableStateOf(
+            when (settings.getSortType()) {
+                "DateAdded" -> SortType.DateAdded
+                "DateReleased" -> SortType.DateReleased
+                "Runtime" -> SortType.Runtime
+                "Random" -> SortType.Random
+                "CriticRating" -> SortType.CriticRating
+                "CommunityRating" -> SortType.CommunityRating
+                else -> SortType.Alphabetically
+            }
+        )
+    }
     var selectedGenreFilter by remember { mutableStateOf<String?>(null) }
     var showSortDialog by remember { mutableStateOf(false) }
     
@@ -497,6 +509,10 @@ fun MoviesLibraryScreen(
                     } ?: Long.MIN_VALUE
                 }
             }
+            SortType.Runtime -> filteredItems.sortedBy { it.RunTimeTicks ?: 0L }
+            SortType.Random -> filteredItems.shuffled()
+            SortType.CriticRating -> filteredItems.sortedByDescending { it.CriticRating ?: -1f }
+            SortType.CommunityRating -> filteredItems.sortedByDescending { it.CommunityRating ?: -1f }
         }
     }
     
@@ -2209,6 +2225,17 @@ fun MoviesLibraryScreen(
                 currentSortType = sortType,
                 onSortSelected = { newSortType ->
                     sortType = newSortType
+                    settings.setSortType(
+                        when (newSortType) {
+                            SortType.DateAdded -> "DateAdded"
+                            SortType.DateReleased -> "DateReleased"
+                            SortType.Runtime -> "Runtime"
+                            SortType.Random -> "Random"
+                            SortType.CriticRating -> "CriticRating"
+                            SortType.CommunityRating -> "CommunityRating"
+                            SortType.Alphabetically -> "Alphabetically"
+                        }
+                    )
                     showSortDialog = false
                 },
                 onDismiss = { showSortDialog = false },
