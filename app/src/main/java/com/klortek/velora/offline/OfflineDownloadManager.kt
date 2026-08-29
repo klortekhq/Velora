@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import org.json.JSONArray
-import org.json.JSONObject
 import java.io.File
 
 data class OfflineDownload(
