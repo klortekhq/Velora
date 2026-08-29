@@ -82,6 +82,7 @@ import com.klortek.velora.jellyseerr.JellyseerrApiService
 import com.klortek.velora.jellyseerr.JellyseerrTvShow
 import com.klortek.velora.jellyseerr.JellyseerrImageUrl
 import com.klortek.velora.jellyseerr.JellyseerrGenres
+
 import com.klortek.velora.ui.ArtworkPalette
 import com.klortek.velora.ui.PlexPaletteExtractor
 import com.klortek.velora.ui.PlexBackdropGradient
@@ -97,6 +98,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
+
+// Velora is Jellyfin-only. The old request/discovery implementation remains
+// in the source for migration compatibility but is deliberately unreachable.
+private const val LEGACY_DISCOVERY_ENABLED = false
 
 /**
  * TV Shows Library Screen - A dedicated screen for the TV Shows library
@@ -167,7 +172,7 @@ fun TvShowsLibraryScreen(
         settings.jellyseerrApiKey, 
         settings.jellyseerrSessionCookie
     ) {
-        if (settings.jellyseerrUrl.isBlank()) return@remember null
+        if (!LEGACY_DISCOVERY_ENABLED || settings.jellyseerrUrl.isBlank()) return@remember null
         
         when (settings.jellyseerrAuthType) {
             "api_key" -> {
