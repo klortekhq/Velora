@@ -106,8 +106,8 @@ class GLVideoSurfaceView @JvmOverloads constructor(
         val scaleX: Float
         val scaleY: Float
         
-        if (aspectMode == "FILL") {
-            // Crop the source to the whole viewport.
+        if (aspectMode == "STRETCH") {
+            // Deliberately fill both axes, even when that distorts the image.
             scaleX = 1.0f
             scaleY = 1.0f
         } else {
@@ -119,12 +119,23 @@ class GLVideoSurfaceView @JvmOverloads constructor(
                 "CINEMA" -> 2.39f
                 else -> videoAspect
             }
+            val fitScaleX: Float
+            val fitScaleY: Float
             if (presentationAspect > viewportAspect) {
-                scaleX = 1.0f
-                scaleY = viewportAspect / presentationAspect
+                fitScaleX = 1.0f
+                fitScaleY = viewportAspect / presentationAspect
             } else {
-                scaleX = presentationAspect / viewportAspect
-                scaleY = 1.0f
+                fitScaleX = presentationAspect / viewportAspect
+                fitScaleY = 1.0f
+            }
+            if (aspectMode == "FILL") {
+                // Invert the fit correction to crop the excess image while
+                // preserving its proportions. This is distinct from stretch.
+                scaleX = 1.0f / fitScaleX
+                scaleY = 1.0f / fitScaleY
+            } else {
+                scaleX = fitScaleX
+                scaleY = fitScaleY
             }
         }
         
