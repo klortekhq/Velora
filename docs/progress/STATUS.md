@@ -41,6 +41,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Offline-download availability is covered by a platform-surface contract and
   unit test: mobile/tablet and iOS mobile are eligible; TV, browser, tvOS,
   Tizen, webOS and VIDAA are not.
+- The shared web/Smart TV adapter now exposes the same explicit capability
+  contract with `supportsOfflineDownloads: false`; its Node test covers web,
+  Tizen, webOS and VIDAA user agents.
 - The shared playback mapper/decision engine is now invoked from the Android
   MediaSource loading path and records the selected path for diagnostics.
 - Android playback capabilities now probe installed MediaCodec decoders and
@@ -92,6 +95,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Instrumentation and real-device playback validation were not run.
 - Web `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
+- Web `npm test`: passing on 2026-08-29; platform capability regression test
+  passes. Tizen packaging remains unvalidated without Tizen Studio/signing.
 - Packaging and SHA-256: generated locally; see `outputs/` (ignored).
 - GitHub Android workflow now builds and publishes both mobile and TV debug /
   unsigned-release variants from a version tag.
