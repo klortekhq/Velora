@@ -56,6 +56,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   left unspecified.
 - Aspect selection is applied to both the PlayerView and its real
   `AspectRatioFrameLayout`, including forced 4:3/16:9/cinema modes.
+- The GL video surface now distinguishes stretch from fill: fill crops while
+  preserving the source proportions, while stretch intentionally fills both
+  axes. This keeps the selector effective when the enhanced GL path is used.
 - Mobile player tap handling now ignores pointer sequences consumed by child
   controls, preventing the parent gesture layer from swallowing aspect,
   settings, audio, subtitle and playback button taps.
@@ -112,6 +115,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   VIDAA hosted HTML5 bundle generated.
 - Web `npm test`: passing on 2026-08-29; platform capability regression test
   passes. Tizen packaging remains unvalidated without Tizen Studio/signing.
+- A fresh local Android verification was blocked before compilation because
+  this machine has no Android SDK installed; no new Android hardware result is
+  claimed. The Windows non-ASCII path guard is enabled in `gradle.properties`.
 - Packaging and SHA-256: generated locally; see `outputs/` (ignored).
 - GitHub Android workflow now builds and publishes both mobile and TV debug /
   unsigned-release variants from a version tag.
