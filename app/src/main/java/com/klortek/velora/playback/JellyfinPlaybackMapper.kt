@@ -18,7 +18,8 @@ object JellyfinPlaybackMapper {
             videoProfile = video?.Profile,
             videoLevel = video?.Level?.toString(),
             audioCodec = audio?.Codec,
-            audioChannels = audio?.ChannelLayout?.let(::audioChannelCount),
+            audioChannels = audio?.ChannelLayout?.let(::audioChannelCount)
+                ?: audio?.Channels?.takeIf { it > 0 },
             hdrFormat = hdrFormat(video),
             width = video?.Width,
             height = video?.Height,

@@ -33,4 +33,12 @@ class JellyfinPlaybackMapperTest {
         )
         assertTrue(source.subtitlesRequireTranscoding)
     }
+
+    @Test
+    fun fallsBackToNumericAudioChannelsWhenLayoutIsMissing() {
+        val source = JellyfinPlaybackMapper.source(
+            MediaSource(MediaStreams = listOf(MediaStream(Type = "Audio", Codec = "eac3", Channels = 6)))
+        )
+        assertEquals(6, source.audioChannels)
+    }
 }

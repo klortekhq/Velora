@@ -210,6 +210,7 @@ data class MediaStream(
     val Width: Int? = null, // Video/subtitle width
     val Height: Int? = null, // Video/subtitle height
     val ChannelLayout: String? = null, // Audio channel layout (e.g., "5.1", "7.1", "stereo")
+    val Channels: Int? = null, // Numeric audio channel count when ChannelLayout is absent
     val BitDepth: Int? = null,
     val BitRate: Int? = null,
     val Profile: String? = null,
