@@ -167,7 +167,10 @@ private fun applyAspectModeToPlayerView(
 
     val (resizeMode, forcedRatio) = when (mode) {
         AspectMode.FIT -> AspectRatioFrameLayout.RESIZE_MODE_FIT to 0f
-        AspectMode.FILL -> AspectRatioFrameLayout.RESIZE_MODE_FILL to 0f
+        // "Rellenar" must crop while preserving the source proportions;
+        // RESIZE_MODE_FILL stretches the image and made it indistinguishable
+        // from the explicit "Estirar" option.
+        AspectMode.FILL -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM to 0f
         AspectMode.FOUR_THREE -> AspectRatioFrameLayout.RESIZE_MODE_FIT to (4f / 3f)
         AspectMode.LETTERBOX -> AspectRatioFrameLayout.RESIZE_MODE_FIT to (16f / 9f)
         AspectMode.CINEMA -> AspectRatioFrameLayout.RESIZE_MODE_FIT to 2.39f
