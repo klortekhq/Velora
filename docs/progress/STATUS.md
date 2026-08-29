@@ -171,6 +171,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-29. The full four-variant build completed online after
   the offline cache was found incomplete.
+- After synchronizing the repository checkout, `compileMobileDebugKotlin`
+  passed again on 2026-08-29; this confirms the tracked offline download
+  manager source compiles, including its Android content-URI path.
 - Android `testMobileDebugUnitTest` and `compileMobileDebugKotlin` passed on
   2026-08-29 after the security/capability changes; the build emitted only
   existing deprecation/KAPT warnings.
