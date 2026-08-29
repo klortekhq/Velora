@@ -69,7 +69,7 @@ class QuickConnectService(
             
             android.util.Log.d("QuickConnect", "Initiating QuickConnect at: $url")
             android.util.Log.d("QuickConnect", "DeviceId: $deviceId")
-            android.util.Log.d("QuickConnect", "Auth header: $embyAuthHeader")
+            android.util.Log.d("QuickConnect", "Authentication header prepared")
             
             val response: HttpResponse = client.post(url) {
                 header(HttpHeaders.Accept, "application/json")
@@ -82,7 +82,7 @@ class QuickConnectService(
             when (response.status) {
                 HttpStatusCode.OK, HttpStatusCode.Created -> {
                     val result = response.body<QuickConnectInitiateResponse>()
-                    android.util.Log.d("QuickConnect", "QuickConnect initiated successfully. Code: ${result.Code}, Secret: ${result.Secret}")
+                    android.util.Log.d("QuickConnect", "QuickConnect initiated successfully")
                     QuickConnectResult(result, null)
                 }
                 HttpStatusCode.Unauthorized -> {
@@ -94,12 +94,7 @@ class QuickConnectService(
                     QuickConnectResult(null, QuickConnectError.Unavailable)
                 }
                 else -> {
-                    val errorBody = try {
-                        response.body<String>()
-                    } catch (e: Exception) {
-                        "Could not read error body: ${e.message}"
-                    }
-                    android.util.Log.e("QuickConnect", "QuickConnect initiation failed. Status: ${response.status.value}, Error: $errorBody")
+                    android.util.Log.e("QuickConnect", "QuickConnect initiation failed. Status: ${response.status.value}")
                     QuickConnectResult(null, QuickConnectError.ServerError("Server returned error: ${response.status.value}"))
                 }
             }
@@ -136,8 +131,7 @@ class QuickConnectService(
             
             val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
             
-            android.util.Log.d("QuickConnect", "Polling QuickConnect state at: $url")
-            android.util.Log.d("QuickConnect", "Secret: $secret")
+            android.util.Log.d("QuickConnect", "Polling QuickConnect state")
             
             val response = client.get(url) {
                 header(HttpHeaders.Accept, "application/json")
@@ -151,7 +145,7 @@ class QuickConnectService(
                     val state = response.body<QuickConnectStateResponse>()
                     android.util.Log.d("QuickConnect", "State response: Authenticated=${state.Authenticated}, HasAuth=${state.Authentication != null}")
                     if (state.Authenticated && state.Authentication != null) {
-                        android.util.Log.d("QuickConnect", "✅ Authentication successful! AccessToken: ${state.Authentication.AccessToken.take(20)}..., UserId: ${state.Authentication.User.Id}")
+                        android.util.Log.d("QuickConnect", "QuickConnect authentication successful. UserId: ${state.Authentication.User.Id}")
                     }
                     state
                 }
@@ -164,12 +158,7 @@ class QuickConnectService(
                     null
                 }
                 else -> {
-                    val errorBody = try {
-                        response.body<String>()
-                    } catch (e: Exception) {
-                        "Could not read error body: ${e.message}"
-                    }
-                    android.util.Log.e("QuickConnect", "QuickConnect state check failed. Status: ${response.status.value}, Error: $errorBody")
+                    android.util.Log.e("QuickConnect", "QuickConnect state check failed. Status: ${response.status.value}")
                     null
                 }
             }
@@ -197,7 +186,6 @@ class QuickConnectService(
             val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
             
             android.util.Log.d("QuickConnect", "Authenticating with QuickConnect at: $url")
-            android.util.Log.d("QuickConnect", "Secret: $secret")
             
             val response: HttpResponse = client.post(url) {
                 header(HttpHeaders.Accept, "application/json")
@@ -211,7 +199,7 @@ class QuickConnectService(
             when (response.status) {
                 HttpStatusCode.OK -> {
                     val result = response.body<QuickConnectAuthenticationResponse>()
-                    android.util.Log.d("QuickConnect", "✅ QuickConnect authentication successful! AccessToken: ${result.AccessToken.take(20)}..., UserId: ${result.User.Id}")
+                    android.util.Log.d("QuickConnect", "QuickConnect authentication successful. UserId: ${result.User.Id}")
                     result
                 }
                 HttpStatusCode.Unauthorized -> {
@@ -223,12 +211,7 @@ class QuickConnectService(
                     null
                 }
                 else -> {
-                    val errorBody = try {
-                        response.body<String>()
-                    } catch (e: Exception) {
-                        "Could not read error body: ${e.message}"
-                    }
-                    android.util.Log.e("QuickConnect", "QuickConnect authentication failed. Status: ${response.status.value}, Error: $errorBody")
+                    android.util.Log.e("QuickConnect", "QuickConnect authentication failed. Status: ${response.status.value}")
                     null
                 }
             }

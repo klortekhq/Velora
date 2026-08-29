@@ -35,6 +35,12 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   token in request headers rather than embedding it in playback/download URLs.
 - Quick Connect diagnostics no longer log access-token fragments or polling
   secrets.
+- Authentication diagnostics no longer print full request URLs, auth headers,
+  token-bearing error bodies, or generated playback URLs; MPV's legacy launcher
+  also uses its authenticated request headers without an `api_key` query.
+- Offline-download availability is covered by a platform-surface contract and
+  unit test: mobile/tablet and iOS mobile are eligible; TV, browser, tvOS,
+  Tizen, webOS and VIDAA are not.
 - The shared playback mapper/decision engine is now invoked from the Android
   MediaSource loading path and records the selected path for diagnostics.
 - Android playback capabilities now probe installed MediaCodec decoders and
@@ -80,8 +86,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-29.
 - Android `testMobileDebugUnitTest` and `compileMobileDebugKotlin` passed on
-  2026-08-28 after the capability probe fix; the build emitted only existing
-  deprecation/KAPT warnings.
+  2026-08-29 after the security/capability changes; the build emitted only
+  existing deprecation/KAPT warnings.
   Instrumentation and real-device playback validation were not run.
 - Web `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
