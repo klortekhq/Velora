@@ -30,4 +30,12 @@
     <string name="settings_subtitle_auto">Automáticos</string>
     <string name="settings_subtitle_language">Idioma de subtítulos</string>
     <string name="settings_subtitle_language_description">Automático sigue la preferencia del servidor; los demás fuerzan ese idioma cuando existe.</string>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_movies">Películas</string>
+    <string name="nav_series">Series</string>
+    <string name="nav_downloads">Descargas</string>
+    <string name="nav_settings">Ajustes</string>
+    <string name="search_movies_series">Buscar películas y series</string>
+    <string name="action_play">Reproducir</string>
+    <string name="action_back">Atrás</string>
 </resources>

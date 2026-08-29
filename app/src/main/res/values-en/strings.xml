@@ -14,4 +14,12 @@
     <string name="settings_subtitle_auto">Automatic</string>
     <string name="settings_subtitle_language">Subtitle language</string>
     <string name="settings_subtitle_language_description">Automatic follows the server preference; other choices prefer that language when available.</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_movies">Movies</string>
+    <string name="nav_series">Series</string>
+    <string name="nav_downloads">Downloads</string>
+    <string name="nav_settings">Settings</string>
+    <string name="search_movies_series">Search movies and series</string>
+    <string name="action_play">Play</string>
+    <string name="action_back">Back</string>
 </resources>

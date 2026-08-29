@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.Icon
@@ -162,8 +163,8 @@ private fun MobileMediaPanel(
             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(Color.White.copy(alpha = .1f)).clickable(onClick = onSearch).padding(horizontal = 18.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Default.Search, "Buscar películas y series", tint = Color.White.copy(alpha = .8f))
-            Text("Buscar películas y series", color = Color.White.copy(alpha = .8f), modifier = Modifier.padding(start = 12.dp))
+            Icon(Icons.Default.Search, stringResource(com.klortek.velora.R.string.search_movies_series), tint = Color.White.copy(alpha = .8f))
+            Text(stringResource(com.klortek.velora.R.string.search_movies_series), color = Color.White.copy(alpha = .8f), modifier = Modifier.padding(start = 12.dp))
         }
     }
 }
@@ -351,7 +352,7 @@ fun MobileLibraryScreen(
                         androidx.compose.material3.OutlinedButton(
                             onClick = { showSortDialog = false },
                             modifier = Modifier.fillMaxWidth().padding(top = 12.dp)
-                        ) { Text("Atrás") }
+                        ) { Text(stringResource(com.klortek.velora.R.string.action_back)) }
                     }
                 }
             }
@@ -445,13 +446,13 @@ private fun MobileBottomNavigation(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val itemModifier = Modifier.width(76.dp)
-        MobileBottomNavigationItem(Icons.Default.Home, "Inicio", onHome, selected = true, modifier = itemModifier)
-        if (showMovies) MobileBottomNavigationItem(Icons.Default.Movie, "Películas", onMovies, modifier = itemModifier)
-        if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, "Series", onSeries, modifier = itemModifier)
+        MobileBottomNavigationItem(Icons.Default.Home, stringResource(com.klortek.velora.R.string.nav_home), onHome, selected = true, modifier = itemModifier)
+        if (showMovies) MobileBottomNavigationItem(Icons.Default.Movie, stringResource(com.klortek.velora.R.string.nav_movies), onMovies, modifier = itemModifier)
+        if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, stringResource(com.klortek.velora.R.string.nav_series), onSeries, modifier = itemModifier)
         if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, "TV", onLiveTv, modifier = itemModifier)
         MobileBottomNavigationItem(Icons.Default.Search, "Buscar", onSearch, modifier = itemModifier)
-        MobileBottomNavigationItem(Icons.Default.Download, "Descargas", onDownloads, modifier = itemModifier)
-        MobileBottomNavigationItem(Icons.Default.Settings, "Ajustes", onSettings, modifier = itemModifier)
+        MobileBottomNavigationItem(Icons.Default.Download, stringResource(com.klortek.velora.R.string.nav_downloads), onDownloads, modifier = itemModifier)
+        MobileBottomNavigationItem(Icons.Default.Settings, stringResource(com.klortek.velora.R.string.nav_settings), onSettings, modifier = itemModifier)
     }
 }
 
