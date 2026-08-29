@@ -3510,7 +3510,11 @@ fun JellyfinVideoPlayerScreen(
                                                     color = Color.Black.copy(alpha = 0.5f),
                                                     shape = RoundedCornerShape(50)
                                                 )
-                                                .clickable { onBack() },
+                                                // In landscape this arrow is the
+                                                // fullscreen exit control. The
+                                                // activity should not close until
+                                                // the user presses Back again.
+                                                .clickable { toggleMobileFullscreen() },
                                             contentAlignment = Alignment.Center
                                         ) {
                                             androidx.compose.material3.Icon(
