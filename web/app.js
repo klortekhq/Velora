@@ -129,11 +129,34 @@
     localStorage[key] = value;
   }
 
+  // Authentication state is intentionally scoped to the browser session. The
+  // server URL and UI preferences may persist, but a Jellyfin access token
+  // must not survive as durable localStorage data. Migrate the legacy token
+  // once so existing users are not unexpectedly signed out.
+  function sessionValue(key) {
+    try { return window.sessionStorage.getItem(key) || ''; } catch (error) { return ''; }
+  }
+
+  function saveSessionValue(key, value) {
+    try { window.sessionStorage.setItem(key, value); } catch (error) { /* session storage may be unavailable */ }
+  }
+
+  function removeSessionValue(key) {
+    try { window.sessionStorage.removeItem(key); } catch (error) { /* best effort */ }
+  }
+
+  var legacyToken = localStorage.veloraToken || '';
+  if (legacyToken && !sessionValue('veloraToken')) saveSessionValue('veloraToken', legacyToken);
+  if (legacyToken) delete localStorage.veloraToken;
+  var legacyUserId = localStorage.veloraUserId || '';
+  if (legacyUserId && !sessionValue('veloraUserId')) saveSessionValue('veloraUserId', legacyUserId);
+  if (legacyUserId) delete localStorage.veloraUserId;
+
   var root = document.querySelector('#app');
   var state = {
     server: localStorage.veloraServer || '',
-    token: localStorage.veloraToken || '',
-    userId: localStorage.veloraUserId || '',
+    token: sessionValue('veloraToken'),
+    userId: sessionValue('veloraUserId'),
     items: [],
     query: '',
     settingsOpen: false,
@@ -239,9 +262,9 @@
       state.token = data.AccessToken;
       state.userId = data.User && data.User.Id ? data.User.Id : '';
       localStorage.veloraServer = state.server;
-      localStorage.veloraToken = state.token;
       localStorage.veloraUser = username;
-      localStorage.veloraUserId = state.userId;
+      saveSessionValue('veloraToken', state.token);
+      saveSessionValue('veloraUserId', state.userId);
       return renderApp();
     }).catch(function (exception) {
       error.textContent = exception.message;
@@ -252,7 +275,7 @@
     if (!state.userId) {
       return api('/Users/Me').then(function (me) {
         state.userId = me.Id;
-        localStorage.veloraUserId = state.userId;
+        saveSessionValue('veloraUserId', state.userId);
       }).then(loadItems);
     }
     var params = 'Recursive=true&IncludeItemTypes=Movie%2CSeries%2CLiveTvChannel&' +
@@ -482,8 +505,10 @@
       '</div></header><div id="content"><div class="empty">' + esc(t('loading')) + '</div></div></div>';
     document.querySelector('#settingsButton').onclick = showSettings;
     document.querySelector('#logout').onclick = function () {
-      localStorage.removeItem('veloraToken');
+      removeSessionValue('veloraToken');
+      removeSessionValue('veloraUserId');
       state.token = '';
+      state.userId = '';
       login();
     };
     document.querySelector('#refresh').onclick = function () {

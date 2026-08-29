@@ -38,6 +38,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Authentication diagnostics no longer print full request URLs, auth headers,
   token-bearing error bodies, or generated playback URLs; MPV's legacy launcher
   also uses its authenticated request headers without an `api_key` query.
+- The web client now scopes Jellyfin tokens and user IDs to `sessionStorage`,
+  migrates legacy localStorage values once, and removes the durable token copy;
+  server URL and non-sensitive UI preferences remain persistent.
 - Subtitle stream URLs and Jellyfin music stream URLs are also tokenless; the
   Media3 music service applies Jellyfin authentication through request headers.
 - Android Jellyfin access tokens and passwords now use an Android Keystore-backed
