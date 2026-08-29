@@ -26,4 +26,18 @@
     <string name="offline_available">Offline verfügbar</string>
     <string name="downloading_progress">Wird heruntergeladen… %1$d%%</string>
     <string name="action_delete">Löschen</string>
+    <string name="live_tv_all_channels">Alle</string>
+    <string name="live_tv_favorites">Favoriten</string>
+    <string name="live_tv_add_favorite">Zu Favoriten hinzufügen</string>
+    <string name="live_tv_remove_favorite">Aus Favoriten entfernen</string>
+    <string name="login_title">Anmelden</string>
+    <string name="login_connecting">Verbindung mit %1$s</string>
+    <string name="login_other_options">Weitere Optionen:</string>
+    <string name="login_use_password">Passwort verwenden</string>
+    <string name="login_use_quick_connect">Quick Connect verwenden</string>
+    <string name="login_cancel">Abbrechen</string>
+    <string name="login_username">Benutzername</string>
+    <string name="login_password">Passwort</string>
+    <string name="login_sign_in">Anmelden</string>
+    <string name="login_authenticating">Anmeldung…</string>
 </resources>
