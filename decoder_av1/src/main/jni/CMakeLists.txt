@@ -26,7 +26,7 @@ set(ABSL_PROPAGATE_CXX_STD ON)
 # standard C++ mutex implementation so the production decoder does not require
 # vendoring the unrelated Abseil dependency just to configure CMake.
 add_compile_definitions(LIBGAV1_THREADPOOL_USE_STD_MUTEX=1)
-set(LIBGAV1_THREADPOOL_USE_STD_MUTEX ON CACHE BOOL "Use the standard C++ mutex implementation" FORCE)
+set(LIBGAV1_THREADPOOL_USE_STD_MUTEX 1 CACHE STRING "Use the standard C++ mutex implementation" FORCE)
 
 project(libgav1JNI C CXX)
 
