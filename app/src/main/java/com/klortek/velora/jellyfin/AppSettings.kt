@@ -107,11 +107,20 @@ class AppSettings(context: Context) {
         private const val KEY_PREFERRED_AUDIO_LANGUAGE = "preferred_audio_language"
         private const val KEY_SUBTITLE_MODE = "subtitle_mode"
         private const val KEY_PREFERRED_SUBTITLE_LANGUAGE = "preferred_subtitle_language"
+        private const val KEY_OFFLINE_MAX_STORAGE_BYTES = "offline_max_storage_bytes"
     }
 
     var isMpvEnabled: Boolean
         get() = prefs.getBoolean(KEY_MPV_ENABLED, false) // Disabled by default (ExoPlayer is default)
         set(value) = prefs.edit().putBoolean(KEY_MPV_ENABLED, value).apply()
+
+    /** Maximum space Velora may manage for offline media; zero means unlimited. */
+    var offlineMaxStorageBytes: Long
+        get() = prefs.getLong(KEY_OFFLINE_MAX_STORAGE_BYTES, 25L * 1024L * 1024L * 1024L)
+        set(value) {
+            require(value >= 0L) { "offlineMaxStorageBytes must be non-negative" }
+            prefs.edit().putLong(KEY_OFFLINE_MAX_STORAGE_BYTES, value).apply()
+        }
 
     var showDebugOutlines: Boolean
         get() = prefs.getBoolean(KEY_DEBUG_OUTLINES, false) // Disabled by default
