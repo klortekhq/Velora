@@ -24,7 +24,7 @@ object TmdbApiService {
             endpoint += "&include_video_language=en,null"
         }
         
-        Log.d("TmdbApiService", "Requesting TMDB videos: $endpoint")
+        Log.d("TmdbApiService", "Requesting TMDB videos: ${redactApiKey(endpoint)}")
 
         return try {
             val url = URL(endpoint)
@@ -54,7 +54,7 @@ object TmdbApiService {
     suspend fun verifyKey(apiKey: String): VerificationResult {
         val trimmedKey = apiKey.trim()
         val endpoint = "$BASE_URL/configuration?api_key=$trimmedKey"
-        Log.d("TmdbApiService", "Verifying key with: $endpoint")
+        Log.d("TmdbApiService", "Verifying TMDB API key")
 
         return kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
             try {
@@ -81,4 +81,8 @@ object TmdbApiService {
             }
         }
     }
+
+    /** Keep user-provided TMDB credentials out of diagnostic output. */
+    internal fun redactApiKey(url: String): String =
+        url.replace(Regex("([?&]api_key=)[^&]*"), "$1<redacted>")
 }
