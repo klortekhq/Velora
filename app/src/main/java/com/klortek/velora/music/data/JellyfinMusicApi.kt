@@ -104,7 +104,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "Overview,SongCount,AlbumCount")
             }.buildString()
 
-            Log.d(TAG, "Fetching artists (via Items): $url")
+            Log.d(TAG, "Fetching artists (via Items)")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("X-Emby-Token", accessToken)
@@ -140,7 +140,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "Overview,ChildCount,RunTimeTicks")
             }.buildString()
 
-            Log.d(TAG, "Fetching albums for artist $artistId: $url")
+            Log.d(TAG, "Fetching albums for artist $artistId")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("X-Emby-Token", accessToken)
@@ -180,7 +180,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "Overview,ChildCount,RunTimeTicks")
             }.buildString()
 
-            Log.d(TAG, "Fetching all albums: $url")
+            Log.d(TAG, "Fetching all albums")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("X-Emby-Token", accessToken)
@@ -219,7 +219,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "Overview,ChildCount,RunTimeTicks")
             }.buildString()
 
-            Log.d(TAG, "Fetching recently added albums: $url")
+            Log.d(TAG, "Fetching recently added albums")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("X-Emby-Token", accessToken)
@@ -257,7 +257,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "MediaSources,MediaStreams")
             }.buildString()
 
-            Log.d(TAG, "Fetching tracks for album $albumId: $url")
+            Log.d(TAG, "Fetching tracks for album $albumId")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("X-Emby-Token", accessToken)
@@ -310,7 +310,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "MediaSources,MediaStreams")
             }.buildString()
 
-            Log.d(TAG, "Fetching tracks for artist $artistId: $url")
+            Log.d(TAG, "Fetching tracks for artist $artistId")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("X-Emby-Token", accessToken)

@@ -165,7 +165,7 @@ object ServerDiscovery {
         
         for (url in candidates) {
             try {
-                Log.d(TAG, "Trying: $url")
+                Log.d(TAG, "Trying discovered server endpoint")
                 
                 val request = Request.Builder()
                     .url(url)
@@ -179,7 +179,7 @@ object ServerDiscovery {
                     if (resp.isSuccessful) {
                         val body = resp.body?.string()
                         if (body != null && body.contains("Jellyfin", ignoreCase = true)) {
-                            Log.i(TAG, "✅ Success: $url")
+                            Log.i(TAG, "✅ Discovered reachable server endpoint")
                             
                             // Remove /System/Info/Public to get the base URL
                             val baseUrl = url
@@ -192,11 +192,11 @@ object ServerDiscovery {
                             Log.d(TAG, "Response OK but not Jellyfin: ${body?.take(100)}")
                         }
                     } else {
-                        Log.d(TAG, "HTTP ${resp.code}: $url")
+                        Log.d(TAG, "HTTP ${resp.code} from discovered server endpoint")
                     }
                 }
             } catch (e: Exception) {
-                Log.d(TAG, "Failed: $url → ${e.message}")
+                Log.d(TAG, "Server discovery attempt failed: ${e.message}")
             }
         }
         
