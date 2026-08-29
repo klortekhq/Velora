@@ -83,6 +83,7 @@ import com.klortek.velora.jellyseerr.JellyseerrApiService
 import com.klortek.velora.jellyseerr.JellyseerrMovie
 import com.klortek.velora.jellyseerr.JellyseerrImageUrl
 import com.klortek.velora.jellyseerr.JellyseerrGenres
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -98,6 +99,10 @@ import com.klortek.velora.ui.PlexBackdropGradient
 import android.graphics.drawable.BitmapDrawable
 import coil.request.SuccessResult
 import coil.annotation.ExperimentalCoilApi
+
+// Velora is Jellyfin-only. The old request/discovery implementation remains
+// in the source for migration compatibility but is deliberately unreachable.
+private const val LEGACY_DISCOVERY_ENABLED = false
 
 /**
  * Movies Library Screen - A dedicated screen for the Movies library
@@ -168,7 +173,7 @@ fun MoviesLibraryScreen(
         settings.jellyseerrApiKey, 
         settings.jellyseerrSessionCookie
     ) {
-        if (settings.jellyseerrUrl.isBlank()) return@remember null
+        if (!LEGACY_DISCOVERY_ENABLED || settings.jellyseerrUrl.isBlank()) return@remember null
         
         when (settings.jellyseerrAuthType) {
             "api_key" -> {

@@ -58,8 +58,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 - Full source-wide internationalization is not yet verified; legacy hardcoded
   strings remain.
-- Jellyseerr/TMDB legacy source is still present and must be removed or fully
-  isolated from the product surface without breaking builds.
+- Jellyseerr/request and Discover legacy source remains only for migration
+  compatibility and is now unreachable from the product surface; it should be
+  removed in a later cleanup once migration coverage exists. TMDB remains only
+  behind the trailer integration.
 - The playback contract is introduced; platform-specific capability population
   and runtime validation remain incomplete.
 - Apple iOS/iPadOS/tvOS clients are not present/verified.

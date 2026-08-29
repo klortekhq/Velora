@@ -468,12 +468,10 @@ class AppSettings(context: Context) {
     // Check if Jellyseerr is properly configured
     val isJellyseerrConfigured: Boolean
         get() {
-            if (!jellyseerrEnabled || jellyseerrUrl.isBlank()) return false
-            return when (jellyseerrAuthType) {
-                "api_key" -> jellyseerrApiKey.isNotBlank()
-                "credentials" -> jellyseerrSessionCookie.isNotBlank()
-                else -> false
-            }
+            // Discovery/request integrations are intentionally not part of the
+            // Velora product surface. Keep legacy settings readable for safe
+            // migration, but never expose or initialize the integration.
+            return false
         }
     
     // Clear Jellyseerr credentials (for logout)
