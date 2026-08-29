@@ -36,6 +36,7 @@ import androidx.tv.material3.Text
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.offline.OfflineDownload
 import com.klortek.velora.offline.OfflineDownloadManager
+import com.klortek.velora.offline.OfflineDownloadQuality
 import com.klortek.velora.platform.PlatformCapabilities
 
 class OfflineDownloadsActivity : ComponentActivity() {
@@ -90,6 +91,11 @@ class OfflineDownloadsActivity : ComponentActivity() {
                                     if (entry.isComplete) stringResource(R.string.offline_available)
                                     else stringResource(R.string.downloading_progress, entry.progress),
                                     color = Color.Gray
+                                )
+                                Text(
+                                    OfflineDownloadQuality.fromStorageKey(entry.quality).label,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    style = MaterialTheme.typography.labelMedium
                                 )
                             }
                             if (entry.isComplete) IconButton(onClick = { onPlay(entry) }) { Icon(Icons.Default.PlayArrow, "Reproducir") }
