@@ -22,6 +22,10 @@ cmake_minimum_required(VERSION 3.21.0 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ABSL_PROPAGATE_CXX_STD ON)
+# The Android client does not build libgav1's optional examples/tests. Use the
+# standard C++ mutex implementation so the production decoder does not require
+# vendoring the unrelated Abseil dependency just to configure CMake.
+add_compile_definitions(LIBGAV1_THREADPOOL_USE_STD_MUTEX=1)
 
 project(libgav1JNI C CXX)
 
