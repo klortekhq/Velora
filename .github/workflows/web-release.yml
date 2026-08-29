@@ -9,6 +9,18 @@ on:
         default: all
         type: choice
         options: [all, samsung, webos, vidaa]
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    paths:
+      - 'web/**'
+      - '.github/workflows/web-release.yml'
+  pull_request:
+    paths:
+      - 'web/**'
+      - '.github/workflows/web-release.yml'
 
 permissions:
   contents: write
@@ -18,19 +30,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Prepare common web client
-        run: node web/scripts/build-web.mjs ${{ inputs.platform }}
+        run: |
+          node web/scripts/test-platform.mjs
+          node web/scripts/build-web.mjs "${{ inputs.platform || 'all' }}"
       - name: Package source
         run: |
           mkdir -p dist
-          tar -czf dist/Velora-Web-${{ inputs.platform }}.tar.gz -C outputs/web .
+          package="${{ inputs.platform || 'all' }}"
+          tar -czf "dist/Velora-Web-${package}.tar.gz" -C outputs/web .
           sha256sum dist/* > dist/SHA256SUMS.txt
-      - name: Publish private release assets
+      - name: Guardar artefactos web
+        uses: actions/upload-artifact@v4
+        with:
+          name: Velora-Web-${{ inputs.platform || 'all' }}
+          path: dist/
+      - name: Publicar paquetes web en la release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: velora-web-${{ github.run_number }}
-          name: Velora Web ${{ inputs.platform }}
+          name: Velora ${{ github.ref_name }}
           generate_release_notes: true
           files: |
-            dist/Velora-Web-${{ inputs.platform }}.tar.gz
+            dist/Velora-Web-${{ inputs.platform || 'all' }}.tar.gz
             dist/SHA256SUMS.txt

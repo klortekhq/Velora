@@ -100,6 +100,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Packaging and SHA-256: generated locally; see `outputs/` (ignored).
 - GitHub Android workflow now builds and publishes both mobile and TV debug /
   unsigned-release variants from a version tag.
+- GitHub web workflow validates on `main`/pull requests and packages the common
+  web client plus Samsung, webOS and VIDAA targets together; a version tag
+  publishes the resulting archive and checksums to the same release.
+- Manual web workflow runs default safely to `all` when no target is selected.
 - Independent critic review: pending.
 
 The requested historical base `c3a2e52506942597444468be78ba3281996a6576` is
