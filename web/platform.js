@@ -156,6 +156,11 @@
   window.VeloraPlatform = {
     name: platform,
     isTv: platform === 'vidaa' || platform === 'tizen' || platform === 'webos',
+    // Offline media is intentionally mobile-app-only. Browser and Smart TV
+    // builds must not grow download controls even if their UI is reused.
+    capabilities: Object.freeze({
+      supportsOfflineDownloads: false
+    }),
     close: closeApplication,
     init: init
   };
