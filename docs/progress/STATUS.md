@@ -123,6 +123,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   the web regression test. Browser-native video streaming still uses the
   Jellyfin-compatible query-token fallback because an HTML video element cannot
   attach custom request headers without a streaming proxy.
+- Resolved Android trailers now enter the canonical Media3/ExoPlayer player
+  surface, preserving the same controls and fullscreen behavior as normal
+  playback; the old direct MPV trailer handoff is removed.
 
 ## Explicitly incomplete or requiring verification
 
@@ -139,7 +142,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Offline queue/storage recovery, quality selection, integrity verification,
   storage policy and full end-to-end offline journey are not yet verified;
   the durable metadata foundation is now in place.
-- Theme music, trailer resolver, persistent preview, and large-library
+- Theme music, a Jellyfin-first trailer resolver, persistent preview, and large-library
   virtualization need implementation and critic testing.
 - Live TV favorites, groups, channel zapping/previous-channel shortcut,
   mini-player and full programme-details view still need implementation.
@@ -176,6 +179,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   VIDAA hosted HTML5 bundle generated.
 - Web `npm test`: passing on 2026-08-29; platform capability regression test
   passes. Tizen packaging remains unvalidated without Tizen Studio/signing.
+- `compileMobileDebugKotlin` and `testMobileDebugUnitTest`: passing after the
+  ExoPlayer trailer routing change; only existing deprecation/KAPT warnings
+  were emitted.
 - A fresh local Android verification was blocked before compilation because
   this machine has no Android SDK installed; no new Android hardware result is
   claimed. The Windows non-ASCII path guard is enabled in `gradle.properties`.
