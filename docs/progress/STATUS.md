@@ -180,8 +180,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   decoder on 2026-08-29.
 - Web `npm test` and `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
-- Release workflow YAML was checked after the combined-release change; a real
-  GitHub tag run remains the required end-to-end publication verification.
+- Release `v1.2.3` was verified on GitHub with the four uniquely named APK
+  assets and `SHA256SUMS.txt`; the release URL is
+  `https://github.com/klortekhq/Velora/releases/tag/v1.2.3`.
 - Web `npm test`: passing on 2026-08-29; platform capability regression test
   passes. Tizen packaging remains unvalidated without Tizen Studio/signing.
 - `compileMobileDebugKotlin` and `testMobileDebugUnitTest`: passing after the
