@@ -126,6 +126,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Resolved Android trailers now enter the canonical Media3/ExoPlayer player
   surface, preserving the same controls and fullscreen behavior as normal
   playback; the old direct MPV trailer handoff is removed.
+- Release workflows now share a tag-scoped concurrency group, so Android and
+  web assets update one release serially; web checksums use a distinct name
+  and cannot overwrite the Android checksum manifest.
 
 ## Explicitly incomplete or requiring verification
 
@@ -177,6 +180,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   decoder on 2026-08-29.
 - Web `npm test` and `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
+- Release workflow YAML was checked after the combined-release change; a real
+  GitHub tag run remains the required end-to-end publication verification.
 - Web `npm test`: passing on 2026-08-29; platform capability regression test
   passes. Tizen packaging remains unvalidated without Tizen Studio/signing.
 - `compileMobileDebugKotlin` and `testMobileDebugUnitTest`: passing after the
