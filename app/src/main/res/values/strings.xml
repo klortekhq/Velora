@@ -42,6 +42,9 @@
     <string name="offline_available">Disponible sin conexión</string>
     <string name="downloading_progress">Descargando… %1$d%%</string>
     <string name="action_delete">Eliminar</string>
+    <string name="settings_offline_storage_limit">Límite de almacenamiento sin conexión</string>
+    <string name="settings_offline_storage_limit_description">Espacio máximo que Velora puede gestionar para descargas en este dispositivo.</string>
+    <string name="settings_offline_storage_unlimited">Sin límite</string>
     <string name="live_tv_all_channels">All</string>
     <string name="live_tv_favorites">Favorites</string>
     <string name="live_tv_add_favorite">Add to favorites</string>
