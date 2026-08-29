@@ -8,6 +8,8 @@ import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.delete
+import io.ktor.client.request.post
 import io.ktor.http.HttpHeaders
 import io.ktor.http.URLBuilder
 import io.ktor.http.takeFrom
@@ -33,6 +35,8 @@ data class LiveTvChannel(
     val ChannelNumber: String? = null,
     val Type: String? = null,
     val ImageTags: Map<String, String>? = null,
+    val UserData: LiveTvUserData? = null,
+    val Tags: List<String>? = null,
     val CurrentProgram: LiveTvProgram? = null,
     val UpcomingProgram: LiveTvProgram? = null
 )
@@ -48,6 +52,11 @@ data class LiveTvProgram(
     val IsLive: Boolean? = null,
     val IsSports: Boolean? = null,
     val IsNews: Boolean? = null
+)
+
+@Serializable
+data class LiveTvUserData(
+    val IsFavorite: Boolean = false
 )
 
 @Serializable
@@ -123,6 +132,13 @@ class LiveTvClient(private val config: JellyfinConfig) {
             .filter { !it.ChannelId.isNullOrBlank() }
             .groupBy { it.ChannelId!! }
             .mapValues { (_, programs) -> programs.minByOrNull { it.StartDate.orEmpty() }!! }
+    }
+
+    suspend fun setFavorite(channelId: String, favorite: Boolean) {
+        if (!config.isConfigured()) return
+        val path = "$baseUrl/Users/$userId/FavoriteItems/$channelId"
+        if (favorite) client.post(path) { jellyfinHeaders() }
+        else client.delete(path) { jellyfinHeaders() }
     }
 
     fun channelImageUrl(channelId: String, maxWidth: Int = 320): String {
