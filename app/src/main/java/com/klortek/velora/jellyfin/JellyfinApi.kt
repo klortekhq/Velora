@@ -2216,7 +2216,7 @@ class JellyfinApiService(
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = "${base}Users/$userId/PlayedItems/$itemId"
             
-            android.util.Log.d("JellyfinAPI", "Marking item as unwatched: $url")
+            android.util.Log.d("JellyfinAPI", "Marking item as unwatched")
             
             val response = client.delete(url) {
                 header("X-Emby-Token", accessToken)

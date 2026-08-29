@@ -104,7 +104,7 @@ class TrailerLauncher {
 
                     if (streamUrl.isNotEmpty()) {
                         withContext(Dispatchers.Main) {
-                            Log.d("TrailerLauncher", "Launching trailer: $streamUrl")
+                            Log.d("TrailerLauncher", "Launching trailer stream")
                             val intent = MpvTvPlayerActivity.createIntent(
                                 context,
                                 streamUrl,

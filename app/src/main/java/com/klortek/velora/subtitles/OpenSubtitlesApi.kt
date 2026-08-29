@@ -220,7 +220,7 @@ object OpenSubtitlesApi {
             urlBuilder.append("order_by=download_count&order_direction=desc")
             
             val url = urlBuilder.toString()
-            Log.d(TAG, "🔍 Searching subtitles: $url")
+                Log.d(TAG, "Searching subtitles")
             
             if (!isConfigured()) {
                 Log.e(TAG, "❌ API key not configured")

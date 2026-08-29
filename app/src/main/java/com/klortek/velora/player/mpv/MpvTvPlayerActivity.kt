@@ -125,7 +125,7 @@ class MpvTvPlayerActivity : ComponentActivity() {
         val audioUrl = intent.getStringExtra(EXTRA_AUDIO_URL)
         val isTrailer = intent.getBooleanExtra(EXTRA_IS_TRAILER, false)
 
-        Log.d("MpvTvPlayer", "Loading: $url")
+        Log.d("MpvTvPlayer", "Loading authenticated media request")
         Log.d(TAG, "Resume position: ${resumePositionMs}ms")
         if (subtitleFile != null) Log.d(TAG, "External subtitle: $subtitleFile")
         
