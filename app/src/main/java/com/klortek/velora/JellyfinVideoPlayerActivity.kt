@@ -130,16 +130,31 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         } else null
 
         if (!localPath.isNullOrBlank()) {
-            val localIntent = MpvTvPlayerActivity.createIntent(
-                context = this,
-                url = localPath,
-                headers = "",
-                title = itemName,
-                itemId = itemId,
-                resumePositionMs = resumePositionMs
+            // Offline media belongs to Velora and must use the same default
+            // Media3/ExoPlayer path as streamed media. DownloadManager may
+            // return a content:// URI, which ExoPlayer resolves through the
+            // Android content resolver; MPV cannot be assumed to access it.
+            // Keep this route server-independent so downloaded media remains
+            // playable with no network or Jellyfin session.
+            val offlineApiService = JellyfinApiService(
+                baseUrl = "http://127.0.0.1",
+                accessToken = "",
+                userId = ""
             )
-            startActivity(localIntent)
-            finish()
+            setContent {
+                JellyfinAppTheme {
+                    JellyfinVideoPlayerScreen(
+                        item = JellyfinItem(Id = itemId, Name = itemName),
+                        apiService = offlineApiService,
+                        onBack = { finish() },
+                        resumePositionMs = resumePositionMs,
+                        subtitleStreamIndex = subtitleStreamIndex,
+                        audioStreamIndex = audioStreamIndex,
+                        initialMediaUrl = localPath,
+                        offlineOnly = true
+                    )
+                }
+            }
             return
         }
 
