@@ -195,6 +195,7 @@ fun JellyfinVideoPlayerScreen(
     subtitleStreamIndex: Int? = null,
     audioStreamIndex: Int? = null,
     initialMediaUrl: String? = null,
+    offlineOnly: Boolean = false,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -737,7 +738,15 @@ fun JellyfinVideoPlayerScreen(
     // Quality changes are handled by the dedicated in-place reload effect above.
     // Keeping quality out of this metadata/track effect avoids a second reload and
     // prevents visible pauses or duplicate player preparation.
-    LaunchedEffect(item.Id, apiService, subtitleStreamIndex) {
+    LaunchedEffect(item.Id, apiService, subtitleStreamIndex, offlineOnly) {
+        if (offlineOnly) {
+            // A local DownloadManager URI is already the media source. Do not
+            // probe Jellyfin while offline: this keeps startup deterministic
+            // and prevents an offline item from being replaced by a remote
+            // URL or getting stuck in the loading state.
+            isLoading = false
+            return@LaunchedEffect
+        }
         withContext(Dispatchers.IO) {
             try {
                 // Get full item details with MediaSources

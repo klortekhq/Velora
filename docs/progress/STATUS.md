@@ -74,6 +74,12 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   itself, so TV builds cannot start a download even if a future caller bypasses
   the UI. The mobile episode download control also uses the mobile Material
   control rather than the TV-specific control.
+- Completed DownloadManager entries now retain their complete local `content://`
+  or `file://` URI, so offline playback does not depend on an invalid filesystem
+  path conversion.
+- Offline playback now enters the shared Media3/ExoPlayer screen directly and
+  does not require a configured Jellyfin session; the explicit MPV setting and
+  fallback remain available only for streamed playback.
 
 ## Explicitly incomplete or requiring verification
 

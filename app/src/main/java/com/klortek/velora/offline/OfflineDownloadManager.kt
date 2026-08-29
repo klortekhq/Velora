@@ -22,7 +22,14 @@ data class OfflineDownload(
     val bytesDownloaded: Long = 0L,
     val totalBytes: Long = -1L
 ) {
-    val isComplete: Boolean get() = status == DownloadManager.STATUS_SUCCESSFUL && !localPath.isNullOrBlank() && File(localPath).exists()
+    /**
+     * DownloadManager may return either a file:// URI or a provider-backed
+     * content:// URI. The latter has no meaningful filesystem path, so using
+     * File(path).exists() incorrectly hid completed downloads and prevented
+     * playback. A successful DownloadManager row with a persisted local URI is
+     * the authoritative availability signal; DownloadManager owns the file.
+     */
+    val isComplete: Boolean get() = status == DownloadManager.STATUS_SUCCESSFUL && !localPath.isNullOrBlank()
     val progress: Int get() = if (totalBytes > 0L) ((bytesDownloaded * 100L) / totalBytes).toInt().coerceIn(0, 100) else 0
 }
 
@@ -86,7 +93,16 @@ object OfflineDownloadManager {
             val total = cursor.getLong(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
             val uri = cursor.getString(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI))
             cursor.close()
-            entry.copy(status = status, reason = reason, bytesDownloaded = bytes, totalBytes = total, localPath = uri?.let { Uri.parse(it).path })
+            entry.copy(
+                status = status,
+                reason = reason,
+                bytesDownloaded = bytes,
+                totalBytes = total,
+                // Keep the complete URI. A content:// URI cannot safely be
+                // converted to a filesystem path and ExoPlayer can consume it
+                // directly through the Android content resolver.
+                localPath = uri?.takeIf { it.isNotBlank() }
+            )
         }
         save(context, updated)
         return updated
