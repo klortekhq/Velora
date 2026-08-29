@@ -817,7 +817,7 @@ class JellyfinApiService(
                 // Also request Chapters for chapter markers
                 parameters.append("Fields", "MediaSources,Genres,Overview,People,ProviderIds,UserData,ImageTags,IndexNumber,ParentIndexNumber,NextEpisodeId,Chapters")
             }.buildString()
-            android.util.Log.d("JellyfinAPI", "Fetching item details from: $url")
+            android.util.Log.d("JellyfinAPI", "Fetching item details")
             
             val response = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
@@ -855,7 +855,7 @@ class JellyfinApiService(
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             // Use the Items endpoint with userId for full details including Overview
             val url = URLBuilder().takeFrom("${base}Users/$userId/Items/$personId").buildString()
-            android.util.Log.d("JellyfinAPI", "Fetching person details from: $url")
+            android.util.Log.d("JellyfinAPI", "Fetching person details")
             
             val response = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
@@ -886,7 +886,7 @@ class JellyfinApiService(
                 parameters.append("Fields", "PrimaryImageAspectRatio,MediaSourceCount,Overview,Genres,ProductionYear")
                 parameters.append("Limit", limit.toString())
             }.buildString()
-            android.util.Log.d("JellyfinAPI", "Fetching person filmography from: $url")
+            android.util.Log.d("JellyfinAPI", "Fetching person filmography")
             
             val response = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
@@ -1074,7 +1074,7 @@ class JellyfinApiService(
             // Add mediaSourceId with correct casing (camelCase, not MediaSourceId)
             parameters.append("mediaSourceId", sourceId)
         }.buildString()
-        android.util.Log.d("JellyfinAPI", "Generated video playback URL: $url")
+        android.util.Log.d("JellyfinAPI", "Generated video playback request")
         return url
     }
     
@@ -1189,7 +1189,7 @@ class JellyfinApiService(
                 }
             }.buildString()
             
-            android.util.Log.d("JellyfinAPI", "Fetching PlaybackInfo: $url")
+            android.util.Log.d("JellyfinAPI", "Fetching PlaybackInfo")
             
             // Allow POST as well, but GET is sufficient and easier for this
             val response: JellyfinPlaybackInfo = client.post(url) {

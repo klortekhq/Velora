@@ -48,7 +48,6 @@ object MpvVeloraLauncher {
             } else {
                 append("static=true")
             }
-            append("&api_key=$accessToken")
             append("&mediaSourceId=${mediaSourceId ?: itemId}")
             append("&enableAutoStreamCopy=true")
             append("&allowVideoStreamCopy=true")
@@ -119,7 +118,7 @@ object MpvVeloraLauncher {
             deviceId = deviceId
         )
 
-        Log.d(TAG, "Launching external MPV player with URL: $url")
+        Log.d(TAG, "Launching MPV player with authenticated request headers")
         if (resumePositionMs > 0) {
             Log.d(TAG, "Resume position: ${resumePositionMs}ms")
         }
