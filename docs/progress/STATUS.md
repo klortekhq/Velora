@@ -137,6 +137,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Release `v1.2.5` is published at https://github.com/klortekhq/Velora/releases/tag/v1.2.5
   with the same four APK variants and a verified `SHA256SUMS.txt`; it includes
   the TMDB diagnostic secret-redaction fix.
+- GitHub repository visibility is verified as public, with source, licensing,
+  dashboard and release artifacts available at https://github.com/klortekhq/Velora.
 
 ## Explicitly incomplete or requiring verification
 
@@ -202,8 +204,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   the new security regression is included in the suite.
 - GitHub Actions runs are currently rejected before the runner starts because
   GitHub reports failed recent account payments or an exceeded spending limit;
-  manual release upload remains verified until the account billing issue is
-  resolved.
+  this remains true after retrying the v1.2.5 tag runs even after making the
+  repository public. Manual release upload remains verified until the account
+  billing issue is resolved.
 - Release `v1.2.3` was verified on GitHub with the four uniquely named APK
   assets and `SHA256SUMS.txt`; the release URL is
   `https://github.com/klortekhq/Velora/releases/tag/v1.2.3`.
