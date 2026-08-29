@@ -41,7 +41,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Subtitle stream URLs and Jellyfin music stream URLs are also tokenless; the
   Media3 music service applies Jellyfin authentication through request headers.
 - Android Jellyfin access tokens and passwords now use an Android Keystore-backed
-  encrypted store, with a transparent migration from legacy plaintext preferences.
+  encrypted store, with a transparent migration from legacy plaintext preferences;
+  API 21–22 use an RSA-wrapped AES compatibility key.
 - Offline-download availability is covered by a platform-surface contract and
   unit test: mobile/tablet and iOS mobile are eligible; TV, browser, tvOS,
   Tizen, webOS and VIDAA are not.
