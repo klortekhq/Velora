@@ -256,7 +256,9 @@ the actual branch base `418383f`.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-mobile-debug.apk` | pending v1.2.8 release upload |
-| `Velora-tv-debug.apk` | pending v1.2.8 release upload |
-| `Velora-mobile-release-unsigned.apk` | pending v1.2.8 release upload |
-| `Velora-tv-release-unsigned.apk` | pending v1.2.8 release upload |
+| `Velora-mobile-debug.apk` | `2128A257E31830FF3464657FE0D4A3F4087ACD3F50EA7DAF17A156B389AAFEE8` |
+| `Velora-tv-debug.apk` | `A43ABEFA665A592E3BC60005E4D3A7E4895FFEA145E09A9AB360EF5BF27030B9` |
+| `Velora-mobile-release-unsigned.apk` | `B01F19140F5B90E028E5C20A8A393F4215C7ECF7F1227B918C406C47AF8092B2` |
+| `Velora-tv-release-unsigned.apk` | `D6D07A07A1488FB621BF217C3C610D15B584926219AF53D9F3249F2D86522726` |
+
+Release `v1.2.8`: https://github.com/klortekhq/Velora/releases/tag/v1.2.8
