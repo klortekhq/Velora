@@ -15,14 +15,18 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
 import com.klortek.velora.MainActivity
+import com.klortek.velora.BuildConfig
 import com.klortek.velora.R
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
+import com.klortek.velora.jellyfin.JellyfinConfig
 
 private const val TAG = "AudioPlayerService"
 private const val NOTIFICATION_CHANNEL_ID = "velora_music_playback"
@@ -44,8 +48,21 @@ class AudioPlayerService : MediaSessionService() {
 
         createNotificationChannel()
 
+        // Music streams are authenticated with request headers, never URL
+        // query parameters. The service owns the player, so apply the
+        // currently configured Jellyfin credentials to every HTTP request.
+        val jellyfinConfig = JellyfinConfig(this)
+        val httpDataSourceFactory = DefaultHttpDataSource.Factory()
+            .setDefaultRequestProperties(
+                mapOf(
+                    "X-Emby-Token" to jellyfinConfig.accessToken,
+                    "X-Emby-Authorization" to "MediaBrowser Client=\"Velora\", Device=\"Android\", Version=\"${BuildConfig.VERSION_NAME}\""
+                )
+            )
+
         // Build ExoPlayer with audio focus handling
         player = ExoPlayer.Builder(this)
+            .setMediaSourceFactory(DefaultMediaSourceFactory(httpDataSourceFactory))
             .setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
