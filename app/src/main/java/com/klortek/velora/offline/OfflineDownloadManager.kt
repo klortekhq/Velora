@@ -2,7 +2,6 @@ package com.klortek.velora.offline
 
 import android.app.DownloadManager
 import android.content.Context
-import android.net.Uri
 import android.os.Environment
 import com.klortek.velora.platform.PlatformCapabilities
 import org.json.JSONArray
@@ -16,6 +15,7 @@ data class OfflineDownload(
     val seasonNumber: Int? = null,
     val episodeNumber: Int? = null,
     val downloadId: Long,
+    val quality: String = OfflineDownloadQuality.ORIGINAL.storageKey,
     val localPath: String? = null,
     val status: Int = DownloadManager.STATUS_PENDING,
     val reason: Int = 0,
@@ -49,7 +49,8 @@ object OfflineDownloadManager {
         mediaSourceId: String? = null,
         seriesName: String? = null,
         seasonNumber: Int? = null,
-        episodeNumber: Int? = null
+        episodeNumber: Int? = null,
+        quality: OfflineDownloadQuality = OfflineDownloadQuality.ORIGINAL
     ): OfflineDownload {
         check(PlatformCapabilities.supportsOfflineDownloads) {
             "Offline downloads are only supported on mobile and tablet builds"
@@ -63,18 +64,16 @@ object OfflineDownloadManager {
             delete(context, existing)
         }
 
-        val base = serverUrl.trimEnd('/')
-        val query = mediaSourceId?.let { "?mediaSourceId=${Uri.encode(it)}" } ?: ""
-        val request = DownloadManager.Request(Uri.parse("$base/Items/$itemId/Download$query"))
+        val request = DownloadManager.Request(Uri.parse(OfflineDownloadRequest.url(serverUrl, itemId, mediaSourceId, quality)))
             .addRequestHeader("X-Emby-Token", token)
             .setTitle(name)
-            .setDescription(if (type == "Episode") "E${episodeNumber ?: ""} · Descarga de episodio" else "Descarga de película")
+            .setDescription(if (type == "Episode") "E${episodeNumber ?: ""} · ${quality.label}" else quality.label)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setMimeType("video/*")
             .setDestinationInExternalFilesDir(context, Environment.DIRECTORY_MOVIES, "Velora/$itemId")
 
         val downloadId = context.getSystemService(DownloadManager::class.java).enqueue(request)
-        val entry = OfflineDownload(itemId, name, type, seriesName, seasonNumber, episodeNumber, downloadId)
+        val entry = OfflineDownload(itemId, name, type, seriesName, seasonNumber, episodeNumber, downloadId, quality.storageKey)
         save(context, load(context).filterNot { it.itemId == itemId } + entry)
         return entry
     }
@@ -135,7 +134,7 @@ object OfflineDownloadManager {
         val migrated = buildList {
             for (i in 0 until json.length()) {
                 val item = json.optJSONObject(i) ?: continue
-                add(OfflineDownload(item.optString("itemId"), item.optString("name"), item.optString("type"), item.optString("seriesName").ifBlank { null }, item.optInt("seasonNumber").takeIf { item.has("seasonNumber") }, item.optInt("episodeNumber").takeIf { item.has("episodeNumber") }, item.optLong("downloadId"), item.optString("localPath").ifBlank { null }, item.optInt("status"), item.optInt("reason"), item.optLong("bytesDownloaded"), item.optLong("totalBytes", -1L)))
+                add(OfflineDownload(item.optString("itemId"), item.optString("name"), item.optString("type"), item.optString("seriesName").ifBlank { null }, item.optInt("seasonNumber").takeIf { item.has("seasonNumber") }, item.optInt("episodeNumber").takeIf { item.has("episodeNumber") }, item.optLong("downloadId"), item.optString("quality", OfflineDownloadQuality.ORIGINAL.storageKey), item.optString("localPath").ifBlank { null }, item.optInt("status"), item.optInt("reason"), item.optLong("bytesDownloaded"), item.optLong("totalBytes", -1L)))
             }
         }
         if (migrated.isNotEmpty()) db.replaceAll(migrated)

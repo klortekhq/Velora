@@ -10,7 +10,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     "velora_offline.db",
     null,
-    1
+    2
 ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -22,6 +22,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                 season_number INTEGER,
                 episode_number INTEGER,
                 download_id INTEGER NOT NULL,
+                quality TEXT NOT NULL DEFAULT 'original',
                 local_path TEXT,
                 status INTEGER NOT NULL,
                 reason INTEGER NOT NULL,
@@ -33,7 +34,9 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // Future schema changes must be additive and preserve completed media.
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE downloads ADD COLUMN quality TEXT NOT NULL DEFAULT 'original'")
+        }
     }
 
     fun readAll(): List<OfflineDownload> {
@@ -50,6 +53,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                     seasonNumber = cursor.getIntOrNull("season_number"),
                     episodeNumber = cursor.getIntOrNull("episode_number"),
                     downloadId = cursor.getLong(cursor.getColumnIndexOrThrow("download_id")),
+                    quality = cursor.getString(cursor.getColumnIndexOrThrow("quality")),
                     localPath = cursor.getStringOrNull("local_path"),
                     status = cursor.getInt(cursor.getColumnIndexOrThrow("status")),
                     reason = cursor.getInt(cursor.getColumnIndexOrThrow("reason")),
@@ -76,6 +80,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         put("item_id", itemId); put("name", name); put("type", type)
         put("series_name", seriesName); put("season_number", seasonNumber); put("episode_number", episodeNumber)
         put("download_id", downloadId); put("local_path", localPath); put("status", status); put("reason", reason)
+        put("quality", quality)
         put("bytes_downloaded", bytesDownloaded); put("total_bytes", totalBytes)
     }
 
