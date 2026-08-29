@@ -70,6 +70,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Mobile detail navigation and action controls now use touch-native Material
   controls instead of TV focus controls; episode download actions are omitted
   entirely on platforms that do not support offline downloads.
+- Filmography cards in the person/actor screen now keep D-pad activation on TV
+  while exposing an explicit touch target on phones and tablets, so tapping an
+  actor's related filmography works on mobile as well.
 - The mobile landscape player header now separates Back from the fullscreen
   toggle; the left control returns to the previous screen and the right control
   changes fullscreen state.
