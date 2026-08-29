@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at version 1.2.5 across Android, webOS,
+- Release metadata is synchronized at version 1.2.6 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -42,6 +42,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   also uses its authenticated request headers without an `api_key` query.
 - TMDB trailer diagnostics now redact user-provided API keys; the regression
   test prevents secret values from returning to Logcat.
+- The mobile download enqueue path now checks available space and managed
+  offline usage before replacing a failed entry, uses Jellyfin source size
+  when available, and surfaces rejection without closing the app. The
+  configurable maximum defaults to 25 GiB in `AppSettings`.
 - The web client now scopes Jellyfin tokens and user IDs to `sessionStorage`,
   migrates legacy localStorage values once, and removes the durable token copy;
   server URL and non-sensitive UI preferences remain persistent.

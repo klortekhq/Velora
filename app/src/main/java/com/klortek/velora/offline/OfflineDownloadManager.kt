@@ -4,6 +4,8 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import android.os.StatFs
+import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.platform.PlatformCapabilities
 import org.json.JSONArray
 import java.io.File
@@ -40,6 +42,9 @@ object OfflineDownloadManager {
 
     private fun database(context: Context) = OfflineDatabase(context)
 
+    class StorageRejectedException(val decision: OfflineStorageDecision) :
+        IllegalStateException("Offline download rejected: ${decision.rejection}")
+
     fun enqueue(
         context: Context,
         serverUrl: String,
@@ -51,7 +56,8 @@ object OfflineDownloadManager {
         seriesName: String? = null,
         seasonNumber: Int? = null,
         episodeNumber: Int? = null,
-        quality: OfflineDownloadQuality = OfflineDownloadQuality.ORIGINAL
+        quality: OfflineDownloadQuality = OfflineDownloadQuality.ORIGINAL,
+        estimatedBytes: Long? = null
     ): OfflineDownload {
         check(PlatformCapabilities.supportsOfflineDownloads) {
             "Offline downloads are only supported on mobile and tablet builds"
@@ -62,8 +68,25 @@ object OfflineDownloadManager {
                 existing.status == DownloadManager.STATUS_RUNNING) {
                 return existing
             }
-            delete(context, existing)
         }
+
+        // Evaluate before removing a previous failed entry, so a rejected
+        // replacement never destroys the user's existing offline state.
+        val managedBytes = load(context)
+            .filterNot { it.itemId == itemId }
+            .sumOf { entry ->
+                if (entry.totalBytes > 0L) entry.totalBytes else entry.bytesDownloaded.coerceAtLeast(0L)
+            }
+        val storageRoot = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+        val availableBytes = storageRoot?.let { StatFs(it.path).availableBytes } ?: 0L
+        val maxBytes = AppSettings(context).offlineMaxStorageBytes.takeIf { it > 0L }
+        val decision = OfflineStoragePolicy.evaluate(
+            snapshot = OfflineStorageSnapshot(availableBytes = availableBytes, managedBytes = managedBytes),
+            limits = OfflineStorageLimits(maximumBytes = maxBytes),
+            incomingBytes = estimatedBytes ?: 0L
+        )
+        if (!decision.allowed) throw StorageRejectedException(decision)
+        if (existing != null) delete(context, existing)
 
         val request = DownloadManager.Request(Uri.parse(OfflineDownloadRequest.url(serverUrl, itemId, mediaSourceId, quality)))
             .addRequestHeader("X-Emby-Token", token)

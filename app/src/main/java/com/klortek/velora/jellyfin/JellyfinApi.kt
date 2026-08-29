@@ -177,6 +177,8 @@ data class SkipMarkers(
 @Serializable
 data class MediaSource(
     val Id: String? = null,
+    /** File size in bytes when Jellyfin exposes it for the selected source. */
+    val Size: Long? = null,
     val LiveStreamId: String? = null,
     val Protocol: String? = null,
     val Path: String? = null,
