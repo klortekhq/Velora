@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 
 class JellyfinConfig(context: Context) {
+    private val secureCredentials = SecureCredentialStore(context)
     private val prefs: SharedPreferences = context.getSharedPreferences(
         "jellyfin_config",
         Context.MODE_PRIVATE
@@ -19,8 +20,13 @@ class JellyfinConfig(context: Context) {
         }
 
     var accessToken: String
-        get() = prefs.getString("access_token", "") ?: ""
-        set(value) = prefs.edit().putString("access_token", value).apply()
+        get() = secureCredentials.read("access_token")
+            ?: prefs.getString("access_token", "")?.also { if (it.isNotEmpty()) secureCredentials.write("access_token", it) }
+            ?: ""
+        set(value) {
+            secureCredentials.write("access_token", value)
+            prefs.edit().remove("access_token").apply()
+        }
 
     var userId: String
         get() = prefs.getString("user_id", "") ?: ""
@@ -31,8 +37,13 @@ class JellyfinConfig(context: Context) {
         set(value) = prefs.edit().putString("username", value).apply()
 
     var password: String
-        get() = prefs.getString("password", "") ?: ""
-        set(value) = prefs.edit().putString("password", value).apply()
+        get() = secureCredentials.read("password")
+            ?: prefs.getString("password", "")?.also { if (it.isNotEmpty()) secureCredentials.write("password", it) }
+            ?: ""
+        set(value) {
+            secureCredentials.write("password", value)
+            prefs.edit().remove("password").apply()
+        }
     
     var deviceId: String
         get() = prefs.getString("device_id", "") ?: ""
@@ -56,6 +67,7 @@ class JellyfinConfig(context: Context) {
             remove("user_id")
             apply()
         }
+        secureCredentials.remove("access_token")
     }
 }
 

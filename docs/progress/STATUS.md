@@ -40,6 +40,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   also uses its authenticated request headers without an `api_key` query.
 - Subtitle stream URLs and Jellyfin music stream URLs are also tokenless; the
   Media3 music service applies Jellyfin authentication through request headers.
+- Android Jellyfin access tokens and passwords now use an Android Keystore-backed
+  encrypted store, with a transparent migration from legacy plaintext preferences.
 - Offline-download availability is covered by a platform-surface contract and
   unit test: mobile/tablet and iOS mobile are eligible; TV, browser, tvOS,
   Tizen, webOS and VIDAA are not.
@@ -61,8 +63,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Explicitly incomplete or requiring verification
 
-- Android now has a tested locale catalog and translated core language/audio/subtitle settings; full source-wide internationalization is not yet verified, with legacy hardcoded
-  strings remain.
+- Android now has a tested locale catalog and translated core language/audio/subtitle settings; full source-wide internationalization is not yet verified because legacy hardcoded strings remain.
 - Jellyseerr/request and Discover legacy source remains only for migration
   compatibility and is now unreachable from the product surface; it should be
   removed in a later cleanup once migration coverage exists. TMDB remains only
