@@ -138,8 +138,23 @@ object OfflineDownloadManager {
 
     fun delete(context: Context, entry: OfflineDownload) {
         context.getSystemService(DownloadManager::class.java).remove(entry.downloadId)
-        entry.localPath?.let { File(it).delete() }
+        entry.localPath?.let { deleteLocalUri(context, it) }
         deleteEntry(context, entry)
+    }
+
+    /**
+     * DownloadManager can expose provider-backed `content://` URIs. Treating
+     * those as filesystem paths silently leaves the provider-owned media
+     * behind, so deletion must go through ContentResolver. File URIs and the
+     * legacy plain paths remain supported for migrated installations.
+     */
+    private fun deleteLocalUri(context: Context, value: String) {
+        val uri = runCatching { Uri.parse(value) }.getOrNull()
+        when (uri?.scheme?.lowercase()) {
+            "content" -> runCatching { context.contentResolver.delete(uri, null, null) }
+            "file" -> uri.path?.let { runCatching { File(it).delete() } }
+            else -> runCatching { File(value).delete() }
+        }
     }
 
     private fun deleteEntry(context: Context, entry: OfflineDownload) = save(context, load(context).filterNot { it.downloadId == entry.downloadId })

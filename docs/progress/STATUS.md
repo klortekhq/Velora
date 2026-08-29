@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at version 1.2.8 across Android, webOS,
+- Release metadata is synchronized at version 1.2.9 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -46,6 +46,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   offline usage before replacing a failed entry, uses Jellyfin source size
   when available, and surfaces rejection without closing the app. The
   configurable maximum defaults to 25 GiB in `AppSettings`.
+- Offline deletion now routes provider-backed `content://` URIs through
+  `ContentResolver`, while retaining compatibility with `file://` and legacy
+  filesystem paths.
 - The Android player now reapplies the selected aspect mode after every Media3
   `VideoSize` update, preventing fullscreen or stream changes from silently
   restoring the source ratio.
@@ -119,8 +122,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Jellyfin transcode rather than being mislabeled as the original file.
 - A device-independent `OfflineStoragePolicy` now rejects invalid/overflowing
   sizes and enforces both a safety reserve and configurable minimum-free-space
-  and managed-offline limits; it has deterministic unit coverage. Integration
-  with the download queue and settings UI is still pending.
+  and managed-offline limits; it has deterministic unit coverage and is
+  integrated with the download queue and mobile settings UI.
 - Live TV now requests the current programme with the channel list and a
   bounded six-hour upcoming guide window, maps the next programme per channel,
   and renders the guide lazily in the existing virtualized `LazyColumn`; every
@@ -256,9 +259,9 @@ the actual branch base `418383f`.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-mobile-debug.apk` | `2128A257E31830FF3464657FE0D4A3F4087ACD3F50EA7DAF17A156B389AAFEE8` |
-| `Velora-tv-debug.apk` | `A43ABEFA665A592E3BC60005E4D3A7E4895FFEA145E09A9AB360EF5BF27030B9` |
-| `Velora-mobile-release-unsigned.apk` | `B01F19140F5B90E028E5C20A8A393F4215C7ECF7F1227B918C406C47AF8092B2` |
-| `Velora-tv-release-unsigned.apk` | `D6D07A07A1488FB621BF217C3C610D15B584926219AF53D9F3249F2D86522726` |
+| `Velora-mobile-debug.apk` | `87E66679B69D265B4D2506A41CA2E5AE3359C09077E73E650B255BF42DC4B2E0` |
+| `Velora-tv-debug.apk` | `AFC0150F2F78011857588F55DAA3EFBBA66E467C390B5CB968B83FEFCEA12F9B` |
+| `Velora-mobile-release-unsigned.apk` | `12F32F281CAA7198897E6BB92CD2A419EEC1E4D81681C9EE431F1840987B9004` |
+| `Velora-tv-release-unsigned.apk` | `8276E85D413919CB10B8D395A1255AE13F3DF3257E5A46F2C836CEC37FF30675` |
 
-Release `v1.2.8`: https://github.com/klortekhq/Velora/releases/tag/v1.2.8
+Release `v1.2.9`: https://github.com/klortekhq/Velora/releases/tag/v1.2.9
