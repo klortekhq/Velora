@@ -3,8 +3,6 @@ package com.klortek.velora
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.klortek.velora.player.mpv.MpvTvPlayerActivity
-import com.klortek.velora.ui.DeviceUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,26 +42,11 @@ class TrailerLauncher {
                     val audioStreams = extractor.audioStreams
                     val muxedStreams = extractor.videoStreams
                     
-                    // Try 1080p Video-Only (137 = 1080p AVC, 299 = 1080p60 AVC)
-                    val fhdVideo = videoOnlyStreams.find { it.id == "137" } 
-                        ?: videoOnlyStreams.find { it.id == "299" }
-                        
-                    if (fhdVideo != null) {
-                        // Find best M4A audio
-                        val bestAudio = audioStreams.find { it.id == "141" } // 256k
-                            ?: audioStreams.find { it.id == "140" } // 128k
-                            
-                        if (bestAudio != null) {
-                             streamUrl = fhdVideo.content
-                             audioUrl = bestAudio.content
-                             Log.d("TrailerLauncher", "Selected split FHD streams: Video=${fhdVideo.id}, Audio=${bestAudio.id}")
-                             Log.d("TrailerLauncher", "Audio URL: $audioUrl")
-                        } else {
-                             Log.w("TrailerLauncher", "Found 1080p video (${fhdVideo.id}) but NO suitable audio stream found.")
-                        }
-                    } else {
-                        Log.d("TrailerLauncher", "No 1080p video-only stream found.")
-                    }
+                    // Do not select separate audio/video tracks here. The
+                    // canonical Android player receives one progressive or
+                    // DASH source; handing split streams to MPV made trailers
+                    // the only playback path that ignored the ExoPlayer
+                    // preference and its track controls.
                     
                     Log.d("TrailerLauncher", "Available Video-Only Streams: ${videoOnlyStreams.map { it.id }}")
                     Log.d("TrailerLauncher", "Available Audio Streams: ${audioStreams.map { it.id }}")
@@ -105,19 +88,12 @@ class TrailerLauncher {
                     if (streamUrl.isNotEmpty()) {
                         withContext(Dispatchers.Main) {
                             Log.d("TrailerLauncher", "Launching trailer stream")
-                            val intent = MpvTvPlayerActivity.createIntent(
+                            val intent = JellyfinVideoPlayerActivity.createIntent(
                                 context,
-                                streamUrl,
-                                "",
-                                "Trailer: $title",
-                                "trailer-$key"
+                                itemId = "trailer-$key",
+                                itemName = "Tráiler: $title",
+                                externalMediaUrl = streamUrl
                             ).apply {
-                                if (audioUrl != null) {
-                                    putExtra("audio_url", audioUrl)
-                                    Log.d("TrailerLauncher", "Added audio_url to intent")
-                                } else {
-                                    Log.d("TrailerLauncher", "No audio_url to add to intent")
-                                }
                                 putExtra("is_trailer", true)
                             }
                             context.startActivity(intent)

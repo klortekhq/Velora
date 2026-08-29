@@ -43,6 +43,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         private const val EXTRA_AUDIO_STREAM_INDEX = "audio_stream_index"
         private const val EXTRA_IS_LIVE_TV = "is_live_tv"
         private const val EXTRA_LOCAL_PATH = "local_path"
+        private const val EXTRA_EXTERNAL_MEDIA_URL = "external_media_url"
 
         fun createIntent(
             context: Context,
@@ -52,7 +53,8 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
             audioStreamIndex: Int? = null,
             itemName: String? = null,
             isLiveTv: Boolean = false,
-            localPath: String? = null
+            localPath: String? = null,
+            externalMediaUrl: String? = null
         ): Intent {
             return Intent(context, JellyfinVideoPlayerActivity::class.java).apply {
                 putExtra(EXTRA_ITEM_ID, itemId)
@@ -62,6 +64,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 itemName?.let { putExtra(EXTRA_ITEM_NAME, it) }
                 putExtra(EXTRA_IS_LIVE_TV, isLiveTv)
                 localPath?.let { putExtra(EXTRA_LOCAL_PATH, it) }
+                externalMediaUrl?.let { putExtra(EXTRA_EXTERNAL_MEDIA_URL, it) }
             }
         }
     }
@@ -120,6 +123,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         val itemId = intent.getStringExtra(EXTRA_ITEM_ID) ?: return
         val itemName = intent.getStringExtra(EXTRA_ITEM_NAME) ?: ""
         val localPath = intent.getStringExtra(EXTRA_LOCAL_PATH)
+        val externalMediaUrl = intent.getStringExtra(EXTRA_EXTERNAL_MEDIA_URL)
         val isLiveTv = intent.getBooleanExtra(EXTRA_IS_LIVE_TV, false)
         val resumePositionMs = intent.getLongExtra(EXTRA_RESUME_POSITION_MS, 0L)
         val subtitleStreamIndex = if (intent.hasExtra(EXTRA_SUBTITLE_STREAM_INDEX)) {
@@ -170,6 +174,28 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
             )
         } else {
             finish()
+            return
+        }
+
+        if (!externalMediaUrl.isNullOrBlank()) {
+            // External previews (for example a resolved trailer stream) still
+            // use Velora's canonical Media3/ExoPlayer surface. They must not
+            // silently jump to MPV or an external player just because the
+            // source is not a Jellyfin item.
+            setContent {
+                JellyfinAppTheme {
+                    JellyfinVideoPlayerScreen(
+                        item = JellyfinItem(Id = itemId, Name = itemName),
+                        apiService = apiService,
+                        onBack = { finish() },
+                        resumePositionMs = resumePositionMs,
+                        subtitleStreamIndex = subtitleStreamIndex,
+                        audioStreamIndex = audioStreamIndex,
+                        initialMediaUrl = externalMediaUrl,
+                        offlineOnly = true
+                    )
+                }
+            }
             return
         }
 
