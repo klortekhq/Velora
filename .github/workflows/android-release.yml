@@ -19,6 +19,12 @@ on:
 permissions:
   contents: write
 
+# Android and web publish into the same tag release. A shared concurrency
+# group prevents both workflows from trying to create/update it at once.
+concurrency:
+  group: velora-release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build-and-release:
     name: Compilar y publicar APK
