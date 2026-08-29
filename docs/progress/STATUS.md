@@ -115,6 +115,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Live TV channels now expose Jellyfin-backed favorites and tag-based groups;
   the Android screen provides touch/focus-safe filters and favorite toggles,
   with deterministic JVM coverage for the filtering rules.
+- Login UI labels and authentication state are now resource-backed in the
+  Spanish, English, French and German catalogs, including the server name
+  placeholder and both mobile and TV login actions.
 - Web artwork URLs no longer contain the Jellyfin token; the browser requests
   artwork with `X-Emby-Token` and assigns a short-lived object URL, covered by
   the web regression test. Browser-native video streaming still uses the

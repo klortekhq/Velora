@@ -45,6 +45,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -123,12 +124,12 @@ fun JellyfinLoginScreen(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = "Iniciar sesión",
+                    text = stringResource(com.klortek.velora.R.string.login_title),
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                        text = "Conectando con $serverName",
+                        text = stringResource(com.klortek.velora.R.string.login_connecting, serverName),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -202,7 +203,7 @@ fun JellyfinLoginScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     MobileText(
-                        text = "Otras opciones:",
+                        text = stringResource(com.klortek.velora.R.string.login_other_options),
                         style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                         color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -219,7 +220,7 @@ fun JellyfinLoginScreen(
                                 enabled = !isAuthenticating,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                MobileText("Usar contraseña", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                                MobileText(stringResource(com.klortek.velora.R.string.login_use_password), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                             }
                         }
 
@@ -232,7 +233,7 @@ fun JellyfinLoginScreen(
                                 enabled = !isAuthenticating,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                MobileText("Usar Quick Connect", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                                MobileText(stringResource(com.klortek.velora.R.string.login_use_quick_connect), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                             }
                         }
 
@@ -249,7 +250,7 @@ fun JellyfinLoginScreen(
                             enabled = !isAuthenticating,
                             modifier = Modifier.weight(1f)
                         ) {
-                                MobileText("Cancelar", textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                                MobileText(stringResource(com.klortek.velora.R.string.login_cancel), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                         }
                     }
                 }
@@ -260,7 +261,7 @@ fun JellyfinLoginScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Otras opciones:",
+                        text = stringResource(com.klortek.velora.R.string.login_other_options),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(end = 8.dp)
@@ -279,7 +280,7 @@ fun JellyfinLoginScreen(
                                 }
                             }
                         ) {
-                            Text("Usar contraseña")
+                            Text(stringResource(com.klortek.velora.R.string.login_use_password))
                         }
                     }
 
@@ -296,7 +297,7 @@ fun JellyfinLoginScreen(
                                 }
                             }
                         ) {
-                            Text("Usar Quick Connect")
+                            Text(stringResource(com.klortek.velora.R.string.login_use_quick_connect))
                         }
                     }
 
@@ -326,7 +327,7 @@ fun JellyfinLoginScreen(
                             }
                         }
                     ) {
-                        Text("Cancelar")
+                        Text(stringResource(com.klortek.velora.R.string.login_cancel))
                     }
                 }
             }
@@ -370,7 +371,7 @@ private fun CredentialsLoginContent(
         TvTextField(
             value = username,
             onValueChange = onUsernameChange,
-            label = "Usuario",
+            label = stringResource(com.klortek.velora.R.string.login_username),
             enabled = !isAuthenticating && usernameEditable,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -388,7 +389,7 @@ private fun CredentialsLoginContent(
         TvTextField(
             value = password,
             onValueChange = onPasswordChange,
-            label = "Contraseña",
+            label = stringResource(com.klortek.velora.R.string.login_password),
             enabled = !isAuthenticating,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -464,7 +465,7 @@ private fun CredentialsLoginContent(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = if (isAuthenticating) "Autenticando…" else "Iniciar sesión",
+                            text = if (isAuthenticating) stringResource(com.klortek.velora.R.string.login_authenticating) else stringResource(com.klortek.velora.R.string.login_sign_in),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 lineHeight = 20.sp
                             ),
@@ -494,7 +495,7 @@ private fun CredentialsLoginContent(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     MobileText(
-                        text = if (isAuthenticating) "Autenticando…" else "Iniciar sesión",
+                        text = if (isAuthenticating) stringResource(com.klortek.velora.R.string.login_authenticating) else stringResource(com.klortek.velora.R.string.login_sign_in),
                         style = androidx.compose.material3.MaterialTheme.typography.labelLarge
                     )
                 }

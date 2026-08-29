@@ -46,4 +46,14 @@
     <string name="live_tv_favorites">Favorites</string>
     <string name="live_tv_add_favorite">Add to favorites</string>
     <string name="live_tv_remove_favorite">Remove from favorites</string>
+    <string name="login_title">Iniciar sesión</string>
+    <string name="login_connecting">Conectando con %1$s</string>
+    <string name="login_other_options">Otras opciones:</string>
+    <string name="login_use_password">Usar contraseña</string>
+    <string name="login_use_quick_connect">Usar Quick Connect</string>
+    <string name="login_cancel">Cancelar</string>
+    <string name="login_username">Usuario</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_sign_in">Iniciar sesión</string>
+    <string name="login_authenticating">Autenticando…</string>
 </resources>
