@@ -25,6 +25,12 @@ on:
 permissions:
   contents: write
 
+# Serialize with the Android release workflow so both sets of assets land in
+# the same GitHub release without create/update races.
+concurrency:
+  group: velora-release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   web:
     runs-on: ubuntu-latest
@@ -43,7 +49,7 @@ jobs:
           mkdir -p dist
           package="${{ inputs.platform || 'all' }}"
           tar -czf "dist/Velora-Web-${package}.tar.gz" -C outputs/web .
-          sha256sum dist/* > dist/SHA256SUMS.txt
+          sha256sum dist/* > dist/SHA256SUMS-web.txt
       - name: Guardar artefactos web
         uses: actions/upload-artifact@v4
         with:
@@ -57,4 +63,4 @@ jobs:
           generate_release_notes: true
           files: |
             dist/Velora-Web-${{ inputs.platform || 'all' }}.tar.gz
-            dist/SHA256SUMS.txt
+            dist/SHA256SUMS-web.txt
