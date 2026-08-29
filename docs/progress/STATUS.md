@@ -53,6 +53,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   `AspectRatioFrameLayout`, including forced 4:3/16:9/cinema modes.
 - The home UI does not render a separate recently-added episode row; episodes
   remain reachable from series details and Continue Watching.
+- Offline download metadata now uses an app-private SQLite index with a
+  one-time migration from the former JSON preference store; completed media
+  metadata survives process recreation without depending on SharedPreferences.
 
 ## Explicitly incomplete or requiring verification
 
@@ -66,7 +69,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   and runtime validation remain incomplete.
 - Apple iOS/iPadOS/tvOS clients are not present/verified.
 - VIDAA support is not validated on a real device or certified runtime.
-- Offline database/storage engine and recovery journey are not yet verified.
+- Offline queue/storage recovery, quality selection, integrity verification,
+  storage policy and full end-to-end offline journey are not yet verified;
+  the durable metadata foundation is now in place.
 - Theme music, trailer resolver, persistent preview, and large-library
   virtualization need implementation and critic testing.
 - No hardware test result is claimed: the connected Fire TV/phone were not

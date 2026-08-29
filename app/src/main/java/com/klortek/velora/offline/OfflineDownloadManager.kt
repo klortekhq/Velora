@@ -30,6 +30,8 @@ object OfflineDownloadManager {
     private const val PREFS = "velora_offline_downloads"
     private const val KEY_ENTRIES = "entries"
 
+    private fun database(context: Context) = OfflineDatabase(context)
+
     fun enqueue(
         context: Context,
         serverUrl: String,
@@ -101,25 +103,33 @@ object OfflineDownloadManager {
     private fun deleteEntry(context: Context, entry: OfflineDownload) = save(context, load(context).filterNot { it.downloadId == entry.downloadId })
 
     fun load(context: Context): List<OfflineDownload> {
+        val db = database(context)
+        val current = db.readAll()
+        if (current.isNotEmpty()) {
+            db.close()
+            return current
+        }
+
+        // One-time migration for installations that used the original JSON index.
         val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_ENTRIES, "[]") ?: "[]"
         val json = runCatching { JSONArray(raw) }.getOrElse { JSONArray() }
-        return buildList {
+        val migrated = buildList {
             for (i in 0 until json.length()) {
                 val item = json.optJSONObject(i) ?: continue
                 add(OfflineDownload(item.optString("itemId"), item.optString("name"), item.optString("type"), item.optString("seriesName").ifBlank { null }, item.optInt("seasonNumber").takeIf { item.has("seasonNumber") }, item.optInt("episodeNumber").takeIf { item.has("episodeNumber") }, item.optLong("downloadId"), item.optString("localPath").ifBlank { null }, item.optInt("status"), item.optInt("reason"), item.optLong("bytesDownloaded"), item.optLong("totalBytes", -1L)))
             }
         }
+        if (migrated.isNotEmpty()) db.replaceAll(migrated)
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().remove(KEY_ENTRIES).apply()
+        db.close()
+        return migrated
     }
 
     private fun save(context: Context, entries: List<OfflineDownload>) {
-        val json = JSONArray()
-        entries.forEach { entry ->
-            json.put(JSONObject().apply {
-                put("itemId", entry.itemId); put("name", entry.name); put("type", entry.type); put("downloadId", entry.downloadId)
-                entry.seriesName?.let { put("seriesName", it) }; entry.seasonNumber?.let { put("seasonNumber", it) }; entry.episodeNumber?.let { put("episodeNumber", it) }
-                entry.localPath?.let { put("localPath", it) }; put("status", entry.status); put("reason", entry.reason); put("bytesDownloaded", entry.bytesDownloaded); put("totalBytes", entry.totalBytes)
-            })
-        }
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(KEY_ENTRIES, json.toString()).apply()
+        val db = database(context)
+        db.replaceAll(entries)
+        db.close()
+        // The preference is intentionally removed once the SQLite index is live.
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().remove(KEY_ENTRIES).apply()
     }
 }

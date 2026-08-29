@@ -1,0 +1,97 @@
+package com.klortek.velora.offline
+
+import android.content.ContentValues
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+
+/** Durable, app-private index for managed offline media. */
+internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
+    context.applicationContext,
+    "velora_offline.db",
+    null,
+    1
+) {
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL(
+            """CREATE TABLE downloads (
+                item_id TEXT PRIMARY KEY NOT NULL,
+                name TEXT NOT NULL,
+                type TEXT NOT NULL,
+                series_name TEXT,
+                season_number INTEGER,
+                episode_number INTEGER,
+                download_id INTEGER NOT NULL,
+                local_path TEXT,
+                status INTEGER NOT NULL,
+                reason INTEGER NOT NULL,
+                bytes_downloaded INTEGER NOT NULL,
+                total_bytes INTEGER NOT NULL
+            )"""
+        )
+        db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        // Future schema changes must be additive and preserve completed media.
+    }
+
+    fun readAll(): List<OfflineDownload> {
+        val result = mutableListOf<OfflineDownload>()
+        readableDatabase.query(
+            "downloads", null, null, null, null, null, "rowid ASC"
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                result += OfflineDownload(
+                    itemId = cursor.getString(cursor.getColumnIndexOrThrow("item_id")),
+                    name = cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                    type = cursor.getString(cursor.getColumnIndexOrThrow("type")),
+                    seriesName = cursor.getStringOrNull("series_name"),
+                    seasonNumber = cursor.getIntOrNull("season_number"),
+                    episodeNumber = cursor.getIntOrNull("episode_number"),
+                    downloadId = cursor.getLong(cursor.getColumnIndexOrThrow("download_id")),
+                    localPath = cursor.getStringOrNull("local_path"),
+                    status = cursor.getInt(cursor.getColumnIndexOrThrow("status")),
+                    reason = cursor.getInt(cursor.getColumnIndexOrThrow("reason")),
+                    bytesDownloaded = cursor.getLong(cursor.getColumnIndexOrThrow("bytes_downloaded")),
+                    totalBytes = cursor.getLong(cursor.getColumnIndexOrThrow("total_bytes"))
+                )
+            }
+        }
+        return result
+    }
+
+    fun replaceAll(entries: List<OfflineDownload>) {
+        writableDatabase.transaction {
+            delete("downloads", null, null)
+            entries.forEach { entry -> insertOrThrow("downloads", null, entry.values()) }
+        }
+    }
+
+    fun deleteByDownloadId(downloadId: Long) {
+        writableDatabase.delete("downloads", "download_id = ?", arrayOf(downloadId.toString()))
+    }
+
+    private fun OfflineDownload.values() = ContentValues().apply {
+        put("item_id", itemId); put("name", name); put("type", type)
+        put("series_name", seriesName); put("season_number", seasonNumber); put("episode_number", episodeNumber)
+        put("download_id", downloadId); put("local_path", localPath); put("status", status); put("reason", reason)
+        put("bytes_downloaded", bytesDownloaded); put("total_bytes", totalBytes)
+    }
+
+    private fun android.database.Cursor.getStringOrNull(column: String): String? =
+        getString(getColumnIndexOrThrow(column))?.takeIf { it.isNotBlank() }
+
+    private fun android.database.Cursor.getIntOrNull(column: String): Int? =
+        if (isNull(getColumnIndexOrThrow(column))) null else getInt(getColumnIndexOrThrow(column))
+}
+
+private inline fun SQLiteDatabase.transaction(block: SQLiteDatabase.() -> Unit) {
+    beginTransaction()
+    try {
+        block()
+        setTransactionSuccessful()
+    } finally {
+        endTransaction()
+    }
+}
