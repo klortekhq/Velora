@@ -285,6 +285,7 @@ fun SettingsScreen(
     var showLoginDialog by remember { mutableStateOf(false) }
     var showClearSubtitlesDialog by remember { mutableStateOf(false) }
     var rowCardCount by remember { mutableStateOf(settings.rowCardCount) }
+    var offlineMaxStorageBytes by remember { mutableStateOf(settings.offlineMaxStorageBytes) }
     var downloadedSubtitlesCount by remember { mutableStateOf(0) }
 
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
@@ -2116,6 +2117,29 @@ fun SettingsScreen(
                                     settings.rowCardCount = rowCardCount
                                 }
                             )
+
+                            // Offline media is intentionally a mobile/tablet
+                            // feature. TV builds do not expose this control.
+                            if (!isTv) {
+                                val gigabyte = 1024L * 1024L * 1024L
+                                val offlineLimitOptions = listOf(5L, 10L, 25L, 50L, 100L).map { it * gigabyte } + 0L
+                                val offlineLimitLabel = if (offlineMaxStorageBytes == 0L) {
+                                    context.getString(com.klortek.velora.R.string.settings_offline_storage_unlimited)
+                                } else {
+                                    "${offlineMaxStorageBytes / gigabyte} GB"
+                                }
+                                SettingCycle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_offline_storage_limit),
+                                    description = context.getString(com.klortek.velora.R.string.settings_offline_storage_limit_description),
+                                    currentValue = offlineLimitLabel,
+                                    onCycle = {
+                                        val currentIndex = offlineLimitOptions.indexOf(offlineMaxStorageBytes).coerceAtLeast(0)
+                                        val next = offlineLimitOptions[(currentIndex + 1) % offlineLimitOptions.size]
+                                        offlineMaxStorageBytes = next
+                                        settings.offlineMaxStorageBytes = next
+                                    }
+                                )
+                            }
                         }
                         
                         SettingsCategory.ADVANCED -> {
