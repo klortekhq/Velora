@@ -31,6 +31,7 @@
       subtitles: 'Subtítulos', subtitleOff: 'Desactivados', subtitlePreferred: 'Preferidos', subtitleForced: 'Forzados',
       subtitleAuto: 'Automáticos', subtitleLanguage: 'Idioma de subtítulos', save: 'Guardar', cancel: 'Cancelar',
       saved: 'Preferencias guardadas', settingDescription: 'Se aplican al próximo contenido y se guardan en este dispositivo.',
+      cast: 'Reparto', actorWorks: 'Películas y series de este actor', noActorWorks: 'No hay otros títulos disponibles.', personError: 'No se pudo cargar la filmografía',
       loginError: 'No se pudo iniciar sesión', playbackError: 'El dispositivo no puede reproducir este formato directamente.'
     },
     en: {
@@ -43,7 +44,8 @@
       automatic: 'Automatic (device language)', preferredAudio: 'Preferred audio', audioAuto: 'Automatic / server',
       subtitles: 'Subtitles', subtitleOff: 'Disabled', subtitlePreferred: 'Preferred', subtitleForced: 'Forced',
       subtitleAuto: 'Automatic', subtitleLanguage: 'Subtitle language', save: 'Save', cancel: 'Cancel',
-      saved: 'Preferences saved', settingDescription: 'Applied to new playback and saved on this device.',
+      saved: 'Preferences saved', settingDescription: 'Applied to new playback and saved on this device.', cast: 'Cast',
+      actorWorks: 'Movies and series with this actor', noActorWorks: 'No other titles available.', personError: 'Could not load filmography',
       loginError: 'Sign-in failed', playbackError: 'This device cannot play this format directly.'
     },
     pt: {
@@ -304,7 +306,7 @@
     }
     var params = 'Recursive=true&IncludeItemTypes=Movie%2CSeries%2CLiveTvChannel&' +
       'SortBy=DateCreated&SortOrder=Descending&Limit=150&' +
-      'Fields=Overview%2CProductionYear%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData%2CSeriesName%2CSeriesId%2CIndexNumber%2CParentIndexNumber';
+      'Fields=Overview%2CProductionYear%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData%2CPeople%2CSeriesName%2CSeriesId%2CIndexNumber%2CParentIndexNumber';
     return api('/Users/' + state.userId + '/Items?' + params).then(function (data) {
       state.items = data.Items || [];
     });
@@ -338,6 +340,30 @@
     if (details) details.remove();
   }
 
+  function showPersonFilmography(personId, personName) {
+    var details = document.querySelector('#details');
+    if (!details) return;
+    details.querySelector('.person-results').innerHTML = '<p class="muted">' + esc(t('loading')) + '</p>';
+    api('/Users/' + encodeURIComponent(state.userId) + '/Items?Recursive=true&PersonIds=' + encodeURIComponent(personId) +
+      '&IncludeItemTypes=Movie%2CSeries&Fields=Overview%2CProductionYear%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData&Limit=100&SortBy=DateCreated&SortOrder=Descending')
+      .then(function (data) {
+        var works = data.Items || [];
+        var html = '<h2>' + esc(t('actorWorks')) + '</h2>';
+        if (!works.length) html += '<p class="muted">' + esc(t('noActorWorks')) + '</p>';
+        else html += '<div class="grid">' + works.map(function (work) {
+          return '<article class="card" tabindex="0" role="button" data-id="' + esc(work.Id) + '">' +
+            '<img loading="lazy" data-velora-image-id="' + esc(work.Id) + '" alt=""><div class="label">' + esc(work.Name) + '</div></article>';
+        }).join('') + '</div>';
+        details.querySelector('.person-results').innerHTML = html;
+        details.querySelector('.person-results').setAttribute('aria-label', personName);
+        hydrateProtectedImages(details.querySelector('.person-results'));
+        bindCards();
+      })
+      .catch(function () {
+        details.querySelector('.person-results').innerHTML = '<p class="error">' + esc(t('personError')) + '</p>';
+      });
+  }
+
   function openItem(id) {
     var item = state.items.find(function (candidate) { return candidate.Id === id; });
     if (!item) return;
@@ -349,10 +375,21 @@
       '<h1 id="detailsTitle">' + esc(item.Name) + '</h1>' +
       '<p class="muted">' + esc(item.ProductionYear || '') + (item.Type === 'Series' ? ' · ' + esc(t('series')) : '') + '</p>' +
       '<p>' + esc(item.Overview || t('noDescription')) + '</p>' +
+      '<section class="cast"><h2>' + esc(t('cast')) + '</h2><div class="cast-list">' +
+      (item.People || []).filter(function (person) { return person.Type === 'Actor' || person.Type === 'GuestStar'; }).slice(0, 12).map(function (person) {
+        if (!person.Id) return '<span class="cast-person">' + esc(person.Name || '') + '</span>';
+        return '<button type="button" class="cast-person" data-person-id="' + esc(person.Id) + '" data-person-name="' + esc(person.Name || '') + '">' + esc(person.Name || '') + '</button>';
+      }).join('') + '</div></section>' +
+      '<div class="person-results"></div>' +
       '<button type="button" class="primary" id="playItem">' + esc(t('play')) + '</button>' +
       '</div></div>');
     document.querySelector('#detailsClose').onclick = closeDetails;
     hydrateProtectedImages(document.querySelector('#details'));
+    Array.prototype.forEach.call(document.querySelectorAll('#details [data-person-id]'), function (personButton) {
+      personButton.onclick = function () {
+        showPersonFilmography(personButton.getAttribute('data-person-id'), personButton.getAttribute('data-person-name') || '');
+      };
+    });
     document.querySelector('#playItem').onclick = function () {
       closeDetails();
       play(item);
