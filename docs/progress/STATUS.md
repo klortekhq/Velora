@@ -96,7 +96,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 | Platform | Source/build state | Hardware/runtime validation |
 | --- | --- | --- |
-| Android mobile/tablet | Debug + release APK built; unit tests pass | Hardware validation pending |
+| Android mobile/tablet | `assembleMobileDebug` passes with AV1 native decoder; unit tests pass | Hardware validation pending |
 | Android TV / Fire TV | Debug + release APK built; TV download guard compiled | Hardware validation pending |
 | Web | `npm run build:all` passes; webOS IPK generated | Browser/device validation pending |
 | Samsung Tizen | Packaging path exists | Device/emulator validation pending |
@@ -123,6 +123,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   this machine has no Android SDK installed; no new Android hardware result is
   claimed. The Windows non-ASCII path guard is enabled in `gradle.properties`.
 - Packaging and SHA-256: generated locally; see `outputs/` (ignored).
+- Latest mobile debug APK from commit `81bb6ef`: SHA-256
+  `F98E3DB255E5F6E3A756439569E6E1E64A2030748EEE8EE460314CD33D2D135A`.
 - GitHub Android workflow now builds and publishes both mobile and TV debug /
   unsigned-release variants from a version tag.
 - GitHub web workflow validates on `main`/pull requests and packages the common
@@ -139,7 +141,7 @@ the actual branch base `418383f`.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-Mobile-debug.apk` | `09CB6ECC4A4F0FE58BC4208476984B1D91D1ECEEB899EFB9CC28A0A842EA6B2D` |
+| `Velora-Mobile-debug-81bb6ef.apk` | `F98E3DB255E5F6E3A756439569E6E1E64A2030748EEE8EE460314CD33D2D135A` |
 | `Velora-TV-debug.apk` | `4FF1E9AF9BE850E8FC7DAD7E88B232E15AFC490E9EAA59D80F1B8D6841188DD6` |
 | `Velora-Mobile-release-unsigned.apk` | `6DAE8005CD11C6D6FA2609AC82072F5ADB19A787E86249AAB60B6D74D23AC6AB` |
 | `Velora-TV-release-unsigned.apk` | `E03E9C79BF9EF672A64385D9B885286F738B002C41F311AFE8CBE82FDFB887F3` |
