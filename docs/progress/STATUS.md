@@ -139,6 +139,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   the web regression test. Browser-native video streaming still uses the
   Jellyfin-compatible query-token fallback because an HTML video element cannot
   attach custom request headers without a streaming proxy.
+- Web item details now expose Jellyfin cast/guest-star buttons; selecting a
+  person loads that person's movie and series filmography through the API and
+  keeps the result keyboard-accessible.
 - Resolved Android trailers now enter the canonical Media3/ExoPlayer player
   surface, preserving the same controls and fullscreen behavior as normal
   playback; the old direct MPV trailer handoff is removed.
