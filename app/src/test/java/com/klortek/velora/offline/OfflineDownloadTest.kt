@@ -35,4 +35,16 @@ class OfflineDownloadTest {
         assertFalse(pending.isComplete)
         assertFalse(missingUri.isComplete)
     }
+
+    @Test
+    fun qualityProfilesUseOriginalOrExplicitTranscodeEndpoint() {
+        val original = OfflineDownloadRequest.url("http://server:8096/", "movie/1", "source 1", OfflineDownloadQuality.ORIGINAL)
+        val medium = OfflineDownloadRequest.url("http://server:8096/", "movie/1", "source 1", OfflineDownloadQuality.MEDIUM)
+
+        assertTrue(original.contains("/Items/movie%2F1/Download?mediaSourceId=source%201"))
+        assertTrue(medium.contains("/Videos/movie%2F1/stream.mp4?"))
+        assertTrue(medium.contains("MaxWidth=1280"))
+        assertTrue(medium.contains("MaxHeight=720"))
+        assertTrue(medium.contains("VideoBitrate=5000000"))
+    }
 }
