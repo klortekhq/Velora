@@ -33,6 +33,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   headers instead of putting the Jellyfin token in the playback query string.
 - Android-managed downloads and the MPV fallback now also keep the Jellyfin
   token in request headers rather than embedding it in playback/download URLs.
+- Quick Connect diagnostics no longer log access-token fragments or polling
+  secrets.
 - The shared playback mapper/decision engine is now invoked from the Android
   MediaSource loading path and records the selected path for diagnostics.
 - Android playback capabilities now probe installed MediaCodec decoders and
