@@ -67,6 +67,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Mobile detail navigation and action controls now use touch-native Material
   controls instead of TV focus controls; episode download actions are omitted
   entirely on platforms that do not support offline downloads.
+- The mobile landscape player header now separates Back from the fullscreen
+  toggle; the left control returns to the previous screen and the right control
+  changes fullscreen state.
 - The home UI does not render a separate recently-added episode row; episodes
   remain reachable from series details and Continue Watching.
 - Offline download metadata now uses an app-private SQLite index with a

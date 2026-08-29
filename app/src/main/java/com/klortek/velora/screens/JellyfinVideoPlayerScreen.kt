@@ -3510,7 +3510,7 @@ fun JellyfinVideoPlayerScreen(
                                                     color = Color.Black.copy(alpha = 0.5f),
                                                     shape = RoundedCornerShape(50)
                                                 )
-                                                .clickable { toggleMobileFullscreen() },
+                                                .clickable { onBack() },
                                             contentAlignment = Alignment.Center
                                         ) {
                                             androidx.compose.material3.Icon(
