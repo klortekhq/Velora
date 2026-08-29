@@ -27,6 +27,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - App language and preferred audio/subtitle settings have been started in
   Android and web.
 - Generated local build/device artifacts are now ignored by Git.
+- The public README now identifies the current release and uses the exact
+  mobile/TV build and test tasks used by CI.
 - Release metadata is synchronized at version 1.2.2 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
