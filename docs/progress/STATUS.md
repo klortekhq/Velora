@@ -81,6 +81,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Movie and series mobile libraries now share a deterministic, tested content
   query for sorting by name/date/runtime/ratings and filtering by favorites,
   watched state and genre; the selected sort mode is persisted consistently.
+- The mobile sort/filter panel is height-bounded and vertically scrollable, so
+  long genre lists remain reachable on small phones and tablets.
 - The home UI does not render a separate recently-added episode row; episodes
   remain reachable from series details and Continue Watching.
 - Offline download metadata now uses an app-private SQLite index with a
