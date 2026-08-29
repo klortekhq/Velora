@@ -67,12 +67,6 @@ import com.klortek.velora.jellyfin.AppSettings
 private val MobileHomeBackground = Color(0xFF090B10)
 private val MobileHomeCyan = Color(0xFF18C9F1)
 
-private enum class MobileLibrarySortMode {
-    Name, DateAdded, PremiereDate, Runtime, CriticRating, CommunityRating
-}
-
-private enum class MobilePlaybackFilter { All, Watched, Unwatched }
-
 @Composable
 fun MobileHomeScreen(
     continueWatching: List<JellyfinItem>,
@@ -180,57 +174,27 @@ fun MobileLibraryScreen(
 ) {
     val context = LocalContext.current
     val settings = remember { AppSettings(context) }
-    var sortType by remember {
-        mutableStateOf(
-            when (settings.getSortType()) {
-                "DateAdded" -> SortType.DateAdded
-                "DateReleased" -> SortType.DateReleased
-                else -> SortType.Alphabetically
-            }
-        )
-    }
     var mobileSortMode by remember {
         mutableStateOf(
             when (settings.getSortType()) {
-                "DateAdded" -> MobileLibrarySortMode.DateAdded
-                "DateReleased" -> MobileLibrarySortMode.PremiereDate
-                else -> MobileLibrarySortMode.Name
+                "DateAdded" -> LibrarySortMode.DateAdded
+                "DateReleased" -> LibrarySortMode.PremiereDate
+                "Runtime" -> LibrarySortMode.Runtime
+                "CriticRating" -> LibrarySortMode.CriticRating
+                "CommunityRating" -> LibrarySortMode.CommunityRating
+                else -> LibrarySortMode.Name
             }
         )
     }
     var sortDescending by remember { mutableStateOf(false) }
     var favoritesOnly by remember { mutableStateOf(false) }
-    var playbackFilter by remember { mutableStateOf(MobilePlaybackFilter.All) }
+    var playbackFilter by remember { mutableStateOf(LibraryPlaybackFilter.All) }
+    var selectedGenre by remember { mutableStateOf<String?>(null) }
     var showSortDialog by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableStateOf(if (recommendations.isNotEmpty()) 0 else 1) }
-    val sortedItems = remember(items, sortType, mobileSortMode, sortDescending, favoritesOnly, playbackFilter) {
-        val filtered = items.filter { item ->
-            val favorite = item.UserData?.IsFavorite == true
-            val favoriteMatch = !favoritesOnly || favorite
-            val playbackMatch = when (playbackFilter) {
-                MobilePlaybackFilter.All -> true
-                MobilePlaybackFilter.Watched -> item.UserData?.Played == true
-                MobilePlaybackFilter.Unwatched -> item.UserData?.Played != true
-            }
-            favoriteMatch && playbackMatch
-        }
-        val effectiveSort = when (mobileSortMode) {
-            MobileLibrarySortMode.Name -> SortType.Alphabetically
-            MobileLibrarySortMode.DateAdded -> SortType.DateAdded
-            MobileLibrarySortMode.PremiereDate -> SortType.DateReleased
-            else -> SortType.Alphabetically
-        }
-        val result = when (effectiveSort) {
-            SortType.DateAdded -> filtered.sortedBy { it.DateCreated ?: "" }
-            SortType.DateReleased -> filtered.sortedBy { it.PremiereDate ?: "" }
-            SortType.Alphabetically -> when (mobileSortMode) {
-                MobileLibrarySortMode.Runtime -> filtered.sortedBy { it.RunTimeTicks ?: 0L }
-                MobileLibrarySortMode.CriticRating -> filtered.sortedBy { it.CriticRating ?: 0f }
-                MobileLibrarySortMode.CommunityRating -> filtered.sortedBy { it.CommunityRating ?: 0f }
-                else -> filtered.sortedBy { it.Name.lowercase() }
-            }
-        }
-        if (sortDescending) result.asReversed() else result
+    val availableGenres = remember(items) { availableLibraryGenres(items) }
+    val sortedItems = remember(items, mobileSortMode, sortDescending, favoritesOnly, playbackFilter, selectedGenre) {
+        queryLibraryItems(items, mobileSortMode, sortDescending, favoritesOnly, playbackFilter, selectedGenre)
     }
 
     Column(Modifier.fillMaxSize().background(MobileHomeBackground).navigationBarsPadding()) {
@@ -317,35 +281,45 @@ fun MobileLibraryScreen(
                     Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Ordenar y filtrar", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                         Text("Ordenar por", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
-                        MobileLibrarySortOption("Nombre", sortType == SortType.Alphabetically) {
-                            mobileSortMode = MobileLibrarySortMode.Name
-                            sortType = SortType.Alphabetically
+                        MobileLibrarySortOption("Nombre", mobileSortMode == LibrarySortMode.Name) {
+                            mobileSortMode = LibrarySortMode.Name
                             settings.setSortType("Alphabetically")
                         }
-                        MobileLibrarySortOption("Fecha de incorporación", sortType == SortType.DateAdded) {
-                            sortType = SortType.DateAdded
+                        MobileLibrarySortOption("Fecha de incorporación", mobileSortMode == LibrarySortMode.DateAdded) {
+                            mobileSortMode = LibrarySortMode.DateAdded
                             settings.setSortType("DateAdded")
                         }
-                        MobileLibrarySortOption("Fecha de estreno", sortType == SortType.DateReleased) {
-                            mobileSortMode = MobileLibrarySortMode.PremiereDate
-                            sortType = SortType.DateReleased
+                        MobileLibrarySortOption("Fecha de estreno", mobileSortMode == LibrarySortMode.PremiereDate) {
+                            mobileSortMode = LibrarySortMode.PremiereDate
                             settings.setSortType("DateReleased")
                         }
-                        MobileLibrarySortOption("Duración", mobileSortMode == MobileLibrarySortMode.Runtime) {
-                            mobileSortMode = MobileLibrarySortMode.Runtime
+                        MobileLibrarySortOption("Duración", mobileSortMode == LibrarySortMode.Runtime) {
+                            mobileSortMode = LibrarySortMode.Runtime
+                            settings.setSortType("Runtime")
                         }
-                        MobileLibrarySortOption("Valoración de la crítica", mobileSortMode == MobileLibrarySortMode.CriticRating) {
-                            mobileSortMode = MobileLibrarySortMode.CriticRating
+                        MobileLibrarySortOption("Valoración de la crítica", mobileSortMode == LibrarySortMode.CriticRating) {
+                            mobileSortMode = LibrarySortMode.CriticRating
+                            settings.setSortType("CriticRating")
                         }
-                        MobileLibrarySortOption("Valoración de la comunidad", mobileSortMode == MobileLibrarySortMode.CommunityRating) {
-                            mobileSortMode = MobileLibrarySortMode.CommunityRating
+                        MobileLibrarySortOption("Valoración de la comunidad", mobileSortMode == LibrarySortMode.CommunityRating) {
+                            mobileSortMode = LibrarySortMode.CommunityRating
+                            settings.setSortType("CommunityRating")
                         }
                         Text("Filtros", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
                         MobileLibraryCheckOption("Favoritos", favoritesOnly) { favoritesOnly = !favoritesOnly }
                         Text("Estado de reproducción", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
-                        MobileLibrarySortOption("Todos", playbackFilter == MobilePlaybackFilter.All) { playbackFilter = MobilePlaybackFilter.All }
-                        MobileLibrarySortOption("Vistos", playbackFilter == MobilePlaybackFilter.Watched) { playbackFilter = MobilePlaybackFilter.Watched }
-                        MobileLibrarySortOption("No vistos", playbackFilter == MobilePlaybackFilter.Unwatched) { playbackFilter = MobilePlaybackFilter.Unwatched }
+                        MobileLibrarySortOption("Todos", playbackFilter == LibraryPlaybackFilter.All) { playbackFilter = LibraryPlaybackFilter.All }
+                        MobileLibrarySortOption("Vistos", playbackFilter == LibraryPlaybackFilter.Watched) { playbackFilter = LibraryPlaybackFilter.Watched }
+                        MobileLibrarySortOption("No vistos", playbackFilter == LibraryPlaybackFilter.Unwatched) { playbackFilter = LibraryPlaybackFilter.Unwatched }
+                        if (availableGenres.isNotEmpty()) {
+                            Text("Género", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+                            MobileLibrarySortOption("Todos los géneros", selectedGenre == null) { selectedGenre = null }
+                            availableGenres.forEach { genre ->
+                                MobileLibrarySortOption(localizedGenreName(genre), selectedGenre.equals(genre, ignoreCase = true)) {
+                                    selectedGenre = genre
+                                }
+                            }
+                        }
                         Text("Dirección", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
                         MobileLibrarySortOption("Ascendente", !sortDescending) { sortDescending = false }
                         MobileLibrarySortOption("Descendente", sortDescending) { sortDescending = true }
