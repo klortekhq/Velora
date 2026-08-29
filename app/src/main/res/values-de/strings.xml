@@ -14,4 +14,12 @@
     <string name="settings_subtitle_auto">Automatisch</string>
     <string name="settings_subtitle_language">Untertitelsprache</string>
     <string name="settings_subtitle_language_description">Automatisch folgt der Servereinstellung; andere Optionen bevorzugen diese Sprache, wenn verfügbar.</string>
+    <string name="nav_home">Startseite</string>
+    <string name="nav_movies">Filme</string>
+    <string name="nav_series">Serien</string>
+    <string name="nav_downloads">Downloads</string>
+    <string name="nav_settings">Einstellungen</string>
+    <string name="search_movies_series">Filme und Serien suchen</string>
+    <string name="action_play">Wiedergeben</string>
+    <string name="action_back">Zurück</string>
 </resources>
