@@ -2,6 +2,7 @@ package com.klortek.velora.offline
 
 import android.app.DownloadManager
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import com.klortek.velora.platform.PlatformCapabilities
 import org.json.JSONArray
