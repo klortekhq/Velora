@@ -591,7 +591,7 @@ private fun QuickConnectLoginContent(
     LaunchedEffect(isPolling, quickConnectSecret) {
         if (!isPolling || quickConnectSecret == null) return@LaunchedEffect
         
-        android.util.Log.d("QuickConnectLogin", "Starting QuickConnect polling with secret: ${quickConnectSecret?.take(10)}...")
+        android.util.Log.d("QuickConnectLogin", "Starting QuickConnect polling")
         
         while (isPolling && quickConnectSecret != null) {
             delay(5000) // Poll every 5 seconds
@@ -628,7 +628,7 @@ private fun QuickConnectLoginContent(
                                 val authResult = quickConnectService.authenticateWithQuickConnect(quickConnectSecret!!)
                                 
                                 if (authResult != null) {
-                                    android.util.Log.d("QuickConnectLogin", "✅ QuickConnect authentication successful! AccessToken: ${authResult.AccessToken.take(20)}..., UserId: ${authResult.User.Id}, UserName: ${authResult.User.Name}")
+                                    android.util.Log.d("QuickConnectLogin", "QuickConnect authentication successful for user ${authResult.User.Id}")
                                     
                                     config.serverUrl = normalizedUrl
                                     config.accessToken = authResult.AccessToken
