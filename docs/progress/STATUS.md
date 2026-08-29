@@ -62,6 +62,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Mobile player tap handling now ignores pointer sequences consumed by child
   controls, preventing the parent gesture layer from swallowing aspect,
   settings, audio, subtitle and playback button taps.
+- Mobile detail navigation and action controls now use touch-native Material
+  controls instead of TV focus controls; episode download actions are omitted
+  entirely on platforms that do not support offline downloads.
 - The home UI does not render a separate recently-added episode row; episodes
   remain reachable from series details and Continue Watching.
 - Offline download metadata now uses an app-private SQLite index with a
@@ -115,6 +118,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   2026-08-29 after the security/capability changes; the build emitted only
   existing deprecation/KAPT warnings.
   Instrumentation and real-device playback validation were not run.
+- Commit `8404e71` also passed `compileMobileDebugKotlin`,
+  `testMobileDebugUnitTest`, and `assembleMobileDebug` with the native AV1
+  decoder on 2026-08-29.
 - Web `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
 - Web `npm test`: passing on 2026-08-29; platform capability regression test
@@ -141,7 +147,7 @@ the actual branch base `418383f`.
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-Mobile-debug-81bb6ef.apk` | `F98E3DB255E5F6E3A756439569E6E1E64A2030748EEE8EE460314CD33D2D135A` |
+| `Velora-Mobile-debug-8404e71.apk` | `AB107DE2ED6A43E8215A1389EA2AF30A8089C6D5C5290671EE6578F99223D926` |
 | `Velora-TV-debug.apk` | `4FF1E9AF9BE850E8FC7DAD7E88B232E15AFC490E9EAA59D80F1B8D6841188DD6` |
 | `Velora-Mobile-release-unsigned.apk` | `6DAE8005CD11C6D6FA2609AC82072F5ADB19A787E86249AAB60B6D74D23AC6AB` |
 | `Velora-TV-release-unsigned.apk` | `E03E9C79BF9EF672A64385D9B885286F738B002C41F311AFE8CBE82FDFB887F3` |
