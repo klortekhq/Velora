@@ -193,7 +193,31 @@
 
   function image(id) {
     return base() + '/Items/' + encodeURIComponent(id) +
-      '/Images/Primary?api_key=' + encodeURIComponent(state.token) + '&maxWidth=600';
+      '/Images/Primary?maxWidth=600';
+  }
+
+  function hydrateProtectedImages(scope) {
+    var container = scope || document;
+    Array.prototype.forEach.call(container.querySelectorAll('[data-velora-image-id]'), function (element) {
+      if (element.dataset.veloraImageState) return;
+      element.dataset.veloraImageState = 'loading';
+      var id = element.getAttribute('data-velora-image-id');
+      fetch(image(id), {
+        headers: {
+          Accept: 'image/*',
+          'X-Emby-Token': state.token
+        }
+      }).then(function (response) {
+        if (!response.ok) throw Error('No se pudo cargar la imagen');
+        return response.blob();
+      }).then(function (blob) {
+        element.src = URL.createObjectURL(blob);
+        element.dataset.veloraImageState = 'ready';
+      }).catch(function () {
+        element.dataset.veloraImageState = 'error';
+        element.removeAttribute('src');
+      });
+    });
   }
 
   function stream(item) {
@@ -291,7 +315,7 @@
     return '<section><h2>' + esc(title) + '</h2><div class="grid">' +
       items.map(function (item) {
         return '<article class="card" tabindex="0" role="button" data-id="' + esc(item.Id) + '">' +
-          '<img loading="lazy" src="' + image(item.Id) + '" alt="">' +
+          '<img loading="lazy" data-velora-image-id="' + esc(item.Id) + '" alt="">' +
           '<div class="label">' + esc(item.Name) + '</div></article>';
       }).join('') + '</div></section>';
   }
@@ -321,13 +345,14 @@
     root.insertAdjacentHTML('beforeend', '<div class="modal" id="details" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">' +
       '<div class="modal-card">' +
       '<button type="button" class="close" id="detailsClose">' + esc(t('back')) + '</button>' +
-      '<img class="detail-image" src="' + image(item.Id) + '" alt="">' +
+      '<img class="detail-image" data-velora-image-id="' + esc(item.Id) + '" alt="">' +
       '<h1 id="detailsTitle">' + esc(item.Name) + '</h1>' +
       '<p class="muted">' + esc(item.ProductionYear || '') + (item.Type === 'Series' ? ' · ' + esc(t('series')) : '') + '</p>' +
       '<p>' + esc(item.Overview || t('noDescription')) + '</p>' +
       '<button type="button" class="primary" id="playItem">' + esc(t('play')) + '</button>' +
       '</div></div>');
     document.querySelector('#detailsClose').onclick = closeDetails;
+    hydrateProtectedImages(document.querySelector('#details'));
     document.querySelector('#playItem').onclick = function () {
       closeDetails();
       play(item);
@@ -427,9 +452,11 @@
           view === 'live' ? section(t('live'), live) :
           section(t('movies'), movies) + section(t('series'), series) + section(t('live'), live);
         bindCards();
+        hydrateProtectedImages(document.querySelector('#results'));
       };
     });
     bindCards();
+    hydrateProtectedImages(document.querySelector('#results'));
   }
 
   function languageOptionMarkup(selected, includeAuto) {

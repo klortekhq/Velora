@@ -3,6 +3,12 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../platform.js', import.meta.url), 'utf8');
+const appSource = fs.readFileSync(new URL('../app.js', import.meta.url), 'utf8');
+
+assert.doesNotMatch(appSource, /\/Images\/Primary\?api_key=/);
+assert.match(appSource, /data-velora-image-id/);
+assert.match(appSource, /'X-Emby-Token': state\.token/);
+assert.match(appSource, /URL\.createObjectURL\(blob\)/);
 
 function detect(userAgent) {
   const listeners = {};

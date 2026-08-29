@@ -108,6 +108,11 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   bounded six-hour upcoming guide window, maps the next programme per channel,
   and renders the guide lazily in the existing virtualized `LazyColumn`; every
   channel row remains an actionable Jellyfin playback entry.
+- Web artwork URLs no longer contain the Jellyfin token; the browser requests
+  artwork with `X-Emby-Token` and assigns a short-lived object URL, covered by
+  the web regression test. Browser-native video streaming still uses the
+  Jellyfin-compatible query-token fallback because an HTML video element cannot
+  attach custom request headers without a streaming proxy.
 
 ## Explicitly incomplete or requiring verification
 
@@ -157,7 +162,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Commit `8404e71` also passed `compileMobileDebugKotlin`,
   `testMobileDebugUnitTest`, and `assembleMobileDebug` with the native AV1
   decoder on 2026-08-29.
-- Web `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
+- Web `npm test` and `npm run build:all`: passing; Tizen CLI unavailable, webOS IPK generated,
   VIDAA hosted HTML5 bundle generated.
 - Web `npm test`: passing on 2026-08-29; platform capability regression test
   passes. Tizen packaging remains unvalidated without Tizen Studio/signing.
