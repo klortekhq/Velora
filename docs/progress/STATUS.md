@@ -104,6 +104,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Offline completion semantics have regression coverage for provider-backed
   `content://` URIs, successful downloads without a filesystem path, and
   incomplete entries.
+- Mobile and tablet download actions now present a quality chooser with
+  Original, Alta (1080p), Media (720p) and Baja (480p); the selected profile
+  is persisted in the offline index and lower profiles explicitly request a
+  Jellyfin transcode rather than being mislabeled as the original file.
 - Live TV now requests the current programme with the channel list and a
   bounded six-hour upcoming guide window, maps the next programme per channel,
   and renders the guide lazily in the existing virtualized `LazyColumn`; every
