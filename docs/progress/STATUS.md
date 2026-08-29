@@ -56,6 +56,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   left unspecified.
 - Aspect selection is applied to both the PlayerView and its real
   `AspectRatioFrameLayout`, including forced 4:3/16:9/cinema modes.
+- Mobile player tap handling now ignores pointer sequences consumed by child
+  controls, preventing the parent gesture layer from swallowing aspect,
+  settings, audio, subtitle and playback button taps.
 - The home UI does not render a separate recently-added episode row; episodes
   remain reachable from series details and Continue Watching.
 - Offline download metadata now uses an app-private SQLite index with a

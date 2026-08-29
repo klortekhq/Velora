@@ -66,6 +66,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.ui.input.pointer.pointerInput
 import com.klortek.velora.ui.DeviceUtils
 import androidx.compose.ui.unit.dp
@@ -2661,10 +2663,19 @@ fun JellyfinVideoPlayerScreen(
                 .then(
                     if (isMobile) {
                         Modifier.pointerInput(Unit) {
-                            detectTapGestures(onTap = {
-                                showControls = !showControls
-                                if (showControls) controlsInteractionKey++
-                            })
+                            // Observe only taps left unconsumed by child controls.
+                            // The old detectTapGestures on this parent consumed taps
+                            // before Compose buttons could receive them on mobile.
+                            awaitPointerEventScope {
+                                while (true) {
+                                    awaitFirstDown(requireUnconsumed = true)
+                                    val up = waitForUpOrCancellation()
+                                    if (up != null && !up.isConsumed) {
+                                        showControls = !showControls
+                                        if (showControls) controlsInteractionKey++
+                                    }
+                                }
+                            }
                         }
                     } else Modifier
                 )
