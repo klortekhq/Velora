@@ -175,6 +175,14 @@
     }).catch(function () { /* media URL fallback remains available */ });
   }
 
+  function clearMediaProxyCredentials() {
+    if (!navigator.serviceWorker) return;
+    navigator.serviceWorker.ready.then(function (registration) {
+      var worker = navigator.serviceWorker.controller || registration.active;
+      if (worker) worker.postMessage({ type: 'velora-clear-credentials' });
+    }).catch(function () { /* worker may not be available */ });
+  }
+
   if (navigator.serviceWorker) {
     navigator.serviceWorker.register('media-proxy-sw.js').then(syncMediaProxyCredentials).catch(function () {
       /* Older TV browsers can still use Jellyfin's browser-compatible URL fallback. */
@@ -645,6 +653,7 @@
       '</div></header><div id="content"><div class="empty">' + esc(t('loading')) + '</div></div></div>';
     document.querySelector('#settingsButton').onclick = showSettings;
     document.querySelector('#logout').onclick = function () {
+      clearMediaProxyCredentials();
       removeSessionValue('veloraToken');
       removeSessionValue('veloraUserId');
       state.token = '';
