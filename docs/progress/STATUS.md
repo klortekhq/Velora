@@ -312,3 +312,9 @@ Smart TV web runtimes. Android mobile/TV tests and all four APK assemblies
 passed locally. Tizen Studio/CLI is not installed on this build host, VIDAA
 remains a hosted HTML5 bundle, and no physical device was connected for this
 release, so those validations remain open.
+
+Release `v1.2.14`: https://github.com/klortekhq/Velora/releases/tag/v1.2.14
+
+The public release contains 11 verified assets, including all four APKs,
+web/webOS/Samsung/VIDAA packages, combined web archives and
+`SHA256SUMS-1.2.14.txt`.
