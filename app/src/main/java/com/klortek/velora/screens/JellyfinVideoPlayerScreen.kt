@@ -3488,7 +3488,18 @@ fun JellyfinVideoPlayerScreen(
                                         if (isMobile) {
                                             // On mobile, tapping the scrim (not on a button) hides controls
                                             Modifier.pointerInput(Unit) {
-                                                detectTapGestures(onTap = { showControls = false })
+                                                // Observe only taps that no child control consumed.
+                                                // Consuming the gesture here makes every playback
+                                                // button look decorative on touch devices.
+                                                awaitPointerEventScope {
+                                                    while (true) {
+                                                        awaitFirstDown(requireUnconsumed = true)
+                                                        val up = waitForUpOrCancellation()
+                                                        if (up != null && !up.isConsumed) {
+                                                            showControls = false
+                                                        }
+                                                    }
+                                                }
                                             }
                                         } else Modifier
                                     )
