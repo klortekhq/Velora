@@ -142,6 +142,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Web item details now expose Jellyfin cast/guest-star buttons; selecting a
   person loads that person's movie and series filmography through the API and
   keeps the result keyboard-accessible.
+- The web library now has persistent sorting and filtering for movies and
+  series (name, added date, premiere, runtime, rating, favorites and playback
+  state), with the required fields requested directly from Jellyfin.
 - Resolved Android trailers now enter the canonical Media3/ExoPlayer player
   surface, preserving the same controls and fullscreen behavior as normal
   playback; the old direct MPV trailer handoff is removed.
