@@ -260,7 +260,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   unsigned-release variants from a version tag.
 - GitHub web workflow validates on `main`/pull requests and packages the common
   web client plus Samsung, webOS and VIDAA targets together; a version tag
-  publishes the resulting archive and checksums to the same release.
+  publishes browser archives, platform bundles/packages and checksums to the
+  same release as the Android APKs.
 - Manual web workflow runs default safely to `all` when no target is selected.
 - Independent critic review: pending.
 
