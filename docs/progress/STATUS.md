@@ -155,9 +155,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Resolved Android trailers now enter the canonical Media3/ExoPlayer player
   surface, preserving the same controls and fullscreen behavior as normal
   playback; the old direct MPV trailer handoff is removed.
-- Release workflows now share a tag-scoped concurrency group, so Android and
-  web assets update one release serially; web checksums use a distinct name
-  and cannot overwrite the Android checksum manifest.
+- Release workflows use independent ref-scoped concurrency groups, so Android
+  and web validation cannot cancel each other; their distinct release assets
+  can be added to the same tag release and web checksums cannot overwrite the
+  Android checksum manifest.
 - Release `v1.2.4` is published at https://github.com/klortekhq/Velora/releases/tag/v1.2.4
   with mobile/TV debug and unsigned release APKs plus `SHA256SUMS.txt`; the
   four APKs were rebuilt and verified before upload.
