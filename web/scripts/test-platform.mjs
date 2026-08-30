@@ -42,3 +42,13 @@ for (const [userAgent, expected] of [
 }
 
 console.log('platform capability tests passed');
+
+assert.match(appSource, /sessionStorage/);
+assert.match(appSource, /X-Emby-Token/);
+assert.match(appSource, /People/);
+assert.match(appSource, /PersonIds/);
+assert.match(appSource, /veloraLibrarySort/);
+assert.match(appSource, /veloraLibraryPlayback/);
+assert.match(appSource, /veloraLibraryFavorites/);
+assert.doesNotMatch(appSource, /data-velora-image-id[^>]+src=/);
+console.log('web security and library interaction tests passed');
