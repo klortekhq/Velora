@@ -386,7 +386,6 @@ private fun LiveTvChannelRow(
                 }
             )
             .then(focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier)
-            .then(if (compact) Modifier.clickable(onClick = onClick) else Modifier)
     ) {
         Row(
             modifier = Modifier
