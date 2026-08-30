@@ -72,6 +72,7 @@ import coil.request.ImageRequest
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.livetv.LiveTvChannel
 import com.klortek.velora.livetv.LiveTvClient
+import com.klortek.velora.livetv.LiveTvProgram
 import com.klortek.velora.livetv.formatProgramTimeRange
 import com.klortek.velora.livetv.programProgress
 import com.klortek.velora.livetv.filterLiveTvChannels
@@ -131,7 +132,7 @@ private fun LiveTvScreen(
     var channels by remember { mutableStateOf<List<LiveTvChannel>>(emptyList()) }
     var favoritesOnly by remember { mutableStateOf(false) }
     var selectedGroup by remember { mutableStateOf<String?>(null) }
-    var programDetails by remember { mutableStateOf<Pair<String, com.klortek.velora.livetv.LiveTvProgram>?>(null) }
+    var programDetails by remember { mutableStateOf<Pair<String, LiveTvProgram>?>(null) }
     val scope = rememberCoroutineScope()
     val firstChannelFocusRequester = remember { FocusRequester() }
 
@@ -349,7 +350,7 @@ private fun LiveTvChannelRow(
     compact: Boolean = false,
     focusRequester: FocusRequester? = null,
     onClick: () -> Unit,
-    onShowProgram: (com.klortek.velora.livetv.LiveTvProgram) -> Unit,
+    onShowProgram: (LiveTvProgram) -> Unit,
     onToggleFavorite: () -> Unit
 ) {
     val context = LocalContext.current
@@ -503,7 +504,7 @@ private fun LiveTvChannelRow(
 @Composable
 private fun LiveTvProgramDialog(
     channelName: String,
-    program: com.klortek.velora.livetv.LiveTvProgram,
+    program: LiveTvProgram,
     onDismiss: () -> Unit
 ) {
     Dialog(
@@ -526,6 +527,21 @@ private fun LiveTvProgramDialog(
                 text = "${stringResource(R.string.live_tv_channel)}: $channelName",
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = .72f)
             )
+            val seriesName = program.SeriesName?.takeIf { it.isNotBlank() }
+            val episodeTitle = program.EpisodeTitle?.takeIf { it.isNotBlank() }
+            if (seriesName != null || episodeTitle != null) {
+                Text(
+                    text = listOfNotNull(
+                        seriesName,
+                        episodeTitle,
+                        program.SeasonNumber?.let { season ->
+                            program.EpisodeNumber?.let { episode -> "S$season E$episode" }
+                        }
+                    ).joinToString(" · "),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .86f),
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
             formatProgramTimeRange(program)?.let { range ->
                 Text(text = range, color = MaterialTheme.colorScheme.onSurface.copy(alpha = .72f))
             }
