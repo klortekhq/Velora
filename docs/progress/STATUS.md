@@ -1,6 +1,6 @@
 # Velora implementation status
 
-Updated: 2026-08-30
+Updated: 2026-08-31
 
 This dashboard records verified repository state only. A feature is not marked
 complete merely because code or a previous build artifact exists.
@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at version 1.2.13 across Android, webOS,
+- Release metadata is synchronized at version 1.2.14 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -305,3 +305,10 @@ Release `v1.2.13`: https://github.com/klortekhq/Velora/releases/tag/v1.2.13
 
 This release contains the playback touch-event fix and 10 remotely verified
 assets. Its checksum manifest is published as `SHA256SUMS-1.2.13.txt`.
+
+Release `v1.2.14` adds the browser service-worker media proxy, which keeps
+the Jellyfin token in an authenticated request header for modern browsers and
+Smart TV web runtimes. Android mobile/TV tests and all four APK assemblies
+passed locally. Tizen Studio/CLI is not installed on this build host, VIDAA
+remains a hosted HTML5 bundle, and no physical device was connected for this
+release, so those validations remain open.
