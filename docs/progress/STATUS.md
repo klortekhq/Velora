@@ -320,6 +320,9 @@ The public release contains 11 verified assets, including all four APKs,
 web/webOS/Samsung/VIDAA packages, combined web archives and
 `SHA256SUMS-1.2.14.txt`.
 
-Release `v1.2.15` is being prepared with the Live TV touch-interaction fix and
-the browser logout credential cleanup; its artifacts will be added after the
-local build completes.
+Release `v1.2.15`: https://github.com/klortekhq/Velora/releases/tag/v1.2.15
+
+The public release contains 11 verified build artifacts, including all four
+APK variants, web/webOS/Samsung/VIDAA packages, combined web archives and
+`SHA256SUMS-1.2.15.txt`. The Samsung artifact remains an unsigned bundle when
+Tizen Studio/signing is unavailable; VIDAA remains an HTML5 submission bundle.
