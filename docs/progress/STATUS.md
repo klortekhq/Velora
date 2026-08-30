@@ -1,6 +1,6 @@
 # Velora implementation status
 
-Updated: 2026-08-29
+Updated: 2026-08-30
 
 This dashboard records verified repository state only. A feature is not marked
 complete merely because code or a previous build artifact exists.
@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at version 1.2.10 across Android, webOS,
+- Release metadata is synchronized at version 1.2.11 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -131,6 +131,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Live TV channels now expose Jellyfin-backed favorites and tag-based groups;
   the Android screen provides touch/focus-safe filters and favorite toggles,
   with deterministic JVM coverage for the filtering rules.
+- Live TV rows now expose a real programme-details action for the current
+  programme, showing channel, schedule and Jellyfin synopsis in a dismissible
+  dialog; the action is available through touch and TV focus navigation.
 - Login UI labels and authentication state are now resource-backed in the
   Spanish, English, French and German catalogs, including the server name
   placeholder and both mobile and TV login actions.
@@ -185,8 +188,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   the durable metadata foundation is now in place.
 - Theme music, a Jellyfin-first trailer resolver, persistent preview, and large-library
   virtualization need implementation and critic testing.
-- Live TV favorites, groups, channel zapping/previous-channel shortcut,
-  mini-player and full programme-details view still need implementation.
+- Live TV channel zapping/previous-channel shortcut and mini-player still need
+  implementation; programme details are now implemented but need hardware QA.
 - No hardware test result is claimed: the connected Fire TV/phone were not
   available to this automated run.
 
@@ -243,6 +246,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - `compileMobileDebugKotlin` and `testMobileDebugUnitTest`: passing after the
   ExoPlayer trailer routing change; only existing deprecation/KAPT warnings
   were emitted.
+- `compileTvDebugKotlin`: passing on 2026-08-30 after adding the Live TV
+  programme-details action; only existing deprecation/KAPT warnings were
+  emitted.
 - A fresh local Android verification was blocked before compilation because
   this machine has no Android SDK installed; no new Android hardware result is
   claimed. The Windows non-ASCII path guard is enabled in `gradle.properties`.

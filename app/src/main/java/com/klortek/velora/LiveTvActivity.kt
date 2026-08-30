@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LiveTv
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -55,8 +56,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
+import androidx.tv.material3.Button
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.IconButtonDefaults
@@ -127,6 +131,7 @@ private fun LiveTvScreen(
     var channels by remember { mutableStateOf<List<LiveTvChannel>>(emptyList()) }
     var favoritesOnly by remember { mutableStateOf(false) }
     var selectedGroup by remember { mutableStateOf<String?>(null) }
+    var programDetails by remember { mutableStateOf<Pair<String, com.klortek.velora.livetv.LiveTvProgram>?>(null) }
     val scope = rememberCoroutineScope()
     val firstChannelFocusRequester = remember { FocusRequester() }
 
@@ -308,6 +313,7 @@ private fun LiveTvScreen(
                                 null
                             },
                             onClick = { onPlay(channel) },
+                            onShowProgram = { program -> programDetails = channel.Name to program },
                             onToggleFavorite = {
                                 val favorite = channel.UserData?.IsFavorite != true
                                 scope.launch {
@@ -326,6 +332,14 @@ private fun LiveTvScreen(
             }
         }
     }
+
+    programDetails?.let { (channelName, program) ->
+        LiveTvProgramDialog(
+            channelName = channelName,
+            program = program,
+            onDismiss = { programDetails = null }
+        )
+    }
 }
 
 @Composable
@@ -335,6 +349,7 @@ private fun LiveTvChannelRow(
     compact: Boolean = false,
     focusRequester: FocusRequester? = null,
     onClick: () -> Unit,
+    onShowProgram: (com.klortek.velora.livetv.LiveTvProgram) -> Unit,
     onToggleFavorite: () -> Unit
 ) {
     val context = LocalContext.current
@@ -421,6 +436,15 @@ private fun LiveTvChannelRow(
                             tint = if (channel.UserData?.IsFavorite == true) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = .65f)
                         )
                     }
+                    if (program != null) {
+                        IconButton(onClick = { onShowProgram(program) }) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = stringResource(R.string.live_tv_program_details),
+                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = .72f)
+                            )
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(2.dp))
@@ -471,6 +495,47 @@ private fun LiveTvChannelRow(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LiveTvProgramDialog(
+    channelName: String,
+    program: com.klortek.velora.livetv.LiveTvProgram,
+    onDismiss: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.92f)
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
+                .padding(24.dp)
+        ) {
+            Text(
+                text = program.Name.orEmpty().ifBlank { stringResource(R.string.live_tv_no_program) },
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "${stringResource(R.string.live_tv_channel)}: $channelName",
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .72f)
+            )
+            formatProgramTimeRange(program)?.let { range ->
+                Text(text = range, color = MaterialTheme.colorScheme.onSurface.copy(alpha = .72f))
+            }
+            program.Overview?.takeIf { it.isNotBlank() }?.let { overview ->
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = overview, color = MaterialTheme.colorScheme.onSurface.copy(alpha = .9f))
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
+                Text(stringResource(R.string.live_tv_close_details))
             }
         }
     }

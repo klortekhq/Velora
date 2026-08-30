@@ -6,6 +6,9 @@
     <string name="live_tv_no_channels">No hay canales de televisión en directo disponibles en este servidor Jellyfin.</string>
     <string name="live_tv_no_program">No hay información de programación</string>
     <string name="live_tv_next_program">Siguiente: %1$s</string>
+    <string name="live_tv_program_details">Detalles del programa</string>
+    <string name="live_tv_channel">Canal</string>
+    <string name="live_tv_close_details">Cerrar</string>
     <string name="live_tv_refresh">Actualizar canales</string>
     <string name="live_tv_channel_count">%1$d canales</string>
     <string name="live_tv_playback_error">No se pudo abrir este canal. Inténtalo de nuevo.</string>
