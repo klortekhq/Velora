@@ -116,6 +116,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Offline completion semantics have regression coverage for provider-backed
   `content://` URIs, successful downloads without a filesystem path, and
   incomplete entries.
+- A backend-neutral `OfflineIntegrityVerifier` now calculates and compares
+  SHA-256 digests without taking ownership of the caller's stream; its two
+  regression tests pass and it is ready for the managed transfer engine.
 - Mobile and tablet download actions now present a quality chooser with
   Original, Alta (1080p), Media (720p) and Baja (480p); the selected profile
   is persisted in the offline index and lower profiles explicitly request a
@@ -183,9 +186,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   and runtime validation remain incomplete.
 - Apple iOS/iPadOS/tvOS clients are not present/verified.
 - VIDAA support is not validated on a real device or certified runtime.
-- Offline queue/storage recovery, integrity verification, settings integration
-  and the full end-to-end offline journey are not yet verified; the storage
-  policy contract itself now has unit coverage.
+- Offline queue/storage recovery, persistence of integrity metadata, settings
+  integration and the full end-to-end offline journey are not yet verified;
+  the storage policy and digest contracts have unit coverage.
   the durable metadata foundation is now in place.
 - Theme music, a Jellyfin-first trailer resolver, persistent preview, and large-library
   virtualization need implementation and critic testing.
