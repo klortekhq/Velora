@@ -280,7 +280,23 @@ the actual branch base `418383f`.
 | `Velora-mobile-release-unsigned.apk` | `B5829774BCF5936E87FEC7D451F9B8BB63F2DE6F733F123BF1346A7177EE2C85` |
 | `Velora-tv-release-unsigned.apk` | `C8449FEA0AE25422ECAE0ADC9CE7C0E81CB8B7CE8C39DAB2BE15FC9572C6F841` |
 
-Release `v1.2.11`: https://github.com/klortekhq/Velora/releases/tag/v1.2.11
+Release `v1.2.12`: https://github.com/klortekhq/Velora/releases/tag/v1.2.12
 
-The next release will be `v1.2.12` after the source/test and packaging checks
-complete; no device validation is implied by a successful build.
+Release `v1.2.12` contains 10 remotely verified assets: mobile/TV debug and
+release-unsigned APKs, web archive, combined web tarball, Samsung/VIDAA
+bundles, webOS IPK and SHA-256 checksums. No device validation is implied by a
+successful build.
+
+Release `v1.2.12` SHA-256 values:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| `Velora-mobile-debug.apk` | `5852200687027DD23BB3EBF0289AE579013E15B9C07831311DA551365D2BEC08` |
+| `Velora-mobile-release-unsigned.apk` | `4FC34C6000D2865B2B61A6AD0528BD955B1E5647583E13B8552EBEF9328FEA92` |
+| `Velora-tv-debug.apk` | `F0941CA8E8174E30E5A0F9AB594DF2E410BB81169C3F1D877BB6125E8E69258E` |
+| `Velora-tv-release-unsigned.apk` | `F4FFE7404D9A0E03155F8AB9B75E3103553AC6DB810E619F2BFD2BD44548540D` |
+| `Velora-web-1.2.12.zip` | `966AF734DBFF88C26FE7E65DDA7697B91E2DE227F48591638F1C4416107A3906` |
+| `Velora-Web-all.tar.gz` | `F67953BB1644EF8394803633E87BD560679552C7D882A6693C018A98329D7CA9` |
+| `Velora-samsung-bundle-1.2.12.zip` | `05D77D199FC4E78A4AAA79B756C13220A63750D06CCDB66819DCA55CCC7AACA2` |
+| `Velora-webos-1.2.12.ipk` | `D92BB765CAAB7D496353C929471EB4808B636F0E2FBB72B8EA25B07315F0750C` |
+| `Velora-vidaa-bundle-1.2.12.zip` | `7D69BD414D00619FC8C6E099CC860405F82C40457FD31AF14707A7737FADF3EC` |
