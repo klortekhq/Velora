@@ -139,9 +139,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   placeholder and both mobile and TV login actions.
 - Web artwork URLs no longer contain the Jellyfin token; the browser requests
   artwork with `X-Emby-Token` and assigns a short-lived object URL, covered by
-  the web regression test. Browser-native video streaming still uses the
-  Jellyfin-compatible query-token fallback because an HTML video element cannot
-  attach custom request headers without a streaming proxy.
+  the web regression test. Modern browsers and Smart TV web runtimes now use a
+  same-origin service-worker media proxy that adds `X-Emby-Token` to streaming
+  requests; a Jellyfin-compatible query-token fallback remains only for legacy
+  runtimes without service-worker support. Logout clears the proxy credentials.
 - Web item details now expose Jellyfin cast/guest-star buttons; selecting a
   person loads that person's movie and series filmography through the API and
   keeps the result keyboard-accessible.
