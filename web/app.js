@@ -32,6 +32,7 @@
       subtitleAuto: 'Automáticos', subtitleLanguage: 'Idioma de subtítulos', save: 'Guardar', cancel: 'Cancelar',
       saved: 'Preferencias guardadas', settingDescription: 'Se aplican al próximo contenido y se guardan en este dispositivo.',
       cast: 'Reparto', actorWorks: 'Películas y series de este actor', noActorWorks: 'No hay otros títulos disponibles.', personError: 'No se pudo cargar la filmografía',
+      sortAndFilter: 'Ordenar y filtrar', sortName: 'Nombre', sortDateAdded: 'Fecha de incorporación', sortPremiere: 'Fecha de estreno', sortRuntime: 'Duración', sortRating: 'Valoración de la comunidad', favorites: 'Favoritos', playbackState: 'Estado de reproducción', playbackAll: 'Todos', playbackWatched: 'Vistos', playbackUnwatched: 'No vistos',
       loginError: 'No se pudo iniciar sesión', playbackError: 'El dispositivo no puede reproducir este formato directamente.'
     },
     en: {
@@ -46,6 +47,7 @@
       subtitleAuto: 'Automatic', subtitleLanguage: 'Subtitle language', save: 'Save', cancel: 'Cancel',
       saved: 'Preferences saved', settingDescription: 'Applied to new playback and saved on this device.', cast: 'Cast',
       actorWorks: 'Movies and series with this actor', noActorWorks: 'No other titles available.', personError: 'Could not load filmography',
+      sortAndFilter: 'Sort and filter', sortName: 'Name', sortDateAdded: 'Date added', sortPremiere: 'Premiere date', sortRuntime: 'Runtime', sortRating: 'Community rating', favorites: 'Favorites', playbackState: 'Playback state', playbackAll: 'All', playbackWatched: 'Watched', playbackUnwatched: 'Unwatched',
       loginError: 'Sign-in failed', playbackError: 'This device cannot play this format directly.'
     },
     pt: {
@@ -306,7 +308,7 @@
     }
     var params = 'Recursive=true&IncludeItemTypes=Movie%2CSeries%2CLiveTvChannel&' +
       'SortBy=DateCreated&SortOrder=Descending&Limit=150&' +
-      'Fields=Overview%2CProductionYear%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData%2CPeople%2CSeriesName%2CSeriesId%2CIndexNumber%2CParentIndexNumber';
+      'Fields=Overview%2CProductionYear%2CDateCreated%2CPremiereDate%2CRunTimeTicks%2CCommunityRating%2CCriticRating%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData%2CPeople%2CSeriesName%2CSeriesId%2CIndexNumber%2CParentIndexNumber';
     return api('/Users/' + state.userId + '/Items?' + params).then(function (data) {
       state.items = data.Items || [];
     });
@@ -338,6 +340,30 @@
   function closeDetails() {
     var details = document.querySelector('#details');
     if (details) details.remove();
+  }
+
+  function sortedLibraryItems(items) {
+    var favoritesOnly = preference('veloraLibraryFavorites', 'false') === 'true';
+    var playback = preference('veloraLibraryPlayback', 'all');
+    var sort = preference('veloraLibrarySort', 'name');
+    var filtered = items.filter(function (item) {
+      if (favoritesOnly && !(item.UserData && item.UserData.IsFavorite)) return false;
+      if (playback === 'watched' && !(item.UserData && item.UserData.Played)) return false;
+      if (playback === 'unwatched' && item.UserData && item.UserData.Played) return false;
+      return true;
+    });
+    return filtered.sort(function (left, right) {
+      var a;
+      var b;
+      if (sort === 'dateAdded') { a = left.DateCreated || ''; b = right.DateCreated || ''; }
+      else if (sort === 'premiere') { a = left.PremiereDate || ''; b = right.PremiereDate || ''; }
+      else if (sort === 'runtime') { a = left.RunTimeTicks || 0; b = right.RunTimeTicks || 0; }
+      else if (sort === 'rating') { a = left.CommunityRating == null ? -1 : left.CommunityRating; b = right.CommunityRating == null ? -1 : right.CommunityRating; }
+      else { a = String(left.Name || '').toLocaleLowerCase(languageCode()); b = String(right.Name || '').toLocaleLowerCase(languageCode()); }
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return String(left.Id).localeCompare(String(right.Id));
+    });
   }
 
   function showPersonFilmography(personId, personName) {
@@ -458,13 +484,28 @@
     var items = state.items.filter(function (item) {
       return !query || String(item.Name || '').toLowerCase().indexOf(query) !== -1;
     });
-    var movies = items.filter(function (item) { return item.Type === 'Movie'; });
-    var series = items.filter(function (item) { return item.Type === 'Series'; });
+    var movies = sortedLibraryItems(items.filter(function (item) { return item.Type === 'Movie'; }));
+    var series = sortedLibraryItems(items.filter(function (item) { return item.Type === 'Series'; }));
     var live = items.filter(function (item) { return item.Type === 'LiveTvChannel'; });
+    var sort = preference('veloraLibrarySort', 'name');
+    var playback = preference('veloraLibraryPlayback', 'all');
+    var favoritesOnly = preference('veloraLibraryFavorites', 'false') === 'true';
     document.querySelector('#content').innerHTML = '<div class="hero">' +
       '<h1>' + esc(t('library')) + '</h1><p class="muted">' + esc(t('libraryDescription')) + '</p>' +
       '<div class="row"><input class="search" id="query" value="' + esc(state.query) + '" placeholder="' + esc(t('searchPlaceholder')) + '">' +
-      '<button type="button" class="primary" id="search">' + esc(t('search')) + '</button></div></div>' +
+      '<button type="button" class="primary" id="search">' + esc(t('search')) + '</button></div>' +
+      '<div class="library-filters" aria-label="' + esc(t('sortAndFilter')) + '">' +
+      '<label>' + esc(t('sortAndFilter')) + '<select id="librarySort">' +
+      '<option value="name"' + (sort === 'name' ? ' selected' : '') + '>' + esc(t('sortName')) + '</option>' +
+      '<option value="dateAdded"' + (sort === 'dateAdded' ? ' selected' : '') + '>' + esc(t('sortDateAdded')) + '</option>' +
+      '<option value="premiere"' + (sort === 'premiere' ? ' selected' : '') + '>' + esc(t('sortPremiere')) + '</option>' +
+      '<option value="runtime"' + (sort === 'runtime' ? ' selected' : '') + '>' + esc(t('sortRuntime')) + '</option>' +
+      '<option value="rating"' + (sort === 'rating' ? ' selected' : '') + '>' + esc(t('sortRating')) + '</option></select></label>' +
+      '<label class="checkbox"><input type="checkbox" id="libraryFavorites"' + (favoritesOnly ? ' checked' : '') + '>' + esc(t('favorites')) + '</label>' +
+      '<label>' + esc(t('playbackState')) + '<select id="libraryPlayback">' +
+      '<option value="all"' + (playback === 'all' ? ' selected' : '') + '>' + esc(t('playbackAll')) + '</option>' +
+      '<option value="watched"' + (playback === 'watched' ? ' selected' : '') + '>' + esc(t('playbackWatched')) + '</option>' +
+      '<option value="unwatched"' + (playback === 'unwatched' ? ' selected' : '') + '>' + esc(t('playbackUnwatched')) + '</option></select></label></div></div>' +
       '<nav class="tabs" aria-label="' + esc(t('library')) + '"><button type="button" class="active" data-tab="all">' + esc(t('all')) + '</button>' +
       '<button type="button" data-tab="movies">' + esc(t('movies')) + '</button><button type="button" data-tab="series">' + esc(t('series')) + '</button>' +
       (live.length ? '<button type="button" data-tab="live">' + esc(t('live')) + '</button>' : '') +
@@ -478,6 +519,18 @@
     document.querySelector('#search').onclick = submit;
     document.querySelector('#query').onkeydown = function (event) {
       if (event.key === 'Enter') submit();
+    };
+    document.querySelector('#librarySort').onchange = function (event) {
+      savePreference('veloraLibrarySort', event.target.value);
+      renderHome();
+    };
+    document.querySelector('#libraryFavorites').onchange = function (event) {
+      savePreference('veloraLibraryFavorites', event.target.checked ? 'true' : 'false');
+      renderHome();
+    };
+    document.querySelector('#libraryPlayback').onchange = function (event) {
+      savePreference('veloraLibraryPlayback', event.target.value);
+      renderHome();
     };
     Array.prototype.forEach.call(document.querySelectorAll('[data-tab]'), function (tab) {
       tab.onclick = function () {

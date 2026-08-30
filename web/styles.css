@@ -25,6 +25,10 @@ header { display: flex; gap: 12px; align-items: center; justify-content: space-b
 .card img { display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: #16333b; }
 .card .label { padding: 10px; font-weight: 650; }
 .hero { background: var(--panel); border-radius: 20px; padding: clamp(18px, 4vw, 42px); margin-bottom: 24px; }
+.library-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin-top: 16px; }
+.library-filters label { display: grid; gap: 5px; color: var(--muted); font-size: .9rem; font-weight: 700; }
+.library-filters select { min-width: 170px; border: 1px solid #35616b; border-radius: 12px; padding: 10px 12px; color: #fff; background: #071015; }
+.library-filters .checkbox { display: flex; align-items: center; grid-auto-flow: column; padding: 10px 0; }
 .hero h1 { margin: .2rem 0; font-size: clamp(1.6rem, 4vw, 3rem); }
 .muted, .empty, .error { color: var(--muted); }
 .empty, .error { padding: 36px; text-align: center; }
