@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at version 1.2.11 across Android, webOS,
+- Release metadata is synchronized at version 1.2.12 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -263,6 +263,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Manual web workflow runs default safely to `all` when no target is selected.
 - Independent critic review: pending.
 
+- Live TV programme metadata now includes series, episode and season context
+  when Jellyfin provides it; programme time-range/progress formatting has
+  deterministic unit coverage. Hardware playback validation remains pending.
+
 The requested historical base `c3a2e52506942597444468be78ba3281996a6576` is
 not present in this clone. The reproducible local patch is therefore against
 the actual branch base `418383f`.
@@ -277,3 +281,6 @@ the actual branch base `418383f`.
 | `Velora-tv-release-unsigned.apk` | `C8449FEA0AE25422ECAE0ADC9CE7C0E81CB8B7CE8C39DAB2BE15FC9572C6F841` |
 
 Release `v1.2.11`: https://github.com/klortekhq/Velora/releases/tag/v1.2.11
+
+The next release will be `v1.2.12` after the source/test and packaging checks
+complete; no device validation is implied by a successful build.
