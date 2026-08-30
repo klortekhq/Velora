@@ -45,6 +45,8 @@ console.log('platform capability tests passed');
 
 assert.match(appSource, /sessionStorage/);
 assert.match(appSource, /X-Emby-Token/);
+assert.match(appSource, /media-proxy-sw\.js/);
+assert.match(appSource, /__velora_media/);
 assert.match(appSource, /People/);
 assert.match(appSource, /PersonIds/);
 assert.match(appSource, /veloraLibrarySort/);

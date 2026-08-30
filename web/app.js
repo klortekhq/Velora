@@ -167,6 +167,20 @@
     playingItem: null
   };
 
+  function syncMediaProxyCredentials() {
+    if (!navigator.serviceWorker || !state.token || !state.server) return;
+    navigator.serviceWorker.ready.then(function (registration) {
+      var worker = navigator.serviceWorker.controller || registration.active;
+      if (worker) worker.postMessage({ type: 'velora-credentials', server: state.server, token: state.token });
+    }).catch(function () { /* media URL fallback remains available */ });
+  }
+
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.register('media-proxy-sw.js').then(syncMediaProxyCredentials).catch(function () {
+      /* Older TV browsers can still use Jellyfin's browser-compatible URL fallback. */
+    });
+  }
+
   function base() {
     return state.server.replace(/\/$/, '');
   }
@@ -227,7 +241,6 @@
   function stream(item) {
     var params = [
       'static=true',
-      'api_key=' + encodeURIComponent(state.token),
       'mediasourceid=' + encodeURIComponent(item.MediaSources && item.MediaSources[0] ? item.MediaSources[0].Id : '')
     ];
     var streams = item.MediaSources && item.MediaSources[0] ? (item.MediaSources[0].MediaStreams || []) : [];
@@ -249,7 +262,15 @@
         params.push('SubtitleMethod=Encode');
       }
     }
-    return base() + '/Videos/' + encodeURIComponent(item.Id) + '/stream?' + params.join('&');
+    var protectedUrl = base() + '/Videos/' + encodeURIComponent(item.Id) + '/stream?' + params.join('&');
+    // A native <video> element cannot attach Authorization headers. When the
+    // service worker is active it proxies this request and adds X-Emby-Token
+    // there, keeping the token out of the address bar, history and referrers.
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      return '/__velora_media?url=' + encodeURIComponent(protectedUrl);
+    }
+    // Compatibility fallback for legacy TV browsers without service workers.
+    return protectedUrl + '&api_key=' + encodeURIComponent(state.token);
   }
 
   function login() {
@@ -280,7 +301,7 @@
       headers: {
         'Content-Type': 'application/json',
         'Accept-Language': languageCode(),
-        'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="1.2.13", Language="' + languageCode() + '"'
+        'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="1.2.14", Language="' + languageCode() + '"'
       },
       body: JSON.stringify({ Username: username, Password: document.querySelector('#password').value })
     }).then(function (response) {
@@ -293,6 +314,7 @@
       localStorage.veloraUser = username;
       saveSessionValue('veloraToken', state.token);
       saveSessionValue('veloraUserId', state.userId);
+      syncMediaProxyCredentials();
       return renderApp();
     }).catch(function (exception) {
       error.textContent = exception.message;
@@ -616,6 +638,7 @@
       login();
       return Promise.resolve();
     }
+    syncMediaProxyCredentials();
     document.documentElement.lang = languageCode();
     root.innerHTML = '<div class="shell"><header><div class="brand">Velora</div><div class="actions">' +
       '<button type="button" id="refresh">' + esc(t('refresh')) + '</button><button type="button" id="settingsButton">' + esc(t('settings')) + '</button><button type="button" id="logout">' + esc(t('logout')) + '</button>' +

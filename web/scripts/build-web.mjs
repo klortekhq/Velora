@@ -22,7 +22,7 @@ function command(name, args, cwd) {
 
 async function copyCommon(destination) {
   await mkdir(destination, { recursive: true });
-  for (const file of ['app.js', 'platform.js', 'index.html', 'manifest.webmanifest', 'styles.css', 'README.md', 'package.json']) {
+  for (const file of ['app.js', 'platform.js', 'index.html', 'manifest.webmanifest', 'styles.css', 'README.md', 'package.json', 'media-proxy-sw.js']) {
     await copyFile(join(root, file), join(destination, file));
   }
 }
