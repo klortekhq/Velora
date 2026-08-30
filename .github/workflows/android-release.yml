@@ -19,10 +19,10 @@ on:
 permissions:
   contents: write
 
-# Android and web publish into the same tag release. A shared concurrency
-# group prevents both workflows from trying to create/update it at once.
+# Android and web publish into the same tag release. The workflow-specific
+# group prevents a queued validation run from cancelling the other platform.
 concurrency:
-  group: velora-release-${{ github.ref }}
+  group: velora-android-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
