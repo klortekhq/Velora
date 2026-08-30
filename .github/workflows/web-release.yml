@@ -25,10 +25,10 @@ on:
 permissions:
   contents: write
 
-# Serialize with the Android release workflow so both sets of assets land in
-# the same GitHub release without create/update races.
+# Keep web validation independent from Android while both workflows can add
+# their distinct artifacts to the same tag release.
 concurrency:
-  group: velora-release-${{ github.ref }}
+  group: velora-web-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
