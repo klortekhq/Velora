@@ -57,15 +57,15 @@ jobs:
           (cd outputs/web && zip -qr "../../dist/Velora-Web-${package}.zip" .)
 
           if [ -d outputs/web/samsung ]; then
-            (cd outputs/web/samsung && zip -qr "../../dist/Velora-samsung-bundle-${version}.zip" .)
+            (cd outputs/web/samsung && zip -qr "../../../dist/Velora-samsung-bundle-${version}.zip" .)
           fi
           if [ -d outputs/web/vidaa ]; then
-            (cd outputs/web/vidaa && zip -qr "../../dist/Velora-vidaa-bundle-${version}.zip" .)
+            (cd outputs/web/vidaa && zip -qr "../../../dist/Velora-vidaa-bundle-${version}.zip" .)
           fi
           if [ -f outputs/web/webos/*.ipk ]; then
             cp outputs/web/webos/*.ipk "dist/Velora-webos-${version}.ipk"
           elif [ -d outputs/web/webos ]; then
-            (cd outputs/web/webos && zip -qr "../../dist/Velora-webos-bundle-${version}.zip" .)
+            (cd outputs/web/webos && zip -qr "../../../dist/Velora-webos-bundle-${version}.zip" .)
           fi
           sha256sum dist/* > dist/SHA256SUMS-web.txt
       - name: Guardar artefactos web
