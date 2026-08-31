@@ -41,6 +41,8 @@
     <string name="offline_available">Disponible hors connexion</string>
     <string name="downloading_progress">Téléchargement… %1$d%%</string>
     <string name="action_delete">Supprimer</string>
+    <string name="download_season">Télécharger la saison</string>
+    <string name="download_season_queued">%1$d épisodes ajoutés à la file</string>
     <string name="live_tv_all_channels">Toutes</string>
     <string name="live_tv_favorites">Favoris</string>
     <string name="live_tv_add_favorite">Ajouter aux favoris</string>

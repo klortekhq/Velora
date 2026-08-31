@@ -58,6 +58,8 @@
     <string name="offline_integrity_failed">El contenido descargado está dañado. Vuelve a descargarlo.</string>
     <string name="downloading_progress">Descargando… %1$d%%</string>
     <string name="action_delete">Eliminar</string>
+    <string name="download_season">Descargar temporada</string>
+    <string name="download_season_queued">%1$d episodios añadidos a la cola</string>
     <string name="settings_offline_storage_limit">Límite de almacenamiento sin conexión</string>
     <string name="settings_offline_storage_limit_description">Espacio máximo que Velora puede gestionar para descargas en este dispositivo.</string>
     <string name="settings_offline_storage_unlimited">Sin límite</string>
