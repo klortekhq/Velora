@@ -357,7 +357,16 @@ fun MobileLibraryScreen(
                     val image = remember(item.Id, apiService) {
                         apiService?.getImageUrl(item.Id, "Primary", null, maxWidth = 420, maxHeight = 620, quality = 84)
                     }
-                    Column(Modifier.clickable { onItemClick(item) }) {
+                    Column(
+                        Modifier
+                            .semantics {
+                                // Expose the whole poster as one predictable touch target
+                                // for TalkBack and keyboard/controller bridges.
+                                contentDescription = item.Name
+                                role = Role.Button
+                            }
+                            .clickable { onItemClick(item) }
+                    ) {
                         Box(Modifier.fillMaxWidth().aspectRatio(.68f).clip(RoundedCornerShape(14.dp)).background(Color.White.copy(alpha = .1f))) {
                             if (image != null && apiService != null) AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(image).headers(apiService.getImageRequestHeaders()).memoryCachePolicy(CachePolicy.ENABLED).diskCachePolicy(CachePolicy.ENABLED).build(), contentDescription = item.Name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
                         }
@@ -500,6 +509,10 @@ private fun MobileLibrarySortOption(label: String, selected: Boolean, onClick: (
     Row(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp))
             .background(if (selected) MobileHomeCyan.copy(alpha = .18f) else Color.Transparent)
+            .semantics {
+                role = Role.RadioButton
+                contentDescription = label
+            }
             .clickable(onClick = onClick)
             .padding(horizontal = 14.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
