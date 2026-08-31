@@ -55,18 +55,18 @@ VIDAA bundles and the `SHA256SUMS.txt` manifest. Published APK digests are:
 | `Velora-tv-debug.apk` | `7ebf5e854e731a638b6020d56786cc037cfe376989388b6306fb464c155d6874` |
 | `Velora-tv-release-unsigned.apk` | `6dfe2f5359f77321c5ecb71cc05c7a1e6a50db00331c2ca2648c6c8e0bb4ce2c` |
 
-Release `v1.2.31` is now publicly verified at
-https://github.com/klortekhq/Velora/releases/tag/v1.2.31. It is a public,
+Release `v1.2.32` is now publicly verified at
+https://github.com/klortekhq/Velora/releases/tag/v1.2.32. It is a public,
 non-draft release with 11 assets: the four Android APKs, web archives,
 Samsung/webOS/VIDAA bundles and both checksum manifests. GitHub-reported APK
 digests are:
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-mobile-debug.apk` | `8882d48b4ae1cbeef9b5bba5f38fe18f9f28458a3c679423a74797260306fc98` |
-| `Velora-mobile-release-unsigned.apk` | `25c5891cafb3c9d82e88ffb56a6facc71a13cb9951640ca8238f412ea2d1c1f0` |
-| `Velora-tv-debug.apk` | `f637ef2ff2c21f03fa6593bde23651a0a2c799abf5f768f7eb4b5b5364b62574` |
-| `Velora-tv-release-unsigned.apk` | `9123d375701039402aed9d77fbc9d632d756ff1bc06da3d187dcffb984ae5e81` |
+| `Velora-mobile-debug.apk` | `9b0e74bac8898ca5ef3dc4ec62003cc3e606e497b70725705b4ef4cf085ec38c` |
+| `Velora-mobile-release-unsigned.apk` | `311f11ef63535ce46bddb790bcd2a0a788616ff09ff1872316b0d2ed47be52f3` |
+| `Velora-tv-debug.apk` | `df5a18170e1322ab59320d5f65a8ab7c932b75f660d3064c718148031a77f0f4` |
+| `Velora-tv-release-unsigned.apk` | `6f3d2532a14c7976c26ef6cf58d87767a787babaf00eef3ce1353bccda046170` |
 
 - Android-managed downloads and the MPV fallback now also keep the Jellyfin
   token in request headers rather than embedding it in playback/download URLs.
