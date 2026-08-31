@@ -258,6 +258,10 @@ SHA-256 manifests. The only remote branch is `main`.
   2026-08-29 after the security/capability changes; the build emitted only
   existing deprecation/KAPT warnings.
   Instrumentation and real-device playback validation were not run.
+- The mobile Media3 timeline now uses a real horizontal touch-drag gesture,
+  committing the selected position on release; TV/D-pad seeking remains
+  available. Mobile and TV Kotlin compilation plus mobile unit tests passed
+  on 2026-08-31 after this change.
 - Commit `8404e71` also passed `compileMobileDebugKotlin`,
   `testMobileDebugUnitTest`, and `assembleMobileDebug` with the native AV1
   decoder on 2026-08-29.
