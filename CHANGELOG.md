@@ -2,6 +2,13 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.30
+
+### Improved
+
+- Increased contrast and touch readability of the mobile settings category
+  list with dedicated surfaces, borders and stronger typography.
+
 ## 1.2.29
 
 ### Fixed
