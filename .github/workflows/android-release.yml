@@ -67,11 +67,14 @@ jobs:
           test "$tag_version" = "$web_version" || { echo "Tag $tag_version != web $web_version"; exit 1; }
 
       - name: Compilar APK móvil/TV debug y release unsigned
-        run: >-
-          ./gradlew :app:testMobileDebugUnitTest :app:testTvDebugUnitTest
-          :app:assembleMobileDebug :app:assembleTvDebug
-          :app:assembleMobileRelease :app:assembleTvRelease
-          --no-daemon --stacktrace
+        run: |
+          # Keep a runner failure observable and bounded even if Gradle itself
+          # stops producing output. GitHub's job timeout remains the outer guard.
+          timeout --signal=TERM --kill-after=60s 25m ./gradlew \
+            :app:testMobileDebugUnitTest :app:testTvDebugUnitTest \
+            :app:assembleMobileDebug :app:assembleTvDebug \
+            :app:assembleMobileRelease :app:assembleTvRelease \
+            --no-daemon --max-workers=2 --console=plain --stacktrace
 
       - name: Preparar nombres de APK
         shell: bash
