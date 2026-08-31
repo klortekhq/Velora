@@ -87,6 +87,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - The shared search screen now switches from the six-column TV grid to a
   two-column, width-aware mobile grid, preventing result clipping on phones
   while retaining the dense TV layout.
+- When a server exposes multiple movie or series libraries, mobile navigation
+  now presents a touch-friendly library chooser; a single library remains a
+  one-tap destination.
 - The playback mapper also falls back to Jellyfin's numeric `Channels` field
   when `ChannelLayout` is missing, with a regression test for multichannel audio.
 - Android playback capabilities now probe installed MediaCodec decoders and

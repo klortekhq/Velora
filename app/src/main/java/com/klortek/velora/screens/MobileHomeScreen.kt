@@ -93,6 +93,9 @@ fun MobileHomeScreen(
     onSeries: () -> Unit,
     onContinueWatchingLongClick: (JellyfinItem) -> Unit = {}
 ) {
+    var libraryPickerType by remember { mutableStateOf<String?>(null) }
+    val movieLibraries = remember(libraries) { libraries.filter { it.CollectionType.equals("movies", true) } }
+    val seriesLibraries = remember(libraries) { libraries.filter { it.CollectionType.equals("tvshows", true) } }
     Box(Modifier.fillMaxSize().background(MobileHomeBackground)) {
         // Mobile home is a scrollable Plex-style dashboard.  Do not render the
         // TV hero layer here: it is a separate, fixed-height surface that used
@@ -126,8 +129,20 @@ fun MobileHomeScreen(
         val seriesLibrary = libraries.firstOrNull { it.CollectionType.equals("tvshows", true) }
         MobileBottomNavigation(
             onHome = {},
-            onMovies = { movieLibrary?.let { onMovies() } ?: onSearch() },
-            onSeries = { seriesLibrary?.let { onSeries() } ?: onSearch() },
+            onMovies = {
+                when {
+                    movieLibraries.size == 1 -> onMovies()
+                    movieLibraries.size > 1 -> libraryPickerType = "movies"
+                    else -> onSearch()
+                }
+            },
+            onSeries = {
+                when {
+                    seriesLibraries.size == 1 -> onSeries()
+                    seriesLibraries.size > 1 -> libraryPickerType = "tvshows"
+                    else -> onSearch()
+                }
+            },
             onLiveTv = onLiveTv,
             showMovies = movieLibrary != null,
             showSeries = seriesLibrary != null,
@@ -137,6 +152,59 @@ fun MobileHomeScreen(
             onSettings = onSettings,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
+
+        if (libraryPickerType != null) {
+            val pickerLibraries = if (libraryPickerType == "movies") movieLibraries else seriesLibraries
+            Dialog(onDismissRequest = { libraryPickerType = null }) {
+                androidx.compose.material3.Surface(
+                    modifier = Modifier.fillMaxWidth(.9f),
+                    shape = RoundedCornerShape(24.dp),
+                    color = Color(0xFF171A21),
+                    contentColor = Color.White
+                ) {
+                    Column(
+                        Modifier.padding(22.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = if (libraryPickerType == "movies") {
+                                stringResource(com.klortek.velora.R.string.nav_movies)
+                            } else {
+                                stringResource(com.klortek.velora.R.string.nav_series)
+                            },
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        pickerLibraries.forEach { library ->
+                            Text(
+                                text = library.Name,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(min = 48.dp)
+                                    .clip(RoundedCornerShape(14.dp))
+                                    .background(Color.White.copy(alpha = .08f))
+                                    .semantics {
+                                        contentDescription = library.Name
+                                        role = Role.Button
+                                    }
+                                    .clickable {
+                                        libraryPickerType = null
+                                        onLibraryClick(library)
+                                    }
+                                    .padding(horizontal = 16.dp, vertical = 14.dp)
+                            )
+                        }
+                        androidx.compose.material3.OutlinedButton(
+                            onClick = { libraryPickerType = null },
+                            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                        ) {
+                            Text(stringResource(com.klortek.velora.R.string.action_back))
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
