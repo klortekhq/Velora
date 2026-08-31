@@ -43,6 +43,9 @@
     <string name="action_delete">Supprimer</string>
     <string name="download_season">Télécharger la saison</string>
     <string name="download_season_queued">%1$d épisodes ajoutés à la file</string>
+    <string name="select_episodes">Sélectionner les épisodes</string>
+    <string name="episodes_selected">%1$d épisodes sélectionnés</string>
+    <string name="continue_label">Continuer</string>
     <string name="live_tv_all_channels">Toutes</string>
     <string name="live_tv_favorites">Favoris</string>
     <string name="live_tv_add_favorite">Ajouter aux favoris</string>

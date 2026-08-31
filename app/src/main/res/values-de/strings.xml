@@ -43,6 +43,9 @@
     <string name="action_delete">Löschen</string>
     <string name="download_season">Staffel herunterladen</string>
     <string name="download_season_queued">%1$d Folgen zur Warteschlange hinzugefügt</string>
+    <string name="select_episodes">Folgen auswählen</string>
+    <string name="episodes_selected">%1$d Folgen ausgewählt</string>
+    <string name="continue_label">Weiter</string>
     <string name="live_tv_all_channels">Alle</string>
     <string name="live_tv_favorites">Favoriten</string>
     <string name="live_tv_add_favorite">Zu Favoriten hinzufügen</string>
