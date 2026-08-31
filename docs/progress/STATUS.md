@@ -80,6 +80,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - The mobile library header now leaves clear space below the Android status bar,
   exposes an accessible, full-size touch target for the sort/filter action, and
   uses localized movie/series titles.
+- The mobile library sort/filter surface now uses resource-backed labels in
+  Spanish, English, French and German; its query is applied consistently to
+  both Recommendations and All tabs, and the tab controls expose a 48dp
+  minimum touch target.
 - The playback mapper also falls back to Jellyfin's numeric `Channels` field
   when `ChannelLayout` is missing, with a regression test for multichannel audio.
 - Android playback capabilities now probe installed MediaCodec decoders and
@@ -202,6 +206,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Release `v1.2.20` is publicly verified with four Android APKs, the web
   archives, Samsung and VIDAA bundles, the webOS package and both checksum
   manifests: https://github.com/klortekhq/Velora/releases/tag/v1.2.20.
+- Release `v1.2.21` has its web packages published, but its Android workflow is
+  still reported as `in_progress` by GitHub Actions and therefore is not yet
+  certified as a complete release.
 
 ## Explicitly incomplete or requiring verification
 
