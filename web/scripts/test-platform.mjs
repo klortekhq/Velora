@@ -44,7 +44,7 @@ for (const [userAgent, expected] of [
 console.log('platform capability tests passed');
 
 assert.match(appSource, /sessionStorage/);
-assert.match(appSource, /var APP_VERSION = '1\.2\.36'/);
+assert.match(appSource, /var APP_VERSION = '1\.2\.37'/);
 assert.match(appSource, /selected !== 'auto' && TRANSLATIONS\[selected\]/);
 assert.match(appSource, /X-Emby-Token/);
 assert.match(appSource, /media-proxy-sw\.js/);
