@@ -265,6 +265,11 @@ SHA-256 manifests. The only remote branch is `main`.
   committing the selected position on release; TV/D-pad seeking remains
   available. Mobile and TV Kotlin compilation plus mobile unit tests passed
   on 2026-08-31 after this change.
+- The Android playback screen now applies `PlaybackDecisionEngine` to the
+  effective Jellyfin negotiation: capability-driven transcode is requested
+  when allowed, while explicit codec settings and external-subtitle direct
+  streaming remain respected. Mobile unit tests and TV compilation passed
+  after this integration.
 - Commit `8404e71` also passed `compileMobileDebugKotlin`,
   `testMobileDebugUnitTest`, and `assembleMobileDebug` with the native AV1
   decoder on 2026-08-29.

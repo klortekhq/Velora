@@ -55,6 +55,7 @@ import com.klortek.velora.player.GLVideoSurfaceView
 import com.klortek.velora.player.PlaybackQuality
 import com.klortek.velora.playback.JellyfinPlaybackMapper
 import com.klortek.velora.playback.PlaybackDecisionEngine
+import com.klortek.velora.playback.PlaybackPath
 import com.klortek.velora.playback.PlaybackQuality as DecisionQuality
 import android.widget.FrameLayout
 import kotlinx.coroutines.Dispatchers
@@ -885,18 +886,33 @@ fun JellyfinVideoPlayerScreen(
                     val isHEVCVideo = videoCodecName.contains("hevc") || videoCodecName.contains("h265") || videoCodecName.contains("h.265")
                     
                     // Determine if we should request server-side transcoding
-                    val shouldRequestTranscoding = serverTranscodingEnabled && (
-                        (transcodeAV1Setting && isAV1Video) ||
-                        (transcodeHEVCSetting && isHEVCVideo)
-                    )
+                    // The canonical decision is authoritative for server
+                    // negotiation. Codec-specific toggles remain explicit
+                    // opt-in, but an incompatible source must not be sent to
+                    // direct play merely because those toggles are off.
+                    val decisionRequiresTranscoding =
+                        playbackDecision == PlaybackPath.TRANSCODE
+                    val shouldRequestTranscoding = serverTranscodingEnabled &&
+                        !forceDirectStreamForSubtitles &&
+                        (decisionRequiresTranscoding || (
+                            (transcodeAV1Setting && isAV1Video) ||
+                            (transcodeHEVCSetting && isHEVCVideo)
+                        ))
                     
                     val videoUrl = if (initialMediaUrl != null) {
                         initialMediaUrl
-                    } else if (shouldRequestTranscoding && !forceDirectStreamForSubtitles) {
+                    } else if (shouldRequestTranscoding) {
                         Log.d("JellyfinPlayer", "🔄 SERVER-SIDE TRANSCODING ENABLED")
                         Log.d("JellyfinPlayer", "   Source codec: $videoCodecName")
                         Log.d("JellyfinPlayer", "   Target codec: $transcodeTargetCodec @ ${transcodeMaxBitrate}Mbps")
-                        Log.d("JellyfinPlayer", "   Reason: ${if (isAV1Video) "AV1" else "HEVC"} transcoding requested")
+                        val reason = if (decisionRequiresTranscoding) {
+                            "capability decision"
+                        } else if (isAV1Video) {
+                            "AV1 setting"
+                        } else {
+                            "HEVC setting"
+                        }
+                        Log.d("JellyfinPlayer", "   Reason: $reason")
                         
                         apiService.getTranscodedVideoUrl(
                             itemId = item.Id,
