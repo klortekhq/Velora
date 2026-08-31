@@ -213,6 +213,11 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 ## Quality gates
 
 - `git diff --check`: passing for the current working tree.
+- The repository-wide `gradlew test` passed on 2026-08-31 after making the
+  vendored NewPipe test classpath explicit. Its upstream catalog-integration
+  suite is intentionally not used as a Velora release gate because its
+  third-party fixtures are nondeterministic; Velora's mobile and TV unit-test
+  tasks remain enabled and passed.
 - Android `testMobileDebugUnitTest`, `assembleMobileDebug`,
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-29. The full four-variant build completed online after
