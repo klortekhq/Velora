@@ -2,6 +2,15 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.32
+
+### Fixed
+
+- Synchronized the web client authentication version with the Android and
+  platform package metadata.
+- Unsupported explicit browser locale selections now fall back safely to the
+  Spanish catalog instead of sending an unknown language to Jellyfin.
+
 ## 1.2.30
 
 ### Improved
