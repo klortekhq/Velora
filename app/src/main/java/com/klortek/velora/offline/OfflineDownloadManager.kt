@@ -103,6 +103,11 @@ object OfflineDownloadManager {
         val entry = OfflineDownload(itemId, name, type, seriesName, seasonNumber, episodeNumber, 0L, quality.storageKey, status = DownloadManager.STATUS_PENDING, workName = workName)
         val work = androidx.work.OneTimeWorkRequestBuilder<OfflineDownloadWorker>()
             .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(androidx.work.NetworkType.CONNECTED).build())
+            .setBackoffCriteria(
+                androidx.work.BackoffPolicy.EXPONENTIAL,
+                30,
+                java.util.concurrent.TimeUnit.SECONDS
+            )
             .setInputData(androidx.work.workDataOf(
                 OfflineDownloadWorker.KEY_ITEM_ID to itemId,
                 OfflineDownloadWorker.KEY_MEDIA_SOURCE_ID to mediaSourceId,
