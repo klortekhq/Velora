@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -198,6 +199,7 @@ fun MobileLibraryScreen(
     var showSortDialog by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableStateOf(if (recommendations.isNotEmpty()) 0 else 1) }
     val availableGenres = remember(items) { availableLibraryGenres(items) }
+    val sortFilterLabel = stringResource(com.klortek.velora.R.string.library_sort_filter)
     val sortedItems = remember(items, mobileSortMode, sortDescending, favoritesOnly, playbackFilter, selectedGenre) {
         queryLibraryItems(items, mobileSortMode, sortDescending, favoritesOnly, playbackFilter, selectedGenre)
     }
@@ -240,7 +242,7 @@ fun MobileLibraryScreen(
                     .clip(RoundedCornerShape(24.dp))
                     .background(Color.White.copy(alpha = .1f))
                     .semantics {
-                        contentDescription = "Ordenar y filtrar"
+                        contentDescription = sortFilterLabel
                         role = Role.Button
                     }
                     .clickable { showSortDialog = true },
@@ -253,12 +255,17 @@ fun MobileLibraryScreen(
             Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            MobileLibraryTab("Recomendaciones", selectedTab == 0 && recommendations.isNotEmpty()) { selectedTab = 0 }
-            MobileLibraryTab("Todo", selectedTab == 1 || recommendations.isEmpty()) { selectedTab = 1 }
+            MobileLibraryTab(stringResource(com.klortek.velora.R.string.library_recommendations), selectedTab == 0 && recommendations.isNotEmpty()) { selectedTab = 0 }
+            MobileLibraryTab(stringResource(com.klortek.velora.R.string.library_all), selectedTab == 1 || recommendations.isEmpty()) { selectedTab = 1 }
         }
-        val visibleItems = if (selectedTab == 0 && recommendations.isNotEmpty()) recommendations else sortedItems
+        // Apply the same query to both tabs. Changing a filter must never leave
+        // the Recommendations tab visually unchanged while All responds.
+        val sortedRecommendations = remember(recommendations, mobileSortMode, sortDescending, favoritesOnly, playbackFilter, selectedGenre) {
+            queryLibraryItems(recommendations, mobileSortMode, sortDescending, favoritesOnly, playbackFilter, selectedGenre)
+        }
+        val visibleItems = if (selectedTab == 0 && sortedRecommendations.isNotEmpty()) sortedRecommendations else sortedItems
         if (visibleItems.isEmpty()) {
-            Text("No hay contenido disponible", color = Color.White.copy(alpha = .75f), modifier = Modifier.align(Alignment.CenterHorizontally).padding(32.dp))
+            Text(stringResource(com.klortek.velora.R.string.library_empty), color = Color.White.copy(alpha = .75f), modifier = Modifier.align(Alignment.CenterHorizontally).padding(32.dp))
         } else {
             androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
                 columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(minSize = 132.dp),
@@ -303,50 +310,50 @@ fun MobileLibraryScreen(
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text("Ordenar y filtrar", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                        Text("Ordenar por", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
-                        MobileLibrarySortOption("Nombre", mobileSortMode == LibrarySortMode.Name) {
+                        Text(stringResource(com.klortek.velora.R.string.library_sort_filter), color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        Text(stringResource(com.klortek.velora.R.string.library_sort_by), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_sort_name), mobileSortMode == LibrarySortMode.Name) {
                             mobileSortMode = LibrarySortMode.Name
                             settings.setSortType("Alphabetically")
                         }
-                        MobileLibrarySortOption("Fecha de incorporación", mobileSortMode == LibrarySortMode.DateAdded) {
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_sort_date_added), mobileSortMode == LibrarySortMode.DateAdded) {
                             mobileSortMode = LibrarySortMode.DateAdded
                             settings.setSortType("DateAdded")
                         }
-                        MobileLibrarySortOption("Fecha de estreno", mobileSortMode == LibrarySortMode.PremiereDate) {
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_sort_premiere), mobileSortMode == LibrarySortMode.PremiereDate) {
                             mobileSortMode = LibrarySortMode.PremiereDate
                             settings.setSortType("DateReleased")
                         }
-                        MobileLibrarySortOption("Duración", mobileSortMode == LibrarySortMode.Runtime) {
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_sort_runtime), mobileSortMode == LibrarySortMode.Runtime) {
                             mobileSortMode = LibrarySortMode.Runtime
                             settings.setSortType("Runtime")
                         }
-                        MobileLibrarySortOption("Valoración de la crítica", mobileSortMode == LibrarySortMode.CriticRating) {
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_sort_critic_rating), mobileSortMode == LibrarySortMode.CriticRating) {
                             mobileSortMode = LibrarySortMode.CriticRating
                             settings.setSortType("CriticRating")
                         }
-                        MobileLibrarySortOption("Valoración de la comunidad", mobileSortMode == LibrarySortMode.CommunityRating) {
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_sort_community_rating), mobileSortMode == LibrarySortMode.CommunityRating) {
                             mobileSortMode = LibrarySortMode.CommunityRating
                             settings.setSortType("CommunityRating")
                         }
-                        Text("Filtros", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
-                        MobileLibraryCheckOption("Favoritos", favoritesOnly) { favoritesOnly = !favoritesOnly }
-                        Text("Estado de reproducción", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
-                        MobileLibrarySortOption("Todos", playbackFilter == LibraryPlaybackFilter.All) { playbackFilter = LibraryPlaybackFilter.All }
-                        MobileLibrarySortOption("Vistos", playbackFilter == LibraryPlaybackFilter.Watched) { playbackFilter = LibraryPlaybackFilter.Watched }
-                        MobileLibrarySortOption("No vistos", playbackFilter == LibraryPlaybackFilter.Unwatched) { playbackFilter = LibraryPlaybackFilter.Unwatched }
+                        Text(stringResource(com.klortek.velora.R.string.library_filters), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+                        MobileLibraryCheckOption(stringResource(com.klortek.velora.R.string.library_favorites), favoritesOnly) { favoritesOnly = !favoritesOnly }
+                        Text(stringResource(com.klortek.velora.R.string.library_playback_state), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_all_playback), playbackFilter == LibraryPlaybackFilter.All) { playbackFilter = LibraryPlaybackFilter.All }
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_watched), playbackFilter == LibraryPlaybackFilter.Watched) { playbackFilter = LibraryPlaybackFilter.Watched }
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_unwatched), playbackFilter == LibraryPlaybackFilter.Unwatched) { playbackFilter = LibraryPlaybackFilter.Unwatched }
                         if (availableGenres.isNotEmpty()) {
-                            Text("Género", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
-                            MobileLibrarySortOption("Todos los géneros", selectedGenre == null) { selectedGenre = null }
+                            Text(stringResource(com.klortek.velora.R.string.library_genre), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+                            MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_all_genres), selectedGenre == null) { selectedGenre = null }
                             availableGenres.forEach { genre ->
                                 MobileLibrarySortOption(localizedGenreName(genre), selectedGenre.equals(genre, ignoreCase = true)) {
                                     selectedGenre = genre
                                 }
                             }
                         }
-                        Text("Dirección", color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
-                        MobileLibrarySortOption("Ascendente", !sortDescending) { sortDescending = false }
-                        MobileLibrarySortOption("Descendente", sortDescending) { sortDescending = true }
+                        Text(stringResource(com.klortek.velora.R.string.library_direction), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_ascending), !sortDescending) { sortDescending = false }
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_descending), sortDescending) { sortDescending = true }
                         androidx.compose.material3.OutlinedButton(
                             onClick = { showSortDialog = false },
                             modifier = Modifier.fillMaxWidth().padding(top = 12.dp)
@@ -365,10 +372,15 @@ private fun MobileLibraryTab(label: String, selected: Boolean, onClick: () -> Un
         color = if (selected) Color(0xFF071218) else Color.White.copy(alpha = .85f),
         fontWeight = FontWeight.SemiBold,
         modifier = Modifier
+            .heightIn(min = 48.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(if (selected) MobileHomeCyan else Color.White.copy(alpha = .08f))
+            .semantics {
+                contentDescription = label
+                role = Role.Tab
+            }
             .clickable(onClick = onClick)
-            .padding(horizontal = 18.dp, vertical = 10.dp)
+            .padding(horizontal = 18.dp, vertical = 12.dp)
     )
 }
 

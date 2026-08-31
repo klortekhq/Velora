@@ -97,4 +97,26 @@
     <string name="login_password">Contraseña</string>
     <string name="login_sign_in">Iniciar sesión</string>
     <string name="login_authenticating">Autenticando…</string>
+    <string name="library_recommendations">Recomendaciones</string>
+    <string name="library_all">Todo</string>
+    <string name="library_empty">No hay contenido disponible</string>
+    <string name="library_sort_filter">Ordenar y filtrar</string>
+    <string name="library_sort_by">Ordenar por</string>
+    <string name="library_sort_name">Nombre</string>
+    <string name="library_sort_date_added">Fecha de incorporación</string>
+    <string name="library_sort_premiere">Fecha de estreno</string>
+    <string name="library_sort_runtime">Duración</string>
+    <string name="library_sort_critic_rating">Valoración de la crítica</string>
+    <string name="library_sort_community_rating">Valoración de la comunidad</string>
+    <string name="library_filters">Filtros</string>
+    <string name="library_favorites">Favoritos</string>
+    <string name="library_playback_state">Estado de reproducción</string>
+    <string name="library_all_playback">Todos</string>
+    <string name="library_watched">Vistos</string>
+    <string name="library_unwatched">No vistos</string>
+    <string name="library_genre">Género</string>
+    <string name="library_all_genres">Todos los géneros</string>
+    <string name="library_direction">Dirección</string>
+    <string name="library_ascending">Ascendente</string>
+    <string name="library_descending">Descendente</string>
 </resources>
