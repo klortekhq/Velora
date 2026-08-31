@@ -464,26 +464,6 @@ fun JellyfinVideoPlayerScreen(
     var isLoading by remember { mutableStateOf(true) }
     var playerInitialized by remember { mutableStateOf(false) }
 
-    // Change quality with the existing player instance. Jellyfin negotiates the selected
-    // preset; Original keeps static=true and therefore does not impose artificial limits.
-    LaunchedEffect(playbackQuality) {
-        if (playerInitialized && itemDetails != null) {
-            val sourceId = itemDetails?.MediaSources?.firstOrNull()?.Id
-            val position = player.currentPosition
-            val url = withContext(Dispatchers.IO) {
-                apiService.getVideoPlaybackUrl(
-                    itemId = item.Id,
-                    mediaSourceId = sourceId,
-                    preserveQuality = playbackQuality == PlaybackQuality.ORIGINAL,
-                    quality = playbackQuality
-                )
-            }
-            player.setMediaItem(androidx.media3.common.MediaItem.fromUri(url), position)
-            player.prepare()
-            player.play()
-            Log.d("JellyfinPlayer", "Quality changed in-place to ${playbackQuality.label}")
-        }
-    }
     var progressReportingJob by remember { mutableStateOf<Job?>(null) }
     var isPlaying by remember { mutableStateOf(false) }
     // itemDetails is declared earlier for codec detection
@@ -506,6 +486,53 @@ fun JellyfinVideoPlayerScreen(
     var is4KContent by remember { mutableStateOf(false) } // Track if current content is 4K
     // Store subtitle streams list for composite key registration in onTracksChanged
     var jellyfinSubtitleStreams by remember { mutableStateOf<List<MediaStream>>(emptyList()) }
+
+    // Change quality without dropping the active subtitle track. Rebuilding the
+    // MediaItem from only its URI used to make subtitles disappear after a
+    // quality change, even though the selected language remained in the UI.
+    LaunchedEffect(playbackQuality) {
+        if (playerInitialized && itemDetails != null) {
+            val sourceId = itemDetails?.MediaSources?.firstOrNull()?.Id
+            val selectedSubtitle = currentSubtitleIndex?.let { index ->
+                itemDetails?.MediaSources?.firstOrNull()?.MediaStreams
+                    ?.firstOrNull { it.Type == "Subtitle" && it.Index == index }
+            }
+            val mediaItem = withContext(Dispatchers.IO) {
+                val url = apiService.getVideoPlaybackUrl(
+                    itemId = item.Id,
+                    mediaSourceId = sourceId,
+                    preserveQuality = playbackQuality == PlaybackQuality.ORIGINAL,
+                    quality = playbackQuality
+                )
+                val builder = androidx.media3.common.MediaItem.Builder()
+                    .setUri(Uri.parse(url))
+                    .setMediaMetadata(
+                        MediaMetadata.Builder().setTitle(item.Name).build()
+                    )
+                if (selectedSubtitle != null) {
+                    runCatching {
+                        val config = com.klortek.velora.player.SubtitleMapper.buildSubtitleConfiguration(
+                            context = context,
+                            apiService = apiService,
+                            itemId = item.Id,
+                            mediaSourceId = sourceId ?: item.Id,
+                            stream = selectedSubtitle,
+                            positionIndex = selectedSubtitle.Index ?: 0
+                        )
+                        builder.setSubtitleConfigurations(listOf(config))
+                    }.onFailure { error ->
+                        Log.w("JellyfinPlayer", "Could not preserve subtitle after quality change", error)
+                    }
+                }
+                builder.build()
+            }
+            val position = player.currentPosition
+            player.setMediaItem(mediaItem, position)
+            player.prepare()
+            player.play()
+            Log.d("JellyfinPlayer", "Quality changed in-place to ${playbackQuality.label}; subtitle=${selectedSubtitle?.Index}")
+        }
+    }
     
     // Downloaded subtitles from OpenSubtitles
     var downloadedSubtitles by remember { mutableStateOf<List<com.klortek.velora.subtitles.DownloadedSubtitle>>(emptyList()) }
