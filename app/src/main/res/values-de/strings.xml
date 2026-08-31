@@ -113,4 +113,14 @@
     <string name="action_go_to_settings">Zu den Einstellungen</string>
     <string name="request_no_seasons">Keine Staffeln gefunden</string>
     <string name="jellyseerr_requesting_short">Anfrage wird gesendet…</string>
+    <string name="subtitle_downloading">Wird heruntergeladen…</string>
+    <string name="subtitle_downloaded_title">Heruntergeladene Untertitel</string>
+    <string name="subtitle_none_downloaded">Keine Untertitel heruntergeladen</string>
+    <string name="subtitle_delete">Löschen</string>
+    <string name="subtitle_download_more">Untertitel herunterladen</string>
+    <string name="subtitle_login_required">Anmeldung erforderlich</string>
+    <string name="subtitle_login_description">Um Untertitel von OpenSubtitles herunterzuladen, konfiguriere einen API-Schlüssel und dein Konto in den Einstellungen.</string>
+    <string name="subtitle_login_steps">1. Kostenlosen API-Schlüssel erhalten: opensubtitles.com/consumers\n2. Kostenloses Konto erstellen: opensubtitles.com</string>
+    <string name="subtitle_cancel">Abbrechen</string>
+    <string name="subtitle_settings">Einstellungen</string>
 </resources>

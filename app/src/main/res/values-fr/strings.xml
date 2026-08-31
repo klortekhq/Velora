@@ -113,4 +113,14 @@
     <string name="action_go_to_settings">Ouvrir les réglages</string>
     <string name="request_no_seasons">Aucune saison trouvée</string>
     <string name="jellyseerr_requesting_short">Demande en cours…</string>
+    <string name="subtitle_downloading">Téléchargement…</string>
+    <string name="subtitle_downloaded_title">Sous-titres téléchargés</string>
+    <string name="subtitle_none_downloaded">Aucun sous-titre téléchargé</string>
+    <string name="subtitle_delete">Supprimer</string>
+    <string name="subtitle_download_more">Télécharger des sous-titres</string>
+    <string name="subtitle_login_required">Connexion requise</string>
+    <string name="subtitle_login_description">Pour télécharger des sous-titres depuis OpenSubtitles, configurez une clé API et votre compte dans les réglages.</string>
+    <string name="subtitle_login_steps">1. Obtenez une clé API gratuite : opensubtitles.com/consumers\n2. Créez un compte gratuit : opensubtitles.com</string>
+    <string name="subtitle_cancel">Annuler</string>
+    <string name="subtitle_settings">Réglages</string>
 </resources>

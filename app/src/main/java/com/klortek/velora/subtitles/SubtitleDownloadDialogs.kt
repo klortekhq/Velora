@@ -15,6 +15,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.res.stringResource
+import com.klortek.velora.R
 import androidx.tv.material3.*
 
 /**
@@ -286,7 +288,7 @@ fun SubtitleDownloadingDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Downloading...",
+                        text = stringResource(R.string.subtitle_downloading),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -348,7 +350,7 @@ fun DownloadedSubtitlesDialog(
                 ) {
                     // Title - 30% smaller to match subtitle picker
                     Text(
-                        text = "Downloaded Subtitles",
+                        text = stringResource(R.string.subtitle_downloaded_title),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -365,7 +367,7 @@ fun DownloadedSubtitlesDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "No downloaded subtitles",
+                                text = stringResource(R.string.subtitle_none_downloaded),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                 ),
@@ -426,7 +428,7 @@ fun DownloadedSubtitlesDialog(
                                         ) {
                                             Icon(
                                                 imageVector = Icons.Default.Delete,
-                                                contentDescription = "Delete",
+                                                contentDescription = stringResource(R.string.subtitle_delete),
                                                 tint = MaterialTheme.colorScheme.error,
                                                 modifier = Modifier.size(18.dp)
                                             )
@@ -454,7 +456,7 @@ fun DownloadedSubtitlesDialog(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Download Subtitles",
+                            text = stringResource(R.string.subtitle_download_more),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                             )
@@ -500,7 +502,7 @@ fun ApiKeyRequiredDialog(
                 ) {
                     // Title - 30% smaller to match subtitle picker
                     Text(
-                        text = "Login Required",
+                        text = stringResource(R.string.subtitle_login_required),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -509,7 +511,7 @@ fun ApiKeyRequiredDialog(
                     )
                     
                     Text(
-                        text = "To download subtitles from OpenSubtitles, you need to configure both an API key and your account login in Settings.",
+                        text = stringResource(R.string.subtitle_login_description),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                         ),
@@ -519,7 +521,7 @@ fun ApiKeyRequiredDialog(
                     Spacer(modifier = Modifier.height(8.dp))
                     
                     Text(
-                        text = "1. Get free API key at: opensubtitles.com/consumers\n2. Create free account at: opensubtitles.com",
+                        text = stringResource(R.string.subtitle_login_steps),
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontSize = MaterialTheme.typography.bodySmall.fontSize * 0.7f
                         ),
@@ -540,7 +542,7 @@ fun ApiKeyRequiredDialog(
                             )
                         ) {
                             Text(
-                                text = "Cancel",
+                                text = stringResource(R.string.subtitle_cancel),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                                 )
@@ -552,7 +554,7 @@ fun ApiKeyRequiredDialog(
                             modifier = Modifier.weight(1f)
                         ) {
                             Text(
-                                text = "Settings",
+                                text = stringResource(R.string.subtitle_settings),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                                 )

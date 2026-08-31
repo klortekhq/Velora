@@ -113,4 +113,14 @@
     <string name="action_go_to_settings">Go to Settings</string>
     <string name="request_no_seasons">No seasons found</string>
     <string name="jellyseerr_requesting_short">Requesting…</string>
+    <string name="subtitle_downloading">Downloading…</string>
+    <string name="subtitle_downloaded_title">Downloaded subtitles</string>
+    <string name="subtitle_none_downloaded">No downloaded subtitles</string>
+    <string name="subtitle_delete">Delete</string>
+    <string name="subtitle_download_more">Download subtitles</string>
+    <string name="subtitle_login_required">Login required</string>
+    <string name="subtitle_login_description">To download subtitles from OpenSubtitles, configure an API key and your account in Settings.</string>
+    <string name="subtitle_login_steps">1. Get a free API key at: opensubtitles.com/consumers\n2. Create a free account at: opensubtitles.com</string>
+    <string name="subtitle_cancel">Cancel</string>
+    <string name="subtitle_settings">Settings</string>
 </resources>
