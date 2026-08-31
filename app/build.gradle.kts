@@ -17,7 +17,7 @@ android {
 
         // Version code: major * 10000 + minor * 100 + patch
         versionCode = 10303
-        versionName = "1.2.52"
+        versionName = "1.2.53"
 
         ndk {
             abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
@@ -108,6 +108,7 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.foundation)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.activity.compose)
     implementation("androidx.compose.material3:material3:1.3.0")
     implementation("androidx.compose.material:material-icons-extended")

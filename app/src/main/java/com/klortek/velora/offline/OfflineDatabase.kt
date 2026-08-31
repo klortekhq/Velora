@@ -10,7 +10,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     "velora_offline.db",
     null,
-    3
+    4
 ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -28,7 +28,8 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                 reason INTEGER NOT NULL,
                 bytes_downloaded INTEGER NOT NULL,
                 total_bytes INTEGER NOT NULL,
-                checksum_sha256 TEXT
+                checksum_sha256 TEXT,
+                work_name TEXT
             )"""
         )
         db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
@@ -40,6 +41,9 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         }
         if (oldVersion < 3) {
             db.execSQL("ALTER TABLE downloads ADD COLUMN checksum_sha256 TEXT")
+        }
+        if (oldVersion < 4) {
+            db.execSQL("ALTER TABLE downloads ADD COLUMN work_name TEXT")
         }
     }
 
@@ -63,7 +67,8 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                     reason = cursor.getInt(cursor.getColumnIndexOrThrow("reason")),
                     bytesDownloaded = cursor.getLong(cursor.getColumnIndexOrThrow("bytes_downloaded")),
                     totalBytes = cursor.getLong(cursor.getColumnIndexOrThrow("total_bytes")),
-                    checksumSha256 = cursor.getStringOrNull("checksum_sha256")
+                    checksumSha256 = cursor.getStringOrNull("checksum_sha256"),
+                    workName = cursor.getStringOrNull("work_name")
                 )
             }
         }
@@ -87,7 +92,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         put("download_id", downloadId); put("local_path", localPath); put("status", status); put("reason", reason)
         put("quality", quality)
         put("bytes_downloaded", bytesDownloaded); put("total_bytes", totalBytes)
-        put("checksum_sha256", checksumSha256)
+        put("checksum_sha256", checksumSha256); put("work_name", workName)
     }
 
     private fun android.database.Cursor.getStringOrNull(column: String): String? =

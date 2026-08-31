@@ -28,7 +28,9 @@ data class OfflineDownload(
     val bytesDownloaded: Long = 0L,
     val totalBytes: Long = -1L,
     /** SHA-256 of the managed media, calculated on first offline playback. */
-    val checksumSha256: String? = null
+    val checksumSha256: String? = null,
+    /** Unique WorkManager name for app-managed transfers; null means legacy provider. */
+    val workName: String? = null
 ) {
     /** Provider-neutral state used by UI and future managed-transfer engines. */
     val state: OfflineDownloadState get() = offlineDownloadState(status, reason)
@@ -96,23 +98,42 @@ object OfflineDownloadManager {
         if (!decision.allowed) throw StorageRejectedException(decision)
         if (existing != null) delete(context, existing)
 
-        val request = DownloadManager.Request(Uri.parse(OfflineDownloadRequest.url(serverUrl, itemId, mediaSourceId, quality)))
-            .addRequestHeader("X-Emby-Token", token)
-            .setTitle(name)
-            .setDescription(if (type == "Episode") "E${episodeNumber ?: ""} · ${quality.label}" else quality.label)
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setMimeType("video/*")
-            .setDestinationInExternalFilesDir(context, Environment.DIRECTORY_MOVIES, "Velora/$itemId")
-
-        val downloadId = context.getSystemService(DownloadManager::class.java).enqueue(request)
-        val entry = OfflineDownload(itemId, name, type, seriesName, seasonNumber, episodeNumber, downloadId, quality.storageKey)
+        val workName = "offline-${itemId}-${quality.storageKey}"
+        val entry = OfflineDownload(itemId, name, type, seriesName, seasonNumber, episodeNumber, 0L, quality.storageKey, status = DownloadManager.STATUS_PENDING, workName = workName)
+        val work = androidx.work.OneTimeWorkRequestBuilder<OfflineDownloadWorker>()
+            .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(androidx.work.NetworkType.CONNECTED).build())
+            .setInputData(androidx.work.workDataOf(
+                OfflineDownloadWorker.KEY_ITEM_ID to itemId,
+                OfflineDownloadWorker.KEY_MEDIA_SOURCE_ID to mediaSourceId,
+                OfflineDownloadWorker.KEY_QUALITY to quality.storageKey,
+                OfflineDownloadWorker.KEY_WORK_NAME to workName
+            ))
+            .addTag(OfflineDownloadWorker.TAG)
+            .build()
+        androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(workName, androidx.work.ExistingWorkPolicy.KEEP, work)
         save(context, load(context).filterNot { it.itemId == itemId } + entry)
         return entry
+
     }
 
     fun refresh(context: Context): List<OfflineDownload> {
         val manager = context.getSystemService(DownloadManager::class.java)
         val updated = load(context).mapNotNull { entry ->
+            if (!entry.workName.isNullOrBlank()) {
+                val info = androidx.work.WorkManager.getInstance(context)
+                    .getWorkInfosForUniqueWork(entry.workName).get().firstOrNull()
+                return@mapNotNull entry.copy(
+                    status = when (info?.state) {
+                        androidx.work.WorkInfo.State.SUCCEEDED -> DownloadManager.STATUS_SUCCESSFUL
+                        androidx.work.WorkInfo.State.FAILED, androidx.work.WorkInfo.State.CANCELLED -> DownloadManager.STATUS_FAILED
+                        androidx.work.WorkInfo.State.RUNNING -> DownloadManager.STATUS_RUNNING
+                        else -> DownloadManager.STATUS_PENDING
+                    },
+                    bytesDownloaded = info?.progress?.getLong(OfflineDownloadWorker.KEY_BYTES, entry.bytesDownloaded) ?: entry.bytesDownloaded,
+                    totalBytes = info?.progress?.getLong(OfflineDownloadWorker.KEY_TOTAL_BYTES, entry.totalBytes) ?: entry.totalBytes,
+                    localPath = info?.outputData?.getString(OfflineDownloadWorker.KEY_LOCAL_PATH) ?: entry.localPath
+                )
+            }
             val cursor = runCatching { manager.query(DownloadManager.Query().setFilterById(entry.downloadId)) }.getOrNull()
             if (cursor == null || !cursor.moveToFirst()) {
                 cursor?.close()
@@ -140,12 +161,14 @@ object OfflineDownloadManager {
     }
 
     fun cancel(context: Context, entry: OfflineDownload) {
-        context.getSystemService(DownloadManager::class.java).remove(entry.downloadId)
+        entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
+        if (entry.downloadId > 0L) context.getSystemService(DownloadManager::class.java).remove(entry.downloadId)
         deleteEntry(context, entry)
     }
 
     fun delete(context: Context, entry: OfflineDownload) {
-        context.getSystemService(DownloadManager::class.java).remove(entry.downloadId)
+        entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
+        if (entry.downloadId > 0L) context.getSystemService(DownloadManager::class.java).remove(entry.downloadId)
         entry.localPath?.let { deleteLocalUri(context, it) }
         deleteEntry(context, entry)
     }
