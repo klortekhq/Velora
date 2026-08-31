@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Velora</string>
     <string name="settings_language_reproduction">Language and playback</string>
+    <string name="settings_category_playback">Playback</string>
+    <string name="settings_category_video">Video</string>
+    <string name="settings_category_subtitles">Audio and subtitles</string>
+    <string name="settings_category_appearance">Appearance</string>
+    <string name="settings_category_performance">Performance</string>
+    <string name="settings_category_library">Library</string>
+    <string name="settings_category_advanced">Advanced</string>
+    <string name="settings_category_updates">Updates</string>
+    <string name="settings_category_account">Account</string>
+    <string name="settings_category_about">About</string>
     <string name="settings_app_language">App language</string>
     <string name="settings_app_language_description">Automatic follows the mobile, tablet, TV or Fire TV language.</string>
     <string name="settings_audio_language">Preferred audio</string>

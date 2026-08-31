@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Velora</string>
     <string name="settings_language_reproduction">Sprache und Wiedergabe</string>
+    <string name="settings_category_playback">Wiedergabe</string>
+    <string name="settings_category_video">Video</string>
+    <string name="settings_category_subtitles">Audio und Untertitel</string>
+    <string name="settings_category_appearance">Darstellung</string>
+    <string name="settings_category_performance">Leistung</string>
+    <string name="settings_category_library">Bibliothek</string>
+    <string name="settings_category_advanced">Erweitert</string>
+    <string name="settings_category_updates">Aktualisierungen</string>
+    <string name="settings_category_account">Konto</string>
+    <string name="settings_category_about">Über</string>
     <string name="settings_app_language">App-Sprache</string>
     <string name="settings_app_language_description">Automatisch verwendet die Sprache von Mobilgerät, Tablet, TV oder Fire TV.</string>
     <string name="settings_audio_language">Bevorzugte Audiosprache</string>
