@@ -45,12 +45,16 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   `v1.2.40`.
 - Jellyseerr detail actions now use Android string resources instead of
   hardcoded English labels. The additional English, German and French resources
-  are included in the next release `v1.2.43`.
+  are included in tagged release `v1.2.43`.
 - The base Spanish resource now keeps Live TV filters and favorite actions in
   Spanish, matching the existing German, French and English locale resources.
   This is included in verified release `v1.2.40`.
 
 ## Latest verified release
+
+Release `v1.2.43` is tagged and pushed; its Android and web workflows are the
+current release gate and their public assets have not yet been independently
+verified from this host.
 
 Release `v1.2.42` is publicly verified at
 https://github.com/klortekhq/Velora/releases/tag/v1.2.42. GitHub Actions completed
