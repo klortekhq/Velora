@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.56 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.57 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -56,6 +56,9 @@ source also contains the v1.2.55 resumable mobile download worker; its tag
 workflows are configured to build the four Android APK variants and the web/
 Smart TV packages into the same GitHub release; asset completion is still
 pending asynchronous GitHub Actions verification from this host.
+
+Release workflows now use unfiltered tag triggers, so a `v*` tag cannot be
+silently skipped by a path filter.
 
 Release `v1.2.52` is prepared from person-navigation/i18n/home-localization, accessibility, Apple foundation and private offline storage changes; its Android and web workflows are the
 current release gate and their public assets have not yet been independently
