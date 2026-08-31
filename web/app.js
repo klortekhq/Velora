@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var APP_VERSION = '1.2.30';
+  var APP_VERSION = '1.2.32';
 
   var LANGUAGE_OPTIONS = [
     { value: 'auto', label: 'Automático', native: 'Automático' },
@@ -113,7 +113,7 @@
 
   function languageCode() {
     var selected = localStorage.veloraLanguage || 'auto';
-    if (selected !== 'auto') return selected;
+    if (selected !== 'auto' && TRANSLATIONS[selected]) return selected;
     var candidates = navigator.languages || [navigator.language || 'es'];
     for (var i = 0; i < candidates.length; i += 1) {
       var code = String(candidates[i] || '').toLowerCase().split('-')[0];
