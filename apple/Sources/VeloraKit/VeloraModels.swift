@@ -49,10 +49,10 @@ public struct PlaybackCapabilities: Sendable {
     public var remux: Bool
 
     public init(videoCodecs: Set<String> = [], audioCodecs: Set<String> = [], containers: Set<String> = [], hdrFormats: Set<String> = [], directPlay: Bool = true, directStream: Bool = true, remux: Bool = true) {
-        self.videoCodecs = videoCodecs
-        self.audioCodecs = audioCodecs
-        self.containers = containers
-        self.hdrFormats = hdrFormats
+        self.videoCodecs = Set(videoCodecs.map { $0.lowercased() })
+        self.audioCodecs = Set(audioCodecs.map { $0.lowercased() })
+        self.containers = Set(containers.map { $0.lowercased() })
+        self.hdrFormats = Set(hdrFormats.map { $0.lowercased() })
         self.directPlay = directPlay
         self.directStream = directStream
         self.remux = remux
