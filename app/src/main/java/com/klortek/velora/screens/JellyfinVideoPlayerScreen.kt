@@ -2704,7 +2704,13 @@ fun JellyfinVideoPlayerScreen(
                                 while (true) {
                                     awaitFirstDown(requireUnconsumed = true)
                                     val up = waitForUpOrCancellation()
-                                    if (up != null && !up.isConsumed) {
+                                    // PlayerView/SurfaceView may consume the up
+                                    // event itself. The parent still owns the
+                                    // video-surface tap, so a consumed up must
+                                    // not prevent the controls from appearing.
+                                    // Child Compose controls consume the initial
+                                    // down and never enter this gesture loop.
+                                    if (up != null) {
                                         showControls = !showControls
                                         if (showControls) controlsInteractionKey++
                                     }
