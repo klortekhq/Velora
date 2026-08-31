@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.42 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.43 across Android, webOS,
   Samsung and VIDAA manifests.
 - Release candidate `1.2.38` includes live application of preferred audio and
   subtitle settings to the existing Media3 player; Android compilation and 52
@@ -45,7 +45,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   `v1.2.40`.
 - Jellyseerr detail actions now use Android string resources instead of
   hardcoded English labels. The additional English, German and French resources
-  are queued for release `v1.2.42`.
+  are included in the next release `v1.2.43`.
 - The base Spanish resource now keeps Live TV filters and favorite actions in
   Spanish, matching the existing German, French and English locale resources.
   This is included in verified release `v1.2.40`.
