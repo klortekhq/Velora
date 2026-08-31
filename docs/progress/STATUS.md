@@ -44,25 +44,26 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   decorative, non-interactive control; it is included in verified release
   `v1.2.40`.
 - Jellyseerr detail actions now use Android string resources instead of
-  hardcoded English labels. This is queued for release `v1.2.41`.
+  hardcoded English labels. The additional English, German and French resources
+  are queued for release `v1.2.42`.
 - The base Spanish resource now keeps Live TV filters and favorite actions in
   Spanish, matching the existing German, French and English locale resources.
   This is included in verified release `v1.2.40`.
 
 ## Latest verified release
 
-Release `v1.2.40` is publicly verified at
-https://github.com/klortekhq/Velora/releases/tag/v1.2.40. GitHub Actions completed
+Release `v1.2.41` is publicly verified at
+https://github.com/klortekhq/Velora/releases/tag/v1.2.41. GitHub Actions completed
 the Android and web workflows successfully; the release contains the four
 Android APKs, five web/TV bundles and both checksum manifests (in addition to
 GitHub's source archives). The published Android APK digests are:
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-mobile-debug.apk` | `082417d8328d3349fb146c3550fd4f5f2ccfa2fe7332d3cecc6f8dc765a6083c` |
-| `Velora-mobile-release-unsigned.apk` | `53e8b6c45d8f5b694e208b63c3128f9513b5ea25fc7635767995d175006f958c` |
-| `Velora-tv-debug.apk` | `b6d991c7618a285243b9ec22e6c6ec17c1c2fff830b2194b6522cb3a549eb8ab` |
-| `Velora-tv-release-unsigned.apk` | `87d7ba6f5d755fcbe82894dd29dd75a8f83c6e3953d8fbfd08b100b84136561d` |
+| `Velora-mobile-debug.apk` | `b9783b3d43a41d95722a46233937dce4f3dfbb335d83a97daf607196e628b756` |
+| `Velora-mobile-release-unsigned.apk` | `93b5711843956efd9ea6c2755136b6ab958840ef5ce20e0946c1240734ffb68a` |
+| `Velora-tv-debug.apk` | `ccd6a9c4002ad22fd72a205739f332b65982349745f7de9043222b6da0841076` |
+| `Velora-tv-release-unsigned.apk` | `91130344b61925e7a95f169e3befc6abf7c8ee390d29eb6ac7dcd94707f94256` |
 
 The release also contains the combined web archives, Samsung/VIDAA/webOS
 bundles and both checksum manifests. Samsung remains an unsigned bundle because
