@@ -1603,3 +1603,7 @@ All notable changes to Velora will be documented in this file.
 
 - Mejora el control táctil de la línea de tiempo: tocar una posición salta directamente a ese punto y arrastrar mantiene el desplazamiento continuo en móvil y tablet.
 - Mantiene la navegación por mando y teclado en TV sin cambiar el reproductor ExoPlayer predeterminado.
+## 1.2.25
+
+- Conserva la pista de subtítulos activa al cambiar la calidad de reproducción.
+- Mantiene la reproducción con ExoPlayer como ruta predeterminada en móvil y TV.
