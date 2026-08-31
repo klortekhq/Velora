@@ -212,9 +212,11 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Release `v1.2.20` is publicly verified with four Android APKs, the web
   archives, Samsung and VIDAA bundles, the webOS package and both checksum
   manifests: https://github.com/klortekhq/Velora/releases/tag/v1.2.20.
-- Release `v1.2.21` has its web packages published, but its Android workflow is
-  still reported as `in_progress` by GitHub Actions and therefore is not yet
-  certified as a complete release.
+- Release `v1.2.21` is publicly verified with its Android APKs, web packages,
+  Smart TV bundles, combined archives and checksum manifests.
+- Release `v1.2.22` is publicly verified with 11 assets, including mobile and
+  TV debug/release APKs, web packages, Samsung/VIDAA/webOS bundles and
+  checksum manifests: https://github.com/klortekhq/Velora/releases/tag/v1.2.22
 
 ## Explicitly incomplete or requiring verification
 
