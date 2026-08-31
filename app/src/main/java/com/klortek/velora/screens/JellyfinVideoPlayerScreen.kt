@@ -156,37 +156,62 @@ enum class AspectMode(val label: String) {
     }
 }
 
+internal data class AspectPresentation(
+    val resizeMode: Int,
+    val forcedRatio: Float
+)
+
+@OptIn(UnstableApi::class)
+internal fun aspectPresentation(mode: AspectMode): AspectPresentation = when (mode) {
+    AspectMode.FIT -> AspectPresentation(AspectRatioFrameLayout.RESIZE_MODE_FIT, 0f)
+    AspectMode.FILL -> AspectPresentation(AspectRatioFrameLayout.RESIZE_MODE_ZOOM, 0f)
+    AspectMode.FOUR_THREE -> AspectPresentation(AspectRatioFrameLayout.RESIZE_MODE_FIT, 4f / 3f)
+    AspectMode.LETTERBOX -> AspectPresentation(AspectRatioFrameLayout.RESIZE_MODE_FIT, 16f / 9f)
+    AspectMode.CINEMA -> AspectPresentation(AspectRatioFrameLayout.RESIZE_MODE_FIT, 2.39f)
+    AspectMode.STRETCH -> AspectPresentation(AspectRatioFrameLayout.RESIZE_MODE_FILL, 0f)
+    AspectMode.ORIGINAL -> AspectPresentation(AspectRatioFrameLayout.RESIZE_MODE_FIT, 0f)
+}
+
 /** Apply the presentation mode to the Media3 frame that measures the video. */
 @OptIn(UnstableApi::class)
 private fun applyAspectModeToPlayerView(
     playerView: PlayerView,
     mode: AspectMode
 ) {
+    val presentation = aspectPresentation(mode)
+    val resizeMode = presentation.resizeMode
+    val forcedRatio = presentation.forcedRatio
+
+    // Set PlayerView first. The content frame is normally present immediately,
+    // but can be attached a moment later on some Media3/device combinations.
+    // Do not make the whole operation a no-op when that child is temporarily
+    // unavailable.
+    playerView.resizeMode = resizeMode
     val contentFrame = playerView.findViewById<AspectRatioFrameLayout>(
         androidx.media3.ui.R.id.exo_content_frame
-    ) ?: return
-
-    val (resizeMode, forcedRatio) = when (mode) {
-        AspectMode.FIT -> AspectRatioFrameLayout.RESIZE_MODE_FIT to 0f
-        // "Rellenar" must crop while preserving the source proportions;
-        // RESIZE_MODE_FILL stretches the image and made it indistinguishable
-        // from the explicit "Estirar" option.
-        AspectMode.FILL -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM to 0f
-        AspectMode.FOUR_THREE -> AspectRatioFrameLayout.RESIZE_MODE_FIT to (4f / 3f)
-        AspectMode.LETTERBOX -> AspectRatioFrameLayout.RESIZE_MODE_FIT to (16f / 9f)
-        AspectMode.CINEMA -> AspectRatioFrameLayout.RESIZE_MODE_FIT to 2.39f
-        AspectMode.STRETCH -> AspectRatioFrameLayout.RESIZE_MODE_FILL to 0f
-        AspectMode.ORIGINAL -> AspectRatioFrameLayout.RESIZE_MODE_FIT to 0f
+    )
+    contentFrame?.let { frame ->
+        frame.resizeMode = resizeMode
+        frame.setAspectRatio(forcedRatio)
+        frame.requestLayout()
     }
-
-    // Set both layers explicitly: the content frame owns the video-surface
-    // measurement, while PlayerView owns the public resize-mode contract.
-    playerView.resizeMode = resizeMode
-    contentFrame.resizeMode = resizeMode
-    contentFrame.setAspectRatio(forcedRatio)
-    contentFrame.requestLayout()
     playerView.requestLayout()
     playerView.invalidate()
+
+    // Media3 may process a VideoSize/layout callback after the first update.
+    // Reapply on the next frame so a user-selected mode cannot be overwritten
+    // when entering fullscreen or switching between streams.
+    playerView.postOnAnimation {
+        playerView.resizeMode = resizeMode
+        playerView.findViewById<AspectRatioFrameLayout>(
+            androidx.media3.ui.R.id.exo_content_frame
+        )?.let { frame ->
+            frame.resizeMode = resizeMode
+            frame.setAspectRatio(forcedRatio)
+            frame.requestLayout()
+        }
+        playerView.requestLayout()
+    }
 }
 
 @UnstableApi
