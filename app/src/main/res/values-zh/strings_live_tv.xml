@@ -1,0 +1,3 @@
+<resources>
+    <string name="live_tv">电视直播</string><string name="live_tv_nav">电视直播</string><string name="live_tv_loading">正在加载频道…</string><string name="live_tv_error">无法加载电视直播</string><string name="live_tv_no_channels">此 Jellyfin 服务器没有可用的电视直播频道。</string><string name="live_tv_no_program">没有节目资讯</string><string name="live_tv_next_program">接下来：%1$s</string><string name="live_tv_refresh">刷新频道</string><string name="live_tv_channel_count">%1$d 个频道</string><string name="live_tv_playback_error">无法打开此频道，请重试。</string><string name="live_tv_program_details">节目详情</string><string name="live_tv_channel">频道</string><string name="live_tv_close_details">关闭</string>
+</resources>

@@ -229,6 +229,10 @@ digests are:
 - Login UI labels and authentication state are now resource-backed in the
   Spanish, English, French and German catalogs, including the server name
   placeholder and both mobile and TV login actions.
+- Live TV labels are now covered by dedicated resources in all supported
+  Android locale catalogs; English, French and German no longer fall back to
+  Spanish for the screen title, loading/error states, programme details or
+  channel actions.
 - Web artwork URLs no longer contain the Jellyfin token; the browser requests
   artwork with `X-Emby-Token` and assigns a short-lived object URL, covered by
   the web regression test. Modern browsers and Smart TV web runtimes now use a
