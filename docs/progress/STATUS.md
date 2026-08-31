@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at version 1.2.16 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.19 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -181,6 +181,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   of TV settings.
 - GitHub repository visibility is verified as public, with source, licensing,
   dashboard and release artifacts available at https://github.com/klortekhq/Velora.
+- Release `v1.2.18` is publicly verified with four Android APKs, the web
+  archives, Samsung and VIDAA bundles, the webOS package and both checksum
+  manifests: https://github.com/klortekhq/Velora/releases/tag/v1.2.18.
 
 ## Explicitly incomplete or requiring verification
 
@@ -207,7 +210,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Platform evidence
 
-Release `v1.2.16` is publicly verified with four Android APKs, browser
+Release `v1.2.18` is publicly verified with four Android APKs, browser
 archives, Samsung/Tizen and VIDAA bundles, the webOS bundle and separate
 SHA-256 manifests. The only remote branch is `main`.
 
