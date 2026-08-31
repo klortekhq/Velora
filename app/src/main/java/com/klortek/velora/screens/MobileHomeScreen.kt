@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.grid.items as gridItems
@@ -422,16 +421,18 @@ private fun MobileBottomNavigation(
             .fillMaxWidth()
             .navigationBarsPadding()
             .background(Color(0xEE171A21))
-            .horizontalScroll(rememberScrollState())
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val itemModifier = Modifier.width(76.dp)
+        // Keep every available destination visible. A horizontally scrolling
+        // bar hid Search and Settings on narrow phones, making those actions
+        // appear missing or unreachable.
+        val itemModifier = Modifier.weight(1f)
         MobileBottomNavigationItem(Icons.Default.Home, stringResource(com.klortek.velora.R.string.nav_home), onHome, selected = true, modifier = itemModifier)
         if (showMovies) MobileBottomNavigationItem(Icons.Default.Movie, stringResource(com.klortek.velora.R.string.nav_movies), onMovies, modifier = itemModifier)
         if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, stringResource(com.klortek.velora.R.string.nav_series), onSeries, modifier = itemModifier)
         if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, "TV", onLiveTv, modifier = itemModifier)
-        MobileBottomNavigationItem(Icons.Default.Search, "Buscar", onSearch, modifier = itemModifier)
+        MobileBottomNavigationItem(Icons.Default.Search, stringResource(com.klortek.velora.R.string.search_short), onSearch, modifier = itemModifier)
         MobileBottomNavigationItem(Icons.Default.Download, stringResource(com.klortek.velora.R.string.nav_downloads), onDownloads, modifier = itemModifier)
         MobileBottomNavigationItem(Icons.Default.Settings, stringResource(com.klortek.velora.R.string.nav_settings), onSettings, modifier = itemModifier)
     }
@@ -441,7 +442,7 @@ private fun MobileBottomNavigation(
 private fun MobileBottomNavigationItem(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit, selected: Boolean = false, modifier: Modifier = Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.clip(RoundedCornerShape(18.dp)).clickable(onClick = onClick).padding(horizontal = 2.dp, vertical = 4.dp)) {
         Icon(icon, label, tint = if (selected) MobileHomeCyan else Color.White.copy(alpha = .82f), modifier = Modifier.size(24.dp))
-        Text(label, color = if (selected) MobileHomeCyan else Color.White.copy(alpha = .82f), style = MaterialTheme.typography.labelSmall)
+        Text(label, color = if (selected) MobileHomeCyan else Color.White.copy(alpha = .82f), style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 

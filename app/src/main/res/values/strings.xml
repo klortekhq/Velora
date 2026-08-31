@@ -46,6 +46,7 @@
     <string name="nav_downloads">Descargas</string>
     <string name="nav_settings">Ajustes</string>
     <string name="search_movies_series">Buscar películas y series</string>
+    <string name="search_short">Buscar</string>
     <string name="action_play">Reproducir</string>
     <string name="action_back">Atrás</string>
     <string name="downloads_empty">No hay contenido descargado</string>
