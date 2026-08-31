@@ -110,4 +110,7 @@
     <string name="jellyseerr_request_failed">Request failed</string>
     <string name="jellyseerr_requesting">Requesting…</string>
     <string name="jellyseerr_request_action">Request on Jellyseerr</string>
+    <string name="action_go_to_settings">Go to Settings</string>
+    <string name="request_no_seasons">No seasons found</string>
+    <string name="jellyseerr_requesting_short">Requesting…</string>
 </resources>

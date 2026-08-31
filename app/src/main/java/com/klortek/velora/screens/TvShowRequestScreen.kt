@@ -43,6 +43,7 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -249,7 +250,7 @@ fun TvShowRequestScreen(
                             if (fullShowDetails == null) {
                                 CircularProgressIndicator(color = Color.White)
                             } else {
-                                Text("No seasons found", color = Color.White)
+                                Text(stringResource(com.klortek.velora.R.string.request_no_seasons), color = Color.White)
                             }
                         }
                     }
@@ -422,7 +423,7 @@ fun TvShowRequestScreen(
                             if (fullShowDetails == null) {
                                 CircularProgressIndicator(color = com.klortek.velora.theme.JetcasterPrimary)
                             } else {
-                                androidx.compose.material3.Text("No seasons found", color = Color.White)
+                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.request_no_seasons), color = Color.White)
                             }
                         }
                     }
@@ -609,7 +610,7 @@ fun SeasonRequestItem(
                         strokeWidth = 2.dp
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    androidx.compose.material3.Text("Requesting...", fontSize = 12.sp)
+                    androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.jellyseerr_requesting_short), fontSize = 12.sp)
                 } else {
                     androidx.compose.material3.Icon(
                         imageVector = if (requestSuccess) Icons.Filled.Check else Icons.Filled.Add,
