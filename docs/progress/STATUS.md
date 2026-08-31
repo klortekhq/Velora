@@ -55,6 +55,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - The web client now scopes Jellyfin tokens and user IDs to `sessionStorage`,
   migrates legacy localStorage values once, and removes the durable token copy;
   server URL and non-sensitive UI preferences remain persistent.
+- The web client authentication header now uses the current release version
+  constant, keeping the Jellyfin client identity synchronized with package metadata.
 - Subtitle stream URLs and Jellyfin music stream URLs are also tokenless; the
   Media3 music service applies Jellyfin authentication through request headers.
 - Android Jellyfin access tokens and passwords now use an Android Keystore-backed
