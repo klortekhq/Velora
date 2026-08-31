@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at version 1.2.15 across Android, webOS,
+- Release metadata is synchronized at version 1.2.16 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -342,3 +342,7 @@ The public release contains 11 verified build artifacts, including all four
 APK variants, web/webOS/Samsung/VIDAA packages, combined web archives and
 `SHA256SUMS-1.2.15.txt`. The Samsung artifact remains an unsigned bundle when
 Tizen Studio/signing is unavailable; VIDAA remains an HTML5 submission bundle.
+
+Version 1.2.16 is prepared in the tracked source and has passed local mobile
+unit tests, mobile release assembly, TV release assembly and web platform
+tests/build. Its GitHub release is created only after the tag workflows finish.
