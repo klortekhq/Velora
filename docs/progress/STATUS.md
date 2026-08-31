@@ -52,21 +52,23 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Latest verified release
 
-Release `v1.2.41` is publicly verified at
-https://github.com/klortekhq/Velora/releases/tag/v1.2.41. GitHub Actions completed
+Release `v1.2.42` is publicly verified at
+https://github.com/klortekhq/Velora/releases/tag/v1.2.42. GitHub Actions completed
 the Android and web workflows successfully; the release contains the four
-Android APKs, five web/TV bundles and both checksum manifests (in addition to
+Android APKs, the web archives, platform bundles and both checksum manifests (in addition to
 GitHub's source archives). The published Android APK digests are:
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-mobile-debug.apk` | `b9783b3d43a41d95722a46233937dce4f3dfbb335d83a97daf607196e628b756` |
-| `Velora-mobile-release-unsigned.apk` | `93b5711843956efd9ea6c2755136b6ab958840ef5ce20e0946c1240734ffb68a` |
-| `Velora-tv-debug.apk` | `ccd6a9c4002ad22fd72a205739f332b65982349745f7de9043222b6da0841076` |
-| `Velora-tv-release-unsigned.apk` | `91130344b61925e7a95f169e3befc6abf7c8ee390d29eb6ac7dcd94707f94256` |
+| `Velora-mobile-debug.apk` | `acff9a8484ac4123c382cbf6184f2242cd2bb37305699952a433c9c702fd89a3` |
+| `Velora-mobile-release-unsigned.apk` | `47ce7823c56786365fd62af300f390120898db470980859ae5b5335ae12a7b88` |
+| `Velora-tv-debug.apk` | `701bc2c3df333d9d75c364cb919ae217b73ffc8f25d0f154028bf1b4db724536` |
+| `Velora-tv-release-unsigned.apk` | `a5bda29594cb1fce3abcd4deccea8d86f0d75bd89d3f6d110e910836a7d82f38` |
 
-The release also contains the combined web archives, Samsung/VIDAA/webOS
-bundles and both checksum manifests. Samsung remains an unsigned bundle because
+The release also contains the combined web archives and the current
+Samsung/VIDAA/webOS bundles and both checksum manifests. It retains three
+superseded `1.2.41` Smart TV bundle assets from an earlier publish attempt;
+future tag releases remove these automatically. Samsung remains an unsigned bundle because
 Tizen Studio/signing is not installed on this build host; VIDAA is an HTML5
 submission bundle. No hardware validation is implied by a successful build.
 
