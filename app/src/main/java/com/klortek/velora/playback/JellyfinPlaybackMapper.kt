@@ -7,8 +7,13 @@ import com.klortek.velora.jellyfin.MediaStream
 object JellyfinPlaybackMapper {
     fun source(mediaSource: MediaSource?, subtitleStreamIndex: Int? = null): PlaybackSource {
         val streams = mediaSource?.MediaStreams.orEmpty()
-        val video = streams.firstOrNull { it.Type.equals("Video", ignoreCase = true) }
-        val audio = streams.firstOrNull { it.Type.equals("Audio", ignoreCase = true) }
+        // Jellyfin does not guarantee that the default stream is first. The
+        // playback decision must describe the stream the server selected, not
+        // an arbitrary stream ordering from the media source.
+        val videoStreams = streams.filter { it.Type.equals("Video", ignoreCase = true) }
+        val audioStreams = streams.filter { it.Type.equals("Audio", ignoreCase = true) }
+        val video = videoStreams.firstOrNull { it.IsDefault == true } ?: videoStreams.firstOrNull()
+        val audio = audioStreams.firstOrNull { it.IsDefault == true } ?: audioStreams.firstOrNull()
         val subtitle = subtitleStreamIndex?.let { index ->
             streams.firstOrNull { it.Type.equals("Subtitle", ignoreCase = true) && it.Index == index }
         }

@@ -41,4 +41,23 @@ class JellyfinPlaybackMapperTest {
         )
         assertEquals(6, source.audioChannels)
     }
+
+    @Test
+    fun mapsTheServerDefaultAudioAndVideoStreamsWhenTheyAreNotFirst() {
+        val source = JellyfinPlaybackMapper.source(
+            MediaSource(
+                MediaStreams = listOf(
+                    MediaStream(Type = "Video", Codec = "h264", Width = 1920, Height = 1080),
+                    MediaStream(Type = "Video", Codec = "hevc", Width = 3840, Height = 2160, IsDefault = true),
+                    MediaStream(Type = "Audio", Codec = "aac", Channels = 2),
+                    MediaStream(Type = "Audio", Codec = "eac3", ChannelLayout = "5.1", IsDefault = true)
+                )
+            )
+        )
+
+        assertEquals("hevc", source.videoCodec)
+        assertEquals("eac3", source.audioCodec)
+        assertEquals(6, source.audioChannels)
+        assertEquals(3840, source.width)
+    }
 }
