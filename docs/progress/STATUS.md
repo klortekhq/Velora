@@ -68,6 +68,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Tizen, webOS and VIDAA user agents.
 - The shared playback mapper/decision engine is now invoked from the Android
   MediaSource loading path and records the selected path for diagnostics.
+- Mobile cast cards now make the complete actor/crew card touch target open the
+  person filmography, not only the circular portrait.
 - The playback mapper also falls back to Jellyfin's numeric `Channels` field
   when `ChannelLayout` is missing, with a regression test for multichannel audio.
 - Android playback capabilities now probe installed MediaCodec decoders and

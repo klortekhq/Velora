@@ -443,7 +443,15 @@ private fun MobileCastMemberCard(person: com.klortek.velora.jellyfin.Person, api
         apiService?.getImageUrl(id, "Primary", person.PrimaryImageTag, maxWidth = 220, maxHeight = 220, quality = 84)
     }
     Column(
-        modifier = Modifier.width(82.dp),
+        modifier = Modifier
+            .width(82.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(enabled = person.Id != null) {
+                person.Id?.let { id ->
+                    context.startActivity(com.klortek.velora.CastInfoActivity.createIntent(context, id, person.Name, person.Type))
+                }
+            }
+            .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
@@ -451,12 +459,7 @@ private fun MobileCastMemberCard(person: com.klortek.velora.jellyfin.Person, api
             modifier = Modifier
                 .size(72.dp)
                 .clip(CircleShape)
-                .background(Color.White.copy(alpha = .14f))
-                .clickable(enabled = person.Id != null) {
-                    person.Id?.let { id ->
-                        context.startActivity(com.klortek.velora.CastInfoActivity.createIntent(context, id, person.Name, person.Type))
-                    }
-                },
+                .background(Color.White.copy(alpha = .14f)),
             contentAlignment = Alignment.Center
         ) {
             if (!imageUrl.isNullOrBlank() && apiService != null) {
