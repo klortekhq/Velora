@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -110,7 +111,7 @@ class CastInfoActivity : ComponentActivity() {
                         CircularProgressIndicator()
                     }
                     else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("No se ha encontrado información de esta persona", color = Color.White)
+                        Text(stringResource(R.string.person_not_found), color = Color.White)
                     }
                 }
             }
