@@ -14,10 +14,6 @@ on:
       - main
     tags:
       - 'v*'
-    paths:
-      - 'web/**'
-      - 'apple/**'
-      - '.github/workflows/web-release.yml'
   pull_request:
     paths:
       - 'web/**'

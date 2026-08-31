@@ -7,15 +7,6 @@ on:
       - main
     tags:
       - 'v*'
-    paths:
-      - 'app/**'
-      - 'apple/**'
-      - 'build.gradle.kts'
-      - 'settings.gradle.kts'
-      - 'gradle/**'
-      - 'gradlew'
-      - 'gradlew.bat'
-      - '.github/workflows/android-release.yml'
   pull_request:
     paths:
       - 'app/**'
