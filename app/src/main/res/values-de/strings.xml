@@ -86,4 +86,5 @@
     <string name="library_direction">Richtung</string>
     <string name="library_ascending">Aufsteigend</string>
     <string name="library_descending">Absteigend</string>
+    <string name="library_reset_filters">Filter zurücksetzen</string>
 </resources>

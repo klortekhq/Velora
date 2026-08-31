@@ -23,6 +23,10 @@ class AppSettings(context: Context) {
         private const val KEY_AUTO_REFRESH_INTERVAL = "auto_refresh_interval_minutes"
         private const val KEY_IS_FIRST_LAUNCH = "is_first_launch"
         private const val KEY_SORT_TYPE = "library_sort_type"
+        private const val KEY_SORT_DESCENDING = "library_sort_descending"
+        private const val KEY_FAVORITES_ONLY = "library_favorites_only"
+        private const val KEY_PLAYBACK_FILTER = "library_playback_filter"
+        private const val KEY_GENRE_FILTER = "library_genre_filter"
         private const val KEY_HIDE_SHOWS_WITH_ZERO_EPISODES = "hide_shows_with_zero_episodes"
         private const val KEY_MINIMAL_BUFFER_4K = "minimal_buffer_4k"
         private const val KEY_TRANSCODE_AAC_TO_AC3 = "transcode_aac_to_ac3"
@@ -219,6 +223,22 @@ class AppSettings(context: Context) {
     fun setSortType(sortType: String) {
         prefs.edit().putString(KEY_SORT_TYPE, sortType).apply()
     }
+
+    var librarySortDescending: Boolean
+        get() = prefs.getBoolean(KEY_SORT_DESCENDING, false)
+        set(value) = prefs.edit().putBoolean(KEY_SORT_DESCENDING, value).apply()
+
+    var libraryFavoritesOnly: Boolean
+        get() = prefs.getBoolean(KEY_FAVORITES_ONLY, false)
+        set(value) = prefs.edit().putBoolean(KEY_FAVORITES_ONLY, value).apply()
+
+    var libraryPlaybackFilter: String
+        get() = prefs.getString(KEY_PLAYBACK_FILTER, "All") ?: "All"
+        set(value) = prefs.edit().putString(KEY_PLAYBACK_FILTER, value).apply()
+
+    var libraryGenreFilter: String?
+        get() = prefs.getString(KEY_GENRE_FILTER, null)?.takeIf { it.isNotBlank() }
+        set(value) = prefs.edit().putString(KEY_GENRE_FILTER, value.orEmpty()).apply()
     
     var hideShowsWithZeroEpisodes: Boolean
         get() = prefs.getBoolean(KEY_HIDE_SHOWS_WITH_ZERO_EPISODES, true) // Enabled by default

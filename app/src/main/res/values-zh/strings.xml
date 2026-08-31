@@ -14,4 +14,5 @@
     <string name="settings_subtitle_auto">自动</string>
     <string name="settings_subtitle_language">字幕语言</string>
     <string name="settings_subtitle_language_description">自动遵循服务器设置，其他选项会在可用时优先使用该语言。</string>
+    <string name="library_reset_filters">重置筛选条件</string>
 </resources>
