@@ -4,6 +4,14 @@ All notable changes to Velora will be documented in this file.
 
 ---
 
+## 1.2.27
+
+### Fixed
+
+- Replaced the deprecated Android system-bar flags used by the video player with
+  the modern WindowInsets controller, keeping fullscreen playback reliable on
+  current Android and TV builds.
+
 ## 2026-06-06
 
 ### Added
