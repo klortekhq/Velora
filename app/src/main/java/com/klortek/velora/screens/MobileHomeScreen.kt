@@ -525,7 +525,15 @@ private fun MobileLibrarySortOption(label: String, selected: Boolean, onClick: (
 @Composable
 private fun MobileLibraryCheckOption(label: String, selected: Boolean, onClick: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 14.dp),
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .semantics {
+                role = Role.Checkbox
+                contentDescription = label
+            }
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(if (selected) "☑" else "☐", color = if (selected) MobileHomeCyan else Color.White.copy(alpha = .7f), style = MaterialTheme.typography.titleMedium)
@@ -537,7 +545,16 @@ private fun MobileLibraryCheckOption(label: String, selected: Boolean, onClick: 
 private fun MobileHomeHero(item: JellyfinItem?, apiService: JellyfinApiService?, onItemClick: (JellyfinItem) -> Unit) {
     if (item == null || apiService == null) return
     val url = apiService.getImageUrl(item.Id, "Backdrop", null, maxWidth = 960, maxHeight = 540, quality = 80) ?: return
-    Box(Modifier.fillMaxWidth().height(390.dp).clickable { onItemClick(item) }) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .height(390.dp)
+            .semantics {
+                contentDescription = item.Name
+                role = Role.Button
+            }
+            .clickable { onItemClick(item) }
+    ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current).data(url).headers(apiService.getImageRequestHeaders()).memoryCachePolicy(CachePolicy.ENABLED).diskCachePolicy(CachePolicy.ENABLED).build(),
             contentDescription = item.Name, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop
