@@ -39,17 +39,18 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Latest verified release
 
-Release `v1.2.35` is publicly verified at
-https://github.com/klortekhq/Velora/releases/tag/v1.2.35. GitHub Actions completed
-the Android and web workflows successfully; the release contains 11 assets.
-The published Android APK digests are:
+Release `v1.2.36` is publicly verified at
+https://github.com/klortekhq/Velora/releases/tag/v1.2.36. GitHub Actions completed
+the Android and web workflows successfully; the release contains 13 assets,
+including the four Android APKs, five web/TV bundles, two checksum manifests and
+the two source archives. The published Android APK digests are:
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-mobile-debug.apk` | `37099bb9829737f98447f4644e9578df0e90157ce3cb4c9a51dbdcf1ee6b9f31` |
-| `Velora-mobile-release-unsigned.apk` | `95c16ede80e197c9c337b7cbff8177cbf8bddb5837c4201b51172c929fb6217a` |
-| `Velora-tv-debug.apk` | `dfbf30b9c218719b9a91fe5044918303310f6e202cccb22b51fac1ce372fccab` |
-| `Velora-tv-release-unsigned.apk` | `fb53037d91a196334448c8e1393d26568758fb7c6d3b4f9250d49219cebf0ac2` |
+| `Velora-mobile-debug.apk` | `0f74743a2f08b5cf42e63e527ab68822c697789c4662697b720e0b778aea51db` |
+| `Velora-mobile-release-unsigned.apk` | `a2e03ac00557eaf14fe54d0174ce39fd50a2450b10215628387ede2995ba4b30` |
+| `Velora-tv-debug.apk` | `bc360b13b5ba396b623acfbdc237208b86495c30bbee0f13e41c584b248680f1` |
+| `Velora-tv-release-unsigned.apk` | `f0dd93e387cbe35322f8b7bc40b5a76fac12226e3da7c2480789e099d0bc6fea` |
 
 The release also contains the combined web archives, Samsung/VIDAA/webOS
 bundles and both checksum manifests. Samsung remains an unsigned bundle because
