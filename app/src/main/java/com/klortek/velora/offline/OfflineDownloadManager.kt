@@ -30,6 +30,9 @@ data class OfflineDownload(
     /** SHA-256 of the managed media, calculated on first offline playback. */
     val checksumSha256: String? = null
 ) {
+    /** Provider-neutral state used by UI and future managed-transfer engines. */
+    val state: OfflineDownloadState get() = offlineDownloadState(status, reason)
+
     /**
      * DownloadManager may return either a file:// URI or a provider-backed
      * content:// URI. The latter has no meaningful filesystem path, so using
