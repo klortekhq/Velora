@@ -549,7 +549,7 @@ private fun QuickConnectLoginContent(
             onAuthenticatingChange(true)
             try {
                 val trimmedUrl = serverUrl.trim().removeSuffix("/")
-                android.util.Log.d("QuickConnectLogin", "Attempting QuickConnect with server: $trimmedUrl")
+                android.util.Log.d("QuickConnectLogin", "Attempting QuickConnect connection")
                 val quickConnectService = QuickConnectService(trimmedUrl, context)
                 val result = quickConnectService.initiateQuickConnect()
                 
@@ -654,7 +654,7 @@ private fun QuickConnectLoginContent(
                                     }
                                     config.deviceId = deviceId
                                     
-                                    android.util.Log.d("QuickConnectLogin", "✅ Configuration saved: serverUrl=${config.serverUrl}, userId=${config.userId}, deviceId=$deviceId")
+                                    android.util.Log.d("QuickConnectLogin", "✅ Configuration saved")
                                     
                                     onSuccess()
                                 } else {

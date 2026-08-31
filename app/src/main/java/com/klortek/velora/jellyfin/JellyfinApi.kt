@@ -23,6 +23,7 @@ import okhttp3.Headers
 import androidx.compose.runtime.Stable
 import com.klortek.velora.BuildConfig
 import com.klortek.velora.player.PlaybackQuality
+import com.klortek.velora.security.SensitiveDataRedactor
 
 // Chapter info for movies/episodes
 @Stable
@@ -1037,7 +1038,7 @@ class JellyfinApiService(
                         parameters.append("CopyTimestamps", "true")
                         parameters.append("mediaSourceId", sourceId)
                     }.buildString()
-                    android.util.Log.d("JellyfinAPI", "Using HLS for HDR video with audio transcoding to $targetAudioCodec (progressive playback): $hlsUrl")
+                    android.util.Log.d("JellyfinAPI", "Using HLS for HDR video with audio transcoding to $targetAudioCodec (progressive playback): ${SensitiveDataRedactor.url(hlsUrl)}")
                     return hlsUrl
                 } else if (transcodeAudio && audioCodec != null) {
                     // Non-HDR but audio transcoding requested (e.g., AAC to AC3)
@@ -1055,7 +1056,7 @@ class JellyfinApiService(
                         parameters.append("maxStreamingBitrate", "1000000000")
                         parameters.append("mediaSourceId", sourceId)
                     }.buildString()
-                    android.util.Log.d("JellyfinAPI", "Using HLS for audio transcoding to $targetAudioCodec: $hlsUrl")
+                    android.util.Log.d("JellyfinAPI", "Using HLS for audio transcoding to $targetAudioCodec: ${SensitiveDataRedactor.url(hlsUrl)}")
                     return hlsUrl
                 } else if (preserveQuality && !transcodeAudio) {
                     // HDR video with supported audio - try direct play first for instant startup
@@ -1208,7 +1209,7 @@ class JellyfinApiService(
                 val source = response.MediaSources.firstOrNull()
                 android.util.Log.d("JellyfinAPI", "✅ PlaybackInfo received. TranscodingUrl present: ${source?.TranscodingUrl != null}")
                 if (source?.TranscodingUrl != null) {
-                    android.util.Log.d("JellyfinAPI", "🔥 Burn-in URL: ${source.TranscodingUrl}")
+                    android.util.Log.d("JellyfinAPI", "🔥 Burn-in URL: ${SensitiveDataRedactor.url(source.TranscodingUrl)}")
                 }
             } else {
                 android.util.Log.w("JellyfinAPI", "⚠️ PlaybackInfo returned no MediaSources")

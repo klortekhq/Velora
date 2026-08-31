@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.MediaStream
+import com.klortek.velora.security.SensitiveDataRedactor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -73,7 +74,7 @@ object SubtitleDownloader {
             )
             
             Log.d(TAG, "📥 Downloading subtitle: ${stream.DisplayTitle}")
-            Log.d(TAG, "   URL: $subtitleUrl")
+            Log.d(TAG, "   URL: ${SensitiveDataRedactor.url(subtitleUrl)}")
             Log.d(TAG, "   Index: $streamIndex, External: $isExternal, Codec: ${stream.Codec}")
             
             // Create HTTP client with longer timeouts
@@ -94,7 +95,7 @@ object SubtitleDownloader {
             
             if (!response.isSuccessful) {
                 Log.e(TAG, "❌ Failed to download subtitle: HTTP ${response.code}")
-                Log.e(TAG, "   URL: $subtitleUrl")
+                Log.e(TAG, "   URL: ${SensitiveDataRedactor.url(subtitleUrl)}")
                 response.body?.close()
                 return@withContext null
             }

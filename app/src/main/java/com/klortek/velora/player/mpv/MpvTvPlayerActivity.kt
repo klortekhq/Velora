@@ -53,6 +53,7 @@ import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.MPVView
 import `is`.xyz.mpv.MPVView.Track
 import com.klortek.velora.player.SubtitleDownloader
+import com.klortek.velora.security.SensitiveDataRedactor
 import kotlinx.coroutines.*
 import java.io.File
 
@@ -127,9 +128,9 @@ class MpvTvPlayerActivity : ComponentActivity() {
 
         Log.d("MpvTvPlayer", "Loading authenticated media request")
         Log.d(TAG, "Resume position: ${resumePositionMs}ms")
-        if (subtitleFile != null) Log.d(TAG, "External subtitle: $subtitleFile")
+        if (subtitleFile != null) Log.d(TAG, "External subtitle path received")
         
-        Log.d("MpvTvPlayer", "Received Intent Extras -> IsTrailer: $isTrailer, AudioUrl: $audioUrl")
+        Log.d("MpvTvPlayer", "Received Intent Extras -> IsTrailer: $isTrailer, AudioUrlPresent: ${audioUrl != null}")
 
         // Initialize API service for progress reporting
         val config = JellyfinConfig(this)
@@ -451,7 +452,7 @@ private fun MpvPlayerScreen(
                         
                         // Scenario A: subtitle_file URL passed in intent
                         if (subtitleFile != null && (subtitleFile.startsWith("http") || subtitleFile.startsWith("https"))) {
-                            Log.d("MpvTvPlayer", "Downloading initial subtitleFile URL: $subtitleFile")
+                            Log.d("MpvTvPlayer", "Downloading initial subtitle file URL: ${SensitiveDataRedactor.url(subtitleFile)}")
                             // We need a MediaStream object for SubtitleDownloader
                             // If we don't have one, we can try to find it in streams by URL or Index
                             val stream = streams.find { it.Index == initialSubtitleStreamIndex }
@@ -1029,7 +1030,7 @@ private fun MpvPlayerScreen(
                             if (externalAudioUrl != null) {
                                 // Use Handler to ensure the main file load has initialized the player core
                                 android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                                     Log.d("MpvTvPlayer", "Executing delayed audio-add: $externalAudioUrl")
+                                     Log.d("MpvTvPlayer", "Executing delayed audio-add from authenticated source")
                                      MPVLib.command(arrayOf("audio-add", externalAudioUrl, "select"))
                                 }, 500)
                             }

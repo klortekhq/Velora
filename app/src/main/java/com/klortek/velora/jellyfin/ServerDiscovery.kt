@@ -186,7 +186,7 @@ object ServerDiscovery {
                                 .replace("/System/Info/Public", "")
                                 .removeSuffix("/")
                             
-                            Log.i(TAG, "Discovered server base URL: $baseUrl")
+                            Log.i(TAG, "Discovered reachable server base URL")
                             return@withContext baseUrl
                         } else {
                             Log.d(TAG, "Response OK but not Jellyfin: ${body?.take(100)}")
@@ -212,7 +212,7 @@ object ServerDiscovery {
             val cleanUrl = serverUrl.removeSuffix("/")
             val infoUrl = "$cleanUrl/System/Info/Public"
             
-            Log.d(TAG, "Validating server: $infoUrl")
+            Log.d(TAG, "Validating discovered server endpoint")
             
             val request = Request.Builder()
                 .url(infoUrl)
