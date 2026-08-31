@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +56,19 @@ class OfflineDownloadsActivity : ComponentActivity() {
             JellyfinAppTheme {
                 OfflineDownloadsScreen(
                     onBack = { finish() },
-                    onPlay = { entry -> startActivity(JellyfinVideoPlayerActivity.createIntent(this, entry.itemId, itemName = entry.name, localPath = entry.localPath)) },
+                    onPlay = { entry ->
+                        lifecycleScope.launch {
+                            if (OfflineDownloadManager.verifyIntegrity(this@OfflineDownloadsActivity, entry)) {
+                                startActivity(JellyfinVideoPlayerActivity.createIntent(this@OfflineDownloadsActivity, entry.itemId, itemName = entry.name, localPath = entry.localPath))
+                            } else {
+                                android.widget.Toast.makeText(
+                                    this@OfflineDownloadsActivity,
+                                    getString(R.string.offline_integrity_failed),
+                                    android.widget.Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    },
                     onDelete = { entry -> OfflineDownloadManager.delete(this, entry); refresh++ }
                 )
             }

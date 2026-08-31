@@ -218,6 +218,12 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   suite is intentionally not used as a Velora release gate because its
   third-party fixtures are nondeterministic; Velora's mobile and TV unit-test
   tasks remain enabled and passed.
+- Offline SQLite schema v3 now stores an optional SHA-256 digest and the
+  managed-download screen verifies local media before launching playback;
+  existing v2/JSON entries migrate without a digest and establish it on first
+  successful playback. Mobile unit tests and TV compilation passed on
+  2026-08-31. Full background transfer recovery and WorkManager migration are
+  still incomplete.
 - Android `testMobileDebugUnitTest`, `assembleMobileDebug`,
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-29. The full four-variant build completed online after
