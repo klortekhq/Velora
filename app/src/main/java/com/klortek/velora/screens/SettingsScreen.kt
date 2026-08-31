@@ -129,6 +129,16 @@ enum class SettingsCategory(val title: String, val icon: ImageVector) {
 
 private fun SettingsCategory.localizedTitle(context: android.content.Context): String = when (this) {
     SettingsCategory.LANGUAGE -> context.getString(com.klortek.velora.R.string.settings_language_reproduction)
+    SettingsCategory.PLAYBACK -> context.getString(com.klortek.velora.R.string.settings_category_playback)
+    SettingsCategory.VIDEO -> context.getString(com.klortek.velora.R.string.settings_category_video)
+    SettingsCategory.SUBTITLES -> context.getString(com.klortek.velora.R.string.settings_category_subtitles)
+    SettingsCategory.APPEARANCE -> context.getString(com.klortek.velora.R.string.settings_category_appearance)
+    SettingsCategory.PERFORMANCE -> context.getString(com.klortek.velora.R.string.settings_category_performance)
+    SettingsCategory.LIBRARY -> context.getString(com.klortek.velora.R.string.settings_category_library)
+    SettingsCategory.ADVANCED -> context.getString(com.klortek.velora.R.string.settings_category_advanced)
+    SettingsCategory.UPDATES -> context.getString(com.klortek.velora.R.string.settings_category_updates)
+    SettingsCategory.ACCOUNT -> context.getString(com.klortek.velora.R.string.settings_category_account)
+    SettingsCategory.ABOUT -> context.getString(com.klortek.velora.R.string.settings_category_about)
     else -> title
 }
 
