@@ -97,4 +97,17 @@
     <string name="library_ascending">Ascending</string>
     <string name="library_descending">Descending</string>
     <string name="library_reset_filters">Reset filters</string>
+    <string name="jellyseerr_loading_details">Loading details…</string>
+    <string name="jellyseerr_go_back">Go back</string>
+    <string name="jellyseerr_unknown_title">Untitled</string>
+    <string name="jellyseerr_no_overview">No overview available.</string>
+    <string name="jellyseerr_service_unavailable">Jellyseerr service unavailable</string>
+    <string name="jellyseerr_movie_details_failed">Could not load movie details</string>
+    <string name="jellyseerr_tv_details_failed">Could not load TV show details</string>
+    <string name="jellyseerr_available">Available on Jellyfin</string>
+    <string name="jellyseerr_request_pending">Request pending</string>
+    <string name="jellyseerr_request_sent">Request sent successfully</string>
+    <string name="jellyseerr_request_failed">Request failed</string>
+    <string name="jellyseerr_requesting">Requesting…</string>
+    <string name="jellyseerr_request_action">Request on Jellyseerr</string>
 </resources>

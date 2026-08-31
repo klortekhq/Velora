@@ -97,4 +97,17 @@
     <string name="library_ascending">Aufsteigend</string>
     <string name="library_descending">Absteigend</string>
     <string name="library_reset_filters">Filter zurücksetzen</string>
+    <string name="jellyseerr_loading_details">Details werden geladen…</string>
+    <string name="jellyseerr_go_back">Zurück</string>
+    <string name="jellyseerr_unknown_title">Ohne Titel</string>
+    <string name="jellyseerr_no_overview">Keine Zusammenfassung verfügbar.</string>
+    <string name="jellyseerr_service_unavailable">Jellyseerr-Dienst nicht verfügbar</string>
+    <string name="jellyseerr_movie_details_failed">Filmdetails konnten nicht geladen werden</string>
+    <string name="jellyseerr_tv_details_failed">Seriendetails konnten nicht geladen werden</string>
+    <string name="jellyseerr_available">Auf Jellyfin verfügbar</string>
+    <string name="jellyseerr_request_pending">Anfrage ausstehend</string>
+    <string name="jellyseerr_request_sent">Anfrage erfolgreich gesendet</string>
+    <string name="jellyseerr_request_failed">Anfrage fehlgeschlagen</string>
+    <string name="jellyseerr_requesting">Anfrage wird gesendet…</string>
+    <string name="jellyseerr_request_action">Bei Jellyseerr anfragen</string>
 </resources>
