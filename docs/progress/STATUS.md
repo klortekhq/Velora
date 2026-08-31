@@ -29,12 +29,29 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.33 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.34 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
 
 ## Latest verified release
+
+Release `v1.2.34` is publicly verified at
+https://github.com/klortekhq/Velora/releases/tag/v1.2.34. GitHub Actions completed
+the Android and web workflows successfully; the release contains 11 assets.
+The published Android APK digests are:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| `Velora-mobile-debug.apk` | `5437b81e724d94ef36f692b43cf3e7c1a499f6342b6779710370f0b6036452d8` |
+| `Velora-mobile-release-unsigned.apk` | `f036e1b4e5c6ff9eecb805a119421e9e300b1084d6c6556d3cfd2f5496547f1a` |
+| `Velora-tv-debug.apk` | `6a1c00e6942f728a3753adad2d34135f8cd893c8d781eb96487116bda2e31dab` |
+| `Velora-tv-release-unsigned.apk` | `06891d801a05b0c86d9a6262bdbc4f0952587e7ece0bd01feec544ac6e0841c3` |
+
+The release also contains the combined web archives, Samsung/VIDAA/webOS
+bundles and both checksum manifests. Samsung remains an unsigned bundle because
+Tizen Studio/signing is not installed on this build host; VIDAA is an HTML5
+submission bundle. No hardware validation is implied by a successful build.
 
 Release `v1.2.33` is publicly verified at
 https://github.com/klortekhq/Velora/releases/tag/v1.2.33. Both Android build
