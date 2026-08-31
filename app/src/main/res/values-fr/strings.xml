@@ -51,4 +51,26 @@
     <string name="login_password">Mot de passe</string>
     <string name="login_sign_in">Se connecter</string>
     <string name="login_authenticating">Connexion…</string>
+    <string name="library_recommendations">Recommandations</string>
+    <string name="library_all">Tout</string>
+    <string name="library_empty">Aucun contenu disponible</string>
+    <string name="library_sort_filter">Trier et filtrer</string>
+    <string name="library_sort_by">Trier par</string>
+    <string name="library_sort_name">Nom</string>
+    <string name="library_sort_date_added">Date d’ajout</string>
+    <string name="library_sort_premiere">Date de sortie</string>
+    <string name="library_sort_runtime">Durée</string>
+    <string name="library_sort_critic_rating">Note de la critique</string>
+    <string name="library_sort_community_rating">Note de la communauté</string>
+    <string name="library_filters">Filtres</string>
+    <string name="library_favorites">Favoris</string>
+    <string name="library_playback_state">État de lecture</string>
+    <string name="library_all_playback">Tous</string>
+    <string name="library_watched">Vus</string>
+    <string name="library_unwatched">Non vus</string>
+    <string name="library_genre">Genre</string>
+    <string name="library_all_genres">Tous les genres</string>
+    <string name="library_direction">Direction</string>
+    <string name="library_ascending">Croissant</string>
+    <string name="library_descending">Décroissant</string>
 </resources>
