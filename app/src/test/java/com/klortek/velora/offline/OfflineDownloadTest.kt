@@ -46,5 +46,7 @@ class OfflineDownloadTest {
         assertTrue(medium.contains("MaxWidth=1280"))
         assertTrue(medium.contains("MaxHeight=720"))
         assertTrue(medium.contains("VideoBitrate=5000000"))
+        assertFalse(original.contains("api_key"))
+        assertFalse(medium.contains("api_key"))
     }
 }
