@@ -65,7 +65,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.ui.input.pointer.pointerInput
@@ -6003,24 +6003,40 @@ private fun PlayerSeekBar(
             .then(
                 if (isMobile && duration > 0) {
                     Modifier.pointerInput(duration) {
-                        val touchWidth = size.width.toFloat().coerceAtLeast(1f)
-                        detectHorizontalDragGestures(
-                            onDragStart = { offset ->
-                                isDragging = true
-                                dragProgress = (offset.x / touchWidth).coerceIn(0f, 1f)
-                            },
-                            onHorizontalDrag = { change, _ ->
-                                dragProgress = (change.position.x / touchWidth).coerceIn(0f, 1f)
-                                change.consume()
-                            },
-                            onDragEnd = {
-                                onSeek((dragProgress * duration).toLong())
-                                isDragging = false
-                            },
-                            onDragCancel = {
-                                isDragging = false
+                        // A custom gesture recognizer keeps tap-to-seek and scrubbing
+                        // in the same touch target. The previous drag-only detector
+                        // silently ignored a normal finger tap, which made the bar
+                        // look decorative on phones and tablets.
+                        awaitEachGesture {
+                            val down = awaitFirstDown()
+                            val touchWidth = size.width.toFloat().coerceAtLeast(1f)
+                            var lastX = down.position.x
+                            var dragged = false
+                            var finished = false
+
+                            while (!finished) {
+                                val event = awaitPointerEvent()
+                                val change = event.changes.firstOrNull() ?: break
+                                val x = change.position.x
+                                if (!dragged && kotlin.math.abs(x - down.position.x) > viewConfiguration.touchSlop) {
+                                    dragged = true
+                                    isDragging = true
+                                    dragProgress = (x / touchWidth).coerceIn(0f, 1f)
+                                } else if (dragged) {
+                                    dragProgress = (x / touchWidth).coerceIn(0f, 1f)
+                                }
+                                if (dragged) change.consume()
+                                lastX = x
+                                finished = !change.pressed
                             }
-                        )
+
+                            if (dragged) {
+                                onSeek((dragProgress * duration).toLong())
+                            } else {
+                                onSeek(((lastX / touchWidth).coerceIn(0f, 1f) * duration).toLong())
+                            }
+                            isDragging = false
+                        }
                     }
                 } else Modifier
             )

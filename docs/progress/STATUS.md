@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.23 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.24 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -227,7 +227,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Release `v1.2.22` is publicly verified with 11 assets, including mobile and
   TV debug/release APKs, web packages, Samsung/VIDAA/webOS bundles and
   checksum manifests: https://github.com/klortekhq/Velora/releases/tag/v1.2.22
-- Release `v1.2.23` contains the adaptive login-layout fix; its Android and
+- Release `v1.2.24` contains the adaptive login-layout and tactile seek fixes; its Android and
   web artifacts are pending the release workflow and hardware validation.
 
 ## Explicitly incomplete or requiring verification
