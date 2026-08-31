@@ -38,6 +38,12 @@ object UpdateService {
         .build()
     
     private val gson = Gson()
+
+    /** Select only the APK matching this installation's form factor. */
+    fun apkAssetFor(release: GitHubRelease, isTv: Boolean): GitHubAsset? {
+        val expected = if (isTv) "Velora-tv-release-unsigned.apk" else "Velora-mobile-release-unsigned.apk"
+        return release.assets.firstOrNull { it.name == expected }
+    }
     
     /**
      * Fetches the latest release from GitHub
