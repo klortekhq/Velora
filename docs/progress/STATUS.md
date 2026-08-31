@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.48 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.49 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -51,7 +51,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Latest verified release
 
-Release `v1.2.48` is prepared from person-navigation/i18n/home-localization and accessibility fixes; its Android and web workflows are the
+Release `v1.2.49` is prepared from person-navigation/i18n/home-localization, accessibility and Apple foundation changes; its Android and web workflows are the
 current release gate and their public assets have not yet been independently
 verified from this host. The tag includes the localized subtitle download
 dialogs and synchronized platform metadata.
@@ -349,7 +349,10 @@ digests are:
   quality switching and the login layout on physical phone/TV hardware.
 - Runtime validation is also still required for touch control toggling over
   SurfaceView/PlayerView on real mobile hardware.
-- Apple iOS/iPadOS/tvOS clients are not present/verified.
+- Apple shared `VeloraKit` foundation is present with mobile-only offline
+  capability semantics, header-based Jellyfin access and Original First
+  decision tests; the SwiftUI iOS/iPadOS/tvOS clients are not yet present or
+  hardware-verified.
 - VIDAA support is not validated on a real device or certified runtime.
 - Offline queue/storage recovery, persistence of integrity metadata, settings
   integration and the full end-to-end offline journey are not yet verified;
@@ -381,7 +384,7 @@ SHA-256 manifests. The only remote branch is `main`.
 | Samsung Tizen | Packaging path exists | Device/emulator validation pending |
 | LG webOS | Packaging path exists | Device/emulator validation pending |
 | Hisense VIDAA | Preparation only | Not verified |
-| iOS/iPadOS/tvOS | Not implemented in current tree | Not applicable |
+| iOS/iPadOS/tvOS | `VeloraKit` foundation package present; SwiftUI apps pending | macOS/Xcode validation pending |
 
 ## Quality gates
 

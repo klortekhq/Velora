@@ -2,7 +2,7 @@
 
 ### Cliente Jellyfin multiplataforma
 
-Versión publicada: **1.2.48** · Por **Klørtek**
+Versión publicada: **1.2.49** · Por **Klørtek**
 
 Velora es una aplicación independiente para disfrutar de bibliotecas Jellyfin con una interfaz rápida, limpia y adaptada a cada pantalla. La experiencia móvil está pensada para tocar y deslizar; la experiencia de televisión, para mando a distancia, D-pad y pantalla grande.
 
@@ -58,9 +58,10 @@ También están disponibles los controles de aspecto, audio, subtítulos y ajust
 | LG webOS | Cliente web de TV con navegación por mando; `.ipk` con `ares-package` |
 | Hisense VIDAA | Bundle HTML5 para publicación en la tienda/portal VIDAA |
 
-Las aplicaciones nativas de iPhone, iPad y Apple TV todavía no forman parte de
-este árbol; están planificadas como clientes Apple nativos, no como una versión
-Android estirada. Los paquetes Tizen, webOS y VIDAA requieren validación en sus
+La base nativa compartida de Apple está en [`apple/`](apple/) y se valida como
+Swift Package en macOS. Las aplicaciones SwiftUI completas de iPhone, iPad y
+Apple TV todavía no están terminadas; se desarrollan como clientes Apple nativos,
+no como una versión Android estirada. Los paquetes Tizen, webOS y VIDAA requieren validación en sus
 SDK, emuladores o dispositivos reales antes de considerarse certificados.
 
 La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de que el usuario tiene esa función disponible. No existe una pestaña IPTV separada y la aplicación no lee directamente la lista M3U. Las descargas, la calidad de descarga y el almacenamiento sin conexión solo aparecen en Android móvil/tablet e iPhone/iPad; nunca en TV ni navegador.

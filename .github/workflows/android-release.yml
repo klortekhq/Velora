@@ -9,6 +9,7 @@ on:
       - 'v*'
     paths:
       - 'app/**'
+      - 'apple/**'
       - 'build.gradle.kts'
       - 'settings.gradle.kts'
       - 'gradle/**'

@@ -1,0 +1,28 @@
+name: Velora Apple validation
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - 'apple/**'
+      - '.github/workflows/apple.yml'
+  pull_request:
+    paths:
+      - 'apple/**'
+      - '.github/workflows/apple.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  swift-package:
+    runs-on: macos-14
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apple
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar VeloraKit
+        run: swift test
