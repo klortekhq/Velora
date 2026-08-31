@@ -1599,3 +1599,7 @@ All notable changes to Velora will be documented in this file.
 - Corrige la semántica de subtítulos de ExoPlayer: automático respeta Jellyfin,
   deshabilitado apaga todas las pistas y la selección se conserva al cambiar
   calidad o solicitar transcodificación.
+## 1.2.24
+
+- Mejora el control táctil de la línea de tiempo: tocar una posición salta directamente a ese punto y arrastrar mantiene el desplazamiento continuo en móvil y tablet.
+- Mantiene la navegación por mando y teclado en TV sin cambiar el reproductor ExoPlayer predeterminado.
