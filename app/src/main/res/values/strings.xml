@@ -61,10 +61,10 @@
     <string name="settings_offline_storage_limit">Límite de almacenamiento sin conexión</string>
     <string name="settings_offline_storage_limit_description">Espacio máximo que Velora puede gestionar para descargas en este dispositivo.</string>
     <string name="settings_offline_storage_unlimited">Sin límite</string>
-    <string name="live_tv_all_channels">All</string>
-    <string name="live_tv_favorites">Favorites</string>
-    <string name="live_tv_add_favorite">Add to favorites</string>
-    <string name="live_tv_remove_favorite">Remove from favorites</string>
+    <string name="live_tv_all_channels">Todos</string>
+    <string name="live_tv_favorites">Favoritos</string>
+    <string name="live_tv_add_favorite">Añadir a favoritos</string>
+    <string name="live_tv_remove_favorite">Quitar de favoritos</string>
     <string name="login_title">Iniciar sesión</string>
     <string name="login_connecting">Conectando con %1$s</string>
     <string name="login_other_options">Otras opciones:</string>
