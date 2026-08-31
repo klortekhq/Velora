@@ -156,6 +156,9 @@ fun MobileSeriesDetailsLayout(
 ) {
     var pendingDownload by remember { mutableStateOf<JellyfinItem?>(null) }
     var pendingSeasonDownload by remember { mutableStateOf(false) }
+    var showSeasonSelection by remember { mutableStateOf(false) }
+    var selectedSeasonEpisodes by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var seasonEpisodesToDownload by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
     Box(Modifier.fillMaxSize()) {
         MobileBackdrop(backdropUrl, apiService, item.Name)
         Column(
@@ -190,7 +193,10 @@ fun MobileSeriesDetailsLayout(
                 }
                 if (PlatformCapabilities.supportsOfflineDownloads && episodes.isNotEmpty() && onDownloadSeason != null) {
                     androidx.compose.material3.OutlinedButton(
-                        onClick = { pendingSeasonDownload = true },
+                        onClick = {
+                            selectedSeasonEpisodes = episodes.map { it.Id }.toSet()
+                            showSeasonSelection = true
+                        },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         androidx.compose.material3.Icon(Icons.Default.Download, stringResource(com.klortek.velora.R.string.download_season))
@@ -217,9 +223,101 @@ fun MobileSeriesDetailsLayout(
             onDismiss = { pendingSeasonDownload = false },
             onSelected = { quality ->
                 pendingSeasonDownload = false
-                onDownloadSeason?.invoke(episodes, quality)
+                onDownloadSeason?.invoke(seasonEpisodesToDownload, quality)
             }
         )
+    }
+    if (showSeasonSelection) {
+        SeasonEpisodeSelectionDialog(
+            episodes = episodes,
+            selectedIds = selectedSeasonEpisodes,
+            onToggle = { id ->
+                selectedSeasonEpisodes = if (id in selectedSeasonEpisodes) {
+                    selectedSeasonEpisodes - id
+                } else {
+                    selectedSeasonEpisodes + id
+                }
+            },
+            onDismiss = { showSeasonSelection = false },
+            onContinue = {
+                seasonEpisodesToDownload = episodes.filter { it.Id in selectedSeasonEpisodes }
+                showSeasonSelection = false
+                if (selectedSeasonEpisodes.isNotEmpty()) pendingSeasonDownload = true
+            }
+        )
+    }
+}
+
+@Composable
+private fun SeasonEpisodeSelectionDialog(
+    episodes: List<JellyfinItem>,
+    selectedIds: Set<String>,
+    onToggle: (String) -> Unit,
+    onDismiss: () -> Unit,
+    onContinue: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        Column(
+            Modifier.fillMaxWidth().fillMaxSize(0.88f)
+                .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                .background(Color(0xFF17191D)).padding(22.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(stringResource(com.klortek.velora.R.string.select_episodes), color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(
+                stringResource(com.klortek.velora.R.string.episodes_selected, selectedIds.size),
+                color = Color.White.copy(alpha = .72f),
+                style = MaterialTheme.typography.bodySmall
+            )
+            LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                items(episodes, key = { it.Id }) { episode ->
+                    val selected = episode.Id in selectedIds
+                    Row(
+                        Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { onToggle(episode.Id) }
+                            .padding(horizontal = 8.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        androidx.compose.material3.Checkbox(
+                            checked = selected,
+                            onCheckedChange = { onToggle(episode.Id) },
+                            colors = androidx.compose.material3.CheckboxDefaults.colors(
+                                checkedColor = MobileCyan,
+                                checkmarkColor = Color.Black
+                            )
+                        )
+                        Column(Modifier.padding(start = 8.dp)) {
+                            Text(
+                                "E${episode.IndexNumber ?: "?"} · ${episode.Name}",
+                                color = Color.White,
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            episode.RunTimeTicks?.let { ticks ->
+                                Text(
+                                    "${ticks / 600_000_000L} min",
+                                    color = Color.White.copy(alpha = .62f),
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                androidx.compose.material3.TextButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
+                    androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.cancel), color = Color.White.copy(alpha = .8f))
+                }
+                androidx.compose.material3.Button(
+                    onClick = onContinue,
+                    enabled = selectedIds.isNotEmpty(),
+                    modifier = Modifier.weight(1f),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = MobileCyan)
+                ) {
+                    androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.continue_label), color = Color.Black)
+                }
+            }
+        }
     }
 }
 
