@@ -30,6 +30,7 @@
     <string name="nav_downloads">Téléchargements</string>
     <string name="nav_settings">Paramètres</string>
     <string name="search_movies_series">Rechercher des films et des séries</string>
+    <string name="search_short">Rechercher</string>
     <string name="action_play">Lire</string>
     <string name="action_back">Retour</string>
     <string name="downloads_empty">Aucun contenu téléchargé</string>

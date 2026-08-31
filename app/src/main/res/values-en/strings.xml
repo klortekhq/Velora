@@ -30,6 +30,7 @@
     <string name="nav_downloads">Downloads</string>
     <string name="nav_settings">Settings</string>
     <string name="search_movies_series">Search movies and series</string>
+    <string name="search_short">Search</string>
     <string name="action_play">Play</string>
     <string name="action_back">Back</string>
     <string name="downloads_empty">No downloaded content</string>
