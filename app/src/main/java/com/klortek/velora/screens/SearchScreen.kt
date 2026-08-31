@@ -42,6 +42,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -70,6 +71,7 @@ fun SearchScreen(
     showDebugOutlines: Boolean = false
 ) {
     val context = LocalContext.current
+    val isCompactLayout = LocalConfiguration.current.screenWidthDp < 600
     val focusManager = LocalFocusManager.current
     var searchQuery by remember { mutableStateOf("") }
     var searchResults by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
@@ -151,7 +153,7 @@ fun SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(48.dp)
+            .padding(if (isCompactLayout) 16.dp else 48.dp)
     ) {
         // Header with back button and title
         Row(
@@ -340,8 +342,12 @@ fun SearchScreen(
                 )
             }
         } else {
-            // Grid layout matching home screen card sizes (105.dp width, 6 columns)
-            val columns = 6
+            // Use a real phone/tablet grid instead of the six-column TV layout.
+            // The compact values keep every result reachable without horizontal
+            // clipping while preserving the denser TV presentation.
+            val columns = if (isCompactLayout) 2 else 6
+            val cardWidth = if (isCompactLayout) 148.dp else 105.dp
+            val cardSpacing = if (isCompactLayout) 12.dp else 20.dp
             LazyColumn(
                 contentPadding = PaddingValues(vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -372,10 +378,10 @@ fun SearchScreen(
                         // Cards with spacing between them (same as home screen)
                         rowItems.forEachIndexed { index, item ->
                             if (index > 0) {
-                                Spacer(modifier = Modifier.width(20.dp))
+                                Spacer(modifier = Modifier.width(cardSpacing))
                             }
                             Column(
-                                modifier = Modifier.width(105.dp),
+                                modifier = Modifier.width(cardWidth),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 JellyfinHorizontalCard(
@@ -410,7 +416,7 @@ fun SearchScreen(
                         // Fill remaining space if row has fewer than columns items
                         if (rowItems.size < columns) {
                             repeat(columns - rowItems.size) {
-                                Spacer(modifier = Modifier.width(105.dp + 20.dp)) // Width of card + spacing
+                                Spacer(modifier = Modifier.width(cardWidth + cardSpacing))
                             }
                         }
                         
