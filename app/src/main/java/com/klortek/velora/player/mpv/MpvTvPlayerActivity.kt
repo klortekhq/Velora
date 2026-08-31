@@ -780,7 +780,7 @@ private fun MpvPlayerScreen(
                                  Log.d("MpvTvPlayer", "No target subtitle found (User selection: ${initialSubtitleStreamIndex}, Auto-detect: true)")
                              }
                          } else {
-                             Log.d("MpvTvPlayer", "External subtitle provided ($subtitleFile), skipping internal track matching.")
+                             Log.d("MpvTvPlayer", "External subtitle provided; skipping internal track matching.")
                          }
                          
                          // 2. Match Audio
@@ -1013,7 +1013,7 @@ private fun MpvPlayerScreen(
                                 MPVLib.setOptionString("sub-file", resolvedSubtitlePath!!)
                                 MPVLib.setOptionString("sid", "auto")
                             } else if (subtitleFile != null && !subtitleFile.startsWith("http")) {
-                                Log.d("MpvTvPlayer", "Injecting sub-file (provided): $subtitleFile")
+                                Log.d("MpvTvPlayer", "Injecting provided local subtitle file")
                                 // Fallback for local files if any
                                 MPVLib.setOptionString("sub-file", subtitleFile)
                                 MPVLib.setOptionString("sid", "auto")

@@ -13,6 +13,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import com.klortek.velora.BuildConfig
+import com.klortek.velora.security.SensitiveDataRedactor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -119,10 +120,10 @@ class ThemeLoader(
                         android.util.Log.w("ThemeLoader", "Imported CSS from $importUrl is empty")
                     }
                 } else {
-                    android.util.Log.w("ThemeLoader", "Failed to fetch imported CSS from $importUrl: status $importedStatus")
+                    android.util.Log.w("ThemeLoader", "Failed to fetch imported CSS from ${SensitiveDataRedactor.url(importUrl)}: status $importedStatus")
                 }
             } catch (e: Exception) {
-                android.util.Log.e("ThemeLoader", "Error fetching imported CSS from $importUrl: ${e.message}", e)
+                android.util.Log.e("ThemeLoader", "Error fetching imported CSS from ${SensitiveDataRedactor.url(importUrl)}: ${e.message}", e)
             }
         }
         
