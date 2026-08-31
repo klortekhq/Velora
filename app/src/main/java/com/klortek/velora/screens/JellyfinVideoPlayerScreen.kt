@@ -404,6 +404,27 @@ fun JellyfinVideoPlayerScreen(
             )
         }
     }
+
+    // `trackSelector` is intentionally a stable instance so changing an audio
+    // or subtitle preference does not recreate the player. Re-apply the
+    // policy to that instance when the user changes Settings while a title is
+    // already open; reading the values only inside `remember` otherwise left
+    // the visible preference and Media3's effective selection out of sync.
+    LaunchedEffect(preferredAudioLanguage, preferredSubtitleLanguage, subtitleMode) {
+        trackSelector.setParameters(
+            trackSelector.buildUponParameters()
+                .setForceHighestSupportedBitrate(true)
+                .setPreferredAudioLanguage(preferredAudioLanguage)
+                .setSelectUndeterminedTextLanguage(subtitleMode == "auto")
+                .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, subtitleMode == "off")
+                .setDisabledTextTrackSelectionFlags(0)
+                .setPreferredTextLanguage(
+                    if (subtitleMode == "off") null else preferredSubtitleLanguage
+                )
+                .setPreferredTextRoleFlags(0)
+                .setIgnoredTextSelectionFlags(0)
+        )
+    }
     
     // Configure audio attributes for media playback
     val audioAttributes = AudioAttributes.Builder()
