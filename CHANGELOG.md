@@ -2,6 +2,13 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.28
+
+### Fixed
+
+- Hardened the Android release workflow so stalled Gradle child processes are
+  terminated instead of leaving the APK release job running indefinitely.
+
 ---
 
 ## 1.2.27

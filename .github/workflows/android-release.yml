@@ -68,9 +68,15 @@ jobs:
 
       - name: Compilar APK móvil/TV debug y release unsigned
         run: |
-          # Keep a runner failure observable and bounded even if Gradle itself
-          # stops producing output. GitHub's job timeout remains the outer guard.
-          timeout --signal=TERM --kill-after=60s 25m ./gradlew \
+          # Bound Gradle and clean up its worker tree when a hosted runner
+          # stops making progress. Without this, a child Kotlin/CMake process
+          # can survive the wrapper timeout and leave the release job running.
+          set -o errexit
+          cleanup_gradle() {
+            pkill -TERM -P "$BASHPID" 2>/dev/null || true
+          }
+          trap cleanup_gradle EXIT
+          timeout --foreground --signal=TERM --kill-after=30s 25m ./gradlew \
             :app:testMobileDebugUnitTest :app:testTvDebugUnitTest \
             :app:assembleMobileDebug :app:assembleTvDebug \
             :app:assembleMobileRelease :app:assembleTvRelease \
