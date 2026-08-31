@@ -2400,13 +2400,14 @@ fun SettingsScreen(
                     ) {
                         androidx.compose.material3.Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Atrás",
+                            contentDescription = context.getString(com.klortek.velora.R.string.action_back),
                             tint = MobileSettingsText
                         )
                     }
 
                     androidx.compose.material3.Text(
-                        text = if (activeCategoryDetail != null) activeCategoryDetail!!.localizedTitle(context) else "Ajustes",
+                        text = if (activeCategoryDetail != null) activeCategoryDetail!!.localizedTitle(context)
+                        else context.getString(com.klortek.velora.R.string.nav_settings),
                         style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = MobileSettingsText,
