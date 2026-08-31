@@ -41,9 +41,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 Release `v1.2.36` is publicly verified at
 https://github.com/klortekhq/Velora/releases/tag/v1.2.36. GitHub Actions completed
-the Android and web workflows successfully; the release contains 13 assets,
-including the four Android APKs, five web/TV bundles, two checksum manifests and
-the two source archives. The published Android APK digests are:
+the Android and web workflows successfully; the release contains 11 assets,
+including the four Android APKs, five web/TV bundles and two checksum manifests.
+GitHub also provides the two source archives separately. The published Android
+APK digests are:
 
 | Artifact | SHA-256 |
 | --- | --- |
