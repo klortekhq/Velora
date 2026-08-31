@@ -70,6 +70,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   MediaSource loading path and records the selected path for diagnostics.
 - Mobile cast cards now make the complete actor/crew card touch target open the
   person filmography, not only the circular portrait.
+- The mobile Settings header now uses localized resources for its title and
+  back accessibility label instead of fixed Spanish literals.
 - The playback mapper also falls back to Jellyfin's numeric `Channels` field
   when `ChannelLayout` is missing, with a regression test for multichannel audio.
 - Android playback capabilities now probe installed MediaCodec decoders and
