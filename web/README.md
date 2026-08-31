@@ -2,6 +2,8 @@
 
 Cliente web responsive para móvil, tablet y televisores con navegador. Usa la
 API de Jellyfin y el elemento HTML5 `video`, sin depender de otra aplicación.
+El cliente web no ofrece descargas ni almacenamiento sin conexión: esa función
+está reservada a las aplicaciones móviles nativas.
 
 Ejecutar localmente:
 
