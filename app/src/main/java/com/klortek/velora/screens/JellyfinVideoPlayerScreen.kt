@@ -64,7 +64,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
@@ -5981,18 +5980,22 @@ private fun PlayerSeekBar(
             .then(
                 if (isMobile && duration > 0) {
                     Modifier.pointerInput(duration) {
-                        detectTapGestures(
-                            onPress = { offset ->
+                        val touchWidth = size.width.toFloat().coerceAtLeast(1f)
+                        detectHorizontalDragGestures(
+                            onDragStart = { offset ->
                                 isDragging = true
-                                dragProgress = (offset.x / size.width).coerceIn(0f, 1f)
-                                try {
-                                    val position = awaitRelease()
-                                    if (duration > 0) {
-                                        onSeek((dragProgress * duration).toLong())
-                                    }
-                                } finally {
-                                    isDragging = false
-                                }
+                                dragProgress = (offset.x / touchWidth).coerceIn(0f, 1f)
+                            },
+                            onHorizontalDrag = { change, _ ->
+                                dragProgress = (change.position.x / touchWidth).coerceIn(0f, 1f)
+                                change.consume()
+                            },
+                            onDragEnd = {
+                                onSeek((dragProgress * duration).toLong())
+                                isDragging = false
+                            },
+                            onDragCancel = {
+                                isDragging = false
                             }
                         )
                     }
