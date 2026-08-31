@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.38 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.39 across Android, webOS,
   Samsung and VIDAA manifests.
 - Release candidate `1.2.38` includes live application of preferred audio and
   subtitle settings to the existing Media3 player; Android compilation and 52
@@ -40,6 +40,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Mobile/tablet library sorting and filtering preferences now persist locally
   (direction, favorites, playback state and genre), with a localized reset
   action; the shared query remains covered by unit tests.
+- The album artwork action now starts album playback instead of being a
+  decorative, non-interactive control. This is queued for release `v1.2.39`.
 
 ## Latest verified release
 
