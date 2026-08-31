@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.50 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.51 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -358,6 +358,10 @@ digests are:
   integration and the full end-to-end offline journey are not yet verified;
   the storage policy and digest contracts have unit coverage.
   the durable metadata foundation is now in place.
+- Completed provider downloads are now copied into Velora's private
+  `filesDir/offline/media` storage and verified before offline playback; the
+  transfer provider remains only as a compatibility bridge for existing
+  installations and background transfers.
 - Theme music, a Jellyfin-first trailer resolver, persistent preview, and large-library
   virtualization need implementation and critic testing.
 - Live TV channel zapping/previous-channel shortcut and mini-player still need

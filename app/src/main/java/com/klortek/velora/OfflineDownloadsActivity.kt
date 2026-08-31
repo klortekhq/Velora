@@ -39,6 +39,7 @@ import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.offline.OfflineDownload
 import com.klortek.velora.offline.OfflineDownloadManager
 import com.klortek.velora.offline.OfflineDownloadQuality
+import com.klortek.velora.offline.OfflineStorageEngine
 import com.klortek.velora.platform.PlatformCapabilities
 
 class OfflineDownloadsActivity : ComponentActivity() {
@@ -58,8 +59,9 @@ class OfflineDownloadsActivity : ComponentActivity() {
                     onBack = { finish() },
                     onPlay = { entry ->
                         lifecycleScope.launch {
-                            if (OfflineDownloadManager.verifyIntegrity(this@OfflineDownloadsActivity, entry)) {
-                                startActivity(JellyfinVideoPlayerActivity.createIntent(this@OfflineDownloadsActivity, entry.itemId, itemName = entry.name, localPath = entry.localPath))
+                            val managedEntry = OfflineStorageEngine.materialize(this@OfflineDownloadsActivity, entry) ?: entry
+                            if (OfflineDownloadManager.verifyIntegrity(this@OfflineDownloadsActivity, managedEntry)) {
+                                startActivity(JellyfinVideoPlayerActivity.createIntent(this@OfflineDownloadsActivity, managedEntry.itemId, itemName = managedEntry.name, localPath = managedEntry.localPath))
                             } else {
                                 android.widget.Toast.makeText(
                                     this@OfflineDownloadsActivity,
