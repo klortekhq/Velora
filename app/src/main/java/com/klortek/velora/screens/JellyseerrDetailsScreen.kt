@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,6 +51,7 @@ import com.klortek.velora.jellyseerr.JellyseerrApiService
 import com.klortek.velora.jellyseerr.JellyseerrImageUrl
 import com.klortek.velora.jellyseerr.JellyseerrMovie
 import com.klortek.velora.jellyseerr.JellyseerrTvShow
+import com.klortek.velora.R
 import kotlinx.coroutines.launch
 
 import com.klortek.velora.ui.DeviceUtils
@@ -74,7 +76,7 @@ fun JellyseerrDetailsScreen(
     // Fetch details
     LaunchedEffect(tmdbId, mediaType, apiService) {
         if (apiService == null) {
-            error = "Jellyseerr service not available"
+            error = context.getString(com.klortek.velora.R.string.jellyseerr_service_unavailable)
             isLoading = false
             return@LaunchedEffect
         }
@@ -88,14 +90,14 @@ fun JellyseerrDetailsScreen(
                 if (details != null) {
                     movieDetails = details
                 } else {
-                    error = "Could not fetch movie details"
+                    error = context.getString(com.klortek.velora.R.string.jellyseerr_movie_details_failed)
                 }
             } else {
                 val details = apiService.getTvShowDetails(tmdbId)
                 if (details != null) {
                     tvDetails = details
                 } else {
-                    error = "Could not fetch TV show details"
+                    error = context.getString(com.klortek.velora.R.string.jellyseerr_tv_details_failed)
                 }
             }
         } catch (e: Exception) {
@@ -110,7 +112,7 @@ fun JellyseerrDetailsScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text("Loading details...", color = Color.White)
+            Text(stringResource(com.klortek.velora.R.string.jellyseerr_loading_details), color = Color.White)
         }
         return
     }
@@ -125,11 +127,11 @@ fun JellyseerrDetailsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 if (isTv) {
                     Button(onClick = onBackPressed) {
-                        Text("Go Back")
+                        Text(stringResource(com.klortek.velora.R.string.jellyseerr_go_back))
                     }
                 } else {
                     androidx.compose.material3.Button(onClick = onBackPressed) {
-                        androidx.compose.material3.Text("Go Back")
+                        androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.jellyseerr_go_back))
                     }
                 }
             }
@@ -138,8 +140,8 @@ fun JellyseerrDetailsScreen(
     }
     
     // Extract display data
-    val title = movieDetails?.title ?: tvDetails?.name ?: "Unknown"
-    val overview = movieDetails?.overview ?: tvDetails?.overview ?: "No overview available."
+    val title = movieDetails?.title ?: tvDetails?.name ?: stringResource(com.klortek.velora.R.string.jellyseerr_unknown_title)
+    val overview = movieDetails?.overview ?: tvDetails?.overview ?: stringResource(com.klortek.velora.R.string.jellyseerr_no_overview)
     val year = (movieDetails?.releaseDate ?: tvDetails?.firstAirDate)?.take(4) ?: ""
     val backdropPath = movieDetails?.backdropPath ?: tvDetails?.backdropPath
     val posterPath = movieDetails?.posterPath ?: tvDetails?.posterPath
@@ -259,7 +261,7 @@ fun JellyseerrDetailsScreen(
                             ) {
                                 Icon(Icons.Default.Check, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Available on Jellyfin")
+                                Text(stringResource(com.klortek.velora.R.string.jellyseerr_available))
                             }
                         } else {
                             androidx.compose.material3.Button(
@@ -269,7 +271,7 @@ fun JellyseerrDetailsScreen(
                             ) {
                                 androidx.compose.material3.Icon(Icons.Default.Check, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                androidx.compose.material3.Text("Available on Jellyfin")
+                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.jellyseerr_available))
                             }
                         }
                     } else if (isPending) {
@@ -281,7 +283,7 @@ fun JellyseerrDetailsScreen(
                             ) {
                                 Icon(Icons.Default.HourglassEmpty, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Request Pending")
+                                Text(stringResource(com.klortek.velora.R.string.jellyseerr_request_pending))
                             }
                         } else {
                             androidx.compose.material3.Button(
@@ -291,7 +293,7 @@ fun JellyseerrDetailsScreen(
                             ) {
                                 androidx.compose.material3.Icon(Icons.Default.HourglassEmpty, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                androidx.compose.material3.Text("Request Pending")
+                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.jellyseerr_request_pending))
                             }
                         }
                     } else {
@@ -306,14 +308,14 @@ fun JellyseerrDetailsScreen(
                                     }
                                     
                                     if (result.isSuccess) {
-                                        Toast.makeText(context, "Request sent successfully!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, R.string.jellyseerr_request_sent, Toast.LENGTH_SHORT).show()
                                         if (mediaType == "movie") {
                                             movieDetails = apiService.getMovieDetails(tmdbId)
                                         } else {
                                             tvDetails = apiService.getTvShowDetails(tmdbId)
                                         }
                                     } else {
-                                        Toast.makeText(context, "Request failed", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, R.string.jellyseerr_request_failed, Toast.LENGTH_SHORT).show()
                                     }
                                     isRequesting = false
                                 }
@@ -332,11 +334,11 @@ fun JellyseerrDetailsScreen(
                                         color = Color.White
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Text("Requesting...")
+                                    Text(stringResource(R.string.jellyseerr_requesting))
                                 } else {
                                     Icon(Icons.Default.Download, contentDescription = null)
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Text("Request on Jellyseerr")
+                                    Text(stringResource(R.string.jellyseerr_request_action))
                                 }
                             }
                         } else {
@@ -353,11 +355,11 @@ fun JellyseerrDetailsScreen(
                                         color = Color.White
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    androidx.compose.material3.Text("Requesting...")
+                                    androidx.compose.material3.Text(stringResource(R.string.jellyseerr_requesting))
                                 } else {
                                     androidx.compose.material3.Icon(Icons.Default.Download, contentDescription = null)
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    androidx.compose.material3.Text("Request on Jellyseerr")
+                                    androidx.compose.material3.Text(stringResource(R.string.jellyseerr_request_action))
                                 }
                             }
                         }
