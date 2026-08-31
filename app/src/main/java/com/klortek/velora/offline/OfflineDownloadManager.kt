@@ -12,6 +12,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import java.io.InputStream
 import java.io.File
+import java.security.MessageDigest
 
 data class OfflineDownload(
     val itemId: String,
@@ -72,7 +73,7 @@ object OfflineDownloadManager {
         check(PlatformCapabilities.supportsOfflineDownloads) {
             "Offline downloads are only supported on mobile and tablet builds"
         }
-        val existing = refresh(context).firstOrNull { it.itemId == itemId }
+        val existing = load(context).firstOrNull { it.itemId == itemId }
         if (existing != null) {
             if (existing.isComplete || existing.status == DownloadManager.STATUS_PENDING ||
                 existing.status == DownloadManager.STATUS_RUNNING) {
@@ -98,7 +99,7 @@ object OfflineDownloadManager {
         if (!decision.allowed) throw StorageRejectedException(decision)
         if (existing != null) delete(context, existing)
 
-        val workName = "offline-${itemId}-${quality.storageKey}"
+        val workName = workNameFor(itemId, quality)
         val entry = OfflineDownload(itemId, name, type, seriesName, seasonNumber, episodeNumber, 0L, quality.storageKey, status = DownloadManager.STATUS_PENDING, workName = workName)
         val work = androidx.work.OneTimeWorkRequestBuilder<OfflineDownloadWorker>()
             .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(androidx.work.NetworkType.CONNECTED).build())
@@ -116,7 +117,7 @@ object OfflineDownloadManager {
 
     }
 
-    fun refresh(context: Context): List<OfflineDownload> {
+    suspend fun refresh(context: Context): List<OfflineDownload> = withContext(Dispatchers.IO) {
         val manager = context.getSystemService(DownloadManager::class.java)
         val updated = load(context).mapNotNull { entry ->
             if (!entry.workName.isNullOrBlank()) {
@@ -157,7 +158,15 @@ object OfflineDownloadManager {
             )
         }
         save(context, updated)
-        return updated
+        updated
+    }
+
+    private fun workNameFor(itemId: String, quality: OfflineDownloadQuality): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+            .digest(itemId.toByteArray(Charsets.UTF_8))
+            .joinToString("") { byte -> "%02x".format(byte) }
+            .take(24)
+        return "offline-$digest-${quality.storageKey}"
     }
 
     fun cancel(context: Context, entry: OfflineDownload) {
