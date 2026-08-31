@@ -31,6 +31,10 @@
     <string name="nav_settings">Settings</string>
     <string name="search_movies_series">Search movies and series</string>
     <string name="search_short">Search</string>
+    <string name="search_voice_prompt">Say the title you want to search for</string>
+    <string name="search_voice">Voice search</string>
+    <string name="search_loading">Searching…</string>
+    <string name="search_empty_prompt">Type a title or use voice search</string>
     <string name="action_play">Play</string>
     <string name="action_back">Back</string>
     <string name="downloads_empty">No downloaded content</string>
