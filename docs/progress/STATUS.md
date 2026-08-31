@@ -77,6 +77,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - The mobile bottom navigation no longer horizontally scrolls actions off-screen;
   all available destinations are distributed across the device width, including
   Search and Settings.
+- The mobile library header now leaves clear space below the Android status bar,
+  exposes an accessible, full-size touch target for the sort/filter action, and
+  uses localized movie/series titles.
 - The playback mapper also falls back to Jellyfin's numeric `Channels` field
   when `ChannelLayout` is missing, with a regression test for multichannel audio.
 - Android playback capabilities now probe installed MediaCodec decoders and
@@ -196,6 +199,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Release `v1.2.19` is publicly verified with four Android APKs, the web
   archives, Samsung and VIDAA bundles, the webOS package and both checksum
   manifests: https://github.com/klortekhq/Velora/releases/tag/v1.2.19.
+- Release `v1.2.20` is publicly verified with four Android APKs, the web
+  archives, Samsung and VIDAA bundles, the webOS package and both checksum
+  manifests: https://github.com/klortekhq/Velora/releases/tag/v1.2.20.
 
 ## Explicitly incomplete or requiring verification
 
