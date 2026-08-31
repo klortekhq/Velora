@@ -89,9 +89,9 @@ class OfflineDownloadsActivity : ComponentActivity() {
         }
         Column(Modifier.fillMaxSize().padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, "Atrás") }
+                IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, stringResource(R.string.action_back)) }
                 Icon(Icons.Default.Download, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(horizontal = 10.dp))
-                Text("Descargas", style = MaterialTheme.typography.headlineSmall)
+                Text(stringResource(R.string.nav_downloads), style = MaterialTheme.typography.headlineSmall)
             }
             if (entries.isEmpty()) {
                 Text(stringResource(R.string.downloads_empty), color = Color.Gray, modifier = Modifier.padding(24.dp))
@@ -112,7 +112,7 @@ class OfflineDownloadsActivity : ComponentActivity() {
                                     style = MaterialTheme.typography.labelMedium
                                 )
                             }
-                            if (entry.isComplete) IconButton(onClick = { onPlay(entry) }) { Icon(Icons.Default.PlayArrow, "Reproducir") }
+                            if (entry.isComplete) IconButton(onClick = { onPlay(entry) }) { Icon(Icons.Default.PlayArrow, stringResource(R.string.action_play)) }
                             Button(onClick = { onDelete(entry) }) { Icon(Icons.Default.Delete, stringResource(R.string.action_delete)) }
                         }
                     }

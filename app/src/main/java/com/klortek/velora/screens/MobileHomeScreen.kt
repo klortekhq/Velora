@@ -276,6 +276,7 @@ fun MobileLibraryScreen(
     var selectedTab by remember { mutableStateOf(if (recommendations.isNotEmpty()) 0 else 1) }
     val availableGenres = remember(items) { availableLibraryGenres(items) }
     val sortFilterLabel = stringResource(com.klortek.velora.R.string.library_sort_filter)
+    val backDescription = stringResource(com.klortek.velora.R.string.action_back)
     val sortedItems = remember(items, mobileSortMode, sortDescending, favoritesOnly, playbackFilter, selectedGenre) {
         queryLibraryItems(items, mobileSortMode, sortDescending, favoritesOnly, playbackFilter, selectedGenre)
     }
@@ -291,7 +292,7 @@ fun MobileLibraryScreen(
                     .clip(RoundedCornerShape(26.dp))
                     .background(Color.White.copy(alpha = .12f))
                     .semantics {
-                        contentDescription = "Atrás"
+                        contentDescription = backDescription
                         role = Role.Button
                     }
                     .clickable(onClick = onBack),
@@ -566,9 +567,9 @@ private fun MobileHomeHero(item: JellyfinItem?, apiService: JellyfinApiService?,
         ) {
             Text(if (item.Type == "Episode") item.SeriesName ?: item.Name else item.Name, color = Color.White, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis)
             if (item.Type == "Episode") {
-                Text("S${item.ParentIndexNumber ?: "?"} E${item.IndexNumber ?: "?"} · ${item.Name}", color = Color.White.copy(alpha = .86f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(stringResource(com.klortek.velora.R.string.home_episode_label, item.ParentIndexNumber ?: "?", item.IndexNumber ?: "?", item.Name), color = Color.White.copy(alpha = .86f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            Text("Continuar viendo", color = MobileHomeCyan, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(com.klortek.velora.R.string.home_continue_watching), color = MobileHomeCyan, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }
     }
 }

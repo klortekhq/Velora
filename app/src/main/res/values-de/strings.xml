@@ -131,6 +131,7 @@
     <string name="person_series">Serien</string>
     <string name="person_back">Zurück</string>
     <string name="home_continue_watching">Weiterschauen</string>
+    <string name="home_episode_label">S%1$s E%2$s · %3$s</string>
     <string name="home_recent_movies">Zuletzt hinzugefügte Filme</string>
     <string name="home_recent_series">Zuletzt hinzugefügte Serien</string>
     <string name="home_unwatched">Nicht fertig</string>
