@@ -41,6 +41,8 @@
     <string name="offline_available">Available offline</string>
     <string name="downloading_progress">Downloading… %1$d%%</string>
     <string name="action_delete">Delete</string>
+    <string name="download_season">Download season</string>
+    <string name="download_season_queued">%1$d episodes added to the queue</string>
     <string name="live_tv_all_channels">All</string>
     <string name="live_tv_favorites">Favorites</string>
     <string name="live_tv_add_favorite">Add to favorites</string>

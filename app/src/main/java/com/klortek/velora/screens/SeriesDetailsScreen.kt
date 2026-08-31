@@ -143,6 +143,7 @@ fun SeriesDetailsScreen(
 ) {
     val context = LocalContext.current
     val settings = remember { com.klortek.velora.jellyfin.AppSettings(context) }
+    val downloadScope = rememberCoroutineScope()
     var darkModeEnabled by remember { mutableStateOf(settings.darkModeEnabled) }
     
     val repository = remember(apiService) {
@@ -478,6 +479,35 @@ fun SeriesDetailsScreen(
                         android.widget.Toast.makeText(context, "Descarga iniciada", android.widget.Toast.LENGTH_SHORT).show()
                     }.onFailure {
                         android.widget.Toast.makeText(context, "No hay espacio suficiente para esta descarga", android.widget.Toast.LENGTH_LONG).show()
+                    }
+                }
+            },
+            onDownloadSeason = { selectedEpisodes, quality ->
+                val config = com.klortek.velora.jellyfin.JellyfinConfig(context)
+                if (config.isConfigured()) {
+                    downloadScope.launch(Dispatchers.IO) {
+                        var queued = 0
+                        selectedEpisodes.forEach { episode ->
+                            runCatching {
+                                com.klortek.velora.offline.OfflineDownloadManager.enqueue(
+                                    context, config.serverUrl, config.accessToken, episode.Id, episode.Name, "Episode",
+                                    mediaSourceId = episode.MediaSources?.firstOrNull()?.Id,
+                                    seriesName = displayItem.Name,
+                                    seasonNumber = episode.ParentIndexNumber,
+                                    episodeNumber = episode.IndexNumber,
+                                    quality = quality,
+                                    estimatedBytes = episode.MediaSources?.firstOrNull()?.Size
+                                )
+                                queued++
+                            }
+                        }
+                        withContext(Dispatchers.Main) {
+                            android.widget.Toast.makeText(
+                                context,
+                                context.getString(com.klortek.velora.R.string.download_season_queued, queued),
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }

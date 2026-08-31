@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -150,9 +151,11 @@ fun MobileSeriesDetailsLayout(
     onSeasonSelected: (Int) -> Unit,
     onPlay: (JellyfinItem?) -> Unit,
     onRestart: ((JellyfinItem?) -> Unit)? = null,
-    onDownload: ((JellyfinItem, OfflineDownloadQuality) -> Unit)? = null
+    onDownload: ((JellyfinItem, OfflineDownloadQuality) -> Unit)? = null,
+    onDownloadSeason: ((List<JellyfinItem>, OfflineDownloadQuality) -> Unit)? = null
 ) {
     var pendingDownload by remember { mutableStateOf<JellyfinItem?>(null) }
+    var pendingSeasonDownload by remember { mutableStateOf(false) }
     Box(Modifier.fillMaxSize()) {
         MobileBackdrop(backdropUrl, apiService, item.Name)
         Column(
@@ -185,6 +188,16 @@ fun MobileSeriesDetailsLayout(
                         Text("Temporada ${seasons[index].IndexNumber ?: index + 1}", color = if (selected) Color.Black else Color.White, modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(if (selected) MobileCyan else Color.White.copy(alpha = .16f)).clickable { onSeasonSelected(index) }.padding(horizontal = 18.dp, vertical = 10.dp))
                     }
                 }
+                if (PlatformCapabilities.supportsOfflineDownloads && episodes.isNotEmpty() && onDownloadSeason != null) {
+                    androidx.compose.material3.OutlinedButton(
+                        onClick = { pendingSeasonDownload = true },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        androidx.compose.material3.Icon(Icons.Default.Download, stringResource(com.klortek.velora.R.string.download_season))
+                        Spacer(Modifier.width(8.dp))
+                        androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.download_season))
+                    }
+                }
             }
             Text("Episodios", color = Color.White, style = MaterialTheme.typography.titleMedium)
             episodes.forEach { episode ->
@@ -197,6 +210,15 @@ fun MobileSeriesDetailsLayout(
         OfflineDownloadQualityDialog(
             onDismiss = { pendingDownload = null },
             onSelected = { quality -> pendingDownload = null; onDownload?.invoke(episode, quality) }
+        )
+    }
+    if (pendingSeasonDownload) {
+        OfflineDownloadQualityDialog(
+            onDismiss = { pendingSeasonDownload = false },
+            onSelected = { quality ->
+                pendingSeasonDownload = false
+                onDownloadSeason?.invoke(episodes, quality)
+            }
         )
     }
 }
