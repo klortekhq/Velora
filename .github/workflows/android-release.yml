@@ -37,7 +37,7 @@ jobs:
   build-and-release:
     name: Compilar y publicar APK
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Descargar código
@@ -80,7 +80,7 @@ jobs:
             :app:testMobileDebugUnitTest :app:testTvDebugUnitTest \
             :app:assembleMobileDebug :app:assembleTvDebug \
             :app:assembleMobileRelease :app:assembleTvRelease \
-            --no-daemon --max-workers=2 --console=plain --stacktrace
+            --no-daemon --max-workers=1 --console=plain --stacktrace
 
       - name: Preparar nombres de APK
         shell: bash

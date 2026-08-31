@@ -2,6 +2,13 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.29
+
+### Fixed
+
+- Reduced Android release-build worker parallelism and extended the CI guard
+  so resource-constrained hosted runners can finish the APK packaging step.
+
 ## 1.2.28
 
 ### Fixed
