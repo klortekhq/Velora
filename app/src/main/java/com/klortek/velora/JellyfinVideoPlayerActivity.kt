@@ -220,10 +220,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     itemId = itemId,
                     mediaSourceId = if (isLiveTv) null else itemId,
                     subtitleStreamIndex = subtitleStreamIndex,
-                    // Resolve the channel metadata immediately. Direct Play
-                    // can then start from Jellyfin's returned source without
-                    // waiting for a server-side HLS allocation.
-                    autoOpenLiveStream = !isLiveTv
+                    // Live TV requires Jellyfin to allocate/open the tuner or
+                    // M3U/Acestream stream before returning LiveStreamId.
+                    // VOD keeps the regular non-live request semantics.
+                    autoOpenLiveStream = isLiveTv
                 )
                 
                 val mediaSource = playbackInfo?.MediaSources?.firstOrNull()
@@ -350,7 +350,9 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     itemId = itemId,
                     mediaSourceId = null,
                     subtitleStreamIndex = subtitleStreamIndex,
-                    autoOpenLiveStream = false
+                    // Jellyfin must allocate the live source so M3U, tuner and
+                    // Acestream channels return a usable LiveStreamId.
+                    autoOpenLiveStream = true
                 )
                 val liveSource = playbackInfo?.MediaSources?.firstOrNull()
                 val liveMediaSourceId = liveSource?.Id

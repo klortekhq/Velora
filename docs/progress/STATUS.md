@@ -141,6 +141,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Live TV rows now expose a real programme-details action for the current
   programme, showing channel, schedule and Jellyfin synopsis in a dismissible
   dialog; the action is available through touch and TV focus navigation.
+- Live TV playback now requests `AutoOpenLiveStream=true` before resolving the
+  source, so Jellyfin can allocate tuner, M3U or Acestream streams and return
+  the `MediaSourceId`/`LiveStreamId` required by the ExoPlayer and MPV paths.
 - Login UI labels and authentication state are now resource-backed in the
   Spanish, English, French and German catalogs, including the server name
   placeholder and both mobile and TV login actions.
