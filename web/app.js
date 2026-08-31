@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  var APP_VERSION = '1.2.20';
+
   var LANGUAGE_OPTIONS = [
     { value: 'auto', label: 'Automático', native: 'Automático' },
     { value: 'es', label: 'Español', native: 'Español' },
@@ -309,7 +311,7 @@
       headers: {
         'Content-Type': 'application/json',
         'Accept-Language': languageCode(),
-        'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="1.2.19", Language="' + languageCode() + '"'
+      'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="' + APP_VERSION + '", Language="' + languageCode() + '"'
       },
       body: JSON.stringify({ Username: username, Password: document.querySelector('#password').value })
     }).then(function (response) {
