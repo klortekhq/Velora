@@ -112,7 +112,7 @@ fun MobileHomeScreen(
         ) {
             if (continueWatching.isNotEmpty()) item {
                 MobileHomeMediaRow(
-                    title = "Seguir viendo",
+                    title = stringResource(com.klortek.velora.R.string.home_continue_watching),
                     items = continueWatching,
                     apiService = apiService,
                     onItemClick = onItemClick,
@@ -120,10 +120,10 @@ fun MobileHomeScreen(
                     showProgress = true
                 )
             }
-            if (recentMovies.isNotEmpty()) item { MobileHomeMediaRow("Películas añadidas recientemente", recentMovies, apiService, onItemClick) }
-            if (recentShows.isNotEmpty()) item { MobileHomeMediaRow("Series añadidas recientemente", recentShows, apiService, onItemClick) }
-            if (unwatched.isNotEmpty()) item { MobileHomeMediaRow("Sin terminar", unwatched, apiService, onItemClick) }
-            if (popular.isNotEmpty()) item { MobileHomeMediaRow("Más populares", popular, apiService, onItemClick) }
+            if (recentMovies.isNotEmpty()) item { MobileHomeMediaRow(stringResource(com.klortek.velora.R.string.home_recent_movies), recentMovies, apiService, onItemClick) }
+            if (recentShows.isNotEmpty()) item { MobileHomeMediaRow(stringResource(com.klortek.velora.R.string.home_recent_series), recentShows, apiService, onItemClick) }
+            if (unwatched.isNotEmpty()) item { MobileHomeMediaRow(stringResource(com.klortek.velora.R.string.home_unwatched), unwatched, apiService, onItemClick) }
+            if (popular.isNotEmpty()) item { MobileHomeMediaRow(stringResource(com.klortek.velora.R.string.home_popular), popular, apiService, onItemClick) }
         }
         val movieLibrary = libraries.firstOrNull { it.CollectionType.equals("movies", true) }
         val seriesLibrary = libraries.firstOrNull { it.CollectionType.equals("tvshows", true) }
@@ -602,7 +602,7 @@ private fun MobileBottomNavigation(
         MobileBottomNavigationItem(Icons.Default.Home, stringResource(com.klortek.velora.R.string.nav_home), onHome, selected = true, modifier = itemModifier)
         if (showMovies) MobileBottomNavigationItem(Icons.Default.Movie, stringResource(com.klortek.velora.R.string.nav_movies), onMovies, modifier = itemModifier)
         if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, stringResource(com.klortek.velora.R.string.nav_series), onSeries, modifier = itemModifier)
-        if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, "TV", onLiveTv, modifier = itemModifier)
+        if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, stringResource(com.klortek.velora.R.string.nav_live_tv), onLiveTv, modifier = itemModifier)
         MobileBottomNavigationItem(Icons.Default.Search, stringResource(com.klortek.velora.R.string.search_short), onSearch, modifier = itemModifier)
         MobileBottomNavigationItem(Icons.Default.Download, stringResource(com.klortek.velora.R.string.nav_downloads), onDownloads, modifier = itemModifier)
         MobileBottomNavigationItem(Icons.Default.Settings, stringResource(com.klortek.velora.R.string.nav_settings), onSettings, modifier = itemModifier)

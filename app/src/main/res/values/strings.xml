@@ -137,4 +137,10 @@
     <string name="person_movies">Películas</string>
     <string name="person_series">Series</string>
     <string name="person_back">Atrás</string>
+    <string name="home_continue_watching">Seguir viendo</string>
+    <string name="home_recent_movies">Películas añadidas recientemente</string>
+    <string name="home_recent_series">Series añadidas recientemente</string>
+    <string name="home_unwatched">Sin terminar</string>
+    <string name="home_popular">Más populares</string>
+    <string name="nav_live_tv">Televisión en directo</string>
 </resources>
