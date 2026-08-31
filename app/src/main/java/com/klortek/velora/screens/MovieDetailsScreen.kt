@@ -831,15 +831,13 @@ fun CastMemberCard(
                 Card(
                     onClick = {
                         // Navigate to cast info screen if person has an ID
-                        if (person.Id != null && onClick != null) {
+                        if (person.Name.isNotBlank() && onClick != null) {
                             onClick()
-                        } else if (person.Id != null) {
+                        } else if (person.Name.isNotBlank()) {
                             // Default behavior: open CastInfoActivity
                             val intent = com.klortek.velora.CastInfoActivity.createIntent(
                                 context,
-                                person.Id,
-                                person.Name,
-                                person.Type // Pass the type (Actor, Director, Writer, etc.)
+                                person
                             )
                             context.startActivity(intent)
                         }

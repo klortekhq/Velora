@@ -446,10 +446,8 @@ private fun MobileCastMemberCard(person: com.klortek.velora.jellyfin.Person, api
         modifier = Modifier
             .width(82.dp)
             .clip(RoundedCornerShape(12.dp))
-            .clickable(enabled = person.Id != null) {
-                person.Id?.let { id ->
-                    context.startActivity(com.klortek.velora.CastInfoActivity.createIntent(context, id, person.Name, person.Type))
-                }
+            .clickable(enabled = person.Name.isNotBlank()) {
+                context.startActivity(com.klortek.velora.CastInfoActivity.createIntent(context, person))
             }
             .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
