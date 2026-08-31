@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.57 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.58 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -248,6 +248,8 @@ digests are:
 - Managed mobile downloads now preserve a partial file across transient network
   failures and resume with an HTTP Range request; exponential retry backoff is
   configured in WorkManager.
+- Offline transfer filenames now use stable SHA-256 keys, with migration from
+  the earlier hash-based temporary and media paths.
 - DownloadManager statuses are translated at the offline boundary into
   provider-neutral Velora states (`QUEUED`, `WAITING_FOR_NETWORK`,
   `DOWNLOADING`, `PAUSED`, `COMPLETED` and `FAILED`), preparing a future
