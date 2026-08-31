@@ -36,6 +36,21 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Latest verified release
 
+Release `v1.2.33` is publicly verified at
+https://github.com/klortekhq/Velora/releases/tag/v1.2.33. Both Android build
+variants and all web/platform bundles completed successfully in GitHub Actions.
+The release contains 11 assets; Android APK digests reported by GitHub are:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| `Velora-mobile-debug.apk` | `4e9d4ea5cc48645ab366b23f792d35f03141faa335cda47b4c72a12a4ed519a6` |
+| `Velora-mobile-release-unsigned.apk` | `6ad9394037d5a1a1311ce2921dbeb3001f7b35949d9082db41abfa3e3e76b7ff` |
+| `Velora-tv-debug.apk` | `ceffd1c9c4dd8a8e86e666f9549384d22f9491d837d2bef29e0a83ce76ba0e1a` |
+| `Velora-tv-release-unsigned.apk` | `b6b3bfd81a8514a956dfdb3031c6dde7a81791fcf0c51f141827fa0eb0c6100a` |
+
+The release was built from tag commit `ff02fb8`; subsequent `main` commits only
+contain the retained regression test and additional diagnostic-log hardening.
+
 Release `v1.2.30` is published at
 https://github.com/klortekhq/Velora/releases/tag/v1.2.30. The Android workflow
 completed successfully and the release contains the four expected APKs:
