@@ -309,7 +309,7 @@
       headers: {
         'Content-Type': 'application/json',
         'Accept-Language': languageCode(),
-        'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="1.2.18", Language="' + languageCode() + '"'
+        'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="1.2.19", Language="' + languageCode() + '"'
       },
       body: JSON.stringify({ Username: username, Password: document.querySelector('#password').value })
     }).then(function (response) {
