@@ -49,6 +49,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
@@ -200,7 +204,7 @@ fun MobileLibraryScreen(
 
     Column(Modifier.fillMaxSize().background(MobileHomeBackground).navigationBarsPadding()) {
         Row(
-            Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 18.dp, vertical = 12.dp),
+            Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = 18.dp, vertical = 18.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -208,13 +212,23 @@ fun MobileLibraryScreen(
                     .size(52.dp)
                     .clip(RoundedCornerShape(26.dp))
                     .background(Color.White.copy(alpha = .12f))
+                    .semantics {
+                        contentDescription = "Atrás"
+                        role = Role.Button
+                    }
                     .clickable(onClick = onBack),
                 contentAlignment = Alignment.Center
             ) {
                 Text("‹", color = Color.White, style = MaterialTheme.typography.headlineMedium)
             }
             Text(
-                if (library.CollectionType.equals("tvshows", true)) "Series" else "Películas",
+                stringResource(
+                    if (library.CollectionType.equals("tvshows", true)) {
+                        com.klortek.velora.R.string.nav_series
+                    } else {
+                        com.klortek.velora.R.string.nav_movies
+                    }
+                ),
                 color = Color.White,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
@@ -225,6 +239,10 @@ fun MobileLibraryScreen(
                     .size(48.dp)
                     .clip(RoundedCornerShape(24.dp))
                     .background(Color.White.copy(alpha = .1f))
+                    .semantics {
+                        contentDescription = "Ordenar y filtrar"
+                        role = Role.Button
+                    }
                     .clickable { showSortDialog = true },
                 contentAlignment = Alignment.Center
             ) {
