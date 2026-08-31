@@ -1607,3 +1607,7 @@ All notable changes to Velora will be documented in this file.
 
 - Conserva la pista de subtítulos activa al cambiar la calidad de reproducción.
 - Mantiene la reproducción con ExoPlayer como ruta predeterminada en móvil y TV.
+## 1.2.26
+
+- Acota la compilación Android de CI para que una ejecución de Gradle sin salida no bloquee indefinidamente las releases.
+- Conserva subtítulos al cambiar la calidad y mantiene el control táctil de la línea de tiempo.
