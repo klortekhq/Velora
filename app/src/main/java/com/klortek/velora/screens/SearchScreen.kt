@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Mic
@@ -56,6 +57,7 @@ import androidx.tv.material3.IconButtonDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.klortek.velora.components.TvTextField
+import com.klortek.velora.R
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinItem
 import kotlinx.coroutines.Dispatchers
@@ -103,7 +105,7 @@ fun SearchScreen(
     val launchVoiceRecognition: () -> Unit = {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            putExtra(RecognizerIntent.EXTRA_PROMPT, "Di el título que quieres buscar")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, context.getString(R.string.search_voice_prompt))
         }
         
         // Check if voice recognition is available
@@ -186,12 +188,12 @@ fun SearchScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Atrás"
+                    contentDescription = context.getString(R.string.action_back)
                 )
             }
             
             Text(
-                text = "Buscar",
+                text = stringResource(R.string.search_short),
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(start = 16.dp)
@@ -221,7 +223,7 @@ fun SearchScreen(
                 TvTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it; hasSubmittedSearch = false },
-                    placeholder = "Buscar películas y series...",
+                    placeholder = stringResource(R.string.search_movies_series),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Search
@@ -293,7 +295,7 @@ fun SearchScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Mic,
-                    contentDescription = "Búsqueda por voz",
+                    contentDescription = context.getString(R.string.search_voice),
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -310,7 +312,7 @@ fun SearchScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Buscando...",
+                    text = stringResource(R.string.search_loading),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -323,7 +325,7 @@ fun SearchScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Escribe un título o usa la búsqueda por voz",
+                    text = stringResource(R.string.search_empty_prompt),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
