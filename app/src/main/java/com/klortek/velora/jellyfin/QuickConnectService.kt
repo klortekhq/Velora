@@ -68,7 +68,7 @@ class QuickConnectService(
             val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
             
             android.util.Log.d("QuickConnect", "Initiating QuickConnect at: $url")
-            android.util.Log.d("QuickConnect", "DeviceId: $deviceId")
+            android.util.Log.d("QuickConnect", "Device identity prepared")
             android.util.Log.d("QuickConnect", "Authentication header prepared")
             
             val response: HttpResponse = client.post(url) {

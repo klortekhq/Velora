@@ -57,6 +57,7 @@ import com.klortek.velora.playback.JellyfinPlaybackMapper
 import com.klortek.velora.playback.PlaybackDecisionEngine
 import com.klortek.velora.playback.PlaybackPath
 import com.klortek.velora.playback.PlaybackQuality as DecisionQuality
+import com.klortek.velora.security.SensitiveDataRedactor
 import android.widget.FrameLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -958,7 +959,7 @@ fun JellyfinVideoPlayerScreen(
                             quality = playbackQuality
                         )
                     }
-                    Log.d("JellyfinPlayer", "Video URL: $videoUrl")
+                    Log.d("JellyfinPlayer", "Video URL: ${SensitiveDataRedactor.url(videoUrl)}")
                     mediaUrl = videoUrl
                     
                     // Check for next episode if this is an episode
@@ -1313,7 +1314,7 @@ fun JellyfinVideoPlayerScreen(
                                             audioCodec = "aac"
                                         )
                                         
-                                        Log.d("JellyfinPlayer", "🔄 Transcoded URL: $transcodedUrl")
+                                        Log.d("JellyfinPlayer", "🔄 Transcoded URL: ${SensitiveDataRedactor.url(transcodedUrl)}")
                                         
                                         // Create HLS media source for transcoded stream
                                         val hlsMediaSource = HlsMediaSource.Factory(dataSourceFactory)

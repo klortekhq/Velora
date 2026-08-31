@@ -123,7 +123,7 @@ object MpvVeloraLauncher {
             Log.d(TAG, "Resume position: ${resumePositionMs}ms")
         }
         if (subtitleFilePath != null) {
-            Log.d(TAG, "External subtitle: $subtitleFilePath")
+            Log.d(TAG, "External subtitle path provided")
         }
 
         return try {

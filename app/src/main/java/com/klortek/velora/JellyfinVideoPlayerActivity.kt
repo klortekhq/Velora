@@ -24,6 +24,7 @@ import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.player.mpv.MpvTvPlayerActivity
 import com.klortek.velora.player.mpv.MpvUrlBuilder
 import com.klortek.velora.screens.JellyfinVideoPlayerScreen
+import com.klortek.velora.security.SensitiveDataRedactor
 import `is`.xyz.mpv.MPVLib
 
 @UnstableApi
@@ -275,7 +276,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     val transcodeUrl = mediaSource?.TranscodingUrl
                     if (transcodeUrl != null) {
                          finalUrl = if (transcodeUrl.startsWith("http")) transcodeUrl else "$serverUrl$transcodeUrl"
-                         android.util.Log.d("VideoPlayer", "🔥 Using Transcoding URL (Burn-in active): $finalUrl")
+                         android.util.Log.d("VideoPlayer", "🔥 Using Transcoding URL (Burn-in active): ${SensitiveDataRedactor.url(finalUrl)}")
                     } else {
                          android.util.Log.w("VideoPlayer", "⚠️ Transcoding enforced but no URL. Fallback to Direct.")
                          finalUrl = MpvUrlBuilder.buildStreamUrl(serverUrl, itemId, accessToken)
@@ -300,12 +301,12 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                                  codec = subStream.Codec,
                                  path = subStream.Path
                              )
-                             android.util.Log.d("VideoPlayer", "📝 Soft Subtitle URL: $extraSubtitleUrl")
+                             android.util.Log.d("VideoPlayer", "📝 Soft Subtitle URL: ${SensitiveDataRedactor.url(extraSubtitleUrl)}")
                         }
                     }
                 }
 
-                android.util.Log.d("VideoPlayer", "MPV Final URL: $finalUrl")
+                android.util.Log.d("VideoPlayer", "MPV Final URL: ${SensitiveDataRedactor.url(finalUrl)}")
                 
                 // Prioritize local cached subtitle (if any), otherwise use remote soft-sub URL
                 val cachedSubtitlePath = subtitleStreamIndex?.let { streamIndex ->
@@ -390,7 +391,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     return@launch
                 }
 
-                android.util.Log.d("VideoPlayer", "ExoPlayer Live TV source selected: $finalUrl")
+                android.util.Log.d("VideoPlayer", "ExoPlayer Live TV source selected: ${SensitiveDataRedactor.url(finalUrl)}")
                 setContent {
                     JellyfinAppTheme {
                         JellyfinVideoPlayerScreen(

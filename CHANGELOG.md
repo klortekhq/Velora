@@ -2,6 +2,13 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.33
+
+### Security
+
+- Redacted Jellyfin credentials from playback, subtitle and authentication diagnostics.
+- Reduced diagnostic logging of server endpoints, local paths and media URLs.
+
 ## 1.2.32
 
 ### Fixed

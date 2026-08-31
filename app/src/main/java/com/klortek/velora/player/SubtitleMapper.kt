@@ -7,6 +7,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.MediaStream
+import com.klortek.velora.security.SensitiveDataRedactor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -96,7 +97,7 @@ object SubtitleMapper {
             codec = stream.Codec,
             path = stream.Path
         )
-        Log.d(TAG, "   Using HTTP URL: $httpUrl")
+        Log.d(TAG, "   Using authenticated HTTP subtitle URL: ${SensitiveDataRedactor.url(httpUrl)}")
         
         val subtitleUri = Uri.parse(httpUrl)
         
