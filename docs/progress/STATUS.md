@@ -103,6 +103,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Offline download metadata now uses an app-private SQLite index with a
   one-time migration from the former JSON preference store; completed media
   metadata survives process recreation without depending on SharedPreferences.
+- DownloadManager statuses are translated at the offline boundary into
+  provider-neutral Velora states (`QUEUED`, `WAITING_FOR_NETWORK`,
+  `DOWNLOADING`, `PAUSED`, `COMPLETED` and `FAILED`), preparing a future
+  managed-transfer provider without coupling the UI to integer constants.
 - The offline enqueue boundary now enforces the mobile/tablet capability guard
   itself, so TV builds cannot start a download even if a future caller bypasses
   the UI. The mobile episode download control also uses the mobile Material
@@ -200,6 +204,15 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Platform evidence
 
+Release `v1.2.16` is publicly verified with four Android APKs, browser
+archives, Samsung/Tizen and VIDAA bundles, the webOS bundle and separate
+SHA-256 manifests. The only remote branch is `main`.
+
+- The updater now selects the exact mobile or TV APK by asset name instead of
+  assuming the first release asset is installable.
+- Android release CI now validates both mobile and TV unit tests and checks
+  that a version tag matches Android and web metadata before packaging.
+
 | Platform | Source/build state | Hardware/runtime validation |
 | --- | --- | --- |
 | Android mobile/tablet | `assembleMobileDebug` passes with AV1 native decoder; unit tests pass | Hardware validation pending |
@@ -228,6 +241,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   `assembleTvDebug`, `assembleMobileRelease`, and `assembleTvRelease`:
   passing on 2026-08-29. The full four-variant build completed online after
   the offline cache was found incomplete.
+- `testMobileDebugUnitTest` passed on 2026-08-31 after the provider-neutral
+  offline state mapping was added.
 - After synchronizing the repository checkout, `compileMobileDebugKotlin`
   passed again on 2026-08-29; this confirms the tracked offline download
   manager source compiles, including its Android content-URI path.

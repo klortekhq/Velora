@@ -133,8 +133,8 @@ fun UpdateDialog(
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val triggerDownload = {
-                            val apkUrl = release.assets.firstOrNull()?.browserDownloadUrl
+                        val triggerDownload: () -> Unit = {
+                            val apkUrl = UpdateService.apkAssetFor(release, isTv)?.browserDownloadUrl
                             if (apkUrl != null && !isDownloading) {
                                 isDownloading = true
                                 downloadProgress = 0
@@ -180,6 +180,12 @@ fun UpdateDialog(
                                         downloadError = "Download failed: ${e.message}"
                                         isDownloading = false
                                     }
+                                }
+                            } else if (!isDownloading) {
+                                downloadError = if (isTv) {
+                                    "No hay un APK de TV compatible en esta release."
+                                } else {
+                                    "No hay un APK móvil compatible en esta release."
                                 }
                             }
                         }
