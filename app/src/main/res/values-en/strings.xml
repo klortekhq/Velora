@@ -130,4 +130,10 @@
     <string name="person_movies">Movies</string>
     <string name="person_series">Series</string>
     <string name="person_back">Back</string>
+    <string name="home_continue_watching">Continue watching</string>
+    <string name="home_recent_movies">Recently added movies</string>
+    <string name="home_recent_series">Recently added series</string>
+    <string name="home_unwatched">Unfinished</string>
+    <string name="home_popular">Most popular</string>
+    <string name="nav_live_tv">Live TV</string>
 </resources>
