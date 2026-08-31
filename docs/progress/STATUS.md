@@ -41,25 +41,28 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   (direction, favorites, playback state and genre), with a localized reset
   action; the shared query remains covered by unit tests.
 - The album artwork action now starts album playback instead of being a
-  decorative, non-interactive control. This is queued for release `v1.2.39`.
+  decorative, non-interactive control; it is included in verified release
+  `v1.2.40`.
+- Jellyseerr detail actions now use Android string resources instead of
+  hardcoded English labels. This is queued for release `v1.2.41`.
 - The base Spanish resource now keeps Live TV filters and favorite actions in
   Spanish, matching the existing German, French and English locale resources.
-  This is queued for release `v1.2.41`.
+  This is included in verified release `v1.2.40`.
 
 ## Latest verified release
 
-Release `v1.2.39` is publicly verified at
-https://github.com/klortekhq/Velora/releases/tag/v1.2.39. GitHub Actions completed
+Release `v1.2.40` is publicly verified at
+https://github.com/klortekhq/Velora/releases/tag/v1.2.40. GitHub Actions completed
 the Android and web workflows successfully; the release contains the four
-Android APKs, four web/TV bundles and both checksum manifests (in addition to
+Android APKs, five web/TV bundles and both checksum manifests (in addition to
 GitHub's source archives). The published Android APK digests are:
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `Velora-mobile-debug.apk` | `baa78861b3094520e239b9967655fe7dfd1b1325c9dd6ebd8db2cba0ffa1c0d1` |
-| `Velora-mobile-release-unsigned.apk` | `bd88b8c49e78eb250df500a2150307e3ec51bebeccd93d2bb86dc24ea33d2bf3` |
-| `Velora-tv-debug.apk` | `330744f75f55793a620949acb7f71027eb4604175eefb0cbb55068a137bd4dbe` |
-| `Velora-tv-release-unsigned.apk` | `40c040b4a6ec8e8c98d5540e2ff3d2d9467deaa50c0684b7cfeb1414f0175a44` |
+| `Velora-mobile-debug.apk` | `082417d8328d3349fb146c3550fd4f5f2ccfa2fe7332d3cecc6f8dc765a6083c` |
+| `Velora-mobile-release-unsigned.apk` | `53e8b6c45d8f5b694e208b63c3128f9513b5ea25fc7635767995d175006f958c` |
+| `Velora-tv-debug.apk` | `b6d991c7618a285243b9ec22e6c6ec17c1c2fff830b2194b6522cb3a549eb8ab` |
+| `Velora-tv-release-unsigned.apk` | `87d7ba6f5d755fcbe82894dd29dd75a8f83c6e3953d8fbfd08b100b84136561d` |
 
 The release also contains the combined web archives, Samsung/VIDAA/webOS
 bundles and both checksum manifests. Samsung remains an unsigned bundle because
