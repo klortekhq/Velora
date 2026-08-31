@@ -59,8 +59,9 @@ jobs:
         shell: bash
         run: |
           tag_version="${GITHUB_REF_NAME#v}"
-          android_version="$(sed -n 's/.*versionName = "\([^"]*\)".*/\1/p' app/build.gradle.kts | head -n1)"
-          web_version="$(sed -n 's/.*"version": "\([^"]*\)".*/\1/p' web/package.json | head -n1)"
+          android_version="$(awk -F'"' '/versionName =/{print $2; exit}' app/build.gradle.kts)"
+          web_version="$(node -p "require('./web/package.json').version")"
+          echo "Tag=\${tag_version} Android=\${android_version} Web=\${web_version}"
           test "$tag_version" = "$android_version" || { echo "Tag $tag_version != Android $android_version"; exit 1; }
           test "$tag_version" = "$web_version" || { echo "Tag $tag_version != web $web_version"; exit 1; }
 
