@@ -68,6 +68,12 @@
     <string name="login_password">Passwort</string>
     <string name="login_sign_in">Anmelden</string>
     <string name="login_authenticating">Anmeldung…</string>
+    <string name="quick_connect_step_one">Schritt 1: Öffne Jellyfin auf deinem Smartphone oder im Browser</string>
+    <string name="quick_connect_step_two">Schritt 2: Öffne Quick Connect in den Benutzereinstellungen</string>
+    <string name="quick_connect_step_three">Schritt 3: Gib den folgenden Code ein</string>
+    <string name="quick_connect_waiting">Warte auf Autorisierung…</string>
+    <string name="quick_connect_unavailable">Quick Connect nicht verfügbar</string>
+    <string name="quick_connect_initializing">Wird initialisiert…</string>
     <string name="library_recommendations">Empfehlungen</string>
     <string name="library_all">Alle</string>
     <string name="library_empty">Keine Inhalte verfügbar</string>
