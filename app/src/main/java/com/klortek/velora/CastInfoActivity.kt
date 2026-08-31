@@ -5,6 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.jellyfin.JellyfinItem
@@ -45,10 +57,7 @@ class CastInfoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val personId = intent.getStringExtra(EXTRA_PERSON_ID) ?: run {
-            finish()
-            return
-        }
+        val personId = intent.getStringExtra(EXTRA_PERSON_ID)?.trim()?.takeIf { it.isNotEmpty() }
         val personName = intent.getStringExtra(EXTRA_PERSON_NAME) ?: ""
         val personType = intent.getStringExtra(EXTRA_PERSON_TYPE) // Actor, Director, etc.
 
@@ -66,35 +75,44 @@ class CastInfoActivity : ComponentActivity() {
             return
         }
 
+        if (personId == null && personName.isBlank()) {
+            finish()
+            return
+        }
+
         setContent {
             JellyfinAppTheme {
-                CastInfoScreen(
-                    personId = personId,
-                    personName = personName,
-                    personType = personType, // Pass the type (Actor, Director, etc.)
-                    apiService = apiService,
-                    onNavigateToItem = { item ->
-                        // Navigate to movie or series details
-                        when (item.Type) {
-                            "Movie" -> {
-                                val intent = MovieDetailsActivity.createIntent(this, item)
-                                startActivity(intent)
-                            }
-                            "Series" -> {
-                                // Auto-focus on the next episode the user needs to watch
-                                val intent = SeriesDetailsActivity.createIntent(
-                                    context = this,
-                                    item = item,
-                                    autoFocusNextUp = true
-                                )
-                                startActivity(intent)
-                            }
-                        }
-                    },
-                    onBack = {
-                        finish()
+                var resolvedPersonId by remember { mutableStateOf(personId) }
+                var resolving by remember { mutableStateOf(personId == null) }
+
+                LaunchedEffect(personId, personName) {
+                    if (resolvedPersonId == null) {
+                        resolvedPersonId = apiService.findPersonIdByName(personName)
+                        resolving = false
                     }
-                )
+                }
+
+                when {
+                    resolvedPersonId != null -> CastInfoScreen(
+                        personId = resolvedPersonId!!,
+                        personName = personName,
+                        personType = personType,
+                        apiService = apiService,
+                        onNavigateToItem = { item ->
+                            when (item.Type) {
+                                "Movie" -> startActivity(MovieDetailsActivity.createIntent(this@CastInfoActivity, item))
+                                "Series" -> startActivity(SeriesDetailsActivity.createIntent(this@CastInfoActivity, item, autoFocusNextUp = true))
+                            }
+                        },
+                        onBack = { finish() }
+                    )
+                    resolving -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                    else -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("No se ha encontrado información de esta persona", color = Color.White)
+                    }
+                }
             }
         }
     }

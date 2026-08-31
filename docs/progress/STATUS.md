@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.44 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.45 across Android, webOS,
   Samsung and VIDAA manifests.
 - Release candidate `1.2.38` includes live application of preferred audio and
   subtitle settings to the existing Media3 player; Android compilation and 52
@@ -52,7 +52,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Latest verified release
 
-Release `v1.2.44` is tagged and pushed; its Android and web workflows are the
+Release `v1.2.45` is prepared from the actor-navigation fix; its Android and web workflows are the
 current release gate and their public assets have not yet been independently
 verified from this host. The tag includes the localized subtitle download
 dialogs and synchronized platform metadata.
@@ -186,6 +186,9 @@ digests are:
   browser and Smart TV bundles. GitHub authentication is unavailable from this
   host, so `v1.2.44` assets remain unverified here; no publication is claimed
   beyond the pushed tag and configured workflow.
+- Person navigation now keeps actor/crew cards actionable even when a lightweight
+  Jellyfin item response omits the person ID: Velora resolves the name through
+  Jellyfin before opening the filmography, while retaining direct-ID navigation.
 - The mobile library header now leaves clear space below the Android status bar,
   exposes an accessible, full-size touch target for the sort/filter action, and
   uses localized movie/series titles.

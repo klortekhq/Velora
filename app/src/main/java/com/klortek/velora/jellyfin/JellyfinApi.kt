@@ -906,6 +906,29 @@ class JellyfinApiService(
         }
     }
 
+    /** Resolve a person returned without an id in a lightweight item response. */
+    suspend fun findPersonIdByName(name: String): String? {
+        val query = name.trim()
+        if (query.isEmpty()) return null
+        return try {
+            val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+            val url = URLBuilder().takeFrom("${base}Persons").apply {
+                parameters.append("UserId", userId)
+                parameters.append("SearchTerm", query)
+                parameters.append("Limit", "10")
+            }.buildString()
+            val response: ItemsResponse = client.get(url) {
+                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"Android\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
+            }.body()
+            response.Items.firstOrNull { it.Name.equals(query, ignoreCase = true) }?.Id
+                ?: response.Items.firstOrNull()?.Id
+        } catch (e: Exception) {
+            android.util.Log.w("JellyfinAPI", "Unable to resolve person from name")
+            null
+        }
+    }
+
     // Get person image URL
     fun getPersonImageUrl(personId: String, imageType: String = "Primary", tag: String? = null, maxWidth: Int? = null, maxHeight: Int? = null): String {
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
