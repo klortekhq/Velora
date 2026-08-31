@@ -40,6 +40,7 @@
     <string name="action_back">Atrás</string>
     <string name="downloads_empty">No hay contenido descargado</string>
     <string name="offline_available">Disponible sin conexión</string>
+    <string name="offline_integrity_failed">El contenido descargado está dañado. Vuelve a descargarlo.</string>
     <string name="downloading_progress">Descargando… %1$d%%</string>
     <string name="action_delete">Eliminar</string>
     <string name="settings_offline_storage_limit">Límite de almacenamiento sin conexión</string>

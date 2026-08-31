@@ -7,7 +7,10 @@ import android.os.Environment
 import android.os.StatFs
 import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.platform.PlatformCapabilities
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import java.io.InputStream
 import java.io.File
 
 data class OfflineDownload(
@@ -23,7 +26,9 @@ data class OfflineDownload(
     val status: Int = DownloadManager.STATUS_PENDING,
     val reason: Int = 0,
     val bytesDownloaded: Long = 0L,
-    val totalBytes: Long = -1L
+    val totalBytes: Long = -1L,
+    /** SHA-256 of the managed media, calculated on first offline playback. */
+    val checksumSha256: String? = null
 ) {
     /**
      * DownloadManager may return either a file:// URI or a provider-backed
@@ -142,6 +147,25 @@ object OfflineDownloadManager {
         deleteEntry(context, entry)
     }
 
+    /** Verify local media before playback, establishing a digest on first use. */
+    suspend fun verifyIntegrity(context: Context, entry: OfflineDownload): Boolean = withContext(Dispatchers.IO) {
+        val value = entry.localPath ?: return@withContext false
+        val input = openLocalStream(context, value) ?: return@withContext false
+        input.use {
+            val actual = OfflineIntegrityVerifier.sha256(it)
+            val expected = entry.checksumSha256
+            if (expected != null && !expected.equals(actual, ignoreCase = true)) {
+                return@withContext false
+            }
+            if (expected == null) {
+                save(context, load(context).map { current ->
+                    if (current.downloadId == entry.downloadId) current.copy(checksumSha256 = actual) else current
+                })
+            }
+            true
+        }
+    }
+
     /**
      * DownloadManager can expose provider-backed `content://` URIs. Treating
      * those as filesystem paths silently leaves the provider-owned media
@@ -158,6 +182,15 @@ object OfflineDownloadManager {
     }
 
     private fun deleteEntry(context: Context, entry: OfflineDownload) = save(context, load(context).filterNot { it.downloadId == entry.downloadId })
+
+    private fun openLocalStream(context: Context, value: String): InputStream? {
+        val uri = runCatching { Uri.parse(value) }.getOrNull()
+        return when (uri?.scheme?.lowercase()) {
+            "content" -> runCatching { context.contentResolver.openInputStream(uri) }.getOrNull()
+            "file" -> uri.path?.let { runCatching { File(it).inputStream() }.getOrNull() }
+            else -> runCatching { File(value).inputStream() }.getOrNull()
+        }
+    }
 
     fun load(context: Context): List<OfflineDownload> {
         val db = database(context)
