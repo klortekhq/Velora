@@ -2,6 +2,14 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.34
+
+### Fixed
+
+- Completed the Live TV translations for every Android locale already supported
+  by Velora, including channel actions, programme details and loading/error
+  states.
+
 ## 1.2.33
 
 ### Security
