@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -82,7 +83,10 @@ class OfflineDownloadsActivity : ComponentActivity() {
     @androidx.compose.runtime.Composable
     private fun OfflineDownloadsScreen(onBack: () -> Unit, onPlay: (OfflineDownload) -> Unit, onDelete: (OfflineDownload) -> Unit) {
         refresh
-        val entries = OfflineDownloadManager.refresh(this)
+        var entries by remember { mutableStateOf(emptyList<OfflineDownload>()) }
+        LaunchedEffect(refresh) {
+            entries = OfflineDownloadManager.refresh(this@OfflineDownloadsActivity)
+        }
         LaunchedEffect(entries.any { !it.isComplete }) {
             while (entries.any { !it.isComplete }) {
                 kotlinx.coroutines.delay(1500)
