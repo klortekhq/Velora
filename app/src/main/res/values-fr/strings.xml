@@ -31,6 +31,10 @@
     <string name="nav_settings">Paramètres</string>
     <string name="search_movies_series">Rechercher des films et des séries</string>
     <string name="search_short">Rechercher</string>
+    <string name="search_voice_prompt">Dites le titre que vous souhaitez rechercher</string>
+    <string name="search_voice">Recherche vocale</string>
+    <string name="search_loading">Recherche…</string>
+    <string name="search_empty_prompt">Saisissez un titre ou utilisez la recherche vocale</string>
     <string name="action_play">Lire</string>
     <string name="action_back">Retour</string>
     <string name="downloads_empty">Aucun contenu téléchargé</string>
