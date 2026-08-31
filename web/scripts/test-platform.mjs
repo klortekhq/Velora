@@ -4,6 +4,7 @@ import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../platform.js', import.meta.url), 'utf8');
 const appSource = fs.readFileSync(new URL('../app.js', import.meta.url), 'utf8');
+const packageJson = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
 assert.doesNotMatch(appSource, /\/Images\/Primary\?api_key=/);
 assert.match(appSource, /data-velora-image-id/);
@@ -44,7 +45,7 @@ for (const [userAgent, expected] of [
 console.log('platform capability tests passed');
 
 assert.match(appSource, /sessionStorage/);
-assert.match(appSource, /var APP_VERSION = '1\.2\.37'/);
+assert.match(appSource, new RegExp(`var APP_VERSION = '${packageJson.version.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}'`));
 assert.match(appSource, /selected !== 'auto' && TRANSLATIONS\[selected\]/);
 assert.match(appSource, /X-Emby-Token/);
 assert.match(appSource, /media-proxy-sw\.js/);
