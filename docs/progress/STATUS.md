@@ -51,6 +51,11 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Latest verified release
 
+The source commit `v1.2.54` and tag are pushed to `main`/`v1.2.54`. The tag
+workflows are configured to build the four Android APK variants and the web/
+Smart TV packages into the same GitHub release; asset completion is still
+pending asynchronous GitHub Actions verification from this host.
+
 Release `v1.2.52` is prepared from person-navigation/i18n/home-localization, accessibility, Apple foundation and private offline storage changes; its Android and web workflows are the
 current release gate and their public assets have not yet been independently
 verified from this host. The tag includes the localized subtitle download
