@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,7 +66,6 @@ fun CastInfoScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
     var personDetails by remember { mutableStateOf<PersonDetails?>(null) }
     var filmography by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
@@ -371,7 +369,6 @@ private fun FilmographyCard(
     onFocused: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
 
     val imageUrl = remember(item) {
         item.ImageTags?.get("Primary")?.let { tag ->
@@ -388,14 +385,13 @@ private fun FilmographyCard(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Card(
-            onClick = if (isTv) onClick else ({}),
+            // Use the same single action for touch and D-pad navigation. The
+            // previous mobile-only outer clickable sat behind a no-op Card
+            // click handler, so taps could be consumed without navigating.
+            onClick = onClick,
             modifier = Modifier
                 .width(cardWidth)
                 .height(cardHeight)
-                // TV Material cards are focus-first and did not consistently
-                // receive finger taps on phones/tablets. Keep their D-pad
-                // behavior on TV and add an explicit touch target elsewhere.
-                .then(if (!isTv) Modifier.clickable(onClick = onClick) else Modifier)
                 .onFocusChanged { 
                     if (it.isFocused) {
                         onFocused()

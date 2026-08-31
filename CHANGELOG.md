@@ -2,6 +2,11 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.36
+
+- Fixed touch activation for actor filmography cards on mobile and tablet;
+  the same callback is now shared with TV remote activation.
+
 ## 1.2.35
 
 ### Added
