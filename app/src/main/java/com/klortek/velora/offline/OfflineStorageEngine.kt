@@ -1,0 +1,57 @@
+package com.klortek.velora.offline
+
+import android.content.Context
+import android.net.Uri
+import com.klortek.velora.platform.PlatformCapabilities
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+
+/** Moves completed provider downloads into storage owned by Velora. */
+object OfflineStorageEngine {
+    private const val MEDIA_DIRECTORY = "offline/media"
+
+    suspend fun materialize(context: Context, entry: OfflineDownload): OfflineDownload? = withContext(Dispatchers.IO) {
+        if (!PlatformCapabilities.supportsOfflineDownloads || !entry.isComplete) return@withContext null
+        val source = entry.localPath ?: return@withContext null
+        if (source.startsWith("file://${context.filesDir.absolutePath}/$MEDIA_DIRECTORY/")) return@withContext entry
+
+        val root = File(context.filesDir, MEDIA_DIRECTORY).apply { mkdirs() }
+        val destination = File(root, "${entry.downloadId}.media")
+        val temporary = File(root, "${entry.downloadId}.part")
+        val input = open(context, source) ?: return@withContext null
+        try {
+            input.use { inputStream ->
+                FileOutputStream(temporary).use { output ->
+                    inputStream.copyTo(output, DEFAULT_BUFFER_SIZE)
+                    output.fd.sync()
+                }
+            }
+            val digest = FileInputStream(temporary).use { OfflineIntegrityVerifier.sha256(it) }
+            if (entry.checksumSha256 != null && !entry.checksumSha256.equals(digest, ignoreCase = true)) {
+                temporary.delete()
+                return@withContext null
+            }
+            if (destination.exists()) destination.delete()
+            check(temporary.renameTo(destination)) { "Could not commit offline media" }
+            val updated = entry.copy(localPath = Uri.fromFile(destination).toString(), checksumSha256 = digest)
+            OfflineDownloadManager.persist(context, updated)
+            context.getSystemService(android.app.DownloadManager::class.java).remove(entry.downloadId)
+            updated
+        } catch (_: Exception) {
+            temporary.delete()
+            null
+        }
+    }
+
+    private fun open(context: Context, value: String) = runCatching {
+        val uri = Uri.parse(value)
+        when (uri.scheme?.lowercase()) {
+            "content" -> context.contentResolver.openInputStream(uri)
+            "file" -> uri.path?.let(::File)?.inputStream()
+            else -> File(value).inputStream()
+        }
+    }.getOrNull()
+}

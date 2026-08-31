@@ -218,6 +218,15 @@ object OfflineDownloadManager {
         return migrated
     }
 
+    internal fun persist(context: Context, entry: OfflineDownload) {
+        val entries = load(context).let { current ->
+            if (current.any { it.downloadId == entry.downloadId }) {
+                current.map { if (it.downloadId == entry.downloadId) entry else it }
+            } else current + entry
+        }
+        save(context, entries)
+    }
+
     private fun save(context: Context, entries: List<OfflineDownload>) {
         val db = database(context)
         db.replaceAll(entries)
