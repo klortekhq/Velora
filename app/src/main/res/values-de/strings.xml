@@ -123,4 +123,11 @@
     <string name="subtitle_login_steps">1. Kostenlosen API-Schlüssel erhalten: opensubtitles.com/consumers\n2. Kostenloses Konto erstellen: opensubtitles.com</string>
     <string name="subtitle_cancel">Abbrechen</string>
     <string name="subtitle_settings">Einstellungen</string>
+    <string name="person_loading">Wird geladen…</string>
+    <string name="person_not_found">Keine Informationen zu dieser Person gefunden</string>
+    <string name="person_birth">Geboren: %1$s</string>
+    <string name="person_death">Gestorben: %1$s</string>
+    <string name="person_movies">Filme</string>
+    <string name="person_series">Serien</string>
+    <string name="person_back">Zurück</string>
 </resources>

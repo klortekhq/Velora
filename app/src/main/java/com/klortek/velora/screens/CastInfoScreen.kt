@@ -39,6 +39,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,6 +53,7 @@ import coil.request.ImageRequest
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinItem
 import com.klortek.velora.jellyfin.PersonDetails
+import com.klortek.velora.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -128,7 +130,7 @@ fun CastInfoScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Cargando...",
+                    text = stringResource(R.string.person_loading),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
@@ -236,7 +238,7 @@ fun CastInfoScreen(
                                 personDetails?.birthDateValue?.let { birthDate ->
                                     val formattedDate = formatBirthDate(birthDate)
                                     Text(
-                                        text = "Nacimiento: $formattedDate",
+                                        text = stringResource(R.string.person_birth, formattedDate),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                     )
@@ -246,7 +248,7 @@ fun CastInfoScreen(
                                 personDetails?.deathDateValue?.let { deathDate ->
                                     val formattedDate = formatBirthDate(deathDate)
                                     Text(
-                                        text = "Fallecimiento: $formattedDate",
+                                        text = stringResource(R.string.person_death, formattedDate),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                     )
@@ -286,7 +288,7 @@ fun CastInfoScreen(
                 if (movies.isNotEmpty()) {
                     item {
                         Text(
-                            text = "Películas",
+                            text = stringResource(R.string.person_movies),
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.SemiBold,
@@ -321,7 +323,7 @@ fun CastInfoScreen(
                 if (tvShows.isNotEmpty()) {
                     item {
                         Text(
-                                        text = "Series",
+                                        text = stringResource(R.string.person_series),
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.SemiBold,
