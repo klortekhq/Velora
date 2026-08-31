@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.22 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.23 across Android, webOS,
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
@@ -52,6 +52,13 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - The Android player now reapplies the selected aspect mode after every Media3
   `VideoSize` update, preventing fullscreen or stream changes from silently
   restoring the source ratio.
+- The login form now uses an adaptive, bounded and vertically scrollable layout
+  with IME-safe padding, so credentials and actions remain visible on short
+  phones, tablets and TVs.
+- ExoPlayer subtitle policy now treats `auto` as a server/stream decision,
+  disables the entire text renderer for `off`, re-enables it for manual
+  selection, and carries the active Jellyfin subtitle index into quality and
+  transcode URL requests.
 - The web client now scopes Jellyfin tokens and user IDs to `sessionStorage`,
   migrates legacy localStorage values once, and removes the durable token copy;
   server URL and non-sensitive UI preferences remain persistent.
@@ -217,6 +224,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Release `v1.2.22` is publicly verified with 11 assets, including mobile and
   TV debug/release APKs, web packages, Samsung/VIDAA/webOS bundles and
   checksum manifests: https://github.com/klortekhq/Velora/releases/tag/v1.2.22
+- Release `v1.2.23` contains the adaptive login-layout fix; its Android and
+  web artifacts are pending the release workflow and hardware validation.
 
 ## Explicitly incomplete or requiring verification
 
@@ -228,6 +237,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   behind the trailer integration.
 - The playback contract is introduced; platform-specific capability population
   and runtime validation remain incomplete.
+- Runtime validation is still required for the revised subtitle behavior,
+  quality switching and the login layout on physical phone/TV hardware.
 - Apple iOS/iPadOS/tvOS clients are not present/verified.
 - VIDAA support is not validated on a real device or certified runtime.
 - Offline queue/storage recovery, persistence of integrity metadata, settings

@@ -1,7 +1,7 @@
 {
   "name": "Velora",
   "id": "com.klortek.velora",
-  "version": "1.2.22",
+  "version": "1.2.23",
   "kind": "hosted-html5",
   "entry": "index.html",
   "vendor": "Klørtek",
