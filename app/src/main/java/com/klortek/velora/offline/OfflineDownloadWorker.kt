@@ -11,6 +11,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.security.MessageDigest
 
 /** App-owned transfer worker. Credentials are read from the Keystore-backed config. */
 class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
@@ -24,8 +25,15 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         if (config.serverUrl.isBlank() || config.accessToken.isBlank()) return@withContext Result.failure()
 
         val destinationRoot = File(applicationContext.filesDir, "offline/media").apply { mkdirs() }
-        val temporary = File(destinationRoot, "${workName.hashCode()}.part")
-        val destination = File(destinationRoot, "${workName.hashCode()}.media")
+        val fileKey = stableFileKey(workName)
+        val temporary = File(destinationRoot, "$fileKey.part")
+        val destination = File(destinationRoot, "$fileKey.media")
+        // v1.2.55 used Kotlin hashCode() for these paths. Adopt the stable
+        // key without abandoning an interrupted transfer during migration.
+        val legacyTemporary = File(destinationRoot, "${workName.hashCode()}.part")
+        val legacyDestination = File(destinationRoot, "${workName.hashCode()}.media")
+        if (!temporary.exists() && legacyTemporary.exists()) legacyTemporary.renameTo(temporary)
+        if (!destination.exists() && legacyDestination.exists()) legacyDestination.renameTo(destination)
         val existingBytes = temporary.length().coerceAtLeast(0L)
         val requestUrl = OfflineDownloadRequest.url(config.serverUrl, itemId, sourceId, quality)
         val connection = (URL(requestUrl).openConnection() as HttpURLConnection).apply {
@@ -102,4 +110,9 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         const val KEY_BYTES = "bytes"
         const val KEY_TOTAL_BYTES = "total_bytes"
     }
+
+    private fun stableFileKey(value: String): String = MessageDigest.getInstance("SHA-256")
+        .digest(value.toByteArray(Charsets.UTF_8))
+        .joinToString("") { byte -> "%02x".format(byte) }
+        .take(32)
 }
