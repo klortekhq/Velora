@@ -59,6 +59,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   disables the entire text renderer for `off`, re-enables it for manual
   selection, and carries the active Jellyfin subtitle index into quality and
   transcode URL requests.
+- The mobile video surface now toggles the controls even when the native
+  PlayerView consumes the touch-up event; overlaid child buttons retain their
+  own touch handling.
 - The web client now scopes Jellyfin tokens and user IDs to `sessionStorage`,
   migrates legacy localStorage values once, and removes the durable token copy;
   server URL and non-sensitive UI preferences remain persistent.
@@ -239,6 +242,8 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   and runtime validation remain incomplete.
 - Runtime validation is still required for the revised subtitle behavior,
   quality switching and the login layout on physical phone/TV hardware.
+- Runtime validation is also still required for touch control toggling over
+  SurfaceView/PlayerView on real mobile hardware.
 - Apple iOS/iPadOS/tvOS clients are not present/verified.
 - VIDAA support is not validated on a real device or certified runtime.
 - Offline queue/storage recovery, persistence of integrity metadata, settings
