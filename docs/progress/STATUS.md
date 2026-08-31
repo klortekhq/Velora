@@ -33,6 +33,27 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
+
+## Latest verified release
+
+Release `v1.2.30` is published at
+https://github.com/klortekhq/Velora/releases/tag/v1.2.30. The Android workflow
+completed successfully and the release contains the four expected APKs:
+
+- `Velora-mobile-debug.apk`
+- `Velora-mobile-release-unsigned.apk`
+- `Velora-tv-debug.apk`
+- `Velora-tv-release-unsigned.apk`
+
+The same release also contains the combined web archive plus Samsung, webOS and
+VIDAA bundles and the `SHA256SUMS.txt` manifest. Published APK digests are:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| `Velora-mobile-debug.apk` | `52178390725a4bc8366138ec3cea85dac858cdf8992b56d432557a288c5229b3` |
+| `Velora-mobile-release-unsigned.apk` | `fe4298f57e292ad5a2cbaa0751535dcd95f6b5306629a976be5fd4c7394c3618` |
+| `Velora-tv-debug.apk` | `7ebf5e854e731a638b6020d56786cc037cfe376989388b6306fb464c155d6874` |
+| `Velora-tv-release-unsigned.apk` | `6dfe2f5359f77321c5ecb71cc05c7a1e6a50db00331c2ca2648c6c8e0bb4ce2c` |
 - Android-managed downloads and the MPV fallback now also keep the Jellyfin
   token in request headers rather than embedding it in playback/download URLs.
 - Quick Connect diagnostics no longer log access-token fragments or polling
