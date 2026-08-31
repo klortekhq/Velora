@@ -64,6 +64,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -675,7 +676,7 @@ fun MovieRequestScreen(
                                     strokeWidth = 2.dp
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
-                                androidx.compose.material3.Text("Requesting...", fontSize = 14.sp)
+                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.jellyseerr_requesting_short), fontSize = 14.sp)
                             } else {
                                 androidx.compose.material3.Icon(
                                     imageVector = when {
