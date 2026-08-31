@@ -52,9 +52,10 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 
 ## Latest verified release
 
-Release `v1.2.43` is tagged and pushed; its Android and web workflows are the
+Release `v1.2.44` is tagged and pushed; its Android and web workflows are the
 current release gate and their public assets have not yet been independently
-verified from this host.
+verified from this host. The tag includes the localized subtitle download
+dialogs and synchronized platform metadata.
 
 Release `v1.2.42` is publicly verified at
 https://github.com/klortekhq/Velora/releases/tag/v1.2.42. GitHub Actions completed
