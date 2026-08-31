@@ -702,17 +702,17 @@ private fun QuickConnectLoginContent(
     val content = @Composable {
         // Instructions
         Text(
-            text = "Paso 1: Abre Jellyfin en tu móvil o navegador",
+            text = stringResource(com.klortek.velora.R.string.quick_connect_step_one),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "Paso 2: Ve a Quick Connect en los ajustes de usuario",
+            text = stringResource(com.klortek.velora.R.string.quick_connect_step_two),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "Paso 3: Introduce el código siguiente",
+            text = stringResource(com.klortek.velora.R.string.quick_connect_step_three),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -726,7 +726,7 @@ private fun QuickConnectLoginContent(
 
         if (isPolling && quickConnectCode != null) {
             Text(
-                text = "Esperando autorización…",
+                text = stringResource(com.klortek.velora.R.string.quick_connect_waiting),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                 modifier = Modifier.padding(top = 8.dp)
@@ -795,7 +795,7 @@ private fun QuickConnectCodeBox(
         }
     } else if (isUnavailable) {
         Text(
-                text = "Quick Connect no disponible",
+                text = stringResource(com.klortek.velora.R.string.quick_connect_unavailable),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.error,
             modifier = Modifier.padding(vertical = 16.dp)
@@ -813,7 +813,7 @@ private fun QuickConnectCodeBox(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Inicializando…",
+                text = stringResource(com.klortek.velora.R.string.quick_connect_initializing),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
