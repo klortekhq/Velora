@@ -178,6 +178,14 @@ digests are:
 - The mobile bottom navigation no longer horizontally scrolls actions off-screen;
   all available destinations are distributed across the device width, including
   Search and Settings.
+- Current verification on 2026-08-31: `node web/scripts/test-platform.mjs`,
+  `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
+  `:app:compileMobileDebugKotlin` and `:app:compileTvDebugKotlin` pass locally.
+- Release automation is present for the same tag release: the Android workflow
+  publishes four APKs plus checksums, while the web workflow publishes the
+  browser and Smart TV bundles. GitHub authentication is unavailable from this
+  host, so `v1.2.44` assets remain unverified here; no publication is claimed
+  beyond the pushed tag and configured workflow.
 - The mobile library header now leaves clear space below the Android status bar,
   exposes an accessible, full-size touch target for the sort/filter action, and
   uses localized movie/series titles.
