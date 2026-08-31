@@ -183,7 +183,7 @@ private fun AlbumInfoPanel(
 
         // Album artwork
         Card(
-            onClick = {},
+            onClick = onPlayAll,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f),
