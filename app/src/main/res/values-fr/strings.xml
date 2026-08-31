@@ -86,4 +86,5 @@
     <string name="library_direction">Direction</string>
     <string name="library_ascending">Croissant</string>
     <string name="library_descending">Décroissant</string>
+    <string name="library_reset_filters">Réinitialiser les filtres</string>
 </resources>

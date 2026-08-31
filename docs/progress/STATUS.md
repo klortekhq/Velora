@@ -33,6 +33,9 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Samsung and VIDAA manifests.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
+- Mobile/tablet library sorting and filtering preferences now persist locally
+  (direction, favorites, playback state and genre), with a localized reset
+  action; the shared query remains covered by unit tests.
 
 ## Latest verified release
 

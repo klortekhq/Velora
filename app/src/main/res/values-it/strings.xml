@@ -14,4 +14,5 @@
     <string name="settings_subtitle_auto">Automatici</string>
     <string name="settings_subtitle_language">Lingua dei sottotitoli</string>
     <string name="settings_subtitle_language_description">Automatico segue la preferenza del server; le altre scelte preferiscono questa lingua se disponibile.</string>
+    <string name="library_reset_filters">Reimposta filtri</string>
 </resources>

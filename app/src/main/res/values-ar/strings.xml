@@ -14,4 +14,5 @@
     <string name="settings_subtitle_auto">تلقائية</string>
     <string name="settings_subtitle_language">لغة الترجمة</string>
     <string name="settings_subtitle_language_description">يتبع التلقائي إعداد الخادم؛ وتفضل الخيارات الأخرى هذه اللغة عند توفرها.</string>
+    <string name="library_reset_filters">إعادة ضبط عوامل التصفية</string>
 </resources>

@@ -260,10 +260,18 @@ fun MobileLibraryScreen(
             }
         )
     }
-    var sortDescending by remember { mutableStateOf(false) }
-    var favoritesOnly by remember { mutableStateOf(false) }
-    var playbackFilter by remember { mutableStateOf(LibraryPlaybackFilter.All) }
-    var selectedGenre by remember { mutableStateOf<String?>(null) }
+    var sortDescending by remember { mutableStateOf(settings.librarySortDescending) }
+    var favoritesOnly by remember { mutableStateOf(settings.libraryFavoritesOnly) }
+    var playbackFilter by remember {
+        mutableStateOf(
+            when (settings.libraryPlaybackFilter) {
+                "Watched" -> LibraryPlaybackFilter.Watched
+                "Unwatched" -> LibraryPlaybackFilter.Unwatched
+                else -> LibraryPlaybackFilter.All
+            }
+        )
+    }
+    var selectedGenre by remember { mutableStateOf(settings.libraryGenreFilter) }
     var showSortDialog by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableStateOf(if (recommendations.isNotEmpty()) 0 else 1) }
     val availableGenres = remember(items) { availableLibraryGenres(items) }
@@ -405,23 +413,58 @@ fun MobileLibraryScreen(
                             settings.setSortType("CommunityRating")
                         }
                         Text(stringResource(com.klortek.velora.R.string.library_filters), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
-                        MobileLibraryCheckOption(stringResource(com.klortek.velora.R.string.library_favorites), favoritesOnly) { favoritesOnly = !favoritesOnly }
+                        MobileLibraryCheckOption(stringResource(com.klortek.velora.R.string.library_favorites), favoritesOnly) {
+                            favoritesOnly = !favoritesOnly
+                            settings.libraryFavoritesOnly = favoritesOnly
+                        }
                         Text(stringResource(com.klortek.velora.R.string.library_playback_state), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
-                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_all_playback), playbackFilter == LibraryPlaybackFilter.All) { playbackFilter = LibraryPlaybackFilter.All }
-                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_watched), playbackFilter == LibraryPlaybackFilter.Watched) { playbackFilter = LibraryPlaybackFilter.Watched }
-                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_unwatched), playbackFilter == LibraryPlaybackFilter.Unwatched) { playbackFilter = LibraryPlaybackFilter.Unwatched }
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_all_playback), playbackFilter == LibraryPlaybackFilter.All) {
+                            playbackFilter = LibraryPlaybackFilter.All
+                            settings.libraryPlaybackFilter = "All"
+                        }
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_watched), playbackFilter == LibraryPlaybackFilter.Watched) {
+                            playbackFilter = LibraryPlaybackFilter.Watched
+                            settings.libraryPlaybackFilter = "Watched"
+                        }
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_unwatched), playbackFilter == LibraryPlaybackFilter.Unwatched) {
+                            playbackFilter = LibraryPlaybackFilter.Unwatched
+                            settings.libraryPlaybackFilter = "Unwatched"
+                        }
                         if (availableGenres.isNotEmpty()) {
                             Text(stringResource(com.klortek.velora.R.string.library_genre), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
-                            MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_all_genres), selectedGenre == null) { selectedGenre = null }
+                            MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_all_genres), selectedGenre == null) {
+                                selectedGenre = null
+                                settings.libraryGenreFilter = null
+                            }
                             availableGenres.forEach { genre ->
                                 MobileLibrarySortOption(localizedGenreName(genre), selectedGenre.equals(genre, ignoreCase = true)) {
                                     selectedGenre = genre
+                                    settings.libraryGenreFilter = genre
                                 }
                             }
                         }
                         Text(stringResource(com.klortek.velora.R.string.library_direction), color = MobileHomeCyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp))
-                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_ascending), !sortDescending) { sortDescending = false }
-                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_descending), sortDescending) { sortDescending = true }
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_ascending), !sortDescending) {
+                            sortDescending = false
+                            settings.librarySortDescending = false
+                        }
+                        MobileLibrarySortOption(stringResource(com.klortek.velora.R.string.library_descending), sortDescending) {
+                            sortDescending = true
+                            settings.librarySortDescending = true
+                        }
+                        androidx.compose.material3.TextButton(
+                            onClick = {
+                                sortDescending = false
+                                favoritesOnly = false
+                                playbackFilter = LibraryPlaybackFilter.All
+                                selectedGenre = null
+                                settings.librarySortDescending = false
+                                settings.libraryFavoritesOnly = false
+                                settings.libraryPlaybackFilter = "All"
+                                settings.libraryGenreFilter = null
+                            },
+                            modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
+                        ) { Text(stringResource(com.klortek.velora.R.string.library_reset_filters)) }
                         androidx.compose.material3.OutlinedButton(
                             onClick = { showSortDialog = false },
                             modifier = Modifier.fillMaxWidth().padding(top = 12.dp)

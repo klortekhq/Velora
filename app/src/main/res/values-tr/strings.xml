@@ -14,4 +14,5 @@
     <string name="settings_subtitle_auto">Otomatik</string>
     <string name="settings_subtitle_language">Altyazı dili</string>
     <string name="settings_subtitle_language_description">Otomatik sunucu ayarını izler; diğer seçenekler kullanılabiliyorsa bu dili tercih eder.</string>
+    <string name="library_reset_filters">Filtreleri sıfırla</string>
 </resources>

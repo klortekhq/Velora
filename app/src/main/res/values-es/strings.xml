@@ -119,4 +119,5 @@
     <string name="library_direction">Dirección</string>
     <string name="library_ascending">Ascendente</string>
     <string name="library_descending">Descendente</string>
+    <string name="library_reset_filters">Restablecer filtros</string>
 </resources>
