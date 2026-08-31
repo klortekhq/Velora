@@ -2,6 +2,14 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.35
+
+### Added
+
+- Persisted mobile/tablet library sorting and filtering preferences, including
+  direction, favorites, playback state and genre.
+- Added a localized reset-filters action.
+
 ## 1.2.34
 
 ### Fixed
