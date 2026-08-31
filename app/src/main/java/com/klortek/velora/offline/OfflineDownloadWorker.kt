@@ -26,10 +26,12 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         val destinationRoot = File(applicationContext.filesDir, "offline/media").apply { mkdirs() }
         val temporary = File(destinationRoot, "${workName.hashCode()}.part")
         val destination = File(destinationRoot, "${workName.hashCode()}.media")
+        val existingBytes = temporary.length().coerceAtLeast(0L)
         val requestUrl = OfflineDownloadRequest.url(config.serverUrl, itemId, sourceId, quality)
         val connection = (URL(requestUrl).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
             setRequestProperty("X-Emby-Token", config.accessToken)
+            if (existingBytes > 0L) setRequestProperty("Range", "bytes=$existingBytes-")
             connectTimeout = 20_000
             readTimeout = 60_000
             instanceFollowRedirects = true
@@ -37,12 +39,21 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         try {
             connection.connect()
             if (connection.responseCode == 401 || connection.responseCode == 403) return@withContext Result.failure()
+            if (connection.responseCode == 416) {
+                temporary.delete()
+                return@withContext Result.retry()
+            }
             if (connection.responseCode !in 200..299) return@withContext Result.retry()
-            val total = connection.contentLengthLong
-            var copied = 0L
+            val resumed = existingBytes > 0L && connection.responseCode == HttpURLConnection.HTTP_PARTIAL
+            if (!resumed && existingBytes > 0L) temporary.delete()
+            val startingBytes = if (resumed) existingBytes else 0L
+            val total = if (resumed) {
+                connection.contentLengthLong.takeIf { it >= 0L }?.plus(startingBytes) ?: -1L
+            } else connection.contentLengthLong
+            var copied = startingBytes
             setProgress(androidx.work.workDataOf(KEY_TOTAL_BYTES to total))
             connection.inputStream.use { input ->
-                FileOutputStream(temporary).use { output ->
+                FileOutputStream(temporary, resumed).use { output ->
                     val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
                     while (true) {
                         if (isStopped) return@withContext Result.failure()
@@ -70,7 +81,8 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
             }
             Result.success(androidx.work.workDataOf(KEY_LOCAL_PATH to android.net.Uri.fromFile(destination).toString(), KEY_BYTES to copied, KEY_TOTAL_BYTES to total))
         } catch (_: java.io.IOException) {
-            temporary.delete()
+            // Keep the verified prefix. WorkManager's retry will send a Range
+            // request and continue instead of starting the transfer again.
             Result.retry()
         } catch (_: Exception) {
             temporary.delete()
