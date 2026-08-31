@@ -294,7 +294,7 @@ digests are:
 
 ## Platform evidence
 
-Release `v1.2.18` is publicly verified with four Android APKs, browser
+Release `v1.2.32` is publicly verified with four Android APKs, browser
 archives, Samsung/Tizen and VIDAA bundles, the webOS bundle and separate
 SHA-256 manifests. The only remote branch is `main`.
 
