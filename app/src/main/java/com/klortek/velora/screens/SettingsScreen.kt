@@ -149,6 +149,7 @@ private val MobileSettingsText = Color(0xFFF5F7FA)
 private val MobileSettingsSecondaryText = Color(0xFFB8C1CC)
 private val MobileSettingsAccent = Color(0xFF25B8E8)
 private val MobileSettingsDivider = Color(0xFF303846)
+private val MobileSettingsSurface = Color(0xFF151A23)
 
 @OptIn(coil.annotation.ExperimentalCoilApi::class)
 @Composable
@@ -2432,6 +2433,12 @@ fun SettingsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(8.dp))
+                                .background(MobileSettingsSurface)
+                                .border(
+                                    width = 1.dp,
+                                    color = MobileSettingsDivider,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
                                 .clickable { activeCategoryDetail = category }
                                 .padding(horizontal = 16.dp, vertical = 16.dp),
                             verticalAlignment = Alignment.CenterVertically,
@@ -2446,12 +2453,10 @@ fun SettingsScreen(
                             androidx.compose.material3.Text(
                                 text = category.localizedTitle(context),
                                 style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
-                                color = MobileSettingsText
+                                color = MobileSettingsText,
+                                fontWeight = FontWeight.Medium
                             )
                         }
-                        androidx.compose.material3.HorizontalDivider(
-                            color = MobileSettingsDivider
-                        )
                     }
                 }
             } else {
