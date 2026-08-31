@@ -17,6 +17,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -101,9 +105,12 @@ fun JellyfinLoginScreen(
     var isUnavailable by remember { mutableStateOf(false) }
 
     val isTv = remember(context) { DeviceUtils.isTvDevice(context) }
-    val widthFraction = if (isTv) 0.5f else 0.9f
-    val horizontalPadding = if (isTv) 48.dp else 24.dp
-    val verticalPadding = if (isTv) 27.dp else 16.dp
+    // Keep the form inside the safe area on every aspect ratio. The previous
+    // weighted/fillMaxSize layout could push the action row below the viewport
+    // on short TVs and phones, making login appear clipped or unreadable.
+    val widthFraction = if (isTv) 0.62f else 0.94f
+    val horizontalPadding = if (isTv) 48.dp else 16.dp
+    val verticalPadding = if (isTv) 32.dp else 20.dp
 
     Box(
         modifier = Modifier
@@ -115,9 +122,11 @@ fun JellyfinLoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth(widthFraction)
-                .fillMaxSize()
+                .widthIn(max = if (isTv) 760.dp else 560.dp)
+                .imePadding()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = horizontalPadding, vertical = verticalPadding),
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.Top
         ) {
             // Title and subtitle section
             Column(
@@ -135,12 +144,11 @@ fun JellyfinLoginScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(if (isTv) 48.dp else 28.dp))
 
             // Login method content (switches between credentials and QuickConnect)
             Crossfade(
                 targetState = loginMethod,
-                modifier = Modifier.weight(2f)
             ) { method ->
                 when (method) {
                     LoginMethod.CREDENTIALS -> CredentialsLoginContent(
@@ -194,7 +202,7 @@ fun JellyfinLoginScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(if (isTv) 40.dp else 28.dp))
 
             // Action buttons at bottom
             if (!isTv) {

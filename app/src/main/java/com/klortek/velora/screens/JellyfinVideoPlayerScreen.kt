@@ -350,12 +350,13 @@ fun JellyfinVideoPlayerScreen(
     
     // Configure track selector with the global language policy. ExoPlayer remains
     // the default for every platform; FFmpeg is only an extension fallback.
+    // `auto` means let Jellyfin/Media3 apply server and stream defaults. Do
+    // not silently replace it with the device locale: that made an explicit
+    // server preference look like a client-side language override.
     val preferredAudioLanguage = settings.preferredAudioLanguage
         .takeUnless { it == "auto" }
-        ?: java.util.Locale.getDefault().language
     val preferredSubtitleLanguage = settings.preferredSubtitleLanguage
         .takeUnless { it == "auto" }
-        ?: java.util.Locale.getDefault().language
     val subtitleMode = settings.subtitleMode
 
     val trackSelector = remember {
@@ -365,18 +366,15 @@ fun JellyfinVideoPlayerScreen(
                     .setForceHighestSupportedBitrate(true)
                     .setPreferredAudioLanguage(preferredAudioLanguage)
                     .setSelectUndeterminedTextLanguage(subtitleMode == "auto")
-                    .setDisabledTextTrackSelectionFlags(
-                        if (subtitleMode == "off") C.SELECTION_FLAG_FORCED or C.SELECTION_FLAG_DEFAULT else 0
-                    )
+                    .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, subtitleMode == "off")
+                    .setDisabledTextTrackSelectionFlags(0)
                     .setPreferredTextLanguage(if (subtitleMode == "off") null else preferredSubtitleLanguage)
                     // Media3 has no ROLE_FLAG_FORCED constant. Jellyfin marks
                     // forced subtitles with SELECTION_FLAG_FORCED; keeping
                     // role flags neutral lets the selector retain that server
                     // metadata while still honoring the preferred language.
                     .setPreferredTextRoleFlags(0)
-                    .setIgnoredTextSelectionFlags(
-                        if (subtitleMode == "off") C.SELECTION_FLAG_FORCED or C.SELECTION_FLAG_DEFAULT else 0
-                    )
+                    .setIgnoredTextSelectionFlags(0)
             )
         }
     }
@@ -917,7 +915,7 @@ fun JellyfinVideoPlayerScreen(
                         apiService.getTranscodedVideoUrl(
                             itemId = item.Id,
                             mediaSourceId = mediaSourceId,
-                            subtitleStreamIndex = null,
+                            subtitleStreamIndex = currentSubtitleIndex,
                             targetVideoCodec = transcodeTargetCodec,
                             maxBitrateMbps = transcodeMaxBitrate,
                             audioCodec = "aac"
@@ -926,7 +924,7 @@ fun JellyfinVideoPlayerScreen(
                         apiService.getVideoPlaybackUrl(
                             itemId = item.Id,
                             mediaSourceId = mediaSourceId,
-                            subtitleStreamIndex = null,
+                            subtitleStreamIndex = currentSubtitleIndex,
                             preserveQuality = isHDROrHighQuality,
                             transcodeAudio = effectiveNeedsTranscoding, // Disabled if subtitles exist
                             audioCodec = effectiveAudioCodec,
@@ -4355,11 +4353,13 @@ fun JellyfinVideoPlayerScreen(
                             }
                             
                             if (subtitleIndex == null) {
-                                // Disable all subtitles by clearing overrides only
-                                // Do NOT use setTrackTypeDisabled - that prevents ExoPlayer UI from working
+                                // Disable the complete text renderer, including
+                                // forced/default tracks. Clearing overrides alone
+                                // still lets ExoPlayer auto-select another track.
                                 val updatedParameters = player.trackSelectionParameters
                                     .buildUpon()
                                     .clearOverridesOfType(C.TRACK_TYPE_TEXT)
+                                    .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
                                     .build()
                                 
                                 player.trackSelectionParameters = updatedParameters
@@ -4393,6 +4393,7 @@ fun JellyfinVideoPlayerScreen(
                                             val updatedParameters = player.trackSelectionParameters
                                                 .buildUpon()
                                                 .clearOverridesOfType(C.TRACK_TYPE_TEXT)
+                                                .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
                                                 .addOverride(
                                                     androidx.media3.common.TrackSelectionOverride(
                                                         group.mediaTrackGroup,

@@ -1592,3 +1592,10 @@ All notable changes to Velora will be documented in this file.
 
 *For older changes, see git history*
 
+## 1.2.23
+
+- Ajusta el formulario de inicio de sesión para teléfonos, tablets y TV con
+  ancho máximo, desplazamiento seguro y protección frente al teclado.
+- Corrige la semántica de subtítulos de ExoPlayer: automático respeta Jellyfin,
+  deshabilitado apaga todas las pistas y la selección se conserva al cambiar
+  calidad o solicitar transcodificación.
