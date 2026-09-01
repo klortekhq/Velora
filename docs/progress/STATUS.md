@@ -84,6 +84,10 @@ cambiarlo antes de autenticar y asocia la sesión persistida al servidor exacto.
 Las sesiones antiguas sin esa asociación se descartan de forma segura, y el
 token nunca se reutiliza contra otra URL.
 
+La petición de autenticación Apple usa ahora los nombres y encabezados estándar
+de Jellyfin (`Password` y `X-Emby-Authorization`), con una prueba que verifica
+el payload sin enviar credenciales a la red.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba

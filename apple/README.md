@@ -6,7 +6,8 @@ finales. `VeloraPlatform` mantiene la decisión de producto: las descargas sin
 conexión solo están disponibles en iPhone y iPad; tvOS es streaming.
 
 `VeloraKit` no mete tokens en URLs: las peticiones autenticadas usan
-`X-Emby-Token`. Incluye autenticación Jellyfin, sesión tipada, preferencias
+`X-Emby-Token` y la autenticación inicial usa el contrato estándar de Jellyfin
+(`Password` y `X-Emby-Authorization`). Incluye autenticación Jellyfin, sesión tipada, preferencias
 locales de idioma/audio/subtítulos/rendimiento, requests autenticadas para
 artwork o AVPlayer y componentes SwiftUI adaptativos para bibliotecas y ajustes.
 También incluye `VeloraAppShell`, una superficie SwiftUI nativa que conecta

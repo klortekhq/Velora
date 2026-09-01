@@ -111,6 +111,14 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertFalse(url?.absoluteString.contains("api_key") ?? true)
     }
 
+    func testAuthenticationPayloadUsesJellyfinPasswordField() throws {
+        let payload = try JSONEncoder().encode(["Username": "ruvik", "Password": "secret"])
+        let json = try JSONSerialization.jsonObject(with: payload) as? [String: String]
+        XCTAssertEqual(json?["Username"], "ruvik")
+        XCTAssertEqual(json?["Password"], "secret")
+        XCTAssertNil(json?["Pw"])
+    }
+
     func testMediaIdentifiersAreEncodedAsPathComponents() async throws {
         let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
         let url = await client.videoURL(itemID: "movie with spaces")
