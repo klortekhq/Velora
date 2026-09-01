@@ -14,6 +14,9 @@ All notable changes to Velora will be documented in this file.
 - Añade un shell SwiftUI nativo para Apple con inicio de sesión Jellyfin,
   biblioteca, detalle, ajustes y reproducción AVPlayer; tvOS mantiene oculta
   toda la interfaz de descargas.
+- Corrige la comprobación de espacio libre de las descargas móviles para que
+  mida el mismo almacenamiento privado gestionado por Velora donde se guarda
+  el contenido, evitando aceptar descargas que no caben en ese volumen.
 
 ## 1.2.85
 

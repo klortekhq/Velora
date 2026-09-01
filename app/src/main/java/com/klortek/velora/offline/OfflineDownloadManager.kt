@@ -3,7 +3,6 @@ package com.klortek.velora.offline
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
-import android.os.Environment
 import android.os.StatFs
 import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.platform.PlatformCapabilities
@@ -88,8 +87,11 @@ object OfflineDownloadManager {
             .sumOf { entry ->
                 if (entry.totalBytes > 0L) entry.totalBytes else entry.bytesDownloaded.coerceAtLeast(0L)
             }
-        val storageRoot = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-        val availableBytes = storageRoot?.let { StatFs(it.path).availableBytes } ?: 0L
+        // The worker stores media in filesDir/offline/media. Measure that
+        // same app-private filesystem; externalFilesDir can be mounted on a
+        // different volume and would make the gate report misleading space.
+        val storageRoot = File(context.filesDir, "offline/media").apply { mkdirs() }
+        val availableBytes = StatFs(storageRoot.path).availableBytes
         val maxBytes = AppSettings(context).offlineMaxStorageBytes.takeIf { it > 0L }
         val decision = OfflineStoragePolicy.evaluate(
             snapshot = OfflineStorageSnapshot(availableBytes = availableBytes, managedBytes = managedBytes),
