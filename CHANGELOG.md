@@ -15,6 +15,10 @@ All notable changes to Velora will be documented in this file.
   sobrescriban.
 - Añadidas pruebas de regresión para protección de descargas, limpieza
   inteligente y recuperación de identificadores gestionados.
+- Corregida la lista de descargas para usar claves estables en transferencias
+  gestionadas, evitando filas duplicadas o controles que parezcan no responder.
+- La verificación de integridad y la materialización de contenido ya actualizan
+  la descarga correcta incluso cuando el proveedor no aporta un identificador.
 - Live TV web muestra canales en un formato compacto con programa actual,
   próxima emisión y barra de progreso, manteniendo la reproducción integrada y
   la navegación con táctil, teclado y mando.

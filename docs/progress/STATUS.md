@@ -78,6 +78,9 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
   unsupported UIs.
 - Managed offline transfers now use their WorkManager name as a stable identity
   when the provider download id is zero, preventing progress/state collisions.
+- The offline downloads screen and materialization path now use the same stable
+  identity for managed transfers, preventing duplicate Compose keys and media
+  overwrites; integrity metadata is persisted against that identity as well.
 - Web playback now refuses credential-bearing URL fallbacks and waits for the
   same-origin media proxy, keeping Jellyfin tokens out of media URLs.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request

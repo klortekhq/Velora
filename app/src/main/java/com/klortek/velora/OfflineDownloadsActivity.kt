@@ -103,7 +103,7 @@ class OfflineDownloadsActivity : ComponentActivity() {
                 Text(stringResource(R.string.downloads_empty), color = Color.Gray, modifier = Modifier.padding(24.dp))
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxSize()) {
-                    items(entries, key = { it.downloadId }) { entry ->
+                    items(entries, key = { it.stableKey }) { entry ->
                         Row(Modifier.fillMaxWidth().clickable(enabled = entry.isComplete) { onPlay(entry) }.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f)) {
                                 Text(entry.name, style = MaterialTheme.typography.titleMedium)
