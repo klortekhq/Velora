@@ -218,6 +218,7 @@ fun TvShowsLibraryScreen(
         )
     }
     var selectedGenreFilter by remember { mutableStateOf<String?>(null) }
+    var playbackFilter by remember { mutableStateOf(PlaybackFilter.All) }
     var showSortDialog by remember { mutableStateOf(false) }
     
     // Data states for recommendations
@@ -471,12 +472,19 @@ fun TvShowsLibraryScreen(
     }
     
     // Sort and filter library items
-    val sortedLibraryItems = remember(libraryItems, sortType, hideShowsWithZeroEpisodes, selectedGenreFilter) {
+    val sortedLibraryItems = remember(libraryItems, sortType, hideShowsWithZeroEpisodes, selectedGenreFilter, playbackFilter) {
         // First filter by genre if selected
         val genreFilteredItems = if (selectedGenreFilter != null) {
             libraryItems.filter { it.Genres?.contains(selectedGenreFilter) == true }
         } else {
             libraryItems
+        }.filter {
+            when (playbackFilter) {
+                PlaybackFilter.All -> true
+                PlaybackFilter.Watched -> it.UserData?.Played == true
+                PlaybackFilter.Unwatched -> it.UserData?.Played != true
+                PlaybackFilter.Favorites -> it.UserData?.IsFavorite == true
+            }
         }
 
         val sortedItems = when (sortType) {
@@ -2343,6 +2351,11 @@ fun TvShowsLibraryScreen(
                 selectedGenre = selectedGenreFilter,
                 onGenreSelected = { genre ->
                     selectedGenreFilter = genre
+                    showSortDialog = false
+                },
+                playbackFilter = playbackFilter,
+                onPlaybackFilterSelected = { filter ->
+                    playbackFilter = filter
                     showSortDialog = false
                 }
             )

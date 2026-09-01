@@ -155,6 +155,13 @@ enum class SortType {
     CommunityRating
 }
 
+enum class PlaybackFilter {
+    All,
+    Watched,
+    Unwatched,
+    Favorites
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun JellyfinHomeScreen(
@@ -2397,7 +2404,9 @@ fun SortDialog(
     onSortSelected: (SortType) -> Unit,
     availableGenres: List<String> = emptyList(),
     selectedGenre: String? = null,
-    onGenreSelected: ((String?) -> Unit)? = null
+    onGenreSelected: ((String?) -> Unit)? = null,
+    playbackFilter: PlaybackFilter = PlaybackFilter.All,
+    onPlaybackFilterSelected: ((PlaybackFilter) -> Unit)? = null
 ) {
     val context = LocalContext.current
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
@@ -2434,6 +2443,13 @@ fun SortDialog(
                                 items(availableGenres) { genre ->
                                     MobileSortOption(localizedGenreName(genre), selectedGenre == genre) { onGenreSelected(genre) }
                                 }
+                            }
+                            if (onPlaybackFilterSelected != null) {
+                                item { androidx.compose.material3.Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_playback_state), color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 20.dp, bottom = 4.dp)) }
+                                item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_all_playback), playbackFilter == PlaybackFilter.All) { onPlaybackFilterSelected(PlaybackFilter.All) } }
+                                item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_watched), playbackFilter == PlaybackFilter.Watched) { onPlaybackFilterSelected(PlaybackFilter.Watched) } }
+                                item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_unwatched), playbackFilter == PlaybackFilter.Unwatched) { onPlaybackFilterSelected(PlaybackFilter.Unwatched) } }
+                                item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_favorites), playbackFilter == PlaybackFilter.Favorites) { onPlaybackFilterSelected(PlaybackFilter.Favorites) } }
                             }
                         }
                     }
@@ -2610,6 +2626,16 @@ fun SortDialog(
                                     }
                                 )
                             }
+                        }
+                        if (onPlaybackFilterSelected != null) {
+                            item {
+                                Spacer(modifier = Modifier.height(24.dp))
+                                Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_playback_state), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(start = 8.dp, bottom = 8.dp))
+                            }
+                            item { ListItem(selected = playbackFilter == PlaybackFilter.All, onClick = { onPlaybackFilterSelected(PlaybackFilter.All) }, headlineContent = { Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_all_playback)) }) }
+                            item { ListItem(selected = playbackFilter == PlaybackFilter.Watched, onClick = { onPlaybackFilterSelected(PlaybackFilter.Watched) }, headlineContent = { Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_watched)) }) }
+                            item { ListItem(selected = playbackFilter == PlaybackFilter.Unwatched, onClick = { onPlaybackFilterSelected(PlaybackFilter.Unwatched) }, headlineContent = { Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_unwatched)) }) }
+                            item { ListItem(selected = playbackFilter == PlaybackFilter.Favorites, onClick = { onPlaybackFilterSelected(PlaybackFilter.Favorites) }, headlineContent = { Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_favorites)) }) }
                         }
                     }
                 }

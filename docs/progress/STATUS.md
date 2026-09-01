@@ -18,6 +18,12 @@ campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
 
+La revisión en preparación `v1.2.83` añade ordenado y filtrado funcional por
+estado de reproducción en las bibliotecas de películas y series, con opciones
+de Todos, Vistos, No vistos y Favoritos. La compilación y los unit tests Android
+han pasado tras este cambio; la release todavía no se considera publicada
+hasta verificar sus artefactos en GitHub.
+
 Desde la última release se han añadido componentes SwiftUI nativos reutilizables
 para las superficies Apple y se han completado los textos nuevos de la interfaz
 móvil en inglés, alemán y francés. La prueba Android móvil y sus unit tests
