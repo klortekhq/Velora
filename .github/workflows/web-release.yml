@@ -82,7 +82,7 @@ jobs:
             exit 0
           fi
           stale_ids="$(printf '%s' "$release_json" | jq -r --arg version "$version" '
-            .assets[]
+            (.assets // [])[]
             | select(.name | test("^Velora-(samsung|vidaa)-bundle-|^Velora-webos-bundle-"))
             | select(.name | test("-" + $version + "\\.zip$") | not)
             | .id')"
