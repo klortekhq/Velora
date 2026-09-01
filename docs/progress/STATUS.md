@@ -104,9 +104,12 @@ no se afirma validación física en un móvil, Fire TV o televisor.
 La revisión `v1.2.85` conserva el modo de formato de imagen al recrear la
 actividad y unifica el ordenado/filtrado de las pantallas reales de Películas y
 Series con la consulta común cubierta por tests. La compilación Android móvil,
-sus unit tests y las pruebas web pasan localmente. La publicación de release de
-esta revisión queda pendiente de que terminen correctamente los workflows de
-GitHub Actions.
+sus unit tests y las pruebas web pasan localmente. La release pública contiene
+las cuatro APK verificadas (móvil/TV debug y release unsigned), además de los
+paquetes web, Samsung, webOS y VIDAA. La publicación Android automática quedó
+cancelada tras bloquearse Gradle en el runner; las APK se adjuntaron y
+comprobaron manualmente desde la interfaz de GitHub, sin afirmar validación
+física en dispositivos.
 
 La siguiente tabla es el histórico verificado de `v1.2.80`:
 
