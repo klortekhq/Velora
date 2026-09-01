@@ -4,9 +4,6 @@ on:
   push:
     branches: [main]
     tags: ['v*']
-    paths:
-      - 'apple/**'
-      - '.github/workflows/apple.yml'
   pull_request:
     paths:
       - 'apple/**'
