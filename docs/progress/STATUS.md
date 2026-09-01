@@ -121,6 +121,13 @@ La acción de trailers de películas y series ya está habilitada en el código
 actual y la compilación/tests Android móvil y TV, junto con los tests web,
 han pasado localmente.
 
+La compilación local de `1.2.86` también ha generado y verificado los cuatro
+APK Android (móvil/TV, debug y release unsigned). No se han publicado como
+release porque la política actual agrupa los cambios pequeños y reserva las
+releases públicas para hitos `vX.Y.0`; los workflows de Android y web ya
+aplican ese criterio. Las correcciones de parche siguen pudiéndose compilar
+manualmente para QA.
+
 La siguiente tabla es el histórico verificado de `v1.2.80`:
 
 | Artefacto | SHA-256 publicado |
