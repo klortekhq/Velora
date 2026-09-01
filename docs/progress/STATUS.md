@@ -8,10 +8,10 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-Último commit publicado: pendiente de publicación de `v1.2.72`. Las
+Último commit publicado: pendiente de publicación de `v1.2.73`. Las
 validaciones locales de Android móvil/TV y web terminaron correctamente para
-la corrección del renderizador GL; la validación de Apple correspondiente se
-ejecutará con la nueva release.
+las correcciones de presentación GL y MPV; la validación de Apple se ejecutará
+con la nueva release.
 en GitHub Actions. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
@@ -40,7 +40,7 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.72 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.73 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -76,14 +76,13 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Release actual: v1.2.72 (en preparación)
+## Release actual: v1.2.73 (en preparación)
 
-La fuente actual es `1.2.72`. Incluye una corrección del renderizador GL para
-que el selector de relación de aspecto actualice de forma serializada el
-tamaño y la geometría del vídeo. Los tests Android móvil/TV y web pasan en
-local. La release se publicará mediante el workflow de etiqueta después de
-subir el commit; no se afirma validación física en un móvil, Fire TV o
-televisor.
+La fuente actual es `1.2.73`. Incluye correcciones de presentación para el
+renderizador GL y para el contenedor móvil de MPV. Los tests Android móvil/TV
+y web pasan en local. La release se publicará mediante el workflow de etiqueta
+después de subir el commit; no se afirma validación física en un móvil, Fire TV
+o televisor.
 
 Artefactos Android verificados en la release anterior `v1.2.71`:
 
