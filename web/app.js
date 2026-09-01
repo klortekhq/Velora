@@ -164,6 +164,7 @@
     token: sessionValue('veloraToken'),
     userId: sessionValue('veloraUserId'),
     items: [],
+    liveChannels: [],
     query: '',
     settingsOpen: false,
     playingItem: null
@@ -366,9 +367,38 @@
     var params = 'Recursive=true&IncludeItemTypes=Movie%2CSeries%2CLiveTvChannel&' +
       'SortBy=DateCreated&SortOrder=Descending&Limit=150&' +
       'Fields=Overview%2CProductionYear%2CDateCreated%2CPremiereDate%2CRunTimeTicks%2CCommunityRating%2CCriticRating%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData%2CPeople%2CSeriesName%2CSeriesId%2CIndexNumber%2CParentIndexNumber';
-    return api('/Users/' + state.userId + '/Items?' + params).then(function (data) {
-      state.items = data.Items || [];
+    return Promise.all([
+      api('/Users/' + state.userId + '/Items?' + params),
+      loadLiveTvChannels()
+    ]).then(function (responses) {
+      state.items = responses[0].Items || [];
+      state.liveChannels = responses[1].Items || [];
     });
+  }
+
+  function loadLiveTvChannels() {
+    var channelPath = '/LiveTv/Channels?UserId=' + encodeURIComponent(state.userId) +
+      '&AddCurrentProgram=true&EnableUserData=true&EnableImages=true&Fields=Overview';
+    return api(channelPath).then(function (response) {
+      var channels = response.Items || [];
+      if (!channels.length) return channels;
+      var now = new Date();
+      var until = new Date(now.getTime() + 6 * 60 * 60 * 1000);
+      var query = '/LiveTv/Programs?UserId=' + encodeURIComponent(state.userId) +
+        '&ChannelIds=' + channels.map(function (channel) { return encodeURIComponent(channel.Id); }).join('%2C') +
+        '&MinStartDate=' + encodeURIComponent(now.toISOString()) +
+        '&MaxEndDate=' + encodeURIComponent(until.toISOString()) + '&Limit=500';
+      return api(query).then(function (programResponse) {
+        var programs = programResponse.Items || [];
+        return channels.map(function (channel) {
+          var channelPrograms = programs.filter(function (program) { return program.ChannelId === channel.Id; })
+            .sort(function (left, right) { return String(left.StartDate || '').localeCompare(String(right.StartDate || '')); });
+          return Object.assign({}, channel, {
+            UpcomingProgram: channelPrograms.find(function (program) { return new Date(program.EndDate || 0) > now; }) || null
+          });
+        });
+      });
+    }).catch(function () { return []; });
   }
 
   function section(title, items) {
@@ -381,11 +411,56 @@
       }).join('') + '</div></section>';
   }
 
+  function liveProgramTime(program) {
+    if (!program || !program.StartDate || !program.EndDate) return '';
+    var start = new Date(program.StartDate);
+    var end = new Date(program.EndDate);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return '';
+    return start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
+      ' – ' + end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function liveProgramProgress(program) {
+    if (!program || !program.StartDate || !program.EndDate) return 0;
+    var start = new Date(program.StartDate).getTime();
+    var end = new Date(program.EndDate).getTime();
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return 0;
+    return Math.max(0, Math.min(1, (Date.now() - start) / (end - start)));
+  }
+
+  function liveSection(title, channels) {
+    if (!channels.length) return '';
+    return '<section><h2>' + esc(title) + '</h2><div class="live-grid">' +
+      channels.map(function (channel) {
+        var current = channel.CurrentProgram || null;
+        var upcoming = channel.UpcomingProgram || null;
+        var progress = Math.round(liveProgramProgress(current) * 100);
+        return '<article class="live-row" tabindex="0" role="button" data-id="' + esc(channel.Id) + '">' +
+          '<img loading="lazy" data-velora-image-id="' + esc(channel.Id) + '" alt="">' +
+          '<div class="live-copy"><strong>' + esc(channel.Name || '') + '</strong>' +
+          (current ? '<span>' + esc(current.Name || '') + '</span><small>' + esc(liveProgramTime(current)) + '</small>' +
+            '<div class="progress" aria-label="' + progress + '%"><i style="width:' + progress + '%"></i></div>' :
+            '<span class="muted">' + esc(t('noDescription')) + '</span>') +
+          (upcoming ? '<small class="live-next">' + esc(upcoming.Name || '') + ' · ' + esc(liveProgramTime(upcoming)) + '</small>' : '') +
+          '</div></article>';
+      }).join('') + '</div></section>';
+  }
+
   function bindCards() {
     Array.prototype.forEach.call(document.querySelectorAll('.card'), function (card) {
       var open = function () { openItem(card.getAttribute('data-id')); };
       card.onclick = open;
       card.onkeydown = function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          open();
+       }
+     };
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.live-row'), function (row) {
+      var open = function () { openItem(row.getAttribute('data-id')); };
+      row.onclick = open;
+      row.onkeydown = function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
           open();
@@ -448,7 +523,7 @@
   }
 
   function openItem(id) {
-    var item = state.items.find(function (candidate) { return candidate.Id === id; });
+    var item = state.items.concat(state.liveChannels || []).find(function (candidate) { return candidate.Id === id; });
     if (!item) return;
     closeDetails();
     root.insertAdjacentHTML('beforeend', '<div class="modal" id="details" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">' +
@@ -549,7 +624,7 @@
     });
     var movies = sortedLibraryItems(items.filter(function (item) { return item.Type === 'Movie'; }));
     var series = sortedLibraryItems(items.filter(function (item) { return item.Type === 'Series'; }));
-    var live = items.filter(function (item) { return item.Type === 'LiveTvChannel'; });
+    var live = state.liveChannels && state.liveChannels.length ? state.liveChannels : items.filter(function (item) { return item.Type === 'LiveTvChannel'; });
     var sort = preference('veloraLibrarySort', 'name');
     var playback = preference('veloraLibraryPlayback', 'all');
     var favoritesOnly = preference('veloraLibraryFavorites', 'false') === 'true';
@@ -573,7 +648,7 @@
       '<button type="button" data-tab="movies">' + esc(t('movies')) + '</button><button type="button" data-tab="series">' + esc(t('series')) + '</button>' +
       (live.length ? '<button type="button" data-tab="live">' + esc(t('live')) + '</button>' : '') +
       '</nav><div id="results">' + section(t('movies'), movies) + section(t('series'), series) +
-      section(t('live'), live) + '</div>';
+       liveSection(t('live'), live) + '</div>';
 
     var submit = function () {
       state.query = document.querySelector('#query').value;
@@ -602,8 +677,8 @@
         var view = tab.getAttribute('data-tab');
         document.querySelector('#results').innerHTML = view === 'movies' ? section(t('movies'), movies) :
           view === 'series' ? section(t('series'), series) :
-          view === 'live' ? section(t('live'), live) :
-          section(t('movies'), movies) + section(t('series'), series) + section(t('live'), live);
+          view === 'live' ? liveSection(t('live'), live) :
+          section(t('movies'), movies) + section(t('series'), series) + liveSection(t('live'), live);
         bindCards();
         hydrateProtectedImages(document.querySelector('#results'));
       };

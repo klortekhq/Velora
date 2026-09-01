@@ -93,6 +93,10 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
   launcher instead of hiding the functional trailer action behind a disabled
   branch; mobile and TV Kotlin compilation plus unit tests pass after this
   correction.
+- El cliente web Live TV usa ahora la API específica de Jellyfin para cargar
+  canales, programa actual y próxima emisión, y los presenta en filas compactas
+  con progreso y navegación táctil/teclado/mando. `node --check`, los tests web
+  y el empaquetado web/webOS pasan localmente; no se afirma validación física.
 
 ## Release actual: v1.2.86 (preparación)
 

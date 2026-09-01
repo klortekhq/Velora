@@ -13,7 +13,7 @@ body { min-height: 100vh; background: radial-gradient(circle at 70% 0, #12353e, 
 button, input { font: inherit; }
 button { border: 0; border-radius: 14px; padding: .8rem 1.1rem; background: #17353e; color: #fff; cursor: pointer; }
 button.primary, .tabs button.active { background: var(--cyan); color: #001419; font-weight: 700; }
-button:focus, input:focus, .card:focus { outline: 3px solid var(--cyan); outline-offset: 2px; }
+button:focus, input:focus, .card:focus, .live-row:focus { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .shell { max-width: 1400px; margin: auto; padding: clamp(16px, 3vw, 40px); }
 header { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 24px; }
 .brand { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; }
@@ -24,6 +24,16 @@ header { display: flex; gap: 12px; align-items: center; justify-content: space-b
 .card { background: var(--panel); border-radius: 16px; overflow: hidden; }
 .card img { display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: #16333b; }
 .card .label { padding: 10px; font-weight: 650; }
+.live-grid { display: grid; gap: 10px; }
+.live-row { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 92px; padding: 12px 16px; border-radius: 16px; background: var(--panel); cursor: pointer; }
+.live-row img { width: 116px; height: 68px; border-radius: 10px; object-fit: contain; background: #16333b; }
+.live-copy { display: grid; gap: 4px; min-width: 0; }
+.live-copy strong, .live-copy span, .live-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-copy strong { font-size: 1.05rem; }
+.live-copy small { color: var(--muted); }
+.live-next { opacity: .8; }
+.progress { height: 4px; background: #34515a; border-radius: 99px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--cyan); }
 .hero { background: var(--panel); border-radius: 20px; padding: clamp(18px, 4vw, 42px); margin-bottom: 24px; }
 .library-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin-top: 16px; }
 .library-filters label { display: grid; gap: 5px; color: var(--muted); font-size: .9rem; font-weight: 700; }
@@ -65,6 +75,8 @@ header { display: flex; gap: 12px; align-items: center; justify-content: space-b
   .actions { width: 100%; }
   .actions button { flex: 1; }
   .row { flex-wrap: wrap; }
+  .live-row { grid-template-columns: 84px minmax(0, 1fr); gap: 10px; padding: 10px; }
+  .live-row img { width: 84px; height: 52px; }
 }
 @media (min-width: 1000px) and (pointer: coarse) { body { font-size: 1.05rem; } }
 @media (min-width: 1000px) {
