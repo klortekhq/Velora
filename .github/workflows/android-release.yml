@@ -84,12 +84,6 @@ jobs:
           cp app/build/outputs/apk/tv/release/velora-release-unsigned.apk dist/Velora-tv-release-unsigned.apk
           sha256sum dist/*.apk > dist/SHA256SUMS.txt
 
-      - name: Guardar artefactos de compilación
-        uses: actions/upload-artifact@v4
-        with:
-          name: Velora-APK-${{ github.ref_name }}-${{ github.run_id }}
-          path: dist/
-
       - name: Crear o actualizar release con los APK
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
