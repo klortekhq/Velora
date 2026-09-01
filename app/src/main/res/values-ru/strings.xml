@@ -15,4 +15,10 @@
     <string name="settings_subtitle_language">Язык субтитров</string>
     <string name="settings_subtitle_language_description">Автоматически используется настройка сервера; другие варианты предпочитают этот язык, если он доступен.</string>
     <string name="library_reset_filters">Сбросить фильтры</string>
+    <string name="settings_smart_downloads">Умные загрузки</string>
+    <string name="settings_smart_downloads_description">Автоматически управляет просмотренными загрузками и сохраняет защищённый контент.</string>
+    <string name="settings_smart_remove_watched">Удалять просмотренный контент</string>
+    <string name="settings_smart_remove_watched_description">Автоматически удаляет фильмы и эпизоды, отмеченные как просмотренные.</string>
+    <string name="settings_smart_keep_episodes">Сохранять непросмотренные эпизоды</string>
+    <string name="settings_smart_keep_episodes_description">Сохраняет это количество непросмотренных эпизодов при очистке.</string>
 </resources>

@@ -180,4 +180,10 @@
     <string name="player_solutions">Lösungen:</string>
     <string name="player_aspect_title">Bildmodus</string>
     <string name="player_aspect_description">Wähle aus, wie das Video angezeigt werden soll</string>
+    <string name="settings_smart_downloads">Intelligente Downloads</string>
+    <string name="settings_smart_downloads_description">Verwaltet gesehene Downloads automatisch und behält geschützte Inhalte.</string>
+    <string name="settings_smart_remove_watched">Gesehene Inhalte entfernen</string>
+    <string name="settings_smart_remove_watched_description">Entfernt automatisch als gesehen markierte Filme und Folgen.</string>
+    <string name="settings_smart_keep_episodes">Nicht gesehene Folgen behalten</string>
+    <string name="settings_smart_keep_episodes_description">Behält diese Anzahl ungesehener Folgen bei der Bereinigung.</string>
 </resources>

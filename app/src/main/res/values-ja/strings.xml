@@ -15,4 +15,10 @@
     <string name="settings_subtitle_language">字幕の言語</string>
     <string name="settings_subtitle_language_description">自動はサーバー設定に従い、それ以外は利用可能な場合に指定言語を優先します。</string>
     <string name="library_reset_filters">フィルターをリセット</string>
+    <string name="settings_smart_downloads">スマートダウンロード</string>
+    <string name="settings_smart_downloads_description">視聴済みのダウンロードを自動管理し、保護したコンテンツを保持します。</string>
+    <string name="settings_smart_remove_watched">視聴済みコンテンツを削除</string>
+    <string name="settings_smart_remove_watched_description">視聴済みとしてマークされた映画やエピソードを自動的に削除します。</string>
+    <string name="settings_smart_keep_episodes">未視聴エピソードの保持数</string>
+    <string name="settings_smart_keep_episodes_description">整理時にこの数の未視聴エピソードを保持します。</string>
 </resources>

@@ -19,6 +19,9 @@ All notable changes to Velora will be documented in this file.
   gestionadas, evitando filas duplicadas o controles que parezcan no responder.
 - La verificación de integridad y la materialización de contenido ya actualizan
   la descarga correcta incluso cuando el proveedor no aporta un identificador.
+- Completadas las traducciones de Smart Downloads en los 13 idiomas disponibles
+  en Android, manteniendo el idioma automático del dispositivo y la selección
+  manual desde Ajustes.
 - Live TV web muestra canales en un formato compacto con programa actual,
   próxima emisión y barra de progreso, manteniendo la reproducción integrada y
   la navegación con táctil, teclado y mando.

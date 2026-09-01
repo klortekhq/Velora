@@ -81,6 +81,10 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
 - The offline downloads screen and materialization path now use the same stable
   identity for managed transfers, preventing duplicate Compose keys and media
   overwrites; integrity metadata is persisted against that identity as well.
+- Smart Downloads labels are now present in every Android locale offered by the
+  app (Spanish, English, Portuguese, French, German, Italian, Japanese,
+  Korean, Chinese, Russian, Arabic and Turkish); mobile compilation and tests
+  pass after the catalog update.
 - Web playback now refuses credential-bearing URL fallbacks and waits for the
   same-origin media proxy, keeping Jellyfin tokens out of media URLs.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request

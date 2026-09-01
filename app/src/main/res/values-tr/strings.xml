@@ -15,4 +15,10 @@
     <string name="settings_subtitle_language">Altyazı dili</string>
     <string name="settings_subtitle_language_description">Otomatik sunucu ayarını izler; diğer seçenekler kullanılabiliyorsa bu dili tercih eder.</string>
     <string name="library_reset_filters">Filtreleri sıfırla</string>
+    <string name="settings_smart_downloads">Akıllı indirmeler</string>
+    <string name="settings_smart_downloads_description">İzlenen indirmeleri otomatik yönetir ve korunan içerikleri saklar.</string>
+    <string name="settings_smart_remove_watched">İzlenen içeriği kaldır</string>
+    <string name="settings_smart_remove_watched_description">İzlenmiş olarak işaretlenen film ve bölümleri otomatik kaldırır.</string>
+    <string name="settings_smart_keep_episodes">İzlenmemiş bölümleri sakla</string>
+    <string name="settings_smart_keep_episodes_description">Temizlik sırasında bu sayıda izlenmemiş bölümü saklar.</string>
 </resources>

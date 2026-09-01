@@ -15,4 +15,10 @@
     <string name="settings_subtitle_language">Idioma das legendas</string>
     <string name="settings_subtitle_language_description">Automático segue a preferência do servidor; as outras opções preferem esse idioma quando disponível.</string>
     <string name="library_reset_filters">Repor filtros</string>
+    <string name="settings_smart_downloads">Transferências inteligentes</string>
+    <string name="settings_smart_downloads_description">Gere automaticamente as transferências vistas e mantém o conteúdo protegido.</string>
+    <string name="settings_smart_remove_watched">Remover conteúdo visto</string>
+    <string name="settings_smart_remove_watched_description">Remove automaticamente filmes e episódios marcados como vistos.</string>
+    <string name="settings_smart_keep_episodes">Episódios não vistos a manter</string>
+    <string name="settings_smart_keep_episodes_description">Mantém este número de episódios não vistos durante a limpeza.</string>
 </resources>
