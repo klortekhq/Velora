@@ -14,7 +14,7 @@ public actor JellyfinClient {
         enum CodingKeys: String, CodingKey { case accessToken = "AccessToken", user = "User" }
     }
 
-    private let baseURL: URL
+    private var baseURL: URL
     private let session: URLSession
     private var accessToken: String?
     private var sessionState: JellyfinSession?
@@ -26,6 +26,15 @@ public actor JellyfinClient {
         self.accessToken = restoredSession?.accessToken
         self.sessionState = restoredSession
     }
+
+    public func setServerURL(_ serverURL: URL) throws {
+        guard serverURL.scheme == "http" || serverURL.scheme == "https" else { throw ClientError.invalidServerURL }
+        baseURL = serverURL
+        accessToken = nil
+        sessionState = nil
+    }
+
+    public func serverURL() -> URL { baseURL }
 
     public func setAccessToken(_ token: String?) {
         accessToken = token
@@ -44,7 +53,12 @@ public actor JellyfinClient {
         guard (200..<300).contains(http.statusCode) else { throw ClientError.invalidResponse }
         let result = try JSONDecoder().decode(AuthenticateResponse.self, from: data)
         accessToken = result.accessToken
-        let authenticated = JellyfinSession(accessToken: result.accessToken, userID: result.user.id, username: result.user.name)
+        let authenticated = JellyfinSession(
+            accessToken: result.accessToken,
+            userID: result.user.id,
+            username: result.user.name,
+            serverURL: baseURL.absoluteString
+        )
         sessionState = authenticated
         return authenticated
     }

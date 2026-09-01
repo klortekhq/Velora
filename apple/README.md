@@ -26,4 +26,6 @@ usando datos Codable. La sesión autenticada se guarda mediante
 `AfterFirstUnlockThisDeviceOnly`; el adaptador de `UserDefaults` solo se usa en
 entornos de pruebas que no disponen de Security. Cerrar sesión elimina la
 credencial. Ninguno de estos datos se sincroniza con Jellyfin ni entre
-dispositivos.
+dispositivos. Las sesiones antiguas sin servidor asociado no se restauran para
+evitar enviar accidentalmente un token a otra instancia; basta con iniciar
+sesión una vez de nuevo.

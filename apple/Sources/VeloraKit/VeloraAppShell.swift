@@ -19,21 +19,36 @@ public final class VeloraAppModel: ObservableObject {
     private let client: JellyfinClient
     private let settingsStore: VeloraSettingsStore
     private let credentialStore: VeloraCredentialStore
+    private let serverDefaults: UserDefaults
     private var session: JellyfinSession?
 
-    public init(platform: VeloraPlatform, serverURL: URL, credentialStore: VeloraCredentialStore = VeloraCredentialStore()) throws {
+    public init(platform: VeloraPlatform, serverURL: URL, credentialStore: VeloraCredentialStore = VeloraCredentialStore(), serverDefaults: UserDefaults = .standard) throws {
         self.platform = platform
         self.settingsStore = VeloraSettingsStore()
         self.settings = settingsStore.load() ?? VeloraSettings.systemDefault()
         self.credentialStore = credentialStore
-        let restoredSession = credentialStore.load()
-        self.client = try JellyfinClient(serverURL: serverURL, restoredSession: restoredSession)
+        self.serverDefaults = serverDefaults
+        let configuredServer = serverDefaults.string(forKey: "velora.serverURL")
+            .flatMap(URL.init(string:)) ?? serverURL
+        let storedSession = credentialStore.load()
+        // A legacy session without a server association is not restored: a
+        // token must never be sent to an unknown Jellyfin server after an
+        // upgrade. The user can sign in again and create an associated session.
+        let restoredSession = storedSession?.serverURL == configuredServer.absoluteString
+            ? storedSession
+            : nil
+        self.client = try JellyfinClient(serverURL: configuredServer, restoredSession: restoredSession)
         self.session = restoredSession
         self.isAuthenticated = restoredSession != nil
     }
 
-    public func signIn(username: String, password: String) async {
+    public func signIn(serverURL: String, username: String, password: String) async {
         do {
+            guard let url = URL(string: serverURL.trimmingCharacters(in: .whitespacesAndNewlines)) else {
+                throw JellyfinClient.ClientError.invalidServerURL
+            }
+            try await client.setServerURL(url)
+            serverDefaults.set(url.absoluteString, forKey: "velora.serverURL")
             let authenticated = try await client.authenticate(username: username, password: password)
             session = authenticated
             credentialStore.save(authenticated)
@@ -97,11 +112,11 @@ public struct VeloraAppShell: View {
                 }
             } else {
                 VeloraLoginView(
-                    server: serverText,
+                    server: $serverText,
                     username: $username,
                     password: $password,
                     errorMessage: model.errorMessage,
-                    onSignIn: { await model.signIn(username: username, password: password) }
+                    onSignIn: { await model.signIn(serverURL: serverText, username: username, password: password) }
                 )
             }
         }
@@ -111,7 +126,7 @@ public struct VeloraAppShell: View {
 
 @available(iOS 16.0, tvOS 16.0, *)
 private struct VeloraLoginView: View {
-    let server: String
+    @Binding var server: String
     @Binding var username: String
     @Binding var password: String
     let errorMessage: String?
@@ -120,11 +135,11 @@ private struct VeloraLoginView: View {
     var body: some View {
         Form {
             Section("Connect to Jellyfin") {
-                LabeledContent("Server address", value: server)
+                TextField("Server address", text: $server)
                 TextField("Username", text: $username)
                 SecureField("Password", text: $password)
                 Button("Sign in") { Task { await onSignIn() } }
-                    .disabled(server.isEmpty || username.isEmpty || password.isEmpty)
+                    .disabled(server.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || username.isEmpty || password.isEmpty)
                 if let errorMessage { Text(errorMessage).foregroundStyle(.red) }
             }
         }

@@ -76,7 +76,7 @@ final class VeloraKitTests: XCTestCase {
             defaults: defaults,
             defaultsKey: "session"
         )
-        let expected = JellyfinSession(accessToken: "secret-token", userID: "user-1", username: "ruvik")
+        let expected = JellyfinSession(accessToken: "secret-token", userID: "user-1", username: "ruvik", serverURL: "http://jellyfin.local:8096")
         XCTAssertNil(store.load())
         XCTAssertTrue(store.save(expected))
         XCTAssertEqual(store.load(), expected)
