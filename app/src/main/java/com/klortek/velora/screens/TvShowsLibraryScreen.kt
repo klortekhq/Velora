@@ -473,60 +473,15 @@ fun TvShowsLibraryScreen(
     
     // Sort and filter library items
     val sortedLibraryItems = remember(libraryItems, sortType, hideShowsWithZeroEpisodes, selectedGenreFilter, playbackFilter) {
-        // First filter by genre if selected
-        val genreFilteredItems = if (selectedGenreFilter != null) {
-            libraryItems.filter { it.Genres?.contains(selectedGenreFilter) == true }
-        } else {
-            libraryItems
-        }.filter {
-            when (playbackFilter) {
-                PlaybackFilter.All -> true
-                PlaybackFilter.Watched -> it.UserData?.Played == true
-                PlaybackFilter.Unwatched -> it.UserData?.Played != true
-                PlaybackFilter.Favorites -> it.UserData?.IsFavorite == true
-            }
-        }
+        val sortedItems = queryLibraryItems(
+            items = libraryItems,
+            sortMode = sortType.toLibrarySortMode(),
+            descending = sortType.isDescendingLibrarySort(),
+            favoritesOnly = playbackFilter == PlaybackFilter.Favorites,
+            playbackFilter = playbackFilter.toLibraryPlaybackFilter(),
+            genre = selectedGenreFilter
+        )
 
-        val sortedItems = when (sortType) {
-            SortType.Alphabetically -> genreFilteredItems.sortedBy { it.Name?.lowercase() }
-            SortType.DateAdded -> {
-                genreFilteredItems.sortedByDescending { 
-                    it.DateCreated?.let { dateStr ->
-                        try {
-                            val formats = listOf(
-                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US),
-                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
-                                SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                            )
-                            formats.firstNotNullOfOrNull { format ->
-                                try { format.parse(dateStr)?.time } catch (e: Exception) { null }
-                            } ?: Long.MIN_VALUE
-                        } catch (e: Exception) { Long.MIN_VALUE }
-                    } ?: Long.MIN_VALUE
-                }
-            }
-            SortType.DateReleased -> {
-                genreFilteredItems.sortedByDescending { 
-                    it.PremiereDate?.let { dateStr ->
-                        try {
-                            val formats = listOf(
-                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US),
-                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
-                                SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                            )
-                            formats.firstNotNullOfOrNull { format ->
-                                try { format.parse(dateStr)?.time } catch (e: Exception) { null }
-                            } ?: Long.MIN_VALUE
-                        } catch (e: Exception) { Long.MIN_VALUE }
-                    } ?: Long.MIN_VALUE
-                }
-            }
-            SortType.Runtime -> genreFilteredItems.sortedBy { it.RunTimeTicks ?: 0L }
-            SortType.Random -> genreFilteredItems.shuffled()
-            SortType.CriticRating -> genreFilteredItems.sortedByDescending { it.CriticRating ?: -1f }
-            SortType.CommunityRating -> genreFilteredItems.sortedByDescending { it.CommunityRating ?: -1f }
-        }
-        
         // Filter shows with zero episodes if setting is enabled
         if (hideShowsWithZeroEpisodes) {
             sortedItems.filter { item ->

@@ -31,7 +31,7 @@ vuelven a pasar; iOS/iPadOS/tvOS siguen pendientes de validación en macOS/Xcode
 
 ## Oleada actual
 
-Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
+Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
 
 ## Verified in source
 
@@ -54,7 +54,7 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.80 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.84 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -90,9 +90,9 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Release actual: v1.2.80 (preparación)
+## Release actual: v1.2.84 (validación)
 
-La fuente actual es `1.2.80`. Incluye las correcciones de presentación para el
+La fuente actual es `1.2.84`. Incluye las correcciones de presentación para el
 renderizador GL y el contenedor móvil de MPV, además de una negociación de
 reproducción que respeta la calidad elegida, los límites reales del dispositivo
 y el passthrough de audio. La pantalla de detalles móvil usa ahora componentes
@@ -101,7 +101,14 @@ conserva sus componentes de foco, además del endurecimiento de URLs MPV y Live 
 Los tests Android móvil/TV pasan en local. Todavía
 no se afirma validación física en un móvil, Fire TV o televisor.
 
-Artefactos Android verificados en `v1.2.80`:
+La revisión `v1.2.84` conserva el modo de formato de imagen al recrear la
+actividad y unifica el ordenado/filtrado de las pantallas reales de Películas y
+Series con la consulta común cubierta por tests. La compilación Android móvil,
+sus unit tests y las pruebas web pasan localmente. La publicación de release de
+esta revisión queda pendiente de que terminen correctamente los workflows de
+GitHub Actions.
+
+La siguiente tabla es el histórico verificado de `v1.2.80`:
 
 | Artefacto | SHA-256 publicado |
 | --- | --- |

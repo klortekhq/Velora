@@ -471,58 +471,14 @@ fun MoviesLibraryScreen(
     
     // Sort and Filter library items
     val sortedLibraryItems = remember(libraryItems, sortType, selectedGenreFilter, playbackFilter) {
-        val filteredItems = if (selectedGenreFilter != null) {
-            libraryItems.filter { it.Genres?.contains(selectedGenreFilter) == true }
-        } else {
-            libraryItems
-        }.filter {
-            when (playbackFilter) {
-                PlaybackFilter.All -> true
-                PlaybackFilter.Watched -> it.UserData?.Played == true
-                PlaybackFilter.Unwatched -> it.UserData?.Played != true
-                PlaybackFilter.Favorites -> it.UserData?.IsFavorite == true
-            }
-        }
-
-        when (sortType) {
-            SortType.Alphabetically -> filteredItems.sortedBy { it.Name?.lowercase() }
-            SortType.DateAdded -> {
-                filteredItems.sortedByDescending { 
-                    it.DateCreated?.let { dateStr ->
-                        try {
-                            val formats = listOf(
-                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US),
-                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
-                                SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                            )
-                            formats.firstNotNullOfOrNull { format ->
-                                try { format.parse(dateStr)?.time } catch (e: Exception) { null }
-                            } ?: Long.MIN_VALUE
-                        } catch (e: Exception) { Long.MIN_VALUE }
-                    } ?: Long.MIN_VALUE
-                }
-            }
-            SortType.DateReleased -> {
-                filteredItems.sortedByDescending { 
-                    it.PremiereDate?.let { dateStr ->
-                        try {
-                            val formats = listOf(
-                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US),
-                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
-                                SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                            )
-                            formats.firstNotNullOfOrNull { format ->
-                                try { format.parse(dateStr)?.time } catch (e: Exception) { null }
-                            } ?: Long.MIN_VALUE
-                        } catch (e: Exception) { Long.MIN_VALUE }
-                    } ?: Long.MIN_VALUE
-                }
-            }
-            SortType.Runtime -> filteredItems.sortedBy { it.RunTimeTicks ?: 0L }
-            SortType.Random -> filteredItems.shuffled()
-            SortType.CriticRating -> filteredItems.sortedByDescending { it.CriticRating ?: -1f }
-            SortType.CommunityRating -> filteredItems.sortedByDescending { it.CommunityRating ?: -1f }
-        }
+        queryLibraryItems(
+            items = libraryItems,
+            sortMode = sortType.toLibrarySortMode(),
+            descending = sortType.isDescendingLibrarySort(),
+            favoritesOnly = playbackFilter == PlaybackFilter.Favorites,
+            playbackFilter = playbackFilter.toLibraryPlaybackFilter(),
+            genre = selectedGenreFilter
+        )
     }
     
     // Main content (same structure as home screen)
