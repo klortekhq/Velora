@@ -52,6 +52,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -582,7 +586,11 @@ private fun MobileCastMemberCard(person: com.klortek.velora.jellyfin.Person, api
             .clickable(enabled = person.Name.isNotBlank()) {
                 context.startActivity(com.klortek.velora.CastInfoActivity.createIntent(context, person))
             }
-            .padding(vertical = 4.dp),
+            .padding(vertical = 4.dp)
+            .semantics {
+                contentDescription = person.Name
+                role = Role.Button
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
@@ -629,14 +637,14 @@ private fun MobileFileDetails(item: JellyfinItem) {
             .background(Color.Black.copy(alpha = .28f)).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text("Información del archivo", color = Color.White, fontWeight = FontWeight.Bold)
-        Text("Vídeo", color = MobileCyan, fontWeight = FontWeight.SemiBold)
-        Text(videoDetails.ifBlank { "Información de vídeo no disponible" }, color = Color.White.copy(alpha = .78f))
-        Text("Audio", color = MobileCyan, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
-        if (audioDetails.isEmpty()) Text("Información de audio no disponible", color = Color.White.copy(alpha = .78f))
+        Text(stringResource(com.klortek.velora.R.string.mobile_file_info), color = Color.White, fontWeight = FontWeight.Bold)
+        Text(stringResource(com.klortek.velora.R.string.mobile_video), color = MobileCyan, fontWeight = FontWeight.SemiBold)
+        Text(videoDetails.ifBlank { stringResource(com.klortek.velora.R.string.mobile_no_video_info) }, color = Color.White.copy(alpha = .78f))
+        Text(stringResource(com.klortek.velora.R.string.mobile_audio), color = MobileCyan, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
+        if (audioDetails.isEmpty()) Text(stringResource(com.klortek.velora.R.string.mobile_no_audio_info), color = Color.White.copy(alpha = .78f))
         else audioDetails.forEach { Text(it, color = Color.White.copy(alpha = .78f)) }
         source?.Container?.takeIf { it.isNotBlank() }?.let {
-            Text("Formato", color = MobileCyan, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
+            Text(stringResource(com.klortek.velora.R.string.mobile_format), color = MobileCyan, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 4.dp))
             Text(it.uppercase(), color = Color.White.copy(alpha = .78f))
         }
     }
@@ -645,7 +653,7 @@ private fun MobileFileDetails(item: JellyfinItem) {
 @Composable
 private fun MobileSimilarMovies(items: List<JellyfinItem>, apiService: JellyfinApiService?) {
     if (items.isEmpty()) {
-        Text("No hay títulos similares disponibles", color = Color.White.copy(alpha = .72f))
+        Text(stringResource(com.klortek.velora.R.string.mobile_no_similar), color = Color.White.copy(alpha = .72f))
         return
     }
     val context = LocalContext.current
