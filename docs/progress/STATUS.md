@@ -744,3 +744,10 @@ privado `offline/media`, incluidos `.part` de transferencias interrumpidas, y
 usa el tamaño registrado como suelo conservador para filas heredadas. Así una
 descarga parcial o un reinicio no puede hacer que Velora subestime el espacio
 ocupado.
+
+La ordenación de películas y series ya permite cambiar explícitamente entre
+orden ascendente y descendente desde el mismo diálogo de ordenar y filtrar,
+tanto con pantalla táctil como con mando. La preferencia se conserva por
+dispositivo y se aplica a todos los criterios de ordenación. La prueba de
+consulta de biblioteca y la compilación Kotlin de TV pasan; no se publica una
+nueva APK por este cambio aislado.

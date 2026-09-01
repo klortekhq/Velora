@@ -478,12 +478,14 @@ fun TvShowsLibraryScreen(
         }
     }
     
-    // Sort and filter library items
-    val sortedLibraryItems = remember(libraryItems, sortType, hideShowsWithZeroEpisodes, selectedGenreFilter, playbackFilter) {
+    // Sort and filter library items. Direction is explicitly controlled by the
+    // user and persisted, rather than being hard-coded per sort field.
+    var sortDescending by remember { mutableStateOf(settings.librarySortDescending) }
+    val sortedLibraryItems = remember(libraryItems, sortType, sortDescending, hideShowsWithZeroEpisodes, selectedGenreFilter, playbackFilter) {
         val sortedItems = queryLibraryItems(
             items = libraryItems,
             sortMode = sortType.toLibrarySortMode(),
-            descending = sortType.isDescendingLibrarySort(),
+            descending = sortDescending,
             favoritesOnly = playbackFilter == PlaybackFilter.Favorites,
             playbackFilter = playbackFilter.toLibraryPlaybackFilter(),
             genre = selectedGenreFilter
@@ -2293,6 +2295,11 @@ fun TvShowsLibraryScreen(
         if (showSortDialog) {
             SortDialog(
                 currentSortType = sortType,
+                descending = sortDescending,
+                onDescendingChanged = { value ->
+                    sortDescending = value
+                    settings.librarySortDescending = value
+                },
                 onSortSelected = { newSortType ->
                     sortType = newSortType
                     settings.setSortType(

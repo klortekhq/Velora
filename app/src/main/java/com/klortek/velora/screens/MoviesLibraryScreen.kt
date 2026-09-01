@@ -476,12 +476,15 @@ fun MoviesLibraryScreen(
         }
     }
     
-    // Sort and Filter library items
-    val sortedLibraryItems = remember(libraryItems, sortType, selectedGenreFilter, playbackFilter) {
+    // Sort and Filter library items. Keep the direction as a real user preference
+    // instead of deriving it from the selected field, so the arrow in the dialog
+    // controls the actual order for every sort mode.
+    var sortDescending by remember { mutableStateOf(settings.librarySortDescending) }
+    val sortedLibraryItems = remember(libraryItems, sortType, sortDescending, selectedGenreFilter, playbackFilter) {
         queryLibraryItems(
             items = libraryItems,
             sortMode = sortType.toLibrarySortMode(),
-            descending = sortType.isDescendingLibrarySort(),
+            descending = sortDescending,
             favoritesOnly = playbackFilter == PlaybackFilter.Favorites,
             playbackFilter = playbackFilter.toLibraryPlaybackFilter(),
             genre = selectedGenreFilter
@@ -2195,6 +2198,11 @@ fun MoviesLibraryScreen(
         if (showSortDialog) {
             SortDialog(
                 currentSortType = sortType,
+                descending = sortDescending,
+                onDescendingChanged = { value ->
+                    sortDescending = value
+                    settings.librarySortDescending = value
+                },
                 onSortSelected = { newSortType ->
                     sortType = newSortType
                     settings.setSortType(
