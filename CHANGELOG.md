@@ -2,6 +2,12 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.79
+
+### Mobile i18n
+
+- Las etiquetas de detalles móviles pasan por el sistema de traducciones sin romper la selección de pestañas.
+
 ## 1.2.78
 
 ### CI/CD

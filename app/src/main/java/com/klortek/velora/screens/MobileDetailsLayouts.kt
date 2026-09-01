@@ -123,7 +123,7 @@ fun MobileMovieDetailsLayout(
             when (selectedSection) {
                 "Reparto" -> MobilePeople(item, apiService)
                 "Equipo" -> MobileCrew(item, apiService)
-                "Estudios" -> Text("No hay información de estudios disponible", color = Color.White.copy(alpha = .72f))
+                "Estudios" -> Text(stringResource(com.klortek.velora.R.string.mobile_no_studios), color = Color.White.copy(alpha = .72f))
                 "Detalles" -> MobileFileDetails(item)
                 "Similares" -> MobileSimilarMovies(similarMovies, apiService)
                 else -> MobilePeople(item, apiService)
@@ -183,11 +183,11 @@ fun MobileSeriesDetailsLayout(
                 }.takeIf { PlatformCapabilities.supportsOfflineDownloads }
             )
             if (seasons.isNotEmpty()) {
-                Text("Temporadas", color = Color.White, style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(com.klortek.velora.R.string.mobile_seasons), color = Color.White, style = MaterialTheme.typography.titleMedium)
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp), contentPadding = PaddingValues(vertical = 2.dp)) {
                     items(seasons.indices.toList()) { index ->
                         val selected = index == selectedSeasonIndex
-                        Text("Temporada ${seasons[index].IndexNumber ?: index + 1}", color = if (selected) Color.Black else Color.White, modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(if (selected) MobileCyan else Color.White.copy(alpha = .16f)).clickable { onSeasonSelected(index) }.padding(horizontal = 18.dp, vertical = 10.dp))
+                        Text(stringResource(com.klortek.velora.R.string.mobile_season_number, seasons[index].IndexNumber ?: index + 1), color = if (selected) Color.Black else Color.White, modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(if (selected) MobileCyan else Color.White.copy(alpha = .16f)).clickable { onSeasonSelected(index) }.padding(horizontal = 18.dp, vertical = 10.dp))
                     }
                 }
                 if (PlatformCapabilities.supportsOfflineDownloads && episodes.isNotEmpty() && onDownloadSeason != null) {
@@ -204,7 +204,7 @@ fun MobileSeriesDetailsLayout(
                     }
                 }
             }
-            Text("Episodios", color = Color.White, style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(com.klortek.velora.R.string.mobile_episodes), color = Color.White, style = MaterialTheme.typography.titleMedium)
             episodes.forEach { episode ->
                 MobileEpisodeCard(episode, apiService, { if (PlatformCapabilities.supportsOfflineDownloads) pendingDownload = episode }) { onPlay(episode) }
             }
@@ -351,19 +351,19 @@ private fun SeasonEpisodeSelectionDialog(
         ),
         shape = RoundedCornerShape(28.dp)
     ) {
-        androidx.compose.material3.Icon(Icons.Default.PlayArrow, "Reproducir", Modifier.size(22.dp))
+        androidx.compose.material3.Icon(Icons.Default.PlayArrow, stringResource(com.klortek.velora.R.string.action_play), Modifier.size(22.dp))
         Spacer(Modifier.width(8.dp))
-        androidx.compose.material3.Text("Reproducir", fontWeight = FontWeight.SemiBold)
+        androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.action_play), fontWeight = FontWeight.SemiBold)
     }
 }
 
 @Composable private fun MobileActionRow(onShuffle: () -> Unit, onRestart: () -> Unit, onDownload: (() -> Unit)? = null, onAudio: (() -> Unit)? = null, onRemote: (() -> Unit)? = null, hasAudio: Boolean = false) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        MobileActionButton("Aleatorio", Icons.Default.Shuffle, onShuffle)
-        MobileActionButton("Reiniciar", Icons.Default.Replay, onRestart)
-        if (hasAudio && onAudio != null) MobileActionButton("Audio", Icons.Default.VolumeUp, onAudio)
-        if (onRemote != null) MobileActionButton("Transmitir", Icons.Default.Cast, onRemote)
-        onDownload?.let { MobileActionButton("Descargar", Icons.Default.Download, it) }
+        MobileActionButton(stringResource(com.klortek.velora.R.string.mobile_shuffle), Icons.Default.Shuffle, onShuffle)
+        MobileActionButton(stringResource(com.klortek.velora.R.string.mobile_restart), Icons.Default.Replay, onRestart)
+        if (hasAudio && onAudio != null) MobileActionButton(stringResource(com.klortek.velora.R.string.mobile_audio), Icons.Default.VolumeUp, onAudio)
+        if (onRemote != null) MobileActionButton(stringResource(com.klortek.velora.R.string.mobile_cast), Icons.Default.Cast, onRemote)
+        onDownload?.let { MobileActionButton(stringResource(com.klortek.velora.R.string.action_download), Icons.Default.Download, it) }
     }
 }
 
@@ -426,8 +426,8 @@ private fun MobileAudioSelectionDialog(item: JellyfinItem, onDismiss: () -> Unit
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .62f)), contentAlignment = Alignment.BottomCenter) {
             Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)).background(Color(0xFF17191D)).padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Pista de audio", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                if (streams.isEmpty()) Text("No hay pistas de audio disponibles", color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
+                Text(stringResource(com.klortek.velora.R.string.mobile_audio_track), color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                if (streams.isEmpty()) Text(stringResource(com.klortek.velora.R.string.mobile_no_audio_tracks), color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
                 LazyColumn { items(streams, key = { it.Index ?: it.hashCode() }) { stream ->
                     val index = stream.Index
                     val title = stream.DisplayTitle ?: stream.DisplayLanguage ?: stream.Language ?: "Audio"
@@ -443,7 +443,7 @@ private fun MobileAudioSelectionDialog(item: JellyfinItem, onDismiss: () -> Unit
                         }
                     }
                 } }
-                Text("Cancelar", color = MobileCyan, modifier = Modifier.fillMaxWidth().clickable(onClick = onDismiss).padding(vertical = 14.dp))
+                Text(stringResource(com.klortek.velora.R.string.cancel), color = MobileCyan, modifier = Modifier.fillMaxWidth().clickable(onClick = onDismiss).padding(vertical = 14.dp))
             }
         }
     }
@@ -462,10 +462,10 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .62f)), contentAlignment = Alignment.BottomCenter) {
             Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)).background(Color(0xFF17191D)).padding(22.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Reproducción remota", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(com.klortek.velora.R.string.mobile_remote_playback), color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 when {
-                    loading -> Text("Buscando dispositivos…", color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
-                    sessions.isEmpty() -> Text("No hay dispositivos disponibles", color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
+                    loading -> Text(stringResource(com.klortek.velora.R.string.mobile_searching_devices), color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
+                    sessions.isEmpty() -> Text(stringResource(com.klortek.velora.R.string.mobile_no_devices), color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
                     else -> sessions.forEach { session ->
                         Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Color.White.copy(alpha = .06f)).clickable {
                             session.Id?.let { id -> scope.launch { if (apiService?.playOnRemoteSession(id, item.Id, item.UserData?.PositionTicks?.div(10_000L) ?: 0L) == true) sentTo = session.DeviceName } }
@@ -479,7 +479,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
                         }
                     }
                 }
-                Text("Cerrar", color = MobileCyan, modifier = Modifier.fillMaxWidth().clickable(onClick = onDismiss).padding(vertical = 12.dp))
+                Text(stringResource(com.klortek.velora.R.string.close), color = MobileCyan, modifier = Modifier.fillMaxWidth().clickable(onClick = onDismiss).padding(vertical = 12.dp))
             }
         }
     }
@@ -514,7 +514,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
 @Composable private fun MobilePeople(item: JellyfinItem, apiService: JellyfinApiService?) {
     val people = item.People?.filter { it.Type == "Actor" }?.take(12).orEmpty()
     if (people.isNotEmpty()) {
-        Text("Reparto", color = Color.White, style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(com.klortek.velora.R.string.mobile_cast), color = Color.White, style = MaterialTheme.typography.titleMedium)
         LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             items(people.size, key = { index -> "cast-${people[index].Id ?: people[index].Name}-$index" }) { index ->
                 MobileCastMemberCard(person = people[index], apiService = apiService)
@@ -525,21 +525,27 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
 
 @Composable
 private fun MobileDetailTabs(selected: String, onSelected: (String) -> Unit) {
-    val tabs = listOf("Reparto", "Equipo", "Estudios", "Detalles", "Similares")
+    val tabs = listOf(
+        "Reparto" to stringResource(com.klortek.velora.R.string.mobile_cast),
+        "Equipo" to stringResource(com.klortek.velora.R.string.mobile_crew),
+        "Estudios" to stringResource(com.klortek.velora.R.string.mobile_studios),
+        "Detalles" to stringResource(com.klortek.velora.R.string.mobile_details),
+        "Similares" to stringResource(com.klortek.velora.R.string.mobile_similar)
+    )
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 4.dp)
     ) {
-        items(tabs) { tab ->
+        items(tabs) { (key, label) ->
             Text(
-                tab,
-                color = if (selected == tab) Color.White else Color.White.copy(alpha = .82f),
-                fontWeight = if (selected == tab) FontWeight.Bold else FontWeight.Normal,
+                label,
+                color = if (selected == key) Color.White else Color.White.copy(alpha = .82f),
+                fontWeight = if (selected == key) FontWeight.Bold else FontWeight.Normal,
                 modifier = Modifier
                     .clip(RoundedCornerShape(22.dp))
-                    .background(if (selected == tab) MobileCyan else Color.White.copy(alpha = .12f))
-                    .clickable { onSelected(tab) }
+                    .background(if (selected == key) MobileCyan else Color.White.copy(alpha = .12f))
+                    .clickable { onSelected(key) }
                     .padding(horizontal = 16.dp, vertical = 10.dp)
             )
         }
@@ -550,7 +556,7 @@ private fun MobileDetailTabs(selected: String, onSelected: (String) -> Unit) {
 private fun MobileCrew(item: JellyfinItem, apiService: JellyfinApiService?) {
     val crew = item.People?.filter { it.Type != "Actor" }.orEmpty()
     if (crew.isEmpty()) {
-        Text("No hay información del equipo", color = Color.White.copy(alpha = .72f))
+        Text(stringResource(com.klortek.velora.R.string.mobile_no_crew), color = Color.White.copy(alpha = .72f))
     } else {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             val visibleCrew = crew.take(12)
