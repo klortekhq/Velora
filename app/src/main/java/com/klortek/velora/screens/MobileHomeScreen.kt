@@ -86,7 +86,7 @@ fun MobileHomeScreen(
     onLibraryClick: (JellyfinLibrary) -> Unit,
     onSearch: () -> Unit,
     onSettings: () -> Unit,
-    onDownloads: () -> Unit,
+    onDownloads: (() -> Unit)?,
     onLiveTv: () -> Unit,
     showLiveTv: Boolean,
     onMovies: () -> Unit,
@@ -583,7 +583,7 @@ private fun MobileBottomNavigation(
     showMovies: Boolean,
     showSeries: Boolean,
     showLiveTv: Boolean,
-    onDownloads: () -> Unit,
+    onDownloads: (() -> Unit)?,
     onSearch: () -> Unit,
     onSettings: () -> Unit,
     modifier: Modifier = Modifier
@@ -605,7 +605,9 @@ private fun MobileBottomNavigation(
         if (showSeries) MobileBottomNavigationItem(Icons.Default.Tv, stringResource(com.klortek.velora.R.string.nav_series), onSeries, modifier = itemModifier)
         if (showLiveTv) MobileBottomNavigationItem(Icons.Default.Tv, stringResource(com.klortek.velora.R.string.nav_live_tv), onLiveTv, modifier = itemModifier)
         MobileBottomNavigationItem(Icons.Default.Search, stringResource(com.klortek.velora.R.string.search_short), onSearch, modifier = itemModifier)
-        MobileBottomNavigationItem(Icons.Default.Download, stringResource(com.klortek.velora.R.string.nav_downloads), onDownloads, modifier = itemModifier)
+        onDownloads?.let {
+            MobileBottomNavigationItem(Icons.Default.Download, stringResource(com.klortek.velora.R.string.nav_downloads), it, modifier = itemModifier)
+        }
         MobileBottomNavigationItem(Icons.Default.Settings, stringResource(com.klortek.velora.R.string.nav_settings), onSettings, modifier = itemModifier)
     }
 }
