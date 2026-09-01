@@ -52,7 +52,8 @@ public actor JellyfinClient {
     }
 
     public func imageURL(itemID: String, kind: String = "Primary", maxWidth: Int? = nil) -> URL? {
-        var components = URLComponents(url: baseURL.appendingPathComponent("Items/\(itemID)/Images/\(kind)"), resolvingAgainstBaseURL: false)
+        guard let imageURL = itemURL(root: "Items", itemID: itemID, suffix: ["Images", kind]) else { return nil }
+        var components = URLComponents(url: imageURL, resolvingAgainstBaseURL: false)
         if let maxWidth { components?.queryItems = [URLQueryItem(name: "MaxWidth", value: String(maxWidth))] }
         return components?.url
     }
@@ -61,7 +62,8 @@ public actor JellyfinClient {
     /// Authentication is still supplied by `authorizedRequest(for:)` and is
     /// never embedded in this URL.
     public func videoURL(itemID: String) -> URL? {
-        var components = URLComponents(url: baseURL.appendingPathComponent("Videos/\(itemID)/stream"), resolvingAgainstBaseURL: false)
+        guard let streamURL = itemURL(root: "Videos", itemID: itemID, suffix: ["stream"]) else { return nil }
+        var components = URLComponents(url: streamURL, resolvingAgainstBaseURL: false)
         components?.queryItems = [URLQueryItem(name: "static", value: "true")]
         return components?.url
     }
@@ -73,6 +75,19 @@ public actor JellyfinClient {
         request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
         return request
+    }
+
+    /// Jellyfin item IDs are opaque single path components. Rejecting path
+    /// separators here prevents malformed or untrusted IDs from escaping the
+    /// intended resource endpoint.
+    private func itemURL(root: String, itemID: String, suffix: [String]) -> URL? {
+        guard !itemID.isEmpty,
+              !itemID.contains("/"),
+              !itemID.contains("\\") else { return nil }
+        let parts = [root, itemID] + suffix
+        return parts.enumerated().reduce(baseURL) { url, entry in
+            url.appendingPathComponent(entry.element, isDirectory: entry.offset < parts.count - 1)
+        }
     }
 
     public func items(userID: String, parentID: String? = nil, includeTypes: [String] = []) async throws -> [JellyfinItem] {
