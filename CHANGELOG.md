@@ -17,6 +17,9 @@ All notable changes to Velora will be documented in this file.
 - Corrige la comprobación de espacio libre de las descargas móviles para que
   mida el mismo almacenamiento privado gestionado por Velora donde se guarda
   el contenido, evitando aceptar descargas que no caben en ese volumen.
+- Endurece el inicio de sesión de OpenSubtitles: codifica las credenciales como
+  JSON y deja de registrar respuestas o errores que puedan revelar tokens o
+  información sensible.
 
 ## 1.2.85
 

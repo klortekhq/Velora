@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -32,6 +33,12 @@ import java.util.concurrent.TimeUnit
 object OpenSubtitlesApi {
     private const val TAG = "OpenSubtitles"
     private const val BASE_URL = "https://api.opensubtitles.com/api/v1"
+
+    @Serializable
+    private data class LoginRequest(
+        val username: String,
+        val password: String
+    )
     
     // API key must be set by user in Settings
     private var apiKey: String = ""
@@ -99,7 +106,10 @@ object OpenSubtitlesApi {
             
             Log.d(TAG, "🔐 Logging in to OpenSubtitles as: $username")
             
-            val loginBody = """{"username": "$username", "password": "$password"}"""
+            // Encode user input instead of interpolating it into JSON. This
+            // keeps quotes, backslashes and control characters valid without
+            // ever printing the credentials to the log.
+            val loginBody = json.encodeToString(LoginRequest(username, password))
             
             val request = Request.Builder()
                 .url("$BASE_URL/login")
@@ -115,8 +125,7 @@ object OpenSubtitlesApi {
             
             if (!response.isSuccessful) {
                 Log.e(TAG, "❌ Login failed: HTTP ${response.code}")
-                responseBody?.let { Log.e(TAG, "Response: $it") }
-                lastError = "Login failed (HTTP ${response.code})"
+            lastError = "Login failed (HTTP ${response.code})"
                 return@withContext false
             }
             
@@ -125,8 +134,6 @@ object OpenSubtitlesApi {
                 lastError = "Empty login response"
                 return@withContext false
             }
-            
-            Log.d(TAG, "📥 Login response: $responseBody")
             
             val loginResponse = json.decodeFromString<LoginResponse>(responseBody)
             
@@ -144,8 +151,10 @@ object OpenSubtitlesApi {
             return@withContext true
             
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Login error: ${e.message}", e)
-            lastError = "Login error: ${e.message}"
+            // Exception messages and server bodies can contain request data;
+            // keep diagnostics intentionally generic.
+            Log.e(TAG, "❌ Login error (${e::class.simpleName})")
+            lastError = "Login error"
             return@withContext false
         }
     }

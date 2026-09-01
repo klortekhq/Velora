@@ -682,3 +682,9 @@ La revisión `v1.2.84` conserva el modo de formato de imagen del
 reproductor al recrear la actividad durante el cambio de orientación. La
 compilación y los unit tests Android han pasado tras este cambio; sus
 artefactos están pendientes de verificación en GitHub Actions.
+
+La revisión local `1.2.86` endurece la autenticación de OpenSubtitles:
+codifica las credenciales mediante el serializador JSON y evita registrar
+respuestas o mensajes de error que puedan contener tokens o datos sensibles.
+La compilación y los unit tests de móvil pasan; no se ha creado una release
+por tratarse de una corrección de seguridad acotada.
