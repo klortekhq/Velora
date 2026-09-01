@@ -68,7 +68,7 @@ La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de q
 
 ## Descargar
 
-Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases). Cada release etiquetada reúne los cuatro APK de Android (móvil y TV, debug y release unsigned), el cliente web y los paquetes web disponibles, junto con sus sumas SHA-256. Para instalar manualmente en Android TV o Fire TV, descarga el APK correspondiente y realiza una instalación local.
+Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases) cuando incorporan un bloque funcional o una mejora relevante. No se publica una release por cada ajuste menor; las correcciones pequeñas se agrupan en la siguiente versión significativa, salvo que sean de seguridad o críticas. Cada release etiquetada reúne los cuatro APK de Android (móvil y TV, debug y release unsigned), el cliente web y los paquetes web disponibles, junto con sus sumas SHA-256. Para instalar manualmente en Android TV o Fire TV, descarga el APK correspondiente y realiza una instalación local.
 
 ## Cliente web y Smart TV
 
