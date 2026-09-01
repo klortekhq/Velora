@@ -15,6 +15,11 @@ correctamente tras endurecer el motor de decisión de reproducción. El modelo A
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
 
+Desde la última release se han añadido componentes SwiftUI nativos reutilizables
+para las superficies Apple y se han completado los textos nuevos de la interfaz
+móvil en inglés, alemán y francés. La prueba Android móvil y sus unit tests
+vuelven a pasar; iOS/iPadOS/tvOS siguen pendientes de validación en macOS/Xcode.
+
 ## Oleada actual
 
 Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
