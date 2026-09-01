@@ -59,8 +59,8 @@ jobs:
           if [ -d outputs/web/vidaa ]; then
             (cd outputs/web/vidaa && zip -qr "../../../dist/Velora-vidaa-bundle-${version}.zip" .)
           fi
-          if [ -f outputs/web/webos/*.ipk ]; then
-            cp outputs/web/webos/*.ipk "dist/Velora-webos-${version}.ipk"
+          if compgen -G 'outputs/web/webos/*.ipk' > /dev/null; then
+            cp "$(compgen -G 'outputs/web/webos/*.ipk' | head -n 1)" "dist/Velora-webos-${version}.ipk"
           elif [ -d outputs/web/webos ]; then
             (cd outputs/web/webos && zip -qr "../../../dist/Velora-webos-bundle-${version}.zip" .)
           fi
@@ -95,11 +95,4 @@ jobs:
         with:
           name: Velora ${{ github.ref_name }}
           generate_release_notes: true
-          files: |
-            dist/Velora-Web-${{ inputs.platform || 'all' }}.tar.gz
-            dist/Velora-Web-${{ inputs.platform || 'all' }}.zip
-            dist/Velora-samsung-bundle-*.zip
-            dist/Velora-vidaa-bundle-*.zip
-            dist/Velora-webos-*.ipk
-            dist/Velora-webos-bundle-*.zip
-            dist/SHA256SUMS-web.txt
+          files: dist/*
