@@ -10,6 +10,7 @@ import SwiftUI
 public final class VeloraAppModel: ObservableObject {
     @Published public private(set) var isAuthenticated = false
     @Published public private(set) var items: [JellyfinItem] = []
+    @Published public private(set) var liveTvChannels: [JellyfinLiveTvChannel] = []
     @Published public var errorMessage: String?
     @Published public var settings: VeloraSettings {
         didSet { settingsStore.save(settings) }
@@ -52,7 +53,10 @@ public final class VeloraAppModel: ObservableObject {
             let authenticated = try await client.authenticate(username: username, password: password)
             session = authenticated
             credentialStore.save(authenticated)
-            items = try await client.items(userID: authenticated.userID, includeTypes: ["Movie", "Series"])
+            async let library = client.items(userID: authenticated.userID, includeTypes: ["Movie", "Series"])
+            async let channels = client.liveTvChannels(userID: authenticated.userID)
+            items = try await library
+            liveTvChannels = (try? await channels) ?? []
             isAuthenticated = true
             errorMessage = nil
         } catch {
@@ -66,6 +70,7 @@ public final class VeloraAppModel: ObservableObject {
         credentialStore.remove()
         session = nil
         items = []
+        liveTvChannels = []
         isAuthenticated = false
     }
 

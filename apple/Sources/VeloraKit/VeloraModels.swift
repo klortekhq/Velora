@@ -45,6 +45,54 @@ public struct JellyfinResult<T: Decodable & Sendable>: Decodable, Sendable {
     }
 }
 
+public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
+    public let id: String
+    public let name: String
+    public let number: String?
+    public let currentProgram: JellyfinLiveTvProgram?
+
+    private enum CodingKeys: String, CodingKey {
+        case id = "Id"
+        case name = "Name"
+        case number = "ChannelNumber"
+        case currentProgram = "CurrentProgram"
+    }
+
+    public init(id: String, name: String, number: String? = nil, currentProgram: JellyfinLiveTvProgram? = nil) {
+        self.id = id
+        self.name = name
+        self.number = number
+        self.currentProgram = currentProgram
+    }
+}
+
+public struct JellyfinLiveTvProgram: Codable, Identifiable, Sendable {
+    public let id: String
+    public let name: String
+    public let channelID: String?
+    public let startDate: Date?
+    public let endDate: Date?
+    public let overview: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case id = "Id"
+        case name = "Name"
+        case channelID = "ChannelId"
+        case startDate = "StartDate"
+        case endDate = "EndDate"
+        case overview = "Overview"
+    }
+
+    public init(id: String, name: String, channelID: String? = nil, startDate: Date? = nil, endDate: Date? = nil, overview: String? = nil) {
+        self.id = id
+        self.name = name
+        self.channelID = channelID
+        self.startDate = startDate
+        self.endDate = endDate
+        self.overview = overview
+    }
+}
+
 public enum PlaybackPath: String, Sendable { case directPlay, directStream, remux, transcode, fallback }
 
 public enum PlaybackQuality: Sendable, Equatable {
