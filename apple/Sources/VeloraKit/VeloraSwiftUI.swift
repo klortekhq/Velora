@@ -74,10 +74,13 @@ public struct VeloraSettingsView: View {
     public var body: some View {
         Form {
             Section("Language and playback") {
-                TextField("App language", text: Binding(
-                    get: { settings.languageIdentifier ?? "" },
-                    set: { settings.languageIdentifier = $0.isEmpty ? nil : $0 }
-                ))
+                Picker("App language", selection: $settings.languageIdentifier) {
+                    Text("Automatic").tag(nil as String?)
+                    Text("Español").tag(VeloraLanguage.spanish.rawValue as String?)
+                    Text("English").tag(VeloraLanguage.english.rawValue as String?)
+                    Text("Français").tag(VeloraLanguage.french.rawValue as String?)
+                    Text("Deutsch").tag(VeloraLanguage.german.rawValue as String?)
+                }
                 TextField("Preferred audio", text: Binding(
                     get: { settings.preferredAudioLanguage ?? "" },
                     set: { settings.preferredAudioLanguage = $0.isEmpty ? nil : $0 }

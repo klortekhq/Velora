@@ -1,5 +1,14 @@
 import Foundation
 
+public enum VeloraLanguage: String, CaseIterable, Identifiable, Sendable {
+    case spanish = "es"
+    case english = "en"
+    case french = "fr"
+    case german = "de"
+
+    public var id: String { rawValue }
+}
+
 public enum SubtitlePreference: String, Codable, Sendable {
     case off
     case preferred
@@ -45,6 +54,11 @@ public struct VeloraSettings: Codable, Equatable, Sendable {
 
     public static func systemDefault() -> Self {
         Self(languageIdentifier: Locale.preferredLanguages.first)
+    }
+
+    /// The locale used by SwiftUI. A nil choice follows the device locale.
+    public var appLocale: Locale {
+        Locale(identifier: languageIdentifier ?? Locale.preferredLanguages.first ?? "en")
     }
 }
 

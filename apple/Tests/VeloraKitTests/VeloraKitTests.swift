@@ -40,6 +40,15 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(restored, settings)
     }
 
+    func testLanguageSelectionUsesDeviceLocaleByDefaultAndSupportsSupportedLocales() {
+        let automatic = VeloraSettings()
+        XCTAssertFalse(automatic.appLocale.identifier.isEmpty)
+        XCTAssertEqual(Set(VeloraLanguage.allCases.map(\.rawValue)), Set(["es", "en", "fr", "de"]))
+
+        let settings = VeloraSettings(languageIdentifier: VeloraLanguage.spanish.rawValue)
+        XCTAssertEqual(settings.appLocale.identifier, "es")
+    }
+
     func testJellyfinItemDecodesServerFieldNames() throws {
         let data = #"{"Id":"movie-1","Name":"Una película","Type":"Movie","Overview":"Descripción","ImageTags":{"Primary":"abc"}}"#.data(using: .utf8)!
         let item = try JSONDecoder().decode(JellyfinItem.self, from: data)
