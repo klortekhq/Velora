@@ -155,4 +155,24 @@
     <string name="home_unwatched">Sin terminar</string>
     <string name="home_popular">Más populares</string>
     <string name="nav_live_tv">Televisión en directo</string>
+    <string name="action_download">Descargar</string>
+    <string name="close">Cerrar</string>
+    <string name="mobile_shuffle">Aleatorio</string>
+    <string name="mobile_restart">Reiniciar</string>
+    <string name="mobile_audio">Audio</string>
+    <string name="mobile_cast">Transmitir</string>
+    <string name="mobile_crew">Equipo</string>
+    <string name="mobile_studios">Estudios</string>
+    <string name="mobile_audio_track">Pista de audio</string>
+    <string name="mobile_no_audio_tracks">No hay pistas de audio disponibles</string>
+    <string name="mobile_remote_playback">Reproducción remota</string>
+    <string name="mobile_searching_devices">Buscando dispositivos…</string>
+    <string name="mobile_no_devices">No hay dispositivos disponibles</string>
+    <string name="mobile_no_studios">No hay información de estudios disponible</string>
+    <string name="mobile_no_crew">No hay información del equipo</string>
+    <string name="mobile_seasons">Temporadas</string>
+    <string name="mobile_season_number">Temporada %1$d</string>
+    <string name="mobile_episodes">Episodios</string>
+    <string name="mobile_details">Detalles</string>
+    <string name="mobile_similar">Similares</string>
 </resources>
