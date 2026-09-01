@@ -138,6 +138,7 @@ import coil.request.ImageRequest
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.res.stringResource
 import com.klortek.velora.theme.*
 
 // Picture mode / aspect ratio options
@@ -4293,13 +4294,13 @@ fun JellyfinVideoPlayerScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         androidx.compose.material3.Text(
-                            text = "Formato de imagen",
+                            text = stringResource(com.klortek.velora.R.string.player_aspect_title),
                             style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
                             color = Color.White,
                             fontWeight = FontWeight.Bold
                         )
                         androidx.compose.material3.Text(
-                            text = "Selecciona cómo quieres ver el vídeo",
+                            text = stringResource(com.klortek.velora.R.string.player_aspect_description),
                             style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                             color = Color.White.copy(alpha = 0.72f),
                             modifier = Modifier.padding(bottom = 8.dp)
@@ -4560,7 +4561,7 @@ fun JellyfinVideoPlayerScreen(
                             Spacer(modifier = Modifier.height(16.dp))
                             
                             Text(
-                                text = "10-bit AV1 Video Not Supported",
+                                 text = stringResource(com.klortek.velora.R.string.player_av1_unsupported_title),
                                 style = MaterialTheme.typography.headlineSmall,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold
@@ -4585,19 +4586,19 @@ fun JellyfinVideoPlayerScreen(
                                     .padding(16.dp)
                             ) {
                                 Text(
-                                    text = "Soluciones:",
+                                     text = stringResource(com.klortek.velora.R.string.player_solutions),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color(0xFF4ECDC4),
                                     fontWeight = FontWeight.Bold
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
-                                    text = "1. Enable MPV Player in Settings → Playback",
+                                     text = stringResource(com.klortek.velora.R.string.player_av1_solution_mpv),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = Color.White.copy(alpha = 0.9f)
                                 )
                                 Text(
-                                    text = "2. Configure Jellyfin to transcode AV1 content",
+                                     text = stringResource(com.klortek.velora.R.string.player_av1_solution_transcode),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = Color.White.copy(alpha = 0.9f)
                                 )
