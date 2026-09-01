@@ -144,8 +144,13 @@ object OfflineDownloadManager {
             workName = workName,
             createdAtEpochMs = System.currentTimeMillis()
         )
+        val requiredNetwork = if (AppSettings(context).offlineWifiOnly) {
+            androidx.work.NetworkType.UNMETERED
+        } else {
+            androidx.work.NetworkType.CONNECTED
+        }
         val work = androidx.work.OneTimeWorkRequestBuilder<OfflineDownloadWorker>()
-            .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(androidx.work.NetworkType.CONNECTED).build())
+            .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(requiredNetwork).build())
             .setBackoffCriteria(
                 androidx.work.BackoffPolicy.EXPONENTIAL,
                 30,

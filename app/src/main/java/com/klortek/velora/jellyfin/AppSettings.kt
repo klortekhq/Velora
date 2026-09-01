@@ -112,6 +112,7 @@ class AppSettings(context: Context) {
         private const val KEY_SUBTITLE_MODE = "subtitle_mode"
         private const val KEY_PREFERRED_SUBTITLE_LANGUAGE = "preferred_subtitle_language"
         private const val KEY_OFFLINE_MAX_STORAGE_BYTES = "offline_max_storage_bytes"
+        private const val KEY_OFFLINE_WIFI_ONLY = "offline_wifi_only"
         private const val KEY_SMART_DOWNLOADS_ENABLED = "smart_downloads_enabled"
         private const val KEY_SMART_DOWNLOADS_REMOVE_WATCHED = "smart_downloads_remove_watched"
         private const val KEY_SMART_DOWNLOADS_KEEP_UNWATCHED = "smart_downloads_keep_unwatched"
@@ -128,6 +129,11 @@ class AppSettings(context: Context) {
             require(value >= 0L) { "offlineMaxStorageBytes must be non-negative" }
             prefs.edit().putLong(KEY_OFFLINE_MAX_STORAGE_BYTES, value).apply()
         }
+
+    /** When enabled, new offline transfers wait for an unmetered connection. */
+    var offlineWifiOnly: Boolean
+        get() = prefs.getBoolean(KEY_OFFLINE_WIFI_ONLY, false)
+        set(value) = prefs.edit().putBoolean(KEY_OFFLINE_WIFI_ONLY, value).apply()
 
     var showDebugOutlines: Boolean
         get() = prefs.getBoolean(KEY_DEBUG_OUTLINES, false) // Disabled by default

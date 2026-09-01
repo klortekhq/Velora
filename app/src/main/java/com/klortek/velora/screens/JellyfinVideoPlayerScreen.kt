@@ -393,7 +393,11 @@ fun JellyfinVideoPlayerScreen(
         DefaultTrackSelector(context).apply {
             setParameters(
                 buildUponParameters()
-                    .setForceHighestSupportedBitrate(true)
+                    // Let Media3's adaptive selector choose the best available
+                    // variant for the current buffer and network. Forcing the
+                    // highest bitrate makes Live TV and variable networks stall
+                    // even when a lower playable variant is available.
+                    .setForceHighestSupportedBitrate(false)
                     .setPreferredAudioLanguage(preferredAudioLanguage)
                     .setSelectUndeterminedTextLanguage(subtitleMode == "auto")
                     .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, subtitleMode == "off")
@@ -417,7 +421,7 @@ fun JellyfinVideoPlayerScreen(
     LaunchedEffect(preferredAudioLanguage, preferredSubtitleLanguage, subtitleMode) {
         trackSelector.setParameters(
             trackSelector.buildUponParameters()
-                .setForceHighestSupportedBitrate(true)
+                .setForceHighestSupportedBitrate(false)
                 .setPreferredAudioLanguage(preferredAudioLanguage)
                 .setSelectUndeterminedTextLanguage(subtitleMode == "auto")
                 .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, subtitleMode == "off")
@@ -2628,10 +2632,15 @@ fun JellyfinVideoPlayerScreen(
                         try { player.duration } catch (e: Exception) { 0L }
                     }
                     
-                    if (currentPositionMs > 0 && durationMs > 0) {
-                        val positionTicks = currentPositionMs * 10_000L
-                        val isComplete = currentPositionMs >= durationMs * 0.90
-                        
+                    if (!offlineOnly) {
+                        // Live TV commonly has an unknown duration. It still
+                        // needs a stop report so Jellyfin can release the
+                        // tuner/transcoding session when the user exits or
+                        // changes channel. VOD at position zero also benefits
+                        // from an explicit stop report on an early exit.
+                        val positionTicks = currentPositionMs.coerceAtLeast(0L) * 10_000L
+                        val isComplete = durationMs > 0L && currentPositionMs >= durationMs * 0.90
+
                         withContext(Dispatchers.IO) {
                             apiService.reportPlaybackStopped(item.Id, positionTicks)
                             if (isComplete) {

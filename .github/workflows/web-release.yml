@@ -39,6 +39,8 @@ jobs:
         with:
           node-version: '20'
       - name: Prepare common web client
+        env:
+          VELORA_REQUIRE_INSTALLABLE_PACKAGES: ${{ startsWith(github.ref, 'refs/tags/') && '1' || '0' }}
         run: |
           node web/scripts/test-platform.mjs
           node web/scripts/build-web.mjs "${{ inputs.platform || 'all' }}"
@@ -79,8 +81,8 @@ jobs:
           fi
           stale_ids="$(printf '%s' "$release_json" | jq -r --arg version "$version" '
             (.assets // [])[]
-            | select(.name | test("^Velora-(samsung|vidaa)-bundle-|^Velora-webos-bundle-"))
-            | select(.name | test("-" + $version + "\\.zip$") | not)
+            | select(.name | test("^Velora-(samsung|vidaa)-bundle-|^Velora-webos-(bundle-)?"))
+            | select(.name | test("-" + $version + "\\.(zip|ipk)$") | not)
             | .id')"
           for asset_id in $stale_ids; do
             gh api --method DELETE "repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"

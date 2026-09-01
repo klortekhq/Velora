@@ -47,6 +47,19 @@ francés y alemán. Pasaron `testMobileDebugUnitTest`, `compileTvDebugKotlin`,
 las pruebas web y `git diff --check`; no se ha validado todavía en hardware
 real ni se genera una release por este cambio aislado.
 
+Las descargas móviles ahora permiten activar “solo Wi‑Fi” desde Ajustes y esa
+preferencia se traduce en una restricción `UNMETERED` real de WorkManager; por
+defecto se conserva el comportamiento anterior de cualquier red conectada.
+Además, Media3 ya no fuerza el bitrate máximo: la selección adaptativa queda
+habilitada para reducir cortes en Live TV y redes variables. Al cerrar el
+reproductor se informa también la detención de Live TV aunque su duración sea
+indefinida, para liberar la sesión del servidor. La navegación web ya no trata
+Backspace como Atrás y las releases exigen un paquete instalable cuando el
+workflow se ejecuta sobre un tag. Estos cambios están validados en Android
+(pruebas móviles y compilación TV) y en web (pruebas de plataforma, sintaxis y
+diff limpio); los critics han señalado que la validación en hardware y la app
+Apple ejecutable siguen pendientes.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba

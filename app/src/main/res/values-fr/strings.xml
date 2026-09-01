@@ -70,6 +70,8 @@
     <string name="player_stream_index">Index %1$d</string>
     <string name="player_cancel">Annuler</string>
     <string name="player_downloaded_subtitles">Sous-titres téléchargés</string>
+    <string name="settings_offline_wifi_only">Téléchargements en Wi‑Fi uniquement</string>
+    <string name="settings_offline_wifi_only_description">Attendre le Wi‑Fi avant de commencer de nouveaux téléchargements.</string>
     <string name="live_tv">Télévision en direct</string>
     <string name="live_tv_nav">Télévision en direct</string>
     <string name="live_tv_loading">Chargement des chaînes…</string>

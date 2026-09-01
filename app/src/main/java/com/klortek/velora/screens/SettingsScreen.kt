@@ -297,6 +297,7 @@ fun SettingsScreen(
     var showClearSubtitlesDialog by remember { mutableStateOf(false) }
     var rowCardCount by remember { mutableStateOf(settings.rowCardCount) }
     var offlineMaxStorageBytes by remember { mutableStateOf(settings.offlineMaxStorageBytes) }
+    var offlineWifiOnly by remember { mutableStateOf(settings.offlineWifiOnly) }
     var smartDownloadsEnabled by remember { mutableStateOf(settings.smartDownloadsEnabled) }
     var smartDownloadsRemoveWatched by remember { mutableStateOf(settings.smartDownloadsRemoveWatched) }
     var smartDownloadsKeepUnwatchedEpisodes by remember { mutableStateOf(settings.smartDownloadsKeepUnwatchedEpisodes) }
@@ -2151,6 +2152,15 @@ fun SettingsScreen(
                                         val next = offlineLimitOptions[(currentIndex + 1) % offlineLimitOptions.size]
                                         offlineMaxStorageBytes = next
                                         settings.offlineMaxStorageBytes = next
+                                    }
+                                )
+                                SettingToggle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_offline_wifi_only),
+                                    description = context.getString(com.klortek.velora.R.string.settings_offline_wifi_only_description),
+                                    isEnabled = offlineWifiOnly,
+                                    onToggle = {
+                                        offlineWifiOnly = !offlineWifiOnly
+                                        settings.offlineWifiOnly = offlineWifiOnly
                                     }
                                 )
                                 SettingToggle(
