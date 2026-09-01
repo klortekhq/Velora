@@ -19,10 +19,12 @@ public actor JellyfinClient {
     private var accessToken: String?
     private var sessionState: JellyfinSession?
 
-    public init(serverURL: URL, session: URLSession = .shared) throws {
+    public init(serverURL: URL, session: URLSession = .shared, restoredSession: JellyfinSession? = nil) throws {
         guard serverURL.scheme == "http" || serverURL.scheme == "https" else { throw ClientError.invalidServerURL }
         self.baseURL = serverURL
         self.session = session
+        self.accessToken = restoredSession?.accessToken
+        self.sessionState = restoredSession
     }
 
     public func setAccessToken(_ token: String?) {

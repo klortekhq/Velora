@@ -21,4 +21,9 @@ en español, inglés, francés y alemán; la opción automática sigue el idioma
 dispositivo y una selección explícita se aplica al entorno SwiftUI.
 
 Los ajustes del shell se persisten de forma local mediante `VeloraSettingsStore`
-usando datos Codable. No se sincronizan con Jellyfin ni entre dispositivos.
+usando datos Codable. La sesión autenticada se guarda mediante
+`VeloraCredentialStore`: en Apple usa Keychain con accesibilidad
+`AfterFirstUnlockThisDeviceOnly`; el adaptador de `UserDefaults` solo se usa en
+entornos de pruebas que no disponen de Security. Cerrar sesión elimina la
+credencial. Ninguno de estos datos se sincroniza con Jellyfin ni entre
+dispositivos.
