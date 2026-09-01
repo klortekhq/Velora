@@ -7,6 +7,7 @@ const appSource = fs.readFileSync(new URL('../app.js', import.meta.url), 'utf8')
 const packageJson = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
 assert.doesNotMatch(appSource, /\/Images\/Primary\?api_key=/);
+assert.doesNotMatch(appSource, /[?&]api_key=/);
 assert.match(appSource, /data-velora-image-id/);
 assert.match(appSource, /'X-Emby-Token': state\.token/);
 assert.match(appSource, /URL\.createObjectURL\(blob\)/);
@@ -50,6 +51,7 @@ assert.match(appSource, /selected !== 'auto' && TRANSLATIONS\[selected\]/);
 assert.match(appSource, /X-Emby-Token/);
 assert.match(appSource, /media-proxy-sw\.js/);
 assert.match(appSource, /__velora_media/);
+assert.match(appSource, /waitForMediaProxy/);
 assert.match(appSource, /velora-clear-credentials/);
 assert.match(appSource, /People/);
 assert.match(appSource, /PersonIds/);
