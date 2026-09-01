@@ -30,7 +30,11 @@ data class OfflineDownload(
     /** SHA-256 of the managed media, calculated on first offline playback. */
     val checksumSha256: String? = null,
     /** Unique WorkManager name for app-managed transfers; null means legacy provider. */
-    val workName: String? = null
+    val workName: String? = null,
+    /** Lifecycle timestamps are persisted for cleanup and smart-download policies. */
+    val createdAtEpochMs: Long = 0L,
+    val completedAtEpochMs: Long? = null,
+    val lastPlayedAtEpochMs: Long? = null
 ) {
     /** Provider-neutral state used by UI and future managed-transfer engines. */
     val state: OfflineDownloadState get() = offlineDownloadState(status, reason)
@@ -102,7 +106,19 @@ object OfflineDownloadManager {
         if (existing != null) delete(context, existing)
 
         val workName = workNameFor(itemId, quality)
-        val entry = OfflineDownload(itemId, name, type, seriesName, seasonNumber, episodeNumber, 0L, quality.storageKey, status = DownloadManager.STATUS_PENDING, workName = workName)
+        val entry = OfflineDownload(
+            itemId = itemId,
+            name = name,
+            type = type,
+            seriesName = seriesName,
+            seasonNumber = seasonNumber,
+            episodeNumber = episodeNumber,
+            downloadId = 0L,
+            quality = quality.storageKey,
+            status = DownloadManager.STATUS_PENDING,
+            workName = workName,
+            createdAtEpochMs = System.currentTimeMillis()
+        )
         val work = androidx.work.OneTimeWorkRequestBuilder<OfflineDownloadWorker>()
             .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(androidx.work.NetworkType.CONNECTED).build())
             .setBackoffCriteria(
@@ -139,7 +155,10 @@ object OfflineDownloadManager {
                     },
                     bytesDownloaded = info?.progress?.getLong(OfflineDownloadWorker.KEY_BYTES, entry.bytesDownloaded) ?: entry.bytesDownloaded,
                     totalBytes = info?.progress?.getLong(OfflineDownloadWorker.KEY_TOTAL_BYTES, entry.totalBytes) ?: entry.totalBytes,
-                    localPath = info?.outputData?.getString(OfflineDownloadWorker.KEY_LOCAL_PATH) ?: entry.localPath
+                    localPath = info?.outputData?.getString(OfflineDownloadWorker.KEY_LOCAL_PATH) ?: entry.localPath,
+                    completedAtEpochMs = if (info?.state == androidx.work.WorkInfo.State.SUCCEEDED && entry.completedAtEpochMs == null) {
+                        System.currentTimeMillis()
+                    } else entry.completedAtEpochMs
                 )
             }
             val cursor = runCatching { manager.query(DownloadManager.Query().setFilterById(entry.downloadId)) }.getOrNull()
@@ -206,6 +225,12 @@ object OfflineDownloadManager {
             }
             true
         }
+    }
+
+    /** Record playback without changing the provider status or media URI. */
+    fun markPlayed(context: Context, entry: OfflineDownload, atEpochMs: Long = System.currentTimeMillis()) {
+        require(atEpochMs >= 0L) { "atEpochMs must be non-negative" }
+        persist(context, entry.copy(lastPlayedAtEpochMs = atEpochMs))
     }
 
     /**

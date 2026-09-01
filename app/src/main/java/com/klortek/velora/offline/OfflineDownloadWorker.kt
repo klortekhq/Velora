@@ -84,7 +84,8 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
                     bytesDownloaded = copied,
                     totalBytes = total,
                     localPath = android.net.Uri.fromFile(destination).toString(),
-                    checksumSha256 = digest
+                    checksumSha256 = digest,
+                    completedAtEpochMs = System.currentTimeMillis()
                 ))
             }
             Result.success(androidx.work.workDataOf(KEY_LOCAL_PATH to android.net.Uri.fromFile(destination).toString(), KEY_BYTES to copied, KEY_TOTAL_BYTES to total))

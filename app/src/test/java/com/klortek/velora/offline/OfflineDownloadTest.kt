@@ -49,4 +49,22 @@ class OfflineDownloadTest {
         assertFalse(original.contains("api_key"))
         assertFalse(medium.contains("api_key"))
     }
+
+    @Test
+    fun playbackTimestampIsIndependentFromDownloadCompletion() {
+        val entry = OfflineDownload(
+            itemId = "episode-1",
+            name = "Episodio",
+            type = "Episode",
+            downloadId = 2L,
+            createdAtEpochMs = 100L,
+            completedAtEpochMs = 200L
+        )
+
+        val played = entry.copy(lastPlayedAtEpochMs = 300L)
+
+        assertTrue(played.createdAtEpochMs == 100L)
+        assertTrue(played.completedAtEpochMs == 200L)
+        assertTrue(played.lastPlayedAtEpochMs == 300L)
+    }
 }
