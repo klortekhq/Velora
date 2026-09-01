@@ -2,6 +2,12 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.81
+
+- Añadidos componentes SwiftUI nativos reutilizables para iOS, iPadOS y tvOS.
+- Añadidas traducciones de los controles móviles nuevos en inglés, alemán y francés.
+- Verificada la compilación Kotlin móvil y la suite de unit tests Android.
+
 ## 1.2.80
 
 ### Mobile accessibility and localization

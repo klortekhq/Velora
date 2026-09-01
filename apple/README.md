@@ -7,7 +7,9 @@ conexión solo están disponibles en iPhone y iPad; tvOS es streaming.
 
 `VeloraKit` no mete tokens en URLs: las peticiones autenticadas usan
 `X-Emby-Token`. Incluye autenticación Jellyfin, sesión tipada, preferencias
-locales de idioma/audio/subtítulos/rendimiento y requests autenticadas para
-artwork o AVPlayer. La futura app iOS/iPadOS y la app tvOS deben consumir este
-paquete sin copiar la interfaz Android. La compilación y las pruebas requieren
-macOS con Xcode; este host Windows no certifica todavía esos targets.
+locales de idioma/audio/subtítulos/rendimiento, requests autenticadas para
+artwork o AVPlayer y componentes SwiftUI adaptativos para bibliotecas y ajustes.
+Las futuras apps iOS/iPadOS y tvOS deben consumir este paquete sin copiar la
+interfaz Android; el target de tvOS debe omitir descargas mediante
+`VeloraPlatform.tvOS.supportsOfflineDownloads`. La compilación y las pruebas
+requieren macOS con Xcode; este host Windows no certifica todavía esos targets.
