@@ -107,6 +107,10 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
   AVPlayer usando headers autenticados. El shell no muestra descargas en tvOS;
   Swift/Xcode no está disponible en este host, por lo que queda pendiente la
   validación de compilación y dispositivo en macOS.
+- La puerta de espacio de las descargas Android ahora mide el mismo volumen
+  privado que usa `OfflineDownloadWorker` (`filesDir/offline/media`), evitando
+  aceptar descargas basándose en el espacio de otro volumen. La compilación y
+  los unit tests móviles pasan tras este cambio.
 
 ## Release actual: v1.2.86 (preparación)
 
