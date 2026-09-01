@@ -121,6 +121,13 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(info.mediaSources.first?.transcodingURL?.path, "/Videos/channel-1/stream.m3u8")
     }
 
+    func testPlaybackStoppedRequestUsesJellyfinFieldNamesAndClampsPosition() throws {
+        let request = JellyfinPlaybackStoppedRequest(itemID: "channel-1", positionTicks: 0)
+        let json = try JSONSerialization.jsonObject(with: JSONEncoder().encode(request)) as? [String: Any]
+        XCTAssertEqual(json?["ItemId"] as? String, "channel-1")
+        XCTAssertEqual(json?["PositionTicks"] as? Int64, 0)
+    }
+
     func testVideoRequestUsesStreamEndpointWithoutCredentialQuery() async throws {
         let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
         let url = await client.videoURL(itemID: "movie-one")

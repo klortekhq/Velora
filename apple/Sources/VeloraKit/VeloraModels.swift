@@ -115,6 +115,21 @@ public struct JellyfinLiveTvPlaybackInfo: Codable, Sendable {
     private enum CodingKeys: String, CodingKey { case mediaSources = "MediaSources" }
 }
 
+public struct JellyfinPlaybackStoppedRequest: Codable, Sendable {
+    public let itemID: String
+    public let positionTicks: Int64
+
+    private enum CodingKeys: String, CodingKey {
+        case itemID = "ItemId"
+        case positionTicks = "PositionTicks"
+    }
+
+    public init(itemID: String, positionTicks: Int64) {
+        self.itemID = itemID
+        self.positionTicks = positionTicks
+    }
+}
+
 public enum PlaybackPath: String, Sendable { case directPlay, directStream, remux, transcode, fallback }
 
 public enum PlaybackQuality: Sendable, Equatable {

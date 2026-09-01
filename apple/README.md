@@ -29,7 +29,8 @@ La ruta `liveTvPlaybackURL` abre el tuner mediante `PlaybackInfo`, valida que la
 URL devuelta pertenezca al servidor configurado y entrega un `AVPlayer` con la
 cabecera autenticada; tvOS no ofrece descargas.
 El shell muestra Live TV solo cuando Jellyfin devuelve canales y cada fila
-reproduce en el reproductor integrado; no hay elementos de interfaz sin acción.
+reproduce en el reproductor integrado; las cargas se cancelan al cambiar rápido
+de canal y al salir se notifica `Sessions/Playing/Stopped` para liberar el tuner.
 
 Los ajustes del shell se persisten de forma local mediante `VeloraSettingsStore`
 usando datos Codable. La sesión autenticada se guarda mediante
