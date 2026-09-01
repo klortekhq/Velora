@@ -51,7 +51,13 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
                 temporary.delete()
                 return@withContext Result.retry()
             }
-            if (connection.responseCode !in 200..299) return@withContext Result.retry()
+            if (connection.responseCode !in 200..299) {
+                return@withContext if (isRetryableResponse(connection.responseCode)) {
+                    Result.retry()
+                } else {
+                    Result.failure()
+                }
+            }
             val resumed = existingBytes > 0L && connection.responseCode == HttpURLConnection.HTTP_PARTIAL
             if (!resumed && existingBytes > 0L) temporary.delete()
             val startingBytes = if (resumed) existingBytes else 0L
@@ -64,7 +70,10 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
                 FileOutputStream(temporary, resumed).use { output ->
                     val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
                     while (true) {
-                        if (isStopped) return@withContext Result.failure()
+                        // Keep the .part file intact when WorkManager stops
+                        // this attempt for a temporary lifecycle/constraint
+                        // change; the next run can resume with Range.
+                        if (isStopped) return@withContext Result.retry()
                         val count = input.read(buffer)
                         if (count < 0) break
                         output.write(buffer, 0, count)
@@ -110,10 +119,12 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         const val KEY_LOCAL_PATH = "local_path"
         const val KEY_BYTES = "bytes"
         const val KEY_TOTAL_BYTES = "total_bytes"
+        internal fun isRetryableResponse(code: Int): Boolean = code == 408 || code == 429 || code >= 500
     }
 
     private fun stableFileKey(value: String): String = MessageDigest.getInstance("SHA-256")
         .digest(value.toByteArray(Charsets.UTF_8))
         .joinToString("") { byte -> "%02x".format(byte) }
         .take(32)
+
 }
