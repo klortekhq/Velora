@@ -7,7 +7,7 @@ complete merely because code or a previous build artifact exists.
 
 ## Current wave
 
-Wave 1 — shared capability/playback contracts and Android hardening.
+Wave 6 — Apple platform foundation and cross-platform release convergence.
 
 ## Verified in source
 
@@ -49,13 +49,14 @@ Wave 1 — shared capability/playback contracts and Android hardening.
   Spanish, matching the existing German, French and English locale resources.
   This is included in verified release `v1.2.40`.
 
-## Latest verified release
+## Latest published tag
 
-The source commit `v1.2.54` and tag are pushed to `main`/`v1.2.54`. The current
-source also contains the v1.2.55 resumable mobile download worker; its tag
-workflows are configured to build the four Android APK variants and the web/
-Smart TV packages into the same GitHub release; asset completion is still
-pending asynchronous GitHub Actions verification from this host.
+The source commit `14139b6` and tag `v1.2.61` are pushed to the only branch,
+`main`. Android mobile/TV release APKs and the web/Smart TV bundles were built
+locally for this version, and the tag workflows are configured to publish them
+into the same GitHub release. GitHub Actions asset completion is not independently
+verified from this host because its API is unavailable here; no remote asset
+verification is claimed.
 
 Release workflows now use unfiltered tag triggers, so a `v*` tag cannot be
 silently skipped by a path filter.
