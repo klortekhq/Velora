@@ -8,6 +8,12 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
+Último commit publicado: `0a2edc9` (`fix: decode Jellyfin fields in Apple
+client`). La validación `Velora Apple validation` de este commit terminó
+correctamente en GitHub Actions. El modelo Apple usa ahora los nombres de
+campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
+`ImageTags`) y tiene una prueba de regresión.
+
 ## Oleada actual
 
 Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
@@ -62,6 +68,8 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 - Apple playback semantics now mirror Android's Original First ordering,
   including device limits, passthrough checks and quality presets; Swift tests
   are delegated to the macOS CI runner because Swift/Xcode is unavailable here.
+- Apple Jellyfin catalog decoding now maps the server's capitalized JSON field
+  names and is covered by a Swift regression test.
 - The mobile bottom navigation now omits Downloads whenever the platform
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
