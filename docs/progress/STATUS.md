@@ -8,8 +8,8 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-Último commit publicado: `v1.2.73`; la siguiente release `v1.2.74` está en
-preparación. Las validaciones locales de Android móvil/TV terminaron
+Último commit publicado: `454d37e` (`v1.2.74`); la release `v1.2.74` está en
+compilación. Las validaciones locales de Android móvil/TV terminaron
 correctamente tras endurecer el motor de decisión de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
@@ -75,7 +75,7 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Release actual: v1.2.74 (en preparación)
+## Release actual: v1.2.74 (en compilación)
 
 La fuente actual es `1.2.74`. Incluye las correcciones de presentación para el
 renderizador GL y el contenedor móvil de MPV, además de una negociación de
@@ -83,17 +83,17 @@ reproducción que respeta la calidad elegida, los límites reales del dispositiv
 y el passthrough de audio. Los tests Android móvil/TV pasan en local. Todavía
 no se afirma validación física en un móvil, Fire TV o televisor.
 
-Artefactos Android verificados en la release anterior `v1.2.71`:
+Artefactos Android verificados en `v1.2.73`:
 
 | Artefacto | SHA-256 |
 | --- | --- |
-| `Velora-mobile-debug.apk` | `150cf8ffd657521afa0e546ba6a9eeda813f9bcbfa326861d0464906f07b8630` |
-| `Velora-mobile-release-unsigned.apk` | `3b61260ec0f010a3c285cb12b8f68430248ea87e1a3d4d8d590b6c1665e29bae` |
-| `Velora-tv-debug.apk` | `d4c1056d71003af2374d81e1e7a74819867f8c846a63bc41faa1a4f6d3a7250b` |
-| `Velora-tv-release-unsigned.apk` | `1c3fc1c253f63c204b4a2c97b7ed6b398a65bfc19ba5e8f18b7b4284f722491f` |
+| `Velora-mobile-debug.apk` | `489e7ac81aae43bad987593304e30809d5e57f1d4c6806913a27926d2903846a` |
+| `Velora-mobile-release-unsigned.apk` | `0a6487e2a9f69fc9a017a373bfdb740cd31801dd8517d5e411355d2b95998a91` |
+| `Velora-tv-debug.apk` | `a99a217621084335f1d0d6200d1e38552beb025f015b118033dd157df14b93e7` |
+| `Velora-tv-release-unsigned.apk` | `e55b07e8589ec649c514b0c5c3ab00a673ecfb65d21d7e549b3ec0781f8bc576` |
 
-La release anterior `v1.2.71` permanece pública con las cuatro APK, los
-bundles web/Smart TV y sus hashes: https://github.com/klortekhq/Velora/releases/tag/v1.2.71
+La release `v1.2.73` permanece pública con las cuatro APK, los bundles
+web/Smart TV y sus hashes: https://github.com/klortekhq/Velora/releases/tag/v1.2.73
 
 Release workflows now use unfiltered tag triggers, so a `v*` tag cannot be
 silently skipped by a path filter.
