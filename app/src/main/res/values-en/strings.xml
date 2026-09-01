@@ -56,6 +56,8 @@
     <string name="live_tv_favorites">Favorites</string>
     <string name="live_tv_add_favorite">Add to favorites</string>
     <string name="live_tv_remove_favorite">Remove from favorites</string>
+    <string name="live_tv_previous_channel">Previous channel</string>
+    <string name="live_tv_next_channel">Next channel</string>
     <string name="live_tv">Live TV</string>
     <string name="live_tv_nav">Live TV</string>
     <string name="live_tv_loading">Loading channels…</string>

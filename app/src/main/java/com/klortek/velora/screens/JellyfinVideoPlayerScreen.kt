@@ -3776,7 +3776,7 @@ fun JellyfinVideoPlayerScreen(
                                         if (onLiveTvChannelChange != null) {
                                             PlayerControlButton(
                                                 icon = Icons.Filled.SkipPrevious,
-                                                contentDescription = "Canal anterior",
+                                                contentDescription = stringResource(R.string.live_tv_previous_channel),
                                                 size = if (isMobile) 52.dp else 48.dp,
                                                 iconSize = if (isMobile) 26.dp else 24.dp,
                                                 onClick = { onLiveTvChannelChange(false) }
@@ -3832,7 +3832,7 @@ fun JellyfinVideoPlayerScreen(
                                             Spacer(modifier = Modifier.width(if (isMobile) 16.dp else 20.dp))
                                             PlayerControlButton(
                                                 icon = Icons.Filled.SkipNext,
-                                                contentDescription = "Siguiente canal",
+                                                contentDescription = stringResource(R.string.live_tv_next_channel),
                                                 size = if (isMobile) 52.dp else 48.dp,
                                                 iconSize = if (isMobile) 26.dp else 24.dp,
                                                 onClick = { onLiveTvChannelChange(true) }
