@@ -11,6 +11,14 @@ class PlaybackDecisionEngineTest {
     )
 
     @Test
+    fun glEnhancementsRequireKnownNonAv1Codec() {
+        assertEquals(false, VideoRenderPolicy.shouldUseGlEnhancements(true, null))
+        assertEquals(false, VideoRenderPolicy.shouldUseGlEnhancements(true, "av01"))
+        assertEquals(true, VideoRenderPolicy.shouldUseGlEnhancements(true, "h264"))
+        assertEquals(false, VideoRenderPolicy.shouldUseGlEnhancements(false, "h264"))
+    }
+
+    @Test
     fun originalKeepsCompatibleSourceOnDirectPlay() {
         assertEquals(
             PlaybackPath.DIRECT_PLAY,

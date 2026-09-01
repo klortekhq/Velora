@@ -73,6 +73,12 @@ de ciclo completo sobre el almacén inyectable. Sigue siendo una base SwiftPM,
 no un `.app` firmado: los targets iOS/iPadOS/tvOS y su validación requieren
 macOS/Xcode y permanecen pendientes.
 
+La superficie GL experimental de Android ya no se selecciona para AV1 ni cuando
+Jellyfin no declara el códec antes de iniciar la reproducción. En esos casos
+Media3 usa su SurfaceView estándar, evitando pantallas negras por decodificación
+software en televisores; la regla tiene prueba unitaria y pasan las pruebas
+móviles y la compilación TV.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba

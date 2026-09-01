@@ -332,11 +332,24 @@ fun JellyfinVideoPlayerScreen(
         }
     }
     
-    // Start with user's GL setting, but will be overridden if AV1 detected at runtime
-    // Note: The actual enforcement happens in the player listener below
-    val useGLEnhancements = remember { 
-        Log.d("JellyfinPlayer", "🎨 GL enhancements mode: $glSettingEnabled (will be disabled if AV1 detected at runtime)")
-        glSettingEnabled 
+    // GL is an optional post-processing enhancement, not a playback backend.
+    // Only enable it when Jellyfin has already declared a known safe codec;
+    // null metadata must use Media3's standard SurfaceView to avoid a possible
+    // software-decoded AV1 black screen on TV hardware.
+    val declaredVideoCodec = remember(item.Id) {
+        item.MediaSources.orEmpty()
+            .asSequence()
+            .flatMap { it.MediaStreams.orEmpty().asSequence() }
+            .firstOrNull { it.Type?.equals("Video", ignoreCase = true) == true && !it.Codec.isNullOrBlank() }
+            ?.Codec
+    }
+    val useGLEnhancements = remember(glSettingEnabled, declaredVideoCodec) {
+        val enabled = com.klortek.velora.playback.VideoRenderPolicy.shouldUseGlEnhancements(
+            requested = glSettingEnabled,
+            declaredVideoCodec = declaredVideoCodec
+        )
+        Log.d("JellyfinPlayer", "🎨 GL enhancements requested=$glSettingEnabled codec=$declaredVideoCodec enabled=$enabled")
+        enabled
     }
     val enableFakeHDR = remember { settings.enableFakeHDR }
     val enableSharpening = remember { settings.enableSharpening }
