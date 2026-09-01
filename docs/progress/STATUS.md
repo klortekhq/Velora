@@ -33,6 +33,12 @@ los secretos de Quick Connect. Las pruebas unitarias de móvil y TV pasan.
 español, inglés, francés y alemán; su prueba de presentación y la compilación
 móvil pasan. Ninguno de estos cambios aislados genera una nueva release.
 
+La mejora más reciente de Live TV pagina los canales y divide las consultas de
+EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
+canales cuando la lista supera los límites habituales de la API. La prueba
+unitaria móvil y la compilación de las variantes móvil y TV pasan. Es un cambio
+de robustez que queda en `main`; no genera APK/release por sí solo.
+
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
 
