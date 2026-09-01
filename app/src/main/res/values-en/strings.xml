@@ -59,6 +59,17 @@
     <string name="live_tv_previous_channel">Previous channel</string>
     <string name="live_tv_next_channel">Next channel</string>
     <string name="player_settings">Player settings</string>
+    <string name="player_audio_tracks">Audio tracks</string>
+    <string name="player_subtitles">Subtitles</string>
+    <string name="player_playback_speed">Playback speed</string>
+    <string name="player_quality">Quality</string>
+    <string name="player_unknown">Unknown</string>
+    <string name="player_default">Default</string>
+    <string name="player_forced">Forced</string>
+    <string name="player_external">External</string>
+    <string name="player_stream_index">Index %1$d</string>
+    <string name="player_cancel">Cancel</string>
+    <string name="player_downloaded_subtitles">Downloaded subtitles</string>
     <string name="live_tv">Live TV</string>
     <string name="live_tv_nav">Live TV</string>
     <string name="live_tv_loading">Loading channels…</string>
