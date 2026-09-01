@@ -44,6 +44,12 @@ sistema antes de aplicar su desplazamiento, evitando que el título, los campos
 o el botón queden ocultos en móviles, tablets y televisores. Se verificará junto
 con la siguiente compilación Android.
 
+La base Apple ahora persiste los ajustes locales del shell SwiftUI mediante un
+almacén Codable sobre `UserDefaults`, con pruebas de guardar, recuperar y
+eliminar. Swift/Xcode no está instalado en este host, por lo que la compilación
+Apple y la validación en hardware siguen pendientes; no se presenta como una
+verificación de Xcode.
+
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
 
