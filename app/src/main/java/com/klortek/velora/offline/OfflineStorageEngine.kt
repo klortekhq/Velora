@@ -36,8 +36,9 @@ object OfflineStorageEngine {
         if (source.startsWith("file://${context.filesDir.absolutePath}/$MEDIA_DIRECTORY/")) return@withContext entry
 
         val root = File(context.filesDir, MEDIA_DIRECTORY).apply { mkdirs() }
-        val destination = File(root, "${entry.downloadId}.media")
-        val temporary = File(root, "${entry.downloadId}.part")
+        val fileKey = stableFileKey(entry.stableKey)
+        val destination = File(root, "$fileKey.media")
+        val temporary = File(root, "$fileKey.part")
         val input = open(context, source) ?: return@withContext null
         try {
             input.use { inputStream ->
@@ -55,7 +56,9 @@ object OfflineStorageEngine {
             check(temporary.renameTo(destination)) { "Could not commit offline media" }
             val updated = entry.copy(localPath = Uri.fromFile(destination).toString(), checksumSha256 = digest)
             OfflineDownloadManager.persist(context, updated)
-            context.getSystemService(android.app.DownloadManager::class.java).remove(entry.downloadId)
+            if (entry.downloadId > 0L) {
+                context.getSystemService(android.app.DownloadManager::class.java).remove(entry.downloadId)
+            }
             updated
         } catch (_: Exception) {
             temporary.delete()
@@ -71,4 +74,9 @@ object OfflineStorageEngine {
             else -> File(value).inputStream()
         }
     }.getOrNull()
+
+    private fun stableFileKey(value: String): String = java.security.MessageDigest.getInstance("SHA-256")
+        .digest(value.toByteArray(Charsets.UTF_8))
+        .joinToString("") { byte -> "%02x".format(byte) }
+        .take(32)
 }

@@ -91,6 +91,7 @@ class OfflineDownloadTest {
 
         assertFalse(sameOfflineEntry(first, second))
         assertTrue(sameOfflineEntry(first, first.copy(lastPlayedAtEpochMs = 10L)))
+        assertFalse(first.stableKey == second.stableKey)
     }
 
     @Test

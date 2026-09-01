@@ -50,6 +50,11 @@ data class OfflineDownload(
      */
     val isComplete: Boolean get() = status == DownloadManager.STATUS_SUCCESSFUL && !localPath.isNullOrBlank()
     val progress: Int get() = if (totalBytes > 0L) ((bytesDownloaded * 100L) / totalBytes).toInt().coerceIn(0, 100) else 0
+
+    /** Stable UI/database identity for both legacy and WorkManager transfers. */
+    val stableKey: String get() = workName?.takeIf { it.isNotBlank() }
+        ?: if (downloadId > 0L) "download:$downloadId"
+        else "item:$itemId:quality:$quality"
 }
 
 /** Managed WorkManager rows have no DownloadManager id, so workName is their identity. */
@@ -243,7 +248,7 @@ object OfflineDownloadManager {
             }
             if (expected == null) {
                 save(context, load(context).map { current ->
-                    if (current.downloadId == entry.downloadId) current.copy(checksumSha256 = actual) else current
+                    if (sameOfflineEntry(current, entry)) current.copy(checksumSha256 = actual) else current
                 })
             }
             true
