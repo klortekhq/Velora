@@ -33,6 +33,7 @@
     <string name="live_tv_remove_favorite">Quitar de favoritos</string>
     <string name="live_tv_previous_channel">Canal anterior</string>
     <string name="live_tv_next_channel">Siguiente canal</string>
+    <string name="player_settings">Ajustes del reproductor</string>
     <string name="back">Atrás</string>
     <string name="collections">Colecciones</string>
     <string name="continue_watching">Seguir viendo</string>

@@ -58,6 +58,7 @@
     <string name="live_tv_remove_favorite">Aus Favoriten entfernen</string>
     <string name="live_tv_previous_channel">Vorheriger Sender</string>
     <string name="live_tv_next_channel">Nächster Sender</string>
+    <string name="player_settings">Player-Einstellungen</string>
     <string name="live_tv">Live-TV</string>
     <string name="live_tv_nav">Live-TV</string>
     <string name="live_tv_loading">Sender werden geladen…</string>

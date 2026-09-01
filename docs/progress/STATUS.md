@@ -764,3 +764,10 @@ enfocar una persona abre su ficha de Velora y permite consultar sus películas y
 series disponibles. Si Jellyfin no entrega el identificador de la persona, la
 ficha conserva la resolución por nombre. La compilación móvil/TV y las pruebas
 unitarias relevantes pasan; este arreglo aislado no genera una nueva release.
+
+El botón personalizado de ajustes del reproductor ya usa una tuerca propia de
+Velora en las dos rutas del OSD Media3, en lugar de un icono genérico del
+sistema. Su descripción accesible está localizada en español, inglés, francés
+y alemán, y el título del panel reutiliza esa traducción. La compilación móvil
+y TV y las pruebas de aspecto, navegación Live TV y reproducción pasan; no se
+publica una release por este cambio aislado.
