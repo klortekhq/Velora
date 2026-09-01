@@ -139,17 +139,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.res.stringResource
+import com.klortek.velora.R
 import com.klortek.velora.theme.*
 
 // Picture mode / aspect ratio options
-enum class AspectMode(val label: String) {
-    FIT("Ajustar"),          // Natural letterbox - fits video in screen with black bars
-    FILL("Rellenar"),        // Crop to fill screen - removes black bars by cropping
-    FOUR_THREE("4:3"),        // Force a 4:3 viewing frame
-    LETTERBOX("16:9"),       // Force 16:9 letterbox - maintains aspect ratio in 16:9 frame
-    CINEMA("Cine"),          // Cinema scope 2.39:1 - movie theater style with wide black bars
-    STRETCH("Estirar"),      // Stretch both axes - distorts to fill screen
-    ORIGINAL("Original");    // Display at native resolution without scaling
+enum class AspectMode(val labelRes: Int) {
+    FIT(R.string.player_aspect_fit),
+    FILL(R.string.player_aspect_fill),
+    FOUR_THREE(R.string.player_aspect_four_three),
+    LETTERBOX(R.string.player_aspect_letterbox),
+    CINEMA(R.string.player_aspect_cinema),
+    STRETCH(R.string.player_aspect_stretch),
+    ORIGINAL(R.string.player_aspect_original);
 
     fun next(): AspectMode {
         val modes = values()
@@ -2766,7 +2767,7 @@ fun JellyfinVideoPlayerScreen(
         glSurfaceViewRef.value?.setAspectMode(currentAspectMode.name)
         playerViewRef.value?.let { pv ->
             applyAspectModeToPlayerView(pv, currentAspectMode)
-            Log.d("ExoPlayer", "Applied aspect mode: ${currentAspectMode.label}")
+            Log.d("ExoPlayer", "Applied aspect mode: ${currentAspectMode.name}")
         }
     }
     
@@ -4330,7 +4331,7 @@ fun JellyfinVideoPlayerScreen(
                                     modifier = Modifier.size(22.dp)
                                 )
                                 androidx.compose.material3.Text(
-                                    text = mode.label,
+                                    text = stringResource(mode.labelRes),
                                     color = Color.White,
                                     style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
                                     modifier = Modifier.padding(start = 12.dp)
@@ -6248,12 +6249,15 @@ private fun AspectModeButton(
         ) {
             Icon(
                 imageVector = Icons.Filled.AspectRatio,
-                contentDescription = "Modo de imagen: ${currentMode.label}",
+                contentDescription = stringResource(
+                    R.string.player_aspect_content_description,
+                    stringResource(currentMode.labelRes)
+                ),
                 tint = if (isFocused) Color.Black else Color.White,
                 modifier = Modifier.size(18.dp)
             )
             Text(
-                text = currentMode.label,
+                text = stringResource(currentMode.labelRes),
                 color = if (isFocused) Color.Black else Color.White,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold
