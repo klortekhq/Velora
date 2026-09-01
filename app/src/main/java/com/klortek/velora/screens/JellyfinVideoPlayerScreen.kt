@@ -116,6 +116,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.height
@@ -227,6 +228,7 @@ fun JellyfinVideoPlayerScreen(
     audioStreamIndex: Int? = null,
     initialMediaUrl: String? = null,
     offlineOnly: Boolean = false,
+    onLiveTvChannelChange: ((next: Boolean) -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -2864,6 +2866,10 @@ fun JellyfinVideoPlayerScreen(
                                 }
                             }
                             Key.DirectionUp, Key.DirectionDown -> {
+                                if (onLiveTvChannelChange != null) {
+                                    onLiveTvChannelChange(event.key == Key.DirectionDown)
+                                    true
+                                } else {
                                 // Cancel autoplay if overlay is showing
                                 if (showNextUpOverlay) {
                                     autoplayCancelled = true
@@ -2872,6 +2878,7 @@ fun JellyfinVideoPlayerScreen(
                                     true
                                 } else {
                                     false
+                                }
                                 }
                             }
                             Key.Menu -> {
@@ -3766,6 +3773,16 @@ fun JellyfinVideoPlayerScreen(
                                         horizontalArrangement = Arrangement.Center,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
+                                        if (onLiveTvChannelChange != null) {
+                                            PlayerControlButton(
+                                                icon = Icons.Filled.SkipPrevious,
+                                                contentDescription = "Canal anterior",
+                                                size = if (isMobile) 52.dp else 48.dp,
+                                                iconSize = if (isMobile) 26.dp else 24.dp,
+                                                onClick = { onLiveTvChannelChange(false) }
+                                            )
+                                            Spacer(modifier = Modifier.width(if (isMobile) 16.dp else 20.dp))
+                                        }
                                         // Rewind button
                                         PlayerControlButton(
                                             icon = Icons.Filled.FastRewind,
@@ -3811,6 +3828,16 @@ fun JellyfinVideoPlayerScreen(
                                                 player.seekTo(seekTo)
                                             }
                                         )
+                                        if (onLiveTvChannelChange != null) {
+                                            Spacer(modifier = Modifier.width(if (isMobile) 16.dp else 20.dp))
+                                            PlayerControlButton(
+                                                icon = Icons.Filled.SkipNext,
+                                                contentDescription = "Siguiente canal",
+                                                size = if (isMobile) 52.dp else 48.dp,
+                                                iconSize = if (isMobile) 26.dp else 24.dp,
+                                                onClick = { onLiveTvChannelChange(true) }
+                                            )
+                                        }
                                         
                                         Spacer(modifier = Modifier.width(if (isMobile) 24.dp else 32.dp))
                                         

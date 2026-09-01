@@ -93,13 +93,15 @@ class LiveTvActivity : ComponentActivity() {
                 LiveTvScreen(
                     config = config,
                     onBack = { finish() },
-                    onPlay = { channel ->
+                    onPlay = { channel, channelList ->
                         startActivity(
                             JellyfinVideoPlayerActivity.createIntent(
                                 context = this@LiveTvActivity,
                                 itemId = channel.Id,
                                 itemName = channel.Name,
-                                isLiveTv = true
+                                isLiveTv = true,
+                                liveTvChannelIds = channelList.map { it.Id },
+                                liveTvChannelNames = channelList.map { it.Name }
                             )
                         )
                     }
@@ -113,7 +115,7 @@ class LiveTvActivity : ComponentActivity() {
 private fun LiveTvScreen(
     config: JellyfinConfig,
     onBack: () -> Unit,
-    onPlay: (LiveTvChannel) -> Unit
+    onPlay: (LiveTvChannel, List<LiveTvChannel>) -> Unit
 ) {
     BackHandler(onBack = onBack)
 
@@ -313,7 +315,7 @@ private fun LiveTvScreen(
                             } else {
                                 null
                             },
-                            onClick = { onPlay(channel) },
+                            onClick = { onPlay(channel, visibleChannels) },
                             onShowProgram = { program -> programDetails = channel.Name to program },
                             onToggleFavorite = {
                                 val favorite = channel.UserData?.IsFavorite != true

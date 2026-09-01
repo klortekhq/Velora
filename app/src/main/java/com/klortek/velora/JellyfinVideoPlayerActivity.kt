@@ -25,6 +25,7 @@ import com.klortek.velora.player.mpv.MpvTvPlayerActivity
 import com.klortek.velora.player.mpv.MpvUrlBuilder
 import com.klortek.velora.screens.JellyfinVideoPlayerScreen
 import com.klortek.velora.security.SensitiveDataRedactor
+import com.klortek.velora.livetv.adjacentLiveTvChannelId
 import `is`.xyz.mpv.MPVLib
 
 @UnstableApi
@@ -58,7 +59,9 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
             itemName: String? = null,
             isLiveTv: Boolean = false,
             localPath: String? = null,
-            externalMediaUrl: String? = null
+            externalMediaUrl: String? = null,
+            liveTvChannelIds: List<String> = emptyList(),
+            liveTvChannelNames: List<String> = emptyList()
         ): Intent {
             return Intent(context, JellyfinVideoPlayerActivity::class.java).apply {
                 putExtra(EXTRA_ITEM_ID, itemId)
@@ -67,6 +70,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 audioStreamIndex?.let { putExtra(EXTRA_AUDIO_STREAM_INDEX, it) }
                 itemName?.let { putExtra(EXTRA_ITEM_NAME, it) }
                 putExtra(EXTRA_IS_LIVE_TV, isLiveTv)
+                if (liveTvChannelIds.isNotEmpty()) {
+                    putStringArrayListExtra("live_tv_channel_ids", ArrayList(liveTvChannelIds))
+                    putStringArrayListExtra("live_tv_channel_names", ArrayList(liveTvChannelNames))
+                }
                 localPath?.let { putExtra(EXTRA_LOCAL_PATH, it) }
                 externalMediaUrl?.let { putExtra(EXTRA_EXTERNAL_MEDIA_URL, it) }
             }
@@ -129,6 +136,9 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         val localPath = intent.getStringExtra(EXTRA_LOCAL_PATH)
         val externalMediaUrl = intent.getStringExtra(EXTRA_EXTERNAL_MEDIA_URL)
         val isLiveTv = intent.getBooleanExtra(EXTRA_IS_LIVE_TV, false)
+        val liveTvChannelIds = intent.getStringArrayListExtra("live_tv_channel_ids").orEmpty()
+        val liveTvChannelNames = intent.getStringArrayListExtra("live_tv_channel_names").orEmpty()
+        val liveTvChannelIndex = liveTvChannelIds.indexOf(itemId)
         val resumePositionMs = intent.getLongExtra(EXTRA_RESUME_POSITION_MS, 0L)
         val subtitleStreamIndex = if (intent.hasExtra(EXTRA_SUBTITLE_STREAM_INDEX)) {
             intent.getIntExtra(EXTRA_SUBTITLE_STREAM_INDEX, -1).takeIf { it >= 0 }
@@ -401,7 +411,25 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                             resumePositionMs = resumePositionMs,
                             subtitleStreamIndex = subtitleStreamIndex,
                             audioStreamIndex = audioStreamIndex,
-                            initialMediaUrl = finalUrl
+                            initialMediaUrl = finalUrl,
+                            onLiveTvChannelChange = if (isLiveTv && liveTvChannelIndex >= 0 && liveTvChannelIds.size > 1) {
+                                { next ->
+                                    adjacentLiveTvChannelId(liveTvChannelIds, itemId, next)?.let { nextId ->
+                                        val nextIndex = liveTvChannelIds.indexOf(nextId)
+                                        startActivity(
+                                            createIntent(
+                                                context = this@JellyfinVideoPlayerActivity,
+                                                itemId = nextId,
+                                                itemName = liveTvChannelNames.getOrNull(nextIndex),
+                                                isLiveTv = true,
+                                                liveTvChannelIds = liveTvChannelIds,
+                                                liveTvChannelNames = liveTvChannelNames
+                                            )
+                                        )
+                                        finish()
+                                    }
+                                }
+                            } else null
                         )
                     }
                 }

@@ -751,3 +751,10 @@ tanto con pantalla táctil como con mando. La preferencia se conserva por
 dispositivo y se aplica a todos los criterios de ordenación. La prueba de
 consulta de biblioteca y la compilación Kotlin de TV pasan; no se publica una
 nueva APK por este cambio aislado.
+
+Live TV incorpora navegación de canales durante la reproducción: arriba/abajo
+en el mando y botones anterior/siguiente en el OSD táctil respetan el orden de
+Jellyfin y hacen ciclo al alcanzar un extremo. La selección se mantiene en
+la lista filtrada y la reproducción normal no muestra esos controles. La
+lógica tiene pruebas unitarias y las compilaciones móvil y TV pasan; no se
+publica una release hasta acumular un bloque funcional mayor.
