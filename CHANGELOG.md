@@ -9,6 +9,8 @@ All notable changes to Velora will be documented in this file.
   la navegación con táctil, teclado y mando.
 - Activa los trailers funcionales en las pantallas de películas y series.
 - Verifica compilación y tests Android para móvil y TV.
+- Localiza el aviso AV1 y los textos principales del selector de formato del
+  reproductor para evitar mensajes en inglés en la interfaz española.
 
 ## 1.2.85
 

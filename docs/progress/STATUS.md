@@ -97,6 +97,9 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
   canales, programa actual y próxima emisión, y los presenta en filas compactas
   con progreso y navegación táctil/teclado/mando. `node --check`, los tests web
   y el empaquetado web/webOS pasan localmente; no se afirma validación física.
+- El aviso de incompatibilidad AV1 y el selector de formato del reproductor
+  Android ya usan recursos localizables en español e inglés; las variantes
+  móvil y TV compilan y pasan sus unit tests tras el cambio.
 
 ## Release actual: v1.2.86 (preparación)
 
