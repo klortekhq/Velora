@@ -8,8 +8,10 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-Último commit publicado: `f718a15` (`release: prepare Velora v1.2.71`). Las
-validaciones de Android, web y Apple de esta release terminaron correctamente
+Último commit publicado: pendiente de publicación de `v1.2.72`. Las
+validaciones locales de Android móvil/TV y web terminaron correctamente para
+la corrección del renderizador GL; la validación de Apple correspondiente se
+ejecutará con la nueva release.
 en GitHub Actions. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
@@ -38,7 +40,7 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.71 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.72 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -74,15 +76,16 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Release actual: v1.2.71 (publicada)
+## Release actual: v1.2.72 (en preparación)
 
-La fuente actual es `1.2.71`. La release pública contiene los cuatro APK
-(móvil/TV debug y release unsigned), los paquetes web/Smart TV y los hashes
-SHA-256 publicados por GitHub. La ejecución Android `33480298938` terminó
-correctamente en 20m 15s y publicó los artefactos en la misma release. No se
-afirma validación física en un móvil, Fire TV o televisor.
+La fuente actual es `1.2.72`. Incluye una corrección del renderizador GL para
+que el selector de relación de aspecto actualice de forma serializada el
+tamaño y la geometría del vídeo. Los tests Android móvil/TV y web pasan en
+local. La release se publicará mediante el workflow de etiqueta después de
+subir el commit; no se afirma validación física en un móvil, Fire TV o
+televisor.
 
-Artefactos Android verificados en la release:
+Artefactos Android verificados en la release anterior `v1.2.71`:
 
 | Artefacto | SHA-256 |
 | --- | --- |
@@ -91,7 +94,8 @@ Artefactos Android verificados en la release:
 | `Velora-tv-debug.apk` | `d4c1056d71003af2374d81e1e7a74819867f8c846a63bc41faa1a4f6d3a7250b` |
 | `Velora-tv-release-unsigned.apk` | `1c3fc1c253f63c204b4a2c97b7ed6b398a65bfc19ba5e8f18b7b4284f722491f` |
 
-Release pública: https://github.com/klortekhq/Velora/releases/tag/v1.2.71
+La release anterior `v1.2.71` permanece pública con las cuatro APK, los
+bundles web/Smart TV y sus hashes: https://github.com/klortekhq/Velora/releases/tag/v1.2.71
 
 Release workflows now use unfiltered tag triggers, so a `v*` tag cannot be
 silently skipped by a path filter.

@@ -49,7 +49,10 @@ class GLVideoSurfaceView @JvmOverloads constructor(
     private var videoWidth: Int = 0
     private var videoHeight: Int = 0
     private var aspectRatioVertexBuffer: FloatBuffer? = null
-    @Volatile private var aspectMode: String = "FIT"
+    // These values and the vertex buffer are owned by the GL thread. Keeping
+    // the update together prevents a touch/remote selection from racing the
+    // draw call and leaving the old geometry on screen.
+    private var aspectMode: String = "FIT"
 
     /**
      * Applies the same picture modes exposed by the ExoPlayer controls to the
@@ -59,7 +62,7 @@ class GLVideoSurfaceView @JvmOverloads constructor(
      */
     fun setAspectMode(mode: String) {
         queueEvent {
-            aspectMode = mode
+            aspectMode = mode.ifBlank { "FIT" }
             updateAspectRatioVertexBuffer()
             requestRender()
         }
@@ -80,12 +83,15 @@ class GLVideoSurfaceView @JvmOverloads constructor(
      * Call this when the video format is known (e.g., from ExoPlayer's onVideoSizeChanged).
      */
     fun setVideoSize(width: Int, height: Int) {
-        if (width > 0 && height > 0 && (width != videoWidth || height != videoHeight)) {
-            videoWidth = width
-            videoHeight = height
-            Log.d(TAG, "🎬 Video size set: ${width}x${height}")
-            updateAspectRatioVertexBuffer()
-            requestRender()
+        if (width <= 0 || height <= 0) return
+        queueEvent {
+            if (width != videoWidth || height != videoHeight) {
+                videoWidth = width
+                videoHeight = height
+                Log.d(TAG, "🎬 Video size set: ${width}x${height}")
+                updateAspectRatioVertexBuffer()
+                requestRender()
+            }
         }
     }
     

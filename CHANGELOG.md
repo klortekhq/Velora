@@ -2,6 +2,14 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.72
+
+### Fixed
+
+- GL playback now serializes video-size and aspect-mode updates on the
+  rendering thread so a selected presentation is applied reliably.
+- Android mobile and TV unit-test suites were revalidated.
+
 ## 1.2.71
 
 ### Fixed
