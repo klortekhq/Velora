@@ -14,6 +14,19 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directPlay)
     }
 
+    func testPlaybackFallsBackWhenActualDeviceLimitsAreExceeded() {
+        let caps = PlaybackCapabilities(videoCodecs: ["h264"], audioCodecs: ["aac"], containers: ["mp4"], maxWidth: 1920, maxAudioChannels: 2)
+        let source = PlaybackSource(container: "mp4", videoCodec: "h264", audioCodec: "aac", audioChannels: 6, width: 3840, height: 2160)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directStream)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps, quality: .fullHD10), .directStream)
+    }
+
+    func testQualityPresetDoesNotAddCapsToOriginal() {
+        let caps = PlaybackCapabilities(videoCodecs: ["hevc"], audioCodecs: ["eac3"], containers: ["mkv"])
+        let source = PlaybackSource(container: "mkv", videoCodec: "hevc", audioCodec: "eac3", width: 7680, height: 4320, bitrateKbps: 100_000)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directPlay)
+    }
+
     func testSettingsClampMusicVolumeAndKeepAppleTVStreamingOnly() {
         let settings = VeloraSettings(themeMusicVolume: 4)
         XCTAssertEqual(settings.themeMusicVolume, 1)
