@@ -4,6 +4,9 @@ All notable changes to Velora will be documented in this file.
 
 ## 1.2.86
 
+- Live TV web muestra canales en un formato compacto con programa actual,
+  próxima emisión y barra de progreso, manteniendo la reproducción integrada y
+  la navegación con táctil, teclado y mando.
 - Activa los trailers funcionales en las pantallas de películas y series.
 - Verifica compilación y tests Android para móvil y TV.
 
