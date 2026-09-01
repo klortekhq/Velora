@@ -16,6 +16,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import com.klortek.velora.BuildConfig
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class QuickConnectService(
     private val baseUrl: String,
@@ -50,6 +52,9 @@ class QuickConnectService(
     private fun normalizeBaseUrl(url: String): String {
         return url.trim().removeSuffix("/")
     }
+
+    private fun queryValue(value: String): String =
+        URLEncoder.encode(value, StandardCharsets.UTF_8.name())
 
     suspend fun initiateQuickConnect(): QuickConnectResult<QuickConnectInitiateResponse> {
         return try {
@@ -119,9 +124,9 @@ class QuickConnectService(
         return try {
             val normalizedBaseUrl = normalizeBaseUrl(baseUrl)
             val url = if (normalizedBaseUrl.endsWith("/")) {
-                "${normalizedBaseUrl}QuickConnect/Connect?secret=$secret"
+                "${normalizedBaseUrl}QuickConnect/Connect?secret=${queryValue(secret)}"
             } else {
-                "$normalizedBaseUrl/QuickConnect/Connect?secret=$secret"
+                "$normalizedBaseUrl/QuickConnect/Connect?secret=${queryValue(secret)}"
             }
             
             val deviceId = getDeviceId()
