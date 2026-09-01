@@ -332,11 +332,13 @@ private fun SeasonEpisodeSelectionDialog(
 }
 
 @Composable private fun MobileBackButton(onBack: (() -> Unit)?) {
-    androidx.compose.material3.IconButton(
-        onClick = { onBack?.invoke() },
-        modifier = Modifier.size(52.dp)
-    ) {
-        androidx.compose.material3.Icon(Icons.Default.ArrowBack, "Atrás", tint = Color.White)
+    if (onBack != null) {
+        androidx.compose.material3.IconButton(
+            onClick = onBack,
+            modifier = Modifier.size(52.dp)
+        ) {
+            androidx.compose.material3.Icon(Icons.Default.ArrowBack, "Atrás", tint = Color.White)
+        }
     }
 }
 
@@ -360,8 +362,8 @@ private fun SeasonEpisodeSelectionDialog(
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         MobileActionButton("Aleatorio", Icons.Default.Shuffle, onShuffle)
         MobileActionButton("Reiniciar", Icons.Default.Replay, onRestart)
-        if (hasAudio) MobileActionButton("Audio", Icons.Default.VolumeUp, onAudio ?: {})
-        MobileActionButton("Transmitir", Icons.Default.Cast, onRemote ?: {})
+        if (hasAudio && onAudio != null) MobileActionButton("Audio", Icons.Default.VolumeUp, onAudio)
+        if (onRemote != null) MobileActionButton("Transmitir", Icons.Default.Cast, onRemote)
         onDownload?.let { MobileActionButton("Descargar", Icons.Default.Download, it) }
     }
 }
