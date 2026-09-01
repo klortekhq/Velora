@@ -8,9 +8,9 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-La etiqueta `v1.2.80` ya está publicada en `main`; sus workflows de release están
-generando los artefactos automáticamente. Las APK no se consideran verificadas
-hasta que aparezcan en la release. Las validaciones locales de Android móvil/TV terminaron
+La etiqueta `v1.2.80` ya está publicada en `main`; sus workflows de release han
+generado los artefactos automáticamente y han sido comprobados en la página de
+la release. Las validaciones locales de Android móvil/TV terminaron
 correctamente tras endurecer el motor de decisión de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
@@ -86,6 +86,21 @@ Material 3 táctiles en detalles, inicio y biblioteca, mientras la variante TV
 conserva sus componentes de foco, además del endurecimiento de URLs MPV y Live TV.
 Los tests Android móvil/TV pasan en local. Todavía
 no se afirma validación física en un móvil, Fire TV o televisor.
+
+Artefactos Android verificados en `v1.2.80`:
+
+| Artefacto | SHA-256 publicado |
+| --- | --- |
+| `Velora-mobile-debug.apk` | `a5a8a445266e03be71a5f5133557ceb0f8fc4915306efb25bb2199189b11be91` |
+| `Velora-mobile-release-unsigned.apk` | `d53e01b3978a8dda671217bade20decff6d745d0ce0b8b1bc4ed4d4a4b7cfd5a` |
+| `Velora-tv-debug.apk` | `d24913764e1a102f862025ee9d6af367a571367053c4b9090aeec5b5bd05fb06` |
+| `Velora-tv-release-unsigned.apk` | `b3cfac01d91c7927bcd6710fdd4dc4ecba6811537c50c50e311d0e1205ddbc7a` |
+
+La release contiene además `Velora-Web-all.zip`, `Velora-Web-all.tar.gz`,
+`Velora-samsung-bundle-1.2.80.zip`, `Velora-webos-bundle-1.2.80.zip`,
+`Velora-vidaa-bundle-1.2.80.zip`, `SHA256SUMS.txt` y `SHA256SUMS-web.txt`.
+El paquete Tizen `.wgt` no se afirma porque el CLI/certificado de Tizen no está
+disponible en este entorno.
 
 Artefactos Android verificados en `v1.2.73`:
 
