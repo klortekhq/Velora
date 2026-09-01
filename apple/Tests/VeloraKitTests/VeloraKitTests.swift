@@ -66,4 +66,14 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(url?.query, "static=true")
         XCTAssertFalse(url?.absoluteString.contains("api_key") ?? true)
     }
+
+    func testMediaIdentifiersAreEncodedAsPathComponents() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        let url = await client.videoURL(itemID: "movie with spaces")
+        XCTAssertEqual(url?.percentEncodedPath, "/Videos/movie%20with%20spaces/stream")
+        let slashURL = await client.videoURL(itemID: "movie/with-slash")
+        let traversalURL = await client.imageURL(itemID: "../escape")
+        XCTAssertNil(slashURL)
+        XCTAssertNil(traversalURL)
+    }
 }

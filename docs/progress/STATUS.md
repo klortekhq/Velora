@@ -771,3 +771,10 @@ sistema. Su descripción accesible está localizada en español, inglés, franc�
 y alemán, y el título del panel reutiliza esa traducción. La compilación móvil
 y TV y las pruebas de aspecto, navegación Live TV y reproducción pasan; no se
 publica una release por este cambio aislado.
+
+La base Apple endurece la construcción de URLs de imágenes y vídeo: los
+identificadores vacíos o con separadores de ruta se rechazan y los caracteres
+especiales se codifican como parte del componente. Se añadió cobertura Swift
+para IDs con espacios, separadores y traversal. En este host Windows no hay
+toolchain Swift; la validación queda delegada al workflow macOS de Apple y no
+se afirma validación local de iOS, iPadOS ni tvOS.
