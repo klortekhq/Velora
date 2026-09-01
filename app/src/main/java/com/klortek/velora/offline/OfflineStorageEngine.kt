@@ -13,6 +13,23 @@ import java.io.FileOutputStream
 object OfflineStorageEngine {
     private const val MEDIA_DIRECTORY = "offline/media"
 
+    /**
+     * Measure every file in Velora's private offline volume, including partial
+     * transfers. Counting the directory rather than only completed rows keeps
+     * the storage limit safe after process death or an interrupted transfer.
+     */
+    fun managedBytes(context: Context): Long {
+        val root = File(context.filesDir, MEDIA_DIRECTORY)
+        if (!root.exists()) return 0L
+        var total = 0L
+        root.walkTopDown().filter(File::isFile).forEach { file ->
+            val size = file.length().coerceAtLeast(0L)
+            total = if (Long.MAX_VALUE - total < size) Long.MAX_VALUE else total + size
+            if (total == Long.MAX_VALUE) return@forEach
+        }
+        return total
+    }
+
     suspend fun materialize(context: Context, entry: OfflineDownload): OfflineDownload? = withContext(Dispatchers.IO) {
         if (!PlatformCapabilities.supportsOfflineDownloads || !entry.isComplete) return@withContext null
         val source = entry.localPath ?: return@withContext null

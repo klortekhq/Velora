@@ -701,3 +701,9 @@ actualización de WorkManager las rellenan sin perder las instalaciones
 existentes, y la capa de gestión expone `markPlayed` para futuras reglas de
 limpieza o Smart Downloads. La compilación móvil y sus tests pasan tras la
 migración.
+
+El límite de almacenamiento offline mide ahora todos los archivos del volumen
+privado `offline/media`, incluidos `.part` de transferencias interrumpidas, y
+usa el tamaño registrado como suelo conservador para filas heredadas. Así una
+descarga parcial o un reinicio no puede hacer que Velora subestime el espacio
+ocupado.
