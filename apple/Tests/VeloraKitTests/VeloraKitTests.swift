@@ -114,6 +114,13 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(channel.currentProgram?.channelID, "channel-1")
     }
 
+    func testLiveTvPlaybackInfoDecodesSelectedStreamURL() throws {
+        let json = #"{"MediaSources":[{"Id":"source-1","LiveStreamId":"live-1","TranscodingUrl":"http://jellyfin.local:8096/Videos/channel-1/stream.m3u8","Protocol":"hls"}]}"#
+        let info = try JSONDecoder().decode(JellyfinLiveTvPlaybackInfo.self, from: json.data(using: .utf8)!)
+        XCTAssertEqual(info.mediaSources.first?.liveStreamID, "live-1")
+        XCTAssertEqual(info.mediaSources.first?.transcodingURL?.path, "/Videos/channel-1/stream.m3u8")
+    }
+
     func testVideoRequestUsesStreamEndpointWithoutCredentialQuery() async throws {
         let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
         let url = await client.videoURL(itemID: "movie-one")
