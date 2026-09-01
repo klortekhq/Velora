@@ -125,6 +125,13 @@ public struct VeloraAppShell: View {
                                 VeloraSettingsView(settings: $model.settings)
                             }
                         }
+                        if !model.liveTvChannels.isEmpty {
+                            ToolbarItem(placement: .automatic) {
+                                NavigationLink("Live TV") {
+                                    VeloraLiveTvView(model: model)
+                                }
+                            }
+                        }
                     }
                 }
                 .sheet(item: $selectedItem) { item in
@@ -191,6 +198,49 @@ private struct VeloraItemDetailView: View {
             .padding()
         }
         .navigationTitle(item.name)
+    }
+}
+
+@available(iOS 16.0, tvOS 16.0, *)
+private struct VeloraLiveTvView: View {
+    @ObservedObject var model: VeloraAppModel
+    @State private var player: AVPlayer?
+    @State private var selectedChannel: JellyfinLiveTvChannel?
+
+    var body: some View {
+        List(model.liveTvChannels) { channel in
+            Button {
+                selectedChannel = channel
+                Task {
+                    player = await model.playLiveTv(channel: channel)
+                    player?.play()
+                }
+            } label: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text((channel.number.map { "\($0) · " } ?? "") + channel.name)
+                        .font(.headline)
+                    if let program = channel.currentProgram {
+                        Text(program.name)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Play live channel")
+        }
+        .navigationTitle("Live TV")
+        .safeAreaInset(edge: .bottom) {
+            if let player, let selectedChannel {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(selectedChannel.name).font(.headline)
+                    VideoPlayer(player: player)
+                        .aspectRatio(16 / 9, contentMode: .fit)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+                .padding()
+                .background(.regularMaterial)
+            }
+        }
     }
 }
 #endif
