@@ -79,6 +79,11 @@ Media3 usa su SurfaceView estándar, evitando pantallas negras por decodificaci�
 software en televisores; la regla tiene prueba unitaria y pasan las pruebas
 móviles y la compilación TV.
 
+El shell Apple acepta ahora el servidor en el formulario de inicio, permite
+cambiarlo antes de autenticar y asocia la sesión persistida al servidor exacto.
+Las sesiones antiguas sin esa asociación se descartan de forma segura, y el
+token nunca se reutiliza contra otra URL.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba

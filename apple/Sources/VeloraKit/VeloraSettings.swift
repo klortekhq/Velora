@@ -96,11 +96,13 @@ public struct JellyfinSession: Codable, Equatable, Sendable {
     public let accessToken: String
     public let userID: String
     public let username: String?
+    public let serverURL: String?
 
-    public init(accessToken: String, userID: String, username: String? = nil) {
+    public init(accessToken: String, userID: String, username: String? = nil, serverURL: String? = nil) {
         self.accessToken = accessToken
         self.userID = userID
         self.username = username
+        self.serverURL = serverURL
     }
 }
 
