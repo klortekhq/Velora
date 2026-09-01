@@ -123,6 +123,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.klortek.velora.TrailerLauncher
 import com.klortek.velora.tmdb.TmdbApiService
+import com.klortek.velora.trailer.TrailerResolver
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.activity.compose.BackHandler
 import kotlinx.coroutines.delay
@@ -2201,11 +2202,7 @@ fun EpisodeActionButtonsRow(
                               apiKey = settings.tmdbApiKey,
                               language = iso639Code
                           )
-                          // Prefer official trailers, matching language
-                          val trailer = videos.firstOrNull { it.site == "YouTube" && it.type == "Trailer" && it.official && (iso639Code == null || it.iso6391 == iso639Code) }
-                              ?: videos.firstOrNull { it.site == "YouTube" && it.type == "Trailer" && it.official }
-                              ?: videos.firstOrNull { it.site == "YouTube" && it.type == "Trailer" }
-                              ?: videos.firstOrNull { it.site == "YouTube" }
+                          val trailer = TrailerResolver.select(videos, iso639Code)
                           
                           if (trailer != null) {
                               trailerKey = trailer.key
