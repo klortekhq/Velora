@@ -13,10 +13,34 @@ enum class LibrarySortMode {
     PremiereDate,
     Runtime,
     CriticRating,
-    CommunityRating
+    CommunityRating,
+    Random
 }
 
 enum class LibraryPlaybackFilter { All, Watched, Unwatched }
+
+fun SortType.toLibrarySortMode(): LibrarySortMode = when (this) {
+    SortType.Alphabetically -> LibrarySortMode.Name
+    SortType.DateAdded -> LibrarySortMode.DateAdded
+    SortType.DateReleased -> LibrarySortMode.PremiereDate
+    SortType.Runtime -> LibrarySortMode.Runtime
+    SortType.CriticRating -> LibrarySortMode.CriticRating
+    SortType.CommunityRating -> LibrarySortMode.CommunityRating
+    SortType.Random -> LibrarySortMode.Random
+}
+
+fun SortType.isDescendingLibrarySort(): Boolean = this in setOf(
+    SortType.DateAdded,
+    SortType.DateReleased,
+    SortType.CriticRating,
+    SortType.CommunityRating
+)
+
+fun PlaybackFilter.toLibraryPlaybackFilter(): LibraryPlaybackFilter = when (this) {
+    PlaybackFilter.Watched -> LibraryPlaybackFilter.Watched
+    PlaybackFilter.Unwatched -> LibraryPlaybackFilter.Unwatched
+    PlaybackFilter.All, PlaybackFilter.Favorites -> LibraryPlaybackFilter.All
+}
 
 fun queryLibraryItems(
     items: List<JellyfinItem>,
@@ -60,6 +84,7 @@ fun queryLibraryItems(
         LibrarySortMode.CommunityRating -> filtered.sortedWith(
             compareBy<JellyfinItem> { it.CommunityRating ?: -1f }.thenBy { it.Name.lowercase() }
         )
+        LibrarySortMode.Random -> filtered.shuffled()
     }
 
     return if (descending) sorted.asReversed() else sorted

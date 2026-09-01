@@ -89,6 +89,7 @@ jobs:
         with:
           name: Velora-APK-${{ github.ref_name }}
           path: dist/
+          overwrite: true
 
       - name: Crear o actualizar release con los APK
         if: startsWith(github.ref, 'refs/tags/')
