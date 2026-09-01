@@ -21,6 +21,11 @@ Los textos del shell se sirven mediante recursos nativos `Localizable.strings`
 en español, inglés, francés y alemán; la opción automática sigue el idioma del
 dispositivo y una selección explícita se aplica al entorno SwiftUI.
 
+`JellyfinClient` también expone canales y programación de Live TV con consultas
+acotadas por usuario y ventana temporal. La reproducción de canal se mantiene
+separada de la reproducción VOD hasta disponer de su ruta AVPlayer específica;
+no se presentan controles de Live TV que aún no tengan acción real.
+
 Los ajustes del shell se persisten de forma local mediante `VeloraSettingsStore`
 usando datos Codable. La sesión autenticada se guarda mediante
 `VeloraCredentialStore`: en Apple usa Keychain con accesibilidad

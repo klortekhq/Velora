@@ -88,6 +88,11 @@ La petición de autenticación Apple usa ahora los nombres y encabezados estánd
 de Jellyfin (`Password` y `X-Emby-Authorization`), con una prueba que verifica
 el payload sin enviar credenciales a la red.
 
+La base Apple incorpora modelos y consultas autenticadas para canales y
+programación de Live TV, con ventana temporal y límite de resultados. Se
+integran en la sesión al iniciar y se limpian al cerrar sesión; todavía no se
+declara como completada la reproducción de canales en Apple.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba

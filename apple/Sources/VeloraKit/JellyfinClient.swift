@@ -119,6 +119,33 @@ public actor JellyfinClient {
         return try await request(url, as: JellyfinResult<JellyfinItem>.self).items
     }
 
+    public func liveTvChannels(userID: String) async throws -> [JellyfinLiveTvChannel] {
+        var components = URLComponents(url: baseURL.appendingPathComponent("LiveTv/Channels"), resolvingAgainstBaseURL: false)
+        components?.queryItems = [
+            URLQueryItem(name: "UserId", value: userID),
+            URLQueryItem(name: "AddCurrentProgram", value: "true"),
+            URLQueryItem(name: "EnableImages", value: "true"),
+            URLQueryItem(name: "Fields", value: "Overview")
+        ]
+        guard let url = components?.url else { throw ClientError.invalidServerURL }
+        return try await request(url, as: JellyfinResult<JellyfinLiveTvChannel>.self).items
+    }
+
+    public func liveTvPrograms(userID: String, channelIDs: [String], from start: Date, until end: Date) async throws -> [JellyfinLiveTvProgram] {
+        guard !channelIDs.isEmpty else { return [] }
+        var components = URLComponents(url: baseURL.appendingPathComponent("LiveTv/Programs"), resolvingAgainstBaseURL: false)
+        let formatter = ISO8601DateFormatter()
+        components?.queryItems = [
+            URLQueryItem(name: "UserId", value: userID),
+            URLQueryItem(name: "ChannelIds", value: channelIDs.joined(separator: ",")),
+            URLQueryItem(name: "MinStartDate", value: formatter.string(from: start)),
+            URLQueryItem(name: "MaxEndDate", value: formatter.string(from: end)),
+            URLQueryItem(name: "Limit", value: "500")
+        ]
+        guard let url = components?.url else { throw ClientError.invalidServerURL }
+        return try await request(url, as: JellyfinResult<JellyfinLiveTvProgram>.self).items
+    }
+
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
         request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")
@@ -127,6 +154,8 @@ public actor JellyfinClient {
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }
         guard http.statusCode != 401 else { throw ClientError.unauthorized }
         guard (200..<300).contains(http.statusCode) else { throw ClientError.invalidResponse }
-        return try JSONDecoder().decode(type, from: data)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(type, from: data)
     }
 }

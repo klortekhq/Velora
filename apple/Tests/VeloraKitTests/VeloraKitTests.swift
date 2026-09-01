@@ -103,6 +103,17 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(item.imageTags?["Primary"], "abc")
     }
 
+    func testLiveTvModelsDecodeServerFieldNames() throws {
+        let json = #"{"Id":"channel-1","Name":"Noticias","ChannelNumber":"24","CurrentProgram":{"Id":"program-1","Name":"Informativo","ChannelId":"channel-1","StartDate":"2026-09-01T10:00:00Z","EndDate":"2026-09-01T11:00:00Z","Overview":"Actualidad"}}"#
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let channel = try decoder.decode(JellyfinLiveTvChannel.self, from: json.data(using: .utf8)!)
+        XCTAssertEqual(channel.id, "channel-1")
+        XCTAssertEqual(channel.number, "24")
+        XCTAssertEqual(channel.currentProgram?.name, "Informativo")
+        XCTAssertEqual(channel.currentProgram?.channelID, "channel-1")
+    }
+
     func testVideoRequestUsesStreamEndpointWithoutCredentialQuery() async throws {
         let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
         let url = await client.videoURL(itemID: "movie-one")
