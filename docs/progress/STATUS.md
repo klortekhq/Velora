@@ -84,6 +84,11 @@ cancelan al cambiar rápidamente y la salida notifica `Sessions/Playing/Stopped`
 para liberar el tuner; la validación de foco remoto y reproducción sostenida en
 hardware Apple sigue pendiente.
 
+La corrección `bec2ed0` añade el contrato Codable de detención y evita que una
+carga de canal obsoleta sustituya al canal elegido. Los tests Android móviles y
+las pruebas web de regresión siguen pasando; Swift/Xcode no está instalado en
+este host.
+
 La superficie GL experimental de Android ya no se selecciona para AV1 ni cuando
 Jellyfin no declara el códec antes de iniciar la reproducción. En esos casos
 Media3 usa su SurfaceView estándar, evitando pantallas negras por decodificación
