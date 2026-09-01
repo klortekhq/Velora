@@ -1,6 +1,9 @@
 package com.klortek.velora.player.mpv
 
 import com.klortek.velora.BuildConfig
+import java.net.URI
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 /**
  * Builds Jellyfin-compatible URLs for MPV playback.
@@ -8,6 +11,35 @@ import com.klortek.velora.BuildConfig
  * IMPORTANT: Jellyfin requires lowercase parameter names!
  */
 object MpvUrlBuilder {
+
+    private fun queryValue(value: String): String =
+        URLEncoder.encode(value, StandardCharsets.UTF_8.name())
+
+    private fun appendQueryParameter(builder: StringBuilder, name: String, value: String) {
+        builder.append(if (builder.indexOf("?") >= 0) '&' else '?')
+            .append(name)
+            .append('=')
+            .append(queryValue(value))
+    }
+
+    /** Remove credential-like query parameters from a server-provided source URL. */
+    private fun stripCredentialQueryParameters(sourcePath: String): String {
+        return runCatching {
+            val uri = URI(sourcePath)
+            val query = uri.rawQuery ?: return@runCatching sourcePath
+            val safeQuery = query.split('&')
+                .filter { part ->
+                    val name = part.substringBefore('=').lowercase()
+                    name !in setOf("api_key", "apikey", "access_token", "token", "x-emby-token")
+                }
+                .joinToString("&")
+            buildString {
+                append(sourcePath.substringBefore('?').substringBefore('#'))
+                if (safeQuery.isNotBlank()) append('?').append(safeQuery)
+                uri.rawFragment?.let { append('#').append(it) }
+            }
+        }.getOrDefault(sourcePath)
+    }
     
     /**
      * Build HTTP headers for Jellyfin authentication.
@@ -47,11 +79,11 @@ object MpvUrlBuilder {
             // Always use static=true for direct streaming without transcoding
             // Resume position is handled client-side by MPV seeking after load
             append("static=true")
-            append("&mediaSourceId=${mediaSourceId ?: itemId}")
+            append("&mediaSourceId=${queryValue(mediaSourceId ?: itemId)}")
             append("&enableAutoStreamCopy=true")
             append("&allowVideoStreamCopy=true")
             append("&allowAudioStreamCopy=true")
-            container?.let { append("&container=$it") }
+            container?.let { append("&container=${queryValue(it)}") }
         }
     }
 
@@ -76,8 +108,8 @@ object MpvUrlBuilder {
             // can emit the invalid `AudioCodec=m3u8` query. Explicit HLS
             // codecs keep the manifest valid while Jellyfin still decides
             // whether the upstream can be copied or must be remuxed.
-            mediaSourceId?.takeIf { it.isNotBlank() }?.let { append("&MediaSourceId=$it") }
-            liveStreamId?.takeIf { it.isNotBlank() }?.let { append("&LiveStreamId=$it") }
+            mediaSourceId?.takeIf { it.isNotBlank() }?.let { append("&MediaSourceId=${queryValue(it)}") }
+            liveStreamId?.takeIf { it.isNotBlank() }?.let { append("&LiveStreamId=${queryValue(it)}") }
             append("&VideoCodec=h264")
             append("&AudioCodec=aac")
             append("&TranscodingProtocol=hls")
@@ -93,7 +125,8 @@ object MpvUrlBuilder {
      * We do not read or parse the provider M3U in the app; Jellyfin resolves
      * the selected channel and returns this source URL through its API.
      */
-    fun buildLiveTvDirectSourceUrl(sourcePath: String): String = sourcePath
+    fun buildLiveTvDirectSourceUrl(sourcePath: String): String =
+        stripCredentialQueryParameters(sourcePath)
 
     /**
      * Build direct download URL for Jellyfin.
@@ -106,6 +139,11 @@ object MpvUrlBuilder {
         mediaSourceId: String? = null
     ): String {
         val baseUrl = serverUrl.removeSuffix("/")
-        return "$baseUrl/Items/$itemId/Download?mediaSourceId=${mediaSourceId ?: itemId}"
+        return buildString {
+            append("$baseUrl/Items/")
+            append(queryValue(itemId))
+            append("/Download")
+            appendQueryParameter(this, "mediaSourceId", mediaSourceId ?: itemId)
+        }
     }
 }

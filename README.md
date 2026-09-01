@@ -2,7 +2,7 @@
 
 ### Cliente Jellyfin multiplataforma
 
-Versión de código: **1.2.76** · Por **Klørtek**
+Versión de código: **1.2.77** · Por **Klørtek**
 
 Velora es una aplicación independiente para disfrutar de bibliotecas Jellyfin con una interfaz rápida, limpia y adaptada a cada pantalla. La experiencia móvil está pensada para tocar y deslizar; la experiencia de televisión, para mando a distancia, D-pad y pantalla grande.
 
