@@ -39,6 +39,11 @@ canales cuando la lista supera los límites habituales de la API. La prueba
 unitaria móvil y la compilación de las variantes móvil y TV pasan. Es un cambio
 de robustez que queda en `main`; no genera APK/release por sí solo.
 
+El formulario de inicio de sesión ahora respeta los insets de las barras del
+sistema antes de aplicar su desplazamiento, evitando que el título, los campos
+o el botón queden ocultos en móviles, tablets y televisores. Se verificará junto
+con la siguiente compilación Android.
+
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
 
