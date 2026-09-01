@@ -2,6 +2,18 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.71
+
+### Fixed
+
+- Apple Jellyfin catalog models now decode the server's capitalized field
+  names correctly.
+- Apple client requests use the synchronized Velora release identifier.
+
+### Release
+
+- Android, web and Smart TV package metadata is synchronized to `1.2.71`.
+
 ## 1.2.36
 
 - Fixed touch activation for actor filmography cards on mobile and tablet;

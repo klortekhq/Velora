@@ -38,7 +38,7 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.70 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.71 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -74,9 +74,9 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Release actual: v1.2.70
+## Release actual: v1.2.71 (en preparación)
 
-La fuente actual es `1.2.70`. La release contiene 13 assets: los cuatro APK
+La fuente actual es `1.2.71`. La release anterior `v1.2.70` contiene 13 assets: los cuatro APK
 (móvil/TV debug y release unsigned), los paquetes web/Smart TV y ambos
 manifiestos SHA-256. Los cinco enlaces esperados de Android están presentes en
 la misma release. No se afirma validación física en un móvil, Fire TV o
