@@ -1,6 +1,7 @@
 package com.klortek.velora.offline
 
 import android.app.DownloadManager
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -66,5 +67,47 @@ class OfflineDownloadTest {
         assertTrue(played.createdAtEpochMs == 100L)
         assertTrue(played.completedAtEpochMs == 200L)
         assertTrue(played.lastPlayedAtEpochMs == 300L)
+    }
+
+    @Test
+    fun smartCleanupNeverRemovesProtectedDownloads() {
+        val watched = OfflineDownload("movie-1", "Vista", "Movie", downloadId = 1L,
+            status = DownloadManager.STATUS_SUCCESSFUL, localPath = "file:///movie", isWatched = true)
+        val protected = watched.copy(itemId = "movie-2", downloadId = 2L, keepDownload = true)
+        val episode = OfflineDownload("episode-1", "Episodio", "Episode", downloadId = 3L,
+            status = DownloadManager.STATUS_SUCCESSFUL, localPath = "file:///episode", createdAtEpochMs = 1L)
+
+        val candidates = SmartDownloadPolicy.cleanupCandidates(listOf(watched, protected, episode), true, 1)
+
+        assertTrue(candidates.map { it.downloadId }.contains(1L))
+        assertFalse(candidates.map { it.downloadId }.contains(2L))
+        assertFalse(candidates.map { it.downloadId }.contains(3L))
+    }
+
+    @Test
+    fun managedDownloadsWithZeroProviderIdRemainDistinct() {
+        val first = OfflineDownload("episode-1", "E1", "Episode", downloadId = 0L, workName = "offline-one")
+        val second = OfflineDownload("episode-2", "E2", "Episode", downloadId = 0L, workName = "offline-two")
+
+        assertFalse(sameOfflineEntry(first, second))
+        assertTrue(sameOfflineEntry(first, first.copy(lastPlayedAtEpochMs = 10L)))
+    }
+
+    @Test
+    fun smartCleanupKeepsDistinctManagedWatchedEntries() {
+        val first = OfflineDownload(
+            "episode-1", "E1", "Episode", downloadId = 0L,
+            workName = "offline-one", status = DownloadManager.STATUS_SUCCESSFUL,
+            localPath = "file:///episode-1", isWatched = true
+        )
+        val second = first.copy(
+            itemId = "episode-2", name = "E2", workName = "offline-two",
+            localPath = "file:///episode-2"
+        )
+
+        val candidates = SmartDownloadPolicy.cleanupCandidates(listOf(first, second), true, 2)
+
+        assertEquals(2, candidates.size)
+        assertEquals(setOf("offline-one", "offline-two"), candidates.mapNotNull { it.workName }.toSet())
     }
 }

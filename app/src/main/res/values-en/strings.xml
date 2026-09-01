@@ -180,4 +180,10 @@
     <string name="player_solutions">Solutions:</string>
     <string name="player_aspect_title">Picture mode</string>
     <string name="player_aspect_description">Choose how you want to view the video</string>
+    <string name="settings_smart_downloads">Smart Downloads</string>
+    <string name="settings_smart_downloads_description">Automatically manage watched downloads while keeping protected items.</string>
+    <string name="settings_smart_remove_watched">Remove watched content</string>
+    <string name="settings_smart_remove_watched_description">Automatically remove movies and episodes marked as watched.</string>
+    <string name="settings_smart_keep_episodes">Unwatched episodes to keep</string>
+    <string name="settings_smart_keep_episodes_description">Keep this many unwatched episodes when cleanup runs.</string>
 </resources>

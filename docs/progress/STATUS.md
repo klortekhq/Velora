@@ -15,6 +15,14 @@ correctamente tras endurecer el motor de decisión de reproducción. El modelo A
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
 
+El bloque actual añade Smart Downloads móvil/tablet de forma opt-in. La
+migración SQLite conserva los estados de visto y protegido, y la limpieza no
+elimina nunca una descarga marcada para conservar. La validación móvil pasa;
+la política y la identidad de transferencias gestionadas tienen pruebas de
+regresión. No se ha creado una release nueva porque la versión 1.2.86 sigue
+acumulando cambios y esta funcionalidad se publicará junto con un bloque de
+tamaño suficiente.
+
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
 
@@ -64,6 +72,12 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
 - The mobile download-quality selector is localized in Spanish, English,
   French and German and uses the same Original/High/Medium/Low contract as the
   offline queue.
+- Smart Downloads is now an explicit mobile/tablet opt-in. Watched cleanup,
+  configurable unwatched-episode retention and user-protected downloads are
+  persisted in SQLite; TV/browser capability gating keeps the feature out of
+  unsupported UIs.
+- Managed offline transfers now use their WorkManager name as a stable identity
+  when the provider download id is zero, preventing progress/state collisions.
 - Web playback now refuses credential-bearing URL fallbacks and waits for the
   same-origin media proxy, keeping Jellyfin tokens out of media URLs.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request

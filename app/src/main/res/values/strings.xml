@@ -187,4 +187,10 @@
     <string name="player_solutions">Soluciones:</string>
     <string name="player_aspect_title">Formato de imagen</string>
     <string name="player_aspect_description">Selecciona cómo quieres ver el vídeo</string>
+    <string name="settings_smart_downloads">Descargas inteligentes</string>
+    <string name="settings_smart_downloads_description">Gestiona automáticamente las descargas vistas y conserva las protegidas.</string>
+    <string name="settings_smart_remove_watched">Eliminar contenido visto</string>
+    <string name="settings_smart_remove_watched_description">Elimina automáticamente películas y episodios marcados como vistos.</string>
+    <string name="settings_smart_keep_episodes">Episodios no vistos que conservar</string>
+    <string name="settings_smart_keep_episodes_description">Mantiene este número de episodios no vistos cuando se ejecuta la limpieza.</string>
 </resources>
