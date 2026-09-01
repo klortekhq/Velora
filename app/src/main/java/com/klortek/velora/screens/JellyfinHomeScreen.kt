@@ -650,7 +650,7 @@ fun JellyfinHomeScreen(
             },
             onSearch = { showSearch = true },
             onSettings = { showSettings = true },
-            onDownloads = if (PlatformCapabilities.supportsOfflineDownloads) onDownloadsClick else ({}),
+            onDownloads = onDownloadsClick.takeIf { PlatformCapabilities.supportsOfflineDownloads },
             onLiveTv = onLiveTvClick,
             showLiveTv = showLiveTv,
             onMovies = {
