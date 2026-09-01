@@ -8,10 +8,11 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-La release pública más reciente verificada es `v1.2.85`; sus artefactos están
-comprobados en la página de la release. La fuente actual es `1.3.0`, en
-preparación local. Las validaciones locales de Android móvil/TV terminaron
-correctamente tras endurecer el motor de decisión de reproducción. El modelo Apple usa ahora los nombres de
+La release pública más reciente con artefactos verificados sigue siendo
+`v1.2.85`; `v1.3.0` ya está etiquetada y subida a `main`, con los workflows de
+GitHub encargados de publicar sus artefactos. Las validaciones locales de
+Android móvil/TV terminaron correctamente tras endurecer el motor de decisión
+de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
 
@@ -20,8 +21,9 @@ migración SQLite conserva los estados de visto y protegido, y la limpieza no
 elimina nunca una descarga marcada para conservar. La validación móvil pasa;
 la política y la identidad de transferencias gestionadas tienen pruebas de
 regresión. La release 1.3.0 agrupa este bloque funcional con los cambios
-offline e i18n anteriores; sus artefactos siguen pendientes de publicación
-final tras la compilación reproducible.
+offline e i18n anteriores. La compilación reproducible local terminó
+correctamente; la publicación final queda pendiente de confirmar desde GitHub
+Actions.
 
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
