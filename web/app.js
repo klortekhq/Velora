@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var APP_VERSION = '1.2.61';
+  var APP_VERSION = '1.2.62';
 
   var LANGUAGE_OPTIONS = [
     { value: 'auto', label: 'Automático', native: 'Automático' },

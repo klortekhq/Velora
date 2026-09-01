@@ -378,19 +378,25 @@ private fun OfflineDownloadQualityDialog(
                     .background(Color(0xFF17191D)).padding(22.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Text("Calidad de descarga", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Text("La calidad original no se convierte; las demás usan una copia optimizada.", color = Color.White.copy(alpha = .72f), style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(com.klortek.velora.R.string.download_quality_title), color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(com.klortek.velora.R.string.download_quality_description), color = Color.White.copy(alpha = .72f), style = MaterialTheme.typography.bodySmall)
                 OfflineDownloadQuality.entries.forEach { quality ->
                     Row(
                         Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable { onSelected(quality) }
                             .padding(horizontal = 10.dp, vertical = 15.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(Icons.Default.Download, quality.label, tint = MobileCyan, modifier = Modifier.size(24.dp))
-                        Text(quality.label, color = Color.White, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 14.dp))
+                        val label = when (quality) {
+                            OfflineDownloadQuality.ORIGINAL -> stringResource(com.klortek.velora.R.string.quality_original)
+                            OfflineDownloadQuality.HIGH -> stringResource(com.klortek.velora.R.string.quality_high)
+                            OfflineDownloadQuality.MEDIUM -> stringResource(com.klortek.velora.R.string.quality_medium)
+                            OfflineDownloadQuality.LOW -> stringResource(com.klortek.velora.R.string.quality_low)
+                        }
+                        Icon(Icons.Default.Download, label, tint = MobileCyan, modifier = Modifier.size(24.dp))
+                        Text(label, color = Color.White, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 14.dp))
                     }
                 }
-                Text("Cancelar", color = Color.White.copy(alpha = .82f), modifier = Modifier.fillMaxWidth().clickable { onDismiss() }.padding(14.dp))
+                Text(stringResource(com.klortek.velora.R.string.login_cancel), color = Color.White.copy(alpha = .82f), modifier = Modifier.fillMaxWidth().clickable { onDismiss() }.padding(14.dp))
             }
         }
     }

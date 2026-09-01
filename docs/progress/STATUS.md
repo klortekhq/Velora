@@ -1,6 +1,6 @@
 # Velora implementation status
 
-Updated: 2026-08-31
+Updated: 2026-09-01
 
 This dashboard records verified repository state only. A feature is not marked
 complete merely because code or a previous build artifact exists.
@@ -29,11 +29,14 @@ Wave 6 — Apple platform foundation and cross-platform release convergence.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.61 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.62 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
   release gate for its public APKs and platform bundles.
+- The mobile download-quality selector is localized in Spanish, English,
+  French and German and uses the same Original/High/Medium/Low contract as the
+  offline queue.
 - The ExoPlayer playback URL path now relies on MediaBrowser/X-Emby request
   headers instead of putting the Jellyfin token in the playback query string.
 - Mobile/tablet library sorting and filtering preferences now persist locally
@@ -51,12 +54,12 @@ Wave 6 — Apple platform foundation and cross-platform release convergence.
 
 ## Latest published tag
 
-The source commit `14139b6` and tag `v1.2.61` are pushed to the only branch,
-`main`. Android mobile/TV release APKs and the web/Smart TV bundles were built
-locally for this version, and the tag workflows are configured to publish them
-into the same GitHub release. GitHub Actions asset completion is not independently
-verified from this host because its API is unavailable here; no remote asset
-verification is claimed.
+The current source is version `1.2.62`. Android mobile/TV release APKs and the
+web/Smart TV bundles were built locally for this version, and the tag workflows
+are configured to publish them into the same GitHub release. GitHub Actions
+asset completion is not independently verified from this host because its API
+is unavailable here; no remote asset verification is claimed until the tag is
+pushed and the release can be inspected.
 
 Release workflows now use unfiltered tag triggers, so a `v*` tag cannot be
 silently skipped by a path filter.
