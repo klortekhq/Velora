@@ -2,6 +2,12 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.83
+
+- Añadido ordenado y filtrado por estado de reproducción para películas y series.
+- Integradas las opciones de Vistos, No vistos y Favoritos en las bibliotecas móvil y TV.
+- Localizadas las nuevas opciones de filtro mediante los recursos de idioma de la aplicación.
+
 ## 1.2.82
 
 - Añadido un botón Atrás visible y navegable en la filmografía de personas.
