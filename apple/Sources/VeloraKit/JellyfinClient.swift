@@ -146,6 +146,36 @@ public actor JellyfinClient {
         return try await request(url, as: JellyfinResult<JellyfinLiveTvProgram>.self).items
     }
 
+    /// Opens a Jellyfin Live TV tuner and returns the server-selected stream.
+    /// The returned URL is checked against the configured server before AVPlayer uses it.
+    public func liveTvPlaybackURL(userID: String, channelID: String) async throws -> URL? {
+        guard !channelID.isEmpty, !channelID.contains("/"), !channelID.contains("\\") else { return nil }
+        var components = URLComponents(url: baseURL.appendingPathComponent("Items/\(channelID)/PlaybackInfo"), resolvingAgainstBaseURL: false)
+        components?.queryItems = [
+            URLQueryItem(name: "UserId", value: userID),
+            URLQueryItem(name: "StartTimeTicks", value: "0"),
+            URLQueryItem(name: "IsPlayback", value: "true"),
+            URLQueryItem(name: "AutoOpenLiveStream", value: "true")
+        ]
+        guard let url = components?.url else { throw ClientError.invalidServerURL }
+        var request = authorizedRequest(for: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = Data("{}".utf8)
+        let (data, response) = try await session.data(for: request)
+        guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }
+        guard (200..<300).contains(http.statusCode) else {
+            throw http.statusCode == 401 ? ClientError.unauthorized : ClientError.invalidResponse
+        }
+        let info = try JSONDecoder().decode(JellyfinLiveTvPlaybackInfo.self, from: data)
+        let selected = info.mediaSources.first?.transcodingURL ?? info.mediaSources.first?.directStreamURL
+        guard let selected,
+              selected.scheme == baseURL.scheme,
+              selected.host?.lowercased() == baseURL.host?.lowercased(),
+              selected.port == baseURL.port else { return nil }
+        return selected
+    }
+
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
         request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")

@@ -73,6 +73,11 @@ de ciclo completo sobre el almacén inyectable. Sigue siendo una base SwiftPM,
 no un `.app` firmado: los targets iOS/iPadOS/tvOS y su validación requieren
 macOS/Xcode y permanecen pendientes.
 
+La base Apple ya puede abrir un tuner de Live TV mediante `PlaybackInfo`, elegir
+la URL de transcodificación o direct stream devuelta por Jellyfin, comprobar que
+pertenece al servidor configurado y construir un `AVPlayer` autenticado. La
+interfaz de canal y la validación en hardware Apple siguen pendientes.
+
 La superficie GL experimental de Android ya no se selecciona para AV1 ni cuando
 Jellyfin no declara el códec antes de iniciar la reproducción. En esos casos
 Media3 usa su SurfaceView estándar, evitando pantallas negras por decodificación

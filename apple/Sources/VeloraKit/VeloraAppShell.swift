@@ -81,6 +81,21 @@ public final class VeloraAppModel: ObservableObject {
         let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": request.allHTTPHeaderFields ?? [:]])
         return AVPlayer(playerItem: AVPlayerItem(asset: asset))
     }
+
+    public func playLiveTv(channel: JellyfinLiveTvChannel) async -> AVPlayer? {
+        guard let session else { return nil }
+        let requestURL: URL?
+        do {
+            requestURL = try await client.liveTvPlaybackURL(userID: session.userID, channelID: channel.id)
+        } catch {
+            return nil
+        }
+        guard let requestURL else { return nil }
+        let request = await client.authorizedRequest(for: requestURL)
+        guard let url = request.url else { return nil }
+        let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": request.allHTTPHeaderFields ?? [:]])
+        return AVPlayer(playerItem: AVPlayerItem(asset: asset))
+    }
 }
 
 @available(iOS 16.0, tvOS 16.0, *)

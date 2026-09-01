@@ -25,6 +25,9 @@ dispositivo y una selección explícita se aplica al entorno SwiftUI.
 acotadas por usuario y ventana temporal. La reproducción de canal se mantiene
 separada de la reproducción VOD hasta disponer de su ruta AVPlayer específica;
 no se presentan controles de Live TV que aún no tengan acción real.
+La ruta `liveTvPlaybackURL` abre el tuner mediante `PlaybackInfo`, valida que la
+URL devuelta pertenezca al servidor configurado y entrega un `AVPlayer` con la
+cabecera autenticada; tvOS no ofrece descargas.
 
 Los ajustes del shell se persisten de forma local mediante `VeloraSettingsStore`
 usando datos Codable. La sesión autenticada se guarda mediante

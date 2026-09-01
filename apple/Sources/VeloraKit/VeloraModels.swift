@@ -93,6 +93,28 @@ public struct JellyfinLiveTvProgram: Codable, Identifiable, Sendable {
     }
 }
 
+public struct JellyfinLiveTvMediaSource: Codable, Sendable {
+    public let id: String?
+    public let liveStreamID: String?
+    public let transcodingURL: URL?
+    public let directStreamURL: URL?
+    public let protocolName: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case id = "Id"
+        case liveStreamID = "LiveStreamId"
+        case transcodingURL = "TranscodingUrl"
+        case directStreamURL = "DirectStreamUrl"
+        case protocolName = "Protocol"
+    }
+}
+
+public struct JellyfinLiveTvPlaybackInfo: Codable, Sendable {
+    public let mediaSources: [JellyfinLiveTvMediaSource]
+
+    private enum CodingKeys: String, CodingKey { case mediaSources = "MediaSources" }
+}
+
 public enum PlaybackPath: String, Sendable { case directPlay, directStream, remux, transcode, fallback }
 
 public enum PlaybackQuality: Sendable, Equatable {
