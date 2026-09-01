@@ -4379,7 +4379,7 @@ fun JellyfinVideoPlayerScreen(
                             onClick = { showAspectModeMenu = false },
                             modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                         ) {
-                            androidx.compose.material3.Text("Cancelar")
+                            androidx.compose.material3.Text(stringResource(R.string.player_cancel))
                         }
                     }
                 }
@@ -4701,6 +4701,7 @@ fun ExoPlayerSettingsMenu(
     playbackQuality: PlaybackQuality = PlaybackQuality.ORIGINAL,
     onPlaybackQualitySelected: (PlaybackQuality) -> Unit = {}
 ) {
+    val context = LocalContext.current
     var itemDetails by remember { mutableStateOf<JellyfinItem?>(null) }
     var isLoadingSubtitles by remember { mutableStateOf(true) }
     var currentTracks by remember { mutableStateOf<Tracks?>(null) }
@@ -4857,6 +4858,7 @@ fun ExoPlayerSettingsMenu(
                     // postage stamp on a phone, causing every label to wrap
                     // one word per line. Give touch devices a readable panel.
                     .fillMaxWidth(if (isMobile) 0.9f else 0.4f)
+                    .widthIn(min = if (isMobile) 280.dp else 0.dp)
                     .fillMaxHeight(if (isMobile) 0.62f else 0.6f),
                 shape = RoundedCornerShape(16.dp),
                 colors = androidx.tv.material3.SurfaceDefaults.colors(
@@ -4872,10 +4874,10 @@ fun ExoPlayerSettingsMenu(
                     // Dialog title - changes based on current menu level
                     Text(
                         text = when (currentMenuLevel) {
-                            "subtitles" -> "Subtítulos"
-                            "audio" -> "Pistas de audio"
-                            "speed" -> "Velocidad de reproducción"
-                            "quality" -> "Calidad"
+                            "subtitles" -> stringResource(R.string.player_subtitles)
+                            "audio" -> stringResource(R.string.player_audio_tracks)
+                            "speed" -> stringResource(R.string.player_playback_speed)
+                            "quality" -> stringResource(R.string.player_quality)
                             else -> stringResource(R.string.player_settings)
                         },
                         style = MaterialTheme.typography.headlineMedium.copy(
@@ -4923,7 +4925,7 @@ fun ExoPlayerSettingsMenu(
                                                         modifier = Modifier.size(24.dp)
                                                     )
                                                     Text(
-                                                        text = "Pistas de audio",
+                                                        text = stringResource(R.string.player_audio_tracks),
                                                         style = MaterialTheme.typography.titleMedium.copy(
                                                             fontSize = MaterialTheme.typography.titleMedium.fontSize * 0.9f
                                                         )
@@ -4964,7 +4966,7 @@ fun ExoPlayerSettingsMenu(
                                                     modifier = Modifier.size(24.dp)
                                                 )
                                                 Text(
-                                                    text = "Subtítulos",
+                                                    text = stringResource(R.string.player_subtitles),
                                                     style = MaterialTheme.typography.titleMedium.copy(
                                                         fontSize = MaterialTheme.typography.titleMedium.fontSize * 0.9f
                                                     )
@@ -5005,7 +5007,7 @@ fun ExoPlayerSettingsMenu(
                                                         modifier = Modifier.size(24.dp)
                                                     )
                                                     Text(
-                                                        text = "Velocidad de reproducción",
+                                                        text = stringResource(R.string.player_playback_speed),
                                                         style = MaterialTheme.typography.titleMedium.copy(
                                                             fontSize = MaterialTheme.typography.titleMedium.fontSize * 0.9f
                                                         )
@@ -5034,7 +5036,7 @@ fun ExoPlayerSettingsMenu(
                                         onClick = { currentMenuLevel = "quality" },
                                         colors = listItemColors,
                                         headlineContent = {
-                                            Text("Calidad: ${playbackQuality.label}", style = MaterialTheme.typography.titleMedium)
+                                            Text("${stringResource(R.string.player_quality)}: ${playbackQuality.label}", style = MaterialTheme.typography.titleMedium)
                                         },
                                         trailingContent = { Text("▶") },
                                         modifier = Modifier.fillMaxWidth()
@@ -5077,7 +5079,7 @@ fun ExoPlayerSettingsMenu(
                                 val trackTitle = buildString {
                                     track.label?.let { append(it) }
                                     if (isEmpty()) {
-                                        track.language?.let { append(it) } ?: append("Unknown")
+                                        track.language?.let { append(it) } ?: append(context.getString(R.string.player_unknown))
                                     }
                                 }
                                 val trackInfo = buildString {
@@ -5219,20 +5221,20 @@ fun ExoPlayerSettingsMenu(
                             items(subtitleStreams) { stream ->
                                 val subtitleTitle = stream.DisplayTitle
                                     ?: stream.Language
-                                    ?: "Unknown"
+                                    ?: context.getString(R.string.player_unknown)
                                 val subtitleInfo = buildString {
-                                    if (stream.IsDefault == true) append("Default")
+                                    if (stream.IsDefault == true) append(context.getString(R.string.player_default))
                                     if (stream.IsForced == true) {
                                         if (isNotEmpty()) append(", ")
-                                        append("Forced")
+                                        append(context.getString(R.string.player_forced))
                                     }
                                     if (stream.IsExternal == true) {
                                         if (isNotEmpty()) append(", ")
-                                        append("External")
+                                        append(context.getString(R.string.player_external))
                                     }
                                     // Debug: Show the actual Jellyfin index
                                     if (isNotEmpty()) append(" • ")
-                                    append("Index ${stream.Index}")
+                                    stream.Index?.let { append(context.getString(R.string.player_stream_index, it)) }
                                 }
                                 
                                 ListItem(
@@ -5280,7 +5282,7 @@ fun ExoPlayerSettingsMenu(
                             if (downloadedSubtitles.isNotEmpty()) {
                                 item {
                                     Text(
-                                        text = "Subtítulos descargados",
+                                        text = stringResource(R.string.player_downloaded_subtitles),
                                         style = MaterialTheme.typography.titleSmall.copy(
                                             fontSize = MaterialTheme.typography.titleSmall.fontSize * 0.8f
                                         ),
@@ -5565,6 +5567,7 @@ fun SubtitleSelectionDialog(
     onDismiss: () -> Unit,
     onSubtitleSelected: (Int?) -> Unit
 ) {
+    val context = LocalContext.current
     var itemDetails by remember { mutableStateOf<JellyfinItem?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     
@@ -5662,7 +5665,7 @@ fun SubtitleSelectionDialog(
                         
                         // Build subtitle title
                         val subtitleTitle = buildString {
-                            append(stream.DisplayTitle ?: stream.Language ?: "Unknown")
+                            append(stream.DisplayTitle ?: stream.Language ?: context.getString(R.string.player_unknown))
                             if (stream.IsForced == true) append(" [Forced]")
                             if (stream.IsExternal == true) append(" (External)")
                             if (stream.IsHearingImpaired == true) append(" [CC]")
@@ -5750,6 +5753,7 @@ fun AudioSelectionDialog(
     onDismiss: () -> Unit,
     onAudioSelected: (Int?) -> Unit
 ) {
+    val context = LocalContext.current
     val audioGroups = remember(player.currentTracks) {
         player.currentTracks.groups.filter { it.type == C.TRACK_TYPE_AUDIO }
     }
@@ -5794,7 +5798,7 @@ fun AudioSelectionDialog(
                     val group = audioGroups[index]
                     val format = group.mediaTrackGroup.getFormat(0)
                     val trackTitle = buildString {
-                        append(format.label ?: format.language ?: "Unknown")
+                        append(format.label ?: format.language ?: context.getString(R.string.player_unknown))
                         format.codecs?.let { append(" • $it") }
                         if (format.channelCount > 0) append(" • ${format.channelCount}ch")
                     }
@@ -5868,7 +5872,7 @@ fun SpeedSelectionDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             androidx.compose.material3.Text(
-                text = "Velocidad de reproducción",
+                text = stringResource(R.string.player_playback_speed),
                 style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp)

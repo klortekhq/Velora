@@ -40,6 +40,13 @@ una prueba de regresión y pasaron los unit tests móviles, la compilación TV y
 las pruebas web. Este cambio se sube como commit; no genera una release por sí
 solo.
 
+El panel de ajustes del reproductor se ha hecho legible en móviles y tablets
+con un ancho mínimo adaptable, y sus etiquetas visibles (audio, subtítulos,
+velocidad, calidad y estados de pista) ya están localizadas en español, inglés,
+francés y alemán. Pasaron `testMobileDebugUnitTest`, `compileTvDebugKotlin`,
+las pruebas web y `git diff --check`; no se ha validado todavía en hardware
+real ni se genera una release por este cambio aislado.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba
