@@ -8,8 +8,8 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-Último commit publicado: `454d37e` (`v1.2.74`); la release `v1.2.74` está en
-compilación. Las validaciones locales de Android móvil/TV terminaron
+La fuente actual prepara `v1.2.75`; la release `v1.2.74` continúa en
+compilación automática para sus APK. Las validaciones locales de Android móvil/TV terminaron
 correctamente tras endurecer el motor de decisión de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
@@ -39,7 +39,7 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.74 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.75 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -75,12 +75,14 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Release actual: v1.2.74 (en compilación)
+## Release actual: v1.2.75 (preparación)
 
-La fuente actual es `1.2.74`. Incluye las correcciones de presentación para el
+La fuente actual es `1.2.75`. Incluye las correcciones de presentación para el
 renderizador GL y el contenedor móvil de MPV, además de una negociación de
 reproducción que respeta la calidad elegida, los límites reales del dispositivo
-y el passthrough de audio. Los tests Android móvil/TV pasan en local. Todavía
+y el passthrough de audio. La pantalla de detalles móvil usa ahora componentes
+Material 3 táctiles, mientras la variante TV conserva sus componentes de foco.
+Los tests Android móvil/TV pasan en local. Todavía
 no se afirma validación física en un móvil, Fire TV o televisor.
 
 Artefactos Android verificados en `v1.2.73`:
