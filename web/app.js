@@ -249,7 +249,7 @@
     });
   }
 
-  function stream(item) {
+  function streamTarget(item) {
     var params = [
       'static=true',
       'mediasourceid=' + encodeURIComponent(item.MediaSources && item.MediaSources[0] ? item.MediaSources[0].Id : '')
@@ -273,7 +273,11 @@
         params.push('SubtitleMethod=Encode');
       }
     }
-    var protectedUrl = base() + '/Videos/' + encodeURIComponent(item.Id) + '/stream?' + params.join('&');
+    return base() + '/Videos/' + encodeURIComponent(item.Id) + '/stream?' + params.join('&');
+  }
+
+  function stream(item) {
+    var protectedUrl = streamTarget(item);
     // A native <video> element cannot attach Authorization headers. The
     // same-origin service worker proxies this request and adds X-Emby-Token,
     // keeping the token out of the address bar, history and referrers.
@@ -599,6 +603,8 @@
   function closePlayer() {
     var player = document.querySelector('#player');
     if (!player) return;
+    if (player._veloraAbortController) player._veloraAbortController.abort();
+    if (player._veloraObjectUrl) URL.revokeObjectURL(player._veloraObjectUrl);
     if (player._veloraFullscreenCleanup) player._veloraFullscreenCleanup();
     var exit = document.exitFullscreen || document.webkitExitFullscreen;
     if ((document.fullscreenElement || document.webkitFullscreenElement) && exit) exit.call(document);
@@ -609,13 +615,17 @@
 
   function play(item) {
     waitForMediaProxy().then(function (available) {
-      if (!available) {
+      // Live streams must remain behind the authenticated same-origin proxy;
+      // buffering them as a Blob would never complete. VOD gets a secure
+      // fetch/Blob fallback so a static host without a service worker still
+      // plays without putting the Jellyfin token in the media URL.
+      if (!available && item.Type === 'LiveTvChannel') {
         toast(t('playbackError'));
         return;
       }
       state.playingItem = item;
       root.insertAdjacentHTML('beforeend', '<div class="video-wrap" id="player" role="dialog" aria-label="' + esc(t('player')) + '">' +
-        '<video controls autoplay playsinline preload="metadata" src="' + stream(item) + '"></video>' +
+        '<video controls autoplay playsinline preload="metadata"></video>' +
         '<div class="video-controls">' +
         '<button type="button" id="fullscreen">' + esc(t('fullscreen')) + '</button>' +
         '<button type="button" id="playerSettings">' + esc(t('settings')) + '</button>' +
@@ -623,6 +633,8 @@
         '</div></div>');
       var player = document.querySelector('#player');
       var video = player.querySelector('video');
+      var sourceUrl = available ? stream(item) : streamTarget(item);
+      if (!available) player._veloraAbortController = new AbortController();
       var update = function () { updateFullscreenButton(player); };
       document.addEventListener('fullscreenchange', update);
       document.addEventListener('webkitfullscreenchange', update);
@@ -636,6 +648,24 @@
       video.onerror = function () { toast(t('playbackError')); };
       video.onloadedmetadata = function () { player.querySelector('#fullscreen').focus(); };
       updateFullscreenButton(player);
+      if (available) {
+        video.src = sourceUrl;
+      } else {
+        fetch(sourceUrl, {
+          headers: { 'X-Emby-Token': state.token, Accept: 'video/*' },
+          cache: 'no-store',
+          signal: player._veloraAbortController.signal
+        }).then(function (response) {
+          if (!response.ok) throw Error(t('playbackError'));
+          return response.blob();
+        }).then(function (blob) {
+          if (!document.body.contains(player)) return;
+          player._veloraObjectUrl = URL.createObjectURL(blob);
+          video.src = player._veloraObjectUrl;
+        }).catch(function (error) {
+          if (error.name !== 'AbortError') toast(t('playbackError'));
+        });
+      }
     });
   }
 
