@@ -7,6 +7,8 @@ import android.net.Uri
 import android.util.Log
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.BuildConfig
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 /**
  * Helper to launch the external MPV player external player.
@@ -21,6 +23,9 @@ object MpvVeloraLauncher {
     private const val TAG = "MpvVeloraLauncher"
     private const val MPV_EXTERNAL_PACKAGE = "is.xyz.mpv"
     private const val MPV_EXTERNAL_ACTIVITY = "is.xyz.mpv.MpvActivity"
+
+    private fun queryValue(value: String): String =
+        URLEncoder.encode(value, StandardCharsets.UTF_8.name())
     
     /**
      * Check if MPV is available (always true now as it is embedded).
@@ -48,7 +53,7 @@ object MpvVeloraLauncher {
             } else {
                 append("static=true")
             }
-            append("&mediaSourceId=${mediaSourceId ?: itemId}")
+            append("&mediaSourceId=${queryValue(mediaSourceId ?: itemId)}")
             append("&enableAutoStreamCopy=true")
             append("&allowVideoStreamCopy=true")
             append("&allowAudioStreamCopy=true")

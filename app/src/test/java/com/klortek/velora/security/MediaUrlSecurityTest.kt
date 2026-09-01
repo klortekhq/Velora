@@ -1,6 +1,7 @@
 package com.klortek.velora.security
 
 import com.klortek.velora.player.mpv.MpvUrlBuilder
+import com.klortek.velora.player.mpv.MpvVeloraLauncher
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -47,6 +48,18 @@ class MediaUrlSecurityTest {
     @Test
     fun mpvQueryValuesAreEncoded() {
         val url = MpvUrlBuilder.buildStreamUrl(
+            serverUrl = "http://jellyfin.test:8096",
+            itemId = "movie-id",
+            accessToken = "secret-token",
+            mediaSourceId = "source id&part"
+        )
+
+        assertTrue(url.contains("mediaSourceId=source+id%26part"))
+    }
+
+    @Test
+    fun launcherQueryValuesAreEncoded() {
+        val url = MpvVeloraLauncher.buildStreamUrl(
             serverUrl = "http://jellyfin.test:8096",
             itemId = "movie-id",
             accessToken = "secret-token",
