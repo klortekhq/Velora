@@ -89,6 +89,9 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
 - The mobile bottom navigation now omits Downloads whenever the platform
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
+- Movie and series detail screens now expose the existing trailer resolver and
+  launcher instead of hiding the functional trailer action behind a disabled
+  branch; mobile Kotlin compilation and unit tests pass after this correction.
 
 ## Release actual: v1.2.85 (validación)
 
