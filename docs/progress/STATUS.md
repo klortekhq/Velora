@@ -8,8 +8,9 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-La fuente actual prepara `v1.2.76`; las releases `v1.2.74` y `v1.2.75` continúan en
-compilación automática para sus APK. Las validaciones locales de Android móvil/TV terminaron
+La etiqueta `v1.2.76` ya está publicada en `main`; sus workflows de release están
+generando los artefactos automáticamente. Las APK no se consideran verificadas
+hasta que aparezcan en la release. Las validaciones locales de Android móvil/TV terminaron
 correctamente tras endurecer el motor de decisión de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
@@ -75,7 +76,7 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Release actual: v1.2.76 (preparación)
+## Release actual: v1.2.76 (workflows automáticos activos)
 
 La fuente actual es `1.2.76`. Incluye las correcciones de presentación para el
 renderizador GL y el contenedor móvil de MPV, además de una negociación de
