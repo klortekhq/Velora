@@ -2,6 +2,14 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.75
+
+### Fixed
+
+- La pantalla de detalles móvil usa componentes táctiles Material 3 en lugar
+  de componentes orientados a TV, mejorando la legibilidad y la interacción
+  con los dedos sin cambiar la navegación por mando de la variante TV.
+
 ## 1.2.74
 
 ### Fixed
