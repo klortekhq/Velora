@@ -2,6 +2,13 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.85
+
+- Unificado el ordenado y filtrado de las bibliotecas reales de Películas y
+  Series con la consulta común cubierta por tests.
+- Corregida la reutilización de nombres de artefactos en GitHub Actions para
+  que las nuevas builds puedan publicarse de forma repetible.
+
 ## 1.2.84
 
 - Conservado el modo de formato de imagen al cambiar la orientación o entrar y salir de pantalla completa en móvil.
