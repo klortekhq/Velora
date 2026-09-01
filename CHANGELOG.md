@@ -2,6 +2,17 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.74
+
+### Fixed
+
+- El motor común de reproducción respeta las calidades elegidas y no las
+  omite mediante direct stream o remux.
+- Las decisiones de reproducción exponen una explicación estable para
+  diagnósticos y futuras plataformas.
+- Se añaden regresiones para límites de dispositivo, passthrough de audio y
+  calidad seleccionada.
+
 ## 1.2.73
 
 ### Fixed

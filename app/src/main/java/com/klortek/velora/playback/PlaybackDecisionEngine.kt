@@ -37,6 +37,16 @@ data class PlaybackSource(
 )
 
 /**
+ * The decision plus a stable, human-readable reason for diagnostics.  The
+ * player-facing API remains [decide] for compatibility, while new backends
+ * can use this richer result without duplicating negotiation rules.
+ */
+data class PlaybackDecision(
+    val path: PlaybackPath,
+    val reason: String
+)
+
+/**
  * Chooses the least destructive path. Original quality never adds an artificial
  * cap; limits only come from actual device capability or the selected preset.
  */
@@ -45,7 +55,13 @@ object PlaybackDecisionEngine {
         source: PlaybackSource,
         capabilities: PlaybackCapabilities,
         quality: PlaybackQuality = PlaybackQuality.ORIGINAL
-    ): PlaybackPath {
+    ): PlaybackPath = decideDetailed(source, capabilities, quality).path
+
+    fun decideDetailed(
+        source: PlaybackSource,
+        capabilities: PlaybackCapabilities,
+        quality: PlaybackQuality = PlaybackQuality.ORIGINAL
+    ): PlaybackDecision {
         val codecOk = source.videoCodec == null || capabilities.videoCodecs.isEmpty() ||
             source.videoCodec.lowercase() in capabilities.videoCodecs.map(String::lowercase)
         val audioOk = source.audioCodec == null || capabilities.audioCodecs.isEmpty() ||
@@ -64,16 +80,29 @@ object PlaybackDecisionEngine {
             (capabilities.maxHeight == null || source.height == null || source.height <= capabilities.maxHeight) &&
             (capabilities.maxFrameRate == null || source.frameRate == null || source.frameRate <= capabilities.maxFrameRate)
 
-        if (capabilities.directPlay && codecOk && audioOk && hdrOk && containerOk && channelsOk &&
-            passthroughAudioOk && dimensionsOk && deviceLimitsOk && !source.subtitlesRequireTranscoding) {
-            return PlaybackPath.DIRECT_PLAY
+        val directCompatible = codecOk && audioOk && hdrOk && containerOk &&
+            channelsOk && passthroughAudioOk && deviceLimitsOk
+
+        if (capabilities.directPlay && directCompatible && dimensionsOk && !source.subtitlesRequireTranscoding) {
+            return PlaybackDecision(PlaybackPath.DIRECT_PLAY, "source and device support direct play")
         }
-        if (capabilities.directStream && codecOk && audioOk && hdrOk && containerOk && channelsOk &&
-            passthroughAudioOk && !source.subtitlesRequireTranscoding) {
-            return PlaybackPath.DIRECT_STREAM
+
+        // A requested quality is an explicit user constraint.  Do not bypass
+        // it with direct stream/remux: the server must produce the selected
+        // profile when the original source is above that preset.
+        if (capabilities.directStream && directCompatible && dimensionsOk && !source.subtitlesRequireTranscoding) {
+            return PlaybackDecision(PlaybackPath.DIRECT_STREAM, "container or stream negotiation is required")
         }
-        if (capabilities.remux && codecOk && audioOk && channelsOk) return PlaybackPath.REMUX
-        return if (capabilities.directStream || capabilities.directPlay) PlaybackPath.TRANSCODE else PlaybackPath.FALLBACK
+
+        if (capabilities.remux && directCompatible && dimensionsOk) {
+            return PlaybackDecision(PlaybackPath.REMUX, "remux required for subtitles or container compatibility")
+        }
+
+        return if (capabilities.directStream || capabilities.directPlay) {
+            PlaybackDecision(PlaybackPath.TRANSCODE, "source exceeds device or selected-quality capabilities")
+        } else {
+            PlaybackDecision(PlaybackPath.FALLBACK, "no compatible native playback path")
+        }
     }
 
     private fun withinPreset(source: PlaybackSource, quality: PlaybackQuality): Boolean {
