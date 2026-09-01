@@ -10,7 +10,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     "velora_offline.db",
     null,
-    4
+    5
 ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -29,7 +29,10 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                 bytes_downloaded INTEGER NOT NULL,
                 total_bytes INTEGER NOT NULL,
                 checksum_sha256 TEXT,
-                work_name TEXT
+                work_name TEXT,
+                created_at INTEGER NOT NULL DEFAULT 0,
+                completed_at INTEGER,
+                last_played_at INTEGER
             )"""
         )
         db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
@@ -44,6 +47,11 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         }
         if (oldVersion < 4) {
             db.execSQL("ALTER TABLE downloads ADD COLUMN work_name TEXT")
+        }
+        if (oldVersion < 5) {
+            db.execSQL("ALTER TABLE downloads ADD COLUMN created_at INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("ALTER TABLE downloads ADD COLUMN completed_at INTEGER")
+            db.execSQL("ALTER TABLE downloads ADD COLUMN last_played_at INTEGER")
         }
     }
 
@@ -68,7 +76,10 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                     bytesDownloaded = cursor.getLong(cursor.getColumnIndexOrThrow("bytes_downloaded")),
                     totalBytes = cursor.getLong(cursor.getColumnIndexOrThrow("total_bytes")),
                     checksumSha256 = cursor.getStringOrNull("checksum_sha256"),
-                    workName = cursor.getStringOrNull("work_name")
+                    workName = cursor.getStringOrNull("work_name"),
+                    createdAtEpochMs = cursor.getLong(cursor.getColumnIndexOrThrow("created_at")),
+                    completedAtEpochMs = cursor.getLongOrNull("completed_at"),
+                    lastPlayedAtEpochMs = cursor.getLongOrNull("last_played_at")
                 )
             }
         }
@@ -93,6 +104,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         put("quality", quality)
         put("bytes_downloaded", bytesDownloaded); put("total_bytes", totalBytes)
         put("checksum_sha256", checksumSha256); put("work_name", workName)
+        put("created_at", createdAtEpochMs); put("completed_at", completedAtEpochMs); put("last_played_at", lastPlayedAtEpochMs)
     }
 
     private fun android.database.Cursor.getStringOrNull(column: String): String? =
@@ -100,6 +112,9 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
 
     private fun android.database.Cursor.getIntOrNull(column: String): Int? =
         if (isNull(getColumnIndexOrThrow(column))) null else getInt(getColumnIndexOrThrow(column))
+
+    private fun android.database.Cursor.getLongOrNull(column: String): Long? =
+        if (isNull(getColumnIndexOrThrow(column))) null else getLong(getColumnIndexOrThrow(column))
 }
 
 private inline fun SQLiteDatabase.transaction(block: SQLiteDatabase.() -> Unit) {

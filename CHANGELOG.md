@@ -24,6 +24,9 @@ All notable changes to Velora will be documented in this file.
   identifica como SDR ya no intenta Direct Play de contenido HDR, y los
   perfiles de calidad validan tanto la anchura como la altura del vídeo sin
   limitar artificialmente la opción Original.
+- Amplía el índice offline con fechas persistentes de creación, finalización y
+  última reproducción, manteniendo la migración de instalaciones existentes y
+  preparando una limpieza inteligente basada en actividad real.
 
 ## 1.2.85
 

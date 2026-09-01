@@ -694,3 +694,10 @@ detectado explícitamente: en Android, un display SDR conocido ya no se trata
 como compatible con HDR. Los presets de calidad también comprueban anchura y
 altura, mientras `Original` sigue sin imponer límites artificiales. Las
 variantes Android móvil y TV compilan y sus unit tests pasan conjuntamente.
+
+El índice SQLite offline sube a la migración 5 y conserva las marcas de
+creación, finalización y última reproducción de cada descarga. El worker y la
+actualización de WorkManager las rellenan sin perder las instalaciones
+existentes, y la capa de gestión expone `markPlayed` para futuras reglas de
+limpieza o Smart Downloads. La compilación móvil y sus tests pasan tras la
+migración.
