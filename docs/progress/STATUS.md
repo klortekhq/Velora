@@ -60,6 +60,13 @@ workflow se ejecuta sobre un tag. Estos cambios están validados en Android
 diff limpio); los critics han señalado que la validación en hardware y la app
 Apple ejecutable siguen pendientes.
 
+El cliente web ahora puede reproducir películas y episodios sin depender de
+que el alojamiento haya activado el Service Worker: usa una petición
+autenticada y un Blob local sin exponer el token. Live TV conserva el requisito
+del proxy autenticado para permitir reproducción continua sin credenciales en
+la URL. La sintaxis y las pruebas web pasan; queda pendiente validar el flujo
+en navegadores y televisores físicos.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba
