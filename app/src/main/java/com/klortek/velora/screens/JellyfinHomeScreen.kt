@@ -2402,6 +2402,8 @@ fun SortDialog(
     currentSortType: SortType,
     onDismiss: () -> Unit,
     onSortSelected: (SortType) -> Unit,
+    descending: Boolean = false,
+    onDescendingChanged: ((Boolean) -> Unit)? = null,
     availableGenres: List<String> = emptyList(),
     selectedGenre: String? = null,
     onGenreSelected: ((String?) -> Unit)? = null,
@@ -2431,6 +2433,15 @@ fun SortDialog(
                                 androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás", tint = Color.White)
                             }
                             androidx.compose.material3.Text("Ordenar y filtrar", color = Color.White, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                            if (onDescendingChanged != null) {
+                                androidx.compose.material3.IconButton(onClick = { onDescendingChanged(!descending) }) {
+                                    androidx.compose.material3.Icon(
+                                        Icons.Default.ArrowDropDown,
+                                        contentDescription = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_direction),
+                                        tint = Color.White
+                                    )
+                                }
+                            }
                         }
                         LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp), contentPadding = PaddingValues(vertical = 8.dp)) {
                             item { androidx.compose.material3.Text("Ordenar por", color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)) }
@@ -2503,6 +2514,32 @@ fun SortDialog(
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                         modifier = Modifier.fillMaxSize()
                     ) {
+                        if (onDescendingChanged != null) {
+                            item {
+                                val directionLabel = androidx.compose.ui.res.stringResource(
+                                    if (descending) com.klortek.velora.R.string.library_descending
+                                    else com.klortek.velora.R.string.library_ascending
+                                )
+                                ListItem(
+                                    selected = false,
+                                    onClick = { onDescendingChanged(!descending) },
+                                    headlineContent = {
+                                        Text(
+                                            text = directionLabel,
+                                            style = MaterialTheme.typography.bodyLarge.copy(
+                                                fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
+                                            )
+                                        )
+                                    },
+                                    leadingContent = {
+                                        androidx.compose.material3.Icon(
+                                            Icons.Default.ArrowDropDown,
+                                            contentDescription = null
+                                        )
+                                    }
+                                )
+                            }
+                        }
                         // SECTION: Sort By
                         item {
                              Text(
