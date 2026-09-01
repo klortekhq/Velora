@@ -114,6 +114,23 @@ class OfflineDownloadTest {
     }
 
     @Test
+    fun migratedProviderEntryUsesStableManagedIdentityAfterCopy() {
+        val provider = OfflineDownload(
+            itemId = "movie-1",
+            name = "Película",
+            type = "Movie",
+            downloadId = 42L,
+            localPath = "content://downloads/my_downloads/42",
+            status = DownloadManager.STATUS_SUCCESSFUL
+        )
+        val managed = provider.copy(downloadId = 0L, localPath = "file:///data/user/0/velora/offline/media/a.media")
+
+        assertTrue(managed.isComplete)
+        assertEquals("item:movie-1:quality:original", managed.stableKey)
+        assertTrue(managed.downloadId == 0L)
+    }
+
+    @Test
     fun smartCleanupKeepsDistinctManagedWatchedEntries() {
         val first = OfflineDownload(
             "episode-1", "E1", "Episode", downloadId = 0L,

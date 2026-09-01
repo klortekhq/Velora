@@ -209,10 +209,17 @@ object OfflineDownloadManager {
             )
         }
         save(context, updated)
+        // Complete rows from the pre-WorkManager provider are migrated as
+        // soon as the downloads screen refreshes. This keeps DownloadManager
+        // only as a compatibility reader for existing installations; new
+        // playback and deletion then use Velora-owned storage exclusively.
+        updated.filter { it.workName.isNullOrBlank() && it.isComplete }
+            .forEach { entry -> OfflineStorageEngine.materialize(context, entry) }
+        val refreshed = load(context)
         val settings = AppSettings(context)
         if (settings.smartDownloadsEnabled) {
             SmartDownloadPolicy.cleanupCandidates(
-                updated,
+                refreshed,
                 removeWatched = settings.smartDownloadsRemoveWatched,
                 keepUnwatchedEpisodes = settings.smartDownloadsKeepUnwatchedEpisodes
             ).forEach { delete(context, it) }
