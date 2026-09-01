@@ -18,7 +18,10 @@
     right: 39,
     down: 40,
     enter: 13,
-    back: [8, 27, 461, 10009]
+    // Backspace is a text-editing key on browsers and must never navigate
+    // away from a search/login field. The TV back codes remain supported;
+    // Escape is kept for desktop keyboard navigation.
+    back: [27, 461, 10009]
   };
 
   function isTextControl(element) {

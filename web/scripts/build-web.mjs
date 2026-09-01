@@ -8,6 +8,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = resolve(root, '..');
 const out = resolve(repo, 'outputs', 'web');
 const target = process.argv[2] || 'all';
+const requireInstallable = process.env.VELORA_REQUIRE_INSTALLABLE_PACKAGES === '1';
 const packageMetadata = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
 const version = packageMetadata.version;
 
@@ -30,7 +31,11 @@ async function copyCommon(destination) {
 async function makeLegacyBrowserCompatible(destination) {
   for (const file of ['platform.js', 'app.js']) {
     const compat = `${file}.compat.js`;
-    if (!command('esbuild', [file, '--target=es2017', `--outfile=${compat}`], destination)) continue;
+    const built = command('esbuild', [file, '--target=es2017', `--outfile=${compat}`], destination);
+    if (!built) {
+      if (requireInstallable) throw new Error(`No se pudo transpilar ${file} para el destino ${destination}`);
+      continue;
+    }
     await copyFile(join(destination, compat), join(destination, file));
     await rm(join(destination, compat), { force: true });
   }
@@ -56,6 +61,9 @@ if (target === 'samsung' || target === 'all') {
   await makeLegacyBrowserCompatible(stage);
   const built = command('tizen', ['build-web', '--', '.'], stage);
   const packaged = built && command('tizen', ['package', '-t', 'wgt', '--', '.buildResult'], stage);
+  if (requireInstallable && !packaged) {
+    throw new Error('Tizen Studio/CLI o un perfil de firma no está disponible; no se genera un WGT publicable');
+  }
   results.push(packaged
     ? 'Samsung WGT generado con Tizen CLI'
     : 'Samsung bundle preparado; falta Tizen Studio/CLI o un perfil de firma');
