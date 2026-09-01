@@ -46,6 +46,12 @@
     <string name="select_episodes">Select episodes</string>
     <string name="episodes_selected">%1$d episodes selected</string>
     <string name="continue_label">Continue</string>
+    <string name="download_quality_title">Download quality</string>
+    <string name="download_quality_description">Original quality is not converted; the other options use an optimized copy.</string>
+    <string name="quality_original">Original</string>
+    <string name="quality_high">High (1080p)</string>
+    <string name="quality_medium">Medium (720p)</string>
+    <string name="quality_low">Low (480p)</string>
     <string name="live_tv_all_channels">All</string>
     <string name="live_tv_favorites">Favorites</string>
     <string name="live_tv_add_favorite">Add to favorites</string>

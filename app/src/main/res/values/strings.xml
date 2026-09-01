@@ -63,6 +63,12 @@
     <string name="select_episodes">Seleccionar episodios</string>
     <string name="episodes_selected">%1$d episodios seleccionados</string>
     <string name="continue_label">Continuar</string>
+    <string name="download_quality_title">Calidad de descarga</string>
+    <string name="download_quality_description">La calidad original no se convierte; las demás usan una copia optimizada.</string>
+    <string name="quality_original">Original</string>
+    <string name="quality_high">Alta (1080p)</string>
+    <string name="quality_medium">Media (720p)</string>
+    <string name="quality_low">Baja (480p)</string>
     <string name="settings_offline_storage_limit">Límite de almacenamiento sin conexión</string>
     <string name="settings_offline_storage_limit_description">Espacio máximo que Velora puede gestionar para descargas en este dispositivo.</string>
     <string name="settings_offline_storage_unlimited">Sin límite</string>
