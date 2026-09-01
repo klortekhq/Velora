@@ -43,4 +43,28 @@ class MediaUrlSecurityTest {
         assertFalse(url.contains("api_key", ignoreCase = true))
         assertTrue(url.contains("mediaSourceId=source-id"))
     }
+
+    @Test
+    fun mpvQueryValuesAreEncoded() {
+        val url = MpvUrlBuilder.buildStreamUrl(
+            serverUrl = "http://jellyfin.test:8096",
+            itemId = "movie-id",
+            accessToken = "secret-token",
+            mediaSourceId = "source id&part"
+        )
+
+        assertTrue(url.contains("mediaSourceId=source+id%26part"))
+    }
+
+    @Test
+    fun directLiveSourceStripsCredentialQueryParameters() {
+        val url = MpvUrlBuilder.buildLiveTvDirectSourceUrl(
+            "https://stream.test/channel.m3u8?api_key=secret&quality=hd&token=also-secret#live"
+        )
+
+        assertFalse(url.contains("secret"))
+        assertFalse(url.contains("token="))
+        assertTrue(url.contains("quality=hd"))
+        assertTrue(url.endsWith("#live"))
+    }
 }

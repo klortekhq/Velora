@@ -8,7 +8,7 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-La etiqueta `v1.2.76` ya está publicada en `main`; sus workflows de release están
+La etiqueta `v1.2.77` ya está publicada en `main`; sus workflows de release están
 generando los artefactos automáticamente. Las APK no se consideran verificadas
 hasta que aparezcan en la release. Las validaciones locales de Android móvil/TV terminaron
 correctamente tras endurecer el motor de decisión de reproducción. El modelo Apple usa ahora los nombres de
@@ -40,7 +40,7 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.76 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.77 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -76,14 +76,14 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Release actual: v1.2.76 (workflows automáticos activos)
+## Release actual: v1.2.77 (workflows automáticos activos)
 
-La fuente actual es `1.2.76`. Incluye las correcciones de presentación para el
+La fuente actual es `1.2.77`. Incluye las correcciones de presentación para el
 renderizador GL y el contenedor móvil de MPV, además de una negociación de
 reproducción que respeta la calidad elegida, los límites reales del dispositivo
 y el passthrough de audio. La pantalla de detalles móvil usa ahora componentes
 Material 3 táctiles en detalles, inicio y biblioteca, mientras la variante TV
-conserva sus componentes de foco.
+conserva sus componentes de foco, además del endurecimiento de URLs MPV y Live TV.
 Los tests Android móvil/TV pasan en local. Todavía
 no se afirma validación física en un móvil, Fire TV o televisor.
 

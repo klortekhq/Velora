@@ -2,6 +2,15 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.77
+
+### Security
+
+- Los parámetros de las URLs MPV se codifican de forma segura.
+- Las fuentes directas de Live TV ya no conservan parámetros de credenciales
+  recibidos en la query.
+- Se añaden regresiones para impedir fugas de tokens y URLs malformadas.
+
 ## 1.2.76
 
 ### Fixed
