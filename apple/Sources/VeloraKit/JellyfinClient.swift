@@ -45,8 +45,11 @@ public actor JellyfinClient {
         var request = URLRequest(url: baseURL.appendingPathComponent("Users/AuthenticateByName"))
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")
-        request.httpBody = try JSONEncoder().encode(["Username": username, "Pw": password])
+        request.setValue(
+            "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"1.3.0\", Language=\"en\"",
+            forHTTPHeaderField: "X-Emby-Authorization"
+        )
+        request.httpBody = try JSONEncoder().encode(["Username": username, "Password": password])
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }
         guard http.statusCode != 401 else { throw ClientError.unauthorized }
