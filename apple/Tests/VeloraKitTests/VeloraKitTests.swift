@@ -65,6 +65,25 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertNil(store.load())
     }
 
+    func testCredentialStoreRoundTripsAndRemovesSession() {
+        let suiteName = "velora.credentials.tests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let store = VeloraCredentialStore(
+            service: "test.service",
+            account: "test.account",
+            defaults: defaults,
+            defaultsKey: "session"
+        )
+        let expected = JellyfinSession(accessToken: "secret-token", userID: "user-1", username: "ruvik")
+        XCTAssertNil(store.load())
+        XCTAssertTrue(store.save(expected))
+        XCTAssertEqual(store.load(), expected)
+        XCTAssertTrue(store.remove())
+        XCTAssertNil(store.load())
+    }
+
     func testLanguageSelectionUsesDeviceLocaleByDefaultAndSupportsSupportedLocales() {
         let automatic = VeloraSettings()
         XCTAssertFalse(automatic.appLocale.identifier.isEmpty)

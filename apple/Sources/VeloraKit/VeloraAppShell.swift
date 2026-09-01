@@ -18,19 +18,25 @@ public final class VeloraAppModel: ObservableObject {
     public let platform: VeloraPlatform
     private let client: JellyfinClient
     private let settingsStore: VeloraSettingsStore
+    private let credentialStore: VeloraCredentialStore
     private var session: JellyfinSession?
 
-    public init(platform: VeloraPlatform, serverURL: URL) throws {
+    public init(platform: VeloraPlatform, serverURL: URL, credentialStore: VeloraCredentialStore = VeloraCredentialStore()) throws {
         self.platform = platform
-        self.client = try JellyfinClient(serverURL: serverURL)
         self.settingsStore = VeloraSettingsStore()
         self.settings = settingsStore.load() ?? VeloraSettings.systemDefault()
+        self.credentialStore = credentialStore
+        let restoredSession = credentialStore.load()
+        self.client = try JellyfinClient(serverURL: serverURL, restoredSession: restoredSession)
+        self.session = restoredSession
+        self.isAuthenticated = restoredSession != nil
     }
 
     public func signIn(username: String, password: String) async {
         do {
             let authenticated = try await client.authenticate(username: username, password: password)
             session = authenticated
+            credentialStore.save(authenticated)
             items = try await client.items(userID: authenticated.userID, includeTypes: ["Movie", "Series"])
             isAuthenticated = true
             errorMessage = nil
@@ -38,6 +44,14 @@ public final class VeloraAppModel: ObservableObject {
             isAuthenticated = false
             errorMessage = "Unable to sign in"
         }
+    }
+
+    public func signOut() async {
+        await client.setAccessToken(nil)
+        credentialStore.remove()
+        session = nil
+        items = []
+        isAuthenticated = false
     }
 
     public func play(_ item: JellyfinItem) async -> AVPlayer? {

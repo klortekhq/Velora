@@ -67,6 +67,12 @@ del proxy autenticado para permitir reproducción continua sin credenciales en
 la URL. La sintaxis y las pruebas web pasan; queda pendiente validar el flujo
 en navegadores y televisores físicos.
 
+La base Apple ya persiste y restaura la sesión de Jellyfin mediante Keychain en
+las plataformas Apple, con eliminación explícita al cerrar sesión y una prueba
+de ciclo completo sobre el almacén inyectable. Sigue siendo una base SwiftPM,
+no un `.app` firmado: los targets iOS/iPadOS/tvOS y su validación requieren
+macOS/Xcode y permanecen pendientes.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba
