@@ -94,20 +94,21 @@ class LiveTvClient(private val config: JellyfinConfig) {
     suspend fun getChannels(): List<LiveTvChannel> {
         if (!config.isConfigured()) return emptyList()
 
-        val url = URLBuilder().takeFrom("$baseUrl/LiveTv/Channels").apply {
-            parameters.append("UserId", userId)
-            parameters.append("AddCurrentProgram", "true")
-            parameters.append("EnableImages", "true")
-            parameters.append("EnableUserData", "true")
-            parameters.append("Fields", "Overview,PrimaryImageAspectRatio")
-        }.buildString()
+        // Jellyfin may cap an unbounded request. Fetch pages while preserving
+        // the server/provider order so every M3U-backed channel remains
+        // playable and channel surfing does not silently skip entries.
+        val pageSize = 100
+        val channels = mutableListOf<LiveTvChannel>()
+        var startIndex = 0
+        var totalRecordCount: Int? = null
+        do {
+            val page = getChannelsPage(startIndex, pageSize)
+            channels += page.Items
+            totalRecordCount = page.TotalRecordCount.takeIf { it > 0 } ?: totalRecordCount
+            startIndex += page.Items.size
+        } while (page.Items.isNotEmpty() && startIndex < (totalRecordCount ?: Int.MAX_VALUE))
 
-        // Do not sort, filter, normalize, or merge here. Jellyfin returns the
-        // provider's M3U-backed entries in its configured order; the UI must
-        // display and play every entry exactly as returned.
-        return client.get(url) {
-            jellyfinHeaders()
-        }.body<LiveTvChannelsResponse>().Items
+        return channels
     }
 
     /** Load only the next six hours so a large EPG is never rendered eagerly. */
@@ -119,23 +120,43 @@ class LiveTvClient(private val config: JellyfinConfig) {
         }
         val now = dateFormat.format(Date(nowMillis))
         val until = dateFormat.format(Date(nowMillis + 6 * 60 * 60 * 1000L))
-        val url = URLBuilder().takeFrom("$baseUrl/LiveTv/Programs").apply {
-            parameters.append("UserId", userId)
-            channelIds.forEach { parameters.append("ChannelIds", it) }
-            parameters.append("MinStartDate", now)
-            parameters.append("MaxStartDate", until)
-            parameters.append("MaxEndDate", until)
-            parameters.append("EnableImages", "false")
-            parameters.append("Fields", "Overview")
-            parameters.append("Limit", channelIds.size.coerceAtMost(500).toString())
-        }.buildString()
+        val programs = channelIds.chunked(500).flatMap { channelChunk ->
+            val url = URLBuilder().takeFrom("$baseUrl/LiveTv/Programs").apply {
+                parameters.append("UserId", userId)
+                channelChunk.forEach { parameters.append("ChannelIds", it) }
+                parameters.append("MinStartDate", now)
+                parameters.append("MaxStartDate", until)
+                parameters.append("MaxEndDate", until)
+                parameters.append("EnableImages", "false")
+                parameters.append("Fields", "Overview")
+                parameters.append("Limit", channelChunk.size.toString())
+            }.buildString()
 
-        return client.get(url) { jellyfinHeaders() }
-            .body<LiveTvProgramsResponse>()
-            .Items
+            client.get(url) { jellyfinHeaders() }
+                .body<LiveTvProgramsResponse>()
+                .Items
+        }
+
+        return programs
             .filter { !it.ChannelId.isNullOrBlank() }
             .groupBy { it.ChannelId!! }
             .mapValues { (_, programs) -> programs.minByOrNull { it.StartDate.orEmpty() }!! }
+    }
+
+    private suspend fun getChannelsPage(startIndex: Int, limit: Int): LiveTvChannelsResponse {
+        val url = URLBuilder().takeFrom("$baseUrl/LiveTv/Channels").apply {
+            parameters.append("UserId", userId)
+            parameters.append("StartIndex", startIndex.toString())
+            parameters.append("Limit", limit.toString())
+            parameters.append("AddCurrentProgram", "true")
+            parameters.append("EnableImages", "true")
+            parameters.append("EnableUserData", "true")
+            parameters.append("Fields", "Overview,PrimaryImageAspectRatio")
+        }.buildString()
+
+        return client.get(url) {
+            jellyfinHeaders()
+        }.body()
     }
 
     suspend fun setFavorite(channelId: String, favorite: Boolean) {
