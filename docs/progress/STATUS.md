@@ -8,9 +8,9 @@ marca como completa solo porque exista código o un artefacto anterior.
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
 
-La etiqueta `v1.2.80` ya está publicada en `main`; sus workflows de release han
-generado los artefactos automáticamente y han sido comprobados en la página de
-la release. Las validaciones locales de Android móvil/TV terminaron
+La release pública más reciente verificada es `v1.2.85`; sus artefactos están
+comprobados en la página de la release. La fuente actual es `1.2.86`, todavía
+en preparación local. Las validaciones locales de Android móvil/TV terminaron
 correctamente tras endurecer el motor de decisión de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
@@ -108,7 +108,7 @@ no se afirma validación física en un móvil, Fire TV o televisor.
 La revisión `v1.2.86` conserva el modo de formato de imagen al recrear la
 actividad y unifica el ordenado/filtrado de las pantallas reales de Películas y
 Series con la consulta común cubierta por tests. La compilación Android móvil,
-sus unit tests y las pruebas web pasan localmente. La release pública contiene
+sus unit tests y las pruebas web pasan localmente. La release pública anterior contiene
 las cuatro APK verificadas (móvil/TV debug y release unsigned), además de los
 paquetes web, Samsung, webOS y VIDAA. La publicación Android automática quedó
 cancelada tras bloquearse Gradle en el runner; las APK se adjuntaron y
@@ -155,8 +155,9 @@ Artefactos Android verificados en `v1.2.73`:
 La release `v1.2.73` permanece pública con las cuatro APK, los bundles
 web/Smart TV y sus hashes: https://github.com/klortekhq/Velora/releases/tag/v1.2.73
 
-Release workflows now use unfiltered tag triggers, so a `v*` tag cannot be
-silently skipped by a path filter.
+Los workflows de release se activan únicamente con etiquetas de hito `vX.Y.0`
+o mediante ejecución manual; los cambios de parche se validan sin publicar una
+release pública automáticamente.
 
 Release `v1.2.52` is prepared from person-navigation/i18n/home-localization, accessibility, Apple foundation and private offline storage changes; its Android and web workflows are the
 current release gate and their public assets have not yet been independently
