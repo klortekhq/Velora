@@ -6,7 +6,7 @@ let package = Package(
     platforms: [.macOS(.v12), .iOS(.v16), .tvOS(.v16)],
     products: [.library(name: "VeloraKit", targets: ["VeloraKit"])],
     targets: [
-        .target(name: "VeloraKit"),
+        .target(name: "VeloraKit", resources: [.process("Resources")]),
         .testTarget(name: "VeloraKitTests", dependencies: ["VeloraKit"])
     ]
 )

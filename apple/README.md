@@ -16,3 +16,6 @@ paquete sin copiar la
 interfaz Android; el target de tvOS debe omitir descargas mediante
 `VeloraPlatform.tvOS.supportsOfflineDownloads`. La compilación y las pruebas
 requieren macOS con Xcode; este host Windows no certifica todavía esos targets.
+Los textos del shell se sirven mediante recursos nativos `Localizable.strings`
+en español, inglés, francés y alemán; la opción automática sigue el idioma del
+dispositivo y una selección explícita se aplica al entorno SwiftUI.

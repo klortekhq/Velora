@@ -86,6 +86,7 @@ public struct VeloraAppShell: View {
                 )
             }
         }
+        .environment(\.locale, model.settings.appLocale)
     }
 }
 
