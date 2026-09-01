@@ -1130,11 +1130,20 @@ private fun MpvPlayerScreen(
                 )
             }
 
-            // Player in 16:9 aspect ratio
+            // Keep the Compose frame in sync with MPV's runtime geometry.
+            // A permanently fixed 16:9 parent made the aspect button appear
+            // to work while the visible mobile frame never changed.
+            val playerFrameAspect = when (currentAspectMode) {
+                AspectMode.FOUR_THREE -> 4f / 3f
+                AspectMode.LETTERBOX -> 16f / 9f
+                AspectMode.CINEMA -> 2.39f
+                AspectMode.FIT, AspectMode.FILL, AspectMode.STRETCH,
+                AspectMode.ORIGINAL -> 16f / 9f
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
+                    .aspectRatio(playerFrameAspect)
             ) {
                 playerContent(Modifier.fillMaxSize())
             }

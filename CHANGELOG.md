@@ -2,6 +2,13 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.73
+
+### Fixed
+
+- MPV mobile playback now changes its outer presentation frame with the
+  selected aspect mode instead of keeping a fixed 16:9 container.
+
 ## 1.2.72
 
 ### Fixed
