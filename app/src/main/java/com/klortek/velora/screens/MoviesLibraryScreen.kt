@@ -218,8 +218,15 @@ fun MoviesLibraryScreen(
             }
         )
     }
-    var selectedGenreFilter by remember { mutableStateOf<String?>(null) }
-    var playbackFilter by remember { mutableStateOf(PlaybackFilter.All) }
+    var selectedGenreFilter by remember { mutableStateOf(settings.libraryGenreFilter) }
+    var playbackFilter by remember {
+        mutableStateOf(when (settings.libraryPlaybackFilter) {
+            "Watched" -> PlaybackFilter.Watched
+            "Unwatched" -> PlaybackFilter.Unwatched
+            "Favorites" -> PlaybackFilter.Favorites
+            else -> PlaybackFilter.All
+        })
+    }
     var showSortDialog by remember { mutableStateOf(false) }
     
     // Data states for recommendations
@@ -2208,11 +2215,13 @@ fun MoviesLibraryScreen(
                 selectedGenre = selectedGenreFilter,
                 onGenreSelected = { genre ->
                     selectedGenreFilter = genre
+                    settings.libraryGenreFilter = genre
                     showSortDialog = false
                 },
                 playbackFilter = playbackFilter,
                 onPlaybackFilterSelected = { filter ->
                     playbackFilter = filter
+                    settings.libraryPlaybackFilter = filter.name
                     showSortDialog = false
                 }
             )

@@ -2437,6 +2437,10 @@ fun SortDialog(
                             item { MobileSortOption("Nombre", currentSortType == SortType.Alphabetically) { onSortSelected(SortType.Alphabetically) } }
                             item { MobileSortOption("Fecha de incorporación", currentSortType == SortType.DateAdded) { onSortSelected(SortType.DateAdded) } }
                             item { MobileSortOption("Fecha de estreno", currentSortType == SortType.DateReleased) { onSortSelected(SortType.DateReleased) } }
+                            item { MobileSortOption("Duración", currentSortType == SortType.Runtime) { onSortSelected(SortType.Runtime) } }
+                            item { MobileSortOption("Aleatorio", currentSortType == SortType.Random) { onSortSelected(SortType.Random) } }
+                            item { MobileSortOption("Valoración de la crítica", currentSortType == SortType.CriticRating) { onSortSelected(SortType.CriticRating) } }
+                            item { MobileSortOption("Valoración de la comunidad", currentSortType == SortType.CommunityRating) { onSortSelected(SortType.CommunityRating) } }
                             if (availableGenres.isNotEmpty() && onGenreSelected != null) {
                                 item { androidx.compose.material3.Text("Filtrar por género", color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 20.dp, bottom = 4.dp)) }
                                 item { MobileSortOption("Todos los géneros", selectedGenre == null) { onGenreSelected(null) } }
