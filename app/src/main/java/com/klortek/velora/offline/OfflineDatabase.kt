@@ -10,12 +10,12 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     "velora_offline.db",
     null,
-    7
+    8
 ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """CREATE TABLE downloads (
-                item_id TEXT PRIMARY KEY NOT NULL,
+                item_id TEXT NOT NULL,
                 name TEXT NOT NULL,
                 type TEXT NOT NULL,
                 series_name TEXT,
@@ -35,7 +35,8 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                 completed_at INTEGER,
                 last_played_at INTEGER,
                 is_watched INTEGER NOT NULL DEFAULT 0,
-                keep_download INTEGER NOT NULL DEFAULT 0
+                keep_download INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY (item_id, quality)
             )"""
         )
         db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
@@ -62,6 +63,53 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         }
         if (oldVersion < 7) {
             db.execSQL("ALTER TABLE downloads ADD COLUMN media_source_id TEXT")
+        }
+        if (oldVersion < 8) {
+            // The original schema keyed rows only by item_id. Rebuild it so
+            // an item can safely have separate Original/Medium/etc. entries.
+            db.execSQL(
+                """CREATE TABLE downloads_v8 (
+                    item_id TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    series_name TEXT,
+                    season_number INTEGER,
+                    episode_number INTEGER,
+                    download_id INTEGER NOT NULL,
+                    quality TEXT NOT NULL DEFAULT 'original',
+                    local_path TEXT,
+                    status INTEGER NOT NULL,
+                    reason INTEGER NOT NULL,
+                    bytes_downloaded INTEGER NOT NULL,
+                    total_bytes INTEGER NOT NULL,
+                    media_source_id TEXT,
+                    checksum_sha256 TEXT,
+                    work_name TEXT,
+                    created_at INTEGER NOT NULL DEFAULT 0,
+                    completed_at INTEGER,
+                    last_played_at INTEGER,
+                    is_watched INTEGER NOT NULL DEFAULT 0,
+                    keep_download INTEGER NOT NULL DEFAULT 0,
+                    PRIMARY KEY (item_id, quality)
+                )"""
+            )
+            db.execSQL(
+                """INSERT INTO downloads_v8 (
+                    item_id, name, type, series_name, season_number,
+                    episode_number, download_id, quality, local_path, status,
+                    reason, bytes_downloaded, total_bytes, media_source_id,
+                    checksum_sha256, work_name, created_at, completed_at,
+                    last_played_at, is_watched, keep_download
+                ) SELECT item_id, name, type, series_name, season_number,
+                    episode_number, download_id, quality, local_path, status,
+                    reason, bytes_downloaded, total_bytes, media_source_id,
+                    checksum_sha256, work_name, created_at, completed_at,
+                    last_played_at, is_watched, keep_download
+                    FROM downloads"""
+            )
+            db.execSQL("DROP TABLE downloads")
+            db.execSQL("ALTER TABLE downloads_v8 RENAME TO downloads")
+            db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
         }
     }
 
