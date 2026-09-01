@@ -2,6 +2,10 @@ package com.klortek.velora.screens
 
 import android.util.Log
 import androidx.compose.animation.core.tween
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
@@ -145,6 +149,34 @@ fun CastInfoScreen(
                 verticalArrangement = Arrangement.spacedBy(0.dp),
                 contentPadding = PaddingValues(bottom = 48.dp)
             ) {
+                // A visible back action is required on touch devices; relying
+                // only on the system gesture left the person page without a
+                // discoverable way back and was especially confusing on TV.
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = onBack,
+                            modifier = Modifier.focusable()
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.action_back),
+                                tint = Color.White
+                            )
+                        }
+                        Text(
+                            text = personName,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+
                 // Top section: Photo and Info - wrapped in focusable Box for D-pad navigation (no zoom effect)
                 item {
                     var isTopFocused by remember { mutableStateOf(false) }

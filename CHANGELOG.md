@@ -2,6 +2,11 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.82
+
+- Añadido un botón Atrás visible y navegable en la filmografía de personas.
+- La acción funciona con toque y con mando/D-pad y evita depender del gesto del sistema.
+
 ## 1.2.81
 
 - Añadidos componentes SwiftUI nativos reutilizables para iOS, iPadOS y tvOS.
