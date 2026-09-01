@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var APP_VERSION = '1.2.62';
+  var APP_VERSION = '1.2.63';
 
   var LANGUAGE_OPTIONS = [
     { value: 'auto', label: 'Automático', native: 'Automático' },
@@ -174,7 +174,7 @@
     navigator.serviceWorker.ready.then(function (registration) {
       var worker = navigator.serviceWorker.controller || registration.active;
       if (worker) worker.postMessage({ type: 'velora-credentials', server: state.server, token: state.token });
-    }).catch(function () { /* media URL fallback remains available */ });
+    }).catch(function () { /* playback will report that the secure proxy is unavailable */ });
   }
 
   function clearMediaProxyCredentials() {
@@ -273,14 +273,39 @@
       }
     }
     var protectedUrl = base() + '/Videos/' + encodeURIComponent(item.Id) + '/stream?' + params.join('&');
-    // A native <video> element cannot attach Authorization headers. When the
-    // service worker is active it proxies this request and adds X-Emby-Token
-    // there, keeping the token out of the address bar, history and referrers.
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      return '/__velora_media?url=' + encodeURIComponent(protectedUrl);
+    // A native <video> element cannot attach Authorization headers. The
+    // same-origin service worker proxies this request and adds X-Emby-Token,
+    // keeping the token out of the address bar, history and referrers.
+    return '/__velora_media?url=' + encodeURIComponent(protectedUrl);
+  }
+
+  function waitForMediaProxy() {
+    if (!navigator.serviceWorker) return Promise.resolve(false);
+    if (navigator.serviceWorker.controller) {
+      syncMediaProxyCredentials();
+      return new Promise(function (resolve) { window.setTimeout(function () { resolve(true); }, 30); });
     }
-    // Compatibility fallback for legacy TV browsers without service workers.
-    return protectedUrl + '&api_key=' + encodeURIComponent(state.token);
+    return new Promise(function (resolve) {
+      var settled = false;
+      var finish = function (available) {
+        if (settled) return;
+        settled = true;
+        navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+        resolve(available);
+      };
+      var onControllerChange = function () {
+        syncMediaProxyCredentials();
+        window.setTimeout(function () { finish(!!navigator.serviceWorker.controller); }, 30);
+      };
+      navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+      navigator.serviceWorker.ready.then(function () {
+        if (navigator.serviceWorker.controller) {
+          onControllerChange();
+        } else {
+          window.setTimeout(function () { finish(false); }, 1500);
+        }
+      }).catch(function () { finish(false); });
+    });
   }
 
   function login() {
@@ -484,21 +509,27 @@
   }
 
   function play(item) {
-    state.playingItem = item;
-    root.insertAdjacentHTML('beforeend', '<div class="video-wrap" id="player" role="dialog" aria-label="' + esc(t('player')) + '">' +
-      '<video controls autoplay playsinline preload="metadata" src="' + stream(item) + '"></video>' +
-      '<div class="video-controls">' +
-      '<button type="button" id="fullscreen">' + esc(t('fullscreen')) + '</button>' +
-      '<button type="button" id="playerSettings">' + esc(t('settings')) + '</button>' +
-      '<button type="button" id="playerClose">' + esc(t('close')) + '</button>' +
-      '</div></div>');
-    var player = document.querySelector('#player');
-    var video = player.querySelector('video');
-    player.querySelector('#playerClose').onclick = closePlayer;
-    player.querySelector('#fullscreen').onclick = function () { setFullscreen(player, video); };
-    player.querySelector('#playerSettings').onclick = showSettings;
-    video.onerror = function () { toast(t('playbackError')); };
-    video.onloadedmetadata = function () { player.querySelector('#fullscreen').focus(); };
+    waitForMediaProxy().then(function (available) {
+      if (!available) {
+        toast(t('playbackError'));
+        return;
+      }
+      state.playingItem = item;
+      root.insertAdjacentHTML('beforeend', '<div class="video-wrap" id="player" role="dialog" aria-label="' + esc(t('player')) + '">' +
+        '<video controls autoplay playsinline preload="metadata" src="' + stream(item) + '"></video>' +
+        '<div class="video-controls">' +
+        '<button type="button" id="fullscreen">' + esc(t('fullscreen')) + '</button>' +
+        '<button type="button" id="playerSettings">' + esc(t('settings')) + '</button>' +
+        '<button type="button" id="playerClose">' + esc(t('close')) + '</button>' +
+        '</div></div>');
+      var player = document.querySelector('#player');
+      var video = player.querySelector('video');
+      player.querySelector('#playerClose').onclick = closePlayer;
+      player.querySelector('#fullscreen').onclick = function () { setFullscreen(player, video); };
+      player.querySelector('#playerSettings').onclick = showSettings;
+      video.onerror = function () { toast(t('playbackError')); };
+      video.onloadedmetadata = function () { player.querySelector('#fullscreen').focus(); };
+    });
   }
 
   function toast(message) {
