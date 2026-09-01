@@ -2,6 +2,12 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.80
+
+### Mobile accessibility and localization
+
+- Las tarjetas de reparto exponen correctamente su acción táctil y las secciones de detalles usan recursos traducibles.
+
 ## 1.2.79
 
 ### Mobile i18n
