@@ -25,6 +25,14 @@ offline e i18n anteriores. La compilación reproducible local terminó
 correctamente; la publicación final queda pendiente de confirmar desde GitHub
 Actions.
 
+Desde esa compilación se han subido dos correcciones verificadas a `main`:
+`5eb06e3` codifica los identificadores de fuente en la ruta MPV y amplía la
+redacción de credenciales en diagnósticos; `02e972d` codifica correctamente
+los secretos de Quick Connect. Las pruebas unitarias de móvil y TV pasan.
+`9b85acb` localiza las etiquetas del selector de aspecto del reproductor en
+español, inglés, francés y alemán; su prueba de presentación y la compilación
+móvil pasan. Ninguno de estos cambios aislados genera una nueva release.
+
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
 
