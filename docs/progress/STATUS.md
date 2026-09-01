@@ -1,13 +1,16 @@
-# Velora implementation status
+# Estado verificable de Velora
 
 Updated: 2026-09-01
 
-This dashboard records verified repository state only. A feature is not marked
-complete merely because code or a previous build artifact exists.
+Este dashboard registra únicamente el estado verificable. Una función no se
+marca como completa solo porque exista código o un artefacto anterior.
 
-## Current wave
+La única rama publicada es `main`. Las notas históricas que aparecen más abajo
+se conservan como referencia y no representan el estado actual de la release.
 
-Wave 6 — Apple platform foundation and cross-platform release convergence.
+## Oleada actual
+
+Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 
 ## Verified in source
 
@@ -63,14 +66,12 @@ Wave 6 — Apple platform foundation and cross-platform release convergence.
   capability is false instead of rendering an inert destination; both Android
   mobile and TV debug tests pass for this change.
 
-## Latest published tag
+## Release actual: v1.2.70
 
-The current source is version `1.2.70`. Android mobile/TV release APKs and the
-web/Smart TV bundles were built locally for this version, and the tag workflows
-are configured to publish them into the same GitHub release. GitHub Actions
-asset completion is not independently verified from this host because its API
-is unavailable here; no remote asset verification is claimed until the tag is
-pushed and the release can be inspected.
+La fuente actual es `1.2.70`. La release contiene los paquetes web/Smart TV ya
+publicados. El workflow Android de esta etiqueta está en ejecución; por tanto,
+los cuatro APK todavía no se consideran publicados hasta comprobar sus assets
+en GitHub. No se afirma validación física en un móvil, Fire TV o televisor.
 
 Release workflows now use unfiltered tag triggers, so a `v*` tag cannot be
 silently skipped by a path filter.
