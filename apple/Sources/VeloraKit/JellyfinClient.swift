@@ -57,6 +57,15 @@ public actor JellyfinClient {
         return components?.url
     }
 
+    /// URL for the server's browser/AVPlayer-compatible stream endpoint.
+    /// Authentication is still supplied by `authorizedRequest(for:)` and is
+    /// never embedded in this URL.
+    public func videoURL(itemID: String) -> URL? {
+        var components = URLComponents(url: baseURL.appendingPathComponent("Videos/\(itemID)/stream"), resolvingAgainstBaseURL: false)
+        components?.queryItems = [URLQueryItem(name: "static", value: "true")]
+        return components?.url
+    }
+
     /// Build an authenticated request for artwork or media without exposing
     /// the Jellyfin token in a URL. Callers can pass this to URLSession/AVURLAsset.
     public func authorizedRequest(for url: URL) -> URLRequest {
