@@ -30,4 +30,17 @@ class SensitiveDataRedactorTest {
         )
         assertFalse(redacted.contains("one-time-secret"))
     }
+
+    @Test
+    fun exceptionMessagesAreRedactedBeforeLogging() {
+        val redacted = SensitiveDataRedactor.message(
+            IllegalStateException("request failed: https://server/QuickConnect/Connect?secret=one-time-secret")
+        )
+
+        assertFalse(redacted.contains("one-time-secret"))
+        assertEquals(
+            "request failed: https://server/QuickConnect/Connect?secret=<redacted>",
+            redacted
+        )
+    }
 }

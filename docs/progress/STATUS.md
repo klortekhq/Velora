@@ -33,6 +33,13 @@ los secretos de Quick Connect. Las pruebas unitarias de móvil y TV pasan.
 español, inglés, francés y alemán; su prueba de presentación y la compilación
 móvil pasan. Ninguno de estos cambios aislados genera una nueva release.
 
+La auditoría de seguridad más reciente corrigió una fuga en los diagnósticos de
+Quick Connect: las URLs de sondeo y los mensajes de excepción ya se redactan
+antes de llegar al log, por lo que el secreto temporal no se expone. Se añadió
+una prueba de regresión y pasaron los unit tests móviles, la compilación TV y
+las pruebas web. Este cambio se sube como commit; no genera una release por sí
+solo.
+
 La mejora más reciente de Live TV pagina los canales y divide las consultas de
 EPG en bloques, manteniendo el orden devuelto por Jellyfin y evitando perder
 canales cuando la lista supera los límites habituales de la API. La prueba

@@ -9,4 +9,6 @@ object SensitiveDataRedactor {
     fun url(value: String?): String = value
         ?.replace(credentialQueryParameter, "$1<redacted>")
         ?: "<null>"
+
+    fun message(error: Throwable?): String = url(error?.message ?: error?.javaClass?.simpleName)
 }
