@@ -83,6 +83,9 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
 - The offline downloads screen and materialization path now use the same stable
   identity for managed transfers, preventing duplicate Compose keys and media
   overwrites; integrity metadata is persisted against that identity as well.
+- Offline records now persist Jellyfin's selected `mediaSourceId`; requesting a
+  different offline quality no longer reuses an existing entry for the same
+  item, and the regression is covered by mobile unit tests.
 - Smart Downloads labels are now present in every Android locale offered by the
   app (Spanish, English, Portuguese, French, German, Italian, Japanese,
   Korean, Chinese, Russian, Arabic and Turkish); mobile compilation and tests
