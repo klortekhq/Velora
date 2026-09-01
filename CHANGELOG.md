@@ -4,6 +4,17 @@ All notable changes to Velora will be documented in this file.
 
 ## 1.2.86
 
+- Añadido Smart Downloads opcional y exclusivo para móvil/tablet: permite
+  retirar contenido visto y conservar un número configurable de episodios sin
+  ver, sin mostrar ninguna de estas opciones en TV ni en navegador.
+- Las descargas protegidas por el usuario se conservan aunque se ejecute la
+  limpieza inteligente, y su estado se recupera mediante una migración SQLite
+  segura.
+- Corregida la identidad de las transferencias gestionadas por Velora para que
+  varias descargas sin identificador del proveedor no colisionen ni se
+  sobrescriban.
+- Añadidas pruebas de regresión para protección de descargas, limpieza
+  inteligente y recuperación de identificadores gestionados.
 - Live TV web muestra canales en un formato compacto con programa actual,
   próxima emisión y barra de progreso, manteniendo la reproducción integrada y
   la navegación con táctil, teclado y mando.

@@ -180,4 +180,10 @@
     <string name="player_solutions">Solutions :</string>
     <string name="player_aspect_title">Mode d’image</string>
     <string name="player_aspect_description">Choisissez l’affichage de la vidéo</string>
+    <string name="settings_smart_downloads">Téléchargements intelligents</string>
+    <string name="settings_smart_downloads_description">Gère automatiquement les téléchargements lus en conservant les éléments protégés.</string>
+    <string name="settings_smart_remove_watched">Supprimer le contenu regardé</string>
+    <string name="settings_smart_remove_watched_description">Supprime automatiquement les films et épisodes marqués comme regardés.</string>
+    <string name="settings_smart_keep_episodes">Épisodes non regardés à conserver</string>
+    <string name="settings_smart_keep_episodes_description">Conserve ce nombre d’épisodes non regardés lors du nettoyage.</string>
 </resources>

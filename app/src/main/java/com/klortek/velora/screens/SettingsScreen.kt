@@ -297,6 +297,9 @@ fun SettingsScreen(
     var showClearSubtitlesDialog by remember { mutableStateOf(false) }
     var rowCardCount by remember { mutableStateOf(settings.rowCardCount) }
     var offlineMaxStorageBytes by remember { mutableStateOf(settings.offlineMaxStorageBytes) }
+    var smartDownloadsEnabled by remember { mutableStateOf(settings.smartDownloadsEnabled) }
+    var smartDownloadsRemoveWatched by remember { mutableStateOf(settings.smartDownloadsRemoveWatched) }
+    var smartDownloadsKeepUnwatchedEpisodes by remember { mutableStateOf(settings.smartDownloadsKeepUnwatchedEpisodes) }
     var downloadedSubtitlesCount by remember { mutableStateOf(0) }
 
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
@@ -2150,6 +2153,37 @@ fun SettingsScreen(
                                         settings.offlineMaxStorageBytes = next
                                     }
                                 )
+                                SettingToggle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_smart_downloads),
+                                    description = context.getString(com.klortek.velora.R.string.settings_smart_downloads_description),
+                                    isEnabled = smartDownloadsEnabled,
+                                    onToggle = {
+                                        smartDownloadsEnabled = !smartDownloadsEnabled
+                                        settings.smartDownloadsEnabled = smartDownloadsEnabled
+                                    }
+                                )
+                                if (smartDownloadsEnabled) {
+                                    SettingToggle(
+                                        title = context.getString(com.klortek.velora.R.string.settings_smart_remove_watched),
+                                        description = context.getString(com.klortek.velora.R.string.settings_smart_remove_watched_description),
+                                        isEnabled = smartDownloadsRemoveWatched,
+                                        onToggle = {
+                                            smartDownloadsRemoveWatched = !smartDownloadsRemoveWatched
+                                            settings.smartDownloadsRemoveWatched = smartDownloadsRemoveWatched
+                                        }
+                                    )
+                                    SettingCycle(
+                                        title = context.getString(com.klortek.velora.R.string.settings_smart_keep_episodes),
+                                        description = context.getString(com.klortek.velora.R.string.settings_smart_keep_episodes_description),
+                                        currentValue = smartDownloadsKeepUnwatchedEpisodes.toString(),
+                                        onCycle = {
+                                            val options = listOf(0, 1, 2, 3, 5, 10)
+                                            val next = options[(options.indexOf(smartDownloadsKeepUnwatchedEpisodes).coerceAtLeast(0) + 1) % options.size]
+                                            smartDownloadsKeepUnwatchedEpisodes = next
+                                            settings.smartDownloadsKeepUnwatchedEpisodes = next
+                                        }
+                                    )
+                                }
                             }
                         }
                         

@@ -34,7 +34,9 @@ data class OfflineDownload(
     /** Lifecycle timestamps are persisted for cleanup and smart-download policies. */
     val createdAtEpochMs: Long = 0L,
     val completedAtEpochMs: Long? = null,
-    val lastPlayedAtEpochMs: Long? = null
+    val lastPlayedAtEpochMs: Long? = null,
+    val isWatched: Boolean = false,
+    val keepDownload: Boolean = false
 ) {
     /** Provider-neutral state used by UI and future managed-transfer engines. */
     val state: OfflineDownloadState get() = offlineDownloadState(status, reason)
@@ -49,6 +51,16 @@ data class OfflineDownload(
     val isComplete: Boolean get() = status == DownloadManager.STATUS_SUCCESSFUL && !localPath.isNullOrBlank()
     val progress: Int get() = if (totalBytes > 0L) ((bytesDownloaded * 100L) / totalBytes).toInt().coerceIn(0, 100) else 0
 }
+
+/** Managed WorkManager rows have no DownloadManager id, so workName is their identity. */
+internal fun sameOfflineEntry(first: OfflineDownload, second: OfflineDownload): Boolean =
+    if (first.downloadId > 0L && second.downloadId > 0L) {
+        first.downloadId == second.downloadId
+    } else if (!first.workName.isNullOrBlank() && !second.workName.isNullOrBlank()) {
+        first.workName == second.workName
+    } else {
+        first.itemId == second.itemId && first.quality == second.quality
+    }
 
 object OfflineDownloadManager {
     private const val PREFS = "velora_offline_downloads"
@@ -187,7 +199,15 @@ object OfflineDownloadManager {
             )
         }
         save(context, updated)
-        updated
+        val settings = AppSettings(context)
+        if (settings.smartDownloadsEnabled) {
+            SmartDownloadPolicy.cleanupCandidates(
+                updated,
+                removeWatched = settings.smartDownloadsRemoveWatched,
+                keepUnwatchedEpisodes = settings.smartDownloadsKeepUnwatchedEpisodes
+            ).forEach { delete(context, it) }
+        }
+        load(context)
     }
 
     private fun workNameFor(itemId: String, quality: OfflineDownloadQuality): String {
@@ -236,6 +256,15 @@ object OfflineDownloadManager {
         persist(context, entry.copy(lastPlayedAtEpochMs = atEpochMs))
     }
 
+    fun markWatched(context: Context, entry: OfflineDownload, watched: Boolean = true) {
+        persist(context, entry.copy(isWatched = watched))
+    }
+
+    /** Explicit protection survives Smart Downloads cleanup and app restarts. */
+    fun setKeepDownload(context: Context, entry: OfflineDownload, keep: Boolean) {
+        persist(context, entry.copy(keepDownload = keep))
+    }
+
     /**
      * DownloadManager can expose provider-backed `content://` URIs. Treating
      * those as filesystem paths silently leaves the provider-owned media
@@ -251,7 +280,8 @@ object OfflineDownloadManager {
         }
     }
 
-    private fun deleteEntry(context: Context, entry: OfflineDownload) = save(context, load(context).filterNot { it.downloadId == entry.downloadId })
+    private fun deleteEntry(context: Context, entry: OfflineDownload) =
+        save(context, load(context).filterNot { sameOfflineEntry(it, entry) })
 
     private fun openLocalStream(context: Context, value: String): InputStream? {
         val uri = runCatching { Uri.parse(value) }.getOrNull()
@@ -287,8 +317,8 @@ object OfflineDownloadManager {
 
     internal fun persist(context: Context, entry: OfflineDownload) {
         val entries = load(context).let { current ->
-            if (current.any { it.downloadId == entry.downloadId }) {
-                current.map { if (it.downloadId == entry.downloadId) entry else it }
+            if (current.any { sameOfflineEntry(it, entry) }) {
+                current.map { if (sameOfflineEntry(it, entry)) entry else it }
             } else current + entry
         }
         save(context, entries)

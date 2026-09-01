@@ -112,6 +112,9 @@ class AppSettings(context: Context) {
         private const val KEY_SUBTITLE_MODE = "subtitle_mode"
         private const val KEY_PREFERRED_SUBTITLE_LANGUAGE = "preferred_subtitle_language"
         private const val KEY_OFFLINE_MAX_STORAGE_BYTES = "offline_max_storage_bytes"
+        private const val KEY_SMART_DOWNLOADS_ENABLED = "smart_downloads_enabled"
+        private const val KEY_SMART_DOWNLOADS_REMOVE_WATCHED = "smart_downloads_remove_watched"
+        private const val KEY_SMART_DOWNLOADS_KEEP_UNWATCHED = "smart_downloads_keep_unwatched"
     }
 
     var isMpvEnabled: Boolean
@@ -223,6 +226,19 @@ class AppSettings(context: Context) {
     fun setSortType(sortType: String) {
         prefs.edit().putString(KEY_SORT_TYPE, sortType).apply()
     }
+
+    /** Smart Downloads are deliberately disabled until the user opts in. */
+    var smartDownloadsEnabled: Boolean
+        get() = prefs.getBoolean(KEY_SMART_DOWNLOADS_ENABLED, false)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_DOWNLOADS_ENABLED, value).apply()
+
+    var smartDownloadsRemoveWatched: Boolean
+        get() = prefs.getBoolean(KEY_SMART_DOWNLOADS_REMOVE_WATCHED, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_DOWNLOADS_REMOVE_WATCHED, value).apply()
+
+    var smartDownloadsKeepUnwatchedEpisodes: Int
+        get() = prefs.getInt(KEY_SMART_DOWNLOADS_KEEP_UNWATCHED, 2).coerceIn(0, 50)
+        set(value) = prefs.edit().putInt(KEY_SMART_DOWNLOADS_KEEP_UNWATCHED, value.coerceIn(0, 50)).apply()
 
     var librarySortDescending: Boolean
         get() = prefs.getBoolean(KEY_SORT_DESCENDING, false)
