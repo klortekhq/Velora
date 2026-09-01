@@ -25,9 +25,11 @@ han pasado tras este cambio; la release `v1.2.83` está publicada con los
 artefactos generados por GitHub Actions.
 
 Desde la última release se han añadido componentes SwiftUI nativos reutilizables
-para las superficies Apple y se han completado los textos nuevos de la interfaz
-móvil en inglés, alemán y francés. La prueba Android móvil y sus unit tests
-vuelven a pasar; iOS/iPadOS/tvOS siguen pendientes de validación en macOS/Xcode.
+para las superficies Apple y un shell compartido que conecta inicio de sesión,
+biblioteca, detalle, ajustes y AVPlayer, manteniendo la regla de no mostrar
+descargas en tvOS. La prueba Android móvil y sus unit tests vuelven a pasar;
+iOS/iPadOS/tvOS siguen pendientes de validación en macOS/Xcode y de sus targets
+de aplicación finales.
 
 ## Oleada actual
 
@@ -100,6 +102,11 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
 - El aviso de incompatibilidad AV1 y el selector de formato del reproductor
   Android ya usan recursos localizables en español e inglés; las variantes
   móvil y TV compilan y pasan sus unit tests tras el cambio.
+- Apple `VeloraKit` incorpora `VeloraAppShell`, un flujo SwiftUI nativo para
+  iniciar sesión, consultar películas/series, abrir detalles y reproducir con
+  AVPlayer usando headers autenticados. El shell no muestra descargas en tvOS;
+  Swift/Xcode no está disponible en este host, por lo que queda pendiente la
+  validación de compilación y dispositivo en macOS.
 
 ## Release actual: v1.2.86 (preparación)
 

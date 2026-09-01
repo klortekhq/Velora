@@ -49,4 +49,12 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(item.overview, "Descripción")
         XCTAssertEqual(item.imageTags?["Primary"], "abc")
     }
+
+    func testVideoRequestUsesStreamEndpointWithoutCredentialQuery() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        let url = await client.videoURL(itemID: "movie-one")
+        XCTAssertEqual(url?.path, "/Videos/movie-one/stream")
+        XCTAssertEqual(url?.query, "static=true")
+        XCTAssertFalse(url?.absoluteString.contains("api_key") ?? true)
+    }
 }
