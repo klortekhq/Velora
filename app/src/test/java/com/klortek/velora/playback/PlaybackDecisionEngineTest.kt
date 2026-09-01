@@ -106,4 +106,28 @@ class PlaybackDecisionEngineTest {
             )
         )
     }
+
+    @Test
+    fun knownSdrDisplayDoesNotDirectPlayHdrSource() {
+        val sdr = capable.copy(hdrFormats = emptySet(), hdrCapabilityKnown = true)
+        assertEquals(
+            PlaybackPath.TRANSCODE,
+            PlaybackDecisionEngine.decide(
+                PlaybackSource(videoCodec = "hevc", audioCodec = "eac3", hdrFormat = "hdr10", width = 1920, height = 1080),
+                sdr
+            )
+        )
+    }
+
+    @Test
+    fun qualityPresetChecksBothWidthAndHeight() {
+        assertEquals(
+            PlaybackPath.TRANSCODE,
+            PlaybackDecisionEngine.decide(
+                PlaybackSource(videoCodec = "h264", audioCodec = "aac", width = 1280, height = 1080),
+                capable,
+                PlaybackQuality.HD_5
+            )
+        )
+    }
 }

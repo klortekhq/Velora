@@ -20,6 +20,10 @@ All notable changes to Velora will be documented in this file.
 - Endurece el inicio de sesión de OpenSubtitles: codifica las credenciales como
   JSON y deja de registrar respuestas o errores que puedan revelar tokens o
   información sensible.
+- Endurece la decisión de reproducción HDR: un dispositivo Android que se
+  identifica como SDR ya no intenta Direct Play de contenido HDR, y los
+  perfiles de calidad validan tanto la anchura como la altura del vídeo sin
+  limitar artificialmente la opción Original.
 
 ## 1.2.85
 

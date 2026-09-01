@@ -15,6 +15,8 @@ data class PlaybackCapabilities(
     val containers: Set<String> = emptySet(),
     val audioPassthroughCodecs: Set<String> = emptySet(),
     val audioPassthrough: Boolean = false,
+    /** True when the platform has positively reported its HDR display support. */
+    val hdrCapabilityKnown: Boolean = false,
     val maxAudioChannels: Int? = null,
     val maxWidth: Int? = null,
     val maxHeight: Int? = null,
@@ -66,7 +68,7 @@ object PlaybackDecisionEngine {
             source.videoCodec.lowercase() in capabilities.videoCodecs.map(String::lowercase)
         val audioOk = source.audioCodec == null || capabilities.audioCodecs.isEmpty() ||
             source.audioCodec.lowercase() in capabilities.audioCodecs.map(String::lowercase)
-        val hdrOk = source.hdrFormat == null || capabilities.hdrFormats.isEmpty() ||
+        val hdrOk = source.hdrFormat == null || !capabilities.hdrCapabilityKnown ||
             source.hdrFormat.lowercase() in capabilities.hdrFormats.map(String::lowercase)
         val containerOk = source.container == null || capabilities.containers.isEmpty() ||
             source.container.lowercase() in capabilities.containers.map(String::lowercase)
@@ -116,11 +118,15 @@ object PlaybackDecisionEngine {
         }
         val bitrateOk = source.bitrateKbps == null || source.bitrateKbps <= maxBitrate
         return when (quality) {
-            PlaybackQuality.FOUR_K -> bitrateOk && (source.width ?: 0) <= 3840
-            PlaybackQuality.FULL_HD_20, PlaybackQuality.FULL_HD_10 -> bitrateOk && (source.width ?: 0) <= 1920
-            PlaybackQuality.HD_5 -> bitrateOk && (source.width ?: 0) <= 1280
-            PlaybackQuality.SD_2 -> bitrateOk && (source.width ?: 0) <= 854
+            PlaybackQuality.FOUR_K -> bitrateOk && withinDimensions(source, 3840, 2160)
+            PlaybackQuality.FULL_HD_20, PlaybackQuality.FULL_HD_10 -> bitrateOk && withinDimensions(source, 1920, 1080)
+            PlaybackQuality.HD_5 -> bitrateOk && withinDimensions(source, 1280, 720)
+            PlaybackQuality.SD_2 -> bitrateOk && withinDimensions(source, 854, 480)
             else -> bitrateOk
         }
     }
+
+    private fun withinDimensions(source: PlaybackSource, maxWidth: Int, maxHeight: Int): Boolean =
+        (source.width == null || source.width <= maxWidth) &&
+            (source.height == null || source.height <= maxHeight)
 }
