@@ -107,10 +107,6 @@ public struct PlaybackSource: Sendable {
 
 public enum PlaybackDecisionEngine {
     public static func decide(source: PlaybackSource, capabilities: PlaybackCapabilities, quality: PlaybackQuality = .original) -> PlaybackPath {
-        func supported(_ value: String?, by values: Set<String>) -> Bool {
-            guard let value else { return true }
-            return values.isEmpty || values.contains(value.lowercased())
-        }
         let directCompatible = supported(source.videoCodec, by: capabilities.videoCodecs)
             && supported(source.audioCodec, by: capabilities.audioCodecs)
             && supported(source.container, by: capabilities.containers)
@@ -125,6 +121,11 @@ public enum PlaybackDecisionEngine {
         if capabilities.directStream && directStreamCompatible(source: source, capabilities: capabilities) { return .directStream }
         if capabilities.remux && supported(source.videoCodec, by: capabilities.videoCodecs) && channelsFit(source, capabilities) { return .remux }
         return capabilities.directStream || capabilities.directPlay ? .transcode : .fallback
+    }
+
+    private static func supported(_ value: String?, by values: Set<String>) -> Bool {
+        guard let value else { return true }
+        return values.isEmpty || values.contains(value.lowercased())
     }
 
     private static func directStreamCompatible(source: PlaybackSource, capabilities: PlaybackCapabilities) -> Bool {

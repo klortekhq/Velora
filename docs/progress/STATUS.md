@@ -29,7 +29,7 @@ Wave 6 — Apple platform foundation and cross-platform release convergence.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.66 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.67 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -65,7 +65,7 @@ Wave 6 — Apple platform foundation and cross-platform release convergence.
 
 ## Latest published tag
 
-The current source is version `1.2.66`. Android mobile/TV release APKs and the
+The current source is version `1.2.67`. Android mobile/TV release APKs and the
 web/Smart TV bundles were built locally for this version, and the tag workflows
 are configured to publish them into the same GitHub release. GitHub Actions
 asset completion is not independently verified from this host because its API
