@@ -17,8 +17,8 @@ final class VeloraKitTests: XCTestCase {
     func testPlaybackFallsBackWhenActualDeviceLimitsAreExceeded() {
         let caps = PlaybackCapabilities(videoCodecs: ["h264"], audioCodecs: ["aac"], containers: ["mp4"], maxAudioChannels: 2, maxWidth: 1920)
         let source = PlaybackSource(container: "mp4", videoCodec: "h264", audioCodec: "aac", audioChannels: 6, width: 3840, height: 2160)
-        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directStream)
-        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps, quality: .fullHD10), .directStream)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .transcode)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps, quality: .fullHD10), .transcode)
     }
 
     func testQualityPresetDoesNotAddCapsToOriginal() {
