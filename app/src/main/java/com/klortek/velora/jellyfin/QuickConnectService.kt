@@ -16,6 +16,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import com.klortek.velora.BuildConfig
+import com.klortek.velora.security.SensitiveDataRedactor
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -72,7 +73,7 @@ class QuickConnectService(
             
             val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
             
-            android.util.Log.d("QuickConnect", "Initiating QuickConnect at: $url")
+            android.util.Log.d("QuickConnect", "Initiating QuickConnect at: ${SensitiveDataRedactor.url(url)}")
             android.util.Log.d("QuickConnect", "Device identity prepared")
             android.util.Log.d("QuickConnect", "Authentication header prepared")
             
@@ -104,18 +105,17 @@ class QuickConnectService(
                 }
             }
         } catch (e: java.net.ConnectException) {
-            android.util.Log.e("QuickConnect", "Connection exception initiating QuickConnect", e)
+            android.util.Log.e("QuickConnect", "Connection exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
             val errorMsg = "Cannot connect to server at $baseUrl. Please check:\n• Server is running\n• IP address is correct\n• TV is on the same network"
             QuickConnectResult(null, QuickConnectError.ConnectionError(errorMsg))
         } catch (e: java.net.SocketTimeoutException) {
-            android.util.Log.e("QuickConnect", "Timeout exception initiating QuickConnect", e)
+            android.util.Log.e("QuickConnect", "Timeout exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
             QuickConnectResult(null, QuickConnectError.ConnectionError("Connection timeout. Server at $baseUrl is not responding."))
         } catch (e: java.net.UnknownHostException) {
-            android.util.Log.e("QuickConnect", "Unknown host exception initiating QuickConnect", e)
+            android.util.Log.e("QuickConnect", "Unknown host exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
             QuickConnectResult(null, QuickConnectError.ConnectionError("Cannot resolve server address. Please check the IP address or hostname."))
         } catch (e: Exception) {
-            android.util.Log.e("QuickConnect", "Exception initiating QuickConnect", e)
-            e.printStackTrace()
+            android.util.Log.e("QuickConnect", "Exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
             QuickConnectResult(null, QuickConnectError.UnknownError("Error: ${e.message ?: e.javaClass.simpleName}"))
         }
     }
@@ -168,8 +168,7 @@ class QuickConnectService(
                 }
             }
         } catch (e: Exception) {
-            android.util.Log.e("QuickConnect", "Exception getting QuickConnect state", e)
-            e.printStackTrace()
+            android.util.Log.e("QuickConnect", "Exception getting QuickConnect state: ${SensitiveDataRedactor.message(e)}")
             null
         }
     }
@@ -190,7 +189,7 @@ class QuickConnectService(
             
             val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
             
-            android.util.Log.d("QuickConnect", "Authenticating with QuickConnect at: $url")
+            android.util.Log.d("QuickConnect", "Authenticating with QuickConnect at: ${SensitiveDataRedactor.url(url)}")
             
             val response: HttpResponse = client.post(url) {
                 header(HttpHeaders.Accept, "application/json")
@@ -221,8 +220,7 @@ class QuickConnectService(
                 }
             }
         } catch (e: Exception) {
-            android.util.Log.e("QuickConnect", "Exception authenticating with QuickConnect", e)
-            e.printStackTrace()
+            android.util.Log.e("QuickConnect", "Exception authenticating with QuickConnect: ${SensitiveDataRedactor.message(e)}")
             null
         }
     }
