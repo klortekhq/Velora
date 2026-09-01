@@ -68,10 +68,11 @@ Oleada 6 — base de Apple y convergencia de publicación multiplataforma.
 
 ## Release actual: v1.2.70
 
-La fuente actual es `1.2.70`. La release contiene los paquetes web/Smart TV ya
-publicados. El workflow Android de esta etiqueta está en ejecución; por tanto,
-los cuatro APK todavía no se consideran publicados hasta comprobar sus assets
-en GitHub. No se afirma validación física en un móvil, Fire TV o televisor.
+La fuente actual es `1.2.70`. La release contiene 13 assets: los cuatro APK
+(móvil/TV debug y release unsigned), los paquetes web/Smart TV y ambos
+manifiestos SHA-256. Los cinco enlaces esperados de Android están presentes en
+la misma release. No se afirma validación física en un móvil, Fire TV o
+televisor.
 
 Release workflows now use unfiltered tag triggers, so a `v*` tag cannot be
 silently skipped by a path filter.
