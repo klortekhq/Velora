@@ -585,7 +585,13 @@ fun JellyfinVideoPlayerScreen(
     var downloadedSubtitles by remember { mutableStateOf<List<com.klortek.velora.subtitles.DownloadedSubtitle>>(emptyList()) }
     var nextEpisodeId by remember { mutableStateOf<String?>(null) } // Next episode ID for autoplay
     var nextEpisodeDetails by remember { mutableStateOf<JellyfinItem?>(null) } // Next episode details
-    var currentAspectMode by remember { mutableStateOf(AspectMode.FIT) } // Picture mode / aspect ratio
+    // Keep the selected presentation mode across the activity recreation that
+    // Android performs when mobile fullscreen changes orientation.
+    var currentAspectModeName by androidx.compose.runtime.saveable.rememberSaveable {
+        mutableStateOf(AspectMode.FIT.name)
+    }
+    val currentAspectMode = AspectMode.values().firstOrNull { it.name == currentAspectModeName }
+        ?: AspectMode.FIT
     var videoAspectRatio by remember { mutableStateOf(16f / 9f) }
     var videoResolution by remember { mutableStateOf("") } // Current video resolution string
     
@@ -4309,7 +4315,7 @@ fun JellyfinVideoPlayerScreen(
                                         } else Color.Transparent
                                     )
                                     .clickable {
-                                        currentAspectMode = mode
+                                        currentAspectModeName = mode.name
                                         showAspectModeMenu = false
                                     }
                                     .focusable()

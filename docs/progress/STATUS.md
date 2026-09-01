@@ -18,7 +18,7 @@ campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
 
-La revisión en preparación `v1.2.83` añade ordenado y filtrado funcional por
+La revisión `v1.2.83` añade ordenado y filtrado funcional por
 estado de reproducción en las bibliotecas de películas y series, con opciones
 de Todos, Vistos, No vistos y Favoritos. La compilación y los unit tests Android
 han pasado tras este cambio; la release todavía no se considera publicada
@@ -632,3 +632,7 @@ Tizen Studio/signing is unavailable; VIDAA remains an HTML5 submission bundle.
 Version 1.2.16 is prepared in the tracked source and has passed local mobile
 unit tests, mobile release assembly, TV release assembly and web platform
 tests/build. Its GitHub release is created only after the tag workflows finish.
+La revisión en preparación `v1.2.84` conserva el modo de formato de imagen del
+reproductor al recrear la actividad durante el cambio de orientación. La
+compilación y los unit tests Android han pasado tras este cambio; la release se
+publicará al completar la validación de versión.

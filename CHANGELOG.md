@@ -2,6 +2,11 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.84
+
+- Conservado el modo de formato de imagen al cambiar la orientación o entrar y salir de pantalla completa en móvil.
+- Evitada la vuelta silenciosa a «Ajustar» cuando Android recrea la actividad del reproductor.
+
 ## 1.2.83
 
 - Añadido ordenado y filtrado por estado de reproducción para películas y series.
