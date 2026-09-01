@@ -6,6 +6,8 @@ finales. `VeloraPlatform` mantiene la decisión de producto: las descargas sin
 conexión solo están disponibles en iPhone y iPad; tvOS es streaming.
 
 `VeloraKit` no mete tokens en URLs: las peticiones autenticadas usan
-`X-Emby-Token`. La futura app iOS/iPadOS y la app tvOS deben consumir este
+`X-Emby-Token`. Incluye autenticación Jellyfin, sesión tipada, preferencias
+locales de idioma/audio/subtítulos/rendimiento y requests autenticadas para
+artwork o AVPlayer. La futura app iOS/iPadOS y la app tvOS deben consumir este
 paquete sin copiar la interfaz Android. La compilación y las pruebas requieren
 macOS con Xcode; este host Windows no certifica todavía esos targets.

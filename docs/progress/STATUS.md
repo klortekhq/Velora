@@ -29,7 +29,7 @@ Wave 1 — shared capability/playback contracts and Android hardening.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.60 across Android, webOS,
+- Release metadata is synchronized at source version 1.2.61 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -253,6 +253,10 @@ digests are:
 - Mobile series details now let the user select individual episodes before choosing
   download quality; selected episodes are queued through the managed offline
   engine, while the control remains absent on TV and browser platforms.
+- The Apple shared foundation now includes Jellyfin username/password
+  authentication, typed sessions, local playback preferences and tokenless
+  authenticated request construction for artwork/media; Swift validation still
+  requires macOS/Xcode and is not claimed on this Windows host.
 - DownloadManager statuses are translated at the offline boundary into
   provider-neutral Velora states (`QUEUED`, `WAITING_FOR_NETWORK`,
   `DOWNLOADING`, `PAUSED`, `COMPLETED` and `FAILED`), preparing a future
