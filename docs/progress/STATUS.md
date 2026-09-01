@@ -86,6 +86,9 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
 - Offline records now persist Jellyfin's selected `mediaSourceId`; requesting a
   different offline quality no longer reuses an existing entry for the same
   item, and the regression is covered by mobile unit tests.
+- Offline SQLite schema v8 migrates the old single-item key to the composite
+  `(item_id, quality)` key, so multiple quality representations can coexist
+  without persistence collisions; mobile and TV unit tests pass afterward.
 - Smart Downloads labels are now present in every Android locale offered by the
   app (Spanish, English, Portuguese, French, German, Italian, Japanese,
   Korean, Chinese, Russian, Arabic and Turkish); mobile compilation and tests
