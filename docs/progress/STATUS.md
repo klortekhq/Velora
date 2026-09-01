@@ -786,3 +786,11 @@ su etiqueta y limpia sus listeners al cerrar el reproductor. Las pruebas de
 plataforma, el empaquetado web y el paquete webOS pasan; Tizen Studio sigue sin
 estar disponible en este host, por lo que no se afirma validación de un
 paquete Tizen real. Es un cambio puntual y no genera una nueva release APK.
+
+La migración de descargas Android ahora materializa automáticamente las
+entradas completas heredadas de DownloadManager al refrescar la pantalla de
+descargas, las copia al almacenamiento privado de Velora, calcula su SHA-256
+y elimina la identidad del proveedor. Las descargas nuevas ya usan
+WorkManager y las antiguas siguen siendo legibles durante la migración. Pasan
+las pruebas offline, la compilación Kotlin móvil y la compilación Kotlin TV;
+la recuperación E2E en hardware real continúa pendiente.

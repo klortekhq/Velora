@@ -54,7 +54,14 @@ object OfflineStorageEngine {
             }
             if (destination.exists()) destination.delete()
             check(temporary.renameTo(destination)) { "Could not commit offline media" }
-            val updated = entry.copy(localPath = Uri.fromFile(destination).toString(), checksumSha256 = digest)
+            // The provider row has been copied into Velora's private storage;
+            // clear its provider id so a later refresh cannot query or remove
+            // an already-migrated DownloadManager row.
+            val updated = entry.copy(
+                downloadId = 0L,
+                localPath = Uri.fromFile(destination).toString(),
+                checksumSha256 = digest
+            )
             OfflineDownloadManager.persist(context, updated)
             if (entry.downloadId > 0L) {
                 context.getSystemService(android.app.DownloadManager::class.java).remove(entry.downloadId)
