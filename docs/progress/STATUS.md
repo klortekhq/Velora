@@ -89,6 +89,11 @@ carga de canal obsoleta sustituya al canal elegido. Los tests Android móviles y
 las pruebas web de regresión siguen pasando; Swift/Xcode no está instalado en
 este host.
 
+La revisión actual elimina botones sin acción en los detalles de Jellyseerr:
+los estados Disponible y Solicitud pendiente se presentan como indicadores no
+interactivos, mientras que Solicitar mantiene su acción real. `testMobileDebugUnitTest`
+y `compileTvDebugKotlin` pasan después del cambio.
+
 La superficie GL experimental de Android ya no se selecciona para AV1 ni cuando
 Jellyfin no declara el códec antes de iniciar la reproducción. En esos casos
 Media3 usa su SurfaceView estándar, evitando pantallas negras por decodificación

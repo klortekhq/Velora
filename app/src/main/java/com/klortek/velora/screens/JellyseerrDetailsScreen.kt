@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -253,49 +254,19 @@ fun JellyseerrDetailsScreen(
                 // Action Button
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (isAvailable) {
-                        if (isTv) {
-                            Button(
-                                onClick = { },
-                                colors = ButtonDefaults.colors(containerColor = Color(0xFF4CAF50)), // Green
-                                enabled = false
-                            ) {
-                                Icon(Icons.Default.Check, contentDescription = null)
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(stringResource(com.klortek.velora.R.string.jellyseerr_available))
-                            }
-                        } else {
-                            androidx.compose.material3.Button(
-                                onClick = { },
-                                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
-                                enabled = false
-                            ) {
-                                androidx.compose.material3.Icon(Icons.Default.Check, contentDescription = null)
-                                Spacer(modifier = Modifier.width(8.dp))
-                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.jellyseerr_available))
-                            }
-                        }
+                        JellyseerrStatusBadge(
+                            isTv = isTv,
+                            icon = Icons.Default.Check,
+                            label = stringResource(com.klortek.velora.R.string.jellyseerr_available),
+                            color = Color(0xFF4CAF50)
+                        )
                     } else if (isPending) {
-                        if (isTv) {
-                            Button(
-                                onClick = { },
-                                colors = ButtonDefaults.colors(containerColor = Color(0xFFFFC107)), // Amber
-                                enabled = false
-                            ) {
-                                Icon(Icons.Default.HourglassEmpty, contentDescription = null)
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(stringResource(com.klortek.velora.R.string.jellyseerr_request_pending))
-                            }
-                        } else {
-                            androidx.compose.material3.Button(
-                                onClick = { },
-                                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107)),
-                                enabled = false
-                            ) {
-                                androidx.compose.material3.Icon(Icons.Default.HourglassEmpty, contentDescription = null)
-                                Spacer(modifier = Modifier.width(8.dp))
-                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.jellyseerr_request_pending))
-                            }
-                        }
+                        JellyseerrStatusBadge(
+                            isTv = isTv,
+                            icon = Icons.Default.HourglassEmpty,
+                            label = stringResource(com.klortek.velora.R.string.jellyseerr_request_pending),
+                            color = Color(0xFFFFC107)
+                        )
                     } else {
                         val requestAction = {
                             if (!isRequesting && apiService != null) {
@@ -391,6 +362,33 @@ fun JellyseerrDetailsScreen(
                     )
                 }
             }
+        }
+    }
+}
+
+/** A non-interactive status indicator; only request actions should be buttons. */
+@Composable
+private fun JellyseerrStatusBadge(
+    isTv: Boolean,
+    icon: ImageVector,
+    label: String,
+    color: Color
+) {
+    Row(
+        modifier = Modifier
+            .clip(androidx.compose.foundation.shape.RoundedCornerShape(12.dp))
+            .background(color.copy(alpha = 0.18f))
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (isTv) {
+            Icon(icon, contentDescription = null, tint = color)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(label, color = Color.White)
+        } else {
+            androidx.compose.material3.Icon(icon, contentDescription = null, tint = color)
+            Spacer(modifier = Modifier.width(8.dp))
+            androidx.compose.material3.Text(label, color = Color.White)
         }
     }
 }
