@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -123,6 +124,11 @@ fun JellyfinLoginScreen(
             modifier = Modifier
                 .fillMaxWidth(widthFraction)
                 .widthIn(max = if (isTv) 760.dp else 560.dp)
+                // Keep the complete login form below status/navigation bars
+                // on TVs, phones and tablets. Without this safe-area inset the
+                // title and primary action can be visibly clipped by the
+                // system UI, especially in landscape TV layouts.
+                .systemBarsPadding()
                 .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = horizontalPadding, vertical = verticalPadding),
