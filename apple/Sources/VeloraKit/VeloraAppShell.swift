@@ -96,6 +96,13 @@ public final class VeloraAppModel: ObservableObject {
         let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": request.allHTTPHeaderFields ?? [:]])
         return AVPlayer(playerItem: AVPlayerItem(asset: asset))
     }
+
+    public func stopLiveTv(channel: JellyfinLiveTvChannel, positionSeconds: Double = 0) async {
+        await client.reportPlaybackStopped(
+            itemID: channel.id,
+            positionTicks: Int64(max(0, positionSeconds) * 10_000_000)
+        )
+    }
 }
 
 @available(iOS 16.0, tvOS 16.0, *)
@@ -206,13 +213,29 @@ private struct VeloraLiveTvView: View {
     @ObservedObject var model: VeloraAppModel
     @State private var player: AVPlayer?
     @State private var selectedChannel: JellyfinLiveTvChannel?
+    @State private var playbackTask: Task<Void, Never>?
 
     var body: some View {
         List(model.liveTvChannels) { channel in
             Button {
-                selectedChannel = channel
-                Task {
-                    player = await model.playLiveTv(channel: channel)
+                let previousChannel = selectedChannel
+                playbackTask?.cancel()
+                playbackTask = Task { @MainActor in
+                    if let previousChannel, previousChannel.id != channel.id {
+                        await model.stopLiveTv(
+                            channel: previousChannel,
+                            positionSeconds: player?.currentTime().seconds ?? 0
+                        )
+                    }
+                    guard !Task.isCancelled else { return }
+                    let nextPlayer = await model.playLiveTv(channel: channel)
+                    guard !Task.isCancelled else {
+                        nextPlayer?.pause()
+                        return
+                    }
+                    player?.pause()
+                    player = nextPlayer
+                    selectedChannel = channel
                     player?.play()
                 }
             } label: {
@@ -229,6 +252,17 @@ private struct VeloraLiveTvView: View {
             .accessibilityHint("Play live channel")
         }
         .navigationTitle("Live TV")
+        .onDisappear {
+            playbackTask?.cancel()
+            let activeChannel = selectedChannel
+            let position = player?.currentTime().seconds ?? 0
+            player?.pause()
+            player = nil
+            selectedChannel = nil
+            if let activeChannel {
+                Task { await model.stopLiveTv(channel: activeChannel, positionSeconds: position) }
+            }
+        }
         .safeAreaInset(edge: .bottom) {
             if let player, let selectedChannel {
                 VStack(alignment: .leading, spacing: 8) {

@@ -79,9 +79,10 @@ pertenece al servidor configurado y construir un `AVPlayer` autenticado. La
 interfaz de canal y la validación en hardware Apple siguen pendientes.
 
 El shell SwiftUI ya muestra una pantalla de Live TV cuando hay canales y cada
-fila inicia el `AVPlayer` autenticado del canal seleccionado. La validación de
-foco remoto, reproducción sostenida y cierre del tuner en hardware Apple sigue
-pendiente.
+fila inicia el `AVPlayer` autenticado del canal seleccionado. Las cargas se
+cancelan al cambiar rápidamente y la salida notifica `Sessions/Playing/Stopped`
+para liberar el tuner; la validación de foco remoto y reproducción sostenida en
+hardware Apple sigue pendiente.
 
 La superficie GL experimental de Android ya no se selecciona para AV1 ni cuando
 Jellyfin no declara el códec antes de iniciar la reproducción. En esos casos

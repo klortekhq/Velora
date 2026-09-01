@@ -176,6 +176,21 @@ public actor JellyfinClient {
         return selected
     }
 
+    /// Releases a Live TV session and updates Jellyfin's playback state.
+    /// The item identifier is validated before it is sent to the server.
+    public func reportPlaybackStopped(itemID: String, positionTicks: Int64 = 0) async {
+        guard !itemID.isEmpty, !itemID.contains("/"), !itemID.contains("\\") else { return }
+        var request = URLRequest(url: baseURL.appendingPathComponent("Sessions/Playing/Stopped"))
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")
+        if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
+        request.httpBody = try? JSONEncoder().encode(
+            JellyfinPlaybackStoppedRequest(itemID: itemID, positionTicks: max(0, positionTicks))
+        )
+        _ = try? await session.data(for: request)
+    }
+
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
         request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")
