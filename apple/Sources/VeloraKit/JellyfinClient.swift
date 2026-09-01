@@ -78,7 +78,7 @@ public actor JellyfinClient {
 
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
-        request.setValue("Velora/1.0", forHTTPHeaderField: "X-Emby-Client")
+        request.setValue("Velora/1.2.70", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }

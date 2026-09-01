@@ -18,6 +18,14 @@ public struct JellyfinItem: Codable, Identifiable, Sendable {
     public let overview: String?
     public let imageTags: [String: String]?
 
+    private enum CodingKeys: String, CodingKey {
+        case id = "Id"
+        case name = "Name"
+        case type = "Type"
+        case overview = "Overview"
+        case imageTags = "ImageTags"
+    }
+
     public init(id: String, name: String, type: String? = nil, overview: String? = nil, imageTags: [String: String]? = nil) {
         self.id = id
         self.name = name
