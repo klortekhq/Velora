@@ -777,4 +777,12 @@ identificadores vacíos o con separadores de ruta se rechazan y los caracteres
 especiales se codifican como parte del componente. Se añadió cobertura Swift
 para IDs con espacios, separadores y traversal. En este host Windows no hay
 toolchain Swift; la validación queda delegada al workflow macOS de Apple y no
-se afirma validación local de iOS, iPadOS ni tvOS.
+ se afirma validación local de iOS, iPadOS ni tvOS.
+
+El reproductor web ahora permite entrar y salir de pantalla completa desde el
+propio botón, incluyendo la API estándar, la variante WebKit y el modo de
+reserva usado por navegadores/Smart TV sin fullscreen nativo. El botón cambia
+su etiqueta y limpia sus listeners al cerrar el reproductor. Las pruebas de
+plataforma, el empaquetado web y el paquete webOS pasan; Tizen Studio sigue sin
+estar disponible en este host, por lo que no se afirma validación de un
+paquete Tizen real. Es un cambio puntual y no genera una nueva release APK.

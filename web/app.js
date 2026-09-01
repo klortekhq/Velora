@@ -27,7 +27,7 @@
       searchPlaceholder: 'Buscar películas y series', search: 'Buscar', all: 'Todo', movies: 'Películas',
       series: 'Series', live: 'Televisión en directo', back: 'Atrás', play: 'Reproducir',
       close: 'Cerrar', noDescription: 'Sin descripción disponible.', refresh: 'Actualizar', logout: 'Salir',
-      loading: 'Cargando biblioteca…', retry: 'Reintentar', player: 'Reproductor', fullscreen: 'Pantalla completa',
+      loading: 'Cargando biblioteca…', retry: 'Reintentar', player: 'Reproductor', fullscreen: 'Pantalla completa', exitFullscreen: 'Salir de pantalla completa',
       settings: 'Ajustes', languageSettings: 'Idioma y reproducción', appLanguage: 'Idioma de la aplicación',
       automatic: 'Automático (idioma del dispositivo)', preferredAudio: 'Audio preferido', audioAuto: 'Automático / servidor',
       subtitles: 'Subtítulos', subtitleOff: 'Desactivados', subtitlePreferred: 'Preferidos', subtitleForced: 'Forzados',
@@ -43,7 +43,7 @@
       searchPlaceholder: 'Search movies and series', search: 'Search', all: 'All', movies: 'Movies', series: 'Series',
       live: 'Live TV', back: 'Back', play: 'Play', close: 'Close', noDescription: 'No description available.',
       refresh: 'Refresh', logout: 'Sign out', loading: 'Loading library…', retry: 'Retry', player: 'Player',
-      fullscreen: 'Fullscreen', settings: 'Settings', languageSettings: 'Language and playback', appLanguage: 'App language',
+      fullscreen: 'Fullscreen', exitFullscreen: 'Exit fullscreen', settings: 'Settings', languageSettings: 'Language and playback', appLanguage: 'App language',
       automatic: 'Automatic (device language)', preferredAudio: 'Preferred audio', audioAuto: 'Automatic / server',
       subtitles: 'Subtitles', subtitleOff: 'Disabled', subtitlePreferred: 'Preferred', subtitleForced: 'Forced',
       subtitleAuto: 'Automatic', subtitleLanguage: 'Subtitle language', save: 'Save', cancel: 'Cancel',
@@ -58,7 +58,7 @@
       searchPlaceholder: 'Pesquisar filmes e séries', search: 'Pesquisar', all: 'Tudo', movies: 'Filmes', series: 'Séries',
       live: 'TV em direto', back: 'Voltar', play: 'Reproduzir', close: 'Fechar', noDescription: 'Sem descrição disponível.',
       refresh: 'Atualizar', logout: 'Sair', loading: 'A carregar biblioteca…', retry: 'Tentar novamente', player: 'Reprodutor',
-      fullscreen: 'Ecrã inteiro', settings: 'Definições', languageSettings: 'Idioma e reprodução', appLanguage: 'Idioma da aplicação',
+      fullscreen: 'Ecrã inteiro', exitFullscreen: 'Sair do ecrã inteiro', settings: 'Definições', languageSettings: 'Idioma e reprodução', appLanguage: 'Idioma da aplicação',
       automatic: 'Automático (idioma do dispositivo)', preferredAudio: 'Áudio preferido', audioAuto: 'Automático / servidor',
       subtitles: 'Legendas', subtitleOff: 'Desativadas', subtitlePreferred: 'Preferidas', subtitleForced: 'Forçadas',
       subtitleAuto: 'Automáticas', subtitleLanguage: 'Idioma das legendas', save: 'Guardar', cancel: 'Cancelar',
@@ -71,7 +71,7 @@
       searchPlaceholder: 'Rechercher des films et séries', search: 'Rechercher', all: 'Tout', movies: 'Films', series: 'Séries',
       live: 'TV en direct', back: 'Retour', play: 'Lire', close: 'Fermer', noDescription: 'Aucune description disponible.',
       refresh: 'Actualiser', logout: 'Se déconnecter', loading: 'Chargement de la bibliothèque…', retry: 'Réessayer', player: 'Lecteur',
-      fullscreen: 'Plein écran', settings: 'Réglages', languageSettings: 'Langue et lecture', appLanguage: 'Langue de l’application',
+      fullscreen: 'Plein écran', exitFullscreen: 'Quitter le plein écran', settings: 'Réglages', languageSettings: 'Langue et lecture', appLanguage: 'Langue de l’application',
       automatic: 'Automatique (langue de l’appareil)', preferredAudio: 'Audio préféré', audioAuto: 'Automatique / serveur',
       subtitles: 'Sous-titres', subtitleOff: 'Désactivés', subtitlePreferred: 'Préférés', subtitleForced: 'Forcés',
       subtitleAuto: 'Automatiques', subtitleLanguage: 'Langue des sous-titres', save: 'Enregistrer', cancel: 'Annuler',
@@ -84,7 +84,7 @@
       searchPlaceholder: 'Filme und Serien suchen', search: 'Suchen', all: 'Alle', movies: 'Filme', series: 'Serien',
       live: 'Live-TV', back: 'Zurück', play: 'Wiedergeben', close: 'Schließen', noDescription: 'Keine Beschreibung verfügbar.',
       refresh: 'Aktualisieren', logout: 'Abmelden', loading: 'Bibliothek wird geladen…', retry: 'Erneut versuchen', player: 'Player',
-      fullscreen: 'Vollbild', settings: 'Einstellungen', languageSettings: 'Sprache und Wiedergabe', appLanguage: 'App-Sprache',
+      fullscreen: 'Vollbild', exitFullscreen: 'Vollbild beenden', settings: 'Einstellungen', languageSettings: 'Sprache und Wiedergabe', appLanguage: 'App-Sprache',
       automatic: 'Automatisch (Gerätesprache)', preferredAudio: 'Bevorzugte Audiosprache', audioAuto: 'Automatisch / Server',
       subtitles: 'Untertitel', subtitleOff: 'Deaktiviert', subtitlePreferred: 'Bevorzugt', subtitleForced: 'Erzwungen',
       subtitleAuto: 'Automatisch', subtitleLanguage: 'Untertitelsprache', save: 'Speichern', cancel: 'Abbrechen',
@@ -554,7 +554,27 @@
     };
   }
 
-  function setFullscreen(player, video) {
+  function updateFullscreenButton(player) {
+    var button = player && player.querySelector('#fullscreen');
+    if (!button) return;
+    var active = Boolean(document.fullscreenElement || document.webkitFullscreenElement || player.classList.contains('video-fullscreen'));
+    button.textContent = t(active ? 'exitFullscreen' : 'fullscreen');
+    button.setAttribute('aria-label', button.textContent);
+  }
+
+  function toggleFullscreen(player, video) {
+    var active = Boolean(document.fullscreenElement || document.webkitFullscreenElement || player.classList.contains('video-fullscreen'));
+    if (active) {
+      var exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) {
+        var exitResult = exit.call(document);
+        if (exitResult && exitResult.catch) exitResult.catch(function () {});
+      } else {
+        player.classList.remove('video-fullscreen');
+      }
+      updateFullscreenButton(player);
+      return;
+    }
     var target = player;
     var request = player.requestFullscreen || player.webkitRequestFullscreen;
     if (!request && video.requestFullscreen) {
@@ -569,6 +589,7 @@
     } else {
       player.classList.add('video-fullscreen');
     }
+    updateFullscreenButton(player);
     if (window.screen && window.screen.orientation && window.screen.orientation.lock) {
       var orientation = window.screen.orientation.lock('landscape');
       if (orientation && orientation.catch) orientation.catch(function () {});
@@ -578,7 +599,10 @@
   function closePlayer() {
     var player = document.querySelector('#player');
     if (!player) return;
-    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
+    if (player._veloraFullscreenCleanup) player._veloraFullscreenCleanup();
+    var exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if ((document.fullscreenElement || document.webkitFullscreenElement) && exit) exit.call(document);
+    player.classList.remove('video-fullscreen');
     player.remove();
     state.playingItem = null;
   }
@@ -599,11 +623,19 @@
         '</div></div>');
       var player = document.querySelector('#player');
       var video = player.querySelector('video');
+      var update = function () { updateFullscreenButton(player); };
+      document.addEventListener('fullscreenchange', update);
+      document.addEventListener('webkitfullscreenchange', update);
+      player._veloraFullscreenCleanup = function () {
+        document.removeEventListener('fullscreenchange', update);
+        document.removeEventListener('webkitfullscreenchange', update);
+      };
       player.querySelector('#playerClose').onclick = closePlayer;
-      player.querySelector('#fullscreen').onclick = function () { setFullscreen(player, video); };
+      player.querySelector('#fullscreen').onclick = function () { toggleFullscreen(player, video); };
       player.querySelector('#playerSettings').onclick = showSettings;
       video.onerror = function () { toast(t('playbackError')); };
       video.onloadedmetadata = function () { player.querySelector('#fullscreen').focus(); };
+      updateFullscreenButton(player);
     });
   }
 
