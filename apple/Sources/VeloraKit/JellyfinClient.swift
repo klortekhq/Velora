@@ -34,7 +34,7 @@ public actor JellyfinClient {
         var request = URLRequest(url: baseURL.appendingPathComponent("Users/AuthenticateByName"))
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Velora/1.2.85", forHTTPHeaderField: "X-Emby-Client")
+        request.setValue("Velora/1.2.86", forHTTPHeaderField: "X-Emby-Client")
         request.httpBody = try JSONEncoder().encode(["Username": username, "Pw": password])
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }
@@ -61,7 +61,7 @@ public actor JellyfinClient {
     /// the Jellyfin token in a URL. Callers can pass this to URLSession/AVURLAsset.
     public func authorizedRequest(for url: URL) -> URLRequest {
         var request = URLRequest(url: url)
-        request.setValue("Velora/1.2.85", forHTTPHeaderField: "X-Emby-Client")
+        request.setValue("Velora/1.2.86", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
         return request
     }
@@ -78,7 +78,7 @@ public actor JellyfinClient {
 
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
-        request.setValue("Velora/1.2.85", forHTTPHeaderField: "X-Emby-Client")
+        request.setValue("Velora/1.2.86", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }

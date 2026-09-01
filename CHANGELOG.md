@@ -2,6 +2,11 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.86
+
+- Activa los trailers funcionales en las pantallas de películas y series.
+- Verifica compilación y tests Android para móvil y TV.
+
 ## 1.2.85
 
 - Unificado el ordenado y filtrado de las bibliotecas reales de Películas y
