@@ -119,6 +119,7 @@ import kotlinx.coroutines.withContext
 import androidx.compose.runtime.rememberCoroutineScope
 import com.klortek.velora.TrailerLauncher
 import com.klortek.velora.tmdb.TmdbApiService
+import com.klortek.velora.trailer.TrailerResolver
 
 @Composable
 fun MovieDetailsScreen(
@@ -1692,12 +1693,7 @@ fun ActionButtonsRow(
                              language = iso639Code
                          )
                          Log.d("ActionButtonsRow", "Fetched ${videos.size} videos from TMDB")
-                         // Prefer official trailers, then any trailer, then any video
-                         // Also prefer matching language if multiple returned
-                         val trailer = videos.firstOrNull { it.site == "YouTube" && it.type == "Trailer" && it.official && (iso639Code == null || it.iso6391 == iso639Code) }
-                             ?: videos.firstOrNull { it.site == "YouTube" && it.type == "Trailer" && it.official }
-                             ?: videos.firstOrNull { it.site == "YouTube" && it.type == "Trailer" }
-                             ?: videos.firstOrNull { it.site == "YouTube" }
+                         val trailer = TrailerResolver.select(videos, iso639Code)
                          
                          if (trailer != null) {
                              trailerKey = trailer.key

@@ -50,6 +50,11 @@ eliminar. Swift/Xcode no está instalado en este host, por lo que la compilació
 Apple y la validación en hardware siguen pendientes; no se presenta como una
 verificación de Xcode.
 
+Películas y series usan ahora el mismo `TrailerResolver`, que prioriza trailers
+oficiales de YouTube en el idioma preferido y evita que cada pantalla aplique
+una política distinta. La prueba unitaria móvil y la compilación móvil/TV pasan;
+la validación del extractor y de reproducción sigue pendiente en hardware real.
+
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
 
