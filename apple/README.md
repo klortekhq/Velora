@@ -19,3 +19,6 @@ requieren macOS con Xcode; este host Windows no certifica todavía esos targets.
 Los textos del shell se sirven mediante recursos nativos `Localizable.strings`
 en español, inglés, francés y alemán; la opción automática sigue el idioma del
 dispositivo y una selección explícita se aplica al entorno SwiftUI.
+
+Los ajustes del shell se persisten de forma local mediante `VeloraSettingsStore`
+usando datos Codable. No se sincronizan con Jellyfin ni entre dispositivos.

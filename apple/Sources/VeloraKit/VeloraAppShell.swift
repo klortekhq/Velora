@@ -11,15 +11,20 @@ public final class VeloraAppModel: ObservableObject {
     @Published public private(set) var isAuthenticated = false
     @Published public private(set) var items: [JellyfinItem] = []
     @Published public var errorMessage: String?
-    @Published public var settings = VeloraSettings.systemDefault()
+    @Published public var settings: VeloraSettings {
+        didSet { settingsStore.save(settings) }
+    }
 
     public let platform: VeloraPlatform
     private let client: JellyfinClient
+    private let settingsStore: VeloraSettingsStore
     private var session: JellyfinSession?
 
     public init(platform: VeloraPlatform, serverURL: URL) throws {
         self.platform = platform
         self.client = try JellyfinClient(serverURL: serverURL)
+        self.settingsStore = VeloraSettingsStore()
+        self.settings = settingsStore.load() ?? VeloraSettings.systemDefault()
     }
 
     public func signIn(username: String, password: String) async {

@@ -40,6 +40,31 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(restored, settings)
     }
 
+    func testSettingsStoreRoundTripsDeviceLocalPreferences() {
+        let suiteName = "velora.settings.tests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer {
+            defaults.removePersistentDomain(forName: suiteName)
+        }
+
+        let store = VeloraSettingsStore(defaults: defaults, key: "settings")
+        let expected = VeloraSettings(
+            languageIdentifier: VeloraLanguage.french.rawValue,
+            preferredAudioLanguage: "fr",
+            subtitlePreference: .preferred,
+            preferredSubtitleLanguage: "fr",
+            performanceMode: .balanced,
+            themeMusicEnabled: true,
+            themeMusicVolume: 0.42
+        )
+
+        XCTAssertNil(store.load())
+        store.save(expected)
+        XCTAssertEqual(store.load(), expected)
+        store.remove()
+        XCTAssertNil(store.load())
+    }
+
     func testLanguageSelectionUsesDeviceLocaleByDefaultAndSupportsSupportedLocales() {
         let automatic = VeloraSettings()
         XCTAssertFalse(automatic.appLocale.identifier.isEmpty)

@@ -62,6 +62,33 @@ public struct VeloraSettings: Codable, Equatable, Sendable {
     }
 }
 
+/// Stores device-local preferences without coupling them to the Jellyfin
+/// account or to another platform. The injected defaults/key make the store
+/// deterministic in tests and allow an app target to provide its own scope.
+public final class VeloraSettingsStore: @unchecked Sendable {
+    private let defaults: UserDefaults
+    private let key: String
+
+    public init(defaults: UserDefaults = .standard, key: String = "velora.settings") {
+        self.defaults = defaults
+        self.key = key
+    }
+
+    public func load() -> VeloraSettings? {
+        guard let data = defaults.data(forKey: key) else { return nil }
+        return try? JSONDecoder().decode(VeloraSettings.self, from: data)
+    }
+
+    public func save(_ settings: VeloraSettings) {
+        guard let data = try? JSONEncoder().encode(settings) else { return }
+        defaults.set(data, forKey: key)
+    }
+
+    public func remove() {
+        defaults.removeObject(forKey: key)
+    }
+}
+
 public struct JellyfinSession: Codable, Equatable, Sendable {
     public let accessToken: String
     public let userID: String
