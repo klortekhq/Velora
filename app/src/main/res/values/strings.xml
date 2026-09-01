@@ -76,6 +76,8 @@
     <string name="live_tv_favorites">Favoritos</string>
     <string name="live_tv_add_favorite">Añadir a favoritos</string>
     <string name="live_tv_remove_favorite">Quitar de favoritos</string>
+    <string name="live_tv_previous_channel">Canal anterior</string>
+    <string name="live_tv_next_channel">Siguiente canal</string>
     <string name="login_title">Iniciar sesión</string>
     <string name="login_connecting">Conectando con %1$s</string>
     <string name="login_other_options">Otras opciones:</string>
