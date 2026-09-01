@@ -27,6 +27,9 @@ All notable changes to Velora will be documented in this file.
 - Amplía el índice offline con fechas persistentes de creación, finalización y
   última reproducción, manteniendo la migración de instalaciones existentes y
   preparando una limpieza inteligente basada en actividad real.
+- Refuerza el límite de almacenamiento offline midiendo también transferencias
+  parciales y archivos privados que no tengan una fila activa en la base de
+  datos, evitando subestimar el espacio ocupado tras una interrupción.
 
 ## 1.2.85
 

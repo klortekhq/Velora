@@ -86,7 +86,7 @@ object OfflineDownloadManager {
 
         // Evaluate before removing a previous failed entry, so a rejected
         // replacement never destroys the user's existing offline state.
-        val managedBytes = load(context)
+        val recordedManagedBytes = load(context)
             .filterNot { it.itemId == itemId }
             .sumOf { entry ->
                 if (entry.totalBytes > 0L) entry.totalBytes else entry.bytesDownloaded.coerceAtLeast(0L)
@@ -96,6 +96,9 @@ object OfflineDownloadManager {
         // different volume and would make the gate report misleading space.
         val storageRoot = File(context.filesDir, "offline/media").apply { mkdirs() }
         val availableBytes = StatFs(storageRoot.path).availableBytes
+        // Use actual bytes on disk and retain the DB estimate as a conservative
+        // floor for legacy rows whose provider URI is no longer inspectable.
+        val managedBytes = maxOf(OfflineStorageEngine.managedBytes(context), recordedManagedBytes)
         val maxBytes = AppSettings(context).offlineMaxStorageBytes.takeIf { it > 0L }
         val decision = OfflineStoragePolicy.evaluate(
             snapshot = OfflineStorageSnapshot(availableBytes = availableBytes, managedBytes = managedBytes),
