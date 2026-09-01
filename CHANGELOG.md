@@ -2,6 +2,14 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.76
+
+### Fixed
+
+- La pantalla de inicio y biblioteca móvil usa componentes Material 3 táctiles
+  para sus acciones, filtros, pestañas y navegación; la variante TV mantiene
+  componentes orientados al mando.
+
 ## 1.2.75
 
 ### Fixed
