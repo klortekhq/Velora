@@ -87,9 +87,8 @@ jobs:
       - name: Guardar artefactos de compilación
         uses: actions/upload-artifact@v4
         with:
-          name: Velora-APK-${{ github.ref_name }}
+          name: Velora-APK-${{ github.ref_name }}-${{ github.run_id }}
           path: dist/
-          overwrite: true
 
       - name: Crear o actualizar release con los APK
         if: startsWith(github.ref, 'refs/tags/')
