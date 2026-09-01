@@ -2,6 +2,19 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.3.0
+
+- Smart Downloads opcional para móvil y tablet, con limpieza segura de
+  contenido visto, retención configurable y protección manual.
+- Persistencia offline SQLite y transferencias gestionadas con reanudación,
+  verificación de integridad y claves estables para evitar colisiones.
+- Cobertura de Smart Downloads en los 13 idiomas Android disponibles.
+- Corrección del comprobador de actualizaciones para comparar versiones
+  semánticas con la versión instalada, sin confundir el `versionCode` interno
+  con una release pública.
+- Verificaciones locales de Android móvil/TV y del cliente web incluidas antes
+  de preparar los artefactos de esta release.
+
 ## 1.2.86
 
 - Añadido Smart Downloads opcional y exclusivo para móvil/tablet: permite

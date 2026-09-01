@@ -9,8 +9,8 @@ La única rama publicada es `main`. Las notas históricas que aparecen más abaj
 se conservan como referencia y no representan el estado actual de la release.
 
 La release pública más reciente verificada es `v1.2.85`; sus artefactos están
-comprobados en la página de la release. La fuente actual es `1.2.86`, todavía
-en preparación local. Las validaciones locales de Android móvil/TV terminaron
+comprobados en la página de la release. La fuente actual es `1.3.0`, en
+preparación local. Las validaciones locales de Android móvil/TV terminaron
 correctamente tras endurecer el motor de decisión de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
@@ -19,9 +19,9 @@ El bloque actual añade Smart Downloads móvil/tablet de forma opt-in. La
 migración SQLite conserva los estados de visto y protegido, y la limpieza no
 elimina nunca una descarga marcada para conservar. La validación móvil pasa;
 la política y la identidad de transferencias gestionadas tienen pruebas de
-regresión. No se ha creado una release nueva porque la versión 1.2.86 sigue
-acumulando cambios y esta funcionalidad se publicará junto con un bloque de
-tamaño suficiente.
+regresión. La release 1.3.0 agrupa este bloque funcional con los cambios
+offline e i18n anteriores; sus artefactos siguen pendientes de publicación
+final tras la compilación reproducible.
 
 La revisión `v1.2.82` añade una acción Atrás visible a la filmografía y ha
 superado `compileMobileDebugKotlin` y `testMobileDebugUnitTest` localmente.
@@ -64,7 +64,7 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
 - Generated local build/device artifacts are now ignored by Git.
 - The public README now identifies the current release and uses the exact
   mobile/TV build and test tasks used by CI.
-- Release metadata is synchronized at source version 1.2.86 across Android, webOS,
+- Release metadata is synchronized at source version 1.3.0 across Android, webOS,
   Samsung and VIDAA manifests.
 - The current source includes live application of preferred audio and subtitle
   settings to the existing Media3 player; the Android tag workflow is the
@@ -133,9 +133,9 @@ Oleada 3 — convergencia de la consulta real de bibliotecas y publicación.
   aceptar descargas basándose en el espacio de otro volumen. La compilación y
   los unit tests móviles pasan tras este cambio.
 
-## Release actual: v1.2.86 (preparación)
+## Release actual: v1.3.0 (preparación)
 
-La fuente actual es `1.2.86`. Incluye las correcciones de presentación para el
+La fuente actual es `1.3.0`. Incluye las correcciones de presentación para el
 renderizador GL y el contenedor móvil de MPV, además de una negociación de
 reproducción que respeta la calidad elegida, los límites reales del dispositivo
 y el passthrough de audio. La pantalla de detalles móvil usa ahora componentes

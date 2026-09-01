@@ -101,8 +101,13 @@ object UpdateService {
      * @param localVersionCode Current app version code
      * @return true if remote version is newer
      */
-    fun updateAvailable(remoteVersionCode: Int, localVersionCode: Int): Boolean {
-        return remoteVersionCode > localVersionCode
+    fun updateAvailable(remoteVersionCode: Int, localVersionCode: Int, localVersionName: String? = null): Boolean {
+        // Android versionCode is monotonic for Play Store upgrades and does not
+        // necessarily share the same numeric shape as a semantic release tag.
+        // Prefer the installed versionName when it is available so 1.3.0 is
+        // not incorrectly treated as older than a historical 1.2.x code.
+        val comparableLocal = localVersionName?.let { parseVersion(it) } ?: localVersionCode
+        return remoteVersionCode > comparableLocal
     }
     
     /**
