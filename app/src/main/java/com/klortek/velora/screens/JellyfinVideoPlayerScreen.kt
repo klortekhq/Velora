@@ -4058,7 +4058,17 @@ fun JellyfinVideoPlayerScreen(
                                     
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier.width(80.dp)
+                                        modifier = Modifier
+                                            .width(80.dp)
+                                            .clickable {
+                                                context.startActivity(
+                                                    com.klortek.velora.CastInfoActivity.createIntent(
+                                                        context = context,
+                                                        person = person
+                                                    )
+                                                )
+                                            }
+                                            .focusable()
                                     ) {
                                         Box(
                                             modifier = Modifier
@@ -4072,7 +4082,7 @@ fun JellyfinVideoPlayerScreen(
                                                         .data(imageUrl)
                                                         .crossfade(true)
                                                         .build(),
-                                                    contentDescription = person.Name ?: "",
+                                                    contentDescription = person.Name,
                                                     modifier = Modifier.fillMaxSize(),
                                                     contentScale = ContentScale.Crop
                                                 )
