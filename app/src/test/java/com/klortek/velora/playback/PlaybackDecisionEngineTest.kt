@@ -56,13 +56,37 @@ class PlaybackDecisionEngineTest {
     }
 
     @Test
-    fun selectedPresetRejectsSourceAboveItsBitrate() {
+    fun selectedPresetTranscodesSourceAboveItsBitrate() {
         assertEquals(
-            PlaybackPath.DIRECT_STREAM,
+            PlaybackPath.TRANSCODE,
             PlaybackDecisionEngine.decide(
                 PlaybackSource(videoCodec = "h264", audioCodec = "aac", width = 1920, height = 1080, bitrateKbps = 30_000),
                 capable,
                 PlaybackQuality.FULL_HD_10
+            )
+        )
+    }
+
+    @Test
+    fun detailedDecisionExplainsQualityFallback() {
+        val decision = PlaybackDecisionEngine.decideDetailed(
+            PlaybackSource(videoCodec = "h264", audioCodec = "aac", width = 1920, height = 1080, bitrateKbps = 30_000),
+            capable,
+            PlaybackQuality.FULL_HD_10
+        )
+
+        assertEquals(PlaybackPath.TRANSCODE, decision.path)
+        assertEquals("source exceeds device or selected-quality capabilities", decision.reason)
+    }
+
+    @Test
+    fun deviceResolutionLimitPreventsDirectStream() {
+        val limited = capable.copy(maxWidth = 1920, maxHeight = 1080)
+        assertEquals(
+            PlaybackPath.TRANSCODE,
+            PlaybackDecisionEngine.decide(
+                PlaybackSource(videoCodec = "hevc", audioCodec = "eac3", width = 3840, height = 2160),
+                limited
             )
         )
     }
@@ -75,7 +99,7 @@ class PlaybackDecisionEngineTest {
             audioPassthrough = false
         )
         assertEquals(
-            PlaybackPath.REMUX,
+            PlaybackPath.TRANSCODE,
             PlaybackDecisionEngine.decide(
                 PlaybackSource(videoCodec = "hevc", audioCodec = "truehd", width = 1920, height = 1080),
                 withPassthrough
