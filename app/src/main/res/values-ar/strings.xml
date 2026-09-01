@@ -15,4 +15,10 @@
     <string name="settings_subtitle_language">لغة الترجمة</string>
     <string name="settings_subtitle_language_description">يتبع التلقائي إعداد الخادم؛ وتفضل الخيارات الأخرى هذه اللغة عند توفرها.</string>
     <string name="library_reset_filters">إعادة ضبط عوامل التصفية</string>
+    <string name="settings_smart_downloads">التنزيلات الذكية</string>
+    <string name="settings_smart_downloads_description">إدارة التنزيلات المشاهدة تلقائياً والاحتفاظ بالمحتوى المحمي.</string>
+    <string name="settings_smart_remove_watched">إزالة المحتوى المشاهد</string>
+    <string name="settings_smart_remove_watched_description">إزالة الأفلام والحلقات المحددة كمشاهدة تلقائياً.</string>
+    <string name="settings_smart_keep_episodes">الحلقات غير المشاهدة التي يجب الاحتفاظ بها</string>
+    <string name="settings_smart_keep_episodes_description">الاحتفاظ بهذا العدد من الحلقات غير المشاهدة عند التنظيف.</string>
 </resources>

@@ -15,4 +15,10 @@
     <string name="settings_subtitle_language">Lingua dei sottotitoli</string>
     <string name="settings_subtitle_language_description">Automatico segue la preferenza del server; le altre scelte preferiscono questa lingua se disponibile.</string>
     <string name="library_reset_filters">Reimposta filtri</string>
+    <string name="settings_smart_downloads">Download intelligenti</string>
+    <string name="settings_smart_downloads_description">Gestisce automaticamente i download guardati e conserva quelli protetti.</string>
+    <string name="settings_smart_remove_watched">Rimuovi contenuti guardati</string>
+    <string name="settings_smart_remove_watched_description">Rimuove automaticamente film ed episodi contrassegnati come guardati.</string>
+    <string name="settings_smart_keep_episodes">Episodi non guardati da conservare</string>
+    <string name="settings_smart_keep_episodes_description">Conserva questo numero di episodi non guardati durante la pulizia.</string>
 </resources>
