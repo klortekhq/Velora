@@ -95,6 +95,25 @@ class OfflineDownloadTest {
     }
 
     @Test
+    fun managedEntriesForDifferentQualitiesRemainDistinct() {
+        val original = OfflineDownload(
+            itemId = "movie-1",
+            name = "Película",
+            type = "Movie",
+            downloadId = 0L,
+            quality = OfflineDownloadQuality.ORIGINAL.storageKey,
+            workName = "offline-original"
+        )
+        val medium = original.copy(
+            quality = OfflineDownloadQuality.MEDIUM.storageKey,
+            workName = "offline-medium"
+        )
+
+        assertFalse(sameOfflineEntry(original, medium))
+        assertTrue(original.stableKey != medium.stableKey)
+    }
+
+    @Test
     fun smartCleanupKeepsDistinctManagedWatchedEntries() {
         val first = OfflineDownload(
             "episode-1", "E1", "Episode", downloadId = 0L,
