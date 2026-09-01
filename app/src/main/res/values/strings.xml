@@ -187,6 +187,14 @@
     <string name="player_solutions">Soluciones:</string>
     <string name="player_aspect_title">Formato de imagen</string>
     <string name="player_aspect_description">Selecciona cómo quieres ver el vídeo</string>
+    <string name="player_aspect_fit">Ajustar</string>
+    <string name="player_aspect_fill">Rellenar</string>
+    <string name="player_aspect_four_three">4:3</string>
+    <string name="player_aspect_letterbox">16:9</string>
+    <string name="player_aspect_cinema">Cine</string>
+    <string name="player_aspect_stretch">Estirar</string>
+    <string name="player_aspect_original">Original</string>
+    <string name="player_aspect_content_description">Modo de imagen: %1$s</string>
     <string name="settings_smart_downloads">Descargas inteligentes</string>
     <string name="settings_smart_downloads_description">Gestiona automáticamente las descargas vistas y conserva las protegidas.</string>
     <string name="settings_smart_remove_watched">Eliminar contenido visto</string>
