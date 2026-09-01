@@ -758,3 +758,9 @@ Jellyfin y hacen ciclo al alcanzar un extremo. La selección se mantiene en
 la lista filtrada y la reproducción normal no muestra esos controles. La
 lógica tiene pruebas unitarias y las compilaciones móvil y TV pasan; no se
 publica una release hasta acumular un bloque funcional mayor.
+
+La ficha de reproducción ahora hace interactiva la fila de reparto: tocar o
+enfocar una persona abre su ficha de Velora y permite consultar sus películas y
+series disponibles. Si Jellyfin no entrega el identificador de la persona, la
+ficha conserva la resolución por nombre. La compilación móvil/TV y las pruebas
+unitarias relevantes pasan; este arreglo aislado no genera una nueva release.
