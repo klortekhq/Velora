@@ -49,6 +49,9 @@ class MainActivity : ComponentActivity() {
             android.util.Log.e("MainActivity", "Error getting version code", e)
             1 // Fallback to 1
         }
+        val versionName = runCatching {
+            packageManager.getPackageInfo(packageName, 0).versionName
+        }.getOrNull()
         
         setContent {
             JellyfinAppTheme {
@@ -56,7 +59,8 @@ class MainActivity : ComponentActivity() {
                 val settings = AppSettings(this)
                 if (false && settings.autoUpdateEnabled) { // custom build: never auto-overwrite from upstream
                     UpdateChecker(
-                        localVersionCode = versionCode
+                        localVersionCode = versionCode,
+                        localVersionName = versionName
                     )
                 }
                 
@@ -163,7 +167,7 @@ class MainActivity : ComponentActivity() {
  * Composable that checks for app updates on startup
  */
 @Composable
-private fun UpdateChecker(localVersionCode: Int) {
+private fun UpdateChecker(localVersionCode: Int, localVersionName: String?) {
     var showUpdateDialog by remember { mutableStateOf(false) }
     var latestRelease by remember { mutableStateOf<GitHubRelease?>(null) }
     
@@ -173,7 +177,7 @@ private fun UpdateChecker(localVersionCode: Int) {
             val release = UpdateService.getLatestRelease() ?: return@LaunchedEffect
             val remoteVersionCode = UpdateService.parseVersion(release.tagName)
             
-            if (UpdateService.updateAvailable(remoteVersionCode, localVersionCode)) {
+            if (UpdateService.updateAvailable(remoteVersionCode, localVersionCode, localVersionName)) {
                 android.util.Log.d("UpdateChecker", "Update available: ${release.name} (remote: $remoteVersionCode, local: $localVersionCode)")
                 latestRelease = release
                 showUpdateDialog = true

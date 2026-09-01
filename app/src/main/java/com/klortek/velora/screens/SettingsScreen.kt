@@ -2295,6 +2295,9 @@ fun SettingsScreen(
                                                     context.packageManager.getPackageInfo(context.packageName, 0).versionCode
                                                 }
                                             } catch (e: Exception) { 1 }
+                                            val versionName = runCatching {
+                                                context.packageManager.getPackageInfo(context.packageName, 0).versionName
+                                            }.getOrNull()
                                             
                                             val release = withContext(Dispatchers.IO) {
                                                 UpdateService.getLatestRelease()
@@ -2302,7 +2305,7 @@ fun SettingsScreen(
                                             
                                             if (release != null) {
                                                 val remoteVersionCode = UpdateService.parseVersion(release.tagName)
-                                                if (UpdateService.updateAvailable(remoteVersionCode, versionCode)) {
+                                                if (UpdateService.updateAvailable(remoteVersionCode, versionCode, versionName)) {
                                                     latestRelease = release
                                                     showUpdateDialog = true
                                                     updateCheckMessage = "Update available: ${release.name}"
