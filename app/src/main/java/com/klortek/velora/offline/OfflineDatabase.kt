@@ -10,7 +10,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     "velora_offline.db",
     null,
-    6
+    7
 ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -28,6 +28,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                 reason INTEGER NOT NULL,
                 bytes_downloaded INTEGER NOT NULL,
                 total_bytes INTEGER NOT NULL,
+                media_source_id TEXT,
                 checksum_sha256 TEXT,
                 work_name TEXT,
                 created_at INTEGER NOT NULL DEFAULT 0,
@@ -59,6 +60,9 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
             db.execSQL("ALTER TABLE downloads ADD COLUMN is_watched INTEGER NOT NULL DEFAULT 0")
             db.execSQL("ALTER TABLE downloads ADD COLUMN keep_download INTEGER NOT NULL DEFAULT 0")
         }
+        if (oldVersion < 7) {
+            db.execSQL("ALTER TABLE downloads ADD COLUMN media_source_id TEXT")
+        }
     }
 
     fun readAll(): List<OfflineDownload> {
@@ -81,6 +85,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                     reason = cursor.getInt(cursor.getColumnIndexOrThrow("reason")),
                     bytesDownloaded = cursor.getLong(cursor.getColumnIndexOrThrow("bytes_downloaded")),
                     totalBytes = cursor.getLong(cursor.getColumnIndexOrThrow("total_bytes")),
+                    mediaSourceId = cursor.getStringOrNull("media_source_id"),
                     checksumSha256 = cursor.getStringOrNull("checksum_sha256"),
                     workName = cursor.getStringOrNull("work_name"),
                     createdAtEpochMs = cursor.getLong(cursor.getColumnIndexOrThrow("created_at")),
@@ -111,6 +116,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         put("download_id", downloadId); put("local_path", localPath); put("status", status); put("reason", reason)
         put("quality", quality)
         put("bytes_downloaded", bytesDownloaded); put("total_bytes", totalBytes)
+        put("media_source_id", mediaSourceId)
         put("checksum_sha256", checksumSha256); put("work_name", workName)
         put("created_at", createdAtEpochMs); put("completed_at", completedAtEpochMs); put("last_played_at", lastPlayedAtEpochMs)
         put("is_watched", if (isWatched) 1 else 0); put("keep_download", if (keepDownload) 1 else 0)

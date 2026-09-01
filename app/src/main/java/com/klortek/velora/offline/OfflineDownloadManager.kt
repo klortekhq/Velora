@@ -36,7 +36,9 @@ data class OfflineDownload(
     val completedAtEpochMs: Long? = null,
     val lastPlayedAtEpochMs: Long? = null,
     val isWatched: Boolean = false,
-    val keepDownload: Boolean = false
+    val keepDownload: Boolean = false,
+    /** Jellyfin media source selected for this offline representation. */
+    val mediaSourceId: String? = null
 ) {
     /** Provider-neutral state used by UI and future managed-transfer engines. */
     val state: OfflineDownloadState get() = offlineDownloadState(status, reason)
@@ -93,7 +95,9 @@ object OfflineDownloadManager {
         check(PlatformCapabilities.supportsOfflineDownloads) {
             "Offline downloads are only supported on mobile and tablet builds"
         }
-        val existing = load(context).firstOrNull { it.itemId == itemId }
+        val existing = load(context).firstOrNull {
+            it.itemId == itemId && it.quality == quality.storageKey
+        }
         if (existing != null) {
             if (existing.isComplete || existing.status == DownloadManager.STATUS_PENDING ||
                 existing.status == DownloadManager.STATUS_RUNNING) {
@@ -135,6 +139,7 @@ object OfflineDownloadManager {
             episodeNumber = episodeNumber,
             downloadId = 0L,
             quality = quality.storageKey,
+            mediaSourceId = mediaSourceId,
             status = DownloadManager.STATUS_PENDING,
             workName = workName,
             createdAtEpochMs = System.currentTimeMillis()
