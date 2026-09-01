@@ -58,6 +58,7 @@
     <string name="live_tv_remove_favorite">Retirer des favoris</string>
     <string name="live_tv_previous_channel">Chaîne précédente</string>
     <string name="live_tv_next_channel">Chaîne suivante</string>
+    <string name="player_settings">Réglages du lecteur</string>
     <string name="live_tv">Télévision en direct</string>
     <string name="live_tv_nav">Télévision en direct</string>
     <string name="live_tv_loading">Chargement des chaînes…</string>

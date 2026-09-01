@@ -3009,11 +3009,11 @@ fun JellyfinVideoPlayerScreen(
                                                         existingBtn.visibility = android.view.View.GONE
                                                         
                                                         val customSettingsButton = android.widget.ImageButton(ctx).apply {
-                                                            setImageResource(android.R.drawable.ic_menu_sort_by_size)
+                                                            setImageResource(com.klortek.velora.R.drawable.ic_player_settings)
                                                             background = android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT)
                                                             scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
                                                             setPadding(16, 16, 16, 16)
-                                                            contentDescription = "Ajustes del reproductor"
+                                                            contentDescription = ctx.getString(com.klortek.velora.R.string.player_settings)
                                                             isFocusable = true
                                                             isClickable = true
                                                             layoutParams = android.view.ViewGroup.LayoutParams(
@@ -3208,11 +3208,11 @@ fun JellyfinVideoPlayerScreen(
                                                 
                                                 // Create custom settings button with better icon
                                                 val customSettingsButton = android.widget.ImageButton(ctx).apply {
-                                                    setImageResource(android.R.drawable.ic_menu_sort_by_size) // List icon
+                                                    setImageResource(com.klortek.velora.R.drawable.ic_player_settings)
                                                     background = android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT)
                                                     scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
                                                     setPadding(16, 16, 16, 16)
-                                                    contentDescription = "Ajustes del reproductor"
+                                                    contentDescription = ctx.getString(com.klortek.velora.R.string.player_settings)
                                                     isFocusable = true
                                                     isClickable = true
                                                     
@@ -4876,7 +4876,7 @@ fun ExoPlayerSettingsMenu(
                             "audio" -> "Pistas de audio"
                             "speed" -> "Velocidad de reproducción"
                             "quality" -> "Calidad"
-                            else -> "Ajustes del reproductor"
+                            else -> stringResource(R.string.player_settings)
                         },
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.8f
