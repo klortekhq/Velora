@@ -13,7 +13,8 @@ on:
     branches:
       - main
     tags:
-      - 'v*'
+      # Keep public releases focused on meaningful product milestones.
+      - 'v?.?.0'
   pull_request:
     paths:
       - 'web/**'
