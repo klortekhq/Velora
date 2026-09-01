@@ -147,4 +147,13 @@ class OfflineDownloadTest {
         assertEquals(2, candidates.size)
         assertEquals(setOf("offline-one", "offline-two"), candidates.mapNotNull { it.workName }.toSet())
     }
+
+    @Test
+    fun workerRetriesTransientResponsesButFailsPermanentClientErrors() {
+        assertTrue(OfflineDownloadWorker.Companion.isRetryableResponse(408))
+        assertTrue(OfflineDownloadWorker.Companion.isRetryableResponse(429))
+        assertTrue(OfflineDownloadWorker.Companion.isRetryableResponse(503))
+        assertFalse(OfflineDownloadWorker.Companion.isRetryableResponse(404))
+        assertFalse(OfflineDownloadWorker.Companion.isRetryableResponse(401))
+    }
 }

@@ -794,3 +794,10 @@ y elimina la identidad del proveedor. Las descargas nuevas ya usan
 WorkManager y las antiguas siguen siendo legibles durante la migración. Pasan
 las pruebas offline, la compilación Kotlin móvil y la compilación Kotlin TV;
 la recuperación E2E en hardware real continúa pendiente.
+
+El worker de descargas distingue ahora errores permanentes de cliente de
+errores transitorios: 408, 429 y respuestas 5xx se reintentan; errores como
+401 y 404 terminan correctamente. Si WorkManager detiene una ejecución por
+cambio temporal de ciclo de vida o restricciones, se conserva el archivo
+parcial para reanudarlo. Las pruebas offline y las compilaciones móvil/TV
+pasan; la prueba E2E en dispositivos reales sigue pendiente.
