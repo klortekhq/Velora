@@ -2,6 +2,13 @@
 
 All notable changes to Velora will be documented in this file.
 
+## 1.2.78
+
+### CI/CD
+
+- Las releases adjuntan todos los paquetes web y Smart TV generados, además
+  de los artefactos web principales y sus hashes.
+
 ## 1.2.77
 
 ### Security
