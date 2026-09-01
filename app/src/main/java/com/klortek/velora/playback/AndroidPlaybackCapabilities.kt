@@ -34,6 +34,7 @@ object AndroidPlaybackCapabilities {
             videoCodecs = mimeTypes.mapNotNull(::videoCodecForMime).toSet(),
             audioCodecs = mimeTypes.mapNotNull(::audioCodecForMime).toSet(),
             hdrFormats = hdrFormats,
+            hdrCapabilityKnown = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N,
             // Containers and passthrough are intentionally left open: Android's
             // codec list does not prove container or HDMI-path compatibility.
             containers = emptySet(),

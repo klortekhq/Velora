@@ -688,3 +688,9 @@ codifica las credenciales mediante el serializador JSON y evita registrar
 respuestas o mensajes de error que puedan contener tokens o datos sensibles.
 La compilación y los unit tests de móvil pasan; no se ha creado una release
 por tratarse de una corrección de seguridad acotada.
+
+El motor canónico de reproducción distingue ahora entre HDR desconocido y HDR
+detectado explícitamente: en Android, un display SDR conocido ya no se trata
+como compatible con HDR. Los presets de calidad también comprueban anchura y
+altura, mientras `Original` sigue sin imponer límites artificiales. Las
+variantes Android móvil y TV compilan y sus unit tests pasan conjuntamente.
