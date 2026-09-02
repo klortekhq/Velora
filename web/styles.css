@@ -39,6 +39,10 @@ header { display: flex; gap: 12px; align-items: center; justify-content: space-b
 .library-filters label { display: grid; gap: 5px; color: var(--muted); font-size: .9rem; font-weight: 700; }
 .library-filters select { min-width: 170px; border: 1px solid #35616b; border-radius: 12px; padding: 10px 12px; color: #fff; background: #071015; }
 .library-filters .checkbox { display: flex; align-items: center; grid-auto-flow: column; padding: 10px 0; }
+.live-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin: 16px 0; padding: 12px 14px; border: 1px solid #244952; border-radius: 14px; background: #0c1c22; }
+.live-filters label { display: grid; gap: 5px; color: var(--muted); font-size: .9rem; font-weight: 700; }
+.live-filters .checkbox { display: flex; align-items: center; grid-auto-flow: column; padding: 10px 0; }
+.live-filters select { min-width: 170px; border: 1px solid #35616b; border-radius: 12px; padding: 10px 12px; color: #fff; background: #071015; }
 .hero h1 { margin: .2rem 0; font-size: clamp(1.6rem, 4vw, 3rem); }
 .muted, .empty, .error { color: var(--muted); }
 .empty, .error { padding: 36px; text-align: center; }

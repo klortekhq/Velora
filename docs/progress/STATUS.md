@@ -18,6 +18,13 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+El cliente web añade ahora filtros funcionales de Live TV por canales favoritos
+y por grupo. Los grupos se derivan de `Tags`, `ChannelType` y `ServiceName` de
+Jellyfin, con una opción explícita para canales sin grupo; las preferencias se
+conservan localmente. La sintaxis, las pruebas web y el empaquetado web se han
+verificado de nuevo. Este cambio se sube a `main`, pero no genera APK ni
+release por sí solo.
+
 La base Apple incorpora ahora entrypoints SwiftPM separados `VeloraMobile` y
 `VeloraTV`, ambos sobre `VeloraKit`; el primero selecciona iPhone/iPad y el
 segundo fuerza tvOS, manteniendo streaming-only en televisión. La compilación

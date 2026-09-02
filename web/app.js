@@ -35,6 +35,7 @@
       saved: 'Preferencias guardadas', settingDescription: 'Se aplican al próximo contenido y se guardan en este dispositivo.',
       cast: 'Reparto', actorWorks: 'Películas y series de este actor', noActorWorks: 'No hay otros títulos disponibles.', personError: 'No se pudo cargar la filmografía',
       sortAndFilter: 'Ordenar y filtrar', sortName: 'Nombre', sortDateAdded: 'Fecha de incorporación', sortPremiere: 'Fecha de estreno', sortRuntime: 'Duración', sortRating: 'Valoración de la comunidad', favorites: 'Favoritos', playbackState: 'Estado de reproducción', playbackAll: 'Todos', playbackWatched: 'Vistos', playbackUnwatched: 'No vistos',
+      liveAll: 'Todos los canales', liveFavorites: 'Solo favoritos', liveGroup: 'Grupo de canales', liveNoChannels: 'No hay canales disponibles',
       loginError: 'No se pudo iniciar sesión', playbackError: 'El dispositivo no puede reproducir este formato directamente.'
     },
     en: {
@@ -50,6 +51,7 @@
       saved: 'Preferences saved', settingDescription: 'Applied to new playback and saved on this device.', cast: 'Cast',
       actorWorks: 'Movies and series with this actor', noActorWorks: 'No other titles available.', personError: 'Could not load filmography',
       sortAndFilter: 'Sort and filter', sortName: 'Name', sortDateAdded: 'Date added', sortPremiere: 'Premiere date', sortRuntime: 'Runtime', sortRating: 'Community rating', favorites: 'Favorites', playbackState: 'Playback state', playbackAll: 'All', playbackWatched: 'Watched', playbackUnwatched: 'Unwatched',
+      liveAll: 'All channels', liveFavorites: 'Favorites only', liveGroup: 'Channel group', liveNoChannels: 'No channels available',
       loginError: 'Sign-in failed', playbackError: 'This device cannot play this format directly.'
     },
     pt: {
@@ -483,6 +485,31 @@
       }).join('') + '</div></section>';
   }
 
+  function liveChannelGroups(channels) {
+    var groups = {};
+    channels.forEach(function (channel) {
+      var tags = Array.isArray(channel.Tags) ? channel.Tags : [];
+      var names = tags.filter(Boolean).map(String);
+      if (channel.ChannelType && names.indexOf(channel.ChannelType) === -1) names.push(channel.ChannelType);
+      if (channel.ServiceName && names.indexOf(channel.ServiceName) === -1) names.push(channel.ServiceName);
+      if (!names.length) names.push('Sin grupo');
+      names.forEach(function (name) { groups[name] = true; });
+    });
+    return Object.keys(groups).sort(function (left, right) { return left.localeCompare(right); });
+  }
+
+  function filteredLiveChannels(channels) {
+    var favoriteOnly = preference('veloraLiveFavorites', 'false') === 'true';
+    var group = preference('veloraLiveGroup', 'all');
+    return channels.filter(function (channel) {
+      if (favoriteOnly && !(channel.UserData && channel.UserData.IsFavorite)) return false;
+      if (group === 'all') return true;
+      var tags = Array.isArray(channel.Tags) ? channel.Tags.map(String) : [];
+      return tags.indexOf(group) !== -1 || channel.ChannelType === group || channel.ServiceName === group ||
+        (group === 'Sin grupo' && !tags.length && !channel.ChannelType && !channel.ServiceName);
+    });
+  }
+
   function bindCards() {
     Array.prototype.forEach.call(document.querySelectorAll('.card'), function (card) {
       var open = function () { openItem(card.getAttribute('data-id')); };
@@ -740,6 +767,8 @@
     var movies = sortedLibraryItems(items.filter(function (item) { return item.Type === 'Movie'; }));
     var series = sortedLibraryItems(items.filter(function (item) { return item.Type === 'Series'; }));
     var live = state.liveChannels && state.liveChannels.length ? state.liveChannels : items.filter(function (item) { return item.Type === 'LiveTvChannel'; });
+    var liveGroups = liveChannelGroups(live);
+    var visibleLive = filteredLiveChannels(live);
     var sort = preference('veloraLibrarySort', 'name');
     var playback = preference('veloraLibraryPlayback', 'all');
     var favoritesOnly = preference('veloraLibraryFavorites', 'false') === 'true';
@@ -759,11 +788,13 @@
       '<option value="all"' + (playback === 'all' ? ' selected' : '') + '>' + esc(t('playbackAll')) + '</option>' +
       '<option value="watched"' + (playback === 'watched' ? ' selected' : '') + '>' + esc(t('playbackWatched')) + '</option>' +
       '<option value="unwatched"' + (playback === 'unwatched' ? ' selected' : '') + '>' + esc(t('playbackUnwatched')) + '</option></select></label></div></div>' +
+      (live.length ? '<div class="live-filters" aria-label="' + esc(t('live')) + '"><label class="checkbox"><input type="checkbox" id="liveFavorites"' + (preference('veloraLiveFavorites', 'false') === 'true' ? ' checked' : '') + '>' + esc(t('liveFavorites')) + '</label>' +
+      (liveGroups.length ? '<label>' + esc(t('liveGroup')) + '<select id="liveGroup"><option value="all">' + esc(t('all')) + '</option>' + liveGroups.map(function (group) { return '<option value="' + esc(group) + '"' + (preference('veloraLiveGroup', 'all') === group ? ' selected' : '') + '>' + esc(group) + '</option>'; }).join('') + '</select></label>' : '') + '</div>' : '') +
       '<nav class="tabs" aria-label="' + esc(t('library')) + '"><button type="button" class="active" data-tab="all">' + esc(t('all')) + '</button>' +
       '<button type="button" data-tab="movies">' + esc(t('movies')) + '</button><button type="button" data-tab="series">' + esc(t('series')) + '</button>' +
       (live.length ? '<button type="button" data-tab="live">' + esc(t('live')) + '</button>' : '') +
       '</nav><div id="results">' + section(t('movies'), movies) + section(t('series'), series) +
-       liveSection(t('live'), live) + '</div>';
+       liveSection(t('live'), visibleLive) + '</div>';
 
     var submit = function () {
       state.query = document.querySelector('#query').value;
@@ -785,6 +816,17 @@
       savePreference('veloraLibraryPlayback', event.target.value);
       renderHome();
     };
+    if (live.length) {
+      document.querySelector('#liveFavorites').onchange = function (event) {
+        savePreference('veloraLiveFavorites', event.target.checked ? 'true' : 'false');
+        renderHome();
+      };
+      var liveGroupSelect = document.querySelector('#liveGroup');
+      if (liveGroupSelect) liveGroupSelect.onchange = function (event) {
+        savePreference('veloraLiveGroup', event.target.value);
+        renderHome();
+      };
+    }
     Array.prototype.forEach.call(document.querySelectorAll('[data-tab]'), function (tab) {
       tab.onclick = function () {
         Array.prototype.forEach.call(document.querySelectorAll('[data-tab]'), function (candidate) { candidate.classList.remove('active'); });
@@ -792,8 +834,8 @@
         var view = tab.getAttribute('data-tab');
         document.querySelector('#results').innerHTML = view === 'movies' ? section(t('movies'), movies) :
           view === 'series' ? section(t('series'), series) :
-          view === 'live' ? liveSection(t('live'), live) :
-          section(t('movies'), movies) + section(t('series'), series) + liveSection(t('live'), live);
+          view === 'live' ? liveSection(t('live'), filteredLiveChannels(live)) :
+          section(t('movies'), movies) + section(t('series'), series) + liveSection(t('live'), filteredLiveChannels(live));
         bindCards();
         hydrateProtectedImages(document.querySelector('#results'));
       };
