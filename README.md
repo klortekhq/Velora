@@ -14,7 +14,7 @@ Velora es una aplicación independiente para disfrutar de bibliotecas Jellyfin c
 - Búsqueda, ordenación y filtros con interfaz localizada.
 - Sesión persistente y reconexión automática cuando el servidor vuelve a estar disponible.
 - Televisión en directo integrada en la navegación principal cuando el usuario tiene Live TV habilitada.
-- Canales individuales respetando el orden y los nombres recibidos de Jellyfin, sin agrupar ni normalizar fuentes IPTV.
+- Canales Live TV agrupados por identidad de Jellyfin: se muestra una sola fila homogénea y, cuando existen varias fuentes, se pueden elegir con un toque o con el mando.
 - EPG, programa actual, logos y progreso cuando el servidor los proporciona.
 - Descargas gestionadas dentro de la aplicación para reproducir contenido compatible sin conexión en móvil y tablet; no se muestran en TV ni en navegador.
 - Interfaz cyan, navegación redondeada y layouts específicos para móvil y televisión.
