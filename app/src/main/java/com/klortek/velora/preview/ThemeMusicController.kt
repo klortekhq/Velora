@@ -10,6 +10,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 
 /** Owns one background audio player for the Home screen and releases it safely. */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class ThemeMusicController(context: Context) {
     private val dataSourceFactory = DefaultHttpDataSource.Factory()
     private val player = ExoPlayer.Builder(context.applicationContext)
