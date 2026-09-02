@@ -145,6 +145,12 @@ mediante un grupo común por referencia. Solo una etiqueta semántica `vX.Y.0`
 publica; ambos workflows aportan sus artefactos a la misma release y usan un
 changelog breve en castellano con los cambios funcionales principales.
 
+La base Apple ya no depende de un proveedor externo opcional para mostrar
+carátulas: las tarjetas pueden solicitar artwork autenticado a Jellyfin y
+mantienen un placeholder durante la carga o ante un error. La compilación
+SwiftUI y la validación en iOS, iPadOS y tvOS siguen pendientes de macOS/Xcode
+y hardware Apple, por lo que todavía no se marcan como verificadas.
+
 El bloque actual añade Smart Downloads móvil/tablet de forma opt-in. La
 migración SQLite conserva los estados de visto y protegido, y la limpieza no
 elimina nunca una descarga marcada para conservar. La validación móvil pasa;
