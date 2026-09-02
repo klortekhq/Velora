@@ -76,6 +76,7 @@
     <string name="live_tv_nav">Télévision en direct</string>
     <string name="live_tv_loading">Chargement des chaînes…</string>
     <string name="live_tv_error">Impossible de charger la télévision en direct</string>
+    <string name="live_tv_favorite_update_error">Impossible de mettre à jour le favori</string>
     <string name="live_tv_no_channels">Aucune chaîne de télévision en direct n’est disponible sur ce serveur Jellyfin.</string>
     <string name="live_tv_no_program">Aucune information de programme</string>
     <string name="live_tv_next_program">Suivant : %1$s</string>

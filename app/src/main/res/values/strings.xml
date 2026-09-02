@@ -74,6 +74,7 @@
     <string name="settings_offline_storage_unlimited">Sin límite</string>
     <string name="live_tv_all_channels">Todos</string>
     <string name="live_tv_favorites">Favoritos</string>
+    <string name="live_tv_favorite_update_error">No se pudo actualizar el favorito</string>
     <string name="live_tv_add_favorite">Añadir a favoritos</string>
     <string name="live_tv_remove_favorite">Quitar de favoritos</string>
     <string name="live_tv_previous_channel">Canal anterior</string>
