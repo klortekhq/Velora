@@ -25,15 +25,19 @@ la interfaz y la compilación móvil/TV se valida tras el cambio.
 
 El lint móvil detectó y se corrigió el uso de APIs no disponibles en Android
 21 en los servicios de música y en el reloj; la compilación móvil/TV posterior
-supera el cambio. El lint completo aún queda abierto por deuda previa (304
-errores y 297 advertencias en el informe actual, principalmente opt-in de
-Media3, compatibilidad API y estilo); no se presenta como un lint limpio.
+supera el cambio. El lint completo aún queda abierto por deuda previa (232
+errores, 297 advertencias y 43 sugerencias en el informe actual, principalmente
+compatibilidad API, opt-in de Media3 y estilo); no se presenta como un lint
+limpio.
 
 En la siguiente pasada también se corrigieron accesos incompatibles con APIs
 antiguas en el control de versión, el cálculo de tamaños de descargas, la
 limpieza de subtítulos y el foco del OSD. `testMobileDebugUnitTest`,
 `compileMobileDebugKotlin` y `compileTvDebugKotlin` vuelven a pasar; el lint
-completo sigue pendiente por la deuda anterior ya contabilizada.
+completo sigue pendiente por la deuda anterior ya contabilizada. En esta ronda
+se añadieron opt-ins AndroidX explícitos para los puntos que usan Media3 y se
+evitaron más llamadas nullable a DownloadManager; el informe bajó de 304 a 232
+errores. `node --check web/app.js`, las pruebas web y `git diff --check` pasan.
 
 La autenticación Android ya no imprime excepciones completas ni trazas de red:
 el log conserva únicamente el tipo de error y el código HTTP, evitando exponer

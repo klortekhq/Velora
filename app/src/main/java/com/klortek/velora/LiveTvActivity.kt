@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.annotation.OptIn
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -78,7 +79,9 @@ import com.klortek.velora.livetv.programProgress
 import com.klortek.velora.livetv.filterLiveTvChannels
 import com.klortek.velora.livetv.liveTvGroups
 import kotlinx.coroutines.launch
+import androidx.media3.common.util.UnstableApi
 
+@OptIn(UnstableApi::class)
 class LiveTvActivity : ComponentActivity() {
     companion object {
         fun createIntent(context: Context): Intent = Intent(context, LiveTvActivity::class.java)

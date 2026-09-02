@@ -1,3 +1,5 @@
+@file:androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+
 package com.klortek.velora.screens
 
 import com.klortek.velora.jellyfin.JellyfinRepository

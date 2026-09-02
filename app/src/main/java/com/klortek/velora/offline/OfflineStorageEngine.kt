@@ -64,7 +64,7 @@ object OfflineStorageEngine {
             )
             OfflineDownloadManager.persist(context, updated)
             if (entry.downloadId > 0L) {
-                context.getSystemService(android.app.DownloadManager::class.java).remove(entry.downloadId)
+                androidx.core.content.ContextCompat.getSystemService(context, android.app.DownloadManager::class.java)?.remove(entry.downloadId)
             }
             updated
         } catch (_: Exception) {

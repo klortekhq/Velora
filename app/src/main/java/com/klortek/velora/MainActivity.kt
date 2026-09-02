@@ -2,6 +2,7 @@ package com.klortek.velora
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.annotation.OptIn
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -21,10 +22,12 @@ import com.klortek.velora.SeriesDetailsActivity
 import com.klortek.velora.JellyfinVideoPlayerActivity
 import com.klortek.velora.updater.GitHubRelease
 import com.klortek.velora.updater.UpdateService
+import androidx.media3.common.util.UnstableApi
 
 /**
  * Main entry point that loads the Jellyfin home screen.
  */
+@OptIn(UnstableApi::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
