@@ -106,6 +106,7 @@ class AppSettings(context: Context) {
         private const val KEY_PLAYBACK_QUALITY = "playback_quality"
         private const val KEY_ROW_CARD_COUNT = "row_card_count"
         private const val KEY_NAVIGATION_SOUNDS_ENABLED = "navigation_sounds_enabled"
+        private const val KEY_THEME_MUSIC_ENABLED = "theme_music_enabled"
         private const val KEY_THEME_COLOR_HEX = "theme_color_hex"
         private const val KEY_LANGUAGE_TAG = "language_tag"
         private const val KEY_PREFERRED_AUDIO_LANGUAGE = "preferred_audio_language"
@@ -581,6 +582,11 @@ class AppSettings(context: Context) {
     var navigationSoundsEnabled: Boolean
         get() = prefs.getBoolean(KEY_NAVIGATION_SOUNDS_ENABLED, true) // Enabled by default
         set(value) = prefs.edit().putBoolean(KEY_NAVIGATION_SOUNDS_ENABLED, value).apply()
+
+    /** Theme music is opt-in until the persistent preview player is wired. */
+    var themeMusicEnabled: Boolean
+        get() = prefs.getBoolean(KEY_THEME_MUSIC_ENABLED, false)
+        set(value) = prefs.edit().putBoolean(KEY_THEME_MUSIC_ENABLED, value).apply()
 
     var themeColorHex: String
         get() = prefs.getString(KEY_THEME_COLOR_HEX, "#25B8E8") ?: "#25B8E8"

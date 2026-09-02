@@ -260,6 +260,7 @@ fun SettingsScreen(
     var lowPowerMode by remember { mutableStateOf(settings.lowPowerMode) }
     var use4KBackgrounds by remember { mutableStateOf(settings.use4KBackgrounds) }
     var navigationSoundsEnabled by remember { mutableStateOf(settings.navigationSoundsEnabled) }
+    var themeMusicEnabled by remember { mutableStateOf(settings.themeMusicEnabled) }
     
     // Logout confirmation
     var showLogoutConfirmation by remember { mutableStateOf(false) }
@@ -2130,6 +2131,16 @@ fun SettingsScreen(
                                         else -> 25
                                     }
                                     settings.rowCardCount = rowCardCount
+                                }
+                            )
+
+                            SettingToggle(
+                                title = "Música de tema",
+                                description = "Reproduce la música del contenido seleccionado cuando Velora la tenga disponible.",
+                                isEnabled = themeMusicEnabled,
+                                onToggle = {
+                                    themeMusicEnabled = !themeMusicEnabled
+                                    settings.themeMusicEnabled = themeMusicEnabled
                                 }
                             )
 
