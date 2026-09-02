@@ -88,5 +88,8 @@ assert.match(proxySource, /parsed\.username \|\| parsed\.password/);
 assert.match(proxySource, /parsed\.search \|\| parsed\.hash/);
 assert.match(proxySource, /credentials = server && data\.token/);
 assert.match(proxySource, /target\.protocol !== server\.protocol/);
+assert.match(proxySource, /function isAllowedMediaPath/);
+assert.match(proxySource, /Videos\\\/\[\^\/\]\+\\\/stream/);
+assert.match(proxySource, /LiveTv\\\/LiveStreamFiles/);
 assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 console.log('web security and library interaction tests passed');
