@@ -3,6 +3,14 @@ import Foundation
 public actor JellyfinClient {
     public enum ClientError: Error { case invalidServerURL, invalidResponse, unauthorized }
 
+    private static func isValidServerURL(_ url: URL) -> Bool {
+        guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https",
+              let host = url.host, !host.isEmpty,
+              url.user == nil, url.password == nil,
+              url.query == nil, url.fragment == nil else { return false }
+        return url.port == nil || (url.port! > 0 && url.port! <= 65_535)
+    }
+
     private struct AuthenticateResponse: Decodable {
         struct User: Decodable {
             let id: String
@@ -20,7 +28,7 @@ public actor JellyfinClient {
     private var sessionState: JellyfinSession?
 
     public init(serverURL: URL, session: URLSession = .shared, restoredSession: JellyfinSession? = nil) throws {
-        guard serverURL.scheme == "http" || serverURL.scheme == "https" else { throw ClientError.invalidServerURL }
+        guard Self.isValidServerURL(serverURL) else { throw ClientError.invalidServerURL }
         self.baseURL = serverURL
         self.session = session
         self.accessToken = restoredSession?.accessToken
@@ -28,7 +36,7 @@ public actor JellyfinClient {
     }
 
     public func setServerURL(_ serverURL: URL) throws {
-        guard serverURL.scheme == "http" || serverURL.scheme == "https" else { throw ClientError.invalidServerURL }
+        guard Self.isValidServerURL(serverURL) else { throw ClientError.invalidServerURL }
         baseURL = serverURL
         accessToken = nil
         sessionState = nil

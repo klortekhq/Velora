@@ -151,6 +151,11 @@ mantienen un placeholder durante la carga o ante un error. La compilación
 SwiftUI y la validación en iOS, iPadOS y tvOS siguen pendientes de macOS/Xcode
 y hardware Apple, por lo que todavía no se marcan como verificadas.
 
+La validación estricta de servidor se aplica también al cliente Apple y tiene
+regresión para IP local, ruta base, credenciales, parámetros y esquemas no
+permitidos. No se ha ejecutado `swift test` en este host porque Windows no
+dispone de Swift/Xcode.
+
 El bloque actual añade Smart Downloads móvil/tablet de forma opt-in. La
 migración SQLite conserva los estados de visto y protegido, y la limpieza no
 elimina nunca una descarga marcada para conservar. La validación móvil pasa;
