@@ -217,4 +217,6 @@
   <string name="settings_offline_storage_limit">Offline storage limit</string>
   <string name="settings_offline_storage_limit_description">Maximum space Velora can manage for downloads on this device.</string>
   <string name="settings_offline_storage_unlimited">Unlimited</string>
+  <string name="live_tv_cancel">Annulla</string>
+  <string name="live_tv_source_count">%1$d sorgenti</string>
 </resources>

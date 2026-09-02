@@ -217,4 +217,6 @@
   <string name="settings_offline_storage_limit">Limite de stockage hors connexion</string>
   <string name="settings_offline_storage_limit_description">Espace maximal que Velora peut gérer pour les téléchargements sur cet appareil.</string>
   <string name="settings_offline_storage_unlimited">Illimité</string>
+  <string name="live_tv_cancel">Annuler</string>
+  <string name="live_tv_source_count">%1$d sources</string>
 </resources>

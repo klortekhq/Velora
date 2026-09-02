@@ -18,6 +18,12 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+En la auditoría posterior, `npm run build:all` prepara el cliente web, webOS y
+VIDAA; Samsung queda honestamente pendiente de Tizen Studio/CLI. `lintMobileDebug`
+también pasa después de corregir el opt-in de Media3 en la música de tema y de
+completar las traducciones Android del selector Live TV. El lint aún informa
+advertencias y sugerencias no bloqueantes de SDK, APIs/dependencias antiguas.
+
 El pipeline Android fija Node.js 20 antes de validar la versión de las etiquetas,
 para que las releases de milestone sean reproducibles en GitHub Actions.
 
