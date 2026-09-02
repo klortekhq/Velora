@@ -124,8 +124,27 @@
     return 'es';
   }
 
+  var LIVE_SOURCE_TRANSLATIONS = {
+    es: { liveSources: 'fuentes', liveSourceOption: 'Opción' },
+    en: { liveSources: 'sources', liveSourceOption: 'Option' },
+    pt: { liveSources: 'fontes', liveSourceOption: 'Opção' },
+    fr: { liveSources: 'sources', liveSourceOption: 'Option' },
+    de: { liveSources: 'Quellen', liveSourceOption: 'Option' },
+    it: { liveSources: 'sorgenti', liveSourceOption: 'Opzione' },
+    ja: { liveSources: 'ソース', liveSourceOption: 'オプション' },
+    ko: { liveSources: '소스', liveSourceOption: '옵션' },
+    zh: { liveSources: '来源', liveSourceOption: '选项' },
+    ru: { liveSources: 'источника', liveSourceOption: 'Вариант' },
+    ar: { liveSources: 'مصادر', liveSourceOption: 'خيار' },
+    tr: { liveSources: 'kaynak', liveSourceOption: 'Seçenek' }
+  };
+
   function t(key) {
-    var current = TRANSLATIONS[languageCode()] || TRANSLATIONS.es;
+    var code = languageCode();
+    if (LIVE_SOURCE_TRANSLATIONS[code] && LIVE_SOURCE_TRANSLATIONS[code][key]) {
+      return LIVE_SOURCE_TRANSLATIONS[code][key];
+    }
+    var current = TRANSLATIONS[code] || TRANSLATIONS.es;
     return current[key] || TRANSLATIONS.es[key] || key;
   }
 
