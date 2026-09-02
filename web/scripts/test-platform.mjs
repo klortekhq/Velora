@@ -8,6 +8,7 @@ const packageJson = JSON.parse(fs.readFileSync(new URL('../package.json', import
 
 assert.doesNotMatch(appSource, /\/Images\/Primary\?api_key=/);
 assert.doesNotMatch(appSource, /[?&]api_key=/);
+assert.doesNotMatch(appSource, /(?:exception|error)\.message/);
 assert.match(appSource, /data-velora-image-id/);
 assert.match(appSource, /'X-Emby-Token': state\.token/);
 assert.match(appSource, /URL\.createObjectURL\(blob\)/);
