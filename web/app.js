@@ -391,8 +391,8 @@
       saveSessionValue('veloraUserId', state.userId);
       syncMediaProxyCredentials();
       return renderApp();
-    }).catch(function (exception) {
-      error.textContent = exception.message;
+    }).catch(function () {
+      error.textContent = t('loginError');
     });
   }
 
@@ -926,10 +926,10 @@
       login();
     };
     document.querySelector('#refresh').onclick = function () {
-      loadItems().then(renderHome).catch(function (exception) { toast(exception.message); });
+      loadItems().then(renderHome).catch(function () { toast(t('retry')); });
     };
-    return loadItems().then(renderHome).catch(function (exception) {
-      document.querySelector('#content').innerHTML = '<div class="error">' + esc(exception.message) +
+    return loadItems().then(renderHome).catch(function () {
+      document.querySelector('#content').innerHTML = '<div class="error">' + esc(t('loginError')) +
         '<br><button type="button" class="primary" id="retry">' + esc(t('retry')) + '</button></div>';
       document.querySelector('#retry').onclick = renderApp;
     });
