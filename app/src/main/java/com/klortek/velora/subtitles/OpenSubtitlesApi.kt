@@ -125,7 +125,7 @@ object OpenSubtitlesApi {
             
             if (!response.isSuccessful) {
                 Log.e(TAG, "❌ Login failed: HTTP ${response.code}")
-            lastError = "Login failed (HTTP ${response.code})"
+                lastError = "Login failed (HTTP ${response.code})"
                 return@withContext false
             }
             
@@ -229,7 +229,7 @@ object OpenSubtitlesApi {
             urlBuilder.append("order_by=download_count&order_direction=desc")
             
             val url = urlBuilder.toString()
-                Log.d(TAG, "Searching subtitles")
+            Log.d(TAG, "Searching subtitles")
             
             if (!isConfigured()) {
                 Log.e(TAG, "❌ API key not configured")
