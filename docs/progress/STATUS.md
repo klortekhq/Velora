@@ -24,6 +24,13 @@ errores de lint en el cliente móvil. La diferencia de SDK XML y la ubicación
 alternativa de Android 36 que aparecen durante Gradle son avisos del SDK local,
 no fallos del código de Velora.
 
+La persistencia offline ya no elimina por accidente otras calidades del mismo
+título al reemplazar una descarga. El índice SQLite admite ahora el caso real
+de tener, por ejemplo, Original y Medium simultáneamente, y se añadió una
+regresión para protegerlo. `testMobileDebugUnitTest`, las compilaciones móvil
+y TV, `lintMobileDebug`, las pruebas web y el parseo de recursos pasan después
+del cambio. Es un commit de corrección agrupable, no una release aislada.
+
 El flujo de inicio de sesión Android ya no muestra mensajes técnicos ni textos
 hardcodeados en inglés: los fallos de credenciales y Quick Connect usan el
 recurso localizado de error genérico. Se mantiene el detalle técnico fuera de

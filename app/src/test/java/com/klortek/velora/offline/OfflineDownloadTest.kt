@@ -114,6 +114,25 @@ class OfflineDownloadTest {
     }
 
     @Test
+    fun replacingOneQualityDoesNotRemoveOtherRepresentations() {
+        val original = OfflineDownload(
+            itemId = "movie-1", name = "Película", type = "Movie",
+            downloadId = 0L, quality = OfflineDownloadQuality.ORIGINAL.storageKey
+        )
+        val medium = original.copy(
+            quality = OfflineDownloadQuality.MEDIUM.storageKey,
+            workName = "offline-medium"
+        )
+        val replacement = medium.copy(workName = "offline-medium-v2")
+        val persisted = listOf(original, medium)
+            .filterNot { it.itemId == replacement.itemId && it.quality == replacement.quality } + replacement
+
+        assertEquals(2, persisted.size)
+        assertTrue(persisted.any { it.quality == OfflineDownloadQuality.ORIGINAL.storageKey })
+        assertEquals("offline-medium-v2", persisted.single { it.quality == OfflineDownloadQuality.MEDIUM.storageKey }.workName)
+    }
+
+    @Test
     fun migratedProviderEntryUsesStableManagedIdentityAfterCopy() {
         val provider = OfflineDownload(
             itemId = "movie-1",
