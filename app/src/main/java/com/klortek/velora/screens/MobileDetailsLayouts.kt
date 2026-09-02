@@ -1,5 +1,8 @@
 package com.klortek.velora.screens
 
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -651,6 +654,7 @@ private fun MobileFileDetails(item: JellyfinItem) {
 }
 
 @Composable
+@OptIn(UnstableApi::class)
 private fun MobileSimilarMovies(items: List<JellyfinItem>, apiService: JellyfinApiService?) {
     if (items.isEmpty()) {
         Text(stringResource(com.klortek.velora.R.string.mobile_no_similar), color = Color.White.copy(alpha = .72f))

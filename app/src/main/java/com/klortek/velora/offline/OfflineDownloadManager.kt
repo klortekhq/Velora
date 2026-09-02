@@ -171,7 +171,7 @@ object OfflineDownloadManager {
     }
 
     suspend fun refresh(context: Context): List<OfflineDownload> = withContext(Dispatchers.IO) {
-        val manager = context.getSystemService(DownloadManager::class.java)
+        val manager = androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)
         val updated = load(context).mapNotNull { entry ->
             if (!entry.workName.isNullOrBlank()) {
                 val info = androidx.work.WorkManager.getInstance(context)
@@ -191,6 +191,7 @@ object OfflineDownloadManager {
                     } else entry.completedAtEpochMs
                 )
             }
+            if (manager == null) return@mapNotNull entry
             val cursor = runCatching { manager.query(DownloadManager.Query().setFilterById(entry.downloadId)) }.getOrNull()
             if (cursor == null || !cursor.moveToFirst()) {
                 cursor?.close()
@@ -242,13 +243,13 @@ object OfflineDownloadManager {
 
     fun cancel(context: Context, entry: OfflineDownload) {
         entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
-        if (entry.downloadId > 0L) context.getSystemService(DownloadManager::class.java).remove(entry.downloadId)
+        if (entry.downloadId > 0L) androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)?.remove(entry.downloadId)
         deleteEntry(context, entry)
     }
 
     fun delete(context: Context, entry: OfflineDownload) {
         entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
-        if (entry.downloadId > 0L) context.getSystemService(DownloadManager::class.java).remove(entry.downloadId)
+        if (entry.downloadId > 0L) androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)?.remove(entry.downloadId)
         entry.localPath?.let { deleteLocalUri(context, it) }
         deleteEntry(context, entry)
     }
