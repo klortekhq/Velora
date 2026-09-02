@@ -164,6 +164,10 @@ El login web aplica ahora la misma validación estricta de servidor: esquema
 HTTP(S), host y puerto válidos, sin usuario, contraseña, query ni fragmento.
 La prueba de plataforma verifica que esta validación no se elimine por error.
 
+La navegación inferior móvil ya no deja el botón «Inicio» sin callback: ahora
+usa el estado real de la lista y vuelve suavemente al primer bloque del home.
+`compileMobileDebugKotlin` y `testMobileDebugUnitTest` pasan después del cambio.
+
 El bloque actual añade Smart Downloads móvil/tablet de forma opt-in. La
 migración SQLite conserva los estados de visto y protegido, y la limpieza no
 elimina nunca una descarga marcada para conservar. La validación móvil pasa;
