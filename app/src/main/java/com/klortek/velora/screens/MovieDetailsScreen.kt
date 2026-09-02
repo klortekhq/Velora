@@ -122,6 +122,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.klortek.velora.TrailerLauncher
 import com.klortek.velora.tmdb.TmdbApiService
 import com.klortek.velora.trailer.TrailerResolver
+import com.klortek.velora.trailer.JellyfinTrailerResolver
 
 @Composable
 fun MovieDetailsScreen(
@@ -1659,8 +1660,10 @@ fun ActionButtonsRow(
         jellyfinTrailer = null
 
         // Jellyfin is the source of truth: prefer server-managed trailers.
-        val serverTrailer = apiService?.getLocalTrailers(displayItem.Id)?.firstOrNull()
-            ?: apiService?.getRemoteTrailers(displayItem.Id)?.firstOrNull()
+        val serverTrailer = JellyfinTrailerResolver.select(
+            local = apiService?.getLocalTrailers(displayItem.Id).orEmpty(),
+            remote = apiService?.getRemoteTrailers(displayItem.Id).orEmpty()
+        )
         if (serverTrailer != null) {
             jellyfinTrailer = serverTrailer
             return@LaunchedEffect
