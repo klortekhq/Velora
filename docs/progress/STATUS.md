@@ -33,6 +33,12 @@ fuente web. Al cerrar el reproductor también notifica
 prueba web pasa; la reproducción en hardware Smart TV sigue pendiente de
 validación física.
 
+El empaquetado web completo del 2026-09-02 también se ha ejecutado: el bundle
+web y el bundle Samsung se preparan, webOS genera un IPK mediante
+`ares-package`, y VIDAA genera su bundle HTML5 con metadatos de portal. Tizen
+CLI/perfil de firma no está instalado en este host, por lo que Samsung no se
+marca como WGT instalable; VIDAA tampoco se marca como paquete firmado.
+
 La release pública más reciente con artefactos verificados sigue siendo
 `v1.2.85`; `v1.3.0` ya está etiquetada y subida a `main`, con los workflows de
 GitHub encargados de publicar sus artefactos. Las validaciones locales de
