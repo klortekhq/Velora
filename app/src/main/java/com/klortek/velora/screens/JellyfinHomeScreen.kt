@@ -3799,7 +3799,7 @@ fun Modifier.carouselGradient(): Modifier = composed {
     val colorStopList2 = listOf(0.1f, 0.4f, 0.9f)
     this
         .then(
-            background(
+            Modifier.background(
                 brush = Brush.linearGradient(
                     colorStopList[0] to color.copy(alpha = colorAlphaList[0]),
                     colorStopList[1] to color.copy(alpha = colorAlphaList[1]),
@@ -3810,7 +3810,7 @@ fun Modifier.carouselGradient(): Modifier = composed {
             )
         )
         .then(
-            background(
+            Modifier.background(
                 brush = Brush.linearGradient(
                     colorStopList2[0] to color.copy(alpha = colorAlphaList2[0]),
                     colorStopList2[1] to color.copy(alpha = colorAlphaList2[1]),
