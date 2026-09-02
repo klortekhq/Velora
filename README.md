@@ -11,7 +11,7 @@ Velora es una aplicación independiente para disfrutar de bibliotecas Jellyfin c
 - Inicio tipo streaming con **Seguir viendo**, películas y series añadidas recientemente; los episodios se consultan desde la ficha de cada serie y **Seguir viendo**, sin una fila redundante de episodios recientes en el inicio.
 - Fichas completas de películas y series con temporadas, episodios, reparto, estudios, detalles técnicos y títulos relacionados.
 - Reparto interactivo: al abrir una persona se muestran sus películas y series disponibles en Jellyfin.
-- Búsqueda, ordenación y filtros en español.
+- Búsqueda, ordenación y filtros con interfaz localizada.
 - Sesión persistente y reconexión automática cuando el servidor vuelve a estar disponible.
 - Televisión en directo integrada en la navegación principal cuando el usuario tiene Live TV habilitada.
 - Canales individuales respetando el orden y los nombres recibidos de Jellyfin, sin agrupar ni normalizar fuentes IPTV.
@@ -104,7 +104,9 @@ Para generar los APK release unsigned de móvil/tablet y TV:
 Las variantes debug son instalables para pruebas. Las variantes release
 generadas aquí no están firmadas; deben firmarse con una clave propia antes de
 distribuirse. El flujo de GitHub Actions ejecuta estas mismas tareas y publica
-los artefactos juntos cuando se crea una etiqueta `v*`.
+los artefactos juntos cuando se crea una etiqueta de versión completa `vX.Y.0`;
+los builds de parche se reservan para QA, salvo correcciones críticas o de
+seguridad.
 
 ## Rendimiento
 
