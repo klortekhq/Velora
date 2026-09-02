@@ -18,6 +18,12 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+La base Apple incorpora ahora entrypoints SwiftPM separados `VeloraMobile` y
+`VeloraTV`, ambos sobre `VeloraKit`; el primero selecciona iPhone/iPad y el
+segundo fuerza tvOS, manteniendo streaming-only en televisión. La compilación
+de estos targets y la creación de los bundles `.app` siguen pendientes de un
+runner macOS con Xcode y no se presentan como validadas en este host Windows.
+
 La release pública más reciente con artefactos verificados sigue siendo
 `v1.2.85`; `v1.3.0` ya está etiquetada y subida a `main`, con los workflows de
 GitHub encargados de publicar sus artefactos. Las validaciones locales de
