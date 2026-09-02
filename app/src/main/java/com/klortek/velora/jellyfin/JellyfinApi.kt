@@ -914,14 +914,35 @@ class JellyfinApiService(
      * before consulting an optional external metadata provider.
      */
     suspend fun getLocalTrailers(itemId: String): List<JellyfinItem> {
-        return getTrailerItems("Items/$itemId/LocalTrailers")
+        return getMediaItems("Items/$itemId/LocalTrailers")
     }
 
     suspend fun getRemoteTrailers(itemId: String): List<JellyfinItem> {
-        return getTrailerItems("Items/$itemId/RemoteTrailers")
+        return getMediaItems("Items/$itemId/RemoteTrailers")
     }
 
-    private suspend fun getTrailerItems(path: String): List<JellyfinItem> {
+    /** Returns theme songs resolved by Jellyfin, including inherited parent media. */
+    suspend fun getThemeSongs(itemId: String): List<JellyfinItem> {
+        return getMediaItems("Items/$itemId/ThemeSongs")
+    }
+
+    /**
+     * Header-authenticated audio URL for theme music. The access token is
+     * deliberately not embedded in the URL; callers must use
+     * getVideoRequestHeaders() when creating the media data source.
+     */
+    fun getThemeSongUrl(itemId: String): String {
+        val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+        return URLBuilder().takeFrom("${base}Audio/$itemId/universal").apply {
+            parameters.append("UserId", userId)
+            parameters.append("Container", "mp3,aac,m4a,flac,ogg,webm")
+            parameters.append("TranscodingContainer", "ts")
+            parameters.append("TranscodingProtocol", "hls")
+            parameters.append("AudioCodec", "aac")
+        }.buildString()
+    }
+
+    private suspend fun getMediaItems(path: String): List<JellyfinItem> {
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("$base$path").apply {
