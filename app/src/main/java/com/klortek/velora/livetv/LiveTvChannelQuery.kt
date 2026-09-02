@@ -15,3 +15,34 @@ fun liveTvGroups(channels: List<LiveTvChannel>): List<String> = channels
     .filter { it.isNotBlank() }
     .distinctBy { it.lowercase() }
     .sortedWith(String.CASE_INSENSITIVE_ORDER)
+
+/** A single visible channel with all Jellyfin entries that share its identity. */
+data class LiveTvChannelGroup(
+    val channelId: String,
+    val channels: List<LiveTvChannel>,
+) {
+    val primary: LiveTvChannel get() = channels.first()
+}
+
+/**
+ * Collapses duplicate provider entries into one channel row. Jellyfin's Id is
+ * the authoritative identity; the fallback only protects malformed provider
+ * data where Id is empty, without merging unrelated numbered channels.
+ */
+fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup> {
+    val groups = linkedMapOf<String, MutableList<LiveTvChannel>>()
+    channels.forEach { channel ->
+        val key = channel.Id.ifBlank {
+            "fallback:${channel.ChannelNumber.orEmpty()}|${channel.Name.trim().lowercase()}"
+        }
+        groups.getOrPut(key) { mutableListOf() }.add(channel)
+    }
+    return groups.map { (key, entries) -> LiveTvChannelGroup(key, entries.toList()) }
+}
+
+/** Human-readable source label for the picker, never exposing URLs or tokens. */
+fun liveTvSourceLabel(channel: LiveTvChannel, optionNumber: Int): String =
+    channel.Tags.orEmpty().firstOrNull { it.isNotBlank() }
+        ?: channel.Type?.takeIf { it.isNotBlank() }
+        ?: channel.ChannelNumber?.takeIf { it.isNotBlank() }?.let { "Canal $it" }
+        ?: "Opción $optionNumber"

@@ -78,6 +78,9 @@ import com.klortek.velora.livetv.formatProgramTimeRange
 import com.klortek.velora.livetv.programProgress
 import com.klortek.velora.livetv.filterLiveTvChannels
 import com.klortek.velora.livetv.liveTvGroups
+import com.klortek.velora.livetv.groupLiveTvChannels
+import com.klortek.velora.livetv.LiveTvChannelGroup
+import com.klortek.velora.livetv.liveTvSourceLabel
 import kotlinx.coroutines.launch
 import androidx.media3.common.util.UnstableApi
 
@@ -138,6 +141,7 @@ private fun LiveTvScreen(
     var favoritesOnly by remember { mutableStateOf(false) }
     var selectedGroup by remember { mutableStateOf<String?>(null) }
     var programDetails by remember { mutableStateOf<Pair<String, LiveTvProgram>?>(null) }
+    var sourceSelection by remember { mutableStateOf<LiveTvChannelGroup?>(null) }
     val scope = rememberCoroutineScope()
     val firstChannelFocusRequester = remember { FocusRequester() }
 
@@ -306,21 +310,27 @@ private fun LiveTvScreen(
 
             else -> {
                 val visibleChannels = filterLiveTvChannels(channels, favoritesOnly, selectedGroup)
+                val visibleGroups = groupLiveTvChannels(visibleChannels)
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(visibleChannels, key = { it.Id }) { channel ->
+                    items(visibleGroups, key = { it.channelId }) { channelGroup ->
+                        val channel = channelGroup.primary
                         LiveTvChannelRow(
                             channel = channel,
                             client = client,
+                            channelGroupCount = channelGroup.channels.size,
                             compact = isMobile,
-                            focusRequester = if (channel == channels.firstOrNull()) {
+                            focusRequester = if (channel.Id == channels.firstOrNull()?.Id) {
                                 firstChannelFocusRequester
                             } else {
                                 null
                             },
-                            onClick = { onPlay(channel, visibleChannels) },
+                            onClick = {
+                                if (channelGroup.channels.size > 1) sourceSelection = channelGroup
+                                else onPlay(channel, visibleGroups.map { it.primary })
+                            },
                             onShowProgram = { program -> programDetails = channel.Name to program },
                             onToggleFavorite = {
                                 val favorite = channel.UserData?.IsFavorite != true
@@ -351,12 +361,59 @@ private fun LiveTvScreen(
             onDismiss = { programDetails = null }
         )
     }
+
+    sourceSelection?.let { group ->
+        LiveTvSourceDialog(
+            group = group,
+            onDismiss = { sourceSelection = null },
+            onSelect = { selected ->
+                sourceSelection = null
+                onPlay(selected, groupLiveTvChannels(channels).map { it.primary })
+            }
+        )
+    }
+}
+
+@Composable
+private fun LiveTvSourceDialog(
+    group: LiveTvChannelGroup,
+    onDismiss: () -> Unit,
+    onSelect: (LiveTvChannel) -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.92f)
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
+                .padding(24.dp)
+        ) {
+            Text(group.primary.Name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = stringResource(R.string.live_tv_source_count, group.channels.size),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .7f)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            group.channels.forEachIndexed { index, channel ->
+                Button(
+                    onClick = { onSelect(channel) },
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                ) {
+                    Text(liveTvSourceLabel(channel, index + 1), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+            Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                Text(stringResource(R.string.live_tv_cancel))
+            }
+        }
+    }
 }
 
 @Composable
 private fun LiveTvChannelRow(
     channel: LiveTvChannel,
     client: LiveTvClient,
+    channelGroupCount: Int = 1,
     compact: Boolean = false,
     focusRequester: FocusRequester? = null,
     onClick: () -> Unit,
@@ -455,6 +512,15 @@ private fun LiveTvChannelRow(
                             )
                         }
                     }
+                }
+
+                if (channelGroupCount > 1) {
+                    Text(
+                        text = stringResource(R.string.live_tv_source_count, channelGroupCount),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(2.dp))

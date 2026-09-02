@@ -301,6 +301,13 @@ canales cuando la lista supera los límites habituales de la API. La prueba
 unitaria móvil y la compilación de las variantes móvil y TV pasan. Es un cambio
 de robustez que queda en `main`; no genera APK/release por sí solo.
 
+Live TV agrupa ahora las entradas que comparten `ChannelId` en una sola fila,
+conservando las fuentes alternativas y mostrando un selector táctil/por mando
+al tocar el canal. El zapeo usa la lista agrupada para no repetir canales. La
+cobertura unitaria y la compilación Android móvil/TV pasan; queda pendiente
+validarlo en hardware conectado y confirmar qué etiquetas de fuente entrega
+cada proveedor Jellyfin.
+
 El formulario de inicio de sesión ahora respeta los insets de las barras del
 sistema antes de aplicar su desplazamiento, evitando que el título, los campos
 o el botón queden ocultos en móviles, tablets y televisores. Se verificará junto
@@ -829,9 +836,9 @@ digests are:
   product integration and critic testing. The preview lifecycle contract now
   covers dwell timing, stale-focus invalidation and cleanup without owning a
   player instance. Android now exposes an opt-in, persisted theme-music
-  preference and connects one lifecycle-managed ExoPlayer to Jellyfin theme
-  songs after the Home focus debounce; volume/settings UX and hardware QA are
-  still pending. Trailer selection now prefers Jellyfin
+  preference, configurable volume and connects one lifecycle-managed ExoPlayer
+  to Jellyfin theme songs after the Home focus debounce; hardware QA is still
+  pending. Trailer selection now prefers Jellyfin
   local/remote trailer metadata and falls back to TMDB only when the server
   has no trailer available; this Android path is covered by a successful
   mobile/TV compilation but still needs hardware playback QA.
