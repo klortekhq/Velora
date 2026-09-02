@@ -1,4 +1,4 @@
-#if canImport(SwiftUI) && canImport(AVKit)
+#if os(iOS) && canImport(SwiftUI) && canImport(AVKit) && canImport(UIKit)
 import SwiftUI
 import UIKit
 import VeloraKit
