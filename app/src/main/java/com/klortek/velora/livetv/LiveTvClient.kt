@@ -2,6 +2,7 @@ package com.klortek.velora.livetv
 
 import com.klortek.velora.BuildConfig
 import com.klortek.velora.jellyfin.JellyfinConfig
+import com.klortek.velora.jellyfin.MediaSource
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -37,6 +38,8 @@ data class LiveTvChannel(
     val ImageTags: Map<String, String>? = null,
     val UserData: LiveTvUserData? = null,
     val Tags: List<String>? = null,
+    /** Optional source descriptors returned by Jellyfin for multi-source channels. */
+    val MediaSources: List<MediaSource>? = null,
     val CurrentProgram: LiveTvProgram? = null,
     val UpcomingProgram: LiveTvProgram? = null
 )

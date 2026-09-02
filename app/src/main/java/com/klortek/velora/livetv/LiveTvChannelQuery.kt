@@ -44,5 +44,9 @@ fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup>
 fun liveTvSourceLabel(channel: LiveTvChannel, optionNumber: Int): String =
     channel.Tags.orEmpty().firstOrNull { it.isNotBlank() }
         ?: channel.Type?.takeIf { it.isNotBlank() }
+        ?: channel.MediaSources.orEmpty().firstOrNull()?.Id?.takeIf { it.isNotBlank() }?.let { "Fuente $optionNumber" }
         ?: channel.ChannelNumber?.takeIf { it.isNotBlank() }?.let { "Canal $it" }
         ?: "Opción $optionNumber"
+
+fun liveTvMediaSourceId(channel: LiveTvChannel): String? =
+    channel.MediaSources.orEmpty().firstOrNull()?.Id?.takeIf { it.isNotBlank() }

@@ -49,6 +49,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         private const val EXTRA_IS_LIVE_TV = "is_live_tv"
         private const val EXTRA_LOCAL_PATH = "local_path"
         private const val EXTRA_EXTERNAL_MEDIA_URL = "external_media_url"
+        private const val EXTRA_LIVE_TV_MEDIA_SOURCE_ID = "live_tv_media_source_id"
 
         fun createIntent(
             context: Context,
@@ -60,6 +61,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
             isLiveTv: Boolean = false,
             localPath: String? = null,
             externalMediaUrl: String? = null,
+            liveTvMediaSourceId: String? = null,
             liveTvChannelIds: List<String> = emptyList(),
             liveTvChannelNames: List<String> = emptyList()
         ): Intent {
@@ -70,6 +72,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 audioStreamIndex?.let { putExtra(EXTRA_AUDIO_STREAM_INDEX, it) }
                 itemName?.let { putExtra(EXTRA_ITEM_NAME, it) }
                 putExtra(EXTRA_IS_LIVE_TV, isLiveTv)
+                liveTvMediaSourceId?.let { putExtra(EXTRA_LIVE_TV_MEDIA_SOURCE_ID, it) }
                 if (liveTvChannelIds.isNotEmpty()) {
                     putStringArrayListExtra("live_tv_channel_ids", ArrayList(liveTvChannelIds))
                     putStringArrayListExtra("live_tv_channel_names", ArrayList(liveTvChannelNames))
@@ -136,6 +139,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         val localPath = intent.getStringExtra(EXTRA_LOCAL_PATH)
         val externalMediaUrl = intent.getStringExtra(EXTRA_EXTERNAL_MEDIA_URL)
         val isLiveTv = intent.getBooleanExtra(EXTRA_IS_LIVE_TV, false)
+        val liveTvMediaSourceId = intent.getStringExtra(EXTRA_LIVE_TV_MEDIA_SOURCE_ID)
         val liveTvChannelIds = intent.getStringArrayListExtra("live_tv_channel_ids").orEmpty()
         val liveTvChannelNames = intent.getStringArrayListExtra("live_tv_channel_names").orEmpty()
         val liveTvChannelIndex = liveTvChannelIds.indexOf(itemId)
@@ -232,7 +236,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 // its master HLS manifest. VOD keeps the existing source flow.
                 val playbackInfo = apiService.getPlaybackInfo(
                     itemId = itemId,
-                    mediaSourceId = if (isLiveTv) null else itemId,
+                    mediaSourceId = if (isLiveTv) liveTvMediaSourceId else itemId,
                     subtitleStreamIndex = subtitleStreamIndex,
                     // Live TV requires Jellyfin to allocate/open the tuner or
                     // M3U/Acestream stream before returning LiveStreamId.
@@ -362,7 +366,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 val accessToken = config.accessToken ?: ""
                 val playbackInfo = apiService.getPlaybackInfo(
                     itemId = itemId,
-                    mediaSourceId = null,
+                    mediaSourceId = liveTvMediaSourceId,
                     subtitleStreamIndex = subtitleStreamIndex,
                     // Jellyfin must allocate the live source so M3U, tuner and
                     // Acestream channels return a usable LiveStreamId.
@@ -422,6 +426,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                                                 itemId = nextId,
                                                 itemName = liveTvChannelNames.getOrNull(nextIndex),
                                                 isLiveTv = true,
+                                                liveTvMediaSourceId = liveTvMediaSourceId,
                                                 liveTvChannelIds = liveTvChannelIds,
                                                 liveTvChannelNames = liveTvChannelNames
                                             )

@@ -55,6 +55,7 @@ assert.match(appSource, /__velora_media/);
 assert.match(appSource, /waitForMediaProxy/);
 assert.match(appSource, /\/Items\/'.*PlaybackInfo\?UserId=/);
 assert.match(appSource, /AutoOpenLiveStream=true/);
+assert.match(appSource, /MediaSourceId=/);
 assert.match(appSource, /\/Sessions\/Playing\/Stopped/);
 assert.match(appSource, /PositionTicks/);
 assert.match(appSource, /function sanitizeMediaTarget/);
