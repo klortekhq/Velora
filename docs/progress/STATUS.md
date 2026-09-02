@@ -18,6 +18,14 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+La auditoría de autenticación añadió validación estricta y compartida para la
+URL del servidor: solo se aceptan HTTP/HTTPS con host y puerto válidos, sin
+credenciales, query ni fragmentos embebidos. También se eliminó una lectura
+innecesaria del cuerpo de errores de login. Se añadió cobertura unitaria para
+IPs locales, IPv6, rutas válidas y entradas inseguras. `testMobileDebugUnitTest`,
+`compileMobileDebugKotlin` y `compileTvDebugKotlin` pasan; no es una release
+aislada y queda agrupado para el próximo hito publicable.
+
 En esta misma verificación, `lintMobileDebug` termina correctamente. El
 informe mantiene advertencias y sugerencias no bloqueantes, pero no quedan
 errores de lint en el cliente móvil. La diferencia de SDK XML y la ubicación

@@ -51,10 +51,7 @@ class JellyfinConfig(context: Context) {
 
     fun isConfigured(): Boolean {
         val url = serverUrl
-        // Validate that server URL is properly formatted
-        val isValidUrl = url.isNotEmpty() && 
-            (url.startsWith("http://") || url.startsWith("https://"))
-        return isValidUrl && accessToken.isNotEmpty() && userId.isNotEmpty()
+        return ServerUrlValidator.isValid(url) && accessToken.isNotEmpty() && userId.isNotEmpty()
     }
 
     fun hasCredentials(): Boolean {
