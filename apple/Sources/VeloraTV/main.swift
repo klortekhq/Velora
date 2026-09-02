@@ -13,7 +13,7 @@ struct VeloraTVApp: App {
 @available(tvOS 16.0, *)
 private struct VeloraTVRoot: View {
     var body: some View {
-        if let serverURL = URL(string: "http://127.0.0.1:8096"),
+        if let serverURL = URL(string: "http://jellyfin.local:8096"),
            let shell = try? VeloraAppShell(platform: .tvOS, serverURL: serverURL) {
             shell
         } else {

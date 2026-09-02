@@ -156,6 +156,10 @@ regresión para IP local, ruta base, credenciales, parámetros y esquemas no
 permitidos. No se ha ejecutado `swift test` en este host porque Windows no
 dispone de Swift/Xcode.
 
+Los entrypoints Apple dejaron de usar `127.0.0.1:8096` como servidor inicial,
+ya que en un dispositivo real eso apunta al propio equipo. Ahora muestran un
+valor editable de ejemplo y esperan la dirección Jellyfin real del usuario.
+
 El bloque actual añade Smart Downloads móvil/tablet de forma opt-in. La
 migración SQLite conserva los estados de visto y protegido, y la limpieza no
 elimina nunca una descarga marcada para conservar. La validación móvil pasa;
