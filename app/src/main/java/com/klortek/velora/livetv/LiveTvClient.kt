@@ -154,7 +154,7 @@ class LiveTvClient(private val config: JellyfinConfig) {
             parameters.append("AddCurrentProgram", "true")
             parameters.append("EnableImages", "true")
             parameters.append("EnableUserData", "true")
-            parameters.append("Fields", "Overview,PrimaryImageAspectRatio")
+            parameters.append("Fields", "Overview,PrimaryImageAspectRatio,MediaSources")
         }.buildString()
 
         return client.get(url) {

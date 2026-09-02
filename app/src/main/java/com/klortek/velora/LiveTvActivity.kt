@@ -216,7 +216,7 @@ private fun LiveTvScreen(
                 )
                 if (!isLoading && loadError == null) {
                     Text(
-                        text = stringResource(R.string.live_tv_channel_count, channels.size),
+                        text = stringResource(R.string.live_tv_channel_count, groupLiveTvChannels(channels).size),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.62f)
                     )
