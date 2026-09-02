@@ -277,11 +277,42 @@
   }
 
   function stream(item) {
-    var protectedUrl = streamTarget(item);
+    return protectedMediaUrl(streamTarget(item));
+  }
+
+  function protectedMediaUrl(target) {
     // A native <video> element cannot attach Authorization headers. The
     // same-origin service worker proxies this request and adds X-Emby-Token,
     // keeping the token out of the address bar, history and referrers.
-    return '/__velora_media?url=' + encodeURIComponent(protectedUrl);
+    return '/__velora_media?url=' + encodeURIComponent(target);
+  }
+
+  function sanitizeMediaTarget(value) {
+    try {
+      var target = new URL(value, base());
+      var server = new URL(base());
+      if (target.origin !== server.origin) return '';
+      target.searchParams.delete('api_key');
+      target.searchParams.delete('ApiKey');
+      return target.href;
+    } catch (error) {
+      return '';
+    }
+  }
+
+  function liveTvStreamTarget(channel) {
+    return api('/Items/' + encodeURIComponent(channel.Id) + '/PlaybackInfo?UserId=' +
+      encodeURIComponent(state.userId) + '&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true', {
+        method: 'POST',
+        body: JSON.stringify({})
+      }).then(function (data) {
+        var source = data && data.MediaSources && data.MediaSources[0];
+        if (!source) return '';
+        // PlaybackInfo returns a playable server URL for Live TV. A source
+        // Path can be a filesystem path, not a browser media endpoint, so it
+        // must never be promoted into a URL fallback.
+        return sanitizeMediaTarget(source.TranscodingUrl || source.DirectStreamUrl || '');
+      });
   }
 
   function waitForMediaProxy() {
@@ -623,49 +654,59 @@
         toast(t('playbackError'));
         return;
       }
-      state.playingItem = item;
-      root.insertAdjacentHTML('beforeend', '<div class="video-wrap" id="player" role="dialog" aria-label="' + esc(t('player')) + '">' +
+      var targetPromise = item.Type === 'LiveTvChannel' ? liveTvStreamTarget(item) : Promise.resolve('');
+      targetPromise.then(function (liveTarget) {
+        if (item.Type === 'LiveTvChannel' && !liveTarget) {
+          toast(t('playbackError'));
+          return;
+        }
+        state.playingItem = item;
+        root.insertAdjacentHTML('beforeend', '<div class="video-wrap" id="player" role="dialog" aria-label="' + esc(t('player')) + '">' +
         '<video controls autoplay playsinline preload="metadata"></video>' +
         '<div class="video-controls">' +
         '<button type="button" id="fullscreen">' + esc(t('fullscreen')) + '</button>' +
         '<button type="button" id="playerSettings">' + esc(t('settings')) + '</button>' +
         '<button type="button" id="playerClose">' + esc(t('close')) + '</button>' +
         '</div></div>');
-      var player = document.querySelector('#player');
-      var video = player.querySelector('video');
-      var sourceUrl = available ? stream(item) : streamTarget(item);
-      if (!available) player._veloraAbortController = new AbortController();
-      var update = function () { updateFullscreenButton(player); };
-      document.addEventListener('fullscreenchange', update);
-      document.addEventListener('webkitfullscreenchange', update);
-      player._veloraFullscreenCleanup = function () {
-        document.removeEventListener('fullscreenchange', update);
-        document.removeEventListener('webkitfullscreenchange', update);
-      };
-      player.querySelector('#playerClose').onclick = closePlayer;
-      player.querySelector('#fullscreen').onclick = function () { toggleFullscreen(player, video); };
-      player.querySelector('#playerSettings').onclick = showSettings;
-      video.onerror = function () { toast(t('playbackError')); };
-      video.onloadedmetadata = function () { player.querySelector('#fullscreen').focus(); };
-      updateFullscreenButton(player);
-      if (available) {
-        video.src = sourceUrl;
-      } else {
-        fetch(sourceUrl, {
+        var player = document.querySelector('#player');
+        var video = player.querySelector('video');
+        var sourceTarget = item.Type === 'LiveTvChannel' ? liveTarget : streamTarget(item);
+        var sourceUrl = available ? protectedMediaUrl(sourceTarget) : sourceTarget;
+        if (!available) player._veloraAbortController = new AbortController();
+        var update = function () { updateFullscreenButton(player); };
+        document.addEventListener('fullscreenchange', update);
+        document.addEventListener('webkitfullscreenchange', update);
+        player._veloraFullscreenCleanup = function () {
+          document.removeEventListener('fullscreenchange', update);
+          document.removeEventListener('webkitfullscreenchange', update);
+        };
+        player.querySelector('#playerClose').onclick = closePlayer;
+        player.querySelector('#fullscreen').onclick = function () { toggleFullscreen(player, video); };
+        player.querySelector('#playerSettings').onclick = showSettings;
+        video.onerror = function () { toast(t('playbackError')); };
+        video.onloadedmetadata = function () { player.querySelector('#fullscreen').focus(); };
+        updateFullscreenButton(player);
+        if (available) {
+          video.src = sourceUrl;
+        } else {
+          fetch(sourceUrl, {
           headers: { 'X-Emby-Token': state.token, Accept: 'video/*' },
           cache: 'no-store',
           signal: player._veloraAbortController.signal
-        }).then(function (response) {
-          if (!response.ok) throw Error(t('playbackError'));
-          return response.blob();
-        }).then(function (blob) {
-          if (!document.body.contains(player)) return;
-          player._veloraObjectUrl = URL.createObjectURL(blob);
-          video.src = player._veloraObjectUrl;
-        }).catch(function (error) {
-          if (error.name !== 'AbortError') toast(t('playbackError'));
-        });
-      }
+          }).then(function (response) {
+            if (!response.ok) throw Error(t('playbackError'));
+            return response.blob();
+          }).then(function (blob) {
+            if (!document.body.contains(player)) return;
+            player._veloraObjectUrl = URL.createObjectURL(blob);
+            video.src = player._veloraObjectUrl;
+          }).catch(function (error) {
+            if (error.name !== 'AbortError') toast(t('playbackError'));
+          });
+        }
+      }).catch(function () {
+        toast(t('playbackError'));
+      });
     });
   }
 
