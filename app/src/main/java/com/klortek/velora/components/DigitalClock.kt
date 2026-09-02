@@ -9,8 +9,9 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import kotlinx.coroutines.delay
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * A digital clock component that displays the current time and updates every second.
@@ -21,18 +22,18 @@ fun DigitalClock(
     modifier: Modifier = Modifier,
     use24HourFormat: Boolean = false
 ) {
-    var currentTime by remember { mutableStateOf(LocalTime.now()) }
+    var currentTime by remember { mutableStateOf(Date()) }
 
     LaunchedEffect(Unit) {
         while (true) {
-            currentTime = LocalTime.now()
+            currentTime = Date()
             delay(1000)
         }
     }
 
     val pattern = if (use24HourFormat) "HH:mm" else "h:mm a"
-    val formatter = DateTimeFormatter.ofPattern(pattern)
-    val timeString = currentTime.format(formatter)
+    val formatter = remember(use24HourFormat) { SimpleDateFormat(pattern, Locale.getDefault()) }
+    val timeString = formatter.format(currentTime)
     
     // Match the 30% reduction scaling used in navigation tabs (1.17 * 0.7 = 0.819f)
     val scaledFontSize = MaterialTheme.typography.labelLarge.fontSize * 0.82f

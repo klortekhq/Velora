@@ -23,6 +23,12 @@ hardcodeados en inglés: los fallos de credenciales y Quick Connect usan el
 recurso localizado de error genérico. Se mantiene el detalle técnico fuera de
 la interfaz y la compilación móvil/TV se valida tras el cambio.
 
+El lint móvil detectó y se corrigió el uso de APIs no disponibles en Android
+21 en los servicios de música y en el reloj; la compilación móvil/TV posterior
+supera el cambio. El lint completo aún queda abierto por deuda previa (304
+errores y 297 advertencias en el informe actual, principalmente opt-in de
+Media3, compatibilidad API y estilo); no se presenta como un lint limpio.
+
 La autenticación Android ya no imprime excepciones completas ni trazas de red:
 el log conserva únicamente el tipo de error y el código HTTP, evitando exponer
 por accidente el host configurado o detalles de la petición. La corrección se

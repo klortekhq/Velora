@@ -543,7 +543,7 @@ private fun formatDuration(durationMs: Long): String {
 
 private fun startPlayback(context: Context, tracks: List<Track>, startIndex: Int) {
     val intent = Intent(context, AudioPlayerService::class.java)
-    context.startForegroundService(intent)
+    androidx.core.content.ContextCompat.startForegroundService(context, intent)
     PlayerConnection.connect(context)
     PlayerConnection.playTracks(tracks, startIndex)
 }
