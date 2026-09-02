@@ -3134,12 +3134,16 @@ fun JellyfinVideoPlayerScreen(
                                                     playButton?.let { play ->
                                                         play.nextFocusDownId = android.view.View.NO_ID
                                                         play.nextFocusUpId = android.view.View.NO_ID
-                                                        play.isFocusedByDefault = true
+                                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                            play.isFocusedByDefault = true
+                                                        }
                                                     }
                                                     pauseButton?.let { pause ->
                                                         pause.nextFocusDownId = android.view.View.NO_ID
                                                         pause.nextFocusUpId = android.view.View.NO_ID  
-                                                        pause.isFocusedByDefault = true
+                                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                            pause.isFocusedByDefault = true
+                                                        }
                                                     }
                                                     
                                                     // Use postDelayed to ensure controller is fully rendered, then request focus
@@ -3360,12 +3364,16 @@ fun JellyfinVideoPlayerScreen(
                                             playButton?.let { play ->
                                                 play.nextFocusDownId = android.view.View.NO_ID
                                                 play.nextFocusUpId = android.view.View.NO_ID
-                                                play.isFocusedByDefault = true
+                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                    play.isFocusedByDefault = true
+                                                }
                                             }
                                             pauseButton?.let { pause ->
                                                 pause.nextFocusDownId = android.view.View.NO_ID
                                                 pause.nextFocusUpId = android.view.View.NO_ID  
-                                                pause.isFocusedByDefault = true
+                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                                    pause.isFocusedByDefault = true
+                                                }
                                             }
                                             
                                             // Use postDelayed to ensure controller is fully rendered, then request focus

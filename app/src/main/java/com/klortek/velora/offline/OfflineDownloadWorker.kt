@@ -61,9 +61,15 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
             val resumed = existingBytes > 0L && connection.responseCode == HttpURLConnection.HTTP_PARTIAL
             if (!resumed && existingBytes > 0L) temporary.delete()
             val startingBytes = if (resumed) existingBytes else 0L
+            val contentLength = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                connection.contentLengthLong
+            } else {
+                @Suppress("DEPRECATION")
+                connection.contentLength.toLong()
+            }
             val total = if (resumed) {
-                connection.contentLengthLong.takeIf { it >= 0L }?.plus(startingBytes) ?: -1L
-            } else connection.contentLengthLong
+                contentLength.takeIf { it >= 0L }?.plus(startingBytes) ?: -1L
+            } else contentLength
             var copied = startingBytes
             setProgress(androidx.work.workDataOf(KEY_TOTAL_BYTES to total))
             connection.inputStream.use { input ->

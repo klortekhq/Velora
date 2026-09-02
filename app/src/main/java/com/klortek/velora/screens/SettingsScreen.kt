@@ -2298,11 +2298,12 @@ fun SettingsScreen(
                                         
                                         try {
                                             val versionCode = try {
+                                                val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
                                                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                                                    context.packageManager.getPackageInfo(context.packageName, 0).longVersionCode.toInt()
+                                                    packageInfo.longVersionCode.toInt()
                                                 } else {
                                                     @Suppress("DEPRECATION")
-                                                    context.packageManager.getPackageInfo(context.packageName, 0).versionCode
+                                                    packageInfo.versionCode
                                                 }
                                             } catch (e: Exception) { 1 }
                                             val versionName = runCatching {

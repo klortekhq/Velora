@@ -44,7 +44,13 @@ class MainActivity : ComponentActivity() {
         
         // Get version code from package manager
         val versionCode = try {
-            packageManager.getPackageInfo(packageName, 0).longVersionCode.toInt()
+            val packageInfo = packageManager.getPackageInfo(packageName, 0)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                packageInfo.longVersionCode.toInt()
+            } else {
+                @Suppress("DEPRECATION")
+                packageInfo.versionCode
+            }
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "Error getting version code", e)
             1 // Fallback to 1
