@@ -827,8 +827,10 @@ digests are:
   legacy DownloadManager entries remain readable during migration.
 - Theme music, a Jellyfin-first trailer resolver, persistent preview, and large-library
   virtualization need implementation and critic testing.
-- Live TV channel zapping/previous-channel shortcut and mini-player still need
-  implementation; programme details are now implemented but need hardware QA.
+- Live TV channel zapping and previous-channel shortcut are implemented in the
+  ExoPlayer OSD and covered by deterministic navigation tests. A persistent
+  mini-player in the browsing surface still needs implementation; programme
+  details are implemented but need hardware QA.
 - No hardware test result is claimed: the connected Fire TV/phone were not
   available to this automated run.
 
@@ -846,7 +848,7 @@ SHA-256 manifests. The only remote branch is `main`.
 | Platform | Source/build state | Hardware/runtime validation |
 | --- | --- | --- |
 | Android mobile/tablet | `assembleMobileDebug` passes with AV1 native decoder; unit tests pass | Hardware validation pending |
-| Android TV / Fire TV | Debug + release APK built; TV download guard compiled | Hardware validation pending |
+| Android TV / Fire TV | Debug + release APK built; TV download guard and Live TV zapping compiled | Hardware validation pending |
 | Web | `npm run build:all` passes; webOS IPK generated | Browser/device validation pending |
 | Samsung Tizen | Packaging path exists | Device/emulator validation pending |
 | LG webOS | Packaging path exists | Device/emulator validation pending |
