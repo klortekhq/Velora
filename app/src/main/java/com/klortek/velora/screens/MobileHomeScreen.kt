@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.grid.items as gridItems
@@ -40,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +57,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -94,6 +97,8 @@ fun MobileHomeScreen(
     onContinueWatchingLongClick: (JellyfinItem) -> Unit = {}
 ) {
     var libraryPickerType by remember { mutableStateOf<String?>(null) }
+    val homeListState = rememberLazyListState()
+    val homeScrollScope = rememberCoroutineScope()
     val movieLibraries = remember(libraries) { libraries.filter { it.CollectionType.equals("movies", true) } }
     val seriesLibraries = remember(libraries) { libraries.filter { it.CollectionType.equals("tvshows", true) } }
     Box(Modifier.fillMaxSize().background(MobileHomeBackground)) {
@@ -102,6 +107,7 @@ fun MobileHomeScreen(
         // to sit behind the LazyColumn and leave the selected episode title
         // permanently overlaid on the first rows.
         LazyColumn(
+            state = homeListState,
             contentPadding = PaddingValues(top = 18.dp, bottom = 112.dp),
             verticalArrangement = Arrangement.spacedBy(22.dp),
             modifier = Modifier
@@ -128,7 +134,11 @@ fun MobileHomeScreen(
         val movieLibrary = libraries.firstOrNull { it.CollectionType.equals("movies", true) }
         val seriesLibrary = libraries.firstOrNull { it.CollectionType.equals("tvshows", true) }
         MobileBottomNavigation(
-            onHome = {},
+            onHome = {
+                homeScrollScope.launch {
+                    homeListState.animateScrollToItem(0)
+                }
+            },
             onMovies = {
                 when {
                     movieLibraries.size == 1 -> onMovies()
