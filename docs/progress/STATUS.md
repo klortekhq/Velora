@@ -312,6 +312,8 @@ El cliente web aplica la misma agrupación y selector accesible por teclado; sus
 pruebas de seguridad, capacidades y renderizado pasan. La selección real de
 una fuente depende de que Jellyfin entregue entradas/fuentes alternativas bajo
 la misma identidad; el cliente no inventa fuentes ni incorpora M3U directo.
+Las etiquetas de cantidad y opción del selector web están cubiertas para los
+idiomas configurados, con fallback seguro al catálogo español.
 
 El formulario de inicio de sesión ahora respeta los insets de las barras del
 sistema antes de aplicar su desplazamiento, evitando que el título, los campos
