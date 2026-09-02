@@ -1,6 +1,7 @@
 package com.klortek.velora.jellyfin
 
 import android.content.Context
+import android.util.Log
 import android.provider.Settings
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -42,6 +43,10 @@ class JellyfinAuthService(
     private val baseUrl: String,
     private val context: Context? = null
 ) {
+    private companion object {
+        const val TAG = "JellyfinAuth"
+    }
+
     private val client = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
@@ -96,8 +101,6 @@ class JellyfinAuthService(
                 setBody(requestBody)
             }
             
-            println("Response status: ${response.status}")
-            
             if (response.status == HttpStatusCode.OK) {
                 response.body<AuthenticationResponse>()
             } else {
@@ -107,12 +110,13 @@ class JellyfinAuthService(
                 } catch (e: Exception) {
                     "Could not read error body: ${e.message}"
                 }
-                println("Authentication failed: ${response.status}")
+                Log.w(TAG, "Authentication failed with HTTP ${response.status.value}")
                 null
             }
         } catch (e: Exception) {
-            println("Authentication exception: ${e.message}")
-            e.printStackTrace()
+            // Do not print exception text or a stack trace: network exceptions can
+            // include the configured server URL or request details.
+            Log.w(TAG, "Authentication request failed (${e::class.simpleName})")
             null
         }
     }

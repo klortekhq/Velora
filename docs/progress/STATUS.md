@@ -18,6 +18,12 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+La autenticación Android ya no imprime excepciones completas ni trazas de red:
+el log conserva únicamente el tipo de error y el código HTTP, evitando exponer
+por accidente el host configurado o detalles de la petición. La corrección se
+ha validado con los unit tests móviles y la compilación de TV; no genera una
+release aislada.
+
 El cliente web añade ahora filtros funcionales de Live TV por canales favoritos
 y por grupo. Los grupos se derivan de `Tags`, `ChannelType` y `ServiceName` de
 Jellyfin, con una opción explícita para canales sin grupo; las preferencias se
