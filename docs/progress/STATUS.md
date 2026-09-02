@@ -1,12 +1,22 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-01
+Updated: 2026-09-02
 
 Este dashboard registra únicamente el estado verificable. Una función no se
 marca como completa solo porque exista código o un artefacto anterior.
 
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
+
+La política de publicación mantiene las releases públicas para hitos funcionales
+relevantes: los workflows automáticos solo se activan con etiquetas `vX.Y.0`.
+Los builds de parche se reservan para QA y no generan una release salvo que la
+corrección sea crítica o de seguridad.
+
+Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
+`testMobileDebugUnitTest` y `compileTvDebugKotlin` pasan. No se ha creado una
+nueva release para esta verificación porque no incorpora un bloque funcional
+grande.
 
 La release pública más reciente con artefactos verificados sigue siendo
 `v1.2.85`; `v1.3.0` ya está etiquetada y subida a `main`, con los workflows de
