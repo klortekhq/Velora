@@ -18,6 +18,12 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+En esta misma verificación, `lintMobileDebug` termina correctamente. El
+informe mantiene advertencias y sugerencias no bloqueantes, pero no quedan
+errores de lint en el cliente móvil. La diferencia de SDK XML y la ubicación
+alternativa de Android 36 que aparecen durante Gradle son avisos del SDK local,
+no fallos del código de Velora.
+
 El flujo de inicio de sesión Android ya no muestra mensajes técnicos ni textos
 hardcodeados en inglés: los fallos de credenciales y Quick Connect usan el
 recurso localizado de error genérico. Se mantiene el detalle técnico fuera de
@@ -25,10 +31,8 @@ la interfaz y la compilación móvil/TV se valida tras el cambio.
 
 El lint móvil detectó y se corrigió el uso de APIs no disponibles en Android
 21 en los servicios de música y en el reloj; la compilación móvil/TV posterior
-supera el cambio. El lint completo aún queda abierto por deuda previa (232
-errores, 297 advertencias y 43 sugerencias en el informe actual, principalmente
-compatibilidad API, opt-in de Media3 y estilo); no se presenta como un lint
-limpio.
+supera el cambio. El histórico de deuda queda conservado como referencia; el
+último `lintMobileDebug` ya no presenta errores bloqueantes.
 
 En la siguiente pasada también se corrigieron accesos incompatibles con APIs
 antiguas en el control de versión, el cálculo de tamaños de descargas, la
@@ -49,12 +53,13 @@ recalcularse en la siguiente ejecución; los avisos de APIs obsoletas y las
 dependencias pendientes siguen siendo deuda conocida.
 
 La cobertura de idiomas principales se ha saneado: inglés, francés, alemán y
-español mantienen catálogos explícitos con las claves principales completas,
-evitando que la interfaz quede mezclada. Los catálogos
-adicionales (árabe, italiano, japonés, coreano, portugués, ruso, turco y chino)
-siguen siendo parciales y no se presentan como traducciones completas. Las
-pruebas de recursos, `testMobileDebugUnitTest`, `compileMobileDebugKotlin` y
-`compileTvDebugKotlin` pasan tras el cambio.
+español mantienen catálogos explícitos con las claves completas. También se
+han completado las claves estructurales de árabe, italiano, japonés, coreano,
+portugués, ruso, turco y chino; donde aún no existe traducción humana se usa
+un fallback inglés explícito, sin dejar la interfaz parcialmente sin recursos.
+Las claves de Live TV están separadas y presentes en todos los catálogos. Las
+pruebas de recursos, `testMobileDebugUnitTest`, `compileMobileDebugKotlin`,
+`compileTvDebugKotlin` y `lintMobileDebug` pasan tras el cambio.
 
 También se normalizó el formato de tiempos, puntuaciones y metadatos numéricos
 con `Locale.ROOT`, evitando resultados dependientes del idioma del dispositivo.

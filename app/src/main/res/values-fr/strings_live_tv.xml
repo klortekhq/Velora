@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="live_tv">TV ao vivo</string>
-  <string name="live_tv_nav">TV ao vivo</string>
-  <string name="live_tv_loading">A carregar canais…</string>
-  <string name="live_tv_error">Não foi possível carregar a TV ao vivo</string>
-  <string name="live_tv_no_channels">Não há canais de TV ao vivo disponíveis neste servidor Jellyfin.</string>
-  <string name="live_tv_no_program">Sem informação de programação</string>
-  <string name="live_tv_next_program">A seguir: %1$s</string>
-  <string name="live_tv_refresh">Atualizar canais</string>
-  <string name="live_tv_channel_count">%1$d canais</string>
-  <string name="live_tv_playback_error">Não foi possível abrir este canal. Tente novamente.</string>
-  <string name="live_tv_program_details">Detalhes do programa</string>
-  <string name="live_tv_channel">Canal</string>
-  <string name="live_tv_close_details">Fechar</string>
+  <string name="live_tv">Télévision en direct</string>
+  <string name="live_tv_nav">Télévision en direct</string>
+  <string name="live_tv_loading">Chargement des chaînes…</string>
+  <string name="live_tv_error">Impossible de charger la télévision en direct</string>
+  <string name="live_tv_no_channels">Aucune chaîne de télévision en direct n’est disponible sur ce serveur Jellyfin.</string>
+  <string name="live_tv_no_program">Aucune information de programme</string>
+  <string name="live_tv_next_program">Suivant : %1$s</string>
+  <string name="live_tv_program_details">Détails du programme</string>
+  <string name="live_tv_channel">Chaîne</string>
+  <string name="live_tv_close_details">Fermer</string>
+  <string name="live_tv_refresh">Actualiser les chaînes</string>
+  <string name="live_tv_channel_count">%1$d chaînes</string>
+  <string name="live_tv_playback_error">Impossible d’ouvrir cette chaîne. Réessayez.</string>
   <string name="back">Atrás</string>
   <string name="collections">Colecciones</string>
   <string name="continue_watching">Seguir viendo</string>
