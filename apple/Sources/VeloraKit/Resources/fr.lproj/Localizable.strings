@@ -18,6 +18,10 @@
 "Enable theme music" = "Activer la musique de thème";
 "Volume" = "Volume";
 "Offline downloads are available on this device." = "Les téléchargements hors ligne sont disponibles sur cet appareil.";
+"Download" = "Télécharger";
+"Remove download" = "Supprimer le téléchargement";
+"Unable to download" = "Téléchargement impossible";
+"Unable to remove download" = "Suppression du téléchargement impossible";
 "Play" = "Lire";
 "Live TV" = "TV en direct";
 "Subtitles" = "Sous-titres";
