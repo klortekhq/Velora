@@ -94,6 +94,12 @@ los estados Disponible y Solicitud pendiente se presentan como indicadores no
 interactivos, mientras que Solicitar mantiene su acción real. `testMobileDebugUnitTest`
 y `compileTvDebugKotlin` pasan después del cambio.
 
+La capa SwiftUI Apple consulta ahora el bundle `VeloraKit` al presentar login,
+ajustes, reproducción y Live TV, en lugar de dejar esos textos fuera de
+`Localizable.strings`. Se han añadido las claves equivalentes en español,
+inglés, francés y alemán. Swift/Xcode sigue pendiente en este host; Android y
+Web no presentan regresiones en sus pruebas disponibles.
+
 La superficie GL experimental de Android ya no se selecciona para AV1 ni cuando
 Jellyfin no declara el códec antes de iniciar la reproducción. En esos casos
 Media3 usa su SurfaceView estándar, evitando pantallas negras por decodificación

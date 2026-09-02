@@ -61,7 +61,7 @@ public final class VeloraAppModel: ObservableObject {
             errorMessage = nil
         } catch {
             isAuthenticated = false
-            errorMessage = "Unable to sign in"
+            errorMessage = String(localized: "Unable to sign in", bundle: .module)
         }
     }
 
@@ -128,14 +128,18 @@ public struct VeloraAppShell: View {
                     }
                     .toolbar {
                         ToolbarItem(placement: .automatic) {
-                            NavigationLink("Settings") {
+                            NavigationLink {
                                 VeloraSettingsView(settings: $model.settings)
+                            } label: {
+                                Text("Settings", bundle: .module)
                             }
                         }
                         if !model.liveTvChannels.isEmpty {
                             ToolbarItem(placement: .automatic) {
-                                NavigationLink("Live TV") {
+                                NavigationLink {
                                     VeloraLiveTvView(model: model)
+                                } label: {
+                                    Text("Live TV", bundle: .module)
                                 }
                             }
                         }
@@ -168,16 +172,26 @@ private struct VeloraLoginView: View {
 
     var body: some View {
         Form {
-            Section("Connect to Jellyfin") {
-                TextField("Server address", text: $server)
-                TextField("Username", text: $username)
-                SecureField("Password", text: $password)
-                Button("Sign in") { Task { await onSignIn() } }
+            Section {
+                TextField(text: $server) {
+                    Text("Server address", bundle: .module)
+                }
+                TextField(text: $username) {
+                    Text("Username", bundle: .module)
+                }
+                SecureField(text: $password) {
+                    Text("Password", bundle: .module)
+                }
+                Button { Task { await onSignIn() } } label: {
+                    Text("Sign in", bundle: .module)
+                }
                     .disabled(server.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || username.isEmpty || password.isEmpty)
                 if let errorMessage { Text(errorMessage).foregroundStyle(.red) }
+            } header: {
+                Text("Connect to Jellyfin", bundle: .module)
             }
         }
-        .navigationTitle("Sign in")
+        .navigationTitle(Text("Sign in", bundle: .module))
     }
 }
 
@@ -192,8 +206,10 @@ private struct VeloraItemDetailView: View {
             VStack(alignment: .leading, spacing: 16) {
                 Text(item.name).font(.largeTitle.bold())
                 if let overview = item.overview, !overview.isEmpty { Text(overview) }
-                Button("Play") {
+                Button {
                     Task { player = await model.play(item); player?.play() }
+                } label: {
+                    Text("Play", bundle: .module)
                 }
                 if let player { VideoPlayer(player: player).aspectRatio(16 / 9, contentMode: .fit) }
                 if model.platform.supportsOfflineDownloads {
@@ -251,7 +267,7 @@ private struct VeloraLiveTvView: View {
             .buttonStyle(.plain)
             .accessibilityHint("Play live channel")
         }
-        .navigationTitle("Live TV")
+        .navigationTitle(Text("Live TV", bundle: .module))
         .onDisappear {
             playbackTask?.cancel()
             let activeChannel = selectedChannel
