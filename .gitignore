@@ -17,6 +17,7 @@ local.properties
 # Local IDE/build/test output; never ship generated artifacts or device captures.
 /.android/
 /.gradle-user-home/
+/.gradle-user/
 /.kotlin/
 /.vscode/
 /.idea/
