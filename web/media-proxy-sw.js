@@ -23,6 +23,13 @@ function normalizeServer(value) {
   }
 }
 
+function isAllowedMediaPath(pathname) {
+  // The proxy exists only because media elements cannot attach Jellyfin
+  // headers. Never turn it into a generic authenticated same-origin proxy.
+  return /^\/Videos\/[^/]+\/stream(?:\.[^/]+)?$/i.test(pathname) ||
+    /^\/LiveTv\/LiveStreamFiles\//i.test(pathname);
+}
+
 self.addEventListener('install', function (event) {
   self.skipWaiting();
 });
@@ -53,7 +60,8 @@ self.addEventListener('fetch', function (event) {
     try {
       target = new URL(targetValue);
       var server = new URL(credentials.server);
-      if (target.origin !== server.origin || target.protocol !== server.protocol) {
+      if (target.origin !== server.origin || target.protocol !== server.protocol ||
+          !isAllowedMediaPath(target.pathname)) {
         return new Response('Invalid Velora media target', { status: 403 });
       }
     } catch (error) {
