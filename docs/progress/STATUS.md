@@ -48,6 +48,14 @@ disponible. `testMobileDebugUnitTest`, `compileMobileDebugKotlin` y
 recalcularse en la siguiente ejecución; los avisos de APIs obsoletas y las
 dependencias pendientes siguen siendo deuda conocida.
 
+La cobertura de idiomas principales se ha saneado: inglés, francés y alemán
+recuperan las claves que faltaban, y español utiliza el catálogo base completo
+sin un duplicado parcial que podía dejar la interfaz mezclada. Los catálogos
+adicionales (árabe, italiano, japonés, coreano, portugués, ruso, turco y chino)
+siguen siendo parciales y no se presentan como traducciones completas. Las
+pruebas de recursos, `testMobileDebugUnitTest`, `compileMobileDebugKotlin` y
+`compileTvDebugKotlin` pasan tras el cambio.
+
 La autenticación Android ya no imprime excepciones completas ni trazas de red:
 el log conserva únicamente el tipo de error y el código HTTP, evitando exponer
 por accidente el host configurado o detalles de la petición. La corrección se

@@ -211,4 +211,22 @@
     <string name="settings_smart_remove_watched_description">Supprime automatiquement les films et épisodes marqués comme regardés.</string>
     <string name="settings_smart_keep_episodes">Épisodes non regardés à conserver</string>
     <string name="settings_smart_keep_episodes_description">Conserve ce nombre d’épisodes non regardés lors du nettoyage.</string>
+    <string name="browse_title">Parcourir</string>
+    <string name="related_movies">Vidéos similaires</string>
+    <string name="grid_view">Vue en grille</string>
+    <string name="error_fragment">Erreur</string>
+    <string name="personal_settings">Paramètres personnels</string>
+    <string name="watch_trailer_1">Voir la bande-annonce</string>
+    <string name="watch_trailer_2">GRATUIT</string>
+    <string name="rent_1">Louer pour un jour</string>
+    <string name="rent_2">À partir de 1,99 $</string>
+    <string name="buy_1">Acheter et conserver</string>
+    <string name="buy_2">POUR 9,99 $</string>
+    <string name="movie">Film</string>
+    <string name="error_fragment_message">Une erreur s’est produite</string>
+    <string name="dismiss_error">Fermer</string>
+    <string name="offline_integrity_failed">Le contenu téléchargé est endommagé. Téléchargez-le à nouveau.</string>
+    <string name="settings_offline_storage_limit">Limite de stockage hors connexion</string>
+    <string name="settings_offline_storage_limit_description">Espace maximal que Velora peut gérer pour les téléchargements sur cet appareil.</string>
+    <string name="settings_offline_storage_unlimited">Illimité</string>
 </resources>
