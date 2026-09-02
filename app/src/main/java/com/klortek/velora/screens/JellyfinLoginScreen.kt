@@ -569,34 +569,22 @@ private fun QuickConnectLoginContent(
                         onAuthenticatingChange(false)
                     }
                     result.error != null -> {
-                        val errorMsg = when (result.error) {
-                            is QuickConnectError.ConnectionError -> result.error.message
-                            is QuickConnectError.ServerError -> result.error.message
-                            is QuickConnectError.UnknownError -> result.error.message
-                            is QuickConnectError.Unavailable -> "QuickConnect is not available on this server. Please ensure QuickConnect is enabled in server settings."
-                        }
-                        android.util.Log.w("QuickConnectLogin", "QuickConnect error: $errorMsg")
+                        android.util.Log.w("QuickConnectLogin", "QuickConnect request failed")
                         onIsUnavailableChange(true)
-                        onError(errorMsg)
+                        onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                         onAuthenticatingChange(false)
                     }
                     else -> {
                         android.util.Log.w("QuickConnectLogin", "QuickConnect error: Unknown error")
                         onIsUnavailableChange(true)
-                        onError("Failed to connect. Please check your server address and network connection.")
+                        onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                         onAuthenticatingChange(false)
                     }
                 }
             } catch (e: Exception) {
                 android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect initiation", e)
                 onIsUnavailableChange(true)
-                val errorMsg = when {
-                    e is java.net.ConnectException -> "Cannot connect to server. Please check:\n• Server is running\n• IP address is correct\n• TV is on the same network"
-                    e is java.net.SocketTimeoutException -> "Connection timeout. Server is not responding."
-                    e is java.net.UnknownHostException -> "Cannot resolve server address. Please check the IP address."
-                    else -> "Error: ${e::class.simpleName ?: e.javaClass.simpleName}"
-                }
-                onError(errorMsg)
+                onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                 onAuthenticatingChange(false)
             }
         }
@@ -665,12 +653,12 @@ private fun QuickConnectLoginContent(
                                     onSuccess()
                                 } else {
                                     android.util.Log.e("QuickConnectLogin", "❌ Failed to get access token from authenticateWithQuickConnect")
-                                    onError("Failed to authenticate with QuickConnect. Please try again.")
+                                    onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                                     onAuthenticatingChange(false)
                                 }
                             } catch (e: Exception) {
                                 android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect authentication", e)
-                                onError("Error authenticating: ${e::class.simpleName ?: e.javaClass.simpleName}")
+                                onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                                 onAuthenticatingChange(false)
                             }
                         }
@@ -695,7 +683,7 @@ private fun QuickConnectLoginContent(
             } catch (e: Exception) {
                 android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect polling", e)
                 onIsPollingChange(false)
-                onError("Error polling QuickConnect: ${e::class.simpleName ?: e.javaClass.simpleName}")
+                onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                 break
             }
         }
@@ -860,7 +848,7 @@ private fun performCredentialsLogin(
     scope.launch {
         try {
             if (serverUrl.isBlank() || username.isBlank() || password.isBlank()) {
-                onError("Rellena todos los campos")
+                onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                 return@launch
             }
 
@@ -886,10 +874,10 @@ private fun performCredentialsLogin(
                 config.deviceId = deviceId
                 onSuccess()
             } else {
-                onError("Authentication failed. Please check your credentials.")
+                onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
             }
         } catch (e: Exception) {
-            onError("Error: ${e::class.simpleName ?: e.javaClass.simpleName}")
+            onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
         }
     }
 }
