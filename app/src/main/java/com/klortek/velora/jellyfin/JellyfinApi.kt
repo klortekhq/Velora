@@ -908,6 +908,37 @@ class JellyfinApiService(
         }
     }
 
+    /**
+     * Returns trailers managed by Jellyfin for an item.  Keeping this lookup
+     * in the Jellyfin service lets the UI prefer local/remote server metadata
+     * before consulting an optional external metadata provider.
+     */
+    suspend fun getLocalTrailers(itemId: String): List<JellyfinItem> {
+        return getTrailerItems("Items/$itemId/LocalTrailers")
+    }
+
+    suspend fun getRemoteTrailers(itemId: String): List<JellyfinItem> {
+        return getTrailerItems("Items/$itemId/RemoteTrailers")
+    }
+
+    private suspend fun getTrailerItems(path: String): List<JellyfinItem> {
+        return try {
+            val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+            val url = URLBuilder().takeFrom("$base$path").apply {
+                parameters.append("UserId", userId)
+            }.buildString()
+            client.get(url) {
+                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"Android\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
+            }.body<List<JellyfinItem>>()
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            android.util.Log.w("JellyfinAPI", "Trailer metadata unavailable (${e::class.simpleName})")
+            emptyList()
+        }
+    }
+
     /** Resolve a person returned without an id in a lightweight item response. */
     suspend fun findPersonIdByName(name: String): String? {
         val query = name.trim()

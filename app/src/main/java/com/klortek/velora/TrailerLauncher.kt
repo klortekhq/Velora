@@ -13,12 +13,23 @@ import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.ServiceList
 import org.schabi.newpipe.extractor.services.youtube.extractors.YoutubeStreamExtractor
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
+import com.klortek.velora.jellyfin.JellyfinItem
 
 /**
  * Utility to launch trailers using NewPipe Extractor to play in-app.
  */
 class TrailerLauncher {
     companion object {
+        /** Play a Jellyfin-owned trailer through Velora's canonical ExoPlayer path. */
+        fun launchJellyfinTrailer(context: Context, trailer: JellyfinItem) {
+            val intent = JellyfinVideoPlayerActivity.createIntent(
+                context = context,
+                itemId = trailer.Id,
+                itemName = "Tráiler: ${trailer.Name}"
+            ).apply { putExtra("is_trailer", true) }
+            context.startActivity(intent)
+        }
+
         fun launchTmdbTrailer(context: Context, key: String, title: String) {
             val youtubeUrl = "https://www.youtube.com/watch?v=$key"
             

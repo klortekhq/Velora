@@ -1651,10 +1651,20 @@ fun ActionButtonsRow(
 
     // Trailer state
     var trailerKey by remember { mutableStateOf<String?>(null) }
+    var jellyfinTrailer by remember { mutableStateOf<JellyfinItem?>(null) }
     
     // Fetch trailer (TMDB Direct Fallback)
     LaunchedEffect(displayItem, settings.tmdbApiKey) {
         trailerKey = null // Reset
+        jellyfinTrailer = null
+
+        // Jellyfin is the source of truth: prefer server-managed trailers.
+        val serverTrailer = apiService?.getLocalTrailers(displayItem.Id)?.firstOrNull()
+            ?: apiService?.getRemoteTrailers(displayItem.Id)?.firstOrNull()
+        if (serverTrailer != null) {
+            jellyfinTrailer = serverTrailer
+            return@LaunchedEffect
+        }
         
         // Fallback to TMDB directly if key configured
         if (settings.tmdbApiKey.isNotBlank()) {
@@ -2067,8 +2077,10 @@ fun ActionButtonsRow(
         
         Button(
             onClick = {
-                if (trailerKey != null) {
-                    trailerKey?.let { key ->
+                    if (jellyfinTrailer != null) {
+                        TrailerLauncher.launchJellyfinTrailer(context, jellyfinTrailer!!)
+                    } else if (trailerKey != null) {
+                        trailerKey?.let { key ->
                         TrailerLauncher.launchTmdbTrailer(context, key, displayItem.Name ?: "")
                     }
                 } else {
