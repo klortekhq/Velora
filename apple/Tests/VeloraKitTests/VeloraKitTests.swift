@@ -76,7 +76,7 @@ final class VeloraKitTests: XCTestCase {
             defaults: defaults,
             defaultsKey: "session"
         )
-        let expected = JellyfinSession(accessToken: "secret-token", userID: "user-1", username: "ruvik", serverURL: "http://jellyfin.local:8096")
+        let expected = JellyfinSession(accessToken: "secret-token", userID: "user-1", username: "demo-user", serverURL: "http://jellyfin.local:8096")
         XCTAssertNil(store.load())
         XCTAssertTrue(store.save(expected))
         XCTAssertEqual(store.load(), expected)
@@ -137,9 +137,9 @@ final class VeloraKitTests: XCTestCase {
     }
 
     func testAuthenticationPayloadUsesJellyfinPasswordField() throws {
-        let payload = try JSONEncoder().encode(["Username": "ruvik", "Password": "secret"])
+        let payload = try JSONEncoder().encode(["Username": "demo-user", "Password": "secret"])
         let json = try JSONSerialization.jsonObject(with: payload) as? [String: String]
-        XCTAssertEqual(json?["Username"], "ruvik")
+        XCTAssertEqual(json?["Username"], "demo-user")
         XCTAssertEqual(json?["Password"], "secret")
         XCTAssertNil(json?["Pw"])
     }
