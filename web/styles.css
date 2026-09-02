@@ -26,6 +26,10 @@ header { display: flex; gap: 12px; align-items: center; justify-content: space-b
 .card .label { padding: 10px; font-weight: 650; }
 .live-grid { display: grid; gap: 10px; }
 .live-row { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 92px; padding: 12px 16px; border-radius: 16px; background: var(--panel); cursor: pointer; }
+.live-sources { color: var(--cyan); font-weight: 600; }
+.source-options { display: grid; gap: 10px; margin-top: 18px; }
+.source-option { width: 100%; text-align: left; padding: 14px 16px; border: 1px solid #ffffff33; border-radius: 12px; background: #ffffff0d; color: inherit; cursor: pointer; }
+.source-option:hover, .source-option:focus { border-color: var(--cyan); background: #11bde522; }
 .live-row img { width: 116px; height: 68px; border-radius: 10px; object-fit: contain; background: #16333b; }
 .live-copy { display: grid; gap: 4px; min-width: 0; }
 .live-copy strong, .live-copy span, .live-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
