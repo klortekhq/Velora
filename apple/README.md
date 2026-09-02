@@ -51,6 +51,11 @@ dispositivos. Las sesiones antiguas sin servidor asociado no se restauran para
 evitar enviar accidentalmente un token a otra instancia; basta con iniciar
 sesión una vez de nuevo.
 
+Los entrypoints no apuntan a `localhost`: muestran un servidor inicial
+editable (`jellyfin.local:8096`) para evitar intentar conectar con el propio
+dispositivo. El servidor real se introduce en el formulario de inicio de
+sesión y queda asociado a la sesión guardada.
+
 El cliente valida también el host, puerto y componentes de la URL del servidor
 antes de guardar o usar la sesión: no acepta credenciales, query ni fragmentos
 embebidos.
