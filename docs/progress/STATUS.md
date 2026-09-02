@@ -30,6 +30,13 @@ HTTPS respetan ahora la validación de certificados por defecto; los servidores
 locales HTTP siguen funcionando y no se ha añadido ningún bypass oculto. La
 prueba móvil y la compilación TV pasan tras este cambio.
 
+Live TV Android ya no muestra mensajes brutos de excepciones de red ni un
+mensaje de favorito codificado en español: los errores visibles son genéricos,
+localizados y los detalles técnicos quedan únicamente en el log local. La
+clave tiene valor base y traducciones en español, inglés, francés y alemán.
+La corrección se ha validado con `testMobileDebugUnitTest` y
+`compileTvDebugKotlin`.
+
 La base Apple incorpora ahora entrypoints SwiftPM separados `VeloraMobile` y
 `VeloraTV`, ambos sobre `VeloraKit`; el primero selecciona iPhone/iPad y el
 segundo fuerza tvOS, manteniendo streaming-only en televisión. La compilación

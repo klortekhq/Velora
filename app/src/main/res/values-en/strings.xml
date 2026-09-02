@@ -76,6 +76,7 @@
     <string name="live_tv_nav">Live TV</string>
     <string name="live_tv_loading">Loading channels…</string>
     <string name="live_tv_error">Could not load Live TV</string>
+    <string name="live_tv_favorite_update_error">Could not update the favorite</string>
     <string name="live_tv_no_channels">No Live TV channels are available on this Jellyfin server.</string>
     <string name="live_tv_no_program">No programme information</string>
     <string name="live_tv_next_program">Next: %1$s</string>

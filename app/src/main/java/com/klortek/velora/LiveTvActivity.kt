@@ -151,7 +151,7 @@ private fun LiveTvScreen(
             }
         } catch (e: Exception) {
             android.util.Log.e("LiveTvActivity", "Could not load Live TV channels", e)
-            loadError = e.message ?: e.javaClass.simpleName
+            loadError = "error"
         } finally {
             isLoading = false
         }
@@ -277,7 +277,9 @@ private fun LiveTvScreen(
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = stringResource(R.string.live_tv_error),
+                            text = stringResource(
+                                if (loadError == "favorite") R.string.live_tv_favorite_update_error else R.string.live_tv_error
+                            ),
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -326,7 +328,10 @@ private fun LiveTvScreen(
                                                 if (current.Id == channel.Id) current.copy(UserData = com.klortek.velora.livetv.LiveTvUserData(favorite)) else current
                                             }
                                         }
-                                        .onFailure { loadError = it.message ?: "No se pudo actualizar el favorito" }
+                                        .onFailure {
+                                            android.util.Log.e("LiveTvActivity", "Could not update Live TV favorite", it)
+                                            loadError = "favorite"
+                                        }
                                 }
                             }
                         )
