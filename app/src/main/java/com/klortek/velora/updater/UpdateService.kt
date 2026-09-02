@@ -237,8 +237,7 @@ object UpdateService {
                 
                 // Try Intent.ACTION_VIEW with the APK file
                 val installIntent = Intent(Intent.ACTION_VIEW).apply {
-                    data = apkUri
-                    type = "application/vnd.android.package-archive"
+                    setDataAndType(apkUri, "application/vnd.android.package-archive")
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     addFlags(flags)

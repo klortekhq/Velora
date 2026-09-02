@@ -451,7 +451,7 @@ fun JellyfinVideoPlayerScreen(
     // Configure audio attributes for media playback
     val audioAttributes = AudioAttributes.Builder()
         .setUsage(C.USAGE_MEDIA)
-        .setContentType(C.CONTENT_TYPE_MOVIE)
+        .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
         .build()
     
     val player = remember {

@@ -39,6 +39,15 @@ se añadieron opt-ins AndroidX explícitos para los puntos que usan Media3 y se
 evitaron más llamadas nullable a DownloadManager; el informe bajó de 304 a 232
 errores. `node --check web/app.js`, las pruebas web y `git diff --check` pasan.
 
+Después se corrigieron cuatro errores adicionales del informe: dos bloques con
+indentación sospechosa, el tipo de contenido de audio incorrecto en Media3 y
+la construcción de un Intent que podía borrar la URI al fijar el MIME. También
+se hizo segura la consulta de DownloadManager cuando el servicio no está
+disponible. `testMobileDebugUnitTest`, `compileMobileDebugKotlin` y
+`compileTvDebugKotlin` pasan de nuevo. El informe completo de lint debe
+recalcularse en la siguiente ejecución; los avisos de APIs obsoletas y las
+dependencias pendientes siguen siendo deuda conocida.
+
 La autenticación Android ya no imprime excepciones completas ni trazas de red:
 el log conserva únicamente el tipo de error y el código HTTP, evitando exponer
 por accidente el host configurado o detalles de la petición. La corrección se
