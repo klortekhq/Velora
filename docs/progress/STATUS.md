@@ -826,7 +826,9 @@ digests are:
   progress reporting, retry semantics and Keystore-backed credential lookup;
   legacy DownloadManager entries remain readable during migration.
 - Theme music, persistent preview and large-library virtualization still need
-  implementation and critic testing. Trailer selection now prefers Jellyfin
+  product integration and critic testing. The preview lifecycle contract now
+  covers dwell timing, stale-focus invalidation and cleanup without owning a
+  player instance. Trailer selection now prefers Jellyfin
   local/remote trailer metadata and falls back to TMDB only when the server
   has no trailer available; this Android path is covered by a successful
   mobile/TV compilation but still needs hardware playback QA.
@@ -927,6 +929,8 @@ SHA-256 manifests. The only remote branch is `main`.
 - `testMobileDebugUnitTest` and `compileTvDebugKotlin`: passing on 2026-09-02
   after routing Jellyfin-managed trailers through the canonical ExoPlayer
   player; only existing SDK/deprecation/KAPT warnings were emitted.
+- `testMobileDebugUnitTest`: passing on 2026-09-02 with preview lifecycle
+  coverage for dwell timing, focus cancellation and stop cleanup.
 - A fresh local Android verification was blocked before compilation because
   this machine has no Android SDK installed; no new Android hardware result is
   claimed. The Windows non-ASCII path guard is enabled in `gradle.properties`.
