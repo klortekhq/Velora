@@ -763,7 +763,7 @@ private fun MiniPlayer(
 private fun startPlayback(context: Context, tracks: List<Track>, startIndex: Int) {
     // Start the audio service
     val intent = Intent(context, AudioPlayerService::class.java)
-    context.startForegroundService(intent)
+    androidx.core.content.ContextCompat.startForegroundService(context, intent)
 
     // Connect and play
     PlayerConnection.connect(context)
