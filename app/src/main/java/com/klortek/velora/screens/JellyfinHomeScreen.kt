@@ -128,6 +128,7 @@ import androidx.compose.ui.res.painterResource
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.jellyfin.AppSettings
+import com.klortek.velora.preview.ThemeMusicController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import com.klortek.velora.jellyfin.JellyfinItem
@@ -611,6 +612,30 @@ fun JellyfinHomeScreen(
                 } catch (e: Exception) {
                     // Keep using basic item info on failure
                 }
+            }
+        }
+    }
+
+    // Keep one lightweight background player for theme songs. Mobile remains
+    // opt-in through settings; changing focus only swaps the source after the
+    // existing 250 ms Home debounce has settled.
+    val themeMusicController = remember(context) { ThemeMusicController(context) }
+    DisposableEffect(themeMusicController) {
+        onDispose { themeMusicController.release() }
+    }
+    LaunchedEffect(settings.themeMusicEnabled, debouncedHighlightedItem?.Id, apiService) {
+        if (!settings.themeMusicEnabled || apiService == null || debouncedHighlightedItem == null) {
+            themeMusicController.stop()
+        } else {
+            val themeSong = apiService.getThemeSongs(debouncedHighlightedItem!!.Id).firstOrNull()
+            if (themeSong == null) {
+                themeMusicController.stop()
+            } else {
+                themeMusicController.play(
+                    url = apiService.getThemeSongUrl(themeSong.Id),
+                    headers = apiService.getVideoRequestHeaders(),
+                    volume = 0.7f
+                )
             }
         }
     }
