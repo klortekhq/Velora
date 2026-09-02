@@ -168,6 +168,23 @@ internal data class AspectPresentation(
     val forcedRatio: Float
 )
 
+/**
+ * Returns the aspect ratio for the Compose container around the actual video
+ * surface. Keeping this decision pure and shared by portrait and fullscreen
+ * prevents the selector from appearing to work in one orientation only.
+ */
+internal fun containerAspectRatio(
+    mode: AspectMode,
+    sourceRatio: Float,
+    fillContainer: Boolean = false
+): Float? = when (mode) {
+    AspectMode.FOUR_THREE -> 4f / 3f
+    AspectMode.LETTERBOX -> 16f / 9f
+    AspectMode.CINEMA -> 2.39f
+    AspectMode.FIT, AspectMode.ORIGINAL -> sourceRatio.coerceAtLeast(0.1f)
+    AspectMode.FILL, AspectMode.STRETCH -> if (fillContainer) null else 16f / 9f
+}
+
 @OptIn(UnstableApi::class)
 internal fun aspectPresentation(mode: AspectMode): AspectPresentation = when (mode) {
     AspectMode.FIT -> AspectPresentation(AspectRatioFrameLayout.RESIZE_MODE_FIT, 0f)
@@ -3944,17 +3961,11 @@ fun JellyfinVideoPlayerScreen(
 
             // The outer mobile player must follow the selected mode too. A
             // fixed 16:9 box used to hide changes made by the aspect selector.
-            val mobilePlayerAspect = when (currentAspectMode) {
-                AspectMode.FOUR_THREE -> 4f / 3f
-                AspectMode.LETTERBOX -> 16f / 9f
-                AspectMode.CINEMA -> 2.39f
-                AspectMode.FIT, AspectMode.ORIGINAL -> videoAspectRatio
-                AspectMode.FILL, AspectMode.STRETCH -> 16f / 9f
-            }
+            val mobilePlayerAspect = containerAspectRatio(currentAspectMode, videoAspectRatio)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(mobilePlayerAspect)
+                    .aspectRatio(mobilePlayerAspect ?: (16f / 9f))
             ) {
                 playerContent(Modifier.fillMaxSize())
             }
@@ -4317,13 +4328,7 @@ fun JellyfinVideoPlayerScreen(
         // Keep the selected presentation frame in fullscreen too. Previously
         // only the portrait container used the selected aspect ratio, while
         // landscape fullscreen always constrained the player to the display.
-        val fullscreenAspect = when (currentAspectMode) {
-            AspectMode.FOUR_THREE -> 4f / 3f
-            AspectMode.LETTERBOX -> 16f / 9f
-            AspectMode.CINEMA -> 2.39f
-            AspectMode.FIT, AspectMode.ORIGINAL -> videoAspectRatio
-            AspectMode.FILL, AspectMode.STRETCH -> null
-        }
+        val fullscreenAspect = containerAspectRatio(currentAspectMode, videoAspectRatio, fillContainer = true)
         Box(
             modifier = Modifier
                 .fillMaxSize()
