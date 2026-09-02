@@ -33,6 +33,11 @@ Jellyfin las expone; si la respuesta no incluye fuentes identificables, Velora
 usa la selección estándar del servidor. La regresión web y
 `testMobileDebugUnitTest` pasan tras este cambio.
 
+La consulta de canales solicita explícitamente `MediaSources` y el contador de
+la interfaz representa filas agrupadas, no entradas duplicadas. La regresión
+también cubre que dos entradas con la misma ID conserven sus fuentes y que se
+propague la segunda alternativa.
+
 En la auditoría posterior, `npm run build:all` prepara el cliente web, webOS y
 VIDAA; Samsung queda honestamente pendiente de Tizen Studio/CLI. `lintMobileDebug`
 también pasa después de corregir el opt-in de Media3 en la música de tema y de

@@ -458,7 +458,7 @@
 
   function loadLiveTvChannels() {
     var channelPath = '/LiveTv/Channels?UserId=' + encodeURIComponent(state.userId) +
-      '&AddCurrentProgram=true&EnableUserData=true&EnableImages=true&Fields=Overview';
+      '&AddCurrentProgram=true&EnableUserData=true&EnableImages=true&Fields=Overview%2CMediaSources';
     return api(channelPath).then(function (response) {
       var channels = response.Items || [];
       if (!channels.length) return channels;

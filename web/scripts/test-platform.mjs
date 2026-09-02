@@ -71,6 +71,7 @@ assert.match(appSource, /fullscreenchange/);
 assert.match(appSource, /velora-clear-credentials/);
 assert.match(appSource, /\/LiveTv\/Channels\?UserId=/);
 assert.match(appSource, /AddCurrentProgram=true/);
+assert.match(appSource, /Fields=Overview%2CMediaSources/);
 assert.match(appSource, /live-row/);
 assert.match(appSource, /liveProgramProgress/);
 assert.match(appSource, /People/);
