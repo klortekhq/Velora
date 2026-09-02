@@ -29,6 +29,12 @@ supera el cambio. El lint completo aún queda abierto por deuda previa (304
 errores y 297 advertencias en el informe actual, principalmente opt-in de
 Media3, compatibilidad API y estilo); no se presenta como un lint limpio.
 
+En la siguiente pasada también se corrigieron accesos incompatibles con APIs
+antiguas en el control de versión, el cálculo de tamaños de descargas, la
+limpieza de subtítulos y el foco del OSD. `testMobileDebugUnitTest`,
+`compileMobileDebugKotlin` y `compileTvDebugKotlin` vuelven a pasar; el lint
+completo sigue pendiente por la deuda anterior ya contabilizada.
+
 La autenticación Android ya no imprime excepciones completas ni trazas de red:
 el log conserva únicamente el tipo de error y el código HTTP, evitando exponer
 por accidente el host configurado o detalles de la petición. La corrección se

@@ -223,7 +223,7 @@ object SubtitleDownloader {
                 Log.d(TAG, "Deleted cached subtitle: ${file.name}")
                 
                 // Remove from memory cache
-                downloadedSubtitles.entries.removeIf { it.value == file.absolutePath }
+                downloadedSubtitles.entries.removeAll { it.value == file.absolutePath }
             }
         }
     }
