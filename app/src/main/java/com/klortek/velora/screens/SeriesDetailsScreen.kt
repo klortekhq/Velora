@@ -126,6 +126,7 @@ import kotlinx.coroutines.withContext
 import com.klortek.velora.TrailerLauncher
 import com.klortek.velora.tmdb.TmdbApiService
 import com.klortek.velora.trailer.TrailerResolver
+import com.klortek.velora.trailer.JellyfinTrailerResolver
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.activity.compose.BackHandler
 import kotlinx.coroutines.delay
@@ -2175,8 +2176,10 @@ fun EpisodeActionButtonsRow(
         jellyfinTrailer = null
 
         // Prefer trailers curated by the user's Jellyfin server.
-        val serverTrailer = apiService?.getLocalTrailers(seriesItem.Id)?.firstOrNull()
-            ?: apiService?.getRemoteTrailers(seriesItem.Id)?.firstOrNull()
+        val serverTrailer = JellyfinTrailerResolver.select(
+            local = apiService?.getLocalTrailers(seriesItem.Id).orEmpty(),
+            remote = apiService?.getRemoteTrailers(seriesItem.Id).orEmpty()
+        )
         if (serverTrailer != null) {
             jellyfinTrailer = serverTrailer
             return@LaunchedEffect
