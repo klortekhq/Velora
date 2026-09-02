@@ -25,6 +25,11 @@ conservan localmente. La sintaxis, las pruebas web y el empaquetado web se han
 verificado de nuevo. Este cambio se sube a `main`, pero no genera APK ni
 release por sí solo.
 
+El fallback MPV de Android ya no desactiva la verificación TLS. Las conexiones
+HTTPS respetan ahora la validación de certificados por defecto; los servidores
+locales HTTP siguen funcionando y no se ha añadido ningún bypass oculto. La
+prueba móvil y la compilación TV pasan tras este cambio.
+
 La base Apple incorpora ahora entrypoints SwiftPM separados `VeloraMobile` y
 `VeloraTV`, ambos sobre `VeloraKit`; el primero selecciona iPhone/iPad y el
 segundo fuerza tvOS, manteniendo streaming-only en televisión. La compilación
