@@ -160,6 +160,10 @@ Los entrypoints Apple dejaron de usar `127.0.0.1:8096` como servidor inicial,
 ya que en un dispositivo real eso apunta al propio equipo. Ahora muestran un
 valor editable de ejemplo y esperan la dirección Jellyfin real del usuario.
 
+El login web aplica ahora la misma validación estricta de servidor: esquema
+HTTP(S), host y puerto válidos, sin usuario, contraseña, query ni fragmento.
+La prueba de plataforma verifica que esta validación no se elimine por error.
+
 El bloque actual añade Smart Downloads móvil/tablet de forma opt-in. La
 migración SQLite conserva los estados de visto y protegido, y la limpieza no
 elimina nunca una descarga marcada para conservar. La validación móvil pasa;

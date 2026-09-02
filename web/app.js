@@ -199,6 +199,19 @@
     return state.server.replace(/\/$/, '');
   }
 
+  function normalizeServerUrl(value) {
+    try {
+      var parsed = new URL(String(value || '').trim());
+      if ((parsed.protocol !== 'http:' && parsed.protocol !== 'https:') ||
+          !parsed.hostname || parsed.username || parsed.password || parsed.search || parsed.hash ||
+          (parsed.port && (Number(parsed.port) < 1 || Number(parsed.port) > 65535))) return '';
+      parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+      return parsed.toString().replace(/\/$/, '');
+    } catch (error) {
+      return '';
+    }
+  }
+
   function esc(value) {
     return String(value == null ? '' : value).replace(/[&<>"']/g, function (character) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
@@ -369,7 +382,11 @@
 
   function authenticate() {
     var error = document.querySelector('#loginError');
-    state.server = document.querySelector('#server').value.trim();
+    state.server = normalizeServerUrl(document.querySelector('#server').value);
+    if (!state.server) {
+      error.textContent = t('loginError');
+      return;
+    }
     var username = document.querySelector('#user').value.trim();
     fetch(base() + '/Users/AuthenticateByName', {
       method: 'POST',
