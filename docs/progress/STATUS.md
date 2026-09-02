@@ -25,6 +25,12 @@ valida también dentro del service worker web el servidor y las credenciales del
 proxy multimedia. Las pruebas web, unitarias Android y la compilación móvil/TV
 han pasado tras ambos cambios. Ninguno genera una release aislada.
 
+El commit `038c5dd` limita además el proxy multimedia web a rutas de vídeo y
+Live TV del mismo servidor y evita que pueda reutilizarse como un proxy
+autenticado genérico. `node --check web/media-proxy-sw.js` y
+`node web/scripts/test-platform.mjs` pasan después de la regresión. Se mantiene
+como corrección de seguridad puntual, sin release independiente.
+
 La auditoría de autenticación añadió validación estricta y compartida para la
 URL del servidor: solo se aceptan HTTP/HTTPS con host y puerto válidos, sin
 credenciales, query ni fragmentos embebidos. También se eliminó una lectura
