@@ -73,6 +73,23 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertNil(store.load())
     }
 
+    func testOfflineStorePersistsAndRemovesManagedMedia() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let store = VeloraOfflineStore(rootURL: root)
+        let temporary = root.appendingPathComponent("incoming.bin")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        try Data("media".utf8).write(to: temporary)
+
+        let entry = try store.add(mediaAt: temporary, itemID: "item-1", title: "Example", serverURL: "https://jellyfin.example")
+        XCTAssertEqual(store.load(), [entry])
+        XCTAssertEqual(try Data(contentsOf: store.mediaURL(for: entry)), Data("media".utf8))
+
+        try store.remove(entry)
+        XCTAssertTrue(store.load().isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: store.mediaURL(for: entry).path))
+        try? FileManager.default.removeItem(at: root)
+    }
+
     func testCredentialStoreRoundTripsAndRemovesSession() {
         let suiteName = "velora.credentials.tests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!

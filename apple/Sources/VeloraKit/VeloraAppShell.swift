@@ -11,6 +11,8 @@ public final class VeloraAppModel: ObservableObject {
     @Published public private(set) var isAuthenticated = false
     @Published public private(set) var items: [JellyfinItem] = []
     @Published public private(set) var liveTvChannels: [JellyfinLiveTvChannel] = []
+    @Published public private(set) var offlineDownloads: [VeloraOfflineDownload] = []
+    @Published public private(set) var downloadingItemID: String?
     @Published public var errorMessage: String?
     @Published public var settings: VeloraSettings {
         didSet { settingsStore.save(settings) }
@@ -20,6 +22,7 @@ public final class VeloraAppModel: ObservableObject {
     private let client: JellyfinClient
     private let settingsStore: VeloraSettingsStore
     private let credentialStore: VeloraCredentialStore
+    private let offlineStore: VeloraOfflineStore
     private let serverDefaults: UserDefaults
     private var session: JellyfinSession?
 
@@ -30,6 +33,7 @@ public final class VeloraAppModel: ObservableObject {
         self.settingsStore = VeloraSettingsStore()
         self.settings = settingsStore.load() ?? VeloraSettings.systemDefault()
         self.credentialStore = credentialStore
+        self.offlineStore = VeloraOfflineStore()
         self.serverDefaults = serverDefaults
         let configuredServer = serverDefaults.string(forKey: "velora.serverURL")
             .flatMap(URL.init(string:)) ?? serverURL
@@ -43,6 +47,9 @@ public final class VeloraAppModel: ObservableObject {
         self.client = try JellyfinClient(serverURL: configuredServer, restoredSession: restoredSession)
         self.session = restoredSession
         self.isAuthenticated = restoredSession != nil
+        self.offlineDownloads = platform.supportsOfflineDownloads
+            ? offlineStore.load().filter { $0.serverURL == configuredServer.absoluteString }
+            : []
     }
 
     public func signIn(serverURL: String, username: String, password: String) async {
@@ -59,6 +66,9 @@ public final class VeloraAppModel: ObservableObject {
             async let channels = client.liveTvChannels(userID: authenticated.userID)
             items = try await library
             liveTvChannels = (try? await channels) ?? []
+            offlineDownloads = platform.supportsOfflineDownloads
+                ? offlineStore.load().filter { $0.serverURL == url.absoluteString }
+                : []
             isAuthenticated = true
             errorMessage = nil
         } catch {
@@ -73,15 +83,54 @@ public final class VeloraAppModel: ObservableObject {
         session = nil
         items = []
         liveTvChannels = []
+        offlineDownloads = []
         isAuthenticated = false
     }
 
     public func play(_ item: JellyfinItem) async -> AVPlayer? {
+        if let offline = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == session?.serverURL }),
+           FileManager.default.fileExists(atPath: offlineStore.mediaURL(for: offline).path) {
+            return AVPlayer(url: offlineStore.mediaURL(for: offline))
+        }
         guard let requestURL = await client.videoURL(itemID: item.id) else { return nil }
         let request = await client.authorizedRequest(for: requestURL)
         guard let url = request.url else { return nil }
         let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": request.allHTTPHeaderFields ?? [:]])
         return AVPlayer(playerItem: AVPlayerItem(asset: asset))
+    }
+
+    public func download(_ item: JellyfinItem) async {
+        guard platform.supportsOfflineDownloads, downloadingItemID == nil else { return }
+        guard let requestURL = await client.videoURL(itemID: item.id) else { return }
+        let serverURL = await client.serverURL()
+        guard !offlineDownloads.contains(where: { $0.itemID == item.id && $0.serverURL == serverURL.absoluteString }) else { return }
+        downloadingItemID = item.id
+        defer { downloadingItemID = nil }
+        do {
+            let request = await client.authorizedRequest(for: requestURL)
+            let (temporaryURL, response) = try await URLSession.shared.download(for: request)
+            guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else { return }
+            let entry = try offlineStore.add(
+                mediaAt: temporaryURL,
+                itemID: item.id,
+                title: item.name,
+                serverURL: serverURL.absoluteString
+            )
+            offlineDownloads = offlineStore.load().filter { $0.serverURL == serverURL.absoluteString }
+            if !offlineDownloads.contains(entry) { offlineDownloads.append(entry) }
+        } catch {
+            errorMessage = String(localized: "Unable to download", bundle: .module)
+        }
+    }
+
+    public func removeDownload(for item: JellyfinItem) async {
+        guard let entry = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == session?.serverURL }) else { return }
+        do {
+            try offlineStore.remove(entry)
+            offlineDownloads = offlineStore.load().filter { $0.serverURL == session?.serverURL }
+        } catch {
+            errorMessage = String(localized: "Unable to remove download", bundle: .module)
+        }
     }
 
     public func playLiveTv(channel: JellyfinLiveTvChannel) async -> AVPlayer? {
@@ -215,9 +264,28 @@ private struct VeloraItemDetailView: View {
                 }
                 if let player { VideoPlayer(player: player).aspectRatio(16 / 9, contentMode: .fit) }
                 if model.platform.supportsOfflineDownloads {
-                    Text("Offline downloads are available on this device.", bundle: .module)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                    if model.offlineDownloads.contains(where: { $0.itemID == item.id }) {
+                        Button {
+                            Task { await model.removeDownload(for: item) }
+                        } label: {
+                            Label {
+                                Text("Remove download", bundle: .module)
+                            } icon: {
+                                Image(systemName: "trash")
+                            }
+                        }
+                    } else {
+                        Button {
+                            Task { await model.download(item) }
+                        } label: {
+                            Label {
+                                Text("Download", bundle: .module)
+                            } icon: {
+                                Image(systemName: "arrow.down.circle")
+                            }
+                        }
+                        .disabled(model.downloadingItemID != nil)
+                    }
                 }
             }
             .padding()

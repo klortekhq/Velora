@@ -21,6 +21,11 @@ grande.
 El pipeline Android fija Node.js 20 antes de validar la versión de las etiquetas,
 para que las releases de milestone sean reproducibles en GitHub Actions.
 
+La base Apple incorpora ahora un catálogo offline privado para iPhone/iPad:
+descarga autenticada sin token en la URL, reproducción local preferente y
+eliminación desde Velora. La transferencia en segundo plano, calidades y la
+validación en macOS/hardware siguen pendientes; tvOS continúa sin descargas.
+
 Después de esa verificación se subieron dos correcciones adicionales a
 `main`: `b5e298f` centraliza la aplicación del aspecto entre reproducción
 vertical y pantalla completa, con regresiones para todos los modos; `55c08cf`
@@ -808,7 +813,8 @@ digests are:
   decision tests; the SwiftUI iOS/iPadOS/tvOS clients are not yet present or
   hardware-verified.
 - VIDAA support is not validated on a real device or certified runtime.
-- Offline queue/storage recovery, persistence of integrity metadata, settings
+- Offline queue/storage recovery, background transfer, quality selection,
+  persistence of integrity metadata, settings
   integration and the full end-to-end offline journey are not yet verified;
   the storage policy and digest contracts have unit coverage.
   the durable metadata foundation is now in place.

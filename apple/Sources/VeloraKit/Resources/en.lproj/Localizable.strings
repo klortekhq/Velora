@@ -18,6 +18,10 @@
 "Enable theme music" = "Enable theme music";
 "Volume" = "Volume";
 "Offline downloads are available on this device." = "Offline downloads are available on this device.";
+"Download" = "Download";
+"Remove download" = "Remove download";
+"Unable to download" = "Unable to download";
+"Unable to remove download" = "Unable to remove download";
 "Play" = "Play";
 "Live TV" = "Live TV";
 "Subtitles" = "Subtitles";
