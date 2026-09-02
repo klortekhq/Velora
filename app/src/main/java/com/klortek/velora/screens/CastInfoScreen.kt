@@ -110,7 +110,7 @@ fun CastInfoScreen(
             try {
                 topSectionFocusRequester.requestFocus()
             } catch (e: Exception) {
-                Log.w("CastInfoScreen", "Could not request focus on top section: ${e.message}")
+                Log.w("CastInfoScreen", "Could not request focus on top section: ${e::class.simpleName}")
             }
         }
     }

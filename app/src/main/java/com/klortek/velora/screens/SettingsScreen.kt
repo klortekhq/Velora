@@ -2259,7 +2259,7 @@ fun SettingsScreen(
                                         } catch (e: Exception) {
                                             android.util.Log.e("SettingsScreen", "Error clearing cache", e)
                                             withContext(Dispatchers.Main) {
-                                                Toast.makeText(context, "Error al borrar la caché: ${e.message}", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.error_fragment_message), Toast.LENGTH_SHORT).show()
                                             }
                                         }
                                     }
@@ -2327,7 +2327,7 @@ fun SettingsScreen(
                                             }
                                         } catch (e: Exception) {
                                             android.util.Log.e("SettingsScreen", "Error checking for updates", e)
-                                            updateCheckMessage = "Error checking for updates: ${e.message}"
+                                            updateCheckMessage = "Error checking for updates: ${e::class.simpleName}"
                                         } finally {
                                             checkingForUpdates = false
                                         }

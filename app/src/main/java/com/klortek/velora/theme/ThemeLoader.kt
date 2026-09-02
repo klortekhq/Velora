@@ -80,7 +80,7 @@ class ThemeLoader(
                 parseCssTheme(cssText)
             }
         } catch (e: Exception) {
-            android.util.Log.e("ThemeLoader", "Failed to fetch theme from server: ${e.message}", e)
+            android.util.Log.e("ThemeLoader", "Failed to fetch theme from server: ${e::class.simpleName}", e)
             null
         }
     }
@@ -123,7 +123,7 @@ class ThemeLoader(
                     android.util.Log.w("ThemeLoader", "Failed to fetch imported CSS from ${SensitiveDataRedactor.url(importUrl)}: status $importedStatus")
                 }
             } catch (e: Exception) {
-                android.util.Log.e("ThemeLoader", "Error fetching imported CSS from ${SensitiveDataRedactor.url(importUrl)}: ${e.message}", e)
+                android.util.Log.e("ThemeLoader", "Error fetching imported CSS from ${SensitiveDataRedactor.url(importUrl)}: ${e::class.simpleName}", e)
             }
         }
         
@@ -182,7 +182,7 @@ class ThemeLoader(
                 focus = focus
             )
         } catch (e: Exception) {
-            android.util.Log.e("ThemeLoader", "Failed to parse CSS theme: ${e.message}", e)
+            android.util.Log.e("ThemeLoader", "Failed to parse CSS theme: ${e::class.simpleName}", e)
             null
         }
     }
@@ -345,7 +345,7 @@ class ThemeLoader(
                 }
             }
         } catch (e: Exception) {
-            android.util.Log.w("ThemeLoader", "Failed to parse CSS color: $cssValue - ${e.message}")
+            android.util.Log.w("ThemeLoader", "Failed to parse CSS color: $cssValue - ${e::class.simpleName}")
             null
         }
     }

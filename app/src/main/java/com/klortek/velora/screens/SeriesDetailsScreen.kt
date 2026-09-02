@@ -333,7 +333,7 @@ fun SeriesDetailsScreen(
                 firstSeasonFocusRequester.requestFocus()
                 Log.d("SeriesDetailsScreen", "Focused on Season 1 button (no initial episode)")
             } catch (e: Exception) {
-                Log.w("SeriesDetailsScreen", "Could not focus on Season 1 button: ${e.message}")
+                Log.w("SeriesDetailsScreen", "Could not focus on Season 1 button: ${e::class.simpleName}")
             }
         }
     }
@@ -1184,11 +1184,11 @@ fun SeriesBottomContainer(
                             // Wait longer between retries to ensure UI is ready
                             kotlinx.coroutines.delay(300)
                         } else {
-                            Log.w("SeriesBottomContainer", "Failed to request focus on initial episode after $maxRetries retries: ${e.message}")
+                            Log.w("SeriesBottomContainer", "Failed to request focus on initial episode after $maxRetries retries: ${e::class.simpleName}")
                         }
                     } catch (e: Exception) {
                         // Catch any other exceptions
-                        Log.e("SeriesBottomContainer", "Unexpected error requesting focus: ${e.message}", e)
+                        Log.e("SeriesBottomContainer", "Unexpected error requesting focus: ${e::class.simpleName}", e)
                         break
                     }
                 }
@@ -1344,7 +1344,7 @@ fun SeriesBottomContainer(
                                                         lastFocusedEpisodeRequester[episodeToFocus.Id]?.requestFocus()
                                                         true
                                                     } catch (e: Exception) {
-                                                        Log.w("SeriesBottomContainer", "Failed to restore focus to episode: ${e.message}")
+                                                        Log.w("SeriesBottomContainer", "Failed to restore focus to episode: ${e::class.simpleName}")
                                                         false
                                                     }
                                                 } else {
@@ -1505,7 +1505,7 @@ fun SeriesBottomContainer(
                                     try {
                                         lastFocusedEpisodeRequester[currentEpisode.Id]?.requestFocus()
                                     } catch (e: IllegalStateException) {
-                                        Log.w("SeriesBottomContainer", "Failed to restore focus to episode: ${e.message}")
+                                        Log.w("SeriesBottomContainer", "Failed to restore focus to episode: ${e::class.simpleName}")
                                     }
                                     true
                                 } else {
@@ -3440,7 +3440,7 @@ fun EpisodeSubtitleSelectionDialog(
                         }
                     } catch (e: Exception) {
                         Log.e("EpisodeSubtitleDialog", "Error downloading subtitle", e)
-                        android.widget.Toast.makeText(context, "Download failed: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
+                        android.widget.Toast.makeText(context, context.getString(com.klortek.velora.R.string.error_fragment_message), android.widget.Toast.LENGTH_LONG).show()
                     } finally {
                         isDownloading = false
                     }

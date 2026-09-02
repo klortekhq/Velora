@@ -403,7 +403,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Continue Watching SORTED order: ${sorted.mapIndexed { i, it -> "$i: ${it.Name} (LastPlayed: ${it.UserData?.LastPlayedDate})" }}")
             sorted
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -425,7 +425,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -464,7 +464,7 @@ class JellyfinApiService(
             nextUpEpisode
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching NextUp for series $seriesId", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
     }
@@ -510,7 +510,7 @@ class JellyfinApiService(
             firstEpisode
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error getting first episode for series $seriesId", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
     }
@@ -575,7 +575,7 @@ class JellyfinApiService(
             null
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error finding first unwatched episode for series $seriesId", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
     }
@@ -598,7 +598,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -621,7 +621,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -645,7 +645,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -669,7 +669,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -693,7 +693,7 @@ class JellyfinApiService(
             // Return all items - filtering based on settings will be done in UI layer
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -717,7 +717,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -741,7 +741,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -766,7 +766,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -847,7 +847,7 @@ class JellyfinApiService(
             throw e
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching item details", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
     }
@@ -871,7 +871,7 @@ class JellyfinApiService(
             person
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching person details", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
     }
@@ -901,7 +901,7 @@ class JellyfinApiService(
             itemsResponse.Items
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching person filmography", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -1240,7 +1240,7 @@ class JellyfinApiService(
             
             response
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "❌ Failed to get PlaybackInfo: ${e.message}", e)
+            android.util.Log.e("JellyfinAPI", "❌ Failed to get PlaybackInfo: ${e::class.simpleName}", e)
             null
         }
     }
@@ -1297,7 +1297,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Skip markers: intro=${markers.introStartMs}-${markers.introEndMs}ms, credits=${markers.creditsStartMs}ms")
             markers
         } catch (e: Exception) {
-            android.util.Log.d("JellyfinAPI", "MediaSegments not available (server may not support it): ${e.message}")
+            android.util.Log.d("JellyfinAPI", "MediaSegments not available (server may not support it): ${e::class.simpleName}")
             // Return empty markers if not supported
             SkipMarkers()
         }
@@ -1337,7 +1337,7 @@ class JellyfinApiService(
                 )
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -1361,7 +1361,7 @@ class JellyfinApiService(
             // Return all items - filtering based on settings will be done in UI layer
             response
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             ItemsResponse(Items = emptyList(), TotalRecordCount = 0)
         }
     }
@@ -1382,7 +1382,7 @@ class JellyfinApiService(
             
             response.Items
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -1440,7 +1440,7 @@ class JellyfinApiService(
             throw e
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching seasons for series $seriesId", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -1477,7 +1477,7 @@ class JellyfinApiService(
             throw e
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching episodes for season $seasonId", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -1525,7 +1525,7 @@ class JellyfinApiService(
             response.Items.sortedBy { it.IndexNumber ?: 0 }
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching next episodes for season $seasonId", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -1571,7 +1571,7 @@ class JellyfinApiService(
             nextEpisode
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching next episode in season", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
     }
@@ -1613,7 +1613,7 @@ class JellyfinApiService(
             nextEpisode
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching next episode", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
     }
@@ -1659,7 +1659,7 @@ class JellyfinApiService(
             response.Items
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching movies by genre", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -1682,7 +1682,7 @@ class JellyfinApiService(
             response.Items
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching series by genre", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -1705,7 +1705,7 @@ class JellyfinApiService(
             response.Items
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching movies by person", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }
@@ -2224,7 +2224,7 @@ class JellyfinApiService(
             isSuccessful
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error marking item as watched", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
     }
@@ -2314,7 +2314,7 @@ class JellyfinApiService(
             true
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "❌ Error reporting playback start", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
     }
@@ -2377,7 +2377,7 @@ class JellyfinApiService(
             true
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "❌ Error reporting playback progress", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
     }
@@ -2424,7 +2424,7 @@ class JellyfinApiService(
             true
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "❌ Error reporting playback stopped", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
     }
@@ -2467,7 +2467,7 @@ class JellyfinApiService(
             true
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error refreshing item metadata for $itemId", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
     }
@@ -2499,7 +2499,7 @@ class JellyfinApiService(
             true
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error triggering library refresh", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
     }
@@ -2530,7 +2530,7 @@ class JellyfinApiService(
             response.Items
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error searching for items", e)
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
     }

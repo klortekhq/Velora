@@ -262,7 +262,7 @@ object OpenSubtitlesApi {
             return@withContext searchResponse.data
             
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error searching subtitles: ${e.message}", e)
+            Log.e(TAG, "❌ Error searching subtitles: ${e::class.simpleName}", e)
             return@withContext emptyList()
         }
     }
@@ -404,8 +404,8 @@ object OpenSubtitlesApi {
             return@withContext bytes
             
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error downloading subtitle: ${e.message}", e)
-            lastError = e.message ?: "Unknown error"
+            Log.e(TAG, "❌ Error downloading subtitle: ${e::class.simpleName}", e)
+            lastError = e::class.simpleName ?: "Unknown error"
             return@withContext null
         }
     }
@@ -466,7 +466,7 @@ object OpenSubtitlesApi {
             return@withContext file.absolutePath
             
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error saving subtitle: ${e.message}", e)
+            Log.e(TAG, "❌ Error saving subtitle: ${e::class.simpleName}", e)
             return@withContext null
         }
     }
@@ -499,7 +499,7 @@ object OpenSubtitlesApi {
         return try {
             File(filePath).delete()
         } catch (e: Exception) {
-            Log.e(TAG, "Error deleting subtitle: ${e.message}")
+            Log.e(TAG, "Error deleting subtitle: ${e::class.simpleName}")
             false
         }
     }

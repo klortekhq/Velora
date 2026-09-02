@@ -118,7 +118,7 @@ class TrailerLauncher {
                                 }
                                 context.startActivity(webIntent)
                             } catch (exc: Exception) {
-                                Toast.makeText(context, "Error playing trailer: ${e.message}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.error_fragment_message), Toast.LENGTH_SHORT).show()
                             }
                         }
                     }

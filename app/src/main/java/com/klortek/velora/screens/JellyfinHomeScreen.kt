@@ -238,7 +238,7 @@ fun JellyfinHomeScreen(
                     config = config
                 )
             } catch (e: Exception) {
-                android.util.Log.e("JellyfinHomeScreen", "Error creating API service: ${e.message}", e)
+                android.util.Log.e("JellyfinHomeScreen", "Error creating API service: ${e::class.simpleName}", e)
                 null
             }
         } else {

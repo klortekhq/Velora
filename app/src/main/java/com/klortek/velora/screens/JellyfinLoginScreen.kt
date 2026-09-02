@@ -594,7 +594,7 @@ private fun QuickConnectLoginContent(
                     e is java.net.ConnectException -> "Cannot connect to server. Please check:\n• Server is running\n• IP address is correct\n• TV is on the same network"
                     e is java.net.SocketTimeoutException -> "Connection timeout. Server is not responding."
                     e is java.net.UnknownHostException -> "Cannot resolve server address. Please check the IP address."
-                    else -> "Error: ${e.message ?: e.javaClass.simpleName}"
+                    else -> "Error: ${e::class.simpleName ?: e.javaClass.simpleName}"
                 }
                 onError(errorMsg)
                 onAuthenticatingChange(false)
@@ -670,7 +670,7 @@ private fun QuickConnectLoginContent(
                                 }
                             } catch (e: Exception) {
                                 android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect authentication", e)
-                                onError("Error authenticating: ${e.message ?: e.javaClass.simpleName}")
+                                onError("Error authenticating: ${e::class.simpleName ?: e.javaClass.simpleName}")
                                 onAuthenticatingChange(false)
                             }
                         }
@@ -695,7 +695,7 @@ private fun QuickConnectLoginContent(
             } catch (e: Exception) {
                 android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect polling", e)
                 onIsPollingChange(false)
-                onError("Error polling QuickConnect: ${e.message ?: e.javaClass.simpleName}")
+                onError("Error polling QuickConnect: ${e::class.simpleName ?: e.javaClass.simpleName}")
                 break
             }
         }
@@ -889,7 +889,7 @@ private fun performCredentialsLogin(
                 onError("Authentication failed. Please check your credentials.")
             }
         } catch (e: Exception) {
-            onError("Error: ${e.message ?: e.javaClass.simpleName}")
+            onError("Error: ${e::class.simpleName ?: e.javaClass.simpleName}")
         }
     }
 }

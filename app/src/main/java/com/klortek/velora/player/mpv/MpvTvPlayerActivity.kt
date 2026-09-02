@@ -527,7 +527,7 @@ private fun MpvPlayerScreen(
                 rootFocusRequester.requestFocus()
                 Log.d("MpvTvPlayer", "Requested focus to root container")
             } catch (e: Exception) {
-                Log.w("MpvTvPlayer", "Failed to request focus: ${e.message}")
+                Log.w("MpvTvPlayer", "Failed to request focus: ${e::class.simpleName}")
             }
         }
     }

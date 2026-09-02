@@ -24,6 +24,12 @@ por accidente el host configurado o detalles de la petición. La corrección se
 ha validado con los unit tests móviles y la compilación de TV; no genera una
 release aislada.
 
+La auditoría se amplió al resto del cliente Android: se eliminaron trazas y
+mensajes crudos de excepciones en API, descubrimiento, reproducción, trailers,
+subtítulos, actualizaciones y descargas. Los logs conservan solo contexto
+seguro y el tipo de excepción; la interfaz muestra mensajes genéricos. La
+compilación móvil y TV vuelve a pasar tras el cambio.
+
 El cliente web añade ahora filtros funcionales de Live TV por canales favoritos
 y por grupo. Los grupos se derivan de `Tags`, `ChannelType` y `ServiceName` de
 Jellyfin, con una opción explícita para canales sin grupo; las preferencias se

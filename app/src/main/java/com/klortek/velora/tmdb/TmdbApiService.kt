@@ -74,10 +74,10 @@ object TmdbApiService {
                 VerificationResult.Error("SSL Error: Check Device Date/Time")
             } catch (e: java.io.IOException) {
                 Log.e("TmdbApiService", "Network error during verification", e)
-                VerificationResult.Error("Network Error: ${e.message}")
+                VerificationResult.Error("Network Error: ${e::class.simpleName}")
             } catch (e: Exception) {
                 Log.e("TmdbApiService", "Verification exception", e)
-                VerificationResult.Error("Error: ${e.message}")
+                VerificationResult.Error("Error: ${e::class.simpleName}")
             }
         }
     }

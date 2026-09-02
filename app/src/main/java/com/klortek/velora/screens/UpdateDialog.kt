@@ -168,7 +168,7 @@ fun UpdateDialog(
                                                 }
                                             } catch (e: Exception) {
                                                 Log.e("UpdateDialog", "Error installing APK", e)
-                                                downloadError = "Installation failed: ${e.message}"
+                                                downloadError = "Installation failed: ${e::class.simpleName}"
                                                 isDownloading = false
                                             }
                                         } else {
@@ -177,7 +177,7 @@ fun UpdateDialog(
                                         }
                                     } catch (e: Exception) {
                                         Log.e("UpdateDialog", "Error downloading APK", e)
-                                        downloadError = "Download failed: ${e.message}"
+                                        downloadError = "Download failed: ${e::class.simpleName}"
                                         isDownloading = false
                                     }
                                 }
