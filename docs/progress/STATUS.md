@@ -825,11 +825,13 @@ digests are:
 - New mobile downloads are queued through WorkManager with network constraints,
   progress reporting, retry semantics and Keystore-backed credential lookup;
   legacy DownloadManager entries remain readable during migration.
-- Persistent preview and large-library virtualization still need
+- Persistent visual preview and large-library virtualization still need
   product integration and critic testing. The preview lifecycle contract now
   covers dwell timing, stale-focus invalidation and cleanup without owning a
   player instance. Android now exposes an opt-in, persisted theme-music
-  preference, but playback integration is still pending. Trailer selection now prefers Jellyfin
+  preference and connects one lifecycle-managed ExoPlayer to Jellyfin theme
+  songs after the Home focus debounce; volume/settings UX and hardware QA are
+  still pending. Trailer selection now prefers Jellyfin
   local/remote trailer metadata and falls back to TMDB only when the server
   has no trailer available; this Android path is covered by a successful
   mobile/TV compilation but still needs hardware playback QA.
