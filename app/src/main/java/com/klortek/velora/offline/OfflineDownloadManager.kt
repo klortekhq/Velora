@@ -108,7 +108,9 @@ object OfflineDownloadManager {
         // Evaluate before removing a previous failed entry, so a rejected
         // replacement never destroys the user's existing offline state.
         val recordedManagedBytes = load(context)
-            .filterNot { it.itemId == itemId }
+            // Only the representation being replaced is excluded. Other
+            // qualities of the same item are valid, independent downloads.
+            .filterNot { it.itemId == itemId && it.quality == quality.storageKey }
             .sumOf { entry ->
                 if (entry.totalBytes > 0L) entry.totalBytes else entry.bytesDownloaded.coerceAtLeast(0L)
             }
@@ -165,7 +167,9 @@ object OfflineDownloadManager {
             .addTag(OfflineDownloadWorker.TAG)
             .build()
         androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(workName, androidx.work.ExistingWorkPolicy.KEEP, work)
-        save(context, load(context).filterNot { it.itemId == itemId } + entry)
+        save(context, load(context).filterNot {
+            it.itemId == itemId && it.quality == quality.storageKey
+        } + entry)
         return entry
 
     }
