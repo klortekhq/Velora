@@ -261,6 +261,7 @@ fun SettingsScreen(
     var use4KBackgrounds by remember { mutableStateOf(settings.use4KBackgrounds) }
     var navigationSoundsEnabled by remember { mutableStateOf(settings.navigationSoundsEnabled) }
     var themeMusicEnabled by remember { mutableStateOf(settings.themeMusicEnabled) }
+    var themeMusicVolume by remember { mutableStateOf(settings.themeMusicVolume) }
     
     // Logout confirmation
     var showLogoutConfirmation by remember { mutableStateOf(false) }
@@ -2132,6 +2133,20 @@ fun SettingsScreen(
                                     }
                                     settings.rowCardCount = rowCardCount
                                 }
+                            )
+                            SettingSlider(
+                                title = "Volumen de música de tema",
+                                description = "Nivel actual: ${(themeMusicVolume * 100).toInt()}%.",
+                                onDecrease = {
+                                    themeMusicVolume = (themeMusicVolume - 0.1f).coerceAtLeast(0f)
+                                    settings.themeMusicVolume = themeMusicVolume
+                                },
+                                onIncrease = {
+                                    themeMusicVolume = (themeMusicVolume + 0.1f).coerceAtMost(1f)
+                                    settings.themeMusicVolume = themeMusicVolume
+                                },
+                                canDecrease = themeMusicVolume > 0f,
+                                canIncrease = themeMusicVolume < 1f
                             )
 
                             SettingToggle(

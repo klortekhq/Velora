@@ -623,7 +623,7 @@ fun JellyfinHomeScreen(
     DisposableEffect(themeMusicController) {
         onDispose { themeMusicController.release() }
     }
-    LaunchedEffect(settings.themeMusicEnabled, debouncedHighlightedItem?.Id, apiService) {
+    LaunchedEffect(settings.themeMusicEnabled, settings.themeMusicVolume, debouncedHighlightedItem?.Id, apiService) {
         if (!settings.themeMusicEnabled || apiService == null || debouncedHighlightedItem == null) {
             themeMusicController.stop()
         } else {
@@ -634,7 +634,7 @@ fun JellyfinHomeScreen(
                 themeMusicController.play(
                     url = apiService.getThemeSongUrl(themeSong.Id),
                     headers = apiService.getVideoRequestHeaders(),
-                    volume = 0.7f
+                    volume = settings.themeMusicVolume
                 )
             }
         }
