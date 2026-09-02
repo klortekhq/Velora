@@ -28,8 +28,10 @@ El cliente web ya negocia Live TV mediante `PlaybackInfo` con
 `AutoOpenLiveStream=true` antes de abrir el reproductor, y pasa el destino por
 el proxy autenticado del mismo origen. Se añadió una regresión para impedir
 que una URL de Live TV lleve `api_key` o que una ruta de disco se use como
-fuente web. La prueba web pasa; la reproducción en hardware Smart TV sigue
-pendiente de validación física.
+fuente web. Al cerrar el reproductor también notifica
+`Sessions/Playing/Stopped`, con posición y `PlaySessionId` cuando existe. La
+prueba web pasa; la reproducción en hardware Smart TV sigue pendiente de
+validación física.
 
 La release pública más reciente con artefactos verificados sigue siendo
 `v1.2.85`; `v1.3.0` ya está etiquetada y subida a `main`, con los workflows de
