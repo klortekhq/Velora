@@ -46,6 +46,11 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Configurar Node.js para validar versiones
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
 
