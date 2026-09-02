@@ -336,8 +336,13 @@
   }
 
   function liveTvStreamTarget(channel) {
+    var sourceId = channel.MediaSources && channel.MediaSources[0] && channel.MediaSources[0].Id;
+    var sourceParam = sourceId ? '&MediaSourceId=' + encodeURIComponent(sourceId) : '';
     return api('/Items/' + encodeURIComponent(channel.Id) + '/PlaybackInfo?UserId=' +
-      encodeURIComponent(state.userId) + '&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true', {
+      encodeURIComponent(state.userId) + '&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true' + sourceParam, {
+        // Jellyfin accepts MediaSourceId for providers exposing alternatives
+        // under one channel identity. Omit it when unavailable for backwards
+        // compatibility with standard Live TV channel responses.
         method: 'POST',
         body: JSON.stringify({})
       }).then(function (data) {

@@ -26,6 +26,13 @@ una reproducción rota. La validación conjunta de `testMobileDebugUnitTest`,
 `compileTvDebugKotlin` y `lintMobileDebug` pasa; quedan advertencias no
 bloqueantes de APIs antiguas del proyecto.
 
+Live TV conserva ahora el agrupado visual por ID de canal y transmite además el
+`MediaSourceId` de la alternativa elegida a `PlaybackInfo` en Android y web.
+Esto permite seleccionar de forma real fuentes como Principal/IPTV cuando
+Jellyfin las expone; si la respuesta no incluye fuentes identificables, Velora
+usa la selección estándar del servidor. La regresión web y
+`testMobileDebugUnitTest` pasan tras este cambio.
+
 En la auditoría posterior, `npm run build:all` prepara el cliente web, webOS y
 VIDAA; Samsung queda honestamente pendiente de Tizen Studio/CLI. `lintMobileDebug`
 también pasa después de corregir el opt-in de Media3 en la música de tema y de

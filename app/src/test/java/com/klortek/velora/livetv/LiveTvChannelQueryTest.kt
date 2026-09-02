@@ -5,6 +5,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.util.TimeZone
+import com.klortek.velora.jellyfin.MediaSource
 
 class LiveTvChannelQueryTest {
     private val originalTimeZone = TimeZone.getDefault()
@@ -48,8 +49,8 @@ class LiveTvChannelQueryTest {
 
     @Test
     fun channelsWithTheSameJellyfinIdBecomeOneRowAndKeepEverySource() {
-        val main = LiveTvChannel("same-id", "DAZN F1", Type = "Principal")
-        val iptv = LiveTvChannel("same-id", "DAZN F1", Type = "IPTV")
+        val main = LiveTvChannel("same-id", "DAZN F1", Type = "Principal", MediaSources = listOf(MediaSource(Id = "source-main")))
+        val iptv = LiveTvChannel("same-id", "DAZN F1", Type = "IPTV", MediaSources = listOf(MediaSource(Id = "source-iptv")))
         val other = LiveTvChannel("other-id", "DAZN 2")
 
         val groups = groupLiveTvChannels(listOf(main, iptv, other))
@@ -57,5 +58,6 @@ class LiveTvChannelQueryTest {
         assertEquals(listOf("same-id", "other-id"), groups.map { it.channelId })
         assertEquals(listOf("Principal", "IPTV"), groups.first().channels.map { liveTvSourceLabel(it, 1) })
         assertEquals(2, groups.first().channels.size)
+        assertEquals("source-iptv", liveTvMediaSourceId(groups.first().channels[1]))
     }
 }

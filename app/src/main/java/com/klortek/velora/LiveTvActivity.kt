@@ -81,6 +81,7 @@ import com.klortek.velora.livetv.liveTvGroups
 import com.klortek.velora.livetv.groupLiveTvChannels
 import com.klortek.velora.livetv.LiveTvChannelGroup
 import com.klortek.velora.livetv.liveTvSourceLabel
+import com.klortek.velora.livetv.liveTvMediaSourceId
 import kotlinx.coroutines.launch
 import androidx.media3.common.util.UnstableApi
 
@@ -106,6 +107,7 @@ class LiveTvActivity : ComponentActivity() {
                                 itemId = channel.Id,
                                 itemName = channel.Name,
                                 isLiveTv = true,
+                                liveTvMediaSourceId = liveTvMediaSourceId(channel),
                                 liveTvChannelIds = channelList.map { it.Id },
                                 liveTvChannelNames = channelList.map { it.Name }
                             )
