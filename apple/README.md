@@ -36,6 +36,11 @@ El shell muestra Live TV solo cuando Jellyfin devuelve canales y cada fila
 reproduce en el reproductor integrado; las cargas se cancelan al cambiar rápido
 de canal y al salir se notifica `Sessions/Playing/Stopped` para liberar el tuner.
 
+Las tarjetas de biblioteca cargan el artwork directamente desde Jellyfin con
+`X-Emby-Token` en la petición; el token no se incluye en la URL. Los estados de
+carga y error muestran un placeholder estable para que la navegación siga
+siendo usable aunque una imagen no esté disponible.
+
 Los ajustes del shell se persisten de forma local mediante `VeloraSettingsStore`
 usando datos Codable. La sesión autenticada se guarda mediante
 `VeloraCredentialStore`: en Apple usa Keychain con accesibilidad

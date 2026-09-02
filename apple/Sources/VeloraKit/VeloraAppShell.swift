@@ -23,6 +23,8 @@ public final class VeloraAppModel: ObservableObject {
     private let serverDefaults: UserDefaults
     private var session: JellyfinSession?
 
+    public var jellyfinClient: JellyfinClient { client }
+
     public init(platform: VeloraPlatform, serverURL: URL, credentialStore: VeloraCredentialStore = VeloraCredentialStore(), serverDefaults: UserDefaults = .standard) throws {
         self.platform = platform
         self.settingsStore = VeloraSettingsStore()
@@ -123,7 +125,7 @@ public struct VeloraAppShell: View {
         Group {
             if model.isAuthenticated {
                 NavigationStack {
-                    VeloraLibraryView(title: "Library", items: model.items) { item in
+                    VeloraLibraryView(title: "Library", items: model.items, artworkClient: model.jellyfinClient) { item in
                         selectedItem = item
                     }
                     .toolbar {

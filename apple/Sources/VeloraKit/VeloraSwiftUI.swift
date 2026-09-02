@@ -1,5 +1,42 @@
 #if canImport(SwiftUI)
+import Foundation
 import SwiftUI
+
+@available(iOS 16.0, tvOS 16.0, *)
+private struct VeloraArtwork: View {
+    let client: JellyfinClient
+    let itemID: String
+    let width: Int
+    @State private var request: URLRequest?
+
+    var body: some View {
+        Group {
+            if let request {
+                AsyncImage(urlRequest: request, transaction: Transaction(animation: .easeInOut(duration: 0.2))) { phase in
+                    switch phase {
+                    case .success(let image): image.resizable().scaledToFill()
+                    case .failure: placeholder
+                    case .empty: placeholder.redacted(reason: .placeholder)
+                    @unknown default: placeholder
+                    }
+                }
+            } else {
+                placeholder.redacted(reason: .placeholder)
+            }
+        }
+        .task(id: itemID) {
+            guard let url = await client.imageURL(itemID: itemID, maxWidth: width) else { return }
+            request = await client.authorizedRequest(for: url)
+        }
+    }
+
+    private var placeholder: some View {
+        ZStack {
+            Color.secondary.opacity(0.2)
+            Image(systemName: "film").font(.title2).foregroundStyle(.secondary)
+        }
+    }
+}
 
 /// Small native SwiftUI building blocks shared by the iOS, iPadOS and tvOS apps.
 /// The actual app target owns navigation and playback so each platform can keep
@@ -8,11 +45,13 @@ import SwiftUI
 public struct VeloraItemCard: View {
     public let item: JellyfinItem
     public let image: Image?
+    public let artworkClient: JellyfinClient?
     public let onSelect: () -> Void
 
-    public init(item: JellyfinItem, image: Image? = nil, onSelect: @escaping () -> Void) {
+    public init(item: JellyfinItem, image: Image? = nil, artworkClient: JellyfinClient? = nil, onSelect: @escaping () -> Void) {
         self.item = item
         self.image = image
+        self.artworkClient = artworkClient
         self.onSelect = onSelect
     }
 
@@ -21,6 +60,7 @@ public struct VeloraItemCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Group {
                     if let image { image.resizable().scaledToFill() }
+                    else if let artworkClient { VeloraArtwork(client: artworkClient, itemID: item.id, width: 500) }
                     else { Color.secondary.opacity(0.2) }
                 }
                 .frame(minWidth: 120, minHeight: 170)
@@ -41,12 +81,14 @@ public struct VeloraLibraryView: View {
     public let title: String
     public let items: [JellyfinItem]
     public let imageProvider: (JellyfinItem) -> Image?
+    public let artworkClient: JellyfinClient?
     public let onSelect: (JellyfinItem) -> Void
 
-    public init(title: String, items: [JellyfinItem], imageProvider: @escaping (JellyfinItem) -> Image? = { _ in nil }, onSelect: @escaping (JellyfinItem) -> Void) {
+    public init(title: String, items: [JellyfinItem], imageProvider: @escaping (JellyfinItem) -> Image? = { _ in nil }, artworkClient: JellyfinClient? = nil, onSelect: @escaping (JellyfinItem) -> Void) {
         self.title = title
         self.items = items
         self.imageProvider = imageProvider
+        self.artworkClient = artworkClient
         self.onSelect = onSelect
     }
 
@@ -54,7 +96,7 @@ public struct VeloraLibraryView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 16)], spacing: 20) {
                 ForEach(items) { item in
-                    VeloraItemCard(item: item, image: imageProvider(item)) { onSelect(item) }
+                    VeloraItemCard(item: item, image: imageProvider(item), artworkClient: artworkClient) { onSelect(item) }
                 }
             }
             .padding()
