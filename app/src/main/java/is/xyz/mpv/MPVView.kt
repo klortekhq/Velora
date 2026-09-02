@@ -177,8 +177,10 @@ class MPVView(context: Context, attrs: AttributeSet? = null) : SurfaceView(conte
         MPVLib.setOptionString("gpu-api", "opengl")  // Required for libass subtitle overlay
         MPVLib.setOptionString("opengl-es", "yes")
 
-        // TLS settings - allow self-signed certs for local servers
-        MPVLib.setOptionString("tls-verify", "no")
+        // Keep TLS verification enabled. Local HTTP Jellyfin servers continue
+        // to work, while HTTPS connections must not silently trust a forged
+        // certificate. An explicit, user-visible insecure override would be
+        // required before accepting self-signed certificates.
 
         // Demuxer cache settings for mobile
         val cacheMegs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) 64 else 32
