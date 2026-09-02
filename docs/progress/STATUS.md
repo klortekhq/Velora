@@ -308,6 +308,11 @@ cobertura unitaria y la compilación Android móvil/TV pasan; queda pendiente
 validarlo en hardware conectado y confirmar qué etiquetas de fuente entrega
 cada proveedor Jellyfin.
 
+El cliente web aplica la misma agrupación y selector accesible por teclado; sus
+pruebas de seguridad, capacidades y renderizado pasan. La selección real de
+una fuente depende de que Jellyfin entregue entradas/fuentes alternativas bajo
+la misma identidad; el cliente no inventa fuentes ni incorpora M3U directo.
+
 El formulario de inicio de sesión ahora respeta los insets de las barras del
 sistema antes de aplicar su desplazamiento, evitando que el título, los campos
 o el botón queden ocultos en móviles, tablets y televisores. Se verificará junto
