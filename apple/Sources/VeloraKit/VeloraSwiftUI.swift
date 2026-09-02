@@ -73,40 +73,54 @@ public struct VeloraSettingsView: View {
 
     public var body: some View {
         Form {
-            Section("Language and playback") {
-                Picker("App language", selection: $settings.languageIdentifier) {
-                    Text("Automatic").tag(nil as String?)
+            Section {
+                Picker(selection: $settings.languageIdentifier) {
+                    Text("Automatic", bundle: .module).tag(nil as String?)
                     Text("Español").tag(VeloraLanguage.spanish.rawValue as String?)
                     Text("English").tag(VeloraLanguage.english.rawValue as String?)
                     Text("Français").tag(VeloraLanguage.french.rawValue as String?)
                     Text("Deutsch").tag(VeloraLanguage.german.rawValue as String?)
+                } label: {
+                    Text("App language", bundle: .module)
                 }
-                TextField("Preferred audio", text: Binding(
+                TextField(text: Binding(
                     get: { settings.preferredAudioLanguage ?? "" },
                     set: { settings.preferredAudioLanguage = $0.isEmpty ? nil : $0 }
-                ))
-                Picker("Subtitles", selection: $settings.subtitlePreference) {
-                    Text("Automatic").tag(SubtitlePreference.automatic)
-                    Text("Disabled").tag(SubtitlePreference.off)
-                    Text("Preferred").tag(SubtitlePreference.preferred)
-                    Text("Forced").tag(SubtitlePreference.forced)
+                )) {
+                    Text("Preferred audio", bundle: .module)
                 }
-                Picker("Performance", selection: $settings.performanceMode) {
-                    Text("Automatic").tag(PerformanceMode.automatic)
-                    Text("Quality").tag(PerformanceMode.quality)
-                    Text("Balanced").tag(PerformanceMode.balanced)
-                    Text("Performance").tag(PerformanceMode.performance)
+                Picker(selection: $settings.subtitlePreference) {
+                    Text("Automatic", bundle: .module).tag(SubtitlePreference.automatic)
+                    Text("Disabled", bundle: .module).tag(SubtitlePreference.off)
+                    Text("Preferred", bundle: .module).tag(SubtitlePreference.preferred)
+                    Text("Forced", bundle: .module).tag(SubtitlePreference.forced)
+                } label: {
+                    Text("Subtitles", bundle: .module)
                 }
+                Picker(selection: $settings.performanceMode) {
+                    Text("Automatic", bundle: .module).tag(PerformanceMode.automatic)
+                    Text("Quality", bundle: .module).tag(PerformanceMode.quality)
+                    Text("Balanced", bundle: .module).tag(PerformanceMode.balanced)
+                    Text("Performance", bundle: .module).tag(PerformanceMode.performance)
+                } label: {
+                    Text("Performance", bundle: .module)
+                }
+            } header: {
+                Text("Language and playback", bundle: .module)
             }
-            Section("Theme music") {
-                Toggle("Enable theme music", isOn: $settings.themeMusicEnabled)
+            Section {
+                Toggle(isOn: $settings.themeMusicEnabled) {
+                    Text("Enable theme music", bundle: .module)
+                }
                 Slider(value: $settings.themeMusicVolume, in: 0...1) {
-                    Text("Volume")
+                    Text("Volume", bundle: .module)
                 }
                 .disabled(!settings.themeMusicEnabled)
+            } header: {
+                Text("Theme music", bundle: .module)
             }
         }
-        .navigationTitle("Settings")
+        .navigationTitle(Text("Settings", bundle: .module))
     }
 }
 #endif
