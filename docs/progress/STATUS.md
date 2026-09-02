@@ -825,8 +825,11 @@ digests are:
 - New mobile downloads are queued through WorkManager with network constraints,
   progress reporting, retry semantics and Keystore-backed credential lookup;
   legacy DownloadManager entries remain readable during migration.
-- Theme music, a Jellyfin-first trailer resolver, persistent preview, and large-library
-  virtualization need implementation and critic testing.
+- Theme music, persistent preview and large-library virtualization still need
+  implementation and critic testing. Trailer selection now prefers Jellyfin
+  local/remote trailer metadata and falls back to TMDB only when the server
+  has no trailer available; this Android path is covered by a successful
+  mobile/TV compilation but still needs hardware playback QA.
 - Live TV channel zapping and previous-channel shortcut are implemented in the
   ExoPlayer OSD and covered by deterministic navigation tests. A persistent
   mini-player in the browsing surface still needs implementation; programme
@@ -921,6 +924,9 @@ SHA-256 manifests. The only remote branch is `main`.
 - `compileTvDebugKotlin`: passing on 2026-08-30 after adding the Live TV
   programme-details action; only existing deprecation/KAPT warnings were
   emitted.
+- `testMobileDebugUnitTest` and `compileTvDebugKotlin`: passing on 2026-09-02
+  after routing Jellyfin-managed trailers through the canonical ExoPlayer
+  player; only existing SDK/deprecation/KAPT warnings were emitted.
 - A fresh local Android verification was blocked before compilation because
   this machine has no Android SDK installed; no new Android hardware result is
   claimed. The Windows non-ASCII path guard is enabled in `gradle.properties`.
