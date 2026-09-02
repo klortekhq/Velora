@@ -18,6 +18,14 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+La recuperación offline Android se ha endurecido: si una fila SQLite pendiente
+sobrevive al cierre de la aplicación pero su trabajo de WorkManager desaparece,
+Velora lo vuelve a programar con sus restricciones de red; una descarga marcada
+como completada cuyo archivo privado ya no existe pasa a fallida para no ofrecer
+una reproducción rota. La validación conjunta de `testMobileDebugUnitTest`,
+`compileTvDebugKotlin` y `lintMobileDebug` pasa; quedan advertencias no
+bloqueantes de APIs antiguas del proyecto.
+
 En la auditoría posterior, `npm run build:all` prepara el cliente web, webOS y
 VIDAA; Samsung queda honestamente pendiente de Tizen Studio/CLI. `lintMobileDebug`
 también pasa después de corregir el opt-in de Media3 en la música de tema y de

@@ -151,22 +151,14 @@ object OfflineDownloadManager {
         } else {
             androidx.work.NetworkType.CONNECTED
         }
-        val work = androidx.work.OneTimeWorkRequestBuilder<OfflineDownloadWorker>()
-            .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(requiredNetwork).build())
-            .setBackoffCriteria(
-                androidx.work.BackoffPolicy.EXPONENTIAL,
-                30,
-                java.util.concurrent.TimeUnit.SECONDS
-            )
-            .setInputData(androidx.work.workDataOf(
-                OfflineDownloadWorker.KEY_ITEM_ID to itemId,
-                OfflineDownloadWorker.KEY_MEDIA_SOURCE_ID to mediaSourceId,
-                OfflineDownloadWorker.KEY_QUALITY to quality.storageKey,
-                OfflineDownloadWorker.KEY_WORK_NAME to workName
-            ))
-            .addTag(OfflineDownloadWorker.TAG)
-            .build()
-        androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(workName, androidx.work.ExistingWorkPolicy.KEEP, work)
+        scheduleWork(
+            context = context,
+            itemId = itemId,
+            mediaSourceId = mediaSourceId,
+            quality = quality,
+            workName = workName,
+            requiredNetwork = requiredNetwork
+        )
         save(context, load(context).filterNot {
             it.itemId == itemId && it.quality == quality.storageKey
         } + entry)
@@ -178,8 +170,26 @@ object OfflineDownloadManager {
         val manager = androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)
         val updated = load(context).mapNotNull { entry ->
             if (!entry.workName.isNullOrBlank()) {
-                val info = androidx.work.WorkManager.getInstance(context)
-                    .getWorkInfosForUniqueWork(entry.workName).get().firstOrNull()
+                val info = runCatching {
+                    androidx.work.WorkManager.getInstance(context)
+                        .getWorkInfosForUniqueWork(entry.workName).get().firstOrNull()
+                }.getOrNull()
+                // WorkManager is durable, but a cancelled/cleaned-up work row
+                // can disappear while the SQLite record survives. Recreate
+                // the unique work so an app/process restart never strands a
+                // queued download forever.
+                if (info == null && entry.state != OfflineDownloadState.COMPLETED) {
+                    scheduleWork(
+                        context = context,
+                        itemId = entry.itemId,
+                        mediaSourceId = entry.mediaSourceId,
+                        quality = OfflineDownloadQuality.fromStorageKey(entry.quality),
+                        workName = entry.workName,
+                        requiredNetwork = if (AppSettings(context).offlineWifiOnly) {
+                            androidx.work.NetworkType.UNMETERED
+                        } else androidx.work.NetworkType.CONNECTED
+                    )
+                }
                 return@mapNotNull entry.copy(
                     status = when (info?.state) {
                         androidx.work.WorkInfo.State.SUCCEEDED -> DownloadManager.STATUS_SUCCESSFUL
@@ -193,7 +203,15 @@ object OfflineDownloadManager {
                     completedAtEpochMs = if (info?.state == androidx.work.WorkInfo.State.SUCCEEDED && entry.completedAtEpochMs == null) {
                         System.currentTimeMillis()
                     } else entry.completedAtEpochMs
-                )
+                ).let { refreshed ->
+                    if (refreshed.state == OfflineDownloadState.COMPLETED && !managedMediaExists(context, refreshed.localPath)) {
+                        refreshed.copy(
+                            status = DownloadManager.STATUS_FAILED,
+                            reason = DownloadManager.ERROR_FILE_ERROR,
+                            localPath = null
+                        )
+                    } else refreshed
+                }
             }
             if (manager == null) return@mapNotNull entry
             val cursor = runCatching { manager.query(DownloadManager.Query().setFilterById(entry.downloadId)) }.getOrNull()
@@ -243,6 +261,45 @@ object OfflineDownloadManager {
             .joinToString("") { byte -> "%02x".format(byte) }
             .take(24)
         return "offline-$digest-${quality.storageKey}"
+    }
+
+    private fun scheduleWork(
+        context: Context,
+        itemId: String,
+        mediaSourceId: String?,
+        quality: OfflineDownloadQuality,
+        workName: String,
+        requiredNetwork: androidx.work.NetworkType
+    ) {
+        val work = androidx.work.OneTimeWorkRequestBuilder<OfflineDownloadWorker>()
+            .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(requiredNetwork).build())
+            .setBackoffCriteria(
+                androidx.work.BackoffPolicy.EXPONENTIAL,
+                30,
+                java.util.concurrent.TimeUnit.SECONDS
+            )
+            .setInputData(androidx.work.workDataOf(
+                OfflineDownloadWorker.KEY_ITEM_ID to itemId,
+                OfflineDownloadWorker.KEY_MEDIA_SOURCE_ID to mediaSourceId,
+                OfflineDownloadWorker.KEY_QUALITY to quality.storageKey,
+                OfflineDownloadWorker.KEY_WORK_NAME to workName
+            ))
+            .addTag(OfflineDownloadWorker.TAG)
+            .build()
+        androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(
+            workName,
+            androidx.work.ExistingWorkPolicy.KEEP,
+            work
+        )
+    }
+
+    private fun managedMediaExists(context: Context, localPath: String?): Boolean {
+        if (localPath.isNullOrBlank()) return false
+        val uri = runCatching { Uri.parse(localPath) }.getOrNull() ?: return false
+        return when (uri.scheme?.lowercase()) {
+            "file" -> uri.path?.let(::File)?.isFile == true
+            else -> true
+        }
     }
 
     fun cancel(context: Context, entry: OfflineDownload) {
