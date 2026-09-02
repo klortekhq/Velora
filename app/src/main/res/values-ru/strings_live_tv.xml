@@ -1,3 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="live_tv">Прямой эфир</string><string name="live_tv_nav">Прямой эфир</string><string name="live_tv_loading">Загрузка каналов…</string><string name="live_tv_error">Не удалось загрузить прямой эфир</string><string name="live_tv_no_channels">На этом сервере Jellyfin нет доступных каналов прямого эфира.</string><string name="live_tv_no_program">Нет информации о программе</string><string name="live_tv_next_program">Далее: %1$s</string><string name="live_tv_refresh">Обновить каналы</string><string name="live_tv_channel_count">Каналов: %1$d</string><string name="live_tv_playback_error">Не удалось открыть этот канал. Попробуйте ещё раз.</string><string name="live_tv_program_details">Сведения о программе</string><string name="live_tv_channel">Канал</string><string name="live_tv_close_details">Закрыть</string>
+  <string name="live_tv">Прямой эфир</string>
+  <string name="live_tv_nav">Прямой эфир</string>
+  <string name="live_tv_loading">Загрузка каналов…</string>
+  <string name="live_tv_error">Не удалось загрузить прямой эфир</string>
+  <string name="live_tv_no_channels">На этом сервере Jellyfin нет доступных каналов прямого эфира.</string>
+  <string name="live_tv_no_program">Нет информации о программе</string>
+  <string name="live_tv_next_program">Далее: %1$s</string>
+  <string name="live_tv_refresh">Обновить каналы</string>
+  <string name="live_tv_channel_count">Каналов: %1$d</string>
+  <string name="live_tv_playback_error">Не удалось открыть этот канал. Попробуйте ещё раз.</string>
+  <string name="live_tv_program_details">Сведения о программе</string>
+  <string name="live_tv_channel">Канал</string>
+  <string name="live_tv_close_details">Закрыть</string>
+  <string name="back">Atrás</string>
+  <string name="collections">Colecciones</string>
+  <string name="continue_watching">Seguir viendo</string>
+  <string name="next_up">A continuación</string>
+  <string name="recently_added_movies">Películas añadidas recientemente</string>
+  <string name="recently_added_named">%1$s añadidos recientemente</string>
+  <string name="recently_released_movies">Películas estrenadas recientemente</string>
+  <string name="recently_added_shows">Series añadidas recientemente</string>
+  <string name="recently_added_shows_in">Series añadidas recientemente en %1$s</string>
+  <string name="recently_added_episodes">Episodios añadidos recientemente</string>
+  <string name="recently_added_episodes_in">Episodios añadidos recientemente en %1$s</string>
+  <string name="continue_watching_actions">Acciones de Seguir viendo</string>
+  <string name="continue_watching_remove">Quitar de Seguir viendo</string>
+  <string name="continue_watching_remove_explanation">Oculta este elemento en Velora sin cambiar el progreso. Volverá a aparecer cuando lo reproduzcas de nuevo.</string>
+  <string name="continue_watching_mark_watched">Marcar como visto</string>
+  <string name="cancel">Cancelar</string>
 </resources>

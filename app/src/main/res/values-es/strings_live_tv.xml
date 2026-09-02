@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="live_tv">Televisión en directo</string>
+  <string name="live_tv_nav">Televisión en directo</string>
+  <string name="live_tv_loading">Cargando canales…</string>
+  <string name="live_tv_error">No se pudo cargar la TV en directo</string>
+  <string name="live_tv_no_channels">Este servidor Jellyfin no tiene canales de TV en directo disponibles.</string>
+  <string name="live_tv_no_program">Sin información de programación</string>
+  <string name="live_tv_next_program">Siguiente: %1$s</string>
+  <string name="live_tv_program_details">Detalles del programa</string>
+  <string name="live_tv_channel">Canal</string>
+  <string name="live_tv_close_details">Cerrar</string>
+  <string name="live_tv_refresh">Actualizar canales</string>
+  <string name="live_tv_channel_count">%1$d canales</string>
+  <string name="live_tv_playback_error">No se pudo abrir este canal. Inténtalo de nuevo.</string>
+  <string name="back">Atrás</string>
+  <string name="collections">Colecciones</string>
+  <string name="continue_watching">Seguir viendo</string>
+  <string name="next_up">A continuación</string>
+  <string name="recently_added_movies">Películas añadidas recientemente</string>
+  <string name="recently_added_named">Añadido recientemente: %1$s</string>
+  <string name="recently_released_movies">Películas estrenadas recientemente</string>
+  <string name="recently_added_shows">Series añadidas recientemente</string>
+  <string name="recently_added_shows_in">Series añadidas recientemente en %1$s</string>
+  <string name="recently_added_episodes">Episodios añadidos recientemente</string>
+  <string name="recently_added_episodes_in">Episodios añadidos recientemente en %1$s</string>
+  <string name="continue_watching_actions">Acciones de Seguir viendo</string>
+  <string name="continue_watching_remove">Quitar de Seguir viendo</string>
+  <string name="continue_watching_remove_explanation">Oculta este elemento en Velora sin cambiar tu progreso. Volverá a aparecer si lo reproduces de nuevo.</string>
+  <string name="continue_watching_mark_watched">Marcar como visto</string>
+  <string name="cancel">Cancelar</string>
+</resources>

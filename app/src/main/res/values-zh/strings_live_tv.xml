@@ -1,3 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="live_tv">电视直播</string><string name="live_tv_nav">电视直播</string><string name="live_tv_loading">正在加载频道…</string><string name="live_tv_error">无法加载电视直播</string><string name="live_tv_no_channels">此 Jellyfin 服务器没有可用的电视直播频道。</string><string name="live_tv_no_program">没有节目资讯</string><string name="live_tv_next_program">接下来：%1$s</string><string name="live_tv_refresh">刷新频道</string><string name="live_tv_channel_count">%1$d 个频道</string><string name="live_tv_playback_error">无法打开此频道，请重试。</string><string name="live_tv_program_details">节目详情</string><string name="live_tv_channel">频道</string><string name="live_tv_close_details">关闭</string>
+  <string name="live_tv">电视直播</string>
+  <string name="live_tv_nav">电视直播</string>
+  <string name="live_tv_loading">正在加载频道…</string>
+  <string name="live_tv_error">无法加载电视直播</string>
+  <string name="live_tv_no_channels">此 Jellyfin 服务器没有可用的电视直播频道。</string>
+  <string name="live_tv_no_program">没有节目资讯</string>
+  <string name="live_tv_next_program">接下来：%1$s</string>
+  <string name="live_tv_refresh">刷新频道</string>
+  <string name="live_tv_channel_count">%1$d 个频道</string>
+  <string name="live_tv_playback_error">无法打开此频道，请重试。</string>
+  <string name="live_tv_program_details">节目详情</string>
+  <string name="live_tv_channel">频道</string>
+  <string name="live_tv_close_details">关闭</string>
+  <string name="back">Atrás</string>
+  <string name="collections">Colecciones</string>
+  <string name="continue_watching">Seguir viendo</string>
+  <string name="next_up">A continuación</string>
+  <string name="recently_added_movies">Películas añadidas recientemente</string>
+  <string name="recently_added_named">%1$s añadidos recientemente</string>
+  <string name="recently_released_movies">Películas estrenadas recientemente</string>
+  <string name="recently_added_shows">Series añadidas recientemente</string>
+  <string name="recently_added_shows_in">Series añadidas recientemente en %1$s</string>
+  <string name="recently_added_episodes">Episodios añadidos recientemente</string>
+  <string name="recently_added_episodes_in">Episodios añadidos recientemente en %1$s</string>
+  <string name="continue_watching_actions">Acciones de Seguir viendo</string>
+  <string name="continue_watching_remove">Quitar de Seguir viendo</string>
+  <string name="continue_watching_remove_explanation">Oculta este elemento en Velora sin cambiar el progreso. Volverá a aparecer cuando lo reproduzcas de nuevo.</string>
+  <string name="continue_watching_mark_watched">Marcar como visto</string>
+  <string name="cancel">Cancelar</string>
 </resources>
