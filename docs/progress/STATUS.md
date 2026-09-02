@@ -18,6 +18,11 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+El flujo de inicio de sesión Android ya no muestra mensajes técnicos ni textos
+hardcodeados en inglés: los fallos de credenciales y Quick Connect usan el
+recurso localizado de error genérico. Se mantiene el detalle técnico fuera de
+la interfaz y la compilación móvil/TV se valida tras el cambio.
+
 La autenticación Android ya no imprime excepciones completas ni trazas de red:
 el log conserva únicamente el tipo de error y el código HTTP, evitando exponer
 por accidente el host configurado o detalles de la petición. La corrección se
