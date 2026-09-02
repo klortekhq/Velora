@@ -66,4 +66,24 @@ class LiveTvChannelQueryTest {
         val duplicate = LiveTvChannel("same-id", "DAZN F1")
         assertEquals(1, groupLiveTvChannels(listOf(duplicate, duplicate)).size)
     }
+
+    @Test
+    fun oneChannelWithSeveralMediaSourcesAlsoBecomesSelectableOptions() {
+        val channel = LiveTvChannel(
+            "single-row",
+            "DAZN F1",
+            MediaSources = listOf(
+                MediaSource(Id = "source-main"),
+                MediaSource(Id = "source-iptv")
+            )
+        )
+
+        val group = groupLiveTvChannels(listOf(channel)).single()
+
+        assertEquals(2, group.channels.size)
+        assertEquals(
+            listOf("source-main", "source-iptv"),
+            group.channels.map(::liveTvMediaSourceId)
+        )
+    }
 }
