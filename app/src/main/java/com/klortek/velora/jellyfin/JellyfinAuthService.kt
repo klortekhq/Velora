@@ -11,7 +11,6 @@ import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -79,6 +78,7 @@ class JellyfinAuthService(
     suspend fun authenticate(username: String, password: String): AuthenticationResponse? {
         return try {
             val normalizedBaseUrl = normalizeBaseUrl(baseUrl)
+            if (!ServerUrlValidator.isValid(normalizedBaseUrl)) return null
             val url = if (normalizedBaseUrl.endsWith("/")) {
                 "${normalizedBaseUrl}Users/authenticatebyname"
             } else {
@@ -104,12 +104,6 @@ class JellyfinAuthService(
             if (response.status == HttpStatusCode.OK) {
                 response.body<AuthenticationResponse>()
             } else {
-                // Log the error response
-                val errorBody = try {
-                    response.bodyAsText()
-                } catch (e: Exception) {
-                    "Could not read error body: ${e::class.simpleName}"
-                }
                 Log.w(TAG, "Authentication failed with HTTP ${response.status.value}")
                 null
             }
