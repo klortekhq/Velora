@@ -7,6 +7,22 @@
 
 var credentials = { server: '', token: '' };
 
+function normalizeServer(value) {
+  try {
+    var parsed = new URL(String(value || '').trim());
+    if ((parsed.protocol !== 'http:' && parsed.protocol !== 'https:') ||
+        !parsed.hostname || parsed.username || parsed.password ||
+        parsed.search || parsed.hash ||
+        (parsed.port && (Number(parsed.port) < 1 || Number(parsed.port) > 65535))) {
+      return '';
+    }
+    parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+    return parsed.toString().replace(/\/$/, '');
+  } catch (error) {
+    return '';
+  }
+}
+
 self.addEventListener('install', function (event) {
   self.skipWaiting();
 });
@@ -18,7 +34,8 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('message', function (event) {
   var data = event.data || {};
   if (data.type === 'velora-credentials' && typeof data.server === 'string' && typeof data.token === 'string') {
-    credentials = { server: data.server.replace(/\/$/, ''), token: data.token };
+    var server = normalizeServer(data.server);
+    credentials = server && data.token ? { server: server, token: data.token } : { server: '', token: '' };
   }
   if (data.type === 'velora-clear-credentials') credentials = { server: '', token: '' };
 });
@@ -35,7 +52,8 @@ self.addEventListener('fetch', function (event) {
     var target;
     try {
       target = new URL(targetValue);
-      if (target.origin !== new URL(credentials.server).origin) {
+      var server = new URL(credentials.server);
+      if (target.origin !== server.origin || target.protocol !== server.protocol) {
         return new Response('Invalid Velora media target', { status: 403 });
       }
     } catch (error) {
