@@ -45,4 +45,17 @@ class LiveTvChannelQueryTest {
         assertEquals(0.5f, requireNotNull(programProgress(program, 1788085800000L)), 0.01f)
         assertEquals(1f, requireNotNull(programProgress(program, 1788087600000L)), 0.01f)
     }
+
+    @Test
+    fun channelsWithTheSameJellyfinIdBecomeOneRowAndKeepEverySource() {
+        val main = LiveTvChannel("same-id", "DAZN F1", Type = "Principal")
+        val iptv = LiveTvChannel("same-id", "DAZN F1", Type = "IPTV")
+        val other = LiveTvChannel("other-id", "DAZN 2")
+
+        val groups = groupLiveTvChannels(listOf(main, iptv, other))
+
+        assertEquals(listOf("same-id", "other-id"), groups.map { it.channelId })
+        assertEquals(listOf("Principal", "IPTV"), groups.first().channels.map { liveTvSourceLabel(it, 1) })
+        assertEquals(2, groups.first().channels.size)
+    }
 }

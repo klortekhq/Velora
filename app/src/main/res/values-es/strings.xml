@@ -23,6 +23,8 @@
   <string name="live_tv_remove_favorite">Quitar de favoritos</string>
   <string name="live_tv_previous_channel">Canal anterior</string>
   <string name="live_tv_next_channel">Siguiente canal</string>
+  <string name="live_tv_cancel">Cancelar</string>
+  <string name="live_tv_source_count">%1$d fuentes</string>
   <string name="player_settings">Ajustes del reproductor</string>
   <string name="settings_language_reproduction">Idioma y reproducción</string>
   <string name="settings_category_playback">Reproducción</string>
