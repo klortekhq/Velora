@@ -18,6 +18,9 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+El pipeline Android fija Node.js 20 antes de validar la versión de las etiquetas,
+para que las releases de milestone sean reproducibles en GitHub Actions.
+
 Después de esa verificación se subieron dos correcciones adicionales a
 `main`: `b5e298f` centraliza la aplicación del aspecto entre reproducción
 vertical y pantalla completa, con regresiones para todos los modos; `55c08cf`
