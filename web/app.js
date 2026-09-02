@@ -35,7 +35,7 @@
       saved: 'Preferencias guardadas', settingDescription: 'Se aplican al próximo contenido y se guardan en este dispositivo.',
       cast: 'Reparto', actorWorks: 'Películas y series de este actor', noActorWorks: 'No hay otros títulos disponibles.', personError: 'No se pudo cargar la filmografía',
       sortAndFilter: 'Ordenar y filtrar', sortName: 'Nombre', sortDateAdded: 'Fecha de incorporación', sortPremiere: 'Fecha de estreno', sortRuntime: 'Duración', sortRating: 'Valoración de la comunidad', favorites: 'Favoritos', playbackState: 'Estado de reproducción', playbackAll: 'Todos', playbackWatched: 'Vistos', playbackUnwatched: 'No vistos',
-      liveAll: 'Todos los canales', liveFavorites: 'Solo favoritos', liveGroup: 'Grupo de canales', liveNoChannels: 'No hay canales disponibles',
+      liveAll: 'Todos los canales', liveFavorites: 'Solo favoritos', liveGroup: 'Grupo de canales', liveNoChannels: 'No hay canales disponibles', liveSources: 'fuentes', liveSourceOption: 'Opción',
       loginError: 'No se pudo iniciar sesión', playbackError: 'El dispositivo no puede reproducir este formato directamente.'
     },
     en: {
@@ -51,7 +51,7 @@
       saved: 'Preferences saved', settingDescription: 'Applied to new playback and saved on this device.', cast: 'Cast',
       actorWorks: 'Movies and series with this actor', noActorWorks: 'No other titles available.', personError: 'Could not load filmography',
       sortAndFilter: 'Sort and filter', sortName: 'Name', sortDateAdded: 'Date added', sortPremiere: 'Premiere date', sortRuntime: 'Runtime', sortRating: 'Community rating', favorites: 'Favorites', playbackState: 'Playback state', playbackAll: 'All', playbackWatched: 'Watched', playbackUnwatched: 'Unwatched',
-      liveAll: 'All channels', liveFavorites: 'Favorites only', liveGroup: 'Channel group', liveNoChannels: 'No channels available',
+      liveAll: 'All channels', liveFavorites: 'Favorites only', liveGroup: 'Channel group', liveNoChannels: 'No channels available', liveSources: 'sources', liveSourceOption: 'Option',
       loginError: 'Sign-in failed', playbackError: 'This device cannot play this format directly.'
     },
     pt: {
@@ -486,20 +486,66 @@
 
   function liveSection(title, channels) {
     if (!channels.length) return '';
+    channels = groupLiveTvChannels(channels);
     return '<section><h2>' + esc(title) + '</h2><div class="live-grid">' +
-      channels.map(function (channel) {
+      channels.map(function (group) {
+        var channel = group.primary;
         var current = channel.CurrentProgram || null;
         var upcoming = channel.UpcomingProgram || null;
         var progress = Math.round(liveProgramProgress(current) * 100);
         return '<article class="live-row" tabindex="0" role="button" data-id="' + esc(channel.Id) + '">' +
           '<img loading="lazy" data-velora-image-id="' + esc(channel.Id) + '" alt="">' +
           '<div class="live-copy"><strong>' + esc(channel.Name || '') + '</strong>' +
+          (group.channels.length > 1 ? '<small class="live-sources">' + group.channels.length + ' ' + esc(t('liveSources')) + '</small>' : '') +
           (current ? '<span>' + esc(current.Name || '') + '</span><small>' + esc(liveProgramTime(current)) + '</small>' +
             '<div class="progress" aria-label="' + progress + '%"><i style="width:' + progress + '%"></i></div>' :
             '<span class="muted">' + esc(t('noDescription')) + '</span>') +
           (upcoming ? '<small class="live-next">' + esc(upcoming.Name || '') + ' · ' + esc(liveProgramTime(upcoming)) + '</small>' : '') +
           '</div></article>';
       }).join('') + '</div></section>';
+  }
+
+  function groupLiveTvChannels(channels) {
+    var groups = {};
+    var order = [];
+    channels.forEach(function (channel) {
+      var key = String(channel.Id || '').trim() ||
+        ('fallback:' + String(channel.ChannelNumber || '') + '|' + String(channel.Name || '').trim().toLocaleLowerCase(languageCode()));
+      if (!groups[key]) {
+        groups[key] = { channelId: key, primary: channel, channels: [] };
+        order.push(groups[key]);
+      }
+      groups[key].channels.push(channel);
+    });
+    return order;
+  }
+
+  function liveSourceLabel(channel, index) {
+    var tags = Array.isArray(channel.Tags) ? channel.Tags.filter(Boolean) : [];
+    return String(tags[0] || channel.ChannelType || channel.ServiceName ||
+      (t('liveSourceOption') + ' ' + index));
+  }
+
+  function showLiveSourcePicker(group) {
+    closeDetails();
+    root.insertAdjacentHTML('beforeend', '<div class="modal" id="liveSourcePicker" role="dialog" aria-modal="true" aria-labelledby="liveSourceTitle">' +
+      '<div class="modal-card"><button type="button" class="close" id="liveSourceClose">' + esc(t('back')) + '</button>' +
+      '<h2 id="liveSourceTitle">' + esc(group.primary.Name || '') + '</h2>' +
+      '<p class="muted">' + group.channels.length + ' ' + esc(t('liveSources')) + '</p>' +
+      '<div class="source-options">' + group.channels.map(function (channel, index) {
+        return '<button type="button" class="source-option" data-source-index="' + index + '">' +
+          esc(liveSourceLabel(channel, index + 1)) + '</button>';
+      }).join('') + '</div></div></div>');
+    document.querySelector('#liveSourceClose').onclick = function () { document.querySelector('#liveSourcePicker').remove(); };
+    Array.prototype.forEach.call(document.querySelectorAll('#liveSourcePicker [data-source-index]'), function (button) {
+      button.onclick = function () {
+        var selected = group.channels[Number(button.getAttribute('data-source-index'))];
+        document.querySelector('#liveSourcePicker').remove();
+        play(selected);
+      };
+    });
+    var first = document.querySelector('#liveSourcePicker [data-source-index]');
+    if (first) first.focus();
   }
 
   function liveChannelGroups(channels) {
@@ -606,6 +652,13 @@
   function openItem(id) {
     var item = state.items.concat(state.liveChannels || []).find(function (candidate) { return candidate.Id === id; });
     if (!item) return;
+    if (item.Type === 'LiveTvChannel') {
+      var group = groupLiveTvChannels(state.liveChannels || []).find(function (candidate) { return candidate.channelId === id; });
+      if (group && group.channels.length > 1) {
+        showLiveSourcePicker(group);
+        return;
+      }
+    }
     closeDetails();
     root.insertAdjacentHTML('beforeend', '<div class="modal" id="details" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">' +
       '<div class="modal-card">' +
