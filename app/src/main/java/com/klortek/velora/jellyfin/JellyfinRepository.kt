@@ -68,8 +68,8 @@ class JellyfinRepository(
                 _error.value = "No continue watching items found"
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-            _error.value = "Error: ${e.message ?: e.javaClass.simpleName}"
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
+            _error.value = "Error: ${e::class.simpleName ?: e.javaClass.simpleName}"
         } finally {
             _isLoading.value = false
         }
@@ -80,8 +80,8 @@ class JellyfinRepository(
             val items = apiService.getNextUp(limit = settings.rowCardCount)
             _nextUpItems.value = items
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error fetching next up items: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
+            android.util.Log.e("VeloraNetwork", "Error fetching next up items (${e::class.simpleName})")
         }
     }
 
@@ -129,7 +129,7 @@ class JellyfinRepository(
                     }
                 } catch (e: Exception) {
                     // Log but continue with other libraries
-                    android.util.Log.w("JellyfinRepository", "Error fetching movies from library ${library.Name}: ${e.message}")
+                    android.util.Log.w("JellyfinRepository", "Error fetching movies from library ${library.Name}: ${e::class.simpleName}")
                 }
             }
             
@@ -144,9 +144,9 @@ class JellyfinRepository(
             
             _recentlyAddedMovies.value = sortedItems
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             // Don't set error for recently added movies, just log it
-            println("Error fetching recently added movies: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Error fetching recently added movies (${e::class.simpleName})")
         }
     }
 
@@ -195,7 +195,7 @@ class JellyfinRepository(
                     }
                 } catch (e: Exception) {
                     // Log but continue with other libraries
-                    android.util.Log.w("JellyfinRepository", "Error fetching released movies from library ${library.Name}: ${e.message}")
+                    android.util.Log.w("JellyfinRepository", "Error fetching released movies from library ${library.Name}: ${e::class.simpleName}")
                 }
             }
             
@@ -206,9 +206,9 @@ class JellyfinRepository(
             
             _recentlyReleasedMovies.value = sortedItems
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             // Don't set error for recently released movies, just log it
-            println("Error fetching recently released movies: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Error fetching recently released movies (${e::class.simpleName})")
         }
     }
 
@@ -253,7 +253,7 @@ class JellyfinRepository(
                     }
                 } catch (e: Exception) {
                     // Log but continue with other libraries
-                    android.util.Log.w("JellyfinRepository", "Error fetching shows from library ${library.Name}: ${e.message}")
+                    android.util.Log.w("JellyfinRepository", "Error fetching shows from library ${library.Name}: ${e::class.simpleName}")
                 }
             }
             
@@ -267,8 +267,8 @@ class JellyfinRepository(
             
             _recentlyAddedShows.value = sortedItems
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error fetching recently added shows: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
+            android.util.Log.e("VeloraNetwork", "Error fetching recently added shows (${e::class.simpleName})")
         }
     }
 
@@ -313,7 +313,7 @@ class JellyfinRepository(
                     }
                 } catch (e: Exception) {
                     // Log but continue with other libraries
-                    android.util.Log.w("JellyfinRepository", "Error fetching episodes from library ${library.Name}: ${e.message}")
+                    android.util.Log.w("JellyfinRepository", "Error fetching episodes from library ${library.Name}: ${e::class.simpleName}")
                 }
             }
             
@@ -327,8 +327,8 @@ class JellyfinRepository(
             
             _recentlyAddedEpisodes.value = sortedItems
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error fetching recently added episodes: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
+            android.util.Log.e("VeloraNetwork", "Error fetching recently added episodes (${e::class.simpleName})")
         }
     }
 
@@ -341,8 +341,8 @@ class JellyfinRepository(
                 it.Name.equals("Live TV", ignoreCase = true)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error fetching libraries: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
+            android.util.Log.e("VeloraNetwork", "Error fetching libraries (${e::class.simpleName})")
         }
     }
     
@@ -351,8 +351,8 @@ class JellyfinRepository(
             val collections = apiService.getCollections()
             _collections.value = collections
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error fetching collections: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
+            android.util.Log.e("VeloraNetwork", "Error fetching collections (${e::class.simpleName})")
         }
     }
 
@@ -366,8 +366,8 @@ class JellyfinRepository(
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error fetching library items: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
+            android.util.Log.e("VeloraNetwork", "Error fetching library items (${e::class.simpleName})")
         }
     }
     
@@ -382,8 +382,8 @@ class JellyfinRepository(
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
-            println("Error fetching collection items: ${e.message}")
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
+            android.util.Log.e("VeloraNetwork", "Error fetching collection items (${e::class.simpleName})")
         }
     }
 
@@ -417,7 +417,7 @@ class JellyfinRepository(
             
             hasNewMovies || hasNewEpisodes || hasNewContinueWatching || hasNewNextUp
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false // On error, assume no new media to avoid unnecessary refreshes
         }
     }

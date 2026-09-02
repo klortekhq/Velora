@@ -53,7 +53,7 @@ class VeloraDownloader : Downloader() {
         
         val responseBody = okResponse.body?.string()
         val responseCode = okResponse.code
-        val responseMessage = okResponse.message
+        val responseMessage = okResponse::class.simpleName
         
         // Map OkHttp headers to Map<String, List<String>>
         val responseHeaders = mutableMapOf<String, List<String>>()

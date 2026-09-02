@@ -102,7 +102,7 @@ fun JellyseerrDetailsScreen(
                 }
             }
         } catch (e: Exception) {
-            error = "Error: ${e.message}"
+            error = "Error: ${e::class.simpleName}"
         } finally {
             isLoading = false
         }

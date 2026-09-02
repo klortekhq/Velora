@@ -446,7 +446,7 @@ private fun connectToServer(
             }
         } catch (e: Exception) {
             android.util.Log.e("ServerEntry", "Error during server discovery", e)
-            onResult(false, "Error: ${e.message ?: e.javaClass.simpleName}")
+            onResult(false, "Error: ${e::class.simpleName ?: e.javaClass.simpleName}")
         }
     }
 }

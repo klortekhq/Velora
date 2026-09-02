@@ -28,10 +28,10 @@ object MPVLib {
             initialized = true
             Log.d(TAG, "MPV native libraries loaded successfully")
         } catch (e: UnsatisfiedLinkError) {
-            Log.e(TAG, "Failed to load MPV native libraries: ${e.message}", e)
+            Log.e(TAG, "Failed to load MPV native libraries: ${e::class.simpleName}", e)
             initialized = false
         } catch (e: Exception) {
-            Log.e(TAG, "Error loading MPV native libraries: ${e.message}", e)
+            Log.e(TAG, "Error loading MPV native libraries: ${e::class.simpleName}", e)
             initialized = false
         }
     }

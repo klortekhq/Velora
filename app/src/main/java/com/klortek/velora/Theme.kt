@@ -77,7 +77,7 @@ fun JellyfinAppTheme(
                 }
                 loader.close()
             } catch (e: Exception) {
-                android.util.Log.e("JellyfinAppTheme", "Failed to load remote theme: ${e.message}", e)
+                android.util.Log.e("JellyfinAppTheme", "Failed to load remote theme: ${e::class.simpleName}", e)
                 // On error, use default theme
                 themeConfig = null
             }

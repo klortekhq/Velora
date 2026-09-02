@@ -830,7 +830,7 @@ fun JellyfinVideoPlayerScreen(
                     skipMarkers = markers
                     Log.d("JellyfinPlayer", "Skip markers loaded: intro=${markers.introStartMs}-${markers.introEndMs}ms, credits=${markers.creditsStartMs}ms")
                 } catch (e: Exception) {
-                    Log.d("JellyfinPlayer", "Skip markers not available: ${e.message}")
+                    Log.d("JellyfinPlayer", "Skip markers not available: ${e::class.simpleName}")
                 }
             }
         }
@@ -1110,7 +1110,7 @@ fun JellyfinVideoPlayerScreen(
                                 }
                             } catch (e: Exception) {
                                 Log.e("JellyfinPlayer", "Error finding next episode", e)
-                                e.printStackTrace()
+                                android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
                             }
                         }
                         
@@ -1212,7 +1212,7 @@ fun JellyfinVideoPlayerScreen(
                                         positionIndex = subtitleIndex  // Use actual JF index, not sequential!
                                     )
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Failed to create subtitle config for index ${stream.Index}: ${e.message}")
+                                    Log.w("JellyfinPlayer", "Failed to create subtitle config for index ${stream.Index}: ${e::class.simpleName}")
                                     null
                                 }
                             }.filterNotNull()
@@ -1234,7 +1234,7 @@ fun JellyfinVideoPlayerScreen(
                                         label = "${com.klortek.velora.subtitles.SubtitleLanguages.getDisplayName(downloadedSub.language)} (Descargado)"
                                     )
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Failed to add downloaded subtitle ${downloadedSub.fileName}: ${e.message}")
+                                    Log.w("JellyfinPlayer", "Failed to add downloaded subtitle ${downloadedSub.fileName}: ${e::class.simpleName}")
                                     null
                                 }
                             }
@@ -1272,7 +1272,7 @@ fun JellyfinVideoPlayerScreen(
                                     .build()
                             }
                         } catch (e: Exception) {
-                            Log.e("JellyfinPlayer", "❌ Error creating MediaItem with subtitles: ${e.message}", e)
+                            Log.e("JellyfinPlayer", "❌ Error creating MediaItem with subtitles: ${e::class.simpleName}", e)
                             Log.e("JellyfinPlayer", "   Playing video without subtitles")
                             MediaItem.fromUri(Uri.parse(currentMediaUrl))
                         }
@@ -1406,7 +1406,7 @@ fun JellyfinVideoPlayerScreen(
                                         }
                                         
                                     } catch (e: Exception) {
-                                        Log.e("JellyfinPlayer", "❌ Failed to switch to transcoding: ${e.message}", e)
+                                        Log.e("JellyfinPlayer", "❌ Failed to switch to transcoding: ${e::class.simpleName}", e)
                                         
                                         // Try MPV fallback if transcoding failed
                                         if (fallbackToMpv && isMpvInstalled && !hasTriedMpvFallback) {
@@ -1918,7 +1918,7 @@ fun JellyfinVideoPlayerScreen(
                                     player.trackSelectionParameters = updatedParameters
                                     Log.d("JellyfinPlayer", "✅ Cleared subtitle overrides (user selected None)")
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error clearing subtitle overrides: ${e.message}", e)
+                                    Log.w("JellyfinPlayer", "Error clearing subtitle overrides: ${e::class.simpleName}", e)
                                 }
                             }
                             
@@ -1988,7 +1988,7 @@ fun JellyfinVideoPlayerScreen(
                                         Log.w("JellyfinPlayer", "   This might happen if track registration hasn't completed yet")
                                     }
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error applying subtitle preference: ${e.message}", e)
+                                    Log.w("JellyfinPlayer", "Error applying subtitle preference: ${e::class.simpleName}", e)
                                 }
                             } else if (subtitleStreamIndex == null && currentSubtitleIndex == null && textTrackGroups.isNotEmpty() && textTrackGroups.none { it.isSelected } && !hasAppliedInitialSubtitlePreference) {
                                 // User explicitly selected "None" from series/movie page AND no subtitle is currently selected
@@ -2004,7 +2004,7 @@ fun JellyfinVideoPlayerScreen(
                                     player.trackSelectionParameters = updatedParameters
                                     Log.d("JellyfinPlayer", "✅ Cleared subtitle track selection (None selected)")
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error clearing subtitle track selection: ${e.message}", e)
+                                    Log.w("JellyfinPlayer", "Error clearing subtitle track selection: ${e::class.simpleName}", e)
                                 }
                             }
                             
@@ -2111,7 +2111,7 @@ fun JellyfinVideoPlayerScreen(
                                     Log.w("JellyfinPlayer", "Could not find matching ExoPlayer track group for Jellyfin subtitle index $subtitleStreamIndex")
                                 }
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error selecting subtitle track: ${e.message}", e)
+                                    Log.w("JellyfinPlayer", "Error selecting subtitle track: ${e::class.simpleName}", e)
                                 }
                             }
                             */
@@ -2290,7 +2290,7 @@ fun JellyfinVideoPlayerScreen(
                                                     Log.d("JellyfinPlayer", "⚠️ Attempted to force selection of unsupported audio track: language=${selectedFormat.language}, codec=${selectedFormat.codecs ?: "null"}, Jellyfin index=$audioIndexToApply, ExoPlayer group=$groupIndexToSelect (may not work if codec truly unsupported)")
                                                 }
                                             } catch (e: Exception) {
-                                                Log.w("JellyfinPlayer", "Error selecting audio track: ${e.message}", e)
+                                                Log.w("JellyfinPlayer", "Error selecting audio track: ${e::class.simpleName}", e)
                                                 // If it's unsupported and addOverride failed, log a warning
                                                 if (!groupToSelect.isSupported) {
                                                     Log.w("JellyfinPlayer", "⚠️ Audio track index $audioIndexToApply is not supported by ExoPlayer (language=${preferredAudioStream.Language}, codec=${preferredAudioStream.Codec ?: "null"}) and cannot be forced")
@@ -2305,7 +2305,7 @@ fun JellyfinVideoPlayerScreen(
                                         }
                                     }
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error selecting audio track: ${e.message}", e)
+                                    Log.w("JellyfinPlayer", "Error selecting audio track: ${e::class.simpleName}", e)
                                 }
                                 } else {
                                     Log.d("JellyfinPlayer", "Audio track already matches preference, no update needed")
@@ -2967,7 +2967,7 @@ fun JellyfinVideoPlayerScreen(
                                                         player.setVideoSurface(surface)
                                                         Log.d("JellyfinPlayer", "🎬 GL surface attached to player via callback")
                                                     } catch (e: Exception) {
-                                                        Log.w("JellyfinPlayer", "⚠️ Failed to attach GL surface: ${e.message}")
+                                                        Log.w("JellyfinPlayer", "⚠️ Failed to attach GL surface: ${e::class.simpleName}")
                                                     }
                                                 } else {
                                                     Log.d("JellyfinPlayer", "🛑 Ignoring GL surface callback - view disposed")
@@ -4750,7 +4750,7 @@ fun ExoPlayerSettingsMenu(
         } catch (e: IllegalStateException) {
             // FocusRequester not yet attached to a composable - this can happen
             // if the menu is dismissed before the focus request completes
-            Log.w("ExoPlayerSettingsMenu", "Focus request failed (menu may have been dismissed): ${e.message}")
+            Log.w("ExoPlayerSettingsMenu", "Focus request failed (menu may have been dismissed): ${e::class.simpleName}")
         }
     }
     

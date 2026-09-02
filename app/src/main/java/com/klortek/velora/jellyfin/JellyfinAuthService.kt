@@ -108,7 +108,7 @@ class JellyfinAuthService(
                 val errorBody = try {
                     response.bodyAsText()
                 } catch (e: Exception) {
-                    "Could not read error body: ${e.message}"
+                    "Could not read error body: ${e::class.simpleName}"
                 }
                 Log.w(TAG, "Authentication failed with HTTP ${response.status.value}")
                 null

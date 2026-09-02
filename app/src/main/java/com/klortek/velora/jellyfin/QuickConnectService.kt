@@ -116,7 +116,7 @@ class QuickConnectService(
             QuickConnectResult(null, QuickConnectError.ConnectionError("Cannot resolve server address. Please check the IP address or hostname."))
         } catch (e: Exception) {
             android.util.Log.e("QuickConnect", "Exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
-            QuickConnectResult(null, QuickConnectError.UnknownError("Error: ${e.message ?: e.javaClass.simpleName}"))
+            QuickConnectResult(null, QuickConnectError.UnknownError("Error: ${e::class.simpleName ?: e.javaClass.simpleName}"))
         }
     }
 

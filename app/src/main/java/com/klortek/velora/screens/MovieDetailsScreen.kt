@@ -1419,7 +1419,7 @@ fun SubtitleSelectionDialog(
                         }
                     } catch (e: Exception) {
                         Log.e("SubtitleDialog", "Error downloading subtitle", e)
-                        android.widget.Toast.makeText(context, "Download failed: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
+                        android.widget.Toast.makeText(context, context.getString(com.klortek.velora.R.string.error_fragment_message), android.widget.Toast.LENGTH_LONG).show()
                     } finally {
                         isDownloading = false
                     }

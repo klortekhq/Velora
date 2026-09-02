@@ -153,7 +153,7 @@ object SubtitleDownloader {
             return@withContext localPath
             
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error downloading subtitle: ${e.message}", e)
+            Log.e(TAG, "❌ Error downloading subtitle: ${e::class.simpleName}", e)
             return@withContext null
         }
     }

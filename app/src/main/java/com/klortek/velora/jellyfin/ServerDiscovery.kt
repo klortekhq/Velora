@@ -196,7 +196,7 @@ object ServerDiscovery {
                     }
                 }
             } catch (e: Exception) {
-                Log.d(TAG, "Server discovery attempt failed: ${e.message}")
+                Log.d(TAG, "Server discovery attempt failed: ${e::class.simpleName}")
             }
         }
         
@@ -233,7 +233,7 @@ object ServerDiscovery {
             
             false
         } catch (e: Exception) {
-            Log.w(TAG, "Server validation failed: ${e.message}")
+            Log.w(TAG, "Server validation failed: ${e::class.simpleName}")
             false
         }
     }
@@ -311,14 +311,14 @@ object ServerDiscovery {
                             onServerFound?.invoke(server)
                         }
                     } catch (e: Exception) {
-                        Log.w(TAG, "Failed to parse server response: ${e.message}")
+                        Log.w(TAG, "Failed to parse server response: ${e::class.simpleName}")
                     }
                 } catch (e: java.net.SocketTimeoutException) {
                     // Timeout is expected, continue listening until overall timeout
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error during local discovery: ${e.message}")
+            Log.e(TAG, "Error during local discovery: ${e::class.simpleName}")
         } finally {
             socket?.close()
         }
