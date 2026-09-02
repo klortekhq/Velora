@@ -56,6 +56,10 @@ siguen siendo parciales y no se presentan como traducciones completas. Las
 pruebas de recursos, `testMobileDebugUnitTest`, `compileMobileDebugKotlin` y
 `compileTvDebugKotlin` pasan tras el cambio.
 
+También se normalizó el formato de tiempos, puntuaciones y metadatos numéricos
+con `Locale.ROOT`, evitando resultados dependientes del idioma del dispositivo.
+La batería posterior de tests y compilaciones móvil/TV vuelve a pasar.
+
 La autenticación Android ya no imprime excepciones completas ni trazas de red:
 el log conserva únicamente el tipo de error y el código HTTP, evitando exponer
 por accidente el host configurado o detalles de la petición. La corrección se

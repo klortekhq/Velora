@@ -26,6 +26,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.Tracks
 import androidx.media3.common.ColorInfo
 import androidx.media3.common.util.UnstableApi
+import java.util.Locale
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.HttpDataSource
@@ -6114,9 +6115,9 @@ private fun formatTime(ms: Long): String {
     val seconds = totalSeconds % 60
     
     return if (hours > 0) {
-        String.format("%d:%02d:%02d", hours, minutes, seconds)
+        String.format(Locale.ROOT, "%d:%02d:%02d", hours, minutes, seconds)
     } else {
-        String.format("%d:%02d", minutes, seconds)
+        String.format(Locale.ROOT, "%d:%02d", minutes, seconds)
     }
 }
 

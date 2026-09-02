@@ -1123,7 +1123,7 @@ fun TvShowsLibraryScreen(
                                         
                                         // Community Rating
                                         details.CommunityRating?.let { rating ->
-                                            TvShowMetadataBox(text = "★ ${String.format("%.1f", rating)}")
+                                            TvShowMetadataBox(text = "★ ${String.format(Locale.ROOT, "%.1f", rating)}")
                                         }
                                         
                                         // Language
@@ -1928,7 +1928,7 @@ fun TvShowsLibraryScreen(
                                         // Rating
                                         discoverShow.voteAverage?.let { rating ->
                                             Text(
-                                                text = "★ ${String.format("%.1f", rating)}",
+                                                text = "★ ${String.format(Locale.ROOT, "%.1f", rating)}",
                                                 style = MaterialTheme.typography.bodyMedium,
                                                 color = Color(0xFFFFD700)
                                             )
@@ -2593,7 +2593,7 @@ fun JellyseerrTvShowCard(
                             .padding(horizontal = 4.dp, vertical = 2.dp)
                     ) {
                         Text(
-                            text = "★ ${String.format("%.1f", rating)}",
+                            text = "★ ${String.format(Locale.ROOT, "%.1f", rating)}",
                             style = MaterialTheme.typography.labelSmall,
                             color = Color(0xFFFFD700)
                         )

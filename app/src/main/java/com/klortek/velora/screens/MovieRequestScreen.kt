@@ -1,5 +1,7 @@
 package com.klortek.velora.screens
 
+import java.util.Locale
+
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -290,7 +292,7 @@ fun MovieRequestScreen(
                                             )
                                             Spacer(modifier = Modifier.width(4.dp))
                                             Text(
-                                                text = String.format("%.1f", rating),
+                                                text = String.format(Locale.ROOT, "%.1f", rating),
                                                 color = Color.White,
                                                 style = MaterialTheme.typography.labelSmall,
                                                 fontWeight = FontWeight.Bold
@@ -595,7 +597,7 @@ fun MovieRequestScreen(
                                     if (rating > 0) {
                                         Spacer(modifier = Modifier.width(12.dp))
                                         androidx.compose.material3.Text(
-                                            text = "★ " + String.format("%.1f", rating),
+                                            text = "★ " + String.format(Locale.ROOT, "%.1f", rating),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.Bold,
                                             color = Color(0xFFFFD700)
