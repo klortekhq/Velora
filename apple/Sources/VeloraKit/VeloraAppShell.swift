@@ -213,7 +213,7 @@ private struct VeloraItemDetailView: View {
                 }
                 if let player { VideoPlayer(player: player).aspectRatio(16 / 9, contentMode: .fit) }
                 if model.platform.supportsOfflineDownloads {
-                    Text("Offline downloads are available on this device.")
+                    Text("Offline downloads are available on this device.", bundle: .module)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
