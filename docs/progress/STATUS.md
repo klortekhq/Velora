@@ -18,6 +18,13 @@ Verificación local del 2026-09-02: `node web/scripts/test-platform.mjs`,
 nueva release para esta verificación porque no incorpora un bloque funcional
 grande.
 
+Después de esa verificación se subieron dos correcciones adicionales a
+`main`: `b5e298f` centraliza la aplicación del aspecto entre reproducción
+vertical y pantalla completa, con regresiones para todos los modos; `55c08cf`
+valida también dentro del service worker web el servidor y las credenciales del
+proxy multimedia. Las pruebas web, unitarias Android y la compilación móvil/TV
+han pasado tras ambos cambios. Ninguno genera una release aislada.
+
 La auditoría de autenticación añadió validación estricta y compartida para la
 URL del servidor: solo se aceptan HTTP/HTTPS con host y puerto válidos, sin
 credenciales, query ni fragmentos embebidos. También se eliminó una lectura
@@ -132,9 +139,11 @@ web y el bundle Samsung se preparan, webOS genera un IPK mediante
 CLI/perfil de firma no está instalado en este host, por lo que Samsung no se
 marca como WGT instalable; VIDAA tampoco se marca como paquete firmado.
 
-La release pública más reciente con artefactos verificados sigue siendo
-`v1.2.85`; `v1.3.0` ya está etiquetada y subida a `main`, con los workflows de
-GitHub encargados de publicar sus artefactos. Las validaciones locales de
+La etiqueta de versión más reciente publicada en el repositorio es
+`v1.3.0`, y los commits posteriores permanecen en `main` como correcciones
+agrupables. La existencia de la etiqueta no se interpreta por sí sola como
+una release de GitHub con artefactos verificados: esa publicación debe quedar
+confirmada por los workflows de GitHub Actions. Las validaciones locales de
 Android móvil/TV terminaron correctamente tras endurecer el motor de decisión
 de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
