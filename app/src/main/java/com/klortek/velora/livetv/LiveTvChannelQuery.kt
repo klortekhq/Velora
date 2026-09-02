@@ -35,7 +35,18 @@ fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup>
         val key = channel.Id.ifBlank {
             "fallback:${channel.ChannelNumber.orEmpty()}|${channel.Name.trim().lowercase()}"
         }
-        groups.getOrPut(key) { mutableListOf() }.add(channel)
+        val sources = channel.MediaSources.orEmpty()
+        if (sources.size <= 1) {
+            groups.getOrPut(key) { mutableListOf() }.add(channel)
+        } else {
+            // Jellyfin can expose alternatives either as duplicate channel rows
+            // or as several MediaSources on one row. Normalize the latter to
+            // the same picker model, retaining only the selected source in each
+            // option so PlaybackInfo receives the correct MediaSourceId.
+            groups.getOrPut(key) { mutableListOf() }.addAll(
+                sources.map { source -> channel.copy(MediaSources = listOf(source)) }
+            )
+        }
     }
     return groups.map { (key, entries) -> LiveTvChannelGroup(key, entries.toList()) }
 }
