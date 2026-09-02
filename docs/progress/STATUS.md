@@ -140,6 +140,11 @@ de reproducción. El modelo Apple usa ahora los nombres de
 campos reales de la API Jellyfin (`Id`, `Name`, `Type`, `Overview`,
 `ImageTags`) y tiene una prueba de regresión.
 
+La publicación de releases queda serializada entre los workflows Android y web
+mediante un grupo común por referencia. Solo una etiqueta semántica `vX.Y.0`
+publica; ambos workflows aportan sus artefactos a la misma release y usan un
+changelog breve en castellano con los cambios funcionales principales.
+
 El bloque actual añade Smart Downloads móvil/tablet de forma opt-in. La
 migración SQLite conserva los estados de visto y protegido, y la limpieza no
 elimina nunca una descarga marcada para conservar. La validación móvil pasa;
