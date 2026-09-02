@@ -167,7 +167,8 @@
     liveChannels: [],
     query: '',
     settingsOpen: false,
-    playingItem: null
+    playingItem: null,
+    liveTvPlaySessionId: ''
   };
 
   function syncMediaProxyCredentials() {
@@ -308,6 +309,7 @@
       }).then(function (data) {
         var source = data && data.MediaSources && data.MediaSources[0];
         if (!source) return '';
+        state.liveTvPlaySessionId = source.PlaySessionId || data.PlaySessionId || '';
         // PlaybackInfo returns a playable server URL for Live TV. A source
         // Path can be a filesystem path, not a browser media endpoint, so it
         // must never be promoted into a URL fallback.
@@ -634,6 +636,15 @@
   function closePlayer() {
     var player = document.querySelector('#player');
     if (!player) return;
+    var item = state.playingItem;
+    if (item && item.Type === 'LiveTvChannel') {
+      var positionTicks = Math.max(0, Math.round((player.querySelector('video').currentTime || 0) * 10000000));
+      var stopped = { ItemId: item.Id, PositionTicks: positionTicks };
+      if (state.liveTvPlaySessionId) stopped.PlaySessionId = state.liveTvPlaySessionId;
+      // Do not delay closing the UI on a server-side cleanup request. Jellyfin
+      // can release the tuner asynchronously while the next view is opening.
+      api('/Sessions/Playing/Stopped', { method: 'POST', body: JSON.stringify(stopped) }).catch(function () {});
+    }
     if (player._veloraAbortController) player._veloraAbortController.abort();
     if (player._veloraObjectUrl) URL.revokeObjectURL(player._veloraObjectUrl);
     if (player._veloraFullscreenCleanup) player._veloraFullscreenCleanup();
@@ -642,6 +653,7 @@
     player.classList.remove('video-fullscreen');
     player.remove();
     state.playingItem = null;
+    state.liveTvPlaySessionId = '';
   }
 
   function play(item) {
