@@ -2,6 +2,7 @@ package com.klortek.velora.screens
 
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
+import java.util.Locale
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -629,7 +630,7 @@ private fun MobileFileDetails(item: JellyfinItem) {
     val audio = streams.filter { it.Type == "Audio" }
     val resolution = if (video?.Width != null && video.Height != null) "${video.Width} × ${video.Height}" else null
     val frameRate = video?.RealFrameRate ?: video?.AverageFrameRate
-    val videoDetails = listOfNotNull(video?.Codec?.uppercase(), resolution, frameRate?.let { "${String.format("%.2f", it)} fps" }, video?.VideoRangeType ?: video?.VideoRange).joinToString("  ·  ")
+    val videoDetails = listOfNotNull(video?.Codec?.uppercase(Locale.ROOT), resolution, frameRate?.let { "${String.format(Locale.ROOT, "%.2f", it)} fps" }, video?.VideoRangeType ?: video?.VideoRange).joinToString("  ·  ")
     val audioDetails = audio.mapNotNull { stream ->
         val language = stream.DisplayLanguage ?: stream.Language
         val codec = stream.Codec?.uppercase()
