@@ -21,7 +21,7 @@ private struct VeloraMobileRoot: View {
            ) {
             shell
         } else {
-            Text("Velora")
+            Text("Connect to Jellyfin", bundle: .module)
         }
     }
 }
