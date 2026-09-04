@@ -85,6 +85,8 @@ assert.match(appSource, /function liveChannelGroups/);
 assert.match(appSource, /function groupLiveTvChannels/);
 assert.match(appSource, /function showLiveSourcePicker/);
 assert.match(appSource, /liveSourceLabel/);
+assert.match(appSource, /Array\.isArray\(channel\.MediaSources\)/);
+assert.match(appSource, /MediaSources: \[source\]/);
 assert.match(appSource, /data-source-index/);
 assert.match(appSource, /function filteredLiveChannels/);
 assert.doesNotMatch(appSource, /data-velora-image-id[^>]+src=/);
