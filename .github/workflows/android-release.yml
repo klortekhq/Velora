@@ -104,22 +104,26 @@ jobs:
           fi
           sha256sum dist/*.apk > dist/SHA256SUMS-${{ matrix.target }}.txt
 
+      - name: Preparar changelog de la release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          awk -v section="## ${version}" '
+            $0 == section { found=1; print; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md || { echo "Falta una sección ## ${version} en CHANGELOG.md"; exit 1; }
+
       - name: Crear o actualizar release con los APK
         if: startsWith(env.RELEASE_TAG, 'v')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           generate_release_notes: false
-          body: |
-            Cambios principales de esta versión:
-
-            - Reproducción con Media3/ExoPlayer como motor predeterminado y decisión Original First.
-            - Experiencia diferenciada para móvil/tablet y Android TV/Fire TV.
-            - Live TV, subtítulos, pistas de audio, reanudación y controles de reproducción.
-            - Descargas offline gestionadas por Velora únicamente en móvil y tablet.
-            - Mejoras de seguridad, localización y rendimiento.
-
-            Consulta el dashboard de progreso para conocer el estado de validación por plataforma.
+          body_path: release-notes.md
           files: |
             dist/*.apk
             dist/SHA256SUMS-${{ matrix.target }}.txt
