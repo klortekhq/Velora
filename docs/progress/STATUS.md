@@ -21,11 +21,13 @@ host no tiene autenticación CLI de GitHub, así que la existencia de la release
 sus checks y sus artefactos todavía deben confirmarse desde Actions. No se
 presenta como publicada hasta verificarlo.
 
-Smoke test remoto del 2026-09-04: `192.168.100.201:8096` responde con
-Jellyfin `10.11.11`, pero el usuario facilitado devuelve HTTP 401; por ello no
-se han marcado como verificadas la consulta autenticada de Live TV ni la
-reproducción contra ese servidor. El Fire TV tampoco acepta actualmente ADB en
-la dirección anterior y no se presenta como instalado allí.
+Smoke test remoto del 2026-09-04: `192.168.100.201:8096` responde, pero la
+autenticación con el usuario facilitado devuelve HTTP 401; por ello no se han
+marcado como verificadas la consulta autenticada de Live TV ni la reproducción
+contra ese servidor. El Fire TV tampoco acepta actualmente ADB en la dirección
+anterior y no se presenta como instalado allí. El resultado 401 se volvió a
+confirmar en esta ronda con `scripts/qa/jellyfin-smoke.ps1`, sin imprimir
+contraseña ni token.
 
 Verificación local de 1.4.0 del 2026-09-04: 75 tests JUnit Android pasan sin
 fallos ni errores; `lintMobileDebug` informa 0 errores (mantiene advertencias de
