@@ -164,10 +164,12 @@ public struct VeloraAppShell: View {
     @State private var password = ""
     @State private var selectedItem: JellyfinItem?
 
-    public init(platform: VeloraPlatform, serverURL: URL) throws {
-        let model = try VeloraAppModel(platform: platform, serverURL: serverURL)
+    public init(platform: VeloraPlatform, serverURL: URL = URL(string: "http://localhost:8096")!) throws {
+        let savedServer = UserDefaults.standard.string(forKey: "velora.serverURL")
+            .flatMap(URL.init(string:)) ?? serverURL
+        let model = try VeloraAppModel(platform: platform, serverURL: savedServer)
         _model = StateObject(wrappedValue: model)
-        _serverText = State(initialValue: serverURL.absoluteString)
+        _serverText = State(initialValue: savedServer.absoluteString)
     }
 
     public var body: some View {

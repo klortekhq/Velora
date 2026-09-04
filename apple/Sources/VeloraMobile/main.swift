@@ -14,11 +14,9 @@ struct VeloraMobileApp: App {
 @available(iOS 16.0, *)
 private struct VeloraMobileRoot: View {
     var body: some View {
-        if let serverURL = URL(string: "http://jellyfin.local:8096"),
-           let shell = try? VeloraAppShell(
-               platform: UIDevice.current.userInterfaceIdiom == .pad ? .iPad : .iPhone,
-               serverURL: serverURL
-           ) {
+        if let shell = try? VeloraAppShell(
+            platform: UIDevice.current.userInterfaceIdiom == .pad ? .iPad : .iPhone
+        ) {
             shell
         } else {
             Text("Connect to Jellyfin", bundle: .module)
