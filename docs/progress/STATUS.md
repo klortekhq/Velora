@@ -17,6 +17,12 @@ se han marcado como verificadas la consulta autenticada de Live TV ni la
 reproducción contra ese servidor. El Fire TV tampoco acepta actualmente ADB en
 la dirección anterior y no se presenta como instalado allí.
 
+Verificación local de 1.4.0 del 2026-09-04: 75 tests JUnit Android pasan sin
+fallos ni errores; `lintMobileDebug` informa 0 errores; las compilaciones móvil
+y TV pasan; `node --check`, las pruebas web y `npm run build:all` pasan. El
+empaquetado webOS genera su IPK; Samsung sigue siendo bundle no firmado por
+falta de Tizen Studio/CLI y VIDAA sigue requiriendo la firma de su portal.
+
 Este dashboard registra únicamente el estado verificable. Una función no se
 marca como completa solo porque exista código o un artefacto anterior.
 
