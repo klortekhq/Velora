@@ -4,13 +4,21 @@ Updated: 2026-09-04
 
 ## Última verificación
 
-El commit `55a1588` deja documentada la validación de catálogos Android. Los
-commits anteriores retiran la marca visible de las interfaces web/Apple y
-completan las traducciones del selector de biblioteca en los idiomas incluidos.
-Todos los catálogos Android contienen las claves nuevas y su XML es válido.
-`node --check web/app.js`, las pruebas web y `git diff --check` pasan. No se ha
-creado una release por estos cambios menores. El Fire TV sigue sin aparecer
-conectado por ADB en este host y Apple sigue pendiente de macOS/Xcode.
+La verificación del 2026-09-04 queda registrada en el commit `b961986`. Los
+tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
+`node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
+webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
+como no firmados cuando faltan sus herramientas o certificados. La rama
+remota comprobada es únicamente `main`.
+
+El smoke test contra el servidor Jellyfin indicado responde, pero devuelve
+HTTP 401; por eso no se marca como verificada la consulta autenticada de Live
+TV ni la reproducción remota. No hay ningún dispositivo ADB conectado en este
+host y el Fire TV tampoco responde en la dirección conocida, así que no se
+declara instalación ni prueba real de hardware. GitHub CLI no tiene sesión
+autenticada y la consulta pública de releases devuelve 404; no se presenta una
+release APK como publicada sin confirmación de Actions. Apple sigue pendiente
+de compilación en macOS/Xcode.
 
 ## Release en preparación: 1.4.0
 
