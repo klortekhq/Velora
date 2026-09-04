@@ -51,6 +51,9 @@ marca como completa solo porque exista código o un artefacto anterior.
 
 La única rama publicada es `main`. Las notas históricas que aparecen más abajo
 se conservan como referencia y no representan el estado actual de la release.
+El workflow `branch-policy.yml` comprueba automáticamente que la única rama
+pública siga siendo `main`; la comprobación no sustituye la configuración de
+permisos de GitHub, pero hace visible cualquier desviación en CI.
 
 La política de publicación mantiene las releases públicas para hitos funcionales
 relevantes: los workflows automáticos solo se activan con etiquetas `vX.Y.0`.
