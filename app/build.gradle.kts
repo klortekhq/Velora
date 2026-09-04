@@ -16,8 +16,8 @@ android {
         targetSdk = 36
 
         // Keep the Play-compatible code monotonic; the public release is semantic.
-        versionCode = 10372
-        versionName = "1.3.0"
+        versionCode = 10400
+        versionName = "1.4.0"
 
         ndk {
             abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))

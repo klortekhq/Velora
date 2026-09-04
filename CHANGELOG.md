@@ -1,6 +1,19 @@
-# Changelog
+# Registro de cambios
 
-All notable changes to Velora will be documented in this file.
+Los cambios relevantes de Velora se documentan en este archivo.
+
+## 1.4.0
+
+- Live TV agrupa las alternativas del mismo canal y permite elegir con un
+  toque o con el mando entre las fuentes que Jellyfin devuelve, incluida IPTV.
+- La selección de fuente se propaga realmente a `PlaybackInfo` en Android y
+  web, evitando que el selector sea solo visual.
+- La recuperación de descargas offline sobrevive al cierre o reinicio de la
+  aplicación y verifica que el contenido gestionado siga disponible.
+- Se refuerzan la reproducción Original First, la seguridad de URLs y el
+  tratamiento de credenciales sin exponer tokens en direcciones ni logs.
+- Se añaden regresiones de Live TV y se validan las compilaciones móvil y TV,
+  junto con las pruebas del cliente web.
 
 ## 1.3.0
 
