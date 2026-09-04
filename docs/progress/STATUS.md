@@ -57,6 +57,12 @@ host no tiene autenticación CLI de GitHub, así que la existencia de la release
 sus checks y sus artefactos todavía deben confirmarse desde Actions. No se
 presenta como publicada hasta verificarlo.
 
+Auditoría de trazabilidad del 2026-09-04: la etiqueta remota `v1.4.0` apunta a
+un commit anterior al `main` actual. Por ello no se considera la build actual
+ni se reescribe automáticamente la etiqueta existente; moverla requeriría una
+decisión explícita sobre la historia de la versión. Los workflows ya permiten
+reconstruir una etiqueta existente cuando esa referencia sea la elegida.
+
 Smoke test remoto del 2026-09-04: `192.168.100.201:8096` responde, pero la
 autenticación con el usuario facilitado devuelve HTTP 401; por ello no se han
 marcado como verificadas la consulta autenticada de Live TV ni la reproducción
