@@ -387,8 +387,7 @@
 
   function login() {
     root.innerHTML = '<section class="login" aria-labelledby="loginTitle">' +
-      '<h1 id="loginTitle">Velora</h1>' +
-      '<p class="muted">' + esc(t('connectServer')) + '</p>' +
+      '<h1 id="loginTitle">' + esc(t('connectServer')) + '</h1>' +
       '<label for="server">' + esc(t('server')) + '</label>' +
       '<input id="server" value="' + esc(state.server) + '" placeholder="' + esc(t('serverPlaceholder')) + '" autocomplete="url">' +
       '<label for="user">' + esc(t('user')) + '</label>' +
@@ -1018,7 +1017,7 @@
     }
     syncMediaProxyCredentials();
     document.documentElement.lang = languageCode();
-    root.innerHTML = '<div class="shell"><header><div class="brand">Velora</div><div class="actions">' +
+    root.innerHTML = '<div class="shell"><header><div class="actions">' +
       '<button type="button" id="refresh">' + esc(t('refresh')) + '</button><button type="button" id="settingsButton">' + esc(t('settings')) + '</button><button type="button" id="logout">' + esc(t('logout')) + '</button>' +
       '</div></header><div id="content"><div class="empty">' + esc(t('loading')) + '</div></div></div>';
     document.querySelector('#settingsButton').onclick = showSettings;
