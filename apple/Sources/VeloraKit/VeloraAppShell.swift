@@ -92,7 +92,11 @@ public final class VeloraAppModel: ObservableObject {
            FileManager.default.fileExists(atPath: offlineStore.mediaURL(for: offline).path) {
             return AVPlayer(url: offlineStore.mediaURL(for: offline))
         }
-        guard let requestURL = await client.videoURL(itemID: item.id) else { return nil }
+        let requestURL = await client.playbackURL(
+            itemID: item.id,
+            userID: session?.userID ?? ""
+        ) ?? await client.videoURL(itemID: item.id)
+        guard let requestURL else { return nil }
         let request = await client.authorizedRequest(for: requestURL)
         guard let url = request.url else { return nil }
         let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": request.allHTTPHeaderFields ?? [:]])
