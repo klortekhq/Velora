@@ -4,14 +4,12 @@ Updated: 2026-09-04
 
 ## Última verificación
 
-El commit `ce46ffb` retira la marca visible de las interfaces web y Apple sin
-alterar los identificadores técnicos de Jellyfin. El commit `9b65c35` completa
-las traducciones del selector de biblioteca en español, inglés, francés y
-alemán. Todos los catálogos Android contienen las claves nuevas y su XML es
-válido. `node --check web/app.js`, las pruebas web, `testMobileDebugUnitTest`
-y `git diff --check` pasan; la compilación Android móvil/TV ya había pasado en
-el commit anterior. No se
-ha creado una release por estos cambios menores. El Fire TV sigue sin aparecer
+El commit `55a1588` deja documentada la validación de catálogos Android. Los
+commits anteriores retiran la marca visible de las interfaces web/Apple y
+completan las traducciones del selector de biblioteca en los idiomas incluidos.
+Todos los catálogos Android contienen las claves nuevas y su XML es válido.
+`node --check web/app.js`, las pruebas web y `git diff --check` pasan. No se ha
+creado una release por estos cambios menores. El Fire TV sigue sin aparecer
 conectado por ADB en este host y Apple sigue pendiente de macOS/Xcode.
 
 ## Release en preparación: 1.4.0
@@ -30,10 +28,13 @@ reproducción contra ese servidor. El Fire TV tampoco acepta actualmente ADB en
 la dirección anterior y no se presenta como instalado allí.
 
 Verificación local de 1.4.0 del 2026-09-04: 75 tests JUnit Android pasan sin
-fallos ni errores; `lintMobileDebug` informa 0 errores; las compilaciones móvil
-y TV pasan; `node --check`, las pruebas web y `npm run build:all` pasan. El
+fallos ni errores; `lintMobileDebug` informa 0 errores (mantiene advertencias de
+dependencias, estilo y recursos heredados); las compilaciones Kotlin móvil y
+TV pasan. `node --check`, las pruebas web y `npm run build:all` pasan. El
 empaquetado webOS genera su IPK; Samsung sigue siendo bundle no firmado por
 falta de Tizen Studio/CLI y VIDAA sigue requiriendo la firma de su portal.
+La auditoría de capacidades confirma que las descargas solo se exponen en
+móvil/tablet y permanecen ocultas en TV, navegador, tvOS, Tizen, webOS y VIDAA.
 
 La revisión posterior también normaliza en web una única fila Live TV que
 contiene varias `MediaSources`, igual que Android, y añade una regresión de
