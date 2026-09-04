@@ -108,6 +108,17 @@ los artefactos juntos cuando se crea una etiqueta de versión completa `vX.Y.0`;
 los builds de parche se reservan para QA, salvo correcciones críticas o de
 seguridad.
 
+Para ejecutar el smoke test contra un servidor Jellyfin sin guardar secretos
+en el repositorio, define `VELORA_JELLYFIN_URL`, `VELORA_JELLYFIN_USER` y
+`VELORA_JELLYFIN_PASSWORD` solo en el entorno local y ejecuta:
+
+```powershell
+pwsh -File scripts/qa/jellyfin-smoke.ps1
+```
+
+El script valida disponibilidad, autenticación y la consulta Live TV con
+`MediaSources`; nunca imprime la contraseña ni el token.
+
 ## Rendimiento
 
 Velora utiliza Compose, listas perezosas con claves estables, carga diferida de imágenes, caché local y actualizaciones controladas para reducir recomposiciones, consumo de memoria y tráfico innecesario. La reproducción usa una única sesión de reproductor y evita reinicios de Activity al cambiar opciones durante la reproducción.
