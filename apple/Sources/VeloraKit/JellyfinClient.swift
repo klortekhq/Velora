@@ -2,6 +2,7 @@ import Foundation
 
 public actor JellyfinClient {
     public enum ClientError: Error { case invalidServerURL, invalidResponse, unauthorized }
+    public static let clientVersion = "1.4.0"
 
     private static func isValidServerURL(_ url: URL) -> Bool {
         guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https",
@@ -54,7 +55,7 @@ public actor JellyfinClient {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(
-            "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"1.3.0\", Language=\"en\"",
+            "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"\(Self.clientVersion)\", Language=\"en\"",
             forHTTPHeaderField: "X-Emby-Authorization"
         )
         request.httpBody = try JSONEncoder().encode(["Username": username, "Password": password])
@@ -99,7 +100,7 @@ public actor JellyfinClient {
     /// the Jellyfin token in a URL. Callers can pass this to URLSession/AVURLAsset.
     public func authorizedRequest(for url: URL) -> URLRequest {
         var request = URLRequest(url: url)
-        request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")
+        request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
         return request
     }
@@ -133,7 +134,7 @@ public actor JellyfinClient {
             URLQueryItem(name: "UserId", value: userID),
             URLQueryItem(name: "AddCurrentProgram", value: "true"),
             URLQueryItem(name: "EnableImages", value: "true"),
-            URLQueryItem(name: "Fields", value: "Overview")
+            URLQueryItem(name: "Fields", value: "Overview,MediaSources")
         ]
         guard let url = components?.url else { throw ClientError.invalidServerURL }
         return try await request(url, as: JellyfinResult<JellyfinLiveTvChannel>.self).items
@@ -191,7 +192,7 @@ public actor JellyfinClient {
         var request = URLRequest(url: baseURL.appendingPathComponent("Sessions/Playing/Stopped"))
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")
+        request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
         request.httpBody = try? JSONEncoder().encode(
             JellyfinPlaybackStoppedRequest(itemID: itemID, positionTicks: max(0, positionTicks))
@@ -201,7 +202,7 @@ public actor JellyfinClient {
 
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
-        request.setValue("Velora/1.3.0", forHTTPHeaderField: "X-Emby-Client")
+        request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }
