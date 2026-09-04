@@ -26,6 +26,11 @@ autenticada y la consulta pública de releases devuelve 404; no se presenta una
 release APK como publicada sin confirmación de Actions. Apple sigue pendiente
 de compilación en macOS/Xcode.
 
+La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
+fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
+como fallback. El cambio está revisado estáticamente y queda pendiente de
+compilación y prueba en macOS/Xcode.
+
 ## Release en preparación: 1.4.0
 
 El código actual queda versionado como `1.4.0` para agrupar el bloque

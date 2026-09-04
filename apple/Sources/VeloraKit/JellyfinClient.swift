@@ -23,6 +23,26 @@ public actor JellyfinClient {
         enum CodingKeys: String, CodingKey { case accessToken = "AccessToken", user = "User" }
     }
 
+    private struct PlaybackMediaSource: Decodable {
+        let id: String?
+        let directStreamURL: URL?
+        let transcodingURL: URL?
+        let protocolName: String?
+
+        enum CodingKeys: String, CodingKey {
+            case id = "Id"
+            case directStreamURL = "DirectStreamUrl"
+            case transcodingURL = "TranscodingUrl"
+            case protocolName = "Protocol"
+        }
+    }
+
+    private struct PlaybackInfoResponse: Decodable {
+        let mediaSources: [PlaybackMediaSource]
+
+        enum CodingKeys: String, CodingKey { case mediaSources = "MediaSources" }
+    }
+
     private var baseURL: URL
     private let session: URLSession
     private var accessToken: String?
@@ -96,6 +116,41 @@ public actor JellyfinClient {
         return components?.url
     }
 
+    /// Ask Jellyfin for its canonical source decision before opening VOD.
+    /// This preserves Original First on Apple while retaining a safe generic
+    /// stream fallback for servers that do not return a playable URL.
+    public func playbackURL(itemID: String, userID: String) async -> URL? {
+        guard !userID.isEmpty,
+              let itemURL = itemURL(root: "Items", itemID: itemID, suffix: ["PlaybackInfo"])
+        else { return nil }
+
+        var components = URLComponents(url: itemURL, resolvingAgainstBaseURL: false)
+        components?.queryItems = [
+            URLQueryItem(name: "UserId", value: userID),
+            URLQueryItem(name: "AutoOpenLiveStream", value: "false"),
+            URLQueryItem(name: "EnableDirectPlay", value: "true"),
+            URLQueryItem(name: "EnableDirectStream", value: "true"),
+            URLQueryItem(name: "EnableTranscoding", value: "true")
+        ]
+        guard let url = components?.url else { return nil }
+        var request = authorizedRequest(for: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = Data("{}".utf8)
+
+        guard let (data, response) = try? await session.data(for: request),
+              let http = response as? HTTPURLResponse,
+              (200..<300).contains(http.statusCode),
+              let info = try? JSONDecoder().decode(PlaybackInfoResponse.self, from: data)
+        else { return nil }
+
+        for source in info.mediaSources {
+            let candidate = source.directStreamURL ?? source.transcodingURL
+            if let candidate, isServerURL(candidate) { return candidate }
+        }
+        return nil
+    }
+
     /// Build an authenticated request for artwork or media without exposing
     /// the Jellyfin token in a URL. Callers can pass this to URLSession/AVURLAsset.
     public func authorizedRequest(for url: URL) -> URLRequest {
@@ -116,6 +171,12 @@ public actor JellyfinClient {
         return parts.enumerated().reduce(baseURL) { url, entry in
             url.appendingPathComponent(entry.element, isDirectory: entry.offset < parts.count - 1)
         }
+    }
+
+    private func isServerURL(_ url: URL) -> Bool {
+        url.scheme?.lowercased() == baseURL.scheme?.lowercased()
+            && url.host?.lowercased() == baseURL.host?.lowercased()
+            && url.port == baseURL.port
     }
 
     public func items(userID: String, parentID: String? = nil, includeTypes: [String] = []) async throws -> [JellyfinItem] {
