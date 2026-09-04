@@ -96,9 +96,11 @@
   <string name="library_sort_filter">Sortieren und filtern</string>
   <string name="library_sort_by">Sortieren nach</string>
   <string name="library_sort_name">Name</string>
+  <string name="library_sort_alphabetical">Alphabetisch</string>
   <string name="library_sort_date_added">Hinzugefügt am</string>
   <string name="library_sort_premiere">Premierendatum</string>
   <string name="library_sort_runtime">Laufzeit</string>
+  <string name="library_sort_random">Zufällig</string>
   <string name="library_sort_critic_rating">Kritikerwertung</string>
   <string name="library_sort_community_rating">Community-Bewertung</string>
   <string name="library_filters">Filter</string>
@@ -109,6 +111,7 @@
   <string name="library_unwatched">Ungesehen</string>
   <string name="library_genre">Genre</string>
   <string name="library_all_genres">Alle Genres</string>
+  <string name="library_filter_genre">Nach Genre filtern</string>
   <string name="library_direction">Richtung</string>
   <string name="library_ascending">Aufsteigend</string>
   <string name="library_descending">Absteigend</string>
