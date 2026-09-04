@@ -117,9 +117,11 @@
     <string name="library_sort_filter">Ordenar y filtrar</string>
     <string name="library_sort_by">Ordenar por</string>
     <string name="library_sort_name">Nombre</string>
+    <string name="library_sort_alphabetical">Alfabéticamente</string>
     <string name="library_sort_date_added">Fecha de incorporación</string>
     <string name="library_sort_premiere">Fecha de estreno</string>
     <string name="library_sort_runtime">Duración</string>
+    <string name="library_sort_random">Aleatorio</string>
     <string name="library_sort_critic_rating">Valoración de la crítica</string>
     <string name="library_sort_community_rating">Valoración de la comunidad</string>
     <string name="library_filters">Filtros</string>
@@ -130,6 +132,7 @@
     <string name="library_unwatched">No vistos</string>
     <string name="library_genre">Género</string>
     <string name="library_all_genres">Todos los géneros</string>
+    <string name="library_filter_genre">Filtrar por género</string>
     <string name="library_direction">Dirección</string>
     <string name="library_ascending">Ascendente</string>
     <string name="library_descending">Descendente</string>
