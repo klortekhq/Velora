@@ -39,6 +39,10 @@ crear el elemento nativo; la compilación en Xcode sigue pendiente.
 La misma aplicación se reutiliza en reproducción offline y Live TV, evitando
 que esas rutas tengan un comportamiento distinto al VOD.
 
+El acceso offline de Apple identifica las descargas por el servidor configurado
+y no por una sesión de red activa; así el contenido local puede seguir
+reproduciéndose tras abrir la aplicación sin conectividad.
+
 ## Release en preparación: 1.4.0
 
 El código actual queda versionado como `1.4.0` para agrupar el bloque

@@ -88,7 +88,8 @@ public final class VeloraAppModel: ObservableObject {
     }
 
     public func play(_ item: JellyfinItem) async -> AVPlayer? {
-        if let offline = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == session?.serverURL }),
+        let configuredServer = (await client.serverURL()).absoluteString
+        if let offline = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == configuredServer }),
            FileManager.default.fileExists(atPath: offlineStore.mediaURL(for: offline).path) {
             let player = AVPlayer(url: offlineStore.mediaURL(for: offline))
             let playerItem = player.currentItem
@@ -181,10 +182,11 @@ public final class VeloraAppModel: ObservableObject {
     }
 
     public func removeDownload(for item: JellyfinItem) async {
-        guard let entry = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == session?.serverURL }) else { return }
+        let configuredServer = (await client.serverURL()).absoluteString
+        guard let entry = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == configuredServer }) else { return }
         do {
             try offlineStore.remove(entry)
-            offlineDownloads = offlineStore.load().filter { $0.serverURL == session?.serverURL }
+            offlineDownloads = offlineStore.load().filter { $0.serverURL == configuredServer }
         } catch {
             errorMessage = String(localized: "Unable to remove download", bundle: .module)
         }
