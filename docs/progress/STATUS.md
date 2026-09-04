@@ -11,6 +11,12 @@ webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
 como no firmados cuando faltan sus herramientas o certificados. La rama
 remota comprobada es únicamente `main`.
 
+El workflow de releases no bloquea una publicación por la ausencia de Tizen
+Studio o de un certificado Samsung en el runner: conserva el bundle web
+preparado y solo publica un WGT cuando la herramienta y la firma están
+disponibles. Así se mantiene explícito el límite de validación de Samsung sin
+hacer fallar los artefactos verificables de las demás plataformas.
+
 El smoke test contra el servidor Jellyfin indicado responde, pero devuelve
 HTTP 401; por eso no se marca como verificada la consulta autenticada de Live
 TV ni la reproducción remota. No hay ningún dispositivo ADB conectado en este
