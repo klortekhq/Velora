@@ -35,6 +35,11 @@ empaquetado webOS genera su IPK; Samsung sigue siendo bundle no firmado por
 falta de Tizen Studio/CLI y VIDAA sigue requiriendo la firma de su portal.
 La auditoría de capacidades confirma que las descargas solo se exponen en
 móvil/tablet y permanecen ocultas en TV, navegador, tvOS, Tizen, webOS y VIDAA.
+La base Apple ya no depende de `jellyfin.local`: el formulario usa el servidor
+guardado por el usuario y, en una instalación nueva, muestra un valor local
+editable sin iniciar conexiones automáticamente. Este cambio queda pendiente
+de compilación en macOS/Xcode porque esas herramientas no están disponibles en
+este host.
 
 La revisión posterior también normaliza en web una única fila Live TV que
 contiene varias `MediaSources`, igual que Android, y añade una regresión de
