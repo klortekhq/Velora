@@ -23,6 +23,11 @@ y TV pasan; `node --check`, las pruebas web y `npm run build:all` pasan. El
 empaquetado webOS genera su IPK; Samsung sigue siendo bundle no firmado por
 falta de Tizen Studio/CLI y VIDAA sigue requiriendo la firma de su portal.
 
+La revisión posterior también normaliza en web una única fila Live TV que
+contiene varias `MediaSources`, igual que Android, y añade una regresión de
+estructura para impedir que el selector desaparezca en ese caso. Tests web,
+parseo y empaquetado webOS pasan después del cambio.
+
 Este dashboard registra únicamente el estado verificable. Una función no se
 marca como completa solo porque exista código o un artefacto anterior.
 
