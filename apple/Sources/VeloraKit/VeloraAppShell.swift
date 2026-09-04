@@ -100,7 +100,54 @@ public final class VeloraAppModel: ObservableObject {
         let request = await client.authorizedRequest(for: requestURL)
         guard let url = request.url else { return nil }
         let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": request.allHTTPHeaderFields ?? [:]])
-        return AVPlayer(playerItem: AVPlayerItem(asset: asset))
+        let playerItem = AVPlayerItem(asset: asset)
+        let player = AVPlayer(playerItem: playerItem)
+        Task { @MainActor [weak self, weak playerItem] in
+            guard let self, let playerItem else { return }
+            await self.applyMediaPreferences(to: playerItem)
+        }
+        return player
+    }
+
+    /// Apply device-local audio and subtitle preferences to Apple's native
+    /// media selection groups without modifying the server's source decision.
+    private func applyMediaPreferences(to playerItem: AVPlayerItem) async {
+        let asset = playerItem.asset
+        let preferredAudio = settings.preferredAudioLanguage?.lowercased()
+        let preferredSubtitle = settings.preferredSubtitleLanguage?.lowercased()
+
+        if let group = try? await asset.loadMediaSelectionGroup(for: .audible),
+           let preferredAudio,
+           let option = group.options.first(where: { option in
+               option.locale?.languageCode?.lowercased() == preferredAudio
+           }) {
+            playerItem.select(option, in: group)
+        }
+
+        guard let group = try? await asset.loadMediaSelectionGroup(for: .legible) else { return }
+        switch settings.subtitlePreference {
+        case .off:
+            playerItem.select(nil, in: group)
+        case .forced:
+            let option = group.options.first(where: { $0.hasMediaCharacteristic(.containsOnlyForcedSubtitles) })
+                ?? group.options.first(where: { option in
+                    option.locale?.languageCode?.lowercased() == preferredSubtitle
+                        && option.hasMediaCharacteristic(.containsOnlyForcedSubtitles)
+                })
+            playerItem.select(option, in: group)
+        case .preferred:
+            let option = group.options.first(where: { option in
+                option.locale?.languageCode?.lowercased() == preferredSubtitle
+            })
+            playerItem.select(option, in: group)
+        case .automatic:
+            if let preferredSubtitle,
+               let option = group.options.first(where: { option in
+                   option.locale?.languageCode?.lowercased() == preferredSubtitle
+               }) {
+                playerItem.select(option, in: group)
+            }
+        }
     }
 
     public func download(_ item: JellyfinItem) async {

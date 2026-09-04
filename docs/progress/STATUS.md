@@ -31,6 +31,11 @@ fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
 como fallback. El cambio está revisado estáticamente y queda pendiente de
 compilación y prueba en macOS/Xcode.
 
+La reproducción Apple aplica también las preferencias locales de audio y
+subtítulos al `AVPlayerItem`: idioma preferido, subtítulos desactivados,
+preferidos, forzados o automáticos. La API se integra de forma asíncrona tras
+crear el elemento nativo; la compilación en Xcode sigue pendiente.
+
 ## Release en preparación: 1.4.0
 
 El código actual queda versionado como `1.4.0` para agrupar el bloque
