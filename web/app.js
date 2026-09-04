@@ -532,7 +532,18 @@
   function groupLiveTvChannels(channels) {
     var groups = {};
     var order = [];
+    var normalized = [];
     channels.forEach(function (channel) {
+      var sources = Array.isArray(channel.MediaSources) ? channel.MediaSources : [];
+      if (sources.length > 1) {
+        sources.forEach(function (source) {
+          normalized.push(Object.assign({}, channel, { MediaSources: [source] }));
+        });
+      } else {
+        normalized.push(channel);
+      }
+    });
+    normalized.forEach(function (channel) {
       var key = String(channel.Id || '').trim() ||
         ('fallback:' + String(channel.ChannelNumber || '') + '|' + String(channel.Name || '').trim().toLocaleLowerCase(languageCode()));
       if (!groups[key]) {
