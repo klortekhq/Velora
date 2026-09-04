@@ -4,7 +4,7 @@ Updated: 2026-09-04
 
 ## Última verificación
 
-La verificación del 2026-09-04 queda actualizada en el commit `b62adfb`. Los
+La verificación del 2026-09-04 queda actualizada en el commit `62c18f7`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
