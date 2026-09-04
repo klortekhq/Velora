@@ -1,6 +1,16 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-02
+Updated: 2026-09-04
+
+## Última verificación
+
+El commit `ce46ffb` retira la marca visible de las interfaces web y Apple sin
+alterar los identificadores técnicos de Jellyfin. El commit `9b65c35` completa
+las traducciones del selector de biblioteca en español, inglés, francés y
+alemán. `node --check web/app.js`, las pruebas web y `git diff --check` pasan;
+la compilación Android móvil/TV ya había pasado en el commit anterior. No se
+ha creado una release por estos cambios menores. El Fire TV sigue sin aparecer
+conectado por ADB en este host y Apple sigue pendiente de macOS/Xcode.
 
 ## Release en preparación: 1.4.0
 
