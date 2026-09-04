@@ -17,6 +17,11 @@ preparado y solo publica un WGT cuando la herramienta y la firma están
 disponibles. Así se mantiene explícito el límite de validación de Samsung sin
 hacer fallar los artefactos verificables de las demás plataformas.
 
+Los workflows permiten ahora reconstruir una etiqueta existente desde
+GitHub Actions mediante el parámetro `release_tag`, comprobando antes que
+coincide con la versión del código. Un lanzamiento manual sin ese parámetro
+solo ejecuta QA y no crea una release.
+
 El smoke test contra el servidor Jellyfin indicado responde, pero devuelve
 HTTP 401; por eso no se marca como verificada la consulta autenticada de Live
 TV ni la reproducción remota. No hay ningún dispositivo ADB conectado en este

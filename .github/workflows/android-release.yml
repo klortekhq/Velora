@@ -2,6 +2,12 @@ name: Publicar APK de Velora
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Etiqueta existente que se quiere reconstruir y publicar (por ejemplo, v1.4.0). Vacío = QA sin release.'
+        required: false
+        type: string
+        default: ''
   push:
     tags:
       # Public releases are cut only at a meaningful minor/major boundary.
@@ -30,6 +36,8 @@ jobs:
     name: Compilar y publicar APK (${{ matrix.target }})
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -39,6 +47,8 @@ jobs:
     steps:
       - name: Descargar código
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_tag || github.ref }}
 
       - name: Configurar Java 17
         uses: actions/setup-java@v4
@@ -58,10 +68,10 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Verificar versión de la etiqueta
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(env.RELEASE_TAG, 'v')
         shell: bash
         run: |
-          tag_version="${GITHUB_REF_NAME#v}"
+          tag_version="${RELEASE_TAG#v}"
           android_version="$(awk -F'"' '/versionName =/{print $2; exit}' app/build.gradle.kts)"
           web_version="$(node -p "require('./web/package.json').version")"
           echo "Tag=\${tag_version} Android=\${android_version} Web=\${web_version}"
@@ -95,9 +105,10 @@ jobs:
           sha256sum dist/*.apk > dist/SHA256SUMS-${{ matrix.target }}.txt
 
       - name: Crear o actualizar release con los APK
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(env.RELEASE_TAG, 'v')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.RELEASE_TAG }}
           generate_release_notes: false
           body: |
             Cambios principales de esta versión:
