@@ -90,7 +90,13 @@ public final class VeloraAppModel: ObservableObject {
     public func play(_ item: JellyfinItem) async -> AVPlayer? {
         if let offline = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == session?.serverURL }),
            FileManager.default.fileExists(atPath: offlineStore.mediaURL(for: offline).path) {
-            return AVPlayer(url: offlineStore.mediaURL(for: offline))
+            let player = AVPlayer(url: offlineStore.mediaURL(for: offline))
+            let playerItem = player.currentItem
+            Task { @MainActor [weak self, weak playerItem] in
+                guard let self, let playerItem else { return }
+                await self.applyMediaPreferences(to: playerItem)
+            }
+            return player
         }
         let requestURL = await client.playbackURL(
             itemID: item.id,
@@ -196,7 +202,13 @@ public final class VeloraAppModel: ObservableObject {
         let request = await client.authorizedRequest(for: requestURL)
         guard let url = request.url else { return nil }
         let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": request.allHTTPHeaderFields ?? [:]])
-        return AVPlayer(playerItem: AVPlayerItem(asset: asset))
+        let playerItem = AVPlayerItem(asset: asset)
+        let player = AVPlayer(playerItem: playerItem)
+        Task { @MainActor [weak self, weak playerItem] in
+            guard let self, let playerItem else { return }
+            await self.applyMediaPreferences(to: playerItem)
+        }
+        return player
     }
 
     public func stopLiveTv(channel: JellyfinLiveTvChannel, positionSeconds: Double = 0) async {

@@ -36,6 +36,9 @@ subtítulos al `AVPlayerItem`: idioma preferido, subtítulos desactivados,
 preferidos, forzados o automáticos. La API se integra de forma asíncrona tras
 crear el elemento nativo; la compilación en Xcode sigue pendiente.
 
+La misma aplicación se reutiliza en reproducción offline y Live TV, evitando
+que esas rutas tengan un comportamiento distinto al VOD.
+
 ## Release en preparación: 1.4.0
 
 El código actual queda versionado como `1.4.0` para agrupar el bloque
