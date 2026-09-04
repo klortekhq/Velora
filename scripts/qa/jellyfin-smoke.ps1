@@ -36,6 +36,20 @@ try {
     $multiSourceRows = @($items | Where-Object { $_.MediaSources -and $_.MediaSources.Count -gt 1 }).Count
     $duplicateIds = @($items | Group-Object Id | Where-Object { $_.Count -gt 1 }).Count
 
+    if ($items.Count -gt 0) {
+        $first = $items[0]
+        $sourceId = $first.MediaSources | Select-Object -First 1 | Select-Object -ExpandProperty Id
+        $sourceQuery = if ([string]::IsNullOrWhiteSpace($sourceId)) { '' } else { '&MediaSourceId=' + [uri]::EscapeDataString($sourceId) }
+        $playbackInfo = Invoke-RestMethod -Uri "$base/Items/$([uri]::EscapeDataString($first.Id))/PlaybackInfo?UserId=$userId&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true$sourceQuery" `
+            -Headers @{ 'X-Emby-Authorization' = $authHeader } -TimeoutSec 30
+        if (-not @($playbackInfo.MediaSources).Count) {
+            throw 'PlaybackInfo no devolvió ninguna fuente.'
+        }
+        Write-Output 'PlaybackInfo Live TV: OK'
+    } else {
+        Write-Output 'PlaybackInfo Live TV: omitido (sin canales)'
+    }
+
     Write-Output "Jellyfin $($public.Version) OK"
     Write-Output "Live TV: $($items.Count) canales; $multiSourceRows filas con varias fuentes; $duplicateIds IDs duplicadas"
 }
