@@ -9,6 +9,11 @@ on:
         default: all
         type: choice
         options: [all, samsung, webos, vidaa]
+      release_tag:
+        description: 'Etiqueta existente que se quiere reconstruir y publicar (por ejemplo, v1.4.0). Vacío = QA sin release.'
+        required: false
+        type: string
+        default: ''
   push:
     branches:
       - main
@@ -32,8 +37,12 @@ concurrency:
 jobs:
   web:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_tag || github.ref }}
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
@@ -67,7 +76,7 @@ jobs:
           fi
           sha256sum dist/* > dist/SHA256SUMS-web.txt
       - name: Limpiar bundles Smart TV obsoletos de la release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(env.RELEASE_TAG, 'v')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -86,10 +95,11 @@ jobs:
             gh api --method DELETE "repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"
           done
       - name: Publicar paquetes web en la release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(env.RELEASE_TAG, 'v')
         uses: softprops/action-gh-release@v2
         with:
-          name: Velora ${{ github.ref_name }}
+          name: Velora ${{ env.RELEASE_TAG }}
+          tag_name: ${{ env.RELEASE_TAG }}
           generate_release_notes: false
           body: |
             Cambios principales de esta versión:
