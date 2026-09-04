@@ -103,9 +103,11 @@
   <string name="library_sort_filter">Sort and filter</string>
   <string name="library_sort_by">Sort by</string>
   <string name="library_sort_name">Name</string>
+  <string name="library_sort_alphabetical">أبجديًا</string>
   <string name="library_sort_date_added">Date added</string>
   <string name="library_sort_premiere">Premiere date</string>
   <string name="library_sort_runtime">Runtime</string>
+  <string name="library_sort_random">عشوائي</string>
   <string name="library_sort_critic_rating">Critic rating</string>
   <string name="library_sort_community_rating">Community rating</string>
   <string name="library_filters">Filters</string>
@@ -116,6 +118,7 @@
   <string name="library_unwatched">Unwatched</string>
   <string name="library_genre">Genre</string>
   <string name="library_all_genres">All genres</string>
+  <string name="library_filter_genre">تصفية حسب النوع</string>
   <string name="library_direction">Direction</string>
   <string name="library_ascending">Ascending</string>
   <string name="library_descending">Descending</string>
