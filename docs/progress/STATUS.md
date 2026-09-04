@@ -5,11 +5,11 @@ Updated: 2026-09-02
 ## Release en preparación: 1.4.0
 
 El código actual queda versionado como `1.4.0` para agrupar el bloque
-funcional de Live TV con fuentes seleccionables y la recuperación offline.
-La publicación automática se activa al subir la etiqueta `v1.4.0`; el workflow
-adjunta las APK móvil/TV debug y release unsigned, además de los artefactos web
-disponibles y sus SHA-256. La subida y los checks de GitHub aún deben
-confirmarse desde Actions; no se presenta como publicada hasta verificarlo.
+funcional de Live TV con fuentes seleccionables y la recuperación offline. La
+etiqueta anotada `v1.4.0` ya está subida desde `main` y activa el workflow; este
+host no tiene autenticación CLI de GitHub, así que la existencia de la release,
+sus checks y sus artefactos todavía deben confirmarse desde Actions. No se
+presenta como publicada hasta verificarlo.
 
 Este dashboard registra únicamente el estado verificable. Una función no se
 marca como completa solo porque exista código o un artefacto anterior.
