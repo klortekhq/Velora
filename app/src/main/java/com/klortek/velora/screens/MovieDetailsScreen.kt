@@ -661,7 +661,7 @@ fun BottomContainer(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Reparto",
+                        text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.mobile_cast),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )

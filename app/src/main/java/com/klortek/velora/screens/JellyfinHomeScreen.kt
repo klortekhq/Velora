@@ -2457,7 +2457,7 @@ fun SortDialog(
                             androidx.compose.material3.IconButton(onClick = onDismiss) {
                                 androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás", tint = Color.White)
                             }
-                            androidx.compose.material3.Text("Ordenar y filtrar", color = Color.White, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                            androidx.compose.material3.Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_filter), color = Color.White, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                             if (onDescendingChanged != null) {
                                 androidx.compose.material3.IconButton(onClick = { onDescendingChanged(!descending) }) {
                                     androidx.compose.material3.Icon(
@@ -2469,17 +2469,17 @@ fun SortDialog(
                             }
                         }
                         LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp), contentPadding = PaddingValues(vertical = 8.dp)) {
-                            item { androidx.compose.material3.Text("Ordenar por", color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)) }
-                            item { MobileSortOption("Nombre", currentSortType == SortType.Alphabetically) { onSortSelected(SortType.Alphabetically) } }
-                            item { MobileSortOption("Fecha de incorporación", currentSortType == SortType.DateAdded) { onSortSelected(SortType.DateAdded) } }
-                            item { MobileSortOption("Fecha de estreno", currentSortType == SortType.DateReleased) { onSortSelected(SortType.DateReleased) } }
-                            item { MobileSortOption("Duración", currentSortType == SortType.Runtime) { onSortSelected(SortType.Runtime) } }
-                            item { MobileSortOption("Aleatorio", currentSortType == SortType.Random) { onSortSelected(SortType.Random) } }
-                            item { MobileSortOption("Valoración de la crítica", currentSortType == SortType.CriticRating) { onSortSelected(SortType.CriticRating) } }
-                            item { MobileSortOption("Valoración de la comunidad", currentSortType == SortType.CommunityRating) { onSortSelected(SortType.CommunityRating) } }
+                            item { androidx.compose.material3.Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_by), color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)) }
+                            item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_name), currentSortType == SortType.Alphabetically) { onSortSelected(SortType.Alphabetically) } }
+                            item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_date_added), currentSortType == SortType.DateAdded) { onSortSelected(SortType.DateAdded) } }
+                            item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_premiere), currentSortType == SortType.DateReleased) { onSortSelected(SortType.DateReleased) } }
+                            item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_runtime), currentSortType == SortType.Runtime) { onSortSelected(SortType.Runtime) } }
+                            item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_random), currentSortType == SortType.Random) { onSortSelected(SortType.Random) } }
+                            item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_critic_rating), currentSortType == SortType.CriticRating) { onSortSelected(SortType.CriticRating) } }
+                            item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_community_rating), currentSortType == SortType.CommunityRating) { onSortSelected(SortType.CommunityRating) } }
                             if (availableGenres.isNotEmpty() && onGenreSelected != null) {
-                                item { androidx.compose.material3.Text("Filtrar por género", color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 20.dp, bottom = 4.dp)) }
-                                item { MobileSortOption("Todos los géneros", selectedGenre == null) { onGenreSelected(null) } }
+                                item { androidx.compose.material3.Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_filter_genre), color = Color(0xFF25B8E8), fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 20.dp, bottom = 4.dp)) }
+                                item { MobileSortOption(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_all_genres), selectedGenre == null) { onGenreSelected(null) } }
                                 items(availableGenres) { genre ->
                                     MobileSortOption(localizedGenreName(genre), selectedGenre == genre) { onGenreSelected(genre) }
                                 }
@@ -2525,7 +2525,7 @@ fun SortDialog(
                 ) {
                     // Title Area
                     Text(
-                        text = "Ordenar y filtrar",
+                        text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_filter),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -2568,7 +2568,7 @@ fun SortDialog(
                         // SECTION: Sort By
                         item {
                              Text(
-                                text = "Ordenar por",
+                                text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_by),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
@@ -2581,7 +2581,7 @@ fun SortDialog(
                                 onClick = { onSortSelected(SortType.Alphabetically) },
                                 headlineContent = {
                                     Text(
-                                        text = "Alfabéticamente",
+                                        text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_alphabetical),
                                         style = MaterialTheme.typography.bodyLarge.copy(
                                             fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
                                         )
@@ -2596,7 +2596,7 @@ fun SortDialog(
                                 onClick = { onSortSelected(SortType.DateAdded) },
                                 headlineContent = {
                                     Text(
-                                        text = "Fecha de incorporación",
+                                        text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_date_added),
                                         style = MaterialTheme.typography.bodyLarge.copy(
                                             fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
                                         )
@@ -2611,7 +2611,7 @@ fun SortDialog(
                                 onClick = { onSortSelected(SortType.DateReleased) },
                                 headlineContent = {
                                     Text(
-                                        text = "Fecha de estreno",
+                                        text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_premiere),
                                         style = MaterialTheme.typography.bodyLarge.copy(
                                             fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
                                         )
@@ -2624,28 +2624,28 @@ fun SortDialog(
                             ListItem(
                                 selected = currentSortType == SortType.Runtime,
                                 onClick = { onSortSelected(SortType.Runtime) },
-                                headlineContent = { Text("Duración", style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
+                                headlineContent = { Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_runtime), style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
                             )
                         }
                         item {
                             ListItem(
                                 selected = currentSortType == SortType.Random,
                                 onClick = { onSortSelected(SortType.Random) },
-                                headlineContent = { Text("Aleatorio", style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
+                                headlineContent = { Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_random), style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
                             )
                         }
                         item {
                             ListItem(
                                 selected = currentSortType == SortType.CriticRating,
                                 onClick = { onSortSelected(SortType.CriticRating) },
-                                headlineContent = { Text("Valoración de la crítica", style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
+                                headlineContent = { Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_critic_rating), style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
                             )
                         }
                         item {
                             ListItem(
                                 selected = currentSortType == SortType.CommunityRating,
                                 onClick = { onSortSelected(SortType.CommunityRating) },
-                                headlineContent = { Text("Valoración de la comunidad", style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
+                                headlineContent = { Text(androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_sort_community_rating), style = MaterialTheme.typography.bodyLarge.copy(fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f)) }
                             )
                         }
 
@@ -2654,7 +2654,7 @@ fun SortDialog(
                             item {
                                 Spacer(modifier = Modifier.height(24.dp))
                                 Text(
-                                    text = "Filtrar por género",
+                                    text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_filter_genre),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
@@ -2668,7 +2668,7 @@ fun SortDialog(
                                     onClick = { onGenreSelected(null) },
                                     headlineContent = {
                                         Text(
-                                            text = "Todos los géneros",
+                                            text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.library_all_genres),
                                             style = MaterialTheme.typography.bodyLarge.copy(
                                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
                                             )
