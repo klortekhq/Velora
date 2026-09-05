@@ -125,6 +125,7 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.jellyfin.AppSettings
@@ -923,7 +924,7 @@ fun JellyfinHomeScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Settings,
-                        contentDescription = "Ajustes",
+                        contentDescription = stringResource(com.klortek.velora.R.string.nav_settings),
                         modifier = Modifier.size(14.dp) // Reduced from 20dp to 14dp
                     )
                 }
@@ -943,7 +944,7 @@ fun JellyfinHomeScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = "Buscar",
+                        contentDescription = stringResource(com.klortek.velora.R.string.search_short),
                         modifier = Modifier.size(14.dp) // Reduced from 20dp to 14dp
                     )
                 }
@@ -989,7 +990,7 @@ fun JellyfinHomeScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Home,
-                            contentDescription = "Inicio",
+                            contentDescription = stringResource(com.klortek.velora.R.string.nav_home),
                             tint = if (homeFocused) Color.Black else Color.White,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp, vertical = 4.dp) // Reduced from (12, 6) to (8, 4)
@@ -2813,7 +2814,7 @@ fun HomeButton(
     ) {
         Icon(
             imageVector = Icons.Default.Home,
-            contentDescription = "Inicio",
+            contentDescription = stringResource(com.klortek.velora.R.string.nav_home),
             modifier = Modifier.size(24.dp) // Scale icon proportionally
         )
     }
@@ -3134,7 +3135,7 @@ fun JellyfinHorizontalCard(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = "Watched",
+                            contentDescription = stringResource(com.klortek.velora.R.string.library_watched),
                             tint = Color.White,
                             modifier = Modifier.size(16.dp)
                         )
@@ -3228,7 +3229,7 @@ fun JellyfinHorizontalCard(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,
-                            contentDescription = "Watched",
+                            contentDescription = stringResource(com.klortek.velora.R.string.library_watched),
                             tint = Color.White,
                             modifier = Modifier.size(16.dp)
                         )
@@ -3310,7 +3311,7 @@ fun JellyfinHorizontalCard(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
-                                        contentDescription = "Watched",
+                                        contentDescription = stringResource(com.klortek.velora.R.string.library_watched),
                                         tint = Color.White,
                                         modifier = Modifier.size(16.dp)
                                     )
