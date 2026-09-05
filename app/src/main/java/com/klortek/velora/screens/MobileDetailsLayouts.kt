@@ -79,6 +79,9 @@ import kotlinx.coroutines.launch
 private val MobileBackground = Color(0xFF090A0D)
 private val MobileCyan = Color(0xFF16C8F2)
 
+/** Stable identifiers for detail tabs; labels must never be used as state keys. */
+private enum class MobileDetailSection { CAST, CREW, STUDIOS, DETAILS, SIMILAR }
+
 @Composable
 fun MobileMovieDetailsLayout(
     item: JellyfinItem,
@@ -89,7 +92,7 @@ fun MobileMovieDetailsLayout(
     onRestart: (() -> Unit)? = null,
     onDownload: ((OfflineDownloadQuality) -> Unit)? = null
 ) {
-    var selectedSection by remember { mutableStateOf("Reparto") }
+    var selectedSection by remember { mutableStateOf(MobileDetailSection.CAST) }
     var similarMovies by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
     var showAudioDialog by remember { mutableStateOf(false) }
     var showRemoteDialog by remember { mutableStateOf(false) }
@@ -129,11 +132,11 @@ fun MobileMovieDetailsLayout(
             MobileActionRow(onShuffle = onPlay, onRestart = onRestart ?: onPlay, onDownload = onDownload?.let { { showDownloadQualityDialog = true } }.takeIf { PlatformCapabilities.supportsOfflineDownloads }, onAudio = { showAudioDialog = true }, onRemote = { showRemoteDialog = true }, hasAudio = (item.MediaSources?.firstOrNull()?.MediaStreams?.count { it.Type == "Audio" } ?: 0) > 1)
             MobileDetailTabs(selectedSection) { selectedSection = it }
             when (selectedSection) {
-                "Reparto" -> MobilePeople(item, apiService)
-                "Equipo" -> MobileCrew(item, apiService)
-                "Estudios" -> Text(stringResource(com.klortek.velora.R.string.mobile_no_studios), color = Color.White.copy(alpha = .72f))
-                "Detalles" -> MobileFileDetails(item)
-                "Similares" -> MobileSimilarMovies(similarMovies, apiService)
+                MobileDetailSection.CAST -> MobilePeople(item, apiService)
+                MobileDetailSection.CREW -> MobileCrew(item, apiService)
+                MobileDetailSection.STUDIOS -> Text(stringResource(com.klortek.velora.R.string.mobile_no_studios), color = Color.White.copy(alpha = .72f))
+                MobileDetailSection.DETAILS -> MobileFileDetails(item)
+                MobileDetailSection.SIMILAR -> MobileSimilarMovies(similarMovies, apiService)
                 else -> MobilePeople(item, apiService)
             }
         }
@@ -438,7 +441,8 @@ private fun MobileAudioSelectionDialog(item: JellyfinItem, onDismiss: () -> Unit
                 if (streams.isEmpty()) Text(stringResource(com.klortek.velora.R.string.mobile_no_audio_tracks), color = Color.White.copy(alpha = .7f), modifier = Modifier.padding(vertical = 18.dp))
                 LazyColumn { items(streams, key = { it.Index ?: it.hashCode() }) { stream ->
                     val index = stream.Index
-                    val title = stream.DisplayTitle ?: stream.DisplayLanguage ?: stream.Language ?: "Audio"
+                    val title = stream.DisplayTitle ?: stream.DisplayLanguage ?: stream.Language
+                        ?: stringResource(com.klortek.velora.R.string.mobile_audio)
                     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable {
                         selected = index
                         settings.setAudioPreference(item.Id, index)
@@ -532,13 +536,13 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
 }
 
 @Composable
-private fun MobileDetailTabs(selected: String, onSelected: (String) -> Unit) {
+private fun MobileDetailTabs(selected: MobileDetailSection, onSelected: (MobileDetailSection) -> Unit) {
     val tabs = listOf(
-        "Reparto" to stringResource(com.klortek.velora.R.string.mobile_cast),
-        "Equipo" to stringResource(com.klortek.velora.R.string.mobile_crew),
-        "Estudios" to stringResource(com.klortek.velora.R.string.mobile_studios),
-        "Detalles" to stringResource(com.klortek.velora.R.string.mobile_details),
-        "Similares" to stringResource(com.klortek.velora.R.string.mobile_similar)
+        MobileDetailSection.CAST to stringResource(com.klortek.velora.R.string.mobile_cast),
+        MobileDetailSection.CREW to stringResource(com.klortek.velora.R.string.mobile_crew),
+        MobileDetailSection.STUDIOS to stringResource(com.klortek.velora.R.string.mobile_studios),
+        MobileDetailSection.DETAILS to stringResource(com.klortek.velora.R.string.mobile_details),
+        MobileDetailSection.SIMILAR to stringResource(com.klortek.velora.R.string.mobile_similar)
     )
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
