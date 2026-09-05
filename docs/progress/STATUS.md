@@ -28,6 +28,12 @@ progreso en `JellyfinVideoPlayerScreen`, evitando registrar `Throwable` con
 posibles datos de sesión. `testMobileDebugUnitTest`, `testTvDebugUnitTest`,
 `compileMobileDebugKotlin` y `compileTvDebugKotlin` pasan después del cambio.
 
+La misma revisión se extendió el 2026-09-05 a Quick Connect, comprobación de
+actualizaciones, instalación de APK y Jellyseerr. Esas rutas ya usan
+`SensitiveDataRedactor.message` en vez de registrar excepciones completas; las
+pruebas unitarias móviles/TV y las compilaciones Kotlin de ambas variantes
+vuelven a pasar.
+
 Auditoría de evidencia de releases (2026-09-05): las consultas directas a la
 API y a la URL pública de GitHub para `v1.2.32` y `v1.4.0` devolvieron HTTP
 404. Por tanto, las notas antiguas de releases que aparecen más abajo se

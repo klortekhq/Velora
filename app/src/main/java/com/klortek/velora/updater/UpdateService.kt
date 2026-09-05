@@ -70,7 +70,7 @@ object UpdateService {
                 Log.d(TAG, "Fetched latest release: ${release.name} (${release.tagName})")
                 release
             } catch (e: Exception) {
-                Log.e(TAG, "Error fetching latest release", e)
+                Log.e(TAG, "Error fetching latest release: ${SensitiveDataRedactor.message(e)}")
                 null
             }
         }
@@ -91,7 +91,7 @@ object UpdateService {
                     major * 10000 + minor * 100 + patch
                 }
         } catch (e: Exception) {
-            Log.e(TAG, "Error parsing version tag: $tag", e)
+            Log.e(TAG, "Error parsing version tag: $tag: ${SensitiveDataRedactor.message(e)}")
             0
         }
     }
@@ -210,7 +210,7 @@ object UpdateService {
                     output.close()
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error downloading APK", e)
+                Log.e(TAG, "Error downloading APK: ${SensitiveDataRedactor.message(e)}")
                 null
             }
         }
@@ -252,14 +252,14 @@ object UpdateService {
                         Log.d(TAG, "Installer activity launched successfully")
                         return@withContext true
                     } catch (e: Exception) {
-                        Log.e(TAG, "Failed to start installer activity", e)
+                        Log.e(TAG, "Failed to start installer activity: ${SensitiveDataRedactor.message(e)}")
                     }
                 }
                 
                 Log.e(TAG, "No installer activity found")
                 false
             } catch (e: Exception) {
-                Log.e(TAG, "Error launching installer", e)
+                Log.e(TAG, "Error launching installer: ${SensitiveDataRedactor.message(e)}")
                 false
             }
         }

@@ -19,6 +19,7 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import com.klortek.velora.security.SensitiveDataRedactor
 
 /**
  * Authentication type for Jellyseerr
@@ -115,7 +116,7 @@ class JellyseerrApiService private constructor(
                     Result.failure(Exception("Login failed: ${response.status}"))
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Login error", e)
+                Log.e(TAG, "Login error: ${SensitiveDataRedactor.message(e)}")
                 Result.failure(e)
             } finally {
                 tempClient.close()
@@ -168,7 +169,7 @@ class JellyseerrApiService private constructor(
                     Result.failure(Exception("Login failed: ${response.status}"))
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Jellyfin login error", e)
+                Log.e(TAG, "Jellyfin login error: ${SensitiveDataRedactor.message(e)}")
                 Result.failure(e)
             } finally {
                 tempClient.close()
@@ -228,7 +229,7 @@ class JellyseerrApiService private constructor(
                 emptyList()
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching trending", e)
+            Log.e(TAG, "Error fetching trending: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -251,7 +252,7 @@ class JellyseerrApiService private constructor(
                 emptyList()
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching popular movies", e)
+            Log.e(TAG, "Error fetching popular movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -274,7 +275,7 @@ class JellyseerrApiService private constructor(
                 emptyList()
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching upcoming movies", e)
+            Log.e(TAG, "Error fetching upcoming movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -297,7 +298,7 @@ class JellyseerrApiService private constructor(
                 emptyList()
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching popular TV shows", e)
+            Log.e(TAG, "Error fetching popular TV shows: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -320,7 +321,7 @@ class JellyseerrApiService private constructor(
                 emptyList()
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching upcoming TV shows", e)
+            Log.e(TAG, "Error fetching upcoming TV shows: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -435,7 +436,7 @@ class JellyseerrApiService private constructor(
             }
             response.status.isSuccess()
         } catch (e: Exception) {
-            Log.e(TAG, "Connection test failed", e)
+            Log.e(TAG, "Connection test failed: ${SensitiveDataRedactor.message(e)}")
             false
         }
     }
@@ -474,7 +475,7 @@ class JellyseerrApiService private constructor(
                 Result.failure(Exception(errorMsg))
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error requesting movie", e)
+            Log.e(TAG, "Error requesting movie: ${SensitiveDataRedactor.message(e)}")
             Result.failure(e)
         }
     }
@@ -496,7 +497,7 @@ class JellyseerrApiService private constructor(
                 null
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching TV show details", e)
+            Log.e(TAG, "Error fetching TV show details: ${SensitiveDataRedactor.message(e)}")
             null
         }
     }
@@ -533,7 +534,7 @@ class JellyseerrApiService private constructor(
                 Result.failure(Exception(errorMsg))
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error requesting TV show", e)
+            Log.e(TAG, "Error requesting TV show: ${SensitiveDataRedactor.message(e)}")
             Result.failure(e)
         }
     }
@@ -555,7 +556,7 @@ class JellyseerrApiService private constructor(
                 null
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching movie details", e)
+            Log.e(TAG, "Error fetching movie details: ${SensitiveDataRedactor.message(e)}")
             null
         }
     }
@@ -581,7 +582,7 @@ class JellyseerrApiService private constructor(
                 null
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error performing search", e)
+            Log.e(TAG, "Error performing search: ${SensitiveDataRedactor.message(e)}")
             null
         }
     }
