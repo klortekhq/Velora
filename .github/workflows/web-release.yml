@@ -19,7 +19,7 @@ on:
       - main
     tags:
       # Keep public releases focused on meaningful product milestones.
-      - 'v?.?.0'
+      - 'v*.*.0'
   pull_request:
     paths:
       - 'web/**'
