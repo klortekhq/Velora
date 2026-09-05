@@ -471,7 +471,7 @@ private fun MpvPlayerScreen(
 
                         resolvedSubtitlePath = finalSubPath
                         isSubtitleReady = true
-                        Log.d("MpvTvPlayer", "Primary subtitle ready: $finalSubPath")
+                        Log.d("MpvTvPlayer", "Primary subtitle ready: ${SensitiveDataRedactor.localPath(finalSubPath)}")
                     } else {
                         isSubtitleReady = true
                     }
@@ -1009,7 +1009,7 @@ private fun MpvPlayerScreen(
 
                             // ✅ INJECT PRIMARY SUBTITLE AS OPTION (ROCK-SOLID METHOD)
                             if (resolvedSubtitlePath != null) {
-                                Log.d("MpvTvPlayer", "Injecting sub-file (cached): $resolvedSubtitlePath")
+                                Log.d("MpvTvPlayer", "Injecting sub-file (cached): ${SensitiveDataRedactor.localPath(resolvedSubtitlePath)}")
                                 MPVLib.setOptionString("sub-file", resolvedSubtitlePath!!)
                                 MPVLib.setOptionString("sid", "auto")
                             } else if (subtitleFile != null && !subtitleFile.startsWith("http")) {

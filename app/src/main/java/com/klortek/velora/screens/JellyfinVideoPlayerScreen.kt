@@ -327,7 +327,7 @@ fun JellyfinVideoPlayerScreen(
                 com.klortek.velora.player.SubtitleDownloader.getCachedSubtitle(item.Id, streamIndex)
             }
             if (subtitlePath != null) {
-                Log.d("JellyfinPlayer", "🎬 Found cached subtitle for MPV: $subtitlePath")
+                Log.d("JellyfinPlayer", "🎬 Found cached subtitle for MPV: ${com.klortek.velora.security.SensitiveDataRedactor.localPath(subtitlePath)}")
             }
             
             val success = com.klortek.velora.player.mpv.MpvVeloraLauncher.play(
@@ -1248,14 +1248,14 @@ fun JellyfinVideoPlayerScreen(
                             val downloadedSubtitles = com.klortek.velora.subtitles.OpenSubtitlesApi.getDownloadedSubtitles(context, item.Id)
                             val downloadedSubtitleConfigs = downloadedSubtitles.mapNotNull { downloadedSub ->
                                 try {
-                                    Log.d("JellyfinPlayer", "📁 Adding downloaded subtitle: ${downloadedSub.fileName}")
+                                    Log.d("JellyfinPlayer", "📁 Adding downloaded subtitle: ${com.klortek.velora.security.SensitiveDataRedactor.localFileName(downloadedSub.fileName)}")
                                     com.klortek.velora.player.SubtitleMapper.buildLocalSubtitleConfiguration(
                                         filePath = downloadedSub.filePath,
                                         language = downloadedSub.language,
                                         label = "${com.klortek.velora.subtitles.SubtitleLanguages.getDisplayName(downloadedSub.language)} (Descargado)"
                                     )
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Failed to add downloaded subtitle ${downloadedSub.fileName}: ${e::class.simpleName}")
+                                    Log.w("JellyfinPlayer", "Failed to add downloaded subtitle ${com.klortek.velora.security.SensitiveDataRedactor.localFileName(downloadedSub.fileName)}: ${e::class.simpleName}")
                                     null
                                 }
                             }
@@ -4454,7 +4454,7 @@ fun JellyfinVideoPlayerScreen(
                             val tracks = player.currentTracks
                             val textGroups = tracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }
                             
-                            Log.d("JellyfinPlayer", "🔍 Looking for downloaded subtitle track: $filePath")
+                            Log.d("JellyfinPlayer", "🔍 Looking for downloaded subtitle track: ${com.klortek.velora.security.SensitiveDataRedactor.localPath(filePath)}")
                             Log.d("JellyfinPlayer", "   Available text groups: ${textGroups.size}")
                             
                             // Find the track group that matches this downloaded subtitle
@@ -4489,13 +4489,13 @@ fun JellyfinVideoPlayerScreen(
                                         .build()
                                     
                                     player.trackSelectionParameters = updatedParameters
-                                    Log.d("JellyfinPlayer", "✅ Selected downloaded subtitle: $fileName")
+                                    Log.d("JellyfinPlayer", "✅ Selected downloaded subtitle: ${com.klortek.velora.security.SensitiveDataRedactor.localFileName(fileName)}")
                                     currentSubtitleIndex = null // Clear Jellyfin index since this is a downloaded subtitle
                                 }
                             }
                             
                             if (!foundTrack) {
-                                Log.w("JellyfinPlayer", "⚠️ Could not find ExoPlayer track for downloaded subtitle: $filePath")
+                                Log.w("JellyfinPlayer", "⚠️ Could not find ExoPlayer track for downloaded subtitle: ${com.klortek.velora.security.SensitiveDataRedactor.localPath(filePath)}")
                             }
                             
                             showSettingsMenu = false
@@ -5337,7 +5337,7 @@ fun ExoPlayerSettingsMenu(
                                     ListItem(
                                         selected = false, // Downloaded subtitles have different selection mechanism
                                         onClick = {
-                                            Log.d("ExoPlayerSettingsMenu", "📺 User clicked downloaded subtitle: ${downloadedSub.fileName}")
+                                            Log.d("ExoPlayerSettingsMenu", "📺 User clicked downloaded subtitle: ${com.klortek.velora.security.SensitiveDataRedactor.localFileName(downloadedSub.fileName)}")
                                             onDownloadedSubtitleSelected?.invoke(downloadedSub.filePath)
                                         },
                                         colors = listItemColors,
@@ -5372,7 +5372,7 @@ fun ExoPlayerSettingsMenu(
                                             .fillMaxWidth()
                                             .then(
                                                 if (isMobile) Modifier.clickable {
-                                                    Log.d("ExoPlayerSettingsMenu", "📺 User clicked downloaded subtitle: ${downloadedSub.fileName}")
+                                                    Log.d("ExoPlayerSettingsMenu", "📺 User clicked downloaded subtitle: ${com.klortek.velora.security.SensitiveDataRedactor.localFileName(downloadedSub.fileName)}")
                                                     onDownloadedSubtitleSelected?.invoke(downloadedSub.filePath)
                                                 } else Modifier
                                             )
