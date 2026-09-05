@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`dbabc17`. Los
+`a85b192`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -18,6 +18,11 @@ parámetros de credencial antes de llegar a AVPlayer; la cabecera de sesión no
 se envía a hosts externos. Se añadieron regresiones Swift para ambos casos.
 Swift/Xcode no está instalado en este host Windows, por lo que la ejecución
 nativa queda pendiente del workflow macOS.
+
+El commit `a85b192` completa la revisión Android de logs de URL: el actualizador
+APK y las importaciones CSS pasan por el redactor común, que también cubre
+parámetros de autorización y `X-Emby-Token`. `testMobileDebugUnitTest` y
+`compileTvDebugKotlin` pasan después del cambio.
 
 La compilación release local del 2026-09-05 también genera las dos APK sin
 firmar: móvil (67 825 027 bytes, SHA-256
