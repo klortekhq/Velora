@@ -40,6 +40,16 @@ también reutilizan recursos traducibles. Tras la migración, los tests unitario
 móviles y la compilación Kotlin de TV vuelven a pasar; no quedan esos literales
 en `SettingsScreen`.
 
+La verificación de release sobre el commit actual `a649075` terminó con
+`BUILD SUCCESSFUL` en 13m 12s ejecutando tests unitarios móviles, compilación
+Kotlin de TV, lint móvil y `assembleMobileRelease`/`assembleTvRelease` con lint
+vital. Los APK unsigned recién generados son: móvil (67 836 447 bytes,
+SHA-256 `DC9B7F5AF7D106C865C448A545270351270466520EE4A21596CB373E5EDA5FB3`)
+y TV (67 836 687 bytes, SHA-256
+`67FE56B116B20FF3BC7334714F6328A014D8C810F453667EB57F70DCBDCF7B9C`).
+Siguen siendo artefactos locales sin firma de distribución y no equivalen a una
+release pública de GitHub.
+
 Tras esa corrección, el commit `54bbfb7` vuelve a pasar `assembleMobileRelease`
 y `assembleTvRelease` con lint vital. Las APK unsigned vigentes son: móvil
 (67 832 683 bytes, SHA-256
