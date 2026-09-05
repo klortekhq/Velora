@@ -875,9 +875,9 @@ fun SettingsScreen(
                             SettingButton(
                                 title = stringResource(com.klortek.velora.R.string.settings_subtitles_clear_title),
                                 description = if (downloadedSubtitlesCount > 0) 
-                                    "$downloadedSubtitlesCount archivo(s) de subtítulos guardado(s) localmente" 
+                                context.getString(com.klortek.velora.R.string.settings_subtitles_downloaded_count, downloadedSubtitlesCount)
                                 else 
-                                    "No hay subtítulos descargados",
+                                context.getString(com.klortek.velora.R.string.settings_subtitles_none_downloaded),
                                 buttonText = stringResource(com.klortek.velora.R.string.settings_subtitles_clear_button),
                                 onClick = { showClearSubtitlesDialog = true }
                             )
@@ -888,7 +888,7 @@ fun SettingsScreen(
                                     title = { Text(stringResource(com.klortek.velora.R.string.settings_subtitles_clear_confirm)) },
                                     text = {
                                         Text(
-                                            "Se eliminarán los $downloadedSubtitlesCount archivo(s) de subtítulos descargado(s) de OpenSubtitles.\n\nPodrás descargarlos de nuevo cuando quieras.",
+                            context.getString(com.klortek.velora.R.string.settings_subtitles_clear_description, downloadedSubtitlesCount),
                                             style = MaterialTheme.typography.bodyMedium
                                         )
                                     },
@@ -1738,7 +1738,7 @@ fun SettingsScreen(
                                                             )
                                                         ) {
                                                             androidx.compose.material3.Text(
-                                                                text = "Cancelar",
+                                                text = stringResource(com.klortek.velora.R.string.settings_cancel),
                                                                 color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                                                             )
                                                         }
@@ -1756,7 +1756,7 @@ fun SettingsScreen(
                                                                         is com.klortek.velora.tmdb.TmdbApiService.VerificationResult.Success -> {
                                                                             settings.tmdbApiKey = apiKeyInput.trim()
                                                                             showTmdbKeyDialog = false
-                                                                            Toast.makeText(context, "Clave de TMDB verificada ✓", Toast.LENGTH_SHORT).show()
+Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_tmdb_key_verified), Toast.LENGTH_SHORT).show()
                                                                         }
                                                                         is com.klortek.velora.tmdb.TmdbApiService.VerificationResult.Error -> {
                                                                             verificationError = result.message
@@ -1789,7 +1789,7 @@ fun SettingsScreen(
                                                                         is com.klortek.velora.tmdb.TmdbApiService.VerificationResult.Success -> {
                                                                             settings.tmdbApiKey = apiKeyInput.trim()
                                                                             showTmdbKeyDialog = false
-                                                                            Toast.makeText(context, "Clave de TMDB verificada ✓", Toast.LENGTH_SHORT).show()
+Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_tmdb_key_verified), Toast.LENGTH_SHORT).show()
                                                                         }
                                                                         is com.klortek.velora.tmdb.TmdbApiService.VerificationResult.Error -> {
                                                                             verificationError = result.message
@@ -2347,16 +2347,16 @@ fun SettingsScreen(
                                                 if (UpdateService.updateAvailable(remoteVersionCode, versionCode, versionName)) {
                                                     latestRelease = release
                                                     showUpdateDialog = true
-                                                    updateCheckMessage = "Update available: ${release.name}"
+                                                    updateCheckMessage = context.getString(com.klortek.velora.R.string.settings_update_available, release.name)
                                                 } else {
-                                                    updateCheckMessage = "You're on the latest version (${release.name})"
+                                                    updateCheckMessage = context.getString(com.klortek.velora.R.string.settings_update_latest, release.name)
                                                 }
                                             } else {
-                                                updateCheckMessage = "Failed to check for updates. Please try again later."
+                                                updateCheckMessage = context.getString(com.klortek.velora.R.string.settings_update_failed)
                                             }
                                         } catch (e: Exception) {
                                             android.util.Log.e("SettingsScreen", "Error checking for updates", e)
-                                            updateCheckMessage = "Error checking for updates: ${e::class.simpleName}"
+                                            updateCheckMessage = context.getString(com.klortek.velora.R.string.settings_update_error, e::class.simpleName ?: "Unknown")
                                         } finally {
                                             checkingForUpdates = false
                                         }
@@ -2400,12 +2400,12 @@ fun SettingsScreen(
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = "Cerrar sesión",
+                                        text = stringResource(com.klortek.velora.R.string.settings_logout),
                                         style = MaterialTheme.typography.bodyLarge,
                                         color = MaterialTheme.colorScheme.error
                                     )
                                     Text(
-                                        text = "Cierra la sesión y vuelve a la pantalla de acceso.",
+                                        text = stringResource(com.klortek.velora.R.string.settings_account_logout_description),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                                         modifier = Modifier.padding(top = 4.dp)
@@ -2418,7 +2418,7 @@ fun SettingsScreen(
                                         containerColor = MaterialTheme.colorScheme.error
                                     )
                                 ) {
-                                    Text("Cerrar sesión")
+                                    Text(stringResource(com.klortek.velora.R.string.settings_logout))
                                 }
                             }
                         }
@@ -2455,12 +2455,12 @@ fun SettingsScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Atrás"
+                            contentDescription = stringResource(com.klortek.velora.R.string.settings_back)
                         )
                     }
 
                     Text(
-                        text = "Ajustes",
+                        text = stringResource(com.klortek.velora.R.string.settings_title),
                         style = MaterialTheme.typography.headlineLarge,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(start = 16.dp)
@@ -2636,13 +2636,13 @@ fun SettingsScreen(
                             verticalArrangement = Arrangement.spacedBy(24.dp)
                         ) {
                             Text(
-                                text = "¿Cerrar sesión?",
+                                        text = stringResource(com.klortek.velora.R.string.settings_logout_confirm_title),
                                 style = if (isTv) MaterialTheme.typography.headlineSmall else androidx.compose.material3.MaterialTheme.typography.titleLarge,
                                 color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
                             )
                             
                             Text(
-                                text = "¿Seguro que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tus contenidos.",
+                                        text = stringResource(com.klortek.velora.R.string.settings_logout_confirm_message),
                                 style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                                 color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -2678,7 +2678,7 @@ fun SettingsScreen(
                                             containerColor = MaterialTheme.colorScheme.error
                                         )
                                     ) {
-                                        Text("Cerrar sesión")
+                                    Text(stringResource(com.klortek.velora.R.string.settings_logout))
                                     }
                                 } else {
                                     androidx.compose.material3.Button(
@@ -2706,7 +2706,7 @@ fun SettingsScreen(
                                             containerColor = androidx.compose.material3.MaterialTheme.colorScheme.error
                                         )
                                     ) {
-                                        androidx.compose.material3.Text("Cerrar sesión", color = Color.White)
+                                    androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_logout), color = Color.White)
                                     }
                                 }
                             }
@@ -2760,7 +2760,7 @@ fun SettingsScreen(
         // ExoPlayer subtitle text color picker dialog
         if (showExoSubtitleColorDialog) {
             SubtitleColorPickerDialog(
-                title = "Color del texto de subtítulos",
+                            title = stringResource(com.klortek.velora.R.string.settings_subtitles_text_color),
                 currentColor = settings.exoSubtitleTextColor,
                 onColorSelected = { color ->
                     settings.exoSubtitleTextColor = color
@@ -2773,7 +2773,7 @@ fun SettingsScreen(
         // ExoPlayer subtitle background color picker dialog
         if (showExoSubtitleBgColorDialog) {
             SubtitleColorPickerDialog(
-                title = "Color del fondo de subtítulos",
+                            title = stringResource(com.klortek.velora.R.string.settings_subtitles_background_color),
                 currentColor = settings.exoSubtitleBgColor,
                 onColorSelected = { color ->
                     settings.exoSubtitleBgColor = color

@@ -21,6 +21,11 @@ La tercera pasada migró los ajustes visibles de procesado de vídeo, mapeo de
 tonos, HDR simulado, nitidez y mezcla de fotogramas. El catálogo alcanza 412
 claves; la comprobación de locales y las compilaciones Kotlin móvil/TV pasan.
 
+La cuarta pasada migró los estados de subtítulos descargados, verificación de
+TMDB, comprobación de actualizaciones, cierre de sesión y encabezado de Ajustes.
+El catálogo alcanza 425 claves; `check-android-locales.mjs`, compilación Kotlin
+y tests unitarios de móvil/TV pasan de nuevo.
+
 La auditoría de logs de red del 2026-09-05 sanitiza los mensajes de excepción
 en `JellyfinApi`, `LiveTvActivity`, `JellyfinRepository` y `ServerEntryScreen`.
 Usan `SensitiveDataRedactor.message` en lugar de registrar el `Throwable`

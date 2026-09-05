@@ -348,4 +348,19 @@
   <string name="settings_video_frame_blending_description">Simuler un mouvement plus fluide en mélangeant les images.</string>
   <string name="settings_video_frame_blending_intensity">Intensité du mélange : %.1f (plage : 0,0–1,0)</string>
   <string name="settings_video_frame_blending_intensity_title">Intensité du mélange</string>
+  <string name="settings_subtitles_downloaded_count">%1$d fichier(s) de sous-titres enregistré(s) localement</string>
+  <string name="settings_subtitles_none_downloaded">Aucun sous-titre téléchargé</string>
+  <string name="settings_subtitles_clear_description">%1$d fichier(s) de sous-titres OpenSubtitles seront supprimés.
+
+Vous pourrez les télécharger à nouveau quand vous le souhaitez.</string>
+  <string name="settings_tmdb_key_verified">Clé TMDB vérifiée ✓</string>
+  <string name="settings_update_available">Mise à jour disponible : %1$s</string>
+  <string name="settings_update_latest">Vous utilisez la dernière version (%1$s)</string>
+  <string name="settings_update_failed">Impossible de vérifier les mises à jour. Réessayez plus tard.</string>
+  <string name="settings_update_error">Erreur lors de la vérification : %1$s</string>
+  <string name="settings_account_logout_description">Se déconnecte et revient à l’écran de connexion.</string>
+  <string name="settings_back">Retour</string>
+  <string name="settings_title">Paramètres</string>
+  <string name="settings_logout_confirm_title">Se déconnecter ?</string>
+  <string name="settings_logout_confirm_message">Voulez-vous vraiment vous déconnecter ? Vous devrez vous reconnecter pour accéder à vos contenus.</string>
 </resources>

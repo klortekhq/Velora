@@ -346,4 +346,19 @@
   <string name="settings_video_frame_blending_description">Flüssigere Bewegungen durch das Mischen von Bildern simulieren.</string>
   <string name="settings_video_frame_blending_intensity">Blending-Intensität: %.1f (Bereich: 0,0–1,0)</string>
   <string name="settings_video_frame_blending_intensity_title">Blending-Intensität</string>
+  <string name="settings_subtitles_downloaded_count">%1$d Untertiteldatei(en) lokal gespeichert</string>
+  <string name="settings_subtitles_none_downloaded">Keine Untertitel heruntergeladen</string>
+  <string name="settings_subtitles_clear_description">%1$d heruntergeladene Untertiteldatei(en) von OpenSubtitles werden entfernt.
+
+Du kannst sie jederzeit erneut herunterladen.</string>
+  <string name="settings_tmdb_key_verified">TMDB-Schlüssel verifiziert ✓</string>
+  <string name="settings_update_available">Update verfügbar: %1$s</string>
+  <string name="settings_update_latest">Du verwendest die neueste Version (%1$s)</string>
+  <string name="settings_update_failed">Updates konnten nicht geprüft werden. Bitte später erneut versuchen.</string>
+  <string name="settings_update_error">Fehler bei der Update-Prüfung: %1$s</string>
+  <string name="settings_account_logout_description">Abmelden und zum Anmeldebildschirm zurückkehren.</string>
+  <string name="settings_back">Zurück</string>
+  <string name="settings_title">Einstellungen</string>
+  <string name="settings_logout_confirm_title">Abmelden?</string>
+  <string name="settings_logout_confirm_message">Möchtest du dich wirklich abmelden? Für den Zugriff auf deine Inhalte musst du dich erneut anmelden.</string>
 </resources>
