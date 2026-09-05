@@ -82,7 +82,12 @@ final class VeloraKitTests: XCTestCase {
 
         let entry = try store.add(mediaAt: temporary, itemID: "item-1", title: "Example", serverURL: "https://jellyfin.example")
         XCTAssertEqual(store.load(), [entry])
+        XCTAssertEqual(entry.byteCount, 5)
+        XCTAssertEqual(entry.checksumSha256, "721c9525ade2ea8903d343ef25cf68b9bf4ab0aad56bb7b01fbe48d09bc7fcf4")
+        XCTAssertEqual(store.verifyIntegrity(entry)?.checksumSha256, entry.checksumSha256)
         XCTAssertEqual(try Data(contentsOf: store.mediaURL(for: entry)), Data("media".utf8))
+        try Data("tampered".utf8).write(to: store.mediaURL(for: entry), options: .atomic)
+        XCTAssertNil(store.verifyIntegrity(entry))
 
         try store.remove(entry)
         XCTAssertTrue(store.load().isEmpty)
