@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `3798886`)
+## Revisión actual (commit `cd0da5d`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - Fire TV conectado por ADB (`192.168.31.112:5555`) con `1.4.0-tv` activo;
@@ -38,6 +38,9 @@ La verificación del 2026-09-05 sobre `3798886` pasó
 `testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
 `compileTvDebugKotlin` con `BUILD SUCCESSFUL`. Persisten únicamente avisos de
 deprecaciones del SDK/Kotlin y del SDK XML local; no hay errores de compilación.
+
+El commit documental `cd0da5d` conserva esa misma evidencia y actualiza este
+panel para que su revisión actual coincida con `main`.
 
 La validación del 2026-09-05 sobre el commit actual compiló `assembleTvDebug`
 con éxito, instaló la APK resultante en el Fire TV AFTSS y la lanzó mediante
