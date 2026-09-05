@@ -1,5 +1,6 @@
 package com.klortek.velora.screens
 
+import com.klortek.velora.R
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -322,7 +323,7 @@ fun TvShowRequestScreen(
                         ) {
                             androidx.compose.material3.Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Atrás",
+                                contentDescription = androidx.compose.ui.res.stringResource(R.string.action_back),
                                 tint = Color.White
                             )
                         }

@@ -1001,7 +1001,7 @@ fun ChapterCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Reproducir desde el capítulo",
+                                contentDescription = androidx.compose.ui.res.stringResource(R.string.action_play_from_chapter),
                                 modifier = Modifier.size(24.dp),
                                 tint = Color.White
                             )
@@ -1862,7 +1862,7 @@ fun ActionButtonsRow(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Refresh,
-                        contentDescription = "Continuar",
+                        contentDescription = androidx.compose.ui.res.stringResource(R.string.continue_label),
                         modifier = Modifier.size(14.3.dp)
                     )
                     if (resumeFocused) {
@@ -1944,7 +1944,7 @@ fun ActionButtonsRow(
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Reproducir",
+                    contentDescription = androidx.compose.ui.res.stringResource(R.string.action_play),
                     modifier = Modifier.size(14.3.dp)
                 )
                 if (playFocused) {
@@ -2009,7 +2009,7 @@ fun ActionButtonsRow(
         ) {
             Icon(
                 imageVector = Icons.Default.VolumeUp,
-                contentDescription = "Pista de audio",
+                contentDescription = androidx.compose.ui.res.stringResource(R.string.player_audio_tracks),
                 modifier = Modifier.size(14.3.dp)
             )
             if (audioFocused) {
@@ -2061,7 +2061,7 @@ fun ActionButtonsRow(
         ) {
             Icon(
                 imageVector = Icons.Default.Language,
-                contentDescription = "Subtítulos",
+                contentDescription = androidx.compose.ui.res.stringResource(R.string.player_subtitles),
                 modifier = Modifier.size(14.3.dp)
             )
             if (subtitleFocused) {
@@ -2125,7 +2125,7 @@ fun ActionButtonsRow(
         ) {
             Icon(
                 imageVector = Icons.Default.Movie,
-                contentDescription = "Ver tráiler",
+                contentDescription = androidx.compose.ui.res.stringResource(R.string.watch_trailer_1),
                 modifier = Modifier.size(14.3.dp)
             )
             if (trailerFocused) {

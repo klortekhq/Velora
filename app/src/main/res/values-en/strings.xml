@@ -38,6 +38,10 @@
   <string name="search_empty_prompt">Type a title or use voice search</string>
   <string name="action_play">Play</string>
   <string name="action_back">Back</string>
+  <string name="action_resume">Resume</string>
+  <string name="action_play_from_start">Play from the beginning</string>
+  <string name="action_play_from_chapter">Play from chapter</string>
+  <string name="status_watched">Watched</string>
   <string name="downloads_empty">No downloaded content</string>
   <string name="offline_available">Available offline</string>
   <string name="downloading_progress">Downloading… %1$d%%</string>

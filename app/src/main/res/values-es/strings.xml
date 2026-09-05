@@ -60,6 +60,10 @@
   <string name="search_short">Buscar</string>
   <string name="action_play">Reproducir</string>
   <string name="action_back">Atrás</string>
+  <string name="action_resume">Reanudar</string>
+  <string name="action_play_from_start">Reproducir desde el principio</string>
+  <string name="action_play_from_chapter">Reproducir desde el capítulo</string>
+  <string name="status_watched">Visto</string>
   <string name="downloads_empty">No hay contenido descargado</string>
   <string name="offline_available">Disponible sin conexión</string>
   <string name="downloading_progress">Descargando… %1$d%%</string>

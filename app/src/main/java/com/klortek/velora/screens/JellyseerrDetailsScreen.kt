@@ -349,7 +349,7 @@ fun JellyseerrDetailsScreen(
                 IconButton(onClick = onBackPressed) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Atrás",
+                        contentDescription = androidx.compose.ui.res.stringResource(R.string.action_back),
                         tint = Color.White
                     )
                 }
@@ -357,7 +357,7 @@ fun JellyseerrDetailsScreen(
                 androidx.compose.material3.IconButton(onClick = onBackPressed) {
                     androidx.compose.material3.Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Atrás",
+                        contentDescription = androidx.compose.ui.res.stringResource(R.string.action_back),
                         tint = Color.White
                     )
                 }
