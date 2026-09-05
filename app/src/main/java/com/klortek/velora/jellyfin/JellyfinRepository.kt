@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import com.klortek.velora.security.SensitiveDataRedactor
 
 class JellyfinRepository(
     val apiService: JellyfinApiService,
@@ -459,7 +460,7 @@ class JellyfinRepository(
             // Library scans are asynchronous, and images need time to be generated
             delay(2000) // Wait 2 seconds for scan to start and initial processing
         } catch (e: Exception) {
-            android.util.Log.w("JellyfinRepository", "Failed to trigger library scan, continuing with refresh anyway", e)
+            android.util.Log.w("JellyfinRepository", "Failed to trigger library scan, continuing with refresh anyway: ${SensitiveDataRedactor.message(e)}")
         }
         
         // After triggering scan, check for new media and refresh

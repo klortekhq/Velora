@@ -4,6 +4,14 @@ Updated: 2026-09-05
 
 ## Última verificación
 
+La auditoría de logs de red del 2026-09-05 sanitiza los mensajes de excepción
+en `JellyfinApi`, `LiveTvActivity`, `JellyfinRepository` y `ServerEntryScreen`.
+Usan `SensitiveDataRedactor.message` en lugar de registrar el `Throwable`
+completo, evitando que una URL con credenciales o datos de sesión termine en
+Logcat. Tests unitarios móviles/TV y compilación Kotlin de ambas variantes pasan
+tras este cambio. Quedan otros logs no relacionados con esas rutas en revisión
+separada; esto no se considera una certificación de seguridad completa.
+
 Auditoría de evidencia de releases (2026-09-05): las consultas directas a la
 API y a la URL pública de GitHub para `v1.2.32` y `v1.4.0` devolvieron HTTP
 404. Por tanto, las notas antiguas de releases que aparecen más abajo se
