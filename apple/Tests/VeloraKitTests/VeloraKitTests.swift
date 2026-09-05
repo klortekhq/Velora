@@ -25,6 +25,20 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertTrue(store.hasCapacity(forAdditionalBytes: 0))
     }
 
+    func testBackgroundTransferMetadataNeverContainsCredentials() throws {
+        let metadata = VeloraOfflineTransferMetadata(
+            itemID: "item-1",
+            title: "Movie",
+            serverURL: "https://jellyfin.example",
+            quality: .medium
+        )
+        let data = try JSONEncoder().encode(metadata)
+        let text = String(decoding: data, as: UTF8.self)
+        XCTAssertFalse(text.localizedCaseInsensitiveContains("token"))
+        XCTAssertFalse(text.localizedCaseInsensitiveContains("password"))
+        XCTAssertTrue(text.contains("medium"))
+    }
+
     func testServerURLValidationRejectsEmbeddedCredentialsAndParameters() throws {
         XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "http://192.168.31.232:8096")!))
         XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test/base")!))

@@ -39,9 +39,11 @@ para el job macOS, sin presentarlos como ejecutados aquí.
 
 La descarga móvil de Apple ahora permite seleccionar Original, Alta, Media o
 Baja y envía a Jellyfin los límites de tamaño y bitrate correspondientes. La
-interfaz sigue ocultando por completo las descargas en tvOS; la transferencia
-en segundo plano y la recuperación de colas todavía requieren una siguiente
-iteración y validación en macOS/iOS.
+interfaz sigue ocultando por completo las descargas en tvOS. La transferencia
+usa una sesión URLSession de fondo con identificador estable, metadatos sin
+credenciales y staging seguro del archivo antes de incorporarlo al catálogo;
+su validación final requiere macOS/iOS porque Swift/Xcode no están instalados
+en este host.
 
 La comprobación de ramas del mismo momento devuelve únicamente `main` y
 `origin/main`; no hay ramas adicionales en el checkout ni en el remoto
