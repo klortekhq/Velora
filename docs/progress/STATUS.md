@@ -1350,8 +1350,9 @@ digests are:
   ExoPlayer OSD and covered by deterministic navigation tests. The web client
   now has a persistent mini-player in the browsing surface; Android/Smart TV
   programme playback and the complete cross-device flow still need hardware QA.
-- No hardware test result is claimed: the connected Fire TV/phone were not
-  available to this automated run.
+- La evidencia de hardware debe leerse junto con la sección «Última
+  verificación»: el Fire TV sí tuvo una prueba de instalación y arranque por
+  ADB, pero no se ha certificado todavía reproducción ni Live TV autenticados.
 
 ## Platform evidence
 
