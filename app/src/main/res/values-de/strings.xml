@@ -308,4 +308,24 @@
   <string name="settings_tmdb_api_key_configured">TMDB-Schlüssel konfiguriert ✓</string>
   <string name="settings_tmdb_api_key_description">Erforderlich, um Trailer direkt von The Movie Database abzurufen</string>
   <string name="settings_tmdb_api_key_dialog_description">Gib deinen TMDB-API-Schlüssel ein, um Trailer direkt von The Movie Database abzurufen.</string>
+  <string name="settings_jellyseerr_auth_method">Authentifizierungsmethode</string>
+  <string name="settings_jellyseerr_auth_api_description">API-Schlüssel verwenden (für Administratoren empfohlen)</string>
+  <string name="settings_jellyseerr_auth_credentials_description">Benutzername und Passwort verwenden</string>
+  <string name="settings_jellyseerr_auth_select_description">Authentifizierungsmethode auswählen</string>
+  <string name="settings_jellyseerr_auth_api">API-Schlüssel</string>
+  <string name="settings_jellyseerr_auth_credentials">Benutzername und Passwort</string>
+  <string name="settings_jellyseerr_api_key_title">Jellyseerr-API-Schlüssel</string>
+  <string name="settings_jellyseerr_api_key_configured">API-Schlüssel konfiguriert ✓</string>
+  <string name="settings_jellyseerr_api_key_description">Zu finden unter Jellyseerr Einstellungen &gt; Allgemein</string>
+  <string name="settings_jellyseerr_api_key_dialog_description">Gib deinen Jellyseerr-API-Schlüssel ein. Du findest ihn in Jellyseerr unter Einstellungen &gt; Allgemein &gt; API-Schlüssel.</string>
+  <string name="settings_jellyseerr_access">Jellyseerr-Zugriff</string>
+  <string name="settings_jellyseerr_logged_in_as">Angemeldet als %1$s ✓</string>
+  <string name="settings_jellyseerr_login_description">Mit deinem Jellyseerr- oder Jellyfin-Konto anmelden</string>
+  <string name="settings_jellyseerr_relogin">Erneut anmelden</string>
+  <string name="settings_logout">Abmelden</string>
+  <string name="settings_logout_description">Gespeicherte Zugangsdaten werden entfernt.</string>
+  <string name="settings_jellyseerr_login_prompt">Mit deinen Zugangsdaten anmelden.</string>
+  <string name="settings_jellyseerr_login_success">Erfolgreich angemeldet</string>
+  <string name="settings_jellyseerr_login_required">Benutzername und Passwort eingeben</string>
+  <string name="settings_jellyseerr_login_error">Anmeldung fehlgeschlagen</string>
 </resources>

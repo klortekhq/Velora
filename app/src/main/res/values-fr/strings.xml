@@ -310,4 +310,24 @@
   <string name="settings_tmdb_api_key_configured">Clé TMDB configurée ✓</string>
   <string name="settings_tmdb_api_key_description">Nécessaire pour récupérer les bandes-annonces directement depuis The Movie Database</string>
   <string name="settings_tmdb_api_key_dialog_description">Saisissez votre clé API TMDB pour récupérer les bandes-annonces directement depuis The Movie Database.</string>
+  <string name="settings_jellyseerr_auth_method">Méthode d’authentification</string>
+  <string name="settings_jellyseerr_auth_api_description">Utiliser une clé API (recommandé pour les administrateurs)</string>
+  <string name="settings_jellyseerr_auth_credentials_description">Utiliser un nom d’utilisateur et un mot de passe</string>
+  <string name="settings_jellyseerr_auth_select_description">Choisissez la méthode d’authentification</string>
+  <string name="settings_jellyseerr_auth_api">Clé API</string>
+  <string name="settings_jellyseerr_auth_credentials">Nom d’utilisateur et mot de passe</string>
+  <string name="settings_jellyseerr_api_key_title">Clé API Jellyseerr</string>
+  <string name="settings_jellyseerr_api_key_configured">Clé API configurée ✓</string>
+  <string name="settings_jellyseerr_api_key_description">Disponible dans Paramètres &gt; Général de Jellyseerr</string>
+  <string name="settings_jellyseerr_api_key_dialog_description">Saisissez votre clé API Jellyseerr. Elle se trouve dans Jellyseerr : Paramètres &gt; Général &gt; Clé API.</string>
+  <string name="settings_jellyseerr_access">Accès à Jellyseerr</string>
+  <string name="settings_jellyseerr_logged_in_as">Connecté en tant que %1$s ✓</string>
+  <string name="settings_jellyseerr_login_description">Connectez-vous avec votre compte Jellyseerr ou Jellyfin</string>
+  <string name="settings_jellyseerr_relogin">Se reconnecter</string>
+  <string name="settings_logout">Se déconnecter</string>
+  <string name="settings_logout_description">Supprime les identifiants enregistrés.</string>
+  <string name="settings_jellyseerr_login_prompt">Connectez-vous avec vos identifiants.</string>
+  <string name="settings_jellyseerr_login_success">Connexion réussie</string>
+  <string name="settings_jellyseerr_login_required">Saisissez votre nom d’utilisateur et votre mot de passe</string>
+  <string name="settings_jellyseerr_login_error">Connexion impossible</string>
 </resources>

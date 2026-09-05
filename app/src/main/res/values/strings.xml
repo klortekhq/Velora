@@ -341,4 +341,24 @@
     <string name="settings_tmdb_api_key_configured">Clave de TMDB configurada ✓</string>
     <string name="settings_tmdb_api_key_description">Necesaria para obtener tráilers directamente de The Movie Database</string>
     <string name="settings_tmdb_api_key_dialog_description">Introduce tu clave API de TMDB para obtener tráilers directamente de The Movie Database.</string>
+    <string name="settings_jellyseerr_auth_method">Método de autenticación</string>
+    <string name="settings_jellyseerr_auth_api_description">Usando clave API (recomendado para acceso de administrador)</string>
+    <string name="settings_jellyseerr_auth_credentials_description">Usando acceso con usuario y contraseña</string>
+    <string name="settings_jellyseerr_auth_select_description">Selecciona el método de autenticación</string>
+    <string name="settings_jellyseerr_auth_api">Clave API</string>
+    <string name="settings_jellyseerr_auth_credentials">Usuario y contraseña</string>
+    <string name="settings_jellyseerr_api_key_title">Clave API de Jellyseerr</string>
+    <string name="settings_jellyseerr_api_key_configured">Clave API configurada ✓</string>
+    <string name="settings_jellyseerr_api_key_description">Consíguela en Ajustes &gt; General de Jellyseerr</string>
+    <string name="settings_jellyseerr_api_key_dialog_description">Introduce tu clave API de Jellyseerr. Está en Jellyseerr: Ajustes &gt; General &gt; Clave API.</string>
+    <string name="settings_jellyseerr_access">Acceso a Jellyseerr</string>
+    <string name="settings_jellyseerr_logged_in_as">Sesión iniciada como %1$s ✓</string>
+    <string name="settings_jellyseerr_login_description">Inicia sesión con tu cuenta de Jellyseerr o Jellyfin</string>
+    <string name="settings_jellyseerr_relogin">Volver a iniciar sesión</string>
+    <string name="settings_logout">Cerrar sesión</string>
+    <string name="settings_logout_description">Borra las credenciales guardadas.</string>
+    <string name="settings_jellyseerr_login_prompt">Inicia sesión con tus credenciales.</string>
+    <string name="settings_jellyseerr_login_success">Sesión iniciada correctamente</string>
+    <string name="settings_jellyseerr_login_required">Introduce el usuario y la contraseña</string>
+    <string name="settings_jellyseerr_login_error">No se ha podido iniciar sesión</string>
 </resources>
