@@ -26,7 +26,7 @@
       library: 'Tu biblioteca', libraryDescription: 'Películas, series y televisión en directo',
       searchPlaceholder: 'Buscar películas y series', search: 'Buscar', all: 'Todo', movies: 'Películas',
       series: 'Series', live: 'Televisión en directo', back: 'Atrás', play: 'Reproducir',
-      close: 'Cerrar', noDescription: 'Sin descripción disponible.', refresh: 'Actualizar', logout: 'Salir',
+      close: 'Cerrar', minimizePlayer: 'Minimizar reproductor', restorePlayer: 'Restaurar reproductor', noDescription: 'Sin descripción disponible.', refresh: 'Actualizar', logout: 'Salir',
       loading: 'Cargando biblioteca…', retry: 'Reintentar', player: 'Reproductor', fullscreen: 'Pantalla completa', exitFullscreen: 'Salir de pantalla completa',
       settings: 'Ajustes', languageSettings: 'Idioma y reproducción', appLanguage: 'Idioma de la aplicación',
       automatic: 'Automático (idioma del dispositivo)', preferredAudio: 'Audio preferido', audioAuto: 'Automático / servidor',
@@ -43,7 +43,7 @@
       serverPlaceholder: 'https://server:8096', library: 'Your library', libraryDescription: 'Movies, series and live television',
       searchPlaceholder: 'Search movies and series', search: 'Search', all: 'All', movies: 'Movies', series: 'Series',
       live: 'Live TV', back: 'Back', play: 'Play', close: 'Close', noDescription: 'No description available.',
-      refresh: 'Refresh', logout: 'Sign out', loading: 'Loading library…', retry: 'Retry', player: 'Player',
+      refresh: 'Refresh', logout: 'Sign out', minimizePlayer: 'Minimize player', restorePlayer: 'Restore player', loading: 'Loading library…', retry: 'Retry', player: 'Player',
       fullscreen: 'Fullscreen', exitFullscreen: 'Exit fullscreen', settings: 'Settings', languageSettings: 'Language and playback', appLanguage: 'App language',
       automatic: 'Automatic (device language)', preferredAudio: 'Preferred audio', audioAuto: 'Automatic / server',
       subtitles: 'Subtitles', subtitleOff: 'Disabled', subtitlePreferred: 'Preferred', subtitleForced: 'Forced',
@@ -838,6 +838,38 @@
     }
   }
 
+  function restorePlayer() {
+    var player = document.querySelector('#player');
+    if (!player) return;
+    player.classList.remove('video-mini-player');
+    player.setAttribute('aria-label', t('player'));
+    var restore = player.querySelector('#playerRestore');
+    if (restore) restore.remove();
+    var minimize = player.querySelector('#playerMinimize');
+    if (minimize) minimize.focus();
+  }
+
+  function minimizePlayer() {
+    var player = document.querySelector('#player');
+    if (!player || !state.playingItem || state.playingItem.Type !== 'LiveTvChannel') return;
+    player.classList.add('video-mini-player');
+    player.setAttribute('aria-label', t('live') + ' · ' + (state.playingItem.Name || t('player')));
+    var minimize = player.querySelector('#playerMinimize');
+    if (minimize) minimize.remove();
+    var controls = player.querySelector('.video-controls');
+    if (controls && !player.querySelector('#playerRestore')) {
+      var restore = document.createElement('button');
+      restore.type = 'button';
+      restore.id = 'playerRestore';
+      restore.textContent = t('restorePlayer');
+      restore.setAttribute('aria-label', t('restorePlayer'));
+      restore.onclick = restorePlayer;
+      controls.insertBefore(restore, controls.firstChild);
+    }
+    var restoreButton = player.querySelector('#playerRestore');
+    if (restoreButton) restoreButton.focus();
+  }
+
   function closePlayer() {
     var player = document.querySelector('#player');
     if (!player) return;
@@ -862,6 +894,14 @@
   }
 
   function play(item) {
+    var existing = document.querySelector('#player');
+    if (existing) {
+      if (existing.classList.contains('video-mini-player') && state.playingItem && state.playingItem.Id === item.Id) {
+        restorePlayer();
+        return;
+      }
+      closePlayer();
+    }
     waitForMediaProxy().then(function (available) {
       // Live streams must remain behind the authenticated same-origin proxy;
       // buffering them as a Blob would never complete. VOD gets a secure
@@ -882,6 +922,7 @@
         '<video controls autoplay playsinline preload="metadata"></video>' +
         '<div class="video-controls">' +
         '<button type="button" id="fullscreen">' + esc(t('fullscreen')) + '</button>' +
+        (item.Type === 'LiveTvChannel' ? '<button type="button" id="playerMinimize">' + esc(t('minimizePlayer')) + '</button>' : '') +
         '<button type="button" id="playerSettings">' + esc(t('settings')) + '</button>' +
         '<button type="button" id="playerClose">' + esc(t('close')) + '</button>' +
         '</div></div>');
@@ -898,6 +939,8 @@
           document.removeEventListener('webkitfullscreenchange', update);
         };
         player.querySelector('#playerClose').onclick = closePlayer;
+        var minimizeButton = player.querySelector('#playerMinimize');
+        if (minimizeButton) minimizeButton.onclick = minimizePlayer;
         player.querySelector('#fullscreen').onclick = function () { toggleFullscreen(player, video); };
         player.querySelector('#playerSettings').onclick = showSettings;
         video.onerror = function () { toast(t('playbackError')); };
