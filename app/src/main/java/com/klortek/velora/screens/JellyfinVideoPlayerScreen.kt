@@ -580,6 +580,7 @@ fun JellyfinVideoPlayerScreen(
     var currentSubtitleIndex by remember { mutableStateOf<Int?>(subtitleStreamIndex) }
     var lastSelectedSubtitleIndex by remember { mutableStateOf<Int?>(subtitleStreamIndex) } // Track last selected subtitle from controller
     var hasAppliedInitialSubtitlePreference by remember { mutableStateOf(false) } // Track if we've applied the saved preference once
+    var hasAppliedSubtitleModePreference by remember { mutableStateOf(false) } // Track the global off/forced policy once per playback
     var hasRegisteredTracks by remember { mutableStateOf(false) } // Track if we've registered ExoPlayer tracks with SubtitleMapper
     var currentAudioIndex by remember { mutableStateOf<Int?>(storedAudioPreference) }
     var lastSelectedAudioIndex by remember { mutableStateOf<Int?>(storedAudioPreference) } // Track last selected audio from controller
@@ -1887,6 +1888,50 @@ fun JellyfinVideoPlayerScreen(
                                 Log.d("JellyfinPlayer", "⭐ TRACK REGISTRATION COMPLETE")
                             } else {
                                 Log.d("JellyfinPlayer", "⚠️ Skipping track re-registration (already registered)")
+                            }
+
+                            // The forced-subtitles setting is a real playback policy, not
+                            // merely a label in Settings. Media3 does not expose Jellyfin's
+                            // forced flag as a preferred role, so resolve the flagged
+                            // Jellyfin stream through SubtitleMapper and apply an explicit
+                            // override once the track groups are available.
+                            if (subtitleMode == "forced" &&
+                                subtitleStreamIndex == null &&
+                                !hasAppliedSubtitleModePreference &&
+                                textTrackGroups.isNotEmpty()) {
+                                hasAppliedSubtitleModePreference = true
+                                val forcedStream = jellyfinSubtitleStreams.firstOrNull { it.IsForced == true }
+                                val forcedTrackInfo = forcedStream?.Index?.let { index ->
+                                    com.klortek.velora.player.SubtitleMapper.getExoPlayerTrackInfo(index)
+                                }
+                                try {
+                                    val forcedParameters = player.trackSelectionParameters.buildUpon()
+                                        .clearOverridesOfType(C.TRACK_TYPE_TEXT)
+                                        // Keep text disabled until a verified forced track
+                                        // has been resolved; never fall back to an arbitrary
+                                        // preferred subtitle in forced-only mode.
+                                        .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
+                                    if (forcedStream != null && forcedTrackInfo != null) {
+                                        val (groupIndex, trackIndex) = forcedTrackInfo
+                                        val group = tracks.groups.getOrNull(groupIndex)
+                                        if (group != null && group.type == C.TRACK_TYPE_TEXT) {
+                                            forcedParameters.addOverride(
+                                                TrackSelectionOverride(group.mediaTrackGroup, trackIndex)
+                                            )
+                                            forcedParameters.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                                            currentSubtitleIndex = forcedStream.Index
+                                            lastSelectedSubtitleIndex = forcedStream.Index
+                                            Log.d("JellyfinPlayer", "✅ Applied forced subtitle preference: Jellyfin index=${forcedStream.Index}")
+                                        } else {
+                                            Log.w("JellyfinPlayer", "Forced subtitle group was not a supported text track")
+                                        }
+                                    } else {
+                                        Log.d("JellyfinPlayer", "No forced subtitle available; keeping text tracks disabled")
+                                    }
+                                    player.trackSelectionParameters = forcedParameters.build()
+                                } catch (e: Exception) {
+                                    Log.w("JellyfinPlayer", "Error applying forced subtitle preference: ${SensitiveDataRedactor.message(e)}")
+                                }
                             }
                             
                             // ⭐ STEP 2: CHECK IF USER SELECTED A SUBTITLE
