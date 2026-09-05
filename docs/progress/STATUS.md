@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `b6f077f`)
+## Revisión actual (commit `3bb3d23`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -39,6 +39,11 @@ Updated: 2026-09-05
   (`Fuente principal`, `Fuente IPTV` u `Opción N`) en lugar de IDs internos.
   `scripts/check-apple-locales.mjs` valida las 45 claves de los catálogos
   inglés, español, francés y alemán, y se ejecuta en ambos workflows Apple.
+- El motor de decisión Apple ya no permite que Direct Stream ignore los límites
+  reales de resolución del dispositivo ni el preset de calidad elegido; se
+  añadió una regresión que fuerza Transcode para una fuente 4K en un dispositivo
+  1080p. Swift/Xcode no están disponibles en este host Windows, por lo que la
+  ejecución final de XCTest queda delegada al workflow macOS.
 - Las acciones visibles de detalle y solicitudes Android (reanudar, reproducir,
   audio, subtítulos, tráiler, visto y atrás) ya usan recursos traducibles en
   las pantallas móvil/TV; el comprobador Android valida 431 claves en los
