@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`e2c8ac3`. Los
+`c332ead`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -24,6 +24,12 @@ compilaciones Kotlin móvil/TV pasan después del cambio.
 El commit `e2c8ac3` completa las traducciones del nombre de los ajustes del
 reproductor que aún aparecían en inglés en ocho catálogos. El merge de recursos
 móvil/TV y la validación XML pasan después del cambio.
+
+El commit `c332ead` migra los ajustes de reproducción de Android —MPV, saltos,
+transcodificación, códec, bitrate y reproducción automática— a recursos
+traducibles y añade las traducciones principales en español, inglés, francés y
+alemán. La validación XML y la batería Android móvil/TV pasan después del
+cambio.
 
 El workflow de releases no bloquea una publicación por la ausencia de Tizen
 Studio o de un certificado Samsung en el runner: conserva el bundle web
