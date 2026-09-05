@@ -387,8 +387,8 @@ fun SettingsScreen(
                         SettingsCategory.PLAYBACK -> {
                             // MPV Player Toggle
                             SettingToggle(
-                                title = "Usar reproductor MPV",
-                                description = "Usa el reproductor MPV integrado para mejorar la compatibilidad con AV1, HEVC y HDR.",
+                                title = context.getString(com.klortek.velora.R.string.settings_playback_mpv),
+                                description = context.getString(com.klortek.velora.R.string.settings_playback_mpv_description),
                                 isEnabled = mpvEnabled,
                                 onToggle = {
                                     mpvEnabled = !mpvEnabled
@@ -400,8 +400,8 @@ fun SettingsScreen(
                             
                             // Skip Intro
                             SettingToggle(
-                                title = "Saltar intro",
-                                description = "Muestra un botón para saltar las intros de los episodios (requiere el complemento Intro Skipper).",
+                                title = context.getString(com.klortek.velora.R.string.settings_skip_intro),
+                                description = context.getString(com.klortek.velora.R.string.settings_skip_intro_description),
                                 isEnabled = skipIntroEnabled,
                                 onToggle = {
                                     skipIntroEnabled = !skipIntroEnabled
@@ -411,8 +411,8 @@ fun SettingsScreen(
                             
                             // Skip Credits
                             SettingToggle(
-                                title = "Saltar créditos",
-                                description = "Muestra un botón para saltar los créditos finales de los episodios.",
+                                title = context.getString(com.klortek.velora.R.string.settings_skip_credits),
+                                description = context.getString(com.klortek.velora.R.string.settings_skip_credits_description),
                                 isEnabled = skipCreditsEnabled,
                                 onToggle = {
                                     skipCreditsEnabled = !skipCreditsEnabled
@@ -424,7 +424,7 @@ fun SettingsScreen(
                             
                             // Server-Side Transcoding Section Header
                             Text(
-                                text = "Transcodificación en el servidor",
+                                text = context.getString(com.klortek.velora.R.string.settings_server_transcoding),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -432,8 +432,8 @@ fun SettingsScreen(
                             
                             // Auto-transcode on playback error
                             SettingToggle(
-                                title = "Transcodificar automáticamente si falla",
-                                description = "Reintenta automáticamente con transcodificación del servidor si falla la reproducción directa.",
+                                title = context.getString(com.klortek.velora.R.string.settings_transcode_on_error),
+                                description = context.getString(com.klortek.velora.R.string.settings_transcode_on_error_description),
                                 isEnabled = autoTranscodeOnError,
                                 onToggle = {
                                     autoTranscodeOnError = !autoTranscodeOnError
@@ -443,11 +443,11 @@ fun SettingsScreen(
                             
                             // Fallback to MPV player
                             SettingToggle(
-                                title = "Usar MPV como alternativa",
+                                title = context.getString(com.klortek.velora.R.string.settings_mpv_fallback),
                                 description = if (isMpvInstalled) {
-                                    "Usa MPV si falla ExoPlayer y la transcodificación está desactivada (MPV instalado ✓)"
+                                    context.getString(com.klortek.velora.R.string.settings_mpv_fallback_installed)
                                 } else {
-                                    "Usa MPV si falla ExoPlayer (requiere tener instalado un reproductor MPV externo)"
+                                    context.getString(com.klortek.velora.R.string.settings_mpv_fallback_external)
                                 },
                                 isEnabled = fallbackToMpv,
                                 onToggle = {
@@ -458,8 +458,8 @@ fun SettingsScreen(
                             
                             // Server Transcoding Master Toggle
                             SettingToggle(
-                                title = "Transcodificar siempre",
-                                description = "Solicita siempre transcodificación del servidor para los códecs seleccionados (AV1, HEVC).",
+                                title = context.getString(com.klortek.velora.R.string.settings_transcode_always),
+                                description = context.getString(com.klortek.velora.R.string.settings_transcode_always_description),
                                 isEnabled = serverTranscodingEnabled,
                                 onToggle = {
                                     serverTranscodingEnabled = !serverTranscodingEnabled
@@ -470,8 +470,8 @@ fun SettingsScreen(
                             if (serverTranscodingEnabled) {
                                 // Transcode AV1
                                 SettingToggle(
-                                    title = "Transcodificar AV1",
-                                    description = "Solicita transcodificación para vídeo AV1 (recomendado para Shield TV).",
+                                    title = context.getString(com.klortek.velora.R.string.settings_transcode_av1),
+                                    description = context.getString(com.klortek.velora.R.string.settings_transcode_av1_description),
                                     isEnabled = transcodeAV1,
                                     onToggle = {
                                         transcodeAV1 = !transcodeAV1
@@ -481,8 +481,8 @@ fun SettingsScreen(
                                 
                                 // Transcode HEVC
                                 SettingToggle(
-                                    title = "Transcodificar HEVC/H.265",
-                                    description = "Solicita transcodificación para vídeo HEVC/H.265 (solo si el dispositivo no lo admite).",
+                                    title = context.getString(com.klortek.velora.R.string.settings_transcode_hevc),
+                                    description = context.getString(com.klortek.velora.R.string.settings_transcode_hevc_description),
                                     isEnabled = transcodeHEVC,
                                     onToggle = {
                                         transcodeHEVC = !transcodeHEVC
@@ -492,8 +492,8 @@ fun SettingsScreen(
                                 
                                 // Target Codec
                                 SettingCycle(
-                                    title = "Códec de destino",
-                                    description = "Transcodificar a: ${transcodeTargetCodec.uppercase()}",
+                                    title = context.getString(com.klortek.velora.R.string.settings_transcode_target_codec),
+                                    description = context.getString(com.klortek.velora.R.string.settings_transcode_target_codec_description, transcodeTargetCodec.uppercase()),
                                     currentValue = transcodeTargetCodec.uppercase(),
                                     onCycle = {
                                         transcodeTargetCodec = if (transcodeTargetCodec == "h264") "hevc" else "h264"
@@ -503,8 +503,8 @@ fun SettingsScreen(
                                 
                                 // Max Bitrate
                                 SettingSlider(
-                                    title = "Bitrate máximo de vídeo",
-                                    description = "${transcodeMaxBitrate} Mbps (más alto = mejor calidad)",
+                                    title = context.getString(com.klortek.velora.R.string.settings_transcode_max_bitrate),
+                                    description = context.getString(com.klortek.velora.R.string.settings_transcode_max_bitrate_description, transcodeMaxBitrate),
                                     onDecrease = {
                                         transcodeMaxBitrate = (transcodeMaxBitrate - 5).coerceAtLeast(5)
                                         settings.transcodeMaxBitrateMbps = transcodeMaxBitrate
@@ -522,8 +522,8 @@ fun SettingsScreen(
                             
                             // Autoplay Next Episode
                             SettingToggle(
-                                title = "Reproducir el siguiente episodio",
-                                description = "Reproduce automáticamente el siguiente episodio al terminar el actual.",
+                                title = context.getString(com.klortek.velora.R.string.settings_autoplay_next),
+                                description = context.getString(com.klortek.velora.R.string.settings_autoplay_next_description),
                                 isEnabled = autoplayNextEpisodeEnabled,
                                 onToggle = {
                                     autoplayNextEpisodeEnabled = !autoplayNextEpisodeEnabled
@@ -534,8 +534,8 @@ fun SettingsScreen(
                             // Autoplay Countdown Duration
                             if (autoplayNextEpisodeEnabled) {
                                 SettingCycle(
-                                    title = "Cuenta atrás automática",
-                                    description = "Tiempo antes de terminar el episodio para mostrar la cuenta atrás (${autoplayCountdownSeconds}s).",
+                                    title = context.getString(com.klortek.velora.R.string.settings_autoplay_countdown),
+                                    description = context.getString(com.klortek.velora.R.string.settings_autoplay_countdown_description, autoplayCountdownSeconds),
                                     currentValue = "${autoplayCountdownSeconds}s",
                                     onCycle = {
                                         autoplayCountdownSeconds = when (autoplayCountdownSeconds) {
