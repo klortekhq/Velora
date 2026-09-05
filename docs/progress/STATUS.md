@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`05dfd8a`. Los
+`66de3b5`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -64,6 +64,11 @@ los paquetes Smart TV vuelven a pasar sus comprobaciones.
 con la misma ID se presentan como un canal y conservan sus `MediaSources`.
 Incluye regresiones de decodificación y agrupado; queda pendiente la
 ejecución de Swift en el runner macOS, no se declara validado en Windows.
+
+`66de3b5` completa el flujo Apple: el menú de fuentes ofrece las alternativas
+del canal y la elegida se transmite como `MediaSourceId` a `PlaybackInfo`.
+La selección ya no es solo visual; su compilación sigue pendiente del runner
+macOS por la ausencia de Swift/Xcode local.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
