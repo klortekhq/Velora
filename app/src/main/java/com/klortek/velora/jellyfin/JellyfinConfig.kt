@@ -20,9 +20,7 @@ class JellyfinConfig(context: Context) {
         }
 
     var accessToken: String
-        get() = secureCredentials.read("access_token")
-            ?: prefs.getString("access_token", "")?.also { if (it.isNotEmpty()) secureCredentials.write("access_token", it) }
-            ?: ""
+        get() = readSecret("access_token")
         set(value) {
             secureCredentials.write("access_token", value)
             prefs.edit().remove("access_token").apply()
@@ -37,9 +35,7 @@ class JellyfinConfig(context: Context) {
         set(value) = prefs.edit().putString("username", value).apply()
 
     var password: String
-        get() = secureCredentials.read("password")
-            ?: prefs.getString("password", "")?.also { if (it.isNotEmpty()) secureCredentials.write("password", it) }
-            ?: ""
+        get() = readSecret("password")
         set(value) {
             secureCredentials.write("password", value)
             prefs.edit().remove("password").apply()
@@ -62,9 +58,31 @@ class JellyfinConfig(context: Context) {
         prefs.edit().apply {
             remove("access_token")
             remove("user_id")
+            remove("username")
+            remove("password")
             apply()
         }
         secureCredentials.remove("access_token")
+        secureCredentials.remove("password")
+    }
+
+    /**
+     * One-time migration from the pre-Keystore plaintext preferences. The
+     * legacy value is removed synchronously after it has been encrypted so a
+     * process death cannot leave the old copy behind after a successful read.
+     */
+    private fun readSecret(name: String): String {
+        secureCredentials.read(name)?.let { encrypted ->
+            // Clean up any stale legacy copy left by an interrupted migration.
+            if (prefs.contains(name)) prefs.edit().remove(name).commit()
+            return encrypted
+        }
+
+        val legacy = prefs.getString(name, null).orEmpty()
+        if (legacy.isBlank()) return ""
+        secureCredentials.write(name, legacy)
+        prefs.edit().remove(name).commit()
+        return legacy
     }
 }
 
