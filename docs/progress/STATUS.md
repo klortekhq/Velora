@@ -21,6 +21,10 @@ presentan como verificadas la consulta autenticada de canales, `PlaybackInfo`,
 la reproducción ni Live TV real. El smoke test sí mantiene estas etapas para
 ejecutarlas cuando el acceso sea válido.
 
+La nueva comprobación autenticada realizada tras actualizar los datos de
+conexión volvió a devolver `HTTP 401`; no se obtuvo token y no se consultó la
+lista autenticada de Live TV.
+
 La revisión web/Smart TV del 2026-09-05 añadió una regresión explícita para la
 regla de producto de descargas: `platform.js` mantiene
 `supportsOfflineDownloads: false` y el catálogo de interfaz no contiene
