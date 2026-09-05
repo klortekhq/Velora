@@ -36,6 +36,10 @@ mediante ADB el 2026-09-05. La actividad se lanzó y el
 logcat no mostró `FATAL EXCEPTION`; esto valida instalación y arranque de esta
 build, no reproducción autenticada ni Live TV.
 
+El pipeline de publicación ahora acepta correctamente hitos `vX.Y.0` con
+componentes de más de un dígito (`v1.10.0`, por ejemplo), manteniendo la
+política de releases significativas y la publicación conjunta de Android y web.
+
 La batería unitaria móvil/TV se ejecutó de nuevo el 2026-09-05 y terminó con
 éxito. Incluye la agrupación de Live TV por ID de canal, el selector de fuentes
 (principal/IPTV), decisiones de reproducción, aspecto, seguridad de URLs y
