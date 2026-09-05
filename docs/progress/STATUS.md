@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `b5aa3ec`)
+## Revisión actual (commit `084cf03`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - Fire TV conectado por ADB (`192.168.31.112:5555`) con `1.4.0-tv` activo;
