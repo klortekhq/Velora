@@ -24,3 +24,14 @@ private struct VeloraMobileRoot: View {
     }
 }
 #endif
+
+#if os(macOS)
+import Foundation
+
+/// Package-build entrypoint for macOS CI. The shipped clients remain iOS/iPadOS
+/// and tvOS apps; this keeps the shared Swift package linkable on the runner.
+@main
+struct VeloraMobilePackageCheck {
+    static func main() {}
+}
+#endif
