@@ -16,6 +16,11 @@ La comprobación de ramas del mismo momento devuelve únicamente `main` y
 `origin/main`; no hay ramas adicionales en el checkout ni en el remoto
 visible.
 
+El workflow continuo se amplió el 2026-09-05 con un job `macos-14` que ejecuta
+`swift test` y compila los entrypoints `VeloraMobile` y `VeloraTV` del paquete
+Apple. Hasta que GitHub Actions complete esa ejecución no se presenta como una
+validación realizada; este host Windows no puede sustituirla.
+
 Se añadió `.github/workflows/ci.yml` para que cada cambio en `main` y cada
 pull request relevante valide de forma reproducible los catálogos Android, las
 pruebas de interacción/seguridad web, los bundles web/Smart TV y las pruebas y
