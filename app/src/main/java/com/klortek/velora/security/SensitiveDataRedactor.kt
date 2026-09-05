@@ -11,4 +11,9 @@ object SensitiveDataRedactor {
         ?: "<null>"
 
     fun message(error: Throwable?): String = url(error?.message ?: error?.javaClass?.simpleName)
+
+    /** Local media paths and filenames are not useful in production logs. */
+    fun localPath(value: String?): String = if (value.isNullOrBlank()) "<null>" else "<local-path>"
+
+    fun localFileName(value: String?): String = if (value.isNullOrBlank()) "<null>" else "<local-file>"
 }

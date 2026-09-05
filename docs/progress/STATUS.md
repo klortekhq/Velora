@@ -33,6 +33,11 @@ El commit `65ab892` migra los controles visibles de subtítulos y OpenSubtitles
 en Ajustes a recursos traducibles. Los tests unitarios móviles y las
 compilaciones Android móvil/TV pasan después del cambio.
 
+La revisión de seguridad posterior elimina de los logs del reproductor y MPV
+las rutas y nombres locales de subtítulos/fuentes, manteniendo solo marcadores
+redactados. Tras el cambio pasan `testMobileDebugUnitTest` y la compilación
+Kotlin TV.
+
 El commit `ebb7685` sustituye los textos incrustados de los controles críticos
 del reproductor por recursos traducibles y completa esas claves en los 13
 catálogos Android. La validación XML, los tests unitarios móviles y las

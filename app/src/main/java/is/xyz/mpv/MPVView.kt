@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
+import com.klortek.velora.security.SensitiveDataRedactor
 import `is`.xyz.mpv.MPVLib.MpvFormat.MPV_FORMAT_DOUBLE
 import `is`.xyz.mpv.MPVLib.MpvFormat.MPV_FORMAT_FLAG
 import `is`.xyz.mpv.MPVLib.MpvFormat.MPV_FORMAT_INT64
@@ -412,15 +413,15 @@ class MPVView(context: Context, attrs: AttributeSet? = null) : SurfaceView(conte
             for (fontFile in fontFiles) {
                 val destFile = File(fontsDir, fontFile)
                 if (!destFile.exists()) {
-                    Log.d(TAG, "Copying font: $fontFile to ${destFile.absolutePath}")
+                    Log.d(TAG, "Copying font: ${SensitiveDataRedactor.localFileName(fontFile)} to ${SensitiveDataRedactor.localPath(destFile.absolutePath)}")
                     assetManager.open("fonts/$fontFile").use { input ->
                         destFile.outputStream().use { output ->
                             input.copyTo(output)
                         }
                     }
-                    Log.d(TAG, "Font copied successfully: $fontFile")
+                    Log.d(TAG, "Font copied successfully: ${SensitiveDataRedactor.localFileName(fontFile)}")
                 } else {
-                    Log.d(TAG, "Font already exists: $fontFile")
+                    Log.d(TAG, "Font already exists: ${SensitiveDataRedactor.localFileName(fontFile)}")
                 }
             }
         } catch (e: Exception) {

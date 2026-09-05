@@ -53,7 +53,7 @@ object SubtitleDownloader {
             // Check if already downloaded
             downloadedSubtitles[cacheKey]?.let { cachedPath ->
                 if (File(cachedPath).exists()) {
-                    Log.d(TAG, "✅ Using cached subtitle: $cachedPath")
+                    Log.d(TAG, "✅ Using cached subtitle: ${SensitiveDataRedactor.localPath(cachedPath)}")
                     return@withContext cachedPath
                 } else {
                     // Cached file deleted, remove from cache
@@ -145,7 +145,7 @@ object SubtitleDownloader {
             }
             
             val localPath = subtitleFile.absolutePath
-            Log.d(TAG, "✅ Downloaded $bytesDownloaded bytes to: $localPath")
+            Log.d(TAG, "✅ Downloaded $bytesDownloaded bytes to: ${SensitiveDataRedactor.localPath(localPath)}")
             
             // Cache the result
             downloadedSubtitles[cacheKey] = localPath

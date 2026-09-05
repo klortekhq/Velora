@@ -462,7 +462,7 @@ object OpenSubtitlesApi {
             file.writeBytes(bytes)
             
             Log.d(TAG, "✅ Subtitle saved to app-managed storage")
-            Log.d(TAG, "📁 File name: $fileName, Extension: $extension, Size: ${bytes.size} bytes")
+            Log.d(TAG, "📁 Subtitle file received: ${SensitiveDataRedactor.localFileName(fileName)}, Extension: $extension, Size: ${bytes.size} bytes")
             
             return@withContext file.absolutePath
             

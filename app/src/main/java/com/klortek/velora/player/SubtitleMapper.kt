@@ -358,7 +358,7 @@ object SubtitleMapper {
         }
         
         Log.d(TAG, "📁 Building local subtitle config:")
-        Log.d(TAG, "   File: $filePath")
+        Log.d(TAG, "   File: ${SensitiveDataRedactor.localPath(filePath)}")
         Log.d(TAG, "   Extension: $extension")
         Log.d(TAG, "   MIME type: $mimeType")
         Log.d(TAG, "   Language: $language")
