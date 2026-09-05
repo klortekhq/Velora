@@ -5,12 +5,19 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`65ab892`. Los
+`5d09c7d`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
 como no firmados cuando faltan sus herramientas o certificados. La rama
 remota comprobada es únicamente `main`.
+
+La compilación release local del 2026-09-05 también genera las dos APK sin
+firmar: móvil (67 825 027 bytes, SHA-256
+`CA28E86EC624076961AD70C87FF1D27C4E738026081D9569447EBEB4B2D87A66`) y TV
+(67 825 147 bytes, SHA-256
+`84D9EED46BCC15187E38C76ED893CA6FBA3D8C53FDD60765D88EB6BCF5DC90AD`). No se
+presentan como APK de tienda porque siguen sin firma de distribución.
 
 El commit `933c99f` añade semántica accesible a las pestañas de detalle y a
 los selectores de temporada móviles, sin cambiar su interacción táctil o de
