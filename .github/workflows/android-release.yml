@@ -61,6 +61,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Validar coherencia de versiones
+        run: node scripts/check-version-consistency.mjs
+
       - name: Validar catálogos Android
         run: node scripts/check-android-locales.mjs
 

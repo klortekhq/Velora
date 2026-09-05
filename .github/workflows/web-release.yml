@@ -47,6 +47,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Validar coherencia de versiones
+        run: node scripts/check-version-consistency.mjs
       - name: Prepare common web client
         run: |
           node web/scripts/test-platform.mjs

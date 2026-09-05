@@ -37,6 +37,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Validate platform versions
+        run: node scripts/check-version-consistency.mjs
       - name: Validate web interactions and security
         run: node web/scripts/test-platform.mjs
       - name: Build browser and Smart TV bundles
