@@ -121,6 +121,36 @@
     TRANSLATIONS[code] = Object.assign({}, TRANSLATIONS.en, TRANSLATIONS[code]);
   });
 
+  var TRANSLATION_OVERRIDES = {
+    pt: {
+      cast: 'Elenco', actorWorks: 'Filmes e séries deste ator', noActorWorks: 'Não há outros títulos disponíveis.', personError: 'Não foi possível carregar a filmografia',
+      sortAndFilter: 'Ordenar e filtrar', sortName: 'Nome', sortDateAdded: 'Data de adição', sortPremiere: 'Data de estreia', sortRuntime: 'Duração', sortRating: 'Avaliação da comunidade',
+      favorites: 'Favoritos', playbackState: 'Estado de reprodução', playbackAll: 'Todos', playbackWatched: 'Vistos', playbackUnwatched: 'Não vistos',
+      liveAll: 'Todos os canais', liveFavorites: 'Apenas favoritos', liveGroup: 'Grupo de canais', liveNoChannels: 'Não há canais disponíveis', liveSources: 'fontes', liveSourceOption: 'Opção'
+    },
+    fr: {
+      cast: 'Distribution', actorWorks: 'Films et séries de cet acteur', noActorWorks: 'Aucun autre titre disponible.', personError: 'Impossible de charger la filmographie',
+      sortAndFilter: 'Trier et filtrer', sortName: 'Nom', sortDateAdded: 'Date d’ajout', sortPremiere: 'Date de sortie', sortRuntime: 'Durée', sortRating: 'Note de la communauté',
+      favorites: 'Favoris', playbackState: 'État de lecture', playbackAll: 'Tous', playbackWatched: 'Vus', playbackUnwatched: 'Non vus',
+      liveAll: 'Toutes les chaînes', liveFavorites: 'Favoris uniquement', liveGroup: 'Groupe de chaînes', liveNoChannels: 'Aucune chaîne disponible', liveSources: 'sources', liveSourceOption: 'Option'
+    },
+    de: {
+      cast: 'Besetzung', actorWorks: 'Filme und Serien mit diesem Schauspieler', noActorWorks: 'Keine weiteren Titel verfügbar.', personError: 'Filmografie konnte nicht geladen werden',
+      sortAndFilter: 'Sortieren und filtern', sortName: 'Name', sortDateAdded: 'Hinzugefügt am', sortPremiere: 'Premiere', sortRuntime: 'Laufzeit', sortRating: 'Community-Bewertung',
+      favorites: 'Favoriten', playbackState: 'Wiedergabestatus', playbackAll: 'Alle', playbackWatched: 'Gesehen', playbackUnwatched: 'Nicht gesehen',
+      liveAll: 'Alle Sender', liveFavorites: 'Nur Favoriten', liveGroup: 'Sendergruppe', liveNoChannels: 'Keine Sender verfügbar', liveSources: 'Quellen', liveSourceOption: 'Option'
+    },
+    it: {
+      exitFullscreen: 'Esci dallo schermo intero', cast: 'Cast', actorWorks: 'Film e serie di questo attore', noActorWorks: 'Nessun altro titolo disponibile.', personError: 'Impossibile caricare la filmografia',
+      sortAndFilter: 'Ordina e filtra', sortName: 'Nome', sortDateAdded: 'Data di aggiunta', sortPremiere: 'Data di uscita', sortRuntime: 'Durata', sortRating: 'Valutazione della community',
+      favorites: 'Preferiti', playbackState: 'Stato di riproduzione', playbackAll: 'Tutti', playbackWatched: 'Visti', playbackUnwatched: 'Non visti',
+      liveAll: 'Tutti i canali', liveFavorites: 'Solo preferiti', liveGroup: 'Gruppo di canali', liveNoChannels: 'Nessun canale disponibile', liveSources: 'sorgenti', liveSourceOption: 'Opzione'
+    }
+  };
+  Object.keys(TRANSLATION_OVERRIDES).forEach(function (code) {
+    TRANSLATIONS[code] = Object.assign({}, TRANSLATIONS[code], TRANSLATION_OVERRIDES[code]);
+  });
+
   function languageCode() {
     var selected = localStorage.veloraLanguage || 'auto';
     if (selected !== 'auto' && TRANSLATIONS[selected]) return selected;
