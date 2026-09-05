@@ -16,10 +16,13 @@ jobs:
     steps:
       - name: Comprobar ramas remotas
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           mapfile -t branches < <(
-            git ls-remote --heads https://github.com/klortekhq/Velora.git |
+            git -c "http.extraheader=AUTHORIZATION: bearer ${GH_TOKEN}" \
+              ls-remote --heads "https://github.com/${GITHUB_REPOSITORY}.git" |
               awk '{sub("refs/heads/", "", $2); print $2}' |
               sort
           )
