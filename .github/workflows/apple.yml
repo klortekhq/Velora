@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: '20'
       - name: Validar catálogos Apple
-        working-directory: .
+        working-directory: ${{ github.workspace }}
         run: node scripts/check-apple-locales.mjs
       - name: Mostrar toolchain Swift
         run: swift --version
