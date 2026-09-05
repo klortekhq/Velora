@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`858273c`. Los
+`71da73f`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -82,6 +82,10 @@ con éxito. También pasaron `node --check app.js`, las pruebas de capacidades y
 seguridad web y `npm run build:all`; el empaquetado volvió a generar el IPK de
 webOS y los bundles HTML5 de Samsung/VIDAA sin afirmar firma ni certificación
 de hardware.
+
+`71da73f` elimina de los logs Android rutas de archivos locales, rutas internas
+de subtítulos y enlaces de descarga sin redacción. La suite de tests y lint
+Android vuelven a pasar después del endurecimiento.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
