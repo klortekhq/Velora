@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `0ac7f24`)
+## Revisión actual (commit `345a077`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
