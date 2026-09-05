@@ -68,6 +68,7 @@ import androidx.compose.material3.Text as MobileText
 import androidx.compose.material3.ButtonDefaults as MobileButtonDefaults
 import com.klortek.velora.components.TvTextField
 import com.klortek.velora.ui.DeviceUtils
+import com.klortek.velora.jellyfin.DeviceIdentity
 import com.klortek.velora.jellyfin.JellyfinAuthService
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.jellyfin.QuickConnectError
@@ -638,16 +639,8 @@ private fun QuickConnectLoginContent(
                                     config.accessToken = authResult.AccessToken
                                     config.userId = authResult.User.Id
                                     
-                                    // Store device ID
-                                    val deviceId = try {
-                                        android.provider.Settings.Secure.getString(
-                                            context.contentResolver,
-                                            android.provider.Settings.Secure.ANDROID_ID
-                                        ) ?: "56be65b97eb43eca"
-                                    } catch (e: Exception) {
-                                        "56be65b97eb43eca"
-                                    }
-                                    config.deviceId = deviceId
+                                    // Store the same app-scoped identity used by authentication.
+                                    config.deviceId = DeviceIdentity.get(context)
                                     
                                     android.util.Log.d("QuickConnectLogin", "✅ Configuration saved")
                                     
@@ -863,16 +856,8 @@ private fun performCredentialsLogin(
                 config.password = password.trim()
                 config.accessToken = authResponse.AccessToken
                 config.userId = authResponse.User.Id
-                // Store DeviceId used during authentication
-                val deviceId = try {
-                    android.provider.Settings.Secure.getString(
-                        context.contentResolver,
-                        android.provider.Settings.Secure.ANDROID_ID
-                    ) ?: "56be65b97eb43eca"
-                } catch (e: Exception) {
-                    "56be65b97eb43eca"
-                }
-                config.deviceId = deviceId
+                // Store the same app-scoped identity used by authentication.
+                config.deviceId = DeviceIdentity.get(context)
                 onSuccess()
             } else {
                 onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
