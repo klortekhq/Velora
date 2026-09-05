@@ -7,6 +7,7 @@ on:
     paths:
       - 'app/**'
       - 'web/**'
+      - 'apple/**'
       - 'scripts/**'
       - 'gradle/**'
       - 'build.gradle.kts'
@@ -71,3 +72,21 @@ jobs:
           :app:compileMobileDebugKotlin
           :app:compileTvDebugKotlin
           --no-daemon --max-workers=2 --console=plain
+
+  apple:
+    name: Apple shared package tests and builds
+    runs-on: macos-14
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Select Swift toolchain
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '5.9'
+      - name: Test VeloraKit
+        run: swift test --package-path apple --parallel
+      - name: Build native package entrypoints
+        run: |
+          swift build --package-path apple --product VeloraMobile
+          swift build --package-path apple --product VeloraTV
