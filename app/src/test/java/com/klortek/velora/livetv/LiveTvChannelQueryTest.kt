@@ -86,4 +86,11 @@ class LiveTvChannelQueryTest {
             group.channels.map(::liveTvMediaSourceId)
         )
     }
+
+    @Test
+    fun sourceLabelAcceptsLocalizedFallbackWhenProviderHasNoLabel() {
+        val channel = LiveTvChannel("unlabelled", "Canal")
+
+        assertEquals("Option 2", liveTvSourceLabel(channel, 2, "Option 2"))
+    }
 }

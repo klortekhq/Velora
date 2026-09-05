@@ -52,12 +52,16 @@ fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup>
 }
 
 /** Human-readable source label for the picker, never exposing URLs or tokens. */
-fun liveTvSourceLabel(channel: LiveTvChannel, optionNumber: Int): String =
+fun liveTvSourceLabel(
+    channel: LiveTvChannel,
+    optionNumber: Int,
+    fallbackLabel: String = "Opción $optionNumber"
+): String =
     channel.Tags.orEmpty().firstOrNull { it.isNotBlank() }
         ?: channel.Type?.takeIf { it.isNotBlank() }
         ?: channel.MediaSources.orEmpty().firstOrNull()?.Id?.takeIf { it.isNotBlank() }?.let { "Fuente $optionNumber" }
         ?: channel.ChannelNumber?.takeIf { it.isNotBlank() }?.let { "Canal $it" }
-        ?: "Opción $optionNumber"
+        ?: fallbackLabel
 
 fun liveTvMediaSourceId(channel: LiveTvChannel): String? =
     channel.MediaSources.orEmpty().firstOrNull()?.Id?.takeIf { it.isNotBlank() }

@@ -226,6 +226,7 @@
   <string name="settings_offline_storage_unlimited">Illimité</string>
   <string name="live_tv_cancel">Annuler</string>
   <string name="live_tv_source_count">%1$d sources</string>
+  <string name="live_tv_source_option">Option %1$d</string>
   <string name="player_back">Retour</string>
   <string name="player_fullscreen">Plein écran</string>
   <string name="player_exit_fullscreen">Quitter le plein écran</string>

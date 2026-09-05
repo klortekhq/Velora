@@ -78,6 +78,11 @@ una release pública con APK unsigned; exige los cuatro secretos de firma. Los
 builds unsigned siguen disponibles únicamente en ejecuciones de QA sin
 `release_tag`.
 
+El selector de fuentes Live TV ya recibe el texto de respaldo desde recursos
+localizados; una fuente sin nombre del proveedor no fuerza «Opción» en español
+cuando la interfaz está en inglés, francés o alemán. La regresión de
+`LiveTvChannelQueryTest` y la compilación móvil/TV pasan tras el cambio.
+
 El flujo Android queda preparado para firma de distribución opcional mediante
 los cuatro secretos `VELORA_ANDROID_*` de GitHub Actions. Sin ellos, conserva
 los APK release unsigned de QA; con ellos, cambia el nombre del artefacto a
