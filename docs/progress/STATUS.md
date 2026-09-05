@@ -26,6 +26,10 @@ ruta usa el mismo modelo de contenido para login nuevo y reapertura. Swift/Xcode
 no están disponibles en este host Windows, por lo que la prueba final queda
 delegada al job macOS de GitHub Actions.
 
+La verificación local posterior al changelog volvió a terminar con
+`BUILD SUCCESSFUL` en `testMobileDebugUnitTest` y `testTvDebugUnitTest`; las
+pruebas de capacidades, seguridad e interacción del cliente web también pasan.
+
 La comprobación de ramas del mismo momento devuelve únicamente `main` y
 `origin/main`; no hay ramas adicionales en el checkout ni en el remoto
 visible.
