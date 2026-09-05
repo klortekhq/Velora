@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `cd0da5d`)
+## Revisión actual (commit `eed1eb0`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - Fire TV conectado por ADB (`192.168.31.112:5555`) con `1.4.0-tv` activo;
@@ -31,6 +31,10 @@ Updated: 2026-09-05
   audio, subtítulos, tráiler, visto y atrás) ya usan recursos traducibles en
   las pantallas móvil/TV; el comprobador Android valida 431 claves en los
   catálogos garantizados.
+- El modo de subtítulos `forzados` ya se aplica realmente en Media3/ExoPlayer:
+  se resuelve la pista marcada por Jellyfin mediante el mapeo estable de
+  SubtitleMapper y, si no existe una pista forzada válida, no se selecciona
+  una pista cualquiera. Móvil y TV compilan con los tests unitarios correctos.
 
 ## Última verificación
 
@@ -48,6 +52,10 @@ La verificación web del 2026-09-05 pasó `check-version-consistency.mjs`,
 bundle de navegador, el IPK webOS y los bundles preparados de Samsung/VIDAA.
 Tizen continúa honestamente marcado como pendiente porque el CLI/SDK y la
 firma no están instalados en este entorno.
+
+La verificación Android posterior del 2026-09-05 sobre `eed1eb0` pasó
+`compileMobileDebugKotlin`, `compileTvDebugKotlin`, `testMobileDebugUnitTest`
+y `testTvDebugUnitTest` con `BUILD SUCCESSFUL`.
 
 La validación del 2026-09-05 sobre el commit actual compiló `assembleTvDebug`
 con éxito, instaló la APK resultante en el Fire TV AFTSS y la lanzó mediante
