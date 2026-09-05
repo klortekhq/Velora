@@ -17,6 +17,10 @@ Jellyseerr. El catálogo validado asciende a 394 claves; compilación y pruebas
 unitarias de móvil y TV vuelven a pasar. Los errores de credenciales ya no
 presentan el mensaje técnico bruto en la interfaz.
 
+La tercera pasada migró los ajustes visibles de procesado de vídeo, mapeo de
+tonos, HDR simulado, nitidez y mezcla de fotogramas. El catálogo alcanza 412
+claves; la comprobación de locales y las compilaciones Kotlin móvil/TV pasan.
+
 La auditoría de logs de red del 2026-09-05 sanitiza los mensajes de excepción
 en `JellyfinApi`, `LiveTvActivity`, `JellyfinRepository` y `ServerEntryScreen`.
 Usan `SensitiveDataRedactor.message` en lugar de registrar el `Throwable`

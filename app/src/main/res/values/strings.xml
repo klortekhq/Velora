@@ -361,4 +361,22 @@
     <string name="settings_jellyseerr_login_success">Sesión iniciada correctamente</string>
     <string name="settings_jellyseerr_login_required">Introduce el usuario y la contraseña</string>
     <string name="settings_jellyseerr_login_error">No se ha podido iniciar sesión</string>
+    <string name="settings_video_gl_title">Procesado GL de ExoPlayer</string>
+    <string name="settings_video_gl_description">Usa OpenGL para efectos de vídeo avanzados en ExoPlayer (simulación HDR y nitidez).</string>
+    <string name="settings_video_tone_mapping_title">Activar mapeo dinámico de tonos</string>
+    <string name="settings_video_tone_mapping_description">Activa la simulación HDR adaptada a cada escena. Mejora el contraste dinámicamente.</string>
+    <string name="settings_video_mpv_postprocessing_title">Postprocesado de MPV</string>
+    <string name="settings_video_mpv_postprocessing_description">Aplica perfiles de shaders al reproductor MPV (efectos tipo HDR, nitidez, etc.).</string>
+    <string name="settings_video_fake_hdr_title">HDR simulado</string>
+    <string name="settings_video_fake_hdr_description">Simula HDR mediante mapeo de tonos y aumento de brillo.</string>
+    <string name="settings_video_hdr_intensity">Intensidad HDR: %.1f (rango: 1,0-2,0)</string>
+    <string name="settings_video_hdr_intensity_title">Intensidad HDR</string>
+    <string name="settings_video_sharpening_title">Nitidez</string>
+    <string name="settings_video_sharpening_description">Mejora la nitidez de la imagen mediante detección de bordes.</string>
+    <string name="settings_video_sharpening_intensity">Intensidad de nitidez: %.1f (rango: 0,0-1,0)</string>
+    <string name="settings_video_sharpening_intensity_title">Intensidad de nitidez</string>
+    <string name="settings_video_frame_blending_title">Mezcla de fotogramas</string>
+    <string name="settings_video_frame_blending_description">Simula movimiento suave mezclando fotogramas (efecto telenovela).</string>
+    <string name="settings_video_frame_blending_intensity">Intensidad de mezcla: %.1f (rango: 0,0-1,0)</string>
+    <string name="settings_video_frame_blending_intensity_title">Intensidad de mezcla</string>
 </resources>

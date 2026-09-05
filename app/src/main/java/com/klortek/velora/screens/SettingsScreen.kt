@@ -559,8 +559,8 @@ fun SettingsScreen(
                         SettingsCategory.VIDEO -> {
                             // ExoPlayer GL Enhancements
                             SettingToggle(
-                                title = "Procesado GL de ExoPlayer",
-                                description = "Usa OpenGL para efectos de vídeo avanzados en ExoPlayer (simulación HDR y nitidez).",
+                                title = stringResource(com.klortek.velora.R.string.settings_video_gl_title),
+                                description = stringResource(com.klortek.velora.R.string.settings_video_gl_description),
                                 isEnabled = useGLEnhancements,
                                 onToggle = {
                                     useGLEnhancements = !useGLEnhancements
@@ -582,8 +582,8 @@ fun SettingsScreen(
                             // Dynamic Tone Mapping Toggle
                             var enableDynamicToneMapping by remember { mutableStateOf(settings.enableDynamicToneMapping) }
                             SettingToggle(
-                                title = "Activar mapeo dinámico de tonos",
-                                description = "Activa la simulación HDR adaptada a cada escena. Mejora el contraste dinámicamente.",
+                                title = stringResource(com.klortek.velora.R.string.settings_video_tone_mapping_title),
+                                description = stringResource(com.klortek.velora.R.string.settings_video_tone_mapping_description),
                                 isEnabled = enableDynamicToneMapping,
                                 onToggle = {
                                     enableDynamicToneMapping = !enableDynamicToneMapping
@@ -592,8 +592,8 @@ fun SettingsScreen(
                             )
 
                             SettingCycle(
-                                title = "Postprocesado de MPV",
-                                description = "Aplica perfiles de shaders al reproductor MPV (efectos tipo HDR, nitidez, etc.).",
+                                title = stringResource(com.klortek.velora.R.string.settings_video_mpv_postprocessing_title),
+                                description = stringResource(com.klortek.velora.R.string.settings_video_mpv_postprocessing_description),
                                 currentValue = com.klortek.velora.player.mpv.MpvShaderManager.ShaderProfile.fromString(mpvShaderProfile).displayName,
                                 onCycle = {
                                     val currentProfile = com.klortek.velora.player.mpv.MpvShaderManager.ShaderProfile.fromString(mpvShaderProfile)
@@ -609,8 +609,8 @@ fun SettingsScreen(
                             if (useGLEnhancements) {
                                 // Fake HDR
                                 SettingToggle(
-                                    title = "HDR simulado",
-                                    description = "Simula HDR mediante mapeo de tonos y aumento de brillo.",
+                                    title = stringResource(com.klortek.velora.R.string.settings_video_fake_hdr_title),
+                                    description = stringResource(com.klortek.velora.R.string.settings_video_fake_hdr_description),
                                     isEnabled = enableFakeHDR,
                                     onToggle = {
                                         enableFakeHDR = !enableFakeHDR
@@ -620,8 +620,8 @@ fun SettingsScreen(
                                 
                                 if (enableFakeHDR) {
                                     SettingSlider(
-                                        title = "Intensidad HDR",
-                                        description = "Intensidad: %.1f (rango: 1,0-2,0)".format(hdrStrength),
+                                        title = stringResource(com.klortek.velora.R.string.settings_video_hdr_intensity_title),
+                                        description = stringResource(com.klortek.velora.R.string.settings_video_hdr_intensity, hdrStrength),
                                         onDecrease = {
                                             hdrStrength = (hdrStrength - 0.1f).coerceAtLeast(1.0f)
                                             settings.hdrStrength = hdrStrength
@@ -637,8 +637,8 @@ fun SettingsScreen(
                                 
                                 // Sharpening
                                 SettingToggle(
-                                    title = "Nitidez",
-                                    description = "Mejora la nitidez de la imagen mediante detección de bordes.",
+                                    title = stringResource(com.klortek.velora.R.string.settings_video_sharpening_title),
+                                    description = stringResource(com.klortek.velora.R.string.settings_video_sharpening_description),
                                     isEnabled = enableSharpening,
                                     onToggle = {
                                         enableSharpening = !enableSharpening
@@ -648,8 +648,8 @@ fun SettingsScreen(
                                 
                                 if (enableSharpening) {
                                     SettingSlider(
-                                        title = "Intensidad de nitidez",
-                                        description = "Intensidad: %.1f (rango: 0,0-1,0)".format(sharpenStrength),
+                                        title = stringResource(com.klortek.velora.R.string.settings_video_sharpening_intensity_title),
+                                        description = stringResource(com.klortek.velora.R.string.settings_video_sharpening_intensity, sharpenStrength),
                                         onDecrease = {
                                             sharpenStrength = (sharpenStrength - 0.1f).coerceAtLeast(0.0f)
                                             settings.sharpenStrength = sharpenStrength
@@ -665,8 +665,8 @@ fun SettingsScreen(
                                 
                                 // Frame Blending
                                 SettingToggle(
-                                    title = "Mezcla de fotogramas",
-                                    description = "Simula movimiento suave mezclando fotogramas (efecto telenovela).",
+                                    title = stringResource(com.klortek.velora.R.string.settings_video_frame_blending_title),
+                                    description = stringResource(com.klortek.velora.R.string.settings_video_frame_blending_description),
                                     isEnabled = enableFrameBlending,
                                     onToggle = {
                                         enableFrameBlending = !enableFrameBlending
@@ -676,8 +676,8 @@ fun SettingsScreen(
                                 
                                 if (enableFrameBlending) {
                                     SettingSlider(
-                                        title = "Intensidad de mezcla",
-                                        description = "Intensidad: %.1f (rango: 0,0-1,0)".format(frameBlendStrength),
+                                        title = stringResource(com.klortek.velora.R.string.settings_video_frame_blending_intensity_title),
+                                        description = stringResource(com.klortek.velora.R.string.settings_video_frame_blending_intensity, frameBlendStrength),
                                         onDecrease = {
                                             frameBlendStrength = (frameBlendStrength - 0.1f).coerceAtLeast(0.0f)
                                             settings.frameBlendStrength = frameBlendStrength
