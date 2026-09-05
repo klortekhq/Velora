@@ -370,6 +370,8 @@ private fun CredentialsLoginContent(
     var usernameFocused by remember { mutableStateOf(false) }
     var passwordFocused by remember { mutableStateOf(false) }
     var loginButtonFocused by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val isTv = remember(context) { DeviceUtils.isTvDevice(context) }
 
     LaunchedEffect(Unit) {
         if (usernameEditable && username.isBlank()) {
@@ -398,7 +400,9 @@ private fun CredentialsLoginContent(
             ),
             focusRequester = usernameFocusRequester,
             onFocusChanged = { usernameFocused = it },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            fieldHeight = if (isTv) 72.dp else 48.dp,
+            textSize = if (isTv) 22.sp else 16.sp
         )
 
         // Password Field
@@ -423,12 +427,12 @@ private fun CredentialsLoginContent(
             visualTransformation = PasswordVisualTransformation(),
             focusRequester = passwordFocusRequester,
             onFocusChanged = { passwordFocused = it },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            fieldHeight = if (isTv) 72.dp else 48.dp,
+            textSize = if (isTv) 22.sp else 16.sp
         )
 
         // Login Button and Error
-        val context = LocalContext.current
-        val isTv = remember(context) { DeviceUtils.isTvDevice(context) }
         if (isTv) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
