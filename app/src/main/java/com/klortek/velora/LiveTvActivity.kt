@@ -401,7 +401,15 @@ private fun LiveTvSourceDialog(
                     onClick = { onSelect(channel) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                 ) {
-                    Text(liveTvSourceLabel(channel, index + 1), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(
+                        liveTvSourceLabel(
+                            channel = channel,
+                            optionNumber = index + 1,
+                            fallbackLabel = stringResource(R.string.live_tv_source_option, index + 1)
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
             Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
