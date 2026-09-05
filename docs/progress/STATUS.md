@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `eed1eb0`)
+## Revisión actual (commit `cd33382`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - Fire TV conectado por ADB (`192.168.31.112:5555`) con `1.4.0-tv` activo;
@@ -35,6 +35,10 @@ Updated: 2026-09-05
   se resuelve la pista marcada por Jellyfin mediante el mapeo estable de
   SubtitleMapper y, si no existe una pista forzada válida, no se selecciona
   una pista cualquiera. Móvil y TV compilan con los tests unitarios correctos.
+- Auditoría de seguridad de URLs y registros completada en Android, Apple y
+  web: no se encontraron tokens en URLs de reproducción ni en logs sensibles;
+  las cabeceras Jellyfin se mantienen fuera de la URL y el proxy web solo
+  acepta orígenes/rutas multimedia permitidos.
 
 ## Última verificación
 
