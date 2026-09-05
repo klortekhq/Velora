@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
@@ -872,19 +873,19 @@ fun SettingsScreen(
                             }
                             
                             SettingButton(
-                                title = "Borrar subtítulos descargados",
+                                title = stringResource(com.klortek.velora.R.string.settings_subtitles_clear_title),
                                 description = if (downloadedSubtitlesCount > 0) 
                                     "$downloadedSubtitlesCount archivo(s) de subtítulos guardado(s) localmente" 
                                 else 
                                     "No hay subtítulos descargados",
-                                buttonText = "Borrar",
+                                buttonText = stringResource(com.klortek.velora.R.string.settings_subtitles_clear_button),
                                 onClick = { showClearSubtitlesDialog = true }
                             )
                             
                             if (showClearSubtitlesDialog) {
                                 AlertDialog(
                                     onDismissRequest = { showClearSubtitlesDialog = false },
-                                    title = { Text("¿Borrar subtítulos descargados?") },
+                                    title = { Text(stringResource(com.klortek.velora.R.string.settings_subtitles_clear_confirm)) },
                                     text = {
                                         Text(
                                             "Se eliminarán los $downloadedSubtitlesCount archivo(s) de subtítulos descargado(s) de OpenSubtitles.\n\nPodrás descargarlos de nuevo cuando quieras.",
@@ -906,17 +907,17 @@ fun SettingsScreen(
                                                 // Show toast
                                                 android.widget.Toast.makeText(
                                                     context,
-                                                    "Downloaded subtitles cleared",
+                                                    context.getString(com.klortek.velora.R.string.settings_subtitles_clear_done),
                                                     android.widget.Toast.LENGTH_SHORT
                                                 ).show()
                                             }
                                         ) {
-                                            Text("Borrar", color = MaterialTheme.colorScheme.error)
+                                            Text(stringResource(com.klortek.velora.R.string.settings_subtitles_clear_button), color = MaterialTheme.colorScheme.error)
                                         }
                                     },
                                     dismissButton = {
                                         TextButton(onClick = { showClearSubtitlesDialog = false }) {
-                                            Text("Cancelar")
+                                            Text(stringResource(com.klortek.velora.R.string.settings_cancel))
                                         }
                                     }
                                 )
@@ -926,8 +927,8 @@ fun SettingsScreen(
                             
                             // Transcode AAC to AC3
                             SettingToggle(
-                                title = "Transcodificar AAC a AC3",
-                                description = "Transcodifica todo el audio AAC a AC3 (máximo 5.1). AC3 es compatible universalmente.",
+                                title = stringResource(com.klortek.velora.R.string.settings_audio_transcode_aac_title),
+                                description = stringResource(com.klortek.velora.R.string.settings_audio_transcode_aac_description),
                                 isEnabled = transcodeAacToAc3Enabled,
                                 onToggle = {
                                     transcodeAacToAc3Enabled = !transcodeAacToAc3Enabled

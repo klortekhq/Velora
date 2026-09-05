@@ -13,8 +13,14 @@ siendo opcionales y heredan el español base de forma controlada.
 
 La pantalla de solicitudes Jellyseerr ya no muestra estados hardcodeados en
 inglés: `Available`, `Requested`, `Pending` y `Request` pasan por recursos
-traducibles. La comprobación de locales queda en 350 claves y vuelven a pasar
-los tests unitarios móviles y la compilación Kotlin de TV.
+traducibles. La comprobación de locales quedó en 350 claves en ese cambio y
+volvieron a pasar los tests unitarios móviles y la compilación Kotlin de TV.
+
+El bloque de Ajustes de subtítulos y transcodificación AAC también dejó de
+depender de textos fijos: sus acciones y mensajes pasan por recursos traducibles
+en los catálogos garantizados. La comprobación oficial queda en 356 claves;
+`lintMobileDebug` vuelve a terminar con 0 errores, junto con los tests móviles y
+la compilación TV.
 
 Tras esa corrección, el commit `54bbfb7` vuelve a pasar `assembleMobileRelease`
 y `assembleTvRelease` con lint vital. Las APK unsigned vigentes son: móvil
