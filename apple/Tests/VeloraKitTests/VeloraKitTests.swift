@@ -19,6 +19,12 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(VeloraDownloadQuality.low.videoBitrate, 2_000_000)
     }
 
+    func testOfflineStoreKeepsAnOperatingSystemStorageReserve() {
+        let store = VeloraOfflineStore(rootURL: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        XCTAssertEqual(store.minimumFreeBytes, 512 * 1024 * 1024)
+        XCTAssertTrue(store.hasCapacity(forAdditionalBytes: 0))
+    }
+
     func testServerURLValidationRejectsEmbeddedCredentialsAndParameters() throws {
         XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "http://192.168.31.232:8096")!))
         XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test/base")!))

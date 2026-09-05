@@ -112,7 +112,10 @@ public actor JellyfinClient {
     public func videoURL(itemID: String, quality: VeloraDownloadQuality = .original) -> URL? {
         guard let streamURL = itemURL(root: "Videos", itemID: itemID, suffix: ["stream"]) else { return nil }
         var components = URLComponents(url: streamURL, resolvingAgainstBaseURL: false)
-        var queryItems = [URLQueryItem(name: "static", value: "true")]
+        // Static streams preserve Original. A bounded preset must leave the
+        // server free to transcode; keeping static=true would silently ignore
+        // the requested quality on Jellyfin.
+        var queryItems = [URLQueryItem(name: "static", value: quality == .original ? "true" : "false")]
         if let maxWidth = quality.maxWidth {
             queryItems.append(URLQueryItem(name: "MaxWidth", value: String(maxWidth)))
         }

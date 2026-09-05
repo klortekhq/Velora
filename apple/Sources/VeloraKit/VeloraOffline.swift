@@ -35,6 +35,10 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
     }
 }
 
+public enum VeloraOfflineStoreError: Error, Equatable {
+    case insufficientStorage
+}
+
 /// Small app-managed offline catalog for iPhone/iPad.
 /// A later background-transfer layer can use the same catalog without
 /// changing the playback or UI contract.
@@ -42,6 +46,7 @@ public final class VeloraOfflineStore: @unchecked Sendable {
     private let fileManager: FileManager
     public let rootURL: URL
     private let metadataURL: URL
+    public let minimumFreeBytes: Int64 = 512 * 1024 * 1024
 
     public init(rootURL: URL? = nil, fileManager: FileManager = .default) {
         self.fileManager = fileManager
@@ -88,12 +93,19 @@ public final class VeloraOfflineStore: @unchecked Sendable {
 
     @discardableResult
     public func add(mediaAt temporaryURL: URL, itemID: String, title: String, serverURL: String) throws -> VeloraOfflineDownload {
+        guard let temporaryAttributes = try? fileManager.attributesOfItem(atPath: temporaryURL.path),
+              let byteCount = (temporaryAttributes[.size] as? NSNumber)?.int64Value else {
+            throw VeloraOfflineStoreError.insufficientStorage
+        }
+        guard hasCapacity(forAdditionalBytes: byteCount) else {
+            throw VeloraOfflineStoreError.insufficientStorage
+        }
         try fileManager.createDirectory(at: rootURL, withIntermediateDirectories: true)
         let fileName = "media-\(UUID().uuidString).bin"
         let destination = rootURL.appendingPathComponent(fileName)
         try fileManager.moveItem(at: temporaryURL, to: destination)
         let attributes = try fileManager.attributesOfItem(atPath: destination.path)
-        let byteCount = (attributes[.size] as? NSNumber)?.int64Value
+        let storedByteCount = (attributes[.size] as? NSNumber)?.int64Value
         let checksum = sha256(url: destination)
         var entries = load()
         let entry = VeloraOfflineDownload(itemID: itemID, title: title, serverURL: serverURL, fileName: fileName)
@@ -104,13 +116,22 @@ public final class VeloraOfflineStore: @unchecked Sendable {
             serverURL: entry.serverURL,
             fileName: entry.fileName,
             createdAt: entry.createdAt,
-            byteCount: byteCount,
+            byteCount: storedByteCount,
             checksumSha256: checksum
         )
         entries.removeAll { $0.itemID == itemID && $0.serverURL == serverURL }
         entries.append(verifiedEntry)
         try write(entries)
         return verifiedEntry
+    }
+
+    /// Keeps a fixed reserve for the operating system and future metadata.
+    /// The check is repeated after the temporary transfer completes, when the
+    /// actual media size is known even if Jellyfin did not send Content-Length.
+    public func hasCapacity(forAdditionalBytes additionalBytes: Int64 = 0) -> Bool {
+        guard let values = try? rootURL.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey]),
+              let available = values.volumeAvailableCapacityForImportantUsage else { return true }
+        return available >= minimumFreeBytes + max(0, additionalBytes)
     }
 
     public func remove(_ entry: VeloraOfflineDownload) throws {
