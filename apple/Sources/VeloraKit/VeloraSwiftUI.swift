@@ -131,6 +131,12 @@ public struct VeloraSettingsView: View {
                 )) {
                     Text("Preferred audio", bundle: .module)
                 }
+                TextField(text: Binding(
+                    get: { settings.preferredSubtitleLanguage ?? "" },
+                    set: { settings.preferredSubtitleLanguage = $0.isEmpty ? nil : $0 }
+                )) {
+                    Text("Preferred subtitles", bundle: .module)
+                }
                 Picker(selection: $settings.subtitlePreference) {
                     Text("Automatic", bundle: .module).tag(SubtitlePreference.automatic)
                     Text("Disabled", bundle: .module).tag(SubtitlePreference.off)
