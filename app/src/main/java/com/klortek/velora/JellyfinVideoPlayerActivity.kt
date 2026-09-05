@@ -426,7 +426,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                                                 itemId = nextId,
                                                 itemName = liveTvChannelNames.getOrNull(nextIndex),
                                                 isLiveTv = true,
-                                                liveTvMediaSourceId = liveTvMediaSourceId,
+                                                // A media source belongs to the current channel. Let
+                                                // Jellyfin resolve the next channel's preferred source
+                                                // instead of reusing the previous channel's source ID.
+                                                liveTvMediaSourceId = null,
                                                 liveTvChannelIds = liveTvChannelIds,
                                                 liveTvChannelNames = liveTvChannelNames
                                             )
