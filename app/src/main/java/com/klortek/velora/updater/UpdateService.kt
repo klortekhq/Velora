@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
+import com.klortek.velora.security.SensitiveDataRedactor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineScope
@@ -124,7 +125,7 @@ object UpdateService {
     ): Uri? {
         return withContext(Dispatchers.IO) {
             try {
-                Log.d(TAG, "Starting APK download from: $apkUrl")
+                Log.d(TAG, "Starting APK download from: ${SensitiveDataRedactor.url(apkUrl)}")
                 
                 // Create download directory in app-specific external storage
                 val downloadsDir = File(context.getExternalFilesDir(null), "updates")
