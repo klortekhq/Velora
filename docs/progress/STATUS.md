@@ -47,6 +47,9 @@ Updated: 2026-09-05
   `IsForced`, incluyendo la selección por idioma; una pista predeterminada no
   sustituye silenciosamente a una forzada inexistente. La regresión se ejecuta
   en `web/scripts/test-platform.mjs` y el bundle web/webOS/VIDAA se regenera.
+- La música de tema Android ya realiza transiciones con fade-out/fade-in,
+  cancela animaciones anteriores y libera el reproductor al salir. La
+  compilación y los tests unitarios móvil/TV pasan tras este cambio.
 
 ## Última verificación
 

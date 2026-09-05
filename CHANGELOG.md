@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android TV y móvil: la música de tema cambia con fade-out/fade-in al
+  cambiar de título y se detiene limpiamente al salir, evitando solapamientos
+  y cambios bruscos de volumen.
 - Web: el modo de subtítulos forzados ya selecciona únicamente pistas
   marcadas como forzadas; si no existe ninguna, respeta la preferencia y no
   activa una pista predeterminada por accidente.
