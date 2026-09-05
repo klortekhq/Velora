@@ -19,6 +19,13 @@ firmar: móvil (67 825 027 bytes, SHA-256
 `84D9EED46BCC15187E38C76ED893CA6FBA3D8C53FDD60765D88EB6BCF5DC90AD`). No se
 presentan como APK de tienda porque siguen sin firma de distribución.
 
+La recompilación posterior de `main` en `47be085` vuelve a pasar
+`assembleMobileRelease` y `assembleTvRelease`. Sus artefactos unsigned son:
+móvil (67 825 599 bytes, SHA-256
+`C85E1380D07E534440E07B0FEC17CA08E532076726528D4F29B4B8895309FE67`) y TV
+(67 825 507 bytes, SHA-256
+`2E942D0EFD149A5536354ABC226924CE34703659AB5899270438002BDC20DC36`).
+
 La etiqueta remota `v1.4.0` se realineó con el `main` actual (`1dbb8a3`) para
 evitar que el workflow de publicación reconstruya un commit antiguo. La API
 pública de GitHub sigue devolviendo 404 al consultar releases y ejecuciones
