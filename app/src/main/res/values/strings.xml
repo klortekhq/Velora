@@ -260,4 +260,53 @@
     <string name="settings_autoplay_countdown_description">Tiempo antes de terminar el episodio para mostrar la cuenta atrás (%1$ds).</string>
    <string name="settings_category_jellyseerr">Jellyseerr (Descubrir contenido)</string>
    <string name="settings_category_trailers">Tráilers</string>
+   <string name="settings_appearance_dark_mode">Modo oscuro</string>
+   <string name="settings_appearance_dark_mode_description">Desactiva la imagen de fondo y usa el fondo oscuro de Material.</string>
+   <string name="settings_appearance_logo_title">Usar logo como título</string>
+   <string name="settings_appearance_logo_title_description">Muestra el logo en lugar del texto del título en las pantallas multimedia.</string>
+   <string name="settings_appearance_animated_play">Botón de reproducción animado</string>
+   <string name="settings_appearance_animated_play_description">Usa un botón de reproducción animado con efecto de brillo Lottie.</string>
+   <string name="settings_appearance_24_hour_time">Formato horario de 24 horas</string>
+   <string name="settings_appearance_24_hour_time_description">Muestra la hora en formato de 24 horas (HH:mm).</string>
+   <string name="settings_appearance_4k_backgrounds">Fondos en calidad 4K</string>
+   <string name="settings_appearance_4k_backgrounds_description">Usa resolución 4K (3840x2160) para las imágenes de fondo. Puede afectar al rendimiento.</string>
+   <string name="settings_appearance_navigation_sounds">Sonidos de navegación</string>
+   <string name="settings_appearance_navigation_sounds_description">Activa los sonidos del sistema al navegar y pulsar en la aplicación.</string>
+   <string name="settings_appearance_accent_color">Color de acento del tema</string>
+   <string name="settings_color_white">Blanco</string>
+   <string name="settings_color_yellow">Amarillo</string>
+   <string name="settings_color_blue">Azul</string>
+   <string name="settings_color_green">Verde</string>
+   <string name="settings_color_red">Rojo</string>
+   <string name="settings_color_purple">Morado</string>
+   <string name="settings_color_orange">Naranja</string>
+   <string name="settings_performance_google_tv_cards">Usar tarjetas de Google TV</string>
+   <string name="settings_performance_google_tv_cards_description">Tarjetas ligeras con animación de escala sutil y borde luminoso.</string>
+   <string name="settings_performance_animations">Animaciones</string>
+   <string name="settings_performance_disable_animations">Desactivar animaciones de interfaz</string>
+   <string name="settings_performance_disable_animations_description">Desactiva las animaciones de desplazamiento para mejorar el rendimiento.</string>
+   <string name="settings_performance_preload_images">Precargar imágenes de biblioteca</string>
+   <string name="settings_performance_preload_images_description">Precarga imágenes para un desplazamiento más fluido.</string>
+   <string name="settings_performance_cache_images">Guardar imágenes de biblioteca en caché</string>
+   <string name="settings_performance_cache_images_description">Guarda imágenes en disco y memoria para acelerar la carga.</string>
+   <string name="settings_performance_glide">Usar Glide para imágenes</string>
+   <string name="settings_performance_glide_description">Usa Glide en lugar de Coil para cargar imágenes.</string>
+   <string name="settings_performance_reduce_posters">Reducir resolución de carteles</string>
+   <string name="settings_performance_reduce_posters_description">Reduce los carteles a 600x300 px para ahorrar ancho de banda.</string>
+   <string name="settings_library_auto_refresh">Actualizar contenido automáticamente</string>
+   <string name="settings_library_auto_refresh_description">Busca contenido nuevo automáticamente (cada %1$d min).</string>
+   <string name="settings_library_refresh_interval">Intervalo de actualización</string>
+   <string name="settings_library_refresh_interval_description">Frecuencia de búsqueda de contenido nuevo.</string>
+   <string name="settings_library_hide_empty_shows">Ocultar series vacías</string>
+   <string name="settings_library_hide_empty_shows_description">Oculta de Inicio y Biblioteca las series sin episodios.</string>
+   <string name="settings_library_cards_per_row">Número de tarjetas por fila</string>
+   <string name="settings_library_cards_per_row_description">Número de elementos que se cargan y muestran por fila.</string>
+   <string name="settings_library_theme_music_volume">Volumen de música de tema</string>
+   <string name="settings_library_theme_music_volume_description">Nivel actual: %1$d%%.</string>
+   <string name="settings_library_theme_music">Música de tema</string>
+   <string name="settings_library_theme_music_description">Reproduce la música del contenido seleccionado cuando Velora la tenga disponible.</string>
+   <string name="settings_advanced_debug_outlines">Mostrar contornos de depuración</string><string name="settings_advanced_debug_outlines_description">Muestra bordes de depuración para visualizar el diseño.</string>
+   <string name="settings_advanced_long_press">Duración de pulsación larga</string><string name="settings_advanced_long_press_description">Tiempo que hay que mantener Enter/OK para abrir el menú del episodio.</string>
+   <string name="settings_advanced_clear_image_cache">Borrar caché de imágenes</string><string name="settings_advanced_clear_image_cache_description">Borra todas las imágenes guardadas en disco y memoria.</string><string name="settings_clear">Borrar</string><string name="settings_cache_cleared">Caché borrada correctamente</string>
+   <string name="settings_updates_auto_check">Buscar actualizaciones automáticamente</string><string name="settings_updates_auto_check_description">Busca actualizaciones automáticamente al iniciar la aplicación.</string><string name="settings_updates_check">Buscar actualizaciones</string><string name="settings_updates_checking">Comprobando actualizaciones…</string><string name="settings_updates_check_description">Comprueba manualmente las actualizaciones de la aplicación en GitHub</string><string name="settings_updates_checking_short">Comprobando…</string><string name="settings_check">Comprobar</string>
 </resources>
