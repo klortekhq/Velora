@@ -366,4 +366,19 @@
   <string name="settings_video_frame_blending_description">Simulate smoother motion by blending frames (soap-opera effect).</string>
   <string name="settings_video_frame_blending_intensity">Blending intensity: %.1f (range: 0.0–1.0)</string>
   <string name="settings_video_frame_blending_intensity_title">Blending intensity</string>
+  <string name="settings_subtitles_downloaded_count">%1$d subtitle file(s) saved locally</string>
+  <string name="settings_subtitles_none_downloaded">No downloaded subtitles</string>
+  <string name="settings_subtitles_clear_description">%1$d downloaded subtitle file(s) from OpenSubtitles will be removed.
+
+You can download them again at any time.</string>
+  <string name="settings_tmdb_key_verified">TMDB key verified ✓</string>
+  <string name="settings_update_available">Update available: %1$s</string>
+  <string name="settings_update_latest">You’re on the latest version (%1$s)</string>
+  <string name="settings_update_failed">Could not check for updates. Please try again later.</string>
+  <string name="settings_update_error">Error checking for updates: %1$s</string>
+  <string name="settings_account_logout_description">Signs out and returns to the sign-in screen.</string>
+  <string name="settings_back">Back</string>
+  <string name="settings_title">Settings</string>
+  <string name="settings_logout_confirm_title">Sign out?</string>
+  <string name="settings_logout_confirm_message">Are you sure you want to sign out? You’ll need to sign in again to access your content.</string>
 </resources>

@@ -316,4 +316,19 @@
   <string name="settings_video_frame_blending_description">Simula movimiento suave mezclando fotogramas (efecto telenovela).</string>
   <string name="settings_video_frame_blending_intensity">Intensidad de mezcla: %.1f (rango: 0,0-1,0)</string>
   <string name="settings_video_frame_blending_intensity_title">Intensidad de mezcla</string>
+  <string name="settings_subtitles_downloaded_count">%1$d archivo(s) de subtítulos guardado(s) localmente</string>
+  <string name="settings_subtitles_none_downloaded">No hay subtítulos descargados</string>
+  <string name="settings_subtitles_clear_description">Se eliminarán los %1$d archivo(s) de subtítulos descargado(s) de OpenSubtitles.
+
+Podrás descargarlos de nuevo cuando quieras.</string>
+  <string name="settings_tmdb_key_verified">Clave de TMDB verificada ✓</string>
+  <string name="settings_update_available">Actualización disponible: %1$s</string>
+  <string name="settings_update_latest">Tienes la última versión (%1$s)</string>
+  <string name="settings_update_failed">No se han podido comprobar las actualizaciones. Inténtalo de nuevo más tarde.</string>
+  <string name="settings_update_error">Error al comprobar las actualizaciones: %1$s</string>
+  <string name="settings_account_logout_description">Cierra la sesión y vuelve a la pantalla de acceso.</string>
+  <string name="settings_back">Atrás</string>
+  <string name="settings_title">Ajustes</string>
+  <string name="settings_logout_confirm_title">¿Cerrar sesión?</string>
+  <string name="settings_logout_confirm_message">¿Seguro que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tus contenidos.</string>
 </resources>
