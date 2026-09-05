@@ -394,4 +394,6 @@ Podrás descargarlos de nuevo cuando quieras.</string>
     <string name="settings_title">Ajustes</string>
     <string name="settings_logout_confirm_title">¿Cerrar sesión?</string>
     <string name="settings_logout_confirm_message">¿Seguro que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tus contenidos.</string>
+    <string name="settings_version">Versión %1$s</string>
+    <string name="settings_by_klortek">Por Klørtek</string>
 </resources>
