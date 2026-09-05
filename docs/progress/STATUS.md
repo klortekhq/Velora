@@ -36,6 +36,14 @@ mediante ADB el 2026-09-05. La actividad se lanzó y el
 logcat no mostró `FATAL EXCEPTION`; esto valida instalación y arranque de esta
 build, no reproducción autenticada ni Live TV.
 
+La comprobación directa más reciente en el Fire TV AFTSS confirmó el paquete TV
+`1.4.0-tv` (`versionCode 10400`), resolvió `MainActivity` y registró el evento
+`Displayed ... MainActivity` tras el arranque explícito. Los eventos recientes
+no contienen `FATAL EXCEPTION` ni un fallo `AndroidRuntime` atribuible a Velora;
+las advertencias observadas pertenecen al sistema Fire TV (Alexa/NTP). Sigue
+siendo una prueba de arranque, no una validación autenticada de reproducción o
+Live TV.
+
 El pipeline de publicación ahora acepta correctamente hitos `vX.Y.0` con
 componentes de más de un dígito (`v1.10.0`, por ejemplo), manteniendo la
 política de releases significativas y la publicación conjunta de Android y web.
