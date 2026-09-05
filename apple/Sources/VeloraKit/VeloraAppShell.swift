@@ -192,11 +192,11 @@ public final class VeloraAppModel: ObservableObject {
         }
     }
 
-    public func playLiveTv(channel: JellyfinLiveTvChannel) async -> AVPlayer? {
+    public func playLiveTv(channel: JellyfinLiveTvChannel, sourceID: String? = nil) async -> AVPlayer? {
         guard let session else { return nil }
         let requestURL: URL?
         do {
-            requestURL = try await client.liveTvPlaybackURL(userID: session.userID, channelID: channel.id)
+            requestURL = try await client.liveTvPlaybackURL(userID: session.userID, channelID: channel.id, mediaSourceID: sourceID)
         } catch {
             return nil
         }
@@ -368,29 +368,33 @@ private struct VeloraLiveTvView: View {
     @State private var selectedChannel: JellyfinLiveTvChannel?
     @State private var playbackTask: Task<Void, Never>?
 
+    private func startPlayback(channel: JellyfinLiveTvChannel, sourceID: String? = nil) {
+        let previousChannel = selectedChannel
+        playbackTask?.cancel()
+        playbackTask = Task { @MainActor in
+            if let previousChannel, previousChannel.id != channel.id {
+                await model.stopLiveTv(
+                    channel: previousChannel,
+                    positionSeconds: player?.currentTime().seconds ?? 0
+                )
+            }
+            guard !Task.isCancelled else { return }
+            let nextPlayer = await model.playLiveTv(channel: channel, sourceID: sourceID)
+            guard !Task.isCancelled else {
+                nextPlayer?.pause()
+                return
+            }
+            player?.pause()
+            player = nextPlayer
+            selectedChannel = channel
+            player?.play()
+        }
+    }
+
     var body: some View {
         List(model.liveTvChannels) { channel in
             Button {
-                let previousChannel = selectedChannel
-                playbackTask?.cancel()
-                playbackTask = Task { @MainActor in
-                    if let previousChannel, previousChannel.id != channel.id {
-                        await model.stopLiveTv(
-                            channel: previousChannel,
-                            positionSeconds: player?.currentTime().seconds ?? 0
-                        )
-                    }
-                    guard !Task.isCancelled else { return }
-                    let nextPlayer = await model.playLiveTv(channel: channel)
-                    guard !Task.isCancelled else {
-                        nextPlayer?.pause()
-                        return
-                    }
-                    player?.pause()
-                    player = nextPlayer
-                    selectedChannel = channel
-                    player?.play()
-                }
+                startPlayback(channel: channel)
             } label: {
                 VStack(alignment: .leading, spacing: 4) {
                     Text((channel.number.map { "\($0) · " } ?? "") + channel.name)
@@ -403,6 +407,20 @@ private struct VeloraLiveTvView: View {
             }
             .buttonStyle(.plain)
             .accessibilityHint("Play live channel")
+            if channel.mediaSources.count > 1 {
+                Menu {
+                    ForEach(Array(channel.mediaSources.enumerated()), id: \.offset) { index, source in
+                        Button {
+                            startPlayback(channel: channel, sourceID: source.id ?? source.liveStreamID)
+                        } label: {
+                            Text(source.id ?? source.liveStreamID ?? "Source \(index + 1)")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "rectangle.stack")
+                }
+                .accessibilityLabel("Choose channel source")
+            }
         }
         .navigationTitle(Text("Live TV", bundle: .module))
         .onDisappear {
