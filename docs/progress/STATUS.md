@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `b92f392`)
+## Revisión actual (commit `e5faad5`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -81,6 +81,8 @@ Updated: 2026-09-05
 - Live TV solicita `MediaSources`, agrupa entradas con el mismo ID y permite
   elegir entre sus fuentes desde el mismo canal; `LiveTvChannelQueryTest`
   cubre duplicados, múltiples fuentes en una fila y etiquetas de opción.
+- La comprobación dirigida posterior pasó `LiveTvChannelQueryTest` y
+  `AspectPresentationTest` en `testMobileDebugUnitTest` (`BUILD SUCCESSFUL`).
 
 ## Última verificación
 
