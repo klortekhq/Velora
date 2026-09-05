@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `c2df17d`)
+## Revisión actual (pendiente de commit)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -92,6 +92,10 @@ Updated: 2026-09-05
 - La configuración Android migra de forma síncrona cualquier token o
   contraseña antigua desde preferencias planas al Keystore y elimina la copia
   heredada; cerrar sesión borra también la contraseña cifrada y el usuario.
+- Las credenciales auxiliares de OpenSubtitles, Jellyseerr y la clave TMDB
+  heredada usan ahora el mismo almacén respaldado por Android Keystore. Las
+  instalaciones existentes se migran al leerlas y la preferencia plana se
+  elimina de forma síncrona; no se cambia la API pública de estas opciones.
 
 ## Última verificación
 
@@ -118,6 +122,8 @@ pública.
 La verificación del 2026-09-05 sobre `3798886` pasó
 `testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
 `compileTvDebugKotlin` con `BUILD SUCCESSFUL`. Persisten únicamente avisos de
+La migración de credenciales auxiliares volvió a pasar esas cuatro tareas el
+2026-09-05 (`BUILD SUCCESSFUL`, 82 tareas; 8m55s). Persisten únicamente avisos de
 deprecaciones del SDK/Kotlin y del SDK XML local; no hay errores de compilación.
 
 El commit documental `cd0da5d` conserva esa misma evidencia y actualiza este

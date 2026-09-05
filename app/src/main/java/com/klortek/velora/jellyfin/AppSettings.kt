@@ -4,7 +4,29 @@ import android.content.Context
 import android.content.SharedPreferences
 
 class AppSettings(context: Context) {
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val appContext = context.applicationContext
+    private val prefs: SharedPreferences = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val secureCredentials = SecureCredentialStore(appContext)
+
+    /**
+     * Read a sensitive setting from Keystore-backed storage and migrate the
+     * legacy plaintext preference once. The migration is synchronous so a
+     * process death cannot leave the old value behind after a successful copy.
+     */
+    private fun readSecret(secureName: String, legacyKey: String): String {
+        secureCredentials.read(secureName)?.let { return it }
+        val legacy = prefs.getString(legacyKey, null).orEmpty()
+        if (legacy.isNotEmpty()) {
+            secureCredentials.write(secureName, legacy)
+            prefs.edit().remove(legacyKey).commit()
+        }
+        return legacy
+    }
+
+    private fun writeSecret(secureName: String, legacyKey: String, value: String) {
+        secureCredentials.write(secureName, value)
+        prefs.edit().remove(legacyKey).commit()
+    }
 
     companion object {
         private const val PREFS_NAME = "app_settings"
@@ -457,8 +479,8 @@ class AppSettings(context: Context) {
     
     // OpenSubtitles API key - users need to get their own key from opensubtitles.com
     var openSubtitlesApiKey: String
-        get() = prefs.getString(KEY_OPENSUBTITLES_API_KEY, "") ?: ""
-        set(value) = prefs.edit().putString(KEY_OPENSUBTITLES_API_KEY, value).apply()
+        get() = readSecret("opensubtitles_api_key", KEY_OPENSUBTITLES_API_KEY)
+        set(value) = writeSecret("opensubtitles_api_key", KEY_OPENSUBTITLES_API_KEY, value)
     
     // OpenSubtitles username - required for downloading subtitles
     var openSubtitlesUsername: String
@@ -467,13 +489,13 @@ class AppSettings(context: Context) {
     
     // OpenSubtitles password - required for downloading subtitles
     var openSubtitlesPassword: String
-        get() = prefs.getString(KEY_OPENSUBTITLES_PASSWORD, "") ?: ""
-        set(value) = prefs.edit().putString(KEY_OPENSUBTITLES_PASSWORD, value).apply()
+        get() = readSecret("opensubtitles_password", KEY_OPENSUBTITLES_PASSWORD)
+        set(value) = writeSecret("opensubtitles_password", KEY_OPENSUBTITLES_PASSWORD, value)
     
     // TMDB API key - for trending content discovery (deprecated - use Jellyseerr instead)
     var tmdbApiKey: String
-        get() = prefs.getString(KEY_TMDB_API_KEY, "") ?: ""
-        set(value) = prefs.edit().putString(KEY_TMDB_API_KEY, value).apply()
+        get() = readSecret("tmdb_api_key", KEY_TMDB_API_KEY)
+        set(value) = writeSecret("tmdb_api_key", KEY_TMDB_API_KEY, value)
     
     // TMDB Trending tab enabled - shows trending content from TMDB in library screens (deprecated)
     var tmdbTrendingEnabled: Boolean
@@ -492,8 +514,8 @@ class AppSettings(context: Context) {
     
     // Jellyseerr API key - for API key authentication
     var jellyseerrApiKey: String
-        get() = prefs.getString(KEY_JELLYSEERR_API_KEY, "") ?: ""
-        set(value) = prefs.edit().putString(KEY_JELLYSEERR_API_KEY, value).apply()
+        get() = readSecret("jellyseerr_api_key", KEY_JELLYSEERR_API_KEY)
+        set(value) = writeSecret("jellyseerr_api_key", KEY_JELLYSEERR_API_KEY, value)
     
     // Jellyseerr username - for display purposes when using credentials auth
     var jellyseerrUsername: String
@@ -502,8 +524,8 @@ class AppSettings(context: Context) {
     
     // Jellyseerr session cookie - from username/password login
     var jellyseerrSessionCookie: String
-        get() = prefs.getString(KEY_JELLYSEERR_SESSION_COOKIE, "") ?: ""
-        set(value) = prefs.edit().putString(KEY_JELLYSEERR_SESSION_COOKIE, value).apply()
+        get() = readSecret("jellyseerr_session_cookie", KEY_JELLYSEERR_SESSION_COOKIE)
+        set(value) = writeSecret("jellyseerr_session_cookie", KEY_JELLYSEERR_SESSION_COOKIE, value)
     
     // Jellyseerr enabled - shows Discover tab with trending/popular/upcoming content
     var jellyseerrEnabled: Boolean
