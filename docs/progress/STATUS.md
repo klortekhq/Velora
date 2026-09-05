@@ -23,6 +23,10 @@ Updated: 2026-09-05
 - El gate `scripts/check-version-consistency.mjs` pasa con `1.4.0` y se ejecuta
   en CI, Android Release y Web Release; la etiqueta `v1.4.0` coincide con el
   commit de `main` que contiene ese gate.
+- Apple Live TV ya presenta las fuentes agrupadas con etiquetas localizadas
+  (`Fuente principal`, `Fuente IPTV` u `Opción N`) en lugar de IDs internos.
+  `scripts/check-apple-locales.mjs` valida las 45 claves de los catálogos
+  inglés, español, francés y alemán, y se ejecuta en ambos workflows Apple.
 
 ## Última verificación
 
