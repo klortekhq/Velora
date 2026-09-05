@@ -118,9 +118,9 @@ assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // pattern checks. This protects the one-row/multiple-source Live TV contract.
 const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
   '  renderApp();\n}());',
-  '  window.__veloraTest = { groupLiveTvChannels };\n}());'
+  '  window.__veloraTest = { groupLiveTvChannels, selectSubtitleStream };\n}());'
 );
-assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels \}/, 'web app test hook was not injected');
+assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, selectSubtitleStream \}/, 'web app test hook was not injected');
 const testLocalStorage = {
   getItem() { return null; },
   setItem() {},
@@ -175,3 +175,15 @@ assert.deepEqual(
   ['source-main', 'source-iptv']
 );
 console.log('web security and library interaction tests passed');
+
+const selectSubtitleStream = testWindow.__veloraTest.selectSubtitleStream;
+const subtitleTracks = [
+  { Type: 'Subtitle', Index: 1, Language: 'es', IsDefault: true, IsForced: false },
+  { Type: 'Subtitle', Index: 2, Language: 'en', IsDefault: false, IsForced: true },
+  { Type: 'Subtitle', Index: 3, Language: 'es', IsDefault: false, IsForced: true }
+];
+assert.equal(selectSubtitleStream(subtitleTracks, 'forced', 'auto').Index, 2);
+assert.equal(selectSubtitleStream(subtitleTracks, 'forced', 'es').Index, 3);
+assert.equal(selectSubtitleStream(subtitleTracks, 'preferred', 'auto').Index, 1);
+assert.equal(selectSubtitleStream(subtitleTracks, 'off', 'auto').Index, 1);
+console.log('web subtitle preference tests passed');

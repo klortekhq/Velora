@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Web: el modo de subtítulos forzados ya selecciona únicamente pistas
+  marcadas como forzadas; si no existe ninguna, respeta la preferencia y no
+  activa una pista predeterminada por accidente.
 - Apple: las descargas en iPhone/iPad permiten elegir Original, Alta, Media o Baja antes de iniciar la transferencia; tvOS sigue sin mostrar funciones offline.
 - Apple: los ajustes exponen también el idioma preferido de subtítulos, además de idioma de interfaz, audio, modo de subtítulos y rendimiento.
 - El selector de formato de imagen del reproductor vuelve a aplicar el modo
