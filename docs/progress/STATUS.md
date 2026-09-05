@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `3bb3d23`)
+## Revisión actual (commit `c7a3b5f`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -18,10 +18,12 @@ Updated: 2026-09-05
 - El servidor Jellyfin responde en `192.168.100.201:8096`, pero la
   autenticación disponible en esta sesión devuelve `HTTP 401`; no se declara
   validada la biblioteca, la reproducción autenticada ni Live TV real.
-- La comprobación autenticada repetida el 2026-09-05 con el contrato exacto
-  de Velora (`Pw` y `X-Emby-Authorization`) vuelve a recibir `HTTP 401`; el
-  servidor es alcanzable, pero no hay evidencia válida para certificar datos
-  de usuario o reproducción real.
+- La comprobación autenticada del 2026-09-06 con el contrato exacto de Velora
+  y las credenciales de prueba proporcionadas no llegó a completar la
+  respuesta dentro de 20 segundos; el servidor es alcanzable por salud HTTP
+  200, pero no hay evidencia válida para certificar datos de usuario o
+  reproducción real. El cliente Android ahora acota explícitamente esa espera
+  y evita dejar bloqueada indefinidamente la pantalla de inicio de sesión.
 - No se declara una release pública ni un APK firmado a partir de esta
   revisión: la consulta pública no confirmó una release existente y este
   entorno no dispone de credenciales de firma/GitHub CLI para publicarla.
@@ -44,6 +46,9 @@ Updated: 2026-09-05
   añadió una regresión que fuerza Transcode para una fuente 4K en un dispositivo
   1080p. Swift/Xcode no están disponibles en este host Windows, por lo que la
   ejecución final de XCTest queda delegada al workflow macOS.
+- Las variantes Android móvil y TV vuelven a compilar después de añadir el
+  timeout de autenticación (`BUILD SUCCESSFUL`, 58 tareas; solo avisos de APIs
+  obsoletas).
 - Las acciones visibles de detalle y solicitudes Android (reanudar, reproducir,
   audio, subtítulos, tráiler, visto y atrás) ya usan recursos traducibles en
   las pantallas móvil/TV; el comprobador Android valida 431 claves en los
