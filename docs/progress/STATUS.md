@@ -19,6 +19,12 @@ firmar: móvil (67 825 027 bytes, SHA-256
 `84D9EED46BCC15187E38C76ED893CA6FBA3D8C53FDD60765D88EB6BCF5DC90AD`). No se
 presentan como APK de tienda porque siguen sin firma de distribución.
 
+La etiqueta remota `v1.4.0` se realineó con el `main` actual (`0fa93db`) para
+evitar que el workflow de publicación reconstruya un commit antiguo. La API
+pública de GitHub sigue devolviendo 404 al consultar releases y ejecuciones
+desde este entorno, por lo que no se afirma que la release haya sido creada
+hasta disponer de evidencia directa.
+
 El commit `933c99f` añade semántica accesible a las pestañas de detalle y a
 los selectores de temporada móviles, sin cambiar su interacción táctil o de
 mando. La compilación móvil/TV y los tests unitarios pasan después del cambio.
