@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión actual: commit `88b27d0`.
+Revisión actual: cambios de seguridad pendientes de publicar tras la verificación local.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -54,15 +54,17 @@ una comprobación no se interpreta como soporte certificado.
 - `node scripts/check-android-locales.mjs`: 434 claves en los catálogos Android.
 - `node scripts/check-apple-locales.mjs`: 45 claves coherentes en `en`, `es`,
   `fr` y `de`.
+- `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
+  usuario de una URL y parámetros sensibles en query/fragmento.
 
 ## Artefactos Android locales
 
 Son builds `unsigned` para QA, no releases de distribución:
 
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
-  SHA-256 `D004B584AE0ED66245172CA5CD2CF019A0BA2207F9F00482B4CA40DA47C9B351`.
+  SHA-256 `0143A87E63E541EC864EB2BCB36CCCAD74EF085A0EB0EC2F41265B0D64159376`.
 - TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`
-  SHA-256 `973B6DD0BA58CF79825E0BB7DA500E748F3843B4DA2AF9DEE4CBE0DE5E45CF33`.
+  SHA-256 `1BA67EF1F7B540E84ED894C5DAB9FAAFAEA3F9E4B4045AD3BD6CDB45372CE2C0`.
 
 Las releases etiquetadas `vX.Y.0` exigen secretos de firma Android. Sin ellos,
 el workflow falla deliberadamente en vez de publicar un APK no instalable como

@@ -3,13 +3,17 @@ package com.klortek.velora.security
 /** Removes credentials that may be present in legacy Jellyfin/media URLs before logging. */
 object SensitiveDataRedactor {
     private val credentialQueryParameter = Regex(
-        "(?i)([?&](?:api_key|access_token|token|apikey|secret|password|authorization|x-emby-token)=)[^&]*"
+        "(?i)([?#&](?:api_key|access_token|token|apikey|secret|password|authorization|x-emby-token)=)[^&#]*"
+    )
+    private val credentialUserInfo = Regex(
+        "(?i)(https?://)[^/\\s@]+(?::[^/\\s@]*)?@"
     )
     private val credentialAssignment = Regex(
         "(?i)(\\b(?:token|password|authorization|x-emby-token)\\s*[:=]\\s*(?:Bearer\\s+)?[\\\"']?)[^\\s,;\\\"']+([\\\"']?)"
     )
 
     fun url(value: String?): String = value
+        ?.replace(credentialUserInfo, "$1<redacted>@")
         ?.replace(credentialQueryParameter, "$1<redacted>")
         ?.replace(credentialAssignment, "$1<redacted>$2")
         ?: "<null>"
