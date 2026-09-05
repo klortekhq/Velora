@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `345a077`)
+## Revisión actual (commit `b92f392`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -73,6 +73,14 @@ Updated: 2026-09-05
   TV termina cualquier intento de abrir la pantalla de descargas y que web,
   webOS, VIDAA, Tizen y tvOS declaran `supportsOfflineDownloads = false`.
   La regresión `PlatformCapabilitiesTest` cubre todas las superficies.
+- La auditoría de persistencia offline confirma que `OfflineDatabase` es la
+  fuente duradera para las descargas nuevas y que el índice JSON antiguo solo
+  se importa una vez. `OfflineDownloadWorker` usa almacenamiento privado de
+  Velora, conserva transferencias parciales y `OfflineStorageEngine` migra
+  filas antiguas antes de eliminar el proveedor del sistema.
+- Live TV solicita `MediaSources`, agrupa entradas con el mismo ID y permite
+  elegir entre sus fuentes desde el mismo canal; `LiveTvChannelQueryTest`
+  cubre duplicados, múltiples fuentes en una fila y etiquetas de opción.
 
 ## Última verificación
 
