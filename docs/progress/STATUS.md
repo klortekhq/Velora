@@ -2,12 +2,13 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `36678b5`)
+## Revisión actual (commit `b2baa8f`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
-- Fire TV conectado por ADB (`192.168.31.112:5555`) con `1.4.0-tv` activo;
-  el arranque y los logs recientes no muestran `FATAL EXCEPTION` ni errores de
-  ExoPlayer atribuibles a Velora.
+- La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
+  mostró `FATAL EXCEPTION` ni errores de ExoPlayer atribuibles a Velora; en la
+  revisión actual ADB no encuentra el dispositivo y no se certifica una
+  instalación nueva.
 - La prueba web de seguridad, capacidades y agrupación de Live TV pasa. Las
   pruebas separan ahora `localStorage` de `sessionStorage` y comprueban que el
   token no vuelva a persistirse de forma duradera.
