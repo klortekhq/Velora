@@ -40,6 +40,12 @@ base para que el selector interno funcione sin Play Core. `lintMobileDebug` y
 calidad no bloqueantes de dependencias y compatibilidad, documentados por la
 herramienta.
 
+La auditoría de privacidad Android sustituyó `ANDROID_ID` por una identidad
+aleatoria, persistente y exclusiva de Velora para login normal y Quick Connect.
+La búsqueda fuente confirma que ya no quedan usos de `ANDROID_ID` o
+`Settings.Secure` en el cliente; las variantes móvil/TV compilan y sus pruebas
+unitarias siguen pasando.
+
 La revisión de internacionalización del 2026-09-05 migró a recursos los
 textos de Ajustes relacionados con Jellyseerr, autenticación, Descubrir y
 tráilers de TMDB. Las claves están presentes en español, inglés, francés y

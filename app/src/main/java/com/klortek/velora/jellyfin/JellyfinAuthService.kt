@@ -2,7 +2,6 @@ package com.klortek.velora.jellyfin
 
 import android.content.Context
 import android.util.Log
-import android.provider.Settings
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -57,13 +56,7 @@ class JellyfinAuthService(
     }
 
     private fun getDeviceId(): String {
-        return try {
-            context?.let {
-                Settings.Secure.getString(it.contentResolver, Settings.Secure.ANDROID_ID)
-            } ?: "android-tv-device"
-        } catch (e: Exception) {
-            "android-tv-device"
-        }
+        return context?.let(DeviceIdentity::get) ?: "velora-android"
     }
 
     /**
