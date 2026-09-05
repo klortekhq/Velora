@@ -106,4 +106,59 @@ assert.match(proxySource, /function isAllowedMediaPath/);
 assert.match(proxySource, /Videos\\\/\[\^\/\]\+\\\/stream/);
 assert.match(proxySource, /LiveTv\\\/LiveStreamFiles/);
 assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
+// Execute the real web grouping function instead of relying only on source
+// pattern checks. This protects the one-row/multiple-source Live TV contract.
+const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
+  '  renderApp();\n}());',
+  '  window.__veloraTest = { groupLiveTvChannels };\n}());'
+);
+assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels \}/, 'web app test hook was not injected');
+const testStorage = {
+  getItem() { return null; },
+  setItem() {},
+  removeItem() {}
+};
+const testDocument = {
+  querySelector() { return null; },
+  addEventListener() {},
+  documentElement: { setAttribute() {} }
+};
+const testWindow = {
+  document: testDocument,
+  navigator: { languages: ['es-ES'], language: 'es-ES' },
+  localStorage: testStorage,
+  sessionStorage: testStorage,
+  setTimeout,
+  clearTimeout,
+  addEventListener() {},
+  removeEventListener() {}
+};
+vm.runInNewContext(testableAppSource, {
+  window: testWindow,
+  document: testDocument,
+  navigator: testWindow.navigator,
+  localStorage: testStorage,
+  sessionStorage: testStorage,
+  setTimeout,
+  clearTimeout,
+  console
+});
+const groupedLiveTv = testWindow.__veloraTest.groupLiveTvChannels([
+  {
+    Id: 'same-channel',
+    Name: 'DAZN F1',
+    MediaSources: [
+      { Id: 'source-main', Tags: ['Principal'] },
+      { Id: 'source-iptv', ChannelType: 'IPTV' }
+    ]
+  },
+  { Id: 'other-channel', Name: 'Noticias', MediaSources: [{ Id: 'source-news' }] }
+]);
+assert.equal(groupedLiveTv.length, 2);
+assert.equal(groupedLiveTv[0].channelId, 'same-channel');
+assert.equal(groupedLiveTv[0].channels.length, 2);
+assert.deepEqual(
+  Array.from(groupedLiveTv[0].channels, channel => channel.MediaSources[0].Id),
+  ['source-main', 'source-iptv']
+);
 console.log('web security and library interaction tests passed');
