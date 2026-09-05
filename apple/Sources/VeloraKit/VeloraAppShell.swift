@@ -229,7 +229,7 @@ public struct VeloraAppShell: View {
     @State private var password = ""
     @State private var selectedItem: JellyfinItem?
 
-    public init(platform: VeloraPlatform, serverURL: URL = URL(string: "http://localhost:8096")!) throws {
+    public init(platform: VeloraPlatform, serverURL: URL = URL(string: "http://jellyfin.local:8096")!) throws {
         let savedServer = UserDefaults.standard.string(forKey: "velora.serverURL")
             .flatMap(URL.init(string:)) ?? serverURL
         let model = try VeloraAppModel(platform: platform, serverURL: savedServer)
@@ -241,7 +241,7 @@ public struct VeloraAppShell: View {
         Group {
             if model.isAuthenticated {
                 NavigationStack {
-                    VeloraLibraryView(title: "Library", items: model.items, artworkClient: model.jellyfinClient) { item in
+                    VeloraLibraryView(title: String(localized: "Library", bundle: .module), items: model.items, artworkClient: model.jellyfinClient) { item in
                         selectedItem = item
                     }
                     .toolbar {
@@ -406,7 +406,7 @@ private struct VeloraLiveTvView: View {
                 }
             }
             .buttonStyle(.plain)
-            .accessibilityHint("Play live channel")
+                    .accessibilityHint(String(localized: "Play live channel", bundle: .module))
             if channel.mediaSources.count > 1 {
                 Menu {
                     ForEach(Array(channel.mediaSources.enumerated()), id: \.offset) { index, source in
