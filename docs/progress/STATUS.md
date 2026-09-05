@@ -11,6 +11,12 @@ alemán; `check-android-locales.mjs` valida 374 claves y las variantes móvil/TV
 compilan y pasan sus pruebas unitarias. Esto mejora la traducción efectiva al
 cambiar el idioma desde Ajustes, sin alterar la lógica de conexión.
 
+La segunda pasada del 2026-09-05 migró también el selector de autenticación,
+la configuración de clave API, acceso/cierre de sesión y mensajes de login de
+Jellyseerr. El catálogo validado asciende a 394 claves; compilación y pruebas
+unitarias de móvil y TV vuelven a pasar. Los errores de credenciales ya no
+presentan el mensaje técnico bruto en la interfaz.
+
 La auditoría de logs de red del 2026-09-05 sanitiza los mensajes de excepción
 en `JellyfinApi`, `LiveTvActivity`, `JellyfinRepository` y `ServerEntryScreen`.
 Usan `SensitiveDataRedactor.message` en lugar de registrar el `Throwable`

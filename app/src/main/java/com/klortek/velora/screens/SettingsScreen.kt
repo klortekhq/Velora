@@ -1078,16 +1078,16 @@ fun SettingsScreen(
                             
                             // Authentication method toggle
                             SettingCycle(
-                                title = "Método de autenticación",
+                                title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_method),
                                 description = when (jellyseerrAuthType) {
-                                    "api_key" -> "Usando clave API (recomendado para acceso de administrador)"
-                                    "credentials" -> "Usando acceso con usuario y contraseña"
-                                    else -> "Selecciona el método de autenticación"
+                                    "api_key" -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_api_description)
+                                    "credentials" -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_credentials_description)
+                                    else -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_select_description)
                                 },
                                 currentValue = when (jellyseerrAuthType) {
-                                    "api_key" -> "Clave API"
-                                    "credentials" -> "Usuario y contraseña"
-                                    else -> "Clave API"
+                                    "api_key" -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_api)
+                                    "credentials" -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_credentials)
+                                    else -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_api)
                                 },
                                 onCycle = {
                                     jellyseerrAuthType = when (jellyseerrAuthType) {
@@ -1104,11 +1104,11 @@ fun SettingsScreen(
                             if (jellyseerrAuthType == "api_key") {
                                 // API Key authentication
                                 SettingButton(
-                                    title = "Clave API de Jellyseerr",
+                                    title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_title),
                                     description = if (jellyseerrApiKey.isNotBlank()) 
-                                        "Clave API configurada ✓" 
+                                        stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_configured)
                                     else 
-                                        "Consíguela en Ajustes > General de Jellyseerr",
+                                        stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_description),
                                     buttonText = if (jellyseerrApiKey.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_change) else stringResource(com.klortek.velora.R.string.settings_set_key),
                                     onClick = { showJellyseerrApiKeyDialog = true }
                                 )
@@ -1131,14 +1131,14 @@ fun SettingsScreen(
                                                     verticalArrangement = Arrangement.spacedBy(24.dp)
                                                 ) {
                                                     Text(
-                                                        text = "Clave API de Jellyseerr",
+                                                        text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_title),
                                                         style = if (isTv) MaterialTheme.typography.headlineSmall else androidx.compose.material3.MaterialTheme.typography.titleLarge,
                                                         color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
                                                     )
                                                     
                                                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                                         Text(
-                                                            text = "Introduce tu clave API de Jellyseerr. Está en Jellyseerr: Ajustes > General > Clave API.",
+                                                            text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_dialog_description),
                                                             style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                                                             color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                                         )
@@ -1146,7 +1146,7 @@ fun SettingsScreen(
                                                         OutlinedTextField(
                                                              value = apiKeyInput,
                                                              onValueChange = { apiKeyInput = it },
-                                                             label = { Text("Clave API") },
+                                                             label = { Text(stringResource(com.klortek.velora.R.string.settings_api_key)) },
                                                              singleLine = true,
                                                              modifier = Modifier.fillMaxWidth(),
                                                              colors = TextFieldDefaults.colors(
@@ -1239,12 +1239,12 @@ fun SettingsScreen(
                             } else {
                                 // Username/Password authentication
                                 SettingButton(
-                                    title = "Acceso a Jellyseerr",
+                                    title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_access),
                                     description = if (jellyseerrSessionCookie.isNotBlank() && jellyseerrUsername.isNotBlank()) 
-                                        "Sesión iniciada como ${jellyseerrUsername} ✓" 
+                                        stringResource(com.klortek.velora.R.string.settings_jellyseerr_logged_in_as, jellyseerrUsername)
                                     else 
-                                        "Inicia sesión con tu cuenta de Jellyseerr o Jellyfin",
-                                    buttonText = if (jellyseerrSessionCookie.isNotBlank()) "Volver a iniciar sesión" else "Iniciar sesión",
+                                        stringResource(com.klortek.velora.R.string.settings_jellyseerr_login_description),
+                                    buttonText = if (jellyseerrSessionCookie.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_jellyseerr_relogin) else stringResource(com.klortek.velora.R.string.settings_sign_in),
                                     onClick = { 
                                         showJellyseerrLoginDialog = true
                                         loginError = null
@@ -1255,9 +1255,9 @@ fun SettingsScreen(
                                 if (jellyseerrSessionCookie.isNotBlank()) {
                                     Spacer(modifier = Modifier.height(4.dp))
                                     SettingButton(
-                                        title = "Cerrar sesión",
-                                        description = "Borra las credenciales guardadas.",
-                                        buttonText = "Cerrar sesión",
+                                        title = stringResource(com.klortek.velora.R.string.settings_logout),
+                                        description = stringResource(com.klortek.velora.R.string.settings_logout_description),
+                                        buttonText = stringResource(com.klortek.velora.R.string.settings_logout),
                                         onClick = {
                                             settings.clearJellyseerrCredentials()
                                             jellyseerrSessionCookie = ""
@@ -1293,14 +1293,14 @@ fun SettingsScreen(
                                                     verticalArrangement = Arrangement.spacedBy(24.dp)
                                                 ) {
                                                     Text(
-                                                        text = "Acceso a Jellyseerr",
+                                                        text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_access),
                                                         style = if (isTv) MaterialTheme.typography.headlineSmall else androidx.compose.material3.MaterialTheme.typography.titleLarge,
                                                         color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
                                                     )
                                                     
                                                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                                                         Text(
-                                                            text = "Inicia sesión con tus credenciales.",
+                                                            text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_login_prompt),
                                                             style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                                                             color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                                         )
@@ -1447,7 +1447,7 @@ fun SettingsScreen(
                                                                         return@Button
                                                                     }
                                                                     if (usernameInput.isBlank() || passwordInput.isBlank()) {
-                                                                        loginError = "Please enter username and password"
+                                                                        loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_required)
                                                                         return@Button
                                                                     }
                                                                     
@@ -1479,10 +1479,10 @@ fun SettingsScreen(
                                                                                 settings.jellyseerrUsername = usernameInput
                                                                                 settings.jellyseerrAuthType = "credentials"
                                                                                 showJellyseerrLoginDialog = false
-                                                                                Toast.makeText(context, "Sesión iniciada correctamente", Toast.LENGTH_SHORT).show()
+                                                                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_success), Toast.LENGTH_SHORT).show()
                                                                             },
                                                                             onFailure = { error ->
-                                                                                loginError = "Error al iniciar sesión: ${error.message}"
+                                                                                loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_error)
                                                                             }
                                                                         )
                                                                     }
@@ -1511,7 +1511,7 @@ fun SettingsScreen(
                                                                         return@Button
                                                                     }
                                                                     if (usernameInput.isBlank() || passwordInput.isBlank()) {
-                                                                        loginError = "Please enter username and password"
+                                                                        loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_required)
                                                                         return@Button
                                                                     }
                                                                     
@@ -1543,10 +1543,10 @@ fun SettingsScreen(
                                                                                 settings.jellyseerrUsername = usernameInput
                                                                                 settings.jellyseerrAuthType = "credentials"
                                                                                 showJellyseerrLoginDialog = false
-                                                                                Toast.makeText(context, "Sesión iniciada correctamente", Toast.LENGTH_SHORT).show()
+                                                                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_success), Toast.LENGTH_SHORT).show()
                                                                             },
                                                                             onFailure = { error ->
-                                                                                loginError = "Error al iniciar sesión: ${error.message}"
+                                                                                loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_error)
                                                                             }
                                                                         )
                                                                     }
