@@ -38,6 +38,15 @@ data class UserInfo(
     val Name: String
 )
 
+enum class AuthenticationFailure {
+    NONE,
+    INVALID_SERVER,
+    INVALID_CREDENTIALS,
+    SERVER_ERROR,
+    TIMEOUT,
+    NETWORK
+}
+
 class JellyfinAuthService(
     private val baseUrl: String,
     private val context: Context? = null
@@ -45,6 +54,9 @@ class JellyfinAuthService(
     private companion object {
         const val TAG = "JellyfinAuth"
     }
+
+    var lastFailure: AuthenticationFailure = AuthenticationFailure.NONE
+        private set
 
     private val client = HttpClient(Android) {
         // Authentication must fail promptly when a server accepts the socket
@@ -78,9 +90,13 @@ class JellyfinAuthService(
     }
 
     suspend fun authenticate(username: String, password: String): AuthenticationResponse? {
+        lastFailure = AuthenticationFailure.NONE
         return try {
             val normalizedBaseUrl = normalizeBaseUrl(baseUrl)
-            if (!ServerUrlValidator.isValid(normalizedBaseUrl)) return null
+            if (!ServerUrlValidator.isValid(normalizedBaseUrl)) {
+                lastFailure = AuthenticationFailure.INVALID_SERVER
+                return null
+            }
             val url = if (normalizedBaseUrl.endsWith("/")) {
                 "${normalizedBaseUrl}Users/authenticatebyname"
             } else {
@@ -106,10 +122,22 @@ class JellyfinAuthService(
             if (response.status == HttpStatusCode.OK) {
                 response.body<AuthenticationResponse>()
             } else {
+                lastFailure = when (response.status) {
+                    HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden -> AuthenticationFailure.INVALID_CREDENTIALS
+                    else -> AuthenticationFailure.SERVER_ERROR
+                }
                 Log.w(TAG, "Authentication failed with HTTP ${response.status.value}")
                 null
             }
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
         } catch (e: Exception) {
+            lastFailure = when {
+                e is java.net.SocketTimeoutException ||
+                    e::class.simpleName == "HttpRequestTimeoutException" ||
+                    e::class.simpleName == "ConnectTimeoutException" -> AuthenticationFailure.TIMEOUT
+                else -> AuthenticationFailure.NETWORK
+            }
             // Do not print exception text or a stack trace: network exceptions can
             // include the configured server URL or request details.
             Log.w(TAG, "Authentication request failed (${e::class.simpleName})")

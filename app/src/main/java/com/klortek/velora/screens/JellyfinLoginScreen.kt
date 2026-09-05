@@ -864,7 +864,15 @@ private fun performCredentialsLogin(
                 config.deviceId = DeviceIdentity.get(context)
                 onSuccess()
             } else {
-                onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
+                val errorRes = when (authService.lastFailure) {
+                    com.klortek.velora.jellyfin.AuthenticationFailure.INVALID_SERVER -> com.klortek.velora.R.string.login_error_invalid_server
+                    com.klortek.velora.jellyfin.AuthenticationFailure.INVALID_CREDENTIALS -> com.klortek.velora.R.string.login_error_invalid_credentials
+                    com.klortek.velora.jellyfin.AuthenticationFailure.TIMEOUT -> com.klortek.velora.R.string.login_error_timeout
+                    com.klortek.velora.jellyfin.AuthenticationFailure.NETWORK,
+                    com.klortek.velora.jellyfin.AuthenticationFailure.SERVER_ERROR,
+                    com.klortek.velora.jellyfin.AuthenticationFailure.NONE -> com.klortek.velora.R.string.error_fragment_message
+                }
+                onError(context.getString(errorRes))
             }
         } catch (e: Exception) {
             onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
