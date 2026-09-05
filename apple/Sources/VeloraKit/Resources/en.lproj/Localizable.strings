@@ -24,6 +24,7 @@
 "High" = "High";
 "Medium" = "Medium";
 "Low" = "Low";
+"Not enough storage" = "Not enough storage";
 "Download" = "Download";
 "Remove download" = "Remove download";
 "Unable to download" = "Unable to download";

@@ -192,6 +192,8 @@ public final class VeloraAppModel: ObservableObject {
             )
             offlineDownloads = offlineStore.load().filter { $0.serverURL == serverURL.absoluteString }
             if !offlineDownloads.contains(entry) { offlineDownloads.append(entry) }
+        } catch VeloraOfflineStoreError.insufficientStorage {
+            errorMessage = String(localized: "Not enough storage", bundle: .module)
         } catch {
             errorMessage = String(localized: "Unable to download", bundle: .module)
         }

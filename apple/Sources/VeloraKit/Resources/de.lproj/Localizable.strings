@@ -24,6 +24,7 @@
 "High" = "Hoch";
 "Medium" = "Mittel";
 "Low" = "Niedrig";
+"Not enough storage" = "Nicht genügend Speicherplatz";
 "Download" = "Laden";
 "Remove download" = "Download entfernen";
 "Unable to download" = "Download nicht möglich";
