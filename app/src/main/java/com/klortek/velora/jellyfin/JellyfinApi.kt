@@ -914,11 +914,11 @@ class JellyfinApiService(
      * before consulting an optional external metadata provider.
      */
     suspend fun getLocalTrailers(itemId: String): List<JellyfinItem> {
-        return getMediaItems("Items/$itemId/LocalTrailers")
+        return getMediaItems("Items/$itemId/LocalTrailers", fields = "MediaSources")
     }
 
     suspend fun getRemoteTrailers(itemId: String): List<JellyfinItem> {
-        return getMediaItems("Items/$itemId/RemoteTrailers")
+        return getMediaItems("Items/$itemId/RemoteTrailers", fields = "MediaSources")
     }
 
     /** Returns theme songs resolved by Jellyfin, including inherited parent media. */
@@ -942,11 +942,12 @@ class JellyfinApiService(
         }.buildString()
     }
 
-    private suspend fun getMediaItems(path: String): List<JellyfinItem> {
+    private suspend fun getMediaItems(path: String, fields: String? = null): List<JellyfinItem> {
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("$base$path").apply {
                 parameters.append("UserId", userId)
+                fields?.let { parameters.append("Fields", it) }
             }.buildString()
             client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")

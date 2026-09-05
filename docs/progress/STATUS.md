@@ -25,10 +25,12 @@ Updated: 2026-09-05
 - No se declara una release pública ni un APK firmado a partir de esta
   revisión: la consulta pública no confirmó una release existente y este
   entorno no dispone de credenciales de firma/GitHub CLI para publicarla.
-- El APK TV de esta revisión se compiló correctamente en `main` y su SHA-256
-  es `D852A0E1AC5B88370CFE713602B5F0634515F57E815B4325BCD9F6A91BFF9C1A`.
-  La instalación en Fire TV no pudo verificarse porque el dispositivo dejó de
-  responder en `192.168.31.112:5555` y `adb devices` no lo mostró.
+- El APK TV de la revisión anterior se compiló correctamente; tras pedir
+  explícitamente `MediaSources` para trailers, el nuevo APK local también
+  compila y su SHA-256 es
+  `2F3275686319890E7918B61208657C6C2B9D22CEC94CEC1D2630EB3D7F7D5B78`.
+  La instalación en Fire TV no pudo verificarse porque el dispositivo sigue
+  sin responder en `192.168.31.112:5555` y `adb devices` no lo muestra.
 - El gate `scripts/check-version-consistency.mjs` pasa con `1.4.0` y se ejecuta
   en CI, Android Release y Web Release. `main` contiene ahora cambios
   posteriores a la etiqueta remota `v1.4.0`; no se reescribe esa referencia
@@ -73,6 +75,10 @@ La compilación release del mismo día pasó `assembleMobileRelease` y
 `1.4.0-mobile` y `1.4.0-tv`, ambos con target SDK 36. La inspección de firma
 confirma que los APK locales son `unsigned`; por tanto no se anuncian como
 artefactos publicables hasta disponer de la firma configurada en CI.
+
+La comprobación posterior a la consulta explícita de `MediaSources` volvió a
+pasar `testMobileDebugUnitTest` y `testTvDebugUnitTest` (`BUILD SUCCESSFUL`) y
+`assembleTvRelease` produjo el APK anterior con la huella indicada arriba.
 
 La verificación del 2026-09-05 sobre `3798886` pasó
 `testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
