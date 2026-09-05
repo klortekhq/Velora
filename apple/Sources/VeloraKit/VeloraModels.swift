@@ -87,7 +87,16 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
                 var sources = existing.mediaSources + channel.mediaSources
                 var seen = Set<String>()
                 sources = sources.filter { source in
-                    let key = source.id ?? source.liveStreamID ?? source.transcodingURL?.absoluteString ?? UUID().uuidString
+                    // Some providers omit every source identifier. A random
+                    // fallback made repeated grouping unstable and could
+                    // render the same empty source more than once. Keep the
+                    // fallback deterministic so the channel row remains
+                    // stable across refreshes.
+                    let key = source.id
+                        ?? source.liveStreamID
+                        ?? source.transcodingURL?.absoluteString
+                        ?? source.directStreamURL?.absoluteString
+                        ?? [source.protocolName ?? "", "empty-source"].joined(separator: "|")
                     return seen.insert(key).inserted
                 }
                 grouped[channel.id] = Self(
