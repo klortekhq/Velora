@@ -12,6 +12,16 @@ Logcat. Tests unitarios móviles/TV y compilación Kotlin de ambas variantes pas
 tras este cambio. Quedan otros logs no relacionados con esas rutas en revisión
 separada; esto no se considera una certificación de seguridad completa.
 
+La comprobación web del 2026-09-05 vuelve a pasar `test-platform.mjs` y las
+pruebas de seguridad/interacción de biblioteca. `build-web.mjs all` genera de
+forma reproducible los bundles de navegador, Samsung y VIDAA, además del IPK
+webOS `com.klortek.velora_1.4.0_all.ipk`. El comando Tizen no está instalado en
+este host, por lo que Samsung sigue siendo un bundle preparado y no se afirma
+un WGT firmado. La APK TV debug de `1b42b70` se instaló en Fire TV
+(`192.168.31.112:5555`) y la actividad principal quedó ejecutándose sin
+`FATAL EXCEPTION`; esto es smoke test de arranque, no validación autenticada de
+reproducción o Live TV.
+
 Auditoría de evidencia de releases (2026-09-05): las consultas directas a la
 API y a la URL pública de GitHub para `v1.2.32` y `v1.4.0` devolvieron HTTP
 404. Por tanto, las notas antiguas de releases que aparecen más abajo se
