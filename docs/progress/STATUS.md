@@ -4,6 +4,18 @@ Updated: 2026-09-05
 
 ## Última verificación
 
+La validación del 2026-09-05 sobre el commit actual compiló `assembleTvDebug`
+con éxito, instaló la APK resultante en el Fire TV AFTSS y la lanzó mediante
+ADB. El dispositivo informa `1.4.0-tv`/`versionCode 10400`; la actividad llegó
+a `Displayed ... MainActivity` sin `FATAL EXCEPTION` ni `AndroidRuntime`. Las
+pruebas `testMobileDebugUnitTest` y `testTvDebugUnitTest` del mismo checkout
+también terminaron con `BUILD SUCCESSFUL`. La única advertencia relevante del
+log es del sistema Fire OS (`CoreComponentFactory`), no un cierre de Velora.
+
+La comprobación de ramas del mismo momento devuelve únicamente `main` y
+`origin/main`; no hay ramas adicionales en el checkout ni en el remoto
+visible.
+
 Se añadió `.github/workflows/ci.yml` para que cada cambio en `main` y cada
 pull request relevante valide de forma reproducible los catálogos Android, las
 pruebas de interacción/seguridad web, los bundles web/Smart TV y las pruebas y
