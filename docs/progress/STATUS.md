@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `178e8e3`)
+## Revisión actual (commit `c2df17d`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -89,6 +89,9 @@ Updated: 2026-09-05
 - El workflow específico de Apple corrige su directorio de trabajo para
   ejecutar `check-apple-locales.mjs` desde la raíz del repositorio, igual que
   el workflow continuo; el catálogo local vuelve a validar sus 45 claves.
+- La configuración Android migra de forma síncrona cualquier token o
+  contraseña antigua desde preferencias planas al Keystore y elimina la copia
+  heredada; cerrar sesión borra también la contraseña cifrada y el usuario.
 
 ## Última verificación
 
@@ -155,6 +158,10 @@ La build de validación posterior al ajuste de login volvió a completar
 `assembleMobileRelease` y `assembleTvRelease` (`BUILD SUCCESSFUL`, 155 tareas).
 Los APK resultantes siguen siendo unsigned y solo sirven como artefactos
 locales de QA hasta disponer de firma de distribución.
+
+La validación Android posterior al endurecimiento de credenciales pasó
+`testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
+`compileTvDebugKotlin` (`BUILD SUCCESSFUL`, 82 tareas).
 
 La misma build incorpora una corrección del selector de aspecto: las opciones
 se exponen como controles seleccionables accesibles para táctil y mando, y el
