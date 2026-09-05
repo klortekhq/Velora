@@ -1,10 +1,11 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-04
+Updated: 2026-09-05
 
 ## Última verificación
 
-La verificación del 2026-09-04 queda actualizada en el commit `62c18f7`. Los
+La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
+`5abafdc`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -52,10 +53,10 @@ reproduciéndose tras abrir la aplicación sin conectividad.
 
 El código actual queda versionado como `1.4.0` para agrupar el bloque
 funcional de Live TV con fuentes seleccionables y la recuperación offline. La
-etiqueta anotada `v1.4.0` ya está subida desde `main` y activa el workflow; este
-host no tiene autenticación CLI de GitHub, así que la existencia de la release,
-sus checks y sus artefactos todavía deben confirmarse desde Actions. No se
-presenta como publicada hasta verificarlo.
+etiqueta anotada `v1.4.0` existe en remoto, pero apunta a un commit anterior al
+`main` actual; este host no tiene autenticación CLI de GitHub, así que la
+existencia de la release, sus checks y sus artefactos todavía deben confirmarse
+desde Actions. No se presenta como publicada hasta verificarlo.
 
 Auditoría de trazabilidad del 2026-09-04: la etiqueta remota `v1.4.0` apunta a
 un commit anterior al `main` actual. Por ello no se considera la build actual
@@ -71,8 +72,9 @@ anterior y no se presenta como instalado allí. El resultado 401 se volvió a
 confirmar en esta ronda con `scripts/qa/jellyfin-smoke.ps1`, sin imprimir
 contraseña ni token.
 
-Verificación local de 1.4.0 del 2026-09-04: 75 tests JUnit Android pasan sin
-fallos ni errores; `lintMobileDebug` informa 0 errores (mantiene advertencias de
+Verificación local de 1.4.0 del 2026-09-05 sobre `main` en `5abafdc`: 75 tests
+JUnit Android pasan sin fallos ni errores; `lintMobileDebug` informa 0 errores
+(mantiene advertencias de
 dependencias, estilo y recursos heredados); las compilaciones Kotlin móvil y
 TV pasan. `node --check`, las pruebas web y `npm run build:all` pasan. El
 empaquetado webOS genera su IPK; Samsung sigue siendo bundle no firmado por
