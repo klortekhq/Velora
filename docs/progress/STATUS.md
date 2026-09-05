@@ -2,6 +2,8 @@
 
 Updated: 2026-09-06
 
+Revisión actual: commit `31a73b4`.
+
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
