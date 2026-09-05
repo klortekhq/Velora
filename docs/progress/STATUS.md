@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`8cb4897`. Los
+`c9d7727`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -69,6 +69,12 @@ ejecución de Swift en el runner macOS, no se declara validado en Windows.
 del canal y la elegida se transmite como `MediaSourceId` a `PlaybackInfo`.
 La selección ya no es solo visual; su compilación sigue pendiente del runner
 macOS por la ausencia de Swift/Xcode local.
+
+La verificación Android posterior ejecutó `testMobileDebugUnitTest`,
+`lintMobileDebug`, `assembleMobileDebug` y `assembleTvDebug`: BUILD SUCCESSFUL.
+Los APK de QA generados quedan en `app/build/outputs/apk/` y no se presentan
+como release publicada ni como instalación en hardware, porque ADB no detecta
+ningún dispositivo.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
