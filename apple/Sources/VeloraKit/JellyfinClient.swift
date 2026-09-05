@@ -218,7 +218,7 @@ public actor JellyfinClient {
 
     /// Opens a Jellyfin Live TV tuner and returns the server-selected stream.
     /// The returned URL is checked against the configured server before AVPlayer uses it.
-    public func liveTvPlaybackURL(userID: String, channelID: String) async throws -> URL? {
+    public func liveTvPlaybackURL(userID: String, channelID: String, mediaSourceID: String? = nil) async throws -> URL? {
         guard !channelID.isEmpty, !channelID.contains("/"), !channelID.contains("\\") else { return nil }
         var components = URLComponents(url: baseURL.appendingPathComponent("Items/\(channelID)/PlaybackInfo"), resolvingAgainstBaseURL: false)
         components?.queryItems = [
@@ -227,6 +227,11 @@ public actor JellyfinClient {
             URLQueryItem(name: "IsPlayback", value: "true"),
             URLQueryItem(name: "AutoOpenLiveStream", value: "true")
         ]
+        if let mediaSourceID, !mediaSourceID.isEmpty {
+            var queryItems = components?.queryItems ?? []
+            queryItems.append(URLQueryItem(name: "MediaSourceId", value: mediaSourceID))
+            components?.queryItems = queryItems
+        }
         guard let url = components?.url else { throw ClientError.invalidServerURL }
         var request = authorizedRequest(for: url)
         request.httpMethod = "POST"
