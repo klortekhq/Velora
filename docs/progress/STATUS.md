@@ -59,6 +59,15 @@ arranque tardó aproximadamente 9,2 s y no produjo `FATAL EXCEPTION` ni error
 de Velora en los 500 eventos recientes. Esta es una prueba de arranque, no una
 certificación completa de Live TV o reproducción contra el servidor.
 
+La auditoría funcional del 2026-09-05 confirma que películas y series usan la
+misma consulta determinista: género, favoritos, vistos/no vistos, ordenación
+por nombre/fecha/estreno/duración/valoración/aleatorio y dirección ascendente
+o descendente. Las preferencias se conservan por dispositivo y el diálogo
+ofrece una salida táctil y otra enfocada a mando. `testMobileDebugUnitTest`,
+`testTvDebugUnitTest`, `compileMobileDebugKotlin` y `compileTvDebugKotlin`
+terminaron correctamente. El Fire TV volvió a quedar en primer plano con
+`com.klortek.velora.tv` activo y sin excepciones de la aplicación.
+
 El flujo Android queda preparado para firma de distribución opcional mediante
 los cuatro secretos `VELORA_ANDROID_*` de GitHub Actions. Sin ellos, conserva
 los APK release unsigned de QA; con ellos, cambia el nombre del artefacto a
