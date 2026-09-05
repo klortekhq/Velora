@@ -657,12 +657,22 @@ fun JellyfinHomeScreen(
     val previewPolicy = remember { PreviewPlaybackPolicy() }
     var previewRequest by remember { mutableStateOf<PreviewRequest?>(null) }
     var previewVisible by remember { mutableStateOf(false) }
+    var previewReady by remember { mutableStateOf(false) }
+    LaunchedEffect(previewController) {
+        previewController?.setReadyListener { ready ->
+            previewReady = ready
+        }
+    }
     DisposableEffect(previewController) {
-        onDispose { previewController?.release() }
+        onDispose {
+            previewController?.setReadyListener(null)
+            previewController?.release()
+        }
     }
     LaunchedEffect(debouncedHighlightedItem?.Id, apiService, isMobileLayout) {
         previewRequest = null
         previewVisible = false
+        previewReady = false
         if (isMobileLayout || apiService == null) return@LaunchedEffect
         val item = debouncedHighlightedItem ?: return@LaunchedEffect
         val trailer = apiService.getLocalTrailers(item.Id).firstOrNull()
@@ -683,6 +693,7 @@ fun JellyfinHomeScreen(
             previewPolicy.focusChanged(null, System.currentTimeMillis(), System.currentTimeMillis())
             previewController?.stop()
             previewVisible = false
+            previewReady = false
             return@LaunchedEffect
         }
         val startedAt = System.currentTimeMillis()
@@ -897,7 +908,7 @@ fun JellyfinHomeScreen(
                 )
             }
             
-            if (!isMobileLayout && previewVisible) {
+            if (!isMobileLayout && previewVisible && previewReady) {
                 AndroidView(
                     factory = { viewContext ->
                         PlayerView(viewContext).apply {
