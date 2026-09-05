@@ -42,6 +42,8 @@ Baja y envía a Jellyfin los límites de tamaño y bitrate correspondientes. La
 interfaz sigue ocultando por completo las descargas en tvOS. La transferencia
 usa una sesión URLSession de fondo con identificador estable, metadatos sin
 credenciales y staging seguro del archivo antes de incorporarlo al catálogo;
+al reabrir la aplicación también recupera la tarea activa para evitar colas
+duplicadas;
 su validación final requiere macOS/iOS porque Swift/Xcode no están instalados
 en este host.
 

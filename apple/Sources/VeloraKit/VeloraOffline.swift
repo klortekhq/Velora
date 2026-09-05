@@ -105,6 +105,21 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
         }
     }
 
+    /// Returns metadata for transfers that survived a process restart. The
+    /// task descriptions contain only catalog identifiers and quality, never
+    /// credentials or signed media URLs.
+    public func activeTransfers() async -> [VeloraOfflineTransferMetadata] {
+        await withCheckedContinuation { continuation in
+            session.getAllTasks { [weak self] tasks in
+                let metadata = tasks.compactMap { task -> VeloraOfflineTransferMetadata? in
+                    guard let self, let downloadTask = task as? URLSessionDownloadTask else { return nil }
+                    return self.metadata(for: downloadTask)
+                }
+                continuation.resume(returning: metadata)
+            }
+        }
+    }
+
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let metadata = metadata(for: downloadTask),
               let response = downloadTask.response else { return }
