@@ -73,6 +73,11 @@ al servidor, pero Jellyfin respondió HTTP 401. No se considera validado el
 login ni Live TV contra ese servidor hasta revisar las credenciales o el
 usuario activo; el smoke test no guarda ni imprime la contraseña.
 
+El workflow Android queda endurecido: una etiqueta `vX.Y.0` ya no puede crear
+una release pública con APK unsigned; exige los cuatro secretos de firma. Los
+builds unsigned siguen disponibles únicamente en ejecuciones de QA sin
+`release_tag`.
+
 El flujo Android queda preparado para firma de distribución opcional mediante
 los cuatro secretos `VELORA_ANDROID_*` de GitHub Actions. Sin ellos, conserva
 los APK release unsigned de QA; con ellos, cambia el nombre del artefacto a
