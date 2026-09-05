@@ -8,8 +8,13 @@ La verificación adicional del 2026-09-05 corrige la configuración de lint para
 los catálogos Android con fallback parcial y vuelve a ejecutar `lintMobileDebug`:
 finaliza con 0 errores de lint. La comprobación oficial
 `node scripts/check-android-locales.mjs` mantiene los tres catálogos garantizados
-(inglés, alemán y francés) completos con 346 claves; los demás idiomas siguen
+(inglés, alemán y francés) completos con 350 claves; los demás idiomas siguen
 siendo opcionales y heredan el español base de forma controlada.
+
+La pantalla de solicitudes Jellyseerr ya no muestra estados hardcodeados en
+inglés: `Available`, `Requested`, `Pending` y `Request` pasan por recursos
+traducibles. La comprobación de locales queda en 350 claves y vuelven a pasar
+los tests unitarios móviles y la compilación Kotlin de TV.
 
 Desde el commit `25e7158` también pasan `assembleMobileRelease` y
 `assembleTvRelease` con lint vital. Los artefactos unsigned resultantes son:
