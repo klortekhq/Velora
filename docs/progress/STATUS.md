@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `c7a3b5f`)
+## Revisión actual (commit `7dc408d`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -50,6 +50,12 @@ Updated: 2026-09-05
 - Las variantes Android móvil y TV vuelven a compilar después de añadir el
   timeout de autenticación (`BUILD SUCCESSFUL`, 58 tareas; solo avisos de APIs
   obsoletas).
+- El login Android diferencia ahora servidor inválido, credenciales rechazadas,
+  timeout y error de red, con recursos en español, inglés, alemán y francés.
+  Las pruebas unitarias móvil/TV pasan (`BUILD SUCCESSFUL`, 82 tareas). Los APK
+  release regenerados siguen unsigned: móvil
+  `2DBD1E507E902401126727C4B47DE0D5F180705F140767B9BE56D9EFD21E38C2` y TV
+  `4C608C11D38F05014FF5452B45B6E00D8836E25E51143D246DD438F5B3DEEC0A`.
 - Las acciones visibles de detalle y solicitudes Android (reanudar, reproducir,
   audio, subtítulos, tráiler, visto y atrás) ya usan recursos traducibles en
   las pantallas móvil/TV; el comprobador Android valida 431 claves en los
