@@ -109,10 +109,18 @@ public actor JellyfinClient {
     /// URL for the server's browser/AVPlayer-compatible stream endpoint.
     /// Authentication is still supplied by `authorizedRequest(for:)` and is
     /// never embedded in this URL.
-    public func videoURL(itemID: String) -> URL? {
+    public func videoURL(itemID: String, quality: VeloraDownloadQuality = .original) -> URL? {
         guard let streamURL = itemURL(root: "Videos", itemID: itemID, suffix: ["stream"]) else { return nil }
         var components = URLComponents(url: streamURL, resolvingAgainstBaseURL: false)
-        components?.queryItems = [URLQueryItem(name: "static", value: "true")]
+        var queryItems = [URLQueryItem(name: "static", value: "true")]
+        if let maxWidth = quality.maxWidth {
+            queryItems.append(URLQueryItem(name: "MaxWidth", value: String(maxWidth)))
+        }
+        if let videoBitrate = quality.videoBitrate {
+            queryItems.append(URLQueryItem(name: "VideoBitrate", value: String(videoBitrate)))
+            queryItems.append(URLQueryItem(name: "TranscodingContainer", value: "mp4"))
+        }
+        components?.queryItems = queryItems
         return components?.url
     }
 

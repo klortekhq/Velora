@@ -173,9 +173,9 @@ public final class VeloraAppModel: ObservableObject {
         }
     }
 
-    public func download(_ item: JellyfinItem) async {
+    public func download(_ item: JellyfinItem, quality: VeloraDownloadQuality = .original) async {
         guard platform.supportsOfflineDownloads, downloadingItemID == nil else { return }
-        guard let requestURL = await client.videoURL(itemID: item.id) else { return }
+        guard let requestURL = await client.videoURL(itemID: item.id, quality: quality) else { return }
         let serverURL = await client.serverURL()
         guard !offlineDownloads.contains(where: { $0.itemID == item.id && $0.serverURL == serverURL.absoluteString }) else { return }
         downloadingItemID = item.id
@@ -337,6 +337,7 @@ private struct VeloraItemDetailView: View {
     let item: JellyfinItem
     @ObservedObject var model: VeloraAppModel
     @State private var player: AVPlayer?
+    @State private var downloadQuality: VeloraDownloadQuality = .original
 
     var body: some View {
         ScrollView {
@@ -361,8 +362,15 @@ private struct VeloraItemDetailView: View {
                             }
                         }
                     } else {
+                        Picker(String(localized: "Download quality", bundle: .module), selection: $downloadQuality) {
+                            Text("Original", bundle: .module).tag(VeloraDownloadQuality.original)
+                            Text("High", bundle: .module).tag(VeloraDownloadQuality.high)
+                            Text("Medium", bundle: .module).tag(VeloraDownloadQuality.medium)
+                            Text("Low", bundle: .module).tag(VeloraDownloadQuality.low)
+                        }
+                        .pickerStyle(.menu)
                         Button {
-                            Task { await model.download(item) }
+                            Task { await model.download(item, quality: downloadQuality) }
                         } label: {
                             Label {
                                 Text("Download", bundle: .module)

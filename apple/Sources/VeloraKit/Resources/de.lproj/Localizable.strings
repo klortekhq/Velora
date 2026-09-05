@@ -19,6 +19,11 @@
 "Enable theme music" = "Themenmusik aktivieren";
 "Volume" = "Lautstärke";
 "Offline downloads are available on this device." = "Offline-Downloads sind auf diesem Gerät verfügbar.";
+"Download quality" = "Downloadqualität";
+"Original" = "Original";
+"High" = "Hoch";
+"Medium" = "Mittel";
+"Low" = "Niedrig";
 "Download" = "Laden";
 "Remove download" = "Download entfernen";
 "Unable to download" = "Download nicht möglich";

@@ -37,6 +37,12 @@ localizada pública del módulo compartido y se añadió una regresión unitaria
 Swift no está instalado en este host Windows; la compilación y el test quedan
 para el job macOS, sin presentarlos como ejecutados aquí.
 
+La descarga móvil de Apple ahora permite seleccionar Original, Alta, Media o
+Baja y envía a Jellyfin los límites de tamaño y bitrate correspondientes. La
+interfaz sigue ocultando por completo las descargas en tvOS; la transferencia
+en segundo plano y la recuperación de colas todavía requieren una siguiente
+iteración y validación en macOS/iOS.
+
 La comprobación de ramas del mismo momento devuelve únicamente `main` y
 `origin/main`; no hay ramas adicionales en el checkout ni en el remoto
 visible.

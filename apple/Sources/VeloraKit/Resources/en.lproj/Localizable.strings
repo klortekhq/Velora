@@ -19,6 +19,11 @@
 "Enable theme music" = "Enable theme music";
 "Volume" = "Volume";
 "Offline downloads are available on this device." = "Offline downloads are available on this device.";
+"Download quality" = "Download quality";
+"Original" = "Original";
+"High" = "High";
+"Medium" = "Medium";
+"Low" = "Low";
 "Download" = "Download";
 "Remove download" = "Remove download";
 "Unable to download" = "Unable to download";
