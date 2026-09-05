@@ -13,6 +13,14 @@ del 2026-09-05 terminó correctamente: web y empaquetado webOS pasaron, y
 `compileTvDebugKotlin` terminaron con `BUILD SUCCESSFUL`. El workflow no afirma
 validación física de Tizen, VIDAA, Apple ni de reproducción autenticada.
 
+La comprobación de integración del 2026-09-05 contra el servidor Jellyfin
+proporcionado devolvió `HTTP 200` en `System/Info/Public`, pero `HTTP 401` en
+`Users/AuthenticateByName` con las credenciales disponibles en esta sesión.
+No se guardó ni se imprimió ningún token o contraseña y, por tanto, no se
+presentan como verificadas la consulta autenticada de canales, `PlaybackInfo`,
+la reproducción ni Live TV real. El smoke test sí mantiene estas etapas para
+ejecutarlas cuando el acceso sea válido.
+
 La revisión de internacionalización del 2026-09-05 migró a recursos los
 textos de Ajustes relacionados con Jellyseerr, autenticación, Descubrir y
 tráilers de TMDB. Las claves están presentes en español, inglés, francés y
