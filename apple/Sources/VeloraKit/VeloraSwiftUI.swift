@@ -161,6 +161,17 @@ public struct VeloraSettingsView: View {
             } header: {
                 Text("Theme music", bundle: .module)
             }
+            Section {
+                LabeledContent {
+                    Text(JellyfinClient.clientVersion)
+                } label: {
+                    Text("Version", bundle: .module)
+                }
+                Text("By Klørtek", bundle: .module)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("About", bundle: .module)
+            }
         }
         .navigationTitle(Text("Settings", bundle: .module))
     }
