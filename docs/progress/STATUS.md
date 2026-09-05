@@ -50,6 +50,15 @@ y TV (67 836 687 bytes, SHA-256
 Siguen siendo artefactos locales sin firma de distribución y no equivalen a una
 release pública de GitHub.
 
+La prueba física posterior del 2026-09-05 sí detectó un Fire TV AFTSS por
+ADB en `192.168.31.112:5555`. El APK release unsigned fue rechazado por el
+dispositivo por carecer de certificado, como corresponde a un artefacto sin
+firma; se instaló la variante debug firmada del mismo commit y la actividad
+`com.klortek.velora.MainActivity` arrancó correctamente en 1920x1080. El
+arranque tardó aproximadamente 9,2 s y no produjo `FATAL EXCEPTION` ni error
+de Velora en los 500 eventos recientes. Esta es una prueba de arranque, no una
+certificación completa de Live TV o reproducción contra el servidor.
+
 Tras esa corrección, el commit `54bbfb7` vuelve a pasar `assembleMobileRelease`
 y `assembleTvRelease` con lint vital. Las APK unsigned vigentes son: móvil
 (67 832 683 bytes, SHA-256
