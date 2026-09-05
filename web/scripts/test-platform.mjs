@@ -49,6 +49,7 @@ console.log('platform capability tests passed');
 assert.match(appSource, /sessionStorage/);
 assert.match(appSource, new RegExp(`var APP_VERSION = '${packageJson.version.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}'`));
 assert.match(appSource, /selected !== 'auto' && TRANSLATIONS\[selected\]/);
+assert.match(appSource, /Object\.assign\(\{\}, TRANSLATIONS\.en, TRANSLATIONS\[code\]\)/);
 assert.match(appSource, /X-Emby-Token/);
 assert.match(appSource, /media-proxy-sw\.js/);
 assert.match(appSource, /__velora_media/);
