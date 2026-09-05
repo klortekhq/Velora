@@ -845,8 +845,8 @@
     player.setAttribute('aria-label', t('player'));
     var restore = player.querySelector('#playerRestore');
     if (restore) restore.remove();
-    var minimize = player.querySelector('#playerMinimize');
-    if (minimize) minimize.focus();
+    var fullscreen = player.querySelector('#fullscreen');
+    if (fullscreen) fullscreen.focus();
   }
 
   function minimizePlayer() {
