@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`fb90491`. Los
+`c0a9942`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -35,6 +35,11 @@ El commit `fb90491` completa esas mismas claves en los nueve catálogos restante
 (español regional, italiano, portugués, turco, ruso, árabe, japonés, coreano y
 chino). La validación XML y el merge de recursos móvil/TV pasan después del
 cambio, sin dejar el menú de reproducción con un idioma parcial.
+
+El commit `c0a9942` elimina los últimos títulos incrustados de las categorías
+especiales de Ajustes y los lleva a los 13 catálogos Android, incluyendo
+Jellyseerr y Tráilers. La compilación de recursos y los tests unitarios móviles
+pasan después del cambio.
 
 El workflow de releases no bloquea una publicación por la ausencia de Tizen
 Studio o de un certificado Samsung en el runner: conserva el bundle web
