@@ -2,6 +2,25 @@
 
 Updated: 2026-09-05
 
+## Revisión actual (commit `20ab8e1`)
+
+- Repositorio sincronizado en una única rama: `main` y `origin/main`.
+- Fire TV conectado por ADB (`192.168.31.112:5555`) con `1.4.0-tv` activo;
+  el arranque y los logs recientes no muestran `FATAL EXCEPTION` ni errores de
+  ExoPlayer atribuibles a Velora.
+- La prueba web de seguridad, capacidades y agrupación de Live TV pasa. Las
+  pruebas separan ahora `localStorage` de `sessionStorage` y comprueban que el
+  token no vuelva a persistirse de forma duradera.
+- `build-web.mjs all` pasa y genera el bundle web, el IPK webOS y los bundles
+  preparados de Samsung/VIDAA. Tizen sigue pendiente de Tizen Studio/CLI y un
+  perfil de firma real.
+- El servidor Jellyfin responde en `192.168.100.201:8096`, pero la
+  autenticación disponible en esta sesión devuelve `HTTP 401`; no se declara
+  validada la biblioteca, la reproducción autenticada ni Live TV real.
+- No se declara una release pública ni un APK firmado a partir de esta
+  revisión: la consulta pública no confirmó una release existente y este
+  entorno no dispone de credenciales de firma/GitHub CLI para publicarla.
+
 ## Última verificación
 
 La validación del 2026-09-05 sobre el commit actual compiló `assembleTvDebug`
