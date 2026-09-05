@@ -733,7 +733,7 @@ fun TvShowsLibraryScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Settings,
-                                    contentDescription = "Ajustes",
+                                    contentDescription = stringResource(com.klortek.velora.R.string.nav_settings),
                                     modifier = Modifier.size(14.dp) // Reduced from 20dp to 14dp
                                 )
                             }
@@ -751,7 +751,7 @@ fun TvShowsLibraryScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Search,
-                                    contentDescription = "Buscar",
+                                    contentDescription = stringResource(com.klortek.velora.R.string.search_short),
                                     modifier = Modifier.size(14.dp) // Reduced from 20dp to 14dp
                                 )
                             }
@@ -863,7 +863,7 @@ fun TvShowsLibraryScreen(
                                     // Show sort icon when library tab is selected
                                     Icon(
                                         imageVector = Icons.Default.SwapVert,
-                                        contentDescription = "Ordenar",
+                                        contentDescription = stringResource(com.klortek.velora.R.string.library_sort_filter),
                                         modifier = Modifier.size(14.dp) // Reduced from 20dp to 14dp
                                     )
                                 } else {
@@ -911,7 +911,7 @@ fun TvShowsLibraryScreen(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Home,
-                                        contentDescription = "Inicio",
+                                        contentDescription = stringResource(com.klortek.velora.R.string.nav_home),
                                         tint = if (homeFocused) Color.Black else Color.White,
                                         modifier = Modifier
                                             .padding(horizontal = 8.dp, vertical = 4.dp) // Reduced from (12, 6) to (8, 4)

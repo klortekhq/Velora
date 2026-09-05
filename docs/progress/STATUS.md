@@ -41,10 +41,15 @@ especiales de Ajustes y los lleva a los 13 catálogos Android, incluyendo
 Jellyseerr y Tráilers. La compilación de recursos y los tests unitarios móviles
 pasan después del cambio.
 
-El commit siguiente corrige la base Apple para no proponer `localhost` como
+El commit `ccdb357` corrige la base Apple para no proponer `localhost` como
 servidor inicial, localiza el título de biblioteca y la pista de accesibilidad
 de Live TV en los cuatro catálogos Swift disponibles. Se revisa estáticamente;
 la compilación Apple continúa pendiente de macOS/Xcode.
+
+La corrección posterior migra a recursos las etiquetas accesibles de Ajustes,
+Buscar, Inicio, Ordenar y Vistos en las pantallas Android principales. La
+compilación Kotlin móvil/TV y `testMobileDebugUnitTest` pasan después del
+cambio.
 
 El workflow de releases no bloquea una publicación por la ausencia de Tizen
 Studio o de un certificado Samsung en el runner: conserva el bundle web
