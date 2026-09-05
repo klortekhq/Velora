@@ -42,6 +42,11 @@ Updated: 2026-09-05
 
 ## Última verificación
 
+La validación Android ejecutada el 2026-09-05 pasó `testMobileDebugUnitTest`,
+`testTvDebugUnitTest`, `lintMobileDebug` y `lintTvDebug` con `BUILD SUCCESSFUL`
+(131 tareas, 7m35s). El lint generó los informes de ambas variantes sin
+errores bloqueantes; solo permanecen los avisos conocidos del SDK local.
+
 La verificación del 2026-09-05 sobre `3798886` pasó
 `testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
 `compileTvDebugKotlin` con `BUILD SUCCESSFUL`. Persisten únicamente avisos de
