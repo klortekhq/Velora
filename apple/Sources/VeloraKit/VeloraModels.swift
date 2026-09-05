@@ -50,19 +50,59 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
     public let name: String
     public let number: String?
     public let currentProgram: JellyfinLiveTvProgram?
+    public let mediaSources: [JellyfinLiveTvMediaSource]
 
     private enum CodingKeys: String, CodingKey {
         case id = "Id"
         case name = "Name"
         case number = "ChannelNumber"
         case currentProgram = "CurrentProgram"
+        case mediaSources = "MediaSources"
     }
 
-    public init(id: String, name: String, number: String? = nil, currentProgram: JellyfinLiveTvProgram? = nil) {
+    public init(id: String, name: String, number: String? = nil, currentProgram: JellyfinLiveTvProgram? = nil, mediaSources: [JellyfinLiveTvMediaSource] = []) {
         self.id = id
         self.name = name
         self.number = number
         self.currentProgram = currentProgram
+        self.mediaSources = mediaSources
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        number = try container.decodeIfPresent(String.self, forKey: .number)
+        currentProgram = try container.decodeIfPresent(JellyfinLiveTvProgram.self, forKey: .currentProgram)
+        mediaSources = try container.decodeIfPresent([JellyfinLiveTvMediaSource].self, forKey: .mediaSources) ?? []
+    }
+
+    /// Jellyfin can return one row per tuner/provider for the same channel.
+    /// Velora presents one stable row and keeps every selectable source.
+    public static func grouped(_ channels: [Self]) -> [Self] {
+        var order: [String] = []
+        var grouped: [String: Self] = [:]
+        for channel in channels {
+            if let existing = grouped[channel.id] {
+                var sources = existing.mediaSources + channel.mediaSources
+                var seen = Set<String>()
+                sources = sources.filter { source in
+                    let key = source.id ?? source.liveStreamID ?? source.transcodingURL?.absoluteString ?? UUID().uuidString
+                    return seen.insert(key).inserted
+                }
+                grouped[channel.id] = Self(
+                    id: existing.id,
+                    name: existing.name,
+                    number: existing.number ?? channel.number,
+                    currentProgram: existing.currentProgram ?? channel.currentProgram,
+                    mediaSources: sources
+                )
+            } else {
+                order.append(channel.id)
+                grouped[channel.id] = channel
+            }
+        }
+        return order.compactMap { grouped[$0] }
     }
 }
 
