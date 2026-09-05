@@ -145,6 +145,42 @@
       sortAndFilter: 'Ordina e filtra', sortName: 'Nome', sortDateAdded: 'Data di aggiunta', sortPremiere: 'Data di uscita', sortRuntime: 'Durata', sortRating: 'Valutazione della community',
       favorites: 'Preferiti', playbackState: 'Stato di riproduzione', playbackAll: 'Tutti', playbackWatched: 'Visti', playbackUnwatched: 'Non visti',
       liveAll: 'Tutti i canali', liveFavorites: 'Solo preferiti', liveGroup: 'Gruppo di canali', liveNoChannels: 'Nessun canale disponibile', liveSources: 'sorgenti', liveSourceOption: 'Opzione'
+    },
+    ja: {
+      exitFullscreen: '全画面を終了', cast: 'キャスト', actorWorks: 'この俳優の映画とシリーズ', noActorWorks: '他の作品はありません。', personError: '出演作品を読み込めませんでした',
+      sortAndFilter: '並べ替えとフィルター', sortName: '名前', sortDateAdded: '追加日', sortPremiere: '公開日', sortRuntime: '再生時間', sortRating: 'コミュニティ評価',
+      favorites: 'お気に入り', playbackState: '再生状態', playbackAll: 'すべて', playbackWatched: '視聴済み', playbackUnwatched: '未視聴',
+      liveAll: 'すべてのチャンネル', liveFavorites: 'お気に入りのみ', liveGroup: 'チャンネルグループ', liveNoChannels: '利用できるチャンネルはありません', liveSources: 'ソース', liveSourceOption: 'オプション'
+    },
+    ko: {
+      exitFullscreen: '전체 화면 종료', cast: '출연진', actorWorks: '이 배우의 영화 및 시리즈', noActorWorks: '다른 작품이 없습니다.', personError: '필모그래피를 불러오지 못했습니다',
+      sortAndFilter: '정렬 및 필터', sortName: '이름', sortDateAdded: '추가 날짜', sortPremiere: '개봉일', sortRuntime: '재생 시간', sortRating: '커뮤니티 평점',
+      favorites: '즐겨찾기', playbackState: '재생 상태', playbackAll: '전체', playbackWatched: '시청함', playbackUnwatched: '시청하지 않음',
+      liveAll: '모든 채널', liveFavorites: '즐겨찾기만', liveGroup: '채널 그룹', liveNoChannels: '사용 가능한 채널이 없습니다', liveSources: '소스', liveSourceOption: '옵션'
+    },
+    zh: {
+      exitFullscreen: '退出全屏', cast: '演职员', actorWorks: '这位演员的电影和剧集', noActorWorks: '没有其他可用作品。', personError: '无法加载作品列表',
+      sortAndFilter: '排序和筛选', sortName: '名称', sortDateAdded: '添加日期', sortPremiere: '首映日期', sortRuntime: '时长', sortRating: '社区评分',
+      favorites: '收藏', playbackState: '播放状态', playbackAll: '全部', playbackWatched: '已看', playbackUnwatched: '未看',
+      liveAll: '所有频道', liveFavorites: '仅收藏', liveGroup: '频道组', liveNoChannels: '没有可用频道', liveSources: '来源', liveSourceOption: '选项'
+    },
+    ru: {
+      exitFullscreen: 'Выйти из полноэкранного режима', cast: 'Актёры', actorWorks: 'Фильмы и сериалы с этим актёром', noActorWorks: 'Других доступных произведений нет.', personError: 'Не удалось загрузить фильмографию',
+      sortAndFilter: 'Сортировка и фильтры', sortName: 'Название', sortDateAdded: 'Дата добавления', sortPremiere: 'Дата премьеры', sortRuntime: 'Продолжительность', sortRating: 'Оценка сообщества',
+      favorites: 'Избранное', playbackState: 'Состояние просмотра', playbackAll: 'Все', playbackWatched: 'Просмотрено', playbackUnwatched: 'Не просмотрено',
+      liveAll: 'Все каналы', liveFavorites: 'Только избранные', liveGroup: 'Группа каналов', liveNoChannels: 'Нет доступных каналов', liveSources: 'источники', liveSourceOption: 'Вариант'
+    },
+    ar: {
+      exitFullscreen: 'الخروج من ملء الشاشة', cast: 'طاقم العمل', actorWorks: 'أفلام ومسلسلات هذا الممثل', noActorWorks: 'لا توجد أعمال أخرى متاحة.', personError: 'تعذر تحميل قائمة الأعمال',
+      sortAndFilter: 'الترتيب والتصفية', sortName: 'الاسم', sortDateAdded: 'تاريخ الإضافة', sortPremiere: 'تاريخ العرض', sortRuntime: 'المدة', sortRating: 'تقييم المجتمع',
+      favorites: 'المفضلة', playbackState: 'حالة التشغيل', playbackAll: 'الكل', playbackWatched: 'تمت مشاهدتها', playbackUnwatched: 'لم تتم مشاهدتها',
+      liveAll: 'كل القنوات', liveFavorites: 'المفضلة فقط', liveGroup: 'مجموعة القنوات', liveNoChannels: 'لا توجد قنوات متاحة', liveSources: 'مصادر', liveSourceOption: 'خيار'
+    },
+    tr: {
+      exitFullscreen: 'Tam ekrandan çık', cast: 'Oyuncular', actorWorks: 'Bu oyuncunun filmleri ve dizileri', noActorWorks: 'Başka kullanılabilir içerik yok.', personError: 'Filmografi yüklenemedi',
+      sortAndFilter: 'Sırala ve filtrele', sortName: 'Ad', sortDateAdded: 'Eklenme tarihi', sortPremiere: 'Prömiyer tarihi', sortRuntime: 'Süre', sortRating: 'Topluluk puanı',
+      favorites: 'Favoriler', playbackState: 'Oynatma durumu', playbackAll: 'Tümü', playbackWatched: 'İzlendi', playbackUnwatched: 'İzlenmedi',
+      liveAll: 'Tüm kanallar', liveFavorites: 'Yalnızca favoriler', liveGroup: 'Kanal grubu', liveNoChannels: 'Kullanılabilir kanal yok', liveSources: 'kaynak', liveSourceOption: 'Seçenek'
     }
   };
   Object.keys(TRANSLATION_OVERRIDES).forEach(function (code) {
