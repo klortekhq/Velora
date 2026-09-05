@@ -59,6 +59,7 @@ import com.klortek.velora.ui.DeviceUtils
 import com.klortek.velora.jellyfin.JellyfinAuthService
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.jellyfin.ServerDiscovery
+import com.klortek.velora.security.SensitiveDataRedactor
 
 @Composable
 fun ServerEntryScreen(
@@ -445,7 +446,7 @@ private fun connectToServer(
                 onResult(false, "Could not connect to Jellyfin server.\n\nPlease verify:\n• The address is correct\n• The server is running\n• You can access it from this network")
             }
         } catch (e: Exception) {
-            android.util.Log.e("ServerEntry", "Error during server discovery", e)
+            android.util.Log.e("ServerEntry", "Error during server discovery: ${SensitiveDataRedactor.message(e)}")
             onResult(false, "Error: ${e::class.simpleName ?: e.javaClass.simpleName}")
         }
     }

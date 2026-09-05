@@ -81,6 +81,7 @@ import com.klortek.velora.livetv.liveTvGroups
 import com.klortek.velora.livetv.groupLiveTvChannels
 import com.klortek.velora.livetv.LiveTvChannelGroup
 import com.klortek.velora.livetv.liveTvSourceLabel
+import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.livetv.liveTvMediaSourceId
 import kotlinx.coroutines.launch
 import androidx.media3.common.util.UnstableApi
@@ -159,7 +160,7 @@ private fun LiveTvScreen(
                 channel.copy(UpcomingProgram = upcoming[channel.Id])
             }
         } catch (e: Exception) {
-            android.util.Log.e("LiveTvActivity", "Could not load Live TV channels", e)
+            android.util.Log.e("LiveTvActivity", "Could not load Live TV channels: ${SensitiveDataRedactor.message(e)}")
             loadError = "error"
         } finally {
             isLoading = false
@@ -344,7 +345,7 @@ private fun LiveTvScreen(
                                             }
                                         }
                                         .onFailure {
-                                            android.util.Log.e("LiveTvActivity", "Could not update Live TV favorite", it)
+                                            android.util.Log.e("LiveTvActivity", "Could not update Live TV favorite: ${SensitiveDataRedactor.message(it)}")
                                             loadError = "favorite"
                                         }
                                 }

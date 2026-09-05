@@ -465,7 +465,7 @@ class JellyfinApiService(
             }
             nextUpEpisode
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching NextUp for series $seriesId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching NextUp for series $seriesId: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -511,7 +511,7 @@ class JellyfinApiService(
             }
             firstEpisode
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error getting first episode for series $seriesId", e)
+            android.util.Log.e("JellyfinAPI", "Error getting first episode for series $seriesId: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -576,7 +576,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "All episodes watched for series $seriesId")
             null
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error finding first unwatched episode for series $seriesId", e)
+            android.util.Log.e("JellyfinAPI", "Error finding first unwatched episode for series $seriesId: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -848,7 +848,7 @@ class JellyfinApiService(
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching item details", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching item details: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -872,7 +872,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Person birth: ${person.birthDateValue}, death: ${person.deathDateValue}, locations: ${person.ProductionLocations}")
             person
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching person details", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching person details: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -902,7 +902,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Person filmography fetched: ${itemsResponse.Items.size} items")
             itemsResponse.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching person filmography", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching person filmography: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1294,7 +1294,7 @@ class JellyfinApiService(
             
             response
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "❌ Failed to get PlaybackInfo: ${e::class.simpleName}", e)
+            android.util.Log.e("JellyfinAPI", "❌ Failed to get PlaybackInfo: ${SensitiveDataRedactor.message(e)}")
             null
         }
     }
@@ -1493,7 +1493,7 @@ class JellyfinApiService(
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching seasons for series $seriesId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching seasons for series $seriesId: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1530,7 +1530,7 @@ class JellyfinApiService(
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching episodes for season $seasonId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching episodes for season $seasonId: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1578,7 +1578,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Found ${response.Items.size} episodes starting from index $startIndex")
             response.Items.sortedBy { it.IndexNumber ?: 0 }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching next episodes for season $seasonId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching next episodes for season $seasonId: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1624,7 +1624,7 @@ class JellyfinApiService(
             }
             nextEpisode
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching next episode in season", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching next episode in season: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -1666,7 +1666,7 @@ class JellyfinApiService(
             }
             nextEpisode
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching next episode", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching next episode: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -1690,7 +1690,7 @@ class JellyfinApiService(
             
             unwatchedCount
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error getting unwatched episode count for series $seriesId", e)
+            android.util.Log.e("JellyfinAPI", "Error getting unwatched episode count for series $seriesId: ${SensitiveDataRedactor.message(e)}")
             0
         }
     }
@@ -1712,7 +1712,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching movies by genre", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching movies by genre: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1735,7 +1735,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching series by genre", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching series by genre: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1758,7 +1758,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching movies by person", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching movies by person: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1788,7 +1788,7 @@ class JellyfinApiService(
                 item.getLastPlayedDateForSort()
             }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching continue watching movies", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching continue watching movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1815,7 +1815,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching top unwatched movies", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching top unwatched movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1842,7 +1842,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching recently watched movies", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching recently watched movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1869,7 +1869,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching favorite movies", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching favorite movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1903,7 +1903,7 @@ class JellyfinApiService(
                 item.getLastPlayedDateForSort()
             }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching continue watching movies from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching continue watching movies from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1931,7 +1931,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching top unwatched movies from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching top unwatched movies from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1959,7 +1959,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching recently watched movies from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching recently watched movies from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1987,7 +1987,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching favorite movies from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching favorite movies from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2022,7 +2022,7 @@ class JellyfinApiService(
                 item.getLastPlayedDateForSort()
             }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching continue watching episodes from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching continue watching episodes from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2048,7 +2048,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching next up episodes from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching next up episodes from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2076,7 +2076,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching recently released episodes from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching recently released episodes from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2104,7 +2104,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching random unwatched shows from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching random unwatched shows from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2131,7 +2131,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching top rated shows from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching top rated shows from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2159,7 +2159,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching shows by genre '$genre' from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching shows by genre '$genre' from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2183,7 +2183,7 @@ class JellyfinApiService(
             }.body()
             response.Items.mapNotNull { it.Name }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching genres from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching genres from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2207,7 +2207,7 @@ class JellyfinApiService(
             }.body()
             response.Items.mapNotNull { it.Name }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching movie genres from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching movie genres from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2235,7 +2235,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching movies by genre '$genre' from library $libraryId", e)
+            android.util.Log.e("JellyfinAPI", "Error fetching movies by genre '$genre' from library $libraryId: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2277,7 +2277,7 @@ class JellyfinApiService(
             }
             isSuccessful
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error marking item as watched", e)
+            android.util.Log.e("JellyfinAPI", "Error marking item as watched: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
@@ -2315,7 +2315,7 @@ class JellyfinApiService(
             
             isSuccessful
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error marking item as unwatched", e)
+            android.util.Log.e("JellyfinAPI", "Error marking item as unwatched: ${SensitiveDataRedactor.message(e)}")
             false
         }
     }
@@ -2367,7 +2367,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "✅ Reported playback START for item $itemId at position $positionTicks ticks (status: ${response.status})")
             true
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "❌ Error reporting playback start", e)
+            android.util.Log.e("JellyfinAPI", "❌ Error reporting playback start: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
@@ -2430,7 +2430,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "📊 Reported playback PROGRESS for item $itemId at ${positionTicks / 10_000_000}s (status: ${response.status})")
             true
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "❌ Error reporting playback progress", e)
+            android.util.Log.e("JellyfinAPI", "❌ Error reporting playback progress: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
@@ -2477,7 +2477,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "🛑 Reported playback STOPPED for item $itemId at ${positionTicks / 10_000_000}s (status: ${response.status})")
             true
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "❌ Error reporting playback stopped", e)
+            android.util.Log.e("JellyfinAPI", "❌ Error reporting playback stopped: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
@@ -2520,7 +2520,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Item metadata refresh triggered successfully for $itemId")
             true
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error refreshing item metadata for $itemId", e)
+            android.util.Log.e("JellyfinAPI", "Error refreshing item metadata for $itemId: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
@@ -2552,7 +2552,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Library refresh triggered successfully")
             true
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error triggering library refresh", e)
+            android.util.Log.e("JellyfinAPI", "Error triggering library refresh: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
@@ -2583,7 +2583,7 @@ class JellyfinApiService(
             
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error searching for items", e)
+            android.util.Log.e("JellyfinAPI", "Error searching for items: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -2626,7 +2626,7 @@ class JellyfinApiService(
             
             matchingItem
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error finding item by TMDB ID", e)
+            android.util.Log.e("JellyfinAPI", "Error finding item by TMDB ID: ${SensitiveDataRedactor.message(e)}")
             null
         }
     }
@@ -2679,7 +2679,7 @@ class JellyfinApiService(
             
             matchingItem
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error finding item by title", e)
+            android.util.Log.e("JellyfinAPI", "Error finding item by title: ${SensitiveDataRedactor.message(e)}")
             null
         }
     }
