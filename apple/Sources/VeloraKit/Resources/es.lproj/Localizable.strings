@@ -6,6 +6,7 @@
 "Password" = "Contraseña";
 "Sign in" = "Iniciar sesión";
 "Unable to sign in" = "No se ha podido iniciar sesión";
+"Unable to load library" = "No se ha podido cargar la biblioteca";
 "Language and playback" = "Idioma y reproducción";
 "App language" = "Idioma de la aplicación";
 "Preferred audio" = "Audio preferido";

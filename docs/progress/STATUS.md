@@ -19,6 +19,13 @@ el tamaño real del vídeo y al cambiar a pantalla completa. La compilación y
 las pruebas Android pasan; la reproducción autenticada y el cambio visual en
 contenido real quedan pendientes de una cuenta Jellyfin que acepte el acceso.
 
+La base Apple incorpora ahora una recarga explícita de biblioteca y Live TV al
+restaurar una sesión guardada. Antes el shell podía marcar la sesión como
+válida y mostrar una biblioteca vacía hasta volver a iniciar sesión; la nueva
+ruta usa el mismo modelo de contenido para login nuevo y reapertura. Swift/Xcode
+no están disponibles en este host Windows, por lo que la prueba final queda
+delegada al job macOS de GitHub Actions.
+
 La comprobación de ramas del mismo momento devuelve únicamente `main` y
 `origin/main`; no hay ramas adicionales en el checkout ni en el remoto
 visible.

@@ -6,6 +6,7 @@
 "Password" = "Mot de passe";
 "Sign in" = "Se connecter";
 "Unable to sign in" = "Connexion impossible";
+"Unable to load library" = "Impossible de charger la bibliothèque";
 "Language and playback" = "Langue et lecture";
 "App language" = "Langue de l’application";
 "Preferred audio" = "Audio préféré";
