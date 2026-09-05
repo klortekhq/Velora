@@ -22,6 +22,9 @@ el shell y los entrypoints SwiftPM ya están implementados, pero todavía no hay
 proyectos `.app` firmados ni un pipeline de firma.
 La compilación de Apple y la validación en hardware requieren macOS con Xcode;
 este host Windows no las certifica.
+Los entrypoints incluyen una ruta mínima de enlace exclusiva para macOS CI;
+no es una aplicación macOS distribuible ni sustituye los targets nativos de
+iOS/iPadOS/tvOS.
 Los textos del shell se sirven mediante recursos nativos `Localizable.strings`
 en español, inglés, francés y alemán; la opción automática sigue el idioma del
 dispositivo y una selección explícita se aplica al entorno SwiftUI.

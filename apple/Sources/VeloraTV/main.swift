@@ -21,3 +21,13 @@ private struct VeloraTVRoot: View {
     }
 }
 #endif
+
+#if os(macOS)
+import Foundation
+
+/// Package-build entrypoint for macOS CI. tvOS keeps its native @main above.
+@main
+struct VeloraTVPackageCheck {
+    static func main() {}
+}
+#endif
