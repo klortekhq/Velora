@@ -16,6 +16,13 @@ inglés: `Available`, `Requested`, `Pending` y `Request` pasan por recursos
 traducibles. La comprobación de locales queda en 350 claves y vuelven a pasar
 los tests unitarios móviles y la compilación Kotlin de TV.
 
+Tras esa corrección, el commit `54bbfb7` vuelve a pasar `assembleMobileRelease`
+y `assembleTvRelease` con lint vital. Las APK unsigned vigentes son: móvil
+(67 832 683 bytes, SHA-256
+`94F9A56822AB6717EFF8C1108CC1DF425A8BA3D661CAD27D226E18CC0BC86175`) y TV
+(67 832 683 bytes, SHA-256
+`D6DF0FF57D0AABC708E04825674CEDC82795EB07637F9C62BAFFFE60EDB24907`).
+
 Desde el commit `25e7158` también pasan `assembleMobileRelease` y
 `assembleTvRelease` con lint vital. Los artefactos unsigned resultantes son:
 móvil (67 830 323 bytes, SHA-256
