@@ -260,7 +260,7 @@ public enum PlaybackDecisionEngine {
             && !source.subtitlesRequireTranscoding
         if capabilities.directPlay && directCompatible { return .directPlay }
         if capabilities.directStream && directCompatible { return .directStream }
-        if capabilities.directStream && directStreamCompatible(source: source, capabilities: capabilities) { return .directStream }
+        if capabilities.directStream && directStreamCompatible(source: source, capabilities: capabilities, quality: quality) { return .directStream }
         if capabilities.remux && supported(source.videoCodec, by: capabilities.videoCodecs) && channelsFit(source, capabilities) { return .remux }
         return capabilities.directStream || capabilities.directPlay ? .transcode : .fallback
     }
@@ -270,12 +270,14 @@ public enum PlaybackDecisionEngine {
         return values.isEmpty || values.contains(value.lowercased())
     }
 
-    private static func directStreamCompatible(source: PlaybackSource, capabilities: PlaybackCapabilities) -> Bool {
+    private static func directStreamCompatible(source: PlaybackSource, capabilities: PlaybackCapabilities, quality: PlaybackQuality) -> Bool {
         supported(source.videoCodec, by: capabilities.videoCodecs)
             && supported(source.audioCodec, by: capabilities.audioCodecs)
             && supported(source.hdrFormat, by: capabilities.hdrFormats)
             && channelsFit(source, capabilities)
             && passthroughFits(source, capabilities)
+            && dimensionsFit(source, capabilities)
+            && presetFits(source, quality)
             && !source.subtitlesRequireTranscoding
     }
 
