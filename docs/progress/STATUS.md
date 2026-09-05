@@ -12,6 +12,11 @@ pruebas `testMobileDebugUnitTest` y `testTvDebugUnitTest` del mismo checkout
 también terminaron con `BUILD SUCCESSFUL`. La única advertencia relevante del
 log es del sistema Fire OS (`CoreComponentFactory`), no un cierre de Velora.
 
+La compilación local del 2026-09-05 también completó `assembleMobileRelease` y
+`assembleTvRelease` con lint vital incluido. Generó los dos APK release
+`unsigned` de aproximadamente 67,9 MB; no se publican como release oficial
+porque este entorno no tiene la firma de distribución configurada.
+
 La misma build incorpora una corrección del selector de aspecto: las opciones
 se exponen como controles seleccionables accesibles para táctil y mando, y el
 modo elegido se reaplica después de los ciclos de medida de Media3, al recibir
