@@ -328,4 +328,22 @@
   <string name="settings_jellyseerr_login_success">Erfolgreich angemeldet</string>
   <string name="settings_jellyseerr_login_required">Benutzername und Passwort eingeben</string>
   <string name="settings_jellyseerr_login_error">Anmeldung fehlgeschlagen</string>
+  <string name="settings_video_gl_title">ExoPlayer-GL-Verarbeitung</string>
+  <string name="settings_video_gl_description">OpenGL für erweiterte Videoeffekte in ExoPlayer verwenden (HDR-Simulation und Schärfung).</string>
+  <string name="settings_video_tone_mapping_title">Dynamisches Tone-Mapping aktivieren</string>
+  <string name="settings_video_tone_mapping_description">Szenenabhängige HDR-Simulation aktivieren, um den Kontrast dynamisch zu verbessern.</string>
+  <string name="settings_video_mpv_postprocessing_title">MPV-Nachbearbeitung</string>
+  <string name="settings_video_mpv_postprocessing_description">Shader-Profile im MPV-Player anwenden (HDR-ähnliche Effekte, Schärfung usw.).</string>
+  <string name="settings_video_fake_hdr_title">Simuliertes HDR</string>
+  <string name="settings_video_fake_hdr_description">HDR durch Tone-Mapping und erhöhte Helligkeit simulieren.</string>
+  <string name="settings_video_hdr_intensity">HDR-Intensität: %.1f (Bereich: 1,0–2,0)</string>
+  <string name="settings_video_hdr_intensity_title">HDR-Intensität</string>
+  <string name="settings_video_sharpening_title">Schärfung</string>
+  <string name="settings_video_sharpening_description">Bildschärfe durch Kantenerkennung verbessern.</string>
+  <string name="settings_video_sharpening_intensity">Schärfungsintensität: %.1f (Bereich: 0,0–1,0)</string>
+  <string name="settings_video_sharpening_intensity_title">Schärfungsintensität</string>
+  <string name="settings_video_frame_blending_title">Frame-Blending</string>
+  <string name="settings_video_frame_blending_description">Flüssigere Bewegungen durch das Mischen von Bildern simulieren.</string>
+  <string name="settings_video_frame_blending_intensity">Blending-Intensität: %.1f (Bereich: 0,0–1,0)</string>
+  <string name="settings_video_frame_blending_intensity_title">Blending-Intensität</string>
 </resources>

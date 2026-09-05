@@ -348,4 +348,22 @@
   <string name="settings_jellyseerr_login_success">Signed in successfully</string>
   <string name="settings_jellyseerr_login_required">Enter your username and password</string>
   <string name="settings_jellyseerr_login_error">Could not sign in</string>
+  <string name="settings_video_gl_title">ExoPlayer GL processing</string>
+  <string name="settings_video_gl_description">Use OpenGL for advanced video effects in ExoPlayer (HDR simulation and sharpening).</string>
+  <string name="settings_video_tone_mapping_title">Enable dynamic tone mapping</string>
+  <string name="settings_video_tone_mapping_description">Enable scene-adaptive HDR simulation to improve contrast dynamically.</string>
+  <string name="settings_video_mpv_postprocessing_title">MPV post-processing</string>
+  <string name="settings_video_mpv_postprocessing_description">Apply shader profiles to the MPV player (HDR-like effects, sharpening, and more).</string>
+  <string name="settings_video_fake_hdr_title">Simulated HDR</string>
+  <string name="settings_video_fake_hdr_description">Simulate HDR using tone mapping and increased brightness.</string>
+  <string name="settings_video_hdr_intensity">HDR intensity: %.1f (range: 1.0–2.0)</string>
+  <string name="settings_video_hdr_intensity_title">HDR intensity</string>
+  <string name="settings_video_sharpening_title">Sharpening</string>
+  <string name="settings_video_sharpening_description">Improve image sharpness through edge detection.</string>
+  <string name="settings_video_sharpening_intensity">Sharpening intensity: %.1f (range: 0.0–1.0)</string>
+  <string name="settings_video_sharpening_intensity_title">Sharpening intensity</string>
+  <string name="settings_video_frame_blending_title">Frame blending</string>
+  <string name="settings_video_frame_blending_description">Simulate smoother motion by blending frames (soap-opera effect).</string>
+  <string name="settings_video_frame_blending_intensity">Blending intensity: %.1f (range: 0.0–1.0)</string>
+  <string name="settings_video_frame_blending_intensity_title">Blending intensity</string>
 </resources>
