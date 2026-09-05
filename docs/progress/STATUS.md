@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión actual: commit `31a73b4`.
+Revisión actual: commit `88b27d0`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -50,6 +50,10 @@ una comprobación no se interpreta como soporte certificado.
   Samsung, IPK webOS y bundle HTML5 VIDAA.
 - `:app:assembleMobileRelease` y `:app:assembleTvRelease`: `BUILD SUCCESSFUL`.
 - `git diff --check`: sin errores en los cambios publicados.
+- `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
+- `node scripts/check-android-locales.mjs`: 434 claves en los catálogos Android.
+- `node scripts/check-apple-locales.mjs`: 45 claves coherentes en `en`, `es`,
+  `fr` y `de`.
 
 ## Artefactos Android locales
 
