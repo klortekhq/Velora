@@ -20,10 +20,14 @@ Comandos de empaquetado:
 
 ```text
 npm run build:samsung
+npm run build:tizen
 npm run build:webos
 npm run build:vidaa
 npm run build:all
 ```
+
+`build:tizen` es el alias explícito del empaquetado Samsung Tizen; por
+compatibilidad, ambos comandos dejan la preparación en `outputs/web/samsung`.
 
 VIDAA genera un bundle HTML5 y su ficha de envío; la publicación oficial no
 usa un `.vpk` universal y debe tramitarse mediante el portal VIDAA para los
