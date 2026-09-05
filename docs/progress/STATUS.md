@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`186524e`. Los
+`727bccf`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -25,6 +25,11 @@ móvil (67 825 599 bytes, SHA-256
 `C85E1380D07E534440E07B0FEC17CA08E532076726528D4F29B4B8895309FE67`) y TV
 (67 825 507 bytes, SHA-256
 `2E942D0EFD149A5536354ABC226924CE34703659AB5899270438002BDC20DC36`).
+
+La validación web posterior vuelve a pasar las pruebas de capacidades,
+seguridad e interacción. El bundle web y el paquete webOS se generan; Samsung
+queda preparado sin firma por ausencia de Tizen Studio/CLI y VIDAA queda como
+bundle HTML5, sin inventar un paquete firmado que no se ha validado.
 
 La etiqueta remota `v1.4.0` se realineó con el `main` actual (`1dbb8a3`) para
 evitar que el workflow de publicación reconstruya un commit antiguo. La API
