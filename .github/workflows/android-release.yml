@@ -70,6 +70,30 @@ jobs:
       - name: Dar permisos al wrapper
         run: chmod +x ./gradlew
 
+      - name: Preparar firma de distribución si está configurada
+        shell: bash
+        env:
+          VELORA_ANDROID_KEYSTORE_BASE64: ${{ secrets.VELORA_ANDROID_KEYSTORE_BASE64 }}
+          VELORA_ANDROID_STORE_PASSWORD: ${{ secrets.VELORA_ANDROID_STORE_PASSWORD }}
+          VELORA_ANDROID_KEY_ALIAS: ${{ secrets.VELORA_ANDROID_KEY_ALIAS }}
+          VELORA_ANDROID_KEY_PASSWORD: ${{ secrets.VELORA_ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "${VELORA_ANDROID_KEYSTORE_BASE64:-}" ] || \
+             [ -z "${VELORA_ANDROID_STORE_PASSWORD:-}" ] || \
+             [ -z "${VELORA_ANDROID_KEY_ALIAS:-}" ] || \
+             [ -z "${VELORA_ANDROID_KEY_PASSWORD:-}" ]; then
+            echo "No hay secretos completos de firma; se generará un APK unsigned de QA."
+            exit 0
+          fi
+          keystore="$RUNNER_TEMP/velora-release.jks"
+          printf '%s' "$VELORA_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$keystore"
+          test -s "$keystore"
+          echo "VELORA_RELEASE_STORE_FILE=$keystore" >> "$GITHUB_ENV"
+          echo "VELORA_RELEASE_STORE_PASSWORD=$VELORA_ANDROID_STORE_PASSWORD" >> "$GITHUB_ENV"
+          echo "VELORA_RELEASE_KEY_ALIAS=$VELORA_ANDROID_KEY_ALIAS" >> "$GITHUB_ENV"
+          echo "VELORA_RELEASE_KEY_PASSWORD=$VELORA_ANDROID_KEY_PASSWORD" >> "$GITHUB_ENV"
+
       - name: Verificar versión de la etiqueta
         if: startsWith(env.RELEASE_TAG, 'v')
         shell: bash
@@ -81,29 +105,49 @@ jobs:
           test "$tag_version" = "$android_version" || { echo "Tag $tag_version != Android $android_version"; exit 1; }
           test "$tag_version" = "$web_version" || { echo "Tag $tag_version != web $web_version"; exit 1; }
 
-      - name: Compilar APK ${{ matrix.target }} debug y release unsigned
+      - name: Compilar APK ${{ matrix.target }} debug y release
         run: |
           set -o errexit
           cleanup_gradle() {
             pkill -TERM -P "$BASHPID" 2>/dev/null || true
           }
           trap cleanup_gradle EXIT
+          signing_args=()
+          if [ -n "${VELORA_RELEASE_STORE_FILE:-}" ]; then
+            signing_args+=(
+              "-PveloraReleaseStoreFile=$VELORA_RELEASE_STORE_FILE"
+              "-PveloraReleaseStorePassword=$VELORA_RELEASE_STORE_PASSWORD"
+              "-PveloraReleaseKeyAlias=$VELORA_RELEASE_KEY_ALIAS"
+              "-PveloraReleaseKeyPassword=$VELORA_RELEASE_KEY_PASSWORD"
+            )
+          fi
           timeout --foreground --signal=TERM --kill-after=30s 20m ./gradlew \
             :app:test${{ matrix.target == 'mobile' && 'Mobile' || 'Tv' }}DebugUnitTest \
             :app:assemble${{ matrix.target == 'mobile' && 'Mobile' || 'Tv' }}Debug \
             :app:assemble${{ matrix.target == 'mobile' && 'Mobile' || 'Tv' }}Release \
+            "${signing_args[@]}" \
             --no-daemon --max-workers=1 --console=plain --stacktrace
 
       - name: Preparar nombres de APK
         shell: bash
         run: |
           mkdir -p dist
+          release_apk="$(find app/build/outputs/apk/${{ matrix.target }}/release -maxdepth 1 -type f -name 'velora-release*.apk' -print -quit)"
+          test -n "$release_apk"
           if [ "${{ matrix.target }}" = "mobile" ]; then
             cp app/build/outputs/apk/mobile/debug/app-mobile-debug.apk dist/Velora-mobile-debug.apk
-            cp app/build/outputs/apk/mobile/release/velora-release-unsigned.apk dist/Velora-mobile-release-unsigned.apk
+            if [[ "$release_apk" == *unsigned.apk ]]; then
+              cp "$release_apk" dist/Velora-mobile-release-unsigned.apk
+            else
+              cp "$release_apk" dist/Velora-mobile-release.apk
+            fi
           else
             cp app/build/outputs/apk/tv/debug/app-tv-debug.apk dist/Velora-tv-debug.apk
-            cp app/build/outputs/apk/tv/release/velora-release-unsigned.apk dist/Velora-tv-release-unsigned.apk
+            if [[ "$release_apk" == *unsigned.apk ]]; then
+              cp "$release_apk" dist/Velora-tv-release-unsigned.apk
+            else
+              cp "$release_apk" dist/Velora-tv-release.apk
+            fi
           fi
           sha256sum dist/*.apk > dist/SHA256SUMS-${{ matrix.target }}.txt
 

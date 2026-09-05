@@ -70,7 +70,7 @@ La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de q
 
 ## Descargar
 
-Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases) cuando incorporan un bloque funcional o una mejora relevante. No se publica una release por cada ajuste menor; las correcciones pequeñas se agrupan en la siguiente versión significativa, salvo que sean de seguridad o críticas. Cada release etiquetada reúne los cuatro APK de Android (móvil y TV, debug y release unsigned), el cliente web y los paquetes web disponibles, junto con sus sumas SHA-256. Para instalar manualmente en Android TV o Fire TV, descarga el APK correspondiente y realiza una instalación local.
+Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases) cuando incorporan un bloque funcional o una mejora relevante. No se publica una release por cada ajuste menor; las correcciones pequeñas se agrupan en la siguiente versión significativa, salvo que sean de seguridad o críticas. Cada release etiquetada reúne los cuatro APK de Android (móvil y TV, debug y release firmado cuando hay secretos de distribución configurados; en otro caso, release unsigned de QA), el cliente web y los paquetes web disponibles, junto con sus sumas SHA-256. Solo los APK firmados o debug son instalables directamente; un release unsigned debe firmarse antes de distribuirse.
 
 ## Cliente web y Smart TV
 
@@ -109,6 +109,13 @@ distribuirse. El flujo de GitHub Actions ejecuta estas mismas tareas y publica
 los artefactos juntos cuando se crea una etiqueta de versión completa `vX.Y.0`;
 los builds de parche se reservan para QA, salvo correcciones críticas o de
 seguridad.
+
+Para que GitHub Actions produzca releases instalables, configura estos secretos
+del repositorio: `VELORA_ANDROID_KEYSTORE_BASE64`,
+`VELORA_ANDROID_STORE_PASSWORD`, `VELORA_ANDROID_KEY_ALIAS` y
+`VELORA_ANDROID_KEY_PASSWORD`. Si falta cualquiera, el flujo conserva el
+comportamiento seguro de QA y publica explícitamente `release-unsigned`; nunca
+se genera una clave ni se sube una credencial al repositorio.
 
 Si una ejecución de la etiqueta falla después de crearla, se puede relanzar
 desde GitHub Actions introduciendo esa misma etiqueta en el campo
