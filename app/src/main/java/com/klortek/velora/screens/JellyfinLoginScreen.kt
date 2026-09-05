@@ -72,6 +72,7 @@ import com.klortek.velora.jellyfin.JellyfinAuthService
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.jellyfin.QuickConnectError
 import com.klortek.velora.jellyfin.QuickConnectService
+import com.klortek.velora.security.SensitiveDataRedactor
 import kotlinx.coroutines.isActive
 
 enum class LoginMethod {
@@ -582,7 +583,7 @@ private fun QuickConnectLoginContent(
                     }
                 }
             } catch (e: Exception) {
-                android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect initiation", e)
+                android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect initiation: ${SensitiveDataRedactor.message(e)}")
                 onIsUnavailableChange(true)
                 onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                 onAuthenticatingChange(false)
@@ -657,7 +658,7 @@ private fun QuickConnectLoginContent(
                                     onAuthenticatingChange(false)
                                 }
                             } catch (e: Exception) {
-                                android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect authentication", e)
+                                android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect authentication: ${SensitiveDataRedactor.message(e)}")
                                 onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                                 onAuthenticatingChange(false)
                             }
@@ -681,7 +682,7 @@ private fun QuickConnectLoginContent(
                     // Continue polling - null might be temporary
                 }
             } catch (e: Exception) {
-                android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect polling", e)
+                android.util.Log.e("QuickConnectLogin", "Exception during QuickConnect polling: ${SensitiveDataRedactor.message(e)}")
                 onIsPollingChange(false)
                 onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
                 break

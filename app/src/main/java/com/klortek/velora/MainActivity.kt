@@ -22,6 +22,7 @@ import com.klortek.velora.SeriesDetailsActivity
 import com.klortek.velora.JellyfinVideoPlayerActivity
 import com.klortek.velora.updater.GitHubRelease
 import com.klortek.velora.updater.UpdateService
+import com.klortek.velora.security.SensitiveDataRedactor
 import androidx.media3.common.util.UnstableApi
 
 /**
@@ -55,7 +56,7 @@ class MainActivity : ComponentActivity() {
                 packageInfo.versionCode
             }
         } catch (e: Exception) {
-            android.util.Log.e("MainActivity", "Error getting version code", e)
+            android.util.Log.e("MainActivity", "Error getting version code: ${SensitiveDataRedactor.message(e)}")
             1 // Fallback to 1
         }
         val versionName = runCatching {
@@ -194,7 +195,7 @@ private fun UpdateChecker(localVersionCode: Int, localVersionName: String?) {
                 android.util.Log.d("UpdateChecker", "No update available (remote: $remoteVersionCode, local: $localVersionCode)")
             }
         } catch (e: Exception) {
-            android.util.Log.e("UpdateChecker", "Error checking for updates", e)
+            android.util.Log.e("UpdateChecker", "Error checking for updates: ${SensitiveDataRedactor.message(e)}")
             // Silently fail - don't interrupt user experience
         }
     }
