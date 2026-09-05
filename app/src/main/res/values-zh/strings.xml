@@ -231,4 +231,30 @@
   <string name="player_pause">暂停</string>
   <string name="player_subtitles_none">无（已停用）</string>
   <string name="player_selected">已选择</string>
+  <string name="settings_playback_mpv">使用 MPV 播放器</string>
+  <string name="settings_playback_mpv_description">使用 MPV 改善 AV1、HEVC 和 HDR 兼容性。</string>
+  <string name="settings_skip_intro">跳过片头</string>
+  <string name="settings_skip_intro_description">显示跳过剧集片头的按钮（需要 Intro Skipper）。</string>
+  <string name="settings_skip_credits">跳过片尾</string>
+  <string name="settings_skip_credits_description">显示跳过片尾字幕的按钮。</string>
+  <string name="settings_server_transcoding">服务器转码</string>
+  <string name="settings_transcode_on_error">失败时自动转码</string>
+  <string name="settings_transcode_on_error_description">直接播放失败时使用服务器转码重试。</string>
+  <string name="settings_mpv_fallback">使用 MPV 作为备用</string>
+  <string name="settings_mpv_fallback_installed">ExoPlayer 失败且未启用转码时使用 MPV（已安装 MPV ✓）</string>
+  <string name="settings_mpv_fallback_external">ExoPlayer 失败时使用 MPV（需要外部 MPV 播放器）</string>
+  <string name="settings_transcode_always">始终转码</string>
+  <string name="settings_transcode_always_description">始终为所选编码（AV1、HEVC）请求服务器转码。</string>
+  <string name="settings_transcode_av1">转码 AV1</string>
+  <string name="settings_transcode_av1_description">请求转码 AV1 视频。</string>
+  <string name="settings_transcode_hevc">转码 HEVC/H.265</string>
+  <string name="settings_transcode_hevc_description">设备不支持时请求转码 HEVC/H.265。</string>
+  <string name="settings_transcode_target_codec">目标编码</string>
+  <string name="settings_transcode_target_codec_description">转码为：%1$s</string>
+  <string name="settings_transcode_max_bitrate">最大视频比特率</string>
+  <string name="settings_transcode_max_bitrate_description">%1$d Mbps（越高 = 质量越好）</string>
+  <string name="settings_autoplay_next">播放下一集</string>
+  <string name="settings_autoplay_next_description">当前剧集结束后自动播放下一集。</string>
+  <string name="settings_autoplay_countdown">自动倒计时</string>
+  <string name="settings_autoplay_countdown_description">在剧集结束前显示倒计时的时间（%1$ds）。</string>
 </resources>
