@@ -28,6 +28,18 @@ class SensitiveDataRedactorTest {
     }
 
     @Test
+    fun redactsCredentialsInUrlUserInfoAndFragments() {
+        val redacted = SensitiveDataRedactor.url(
+            "https://user:password@jellyfin.test/video.m3u8#access_token=fragment-secret"
+        )
+
+        assertFalse(redacted.contains("user:password"))
+        assertFalse(redacted.contains("fragment-secret"))
+        assertTrue(redacted.startsWith("https://<redacted>@jellyfin.test"))
+        assertTrue(redacted.contains("#access_token=<redacted>"))
+    }
+
+    @Test
     fun redactsCredentialsInsideErrorMessages() {
         val redacted = SensitiveDataRedactor.message(
             IllegalStateException("request failed: https://server.test/a?password=secret")
