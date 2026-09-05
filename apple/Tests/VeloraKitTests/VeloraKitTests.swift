@@ -60,6 +60,12 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps, quality: .fullHD10), .transcode)
     }
 
+    func testQualityPresetChecksHeightAsWellAsWidth() {
+        let caps = PlaybackCapabilities(videoCodecs: ["h264"], audioCodecs: ["aac"], containers: ["mp4"])
+        let source = PlaybackSource(container: "mp4", videoCodec: "h264", audioCodec: "aac", width: 1920, height: 2160, bitrateKbps: 8_000)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps, quality: .fullHD10), .transcode)
+    }
+
     func testQualityPresetDoesNotAddCapsToOriginal() {
         let caps = PlaybackCapabilities(videoCodecs: ["hevc"], audioCodecs: ["eac3"], containers: ["mkv"])
         let source = PlaybackSource(container: "mkv", videoCodec: "hevc", audioCodec: "eac3", width: 7680, height: 4320, bitrateKbps: 100_000)
