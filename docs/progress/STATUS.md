@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`11d2430`. Los
+`083d222`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -34,6 +34,12 @@ de una ejecución observada en macOS/Xcode; el repositorio ya incluye
 `apple.yml`, que compila y ejecuta el Swift Package en macOS cuando GitHub
 Actions dispone del runner correspondiente. Esto valida el paquete compartido,
 pero no equivale todavía a certificar una app firmada para iOS, iPadOS o tvOS.
+
+Tras publicar `083d222`, se repitieron las comprobaciones locales: 75 tests
+JUnit Android, `lintMobileDebug` sin errores, compilación Kotlin móvil/TV,
+parseo y tests web, y `npm run build:all` con IPK webOS generado. Tizen Studio,
+la firma Samsung/VIDAA, macOS/Xcode y el hardware real siguen sin estar
+disponibles en este host, por lo que permanecen explícitamente sin certificar.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
