@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`122e20a`. Los
+`f73bc45`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -60,6 +60,11 @@ por lo que esta cobertura queda pendiente de ejecución en el workflow macOS.
 
 La comprobación ADB de esta pasada no detectó ningún dispositivo conectado;
 por tanto no se declara una prueba física nueva en Fire TV.
+
+Tras el cambio Apple, `testMobileDebugUnitTest`, `compileTvDebugKotlin`,
+`node web/scripts/test-platform.mjs` y `node --check web/app.js` vuelven a
+pasar. La compilación Android emitió únicamente los avisos ya conocidos del
+SDK local y no errores de código.
 
 Los catálogos Android garantizados para la experiencia principal —español base,
 inglés, alemán y francés— ya contienen las 346 claves actuales. El workflow de
