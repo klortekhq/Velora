@@ -26,6 +26,11 @@ TMDB, comprobación de actualizaciones, cierre de sesión y encabezado de Ajuste
 El catálogo alcanza 425 claves; `check-android-locales.mjs`, compilación Kotlin
 y tests unitarios de móvil/TV pasan de nuevo.
 
+La build TV posterior se compiló e instaló en el Fire TV AFTSS
+mediante ADB el 2026-09-05. La actividad se lanzó y el
+logcat no mostró `FATAL EXCEPTION`; esto valida instalación y arranque de esta
+build, no reproducción autenticada ni Live TV.
+
 La auditoría de logs de red del 2026-09-05 sanitiza los mensajes de excepción
 en `JellyfinApi`, `LiveTvActivity`, `JellyfinRepository` y `ServerEntryScreen`.
 Usan `SensitiveDataRedactor.message` en lugar de registrar el `Throwable`
