@@ -113,6 +113,14 @@
     tr: { server: 'Sunucu', user: 'Kullanıcı', password: 'Şifre', signIn: 'Giriş yap', connectServer: 'Jellyfin sunucunuzu bağlayın', serverPlaceholder: 'https://sunucu:8096', library: 'Kitaplığınız', libraryDescription: 'Filmler, diziler ve canlı televizyon', searchPlaceholder: 'Film ve dizi ara', search: 'Ara', all: 'Tümü', movies: 'Filmler', series: 'Diziler', live: 'Canlı TV', back: 'Geri', play: 'Oynat', close: 'Kapat', noDescription: 'Açıklama yok.', refresh: 'Yenile', logout: 'Çıkış yap', loading: 'Kitaplık yükleniyor…', retry: 'Tekrar dene', player: 'Oynatıcı', fullscreen: 'Tam ekran', settings: 'Ayarlar', languageSettings: 'Dil ve oynatma', appLanguage: 'Uygulama dili', automatic: 'Otomatik (cihaz dili)', preferredAudio: 'Tercih edilen ses', audioAuto: 'Otomatik / sunucu', subtitles: 'Altyazılar', subtitleOff: 'Kapalı', subtitlePreferred: 'Tercih edilen', subtitleForced: 'Zorunlu', subtitleAuto: 'Otomatik', subtitleLanguage: 'Altyazı dili', save: 'Kaydet', cancel: 'İptal', saved: 'Tercihler kaydedildi', settingDescription: 'Bir sonraki oynatmaya uygulanır ve bu cihaza kaydedilir.', loginError: 'Giriş yapılamadı', playbackError: 'Bu cihaz bu biçimi doğrudan oynatamıyor.' }
   };
 
+  // Keep the catalogue total for every supported locale. A locale may add
+  // native wording incrementally, but a newly introduced key must never fall
+  // through to Spanish merely because one platform string was forgotten.
+  // English is the neutral fallback; existing locale-specific values win.
+  Object.keys(TRANSLATIONS).forEach(function (code) {
+    TRANSLATIONS[code] = Object.assign({}, TRANSLATIONS.en, TRANSLATIONS[code]);
+  });
+
   function languageCode() {
     var selected = localStorage.veloraLanguage || 'auto';
     if (selected !== 'auto' && TRANSLATIONS[selected]) return selected;
