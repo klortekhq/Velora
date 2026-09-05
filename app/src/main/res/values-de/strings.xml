@@ -231,4 +231,30 @@
   <string name="player_pause">Pause</string>
   <string name="player_subtitles_none">Keine (deaktiviert)</string>
   <string name="player_selected">Ausgewählt</string>
+  <string name="settings_playback_mpv">MPV-Player verwenden</string>
+  <string name="settings_playback_mpv_description">MPV für bessere AV1-, HEVC- und HDR-Kompatibilität verwenden.</string>
+  <string name="settings_skip_intro">Intro überspringen</string>
+  <string name="settings_skip_intro_description">Schaltfläche zum Überspringen von Intros anzeigen (Intro Skipper erforderlich).</string>
+  <string name="settings_skip_credits">Abspann überspringen</string>
+  <string name="settings_skip_credits_description">Schaltfläche zum Überspringen des Abspanns anzeigen.</string>
+  <string name="settings_server_transcoding">Server-Transkodierung</string>
+  <string name="settings_transcode_on_error">Bei Fehler automatisch transkodieren</string>
+  <string name="settings_transcode_on_error_description">Bei fehlgeschlagener Direktwiedergabe mit Server-Transkodierung erneut versuchen.</string>
+  <string name="settings_mpv_fallback">MPV als Fallback verwenden</string>
+  <string name="settings_mpv_fallback_installed">MPV verwenden, wenn ExoPlayer fehlschlägt und Transkodierung deaktiviert ist (MPV installiert ✓)</string>
+  <string name="settings_mpv_fallback_external">MPV verwenden, wenn ExoPlayer fehlschlägt (externer MPV-Player erforderlich)</string>
+  <string name="settings_transcode_always">Immer transkodieren</string>
+  <string name="settings_transcode_always_description">Für ausgewählte Codecs (AV1, HEVC) immer Server-Transkodierung anfordern.</string>
+  <string name="settings_transcode_av1">AV1 transkodieren</string>
+  <string name="settings_transcode_av1_description">Transkodierung für AV1-Video anfordern.</string>
+  <string name="settings_transcode_hevc">HEVC/H.265 transkodieren</string>
+  <string name="settings_transcode_hevc_description">HEVC/H.265 transkodieren, wenn das Gerät es nicht unterstützt.</string>
+  <string name="settings_transcode_target_codec">Ziel-Codec</string>
+  <string name="settings_transcode_target_codec_description">Transkodieren zu: %1$s</string>
+  <string name="settings_transcode_max_bitrate">Maximale Videobitrate</string>
+  <string name="settings_transcode_max_bitrate_description">%1$d Mbit/s (höher = bessere Qualität)</string>
+  <string name="settings_autoplay_next">Nächste Folge abspielen</string>
+  <string name="settings_autoplay_next_description">Die nächste Folge automatisch abspielen, wenn die aktuelle endet.</string>
+  <string name="settings_autoplay_countdown">Automatischer Countdown</string>
+  <string name="settings_autoplay_countdown_description">Zeit vor dem Ende der Folge für den Countdown (%1$ds).</string>
 </resources>
