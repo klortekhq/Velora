@@ -3419,7 +3419,7 @@ fun JellyfinVideoPlayerScreen(
                             modifier = Modifier.fillMaxSize(),
                             update = { view ->
                                 // Keep references up-to-date on view update/recomposition
-                                val glSurfaceView = if (view is FrameLayout) {
+                                val glSurfaceView = if (view.getChildAt(0) is GLVideoSurfaceView) {
                                     val gl = view.getChildAt(0) as? GLVideoSurfaceView
                                     glSurfaceViewRef.value = gl
                                     gl?.setAspectMode(currentAspectMode.name)
