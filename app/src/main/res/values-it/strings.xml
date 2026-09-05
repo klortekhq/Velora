@@ -222,4 +222,13 @@
   <string name="settings_offline_storage_unlimited">Unlimited</string>
   <string name="live_tv_cancel">Annulla</string>
   <string name="live_tv_source_count">%1$d sorgenti</string>
+  <string name="player_back">Indietro</string>
+  <string name="player_fullscreen">Schermo intero</string>
+  <string name="player_exit_fullscreen">Esci dallo schermo intero</string>
+  <string name="player_rewind_15">Indietro di 15 secondi</string>
+  <string name="player_forward_15">Avanti di 15 secondi</string>
+  <string name="player_play">Riproduci</string>
+  <string name="player_pause">Pausa</string>
+  <string name="player_subtitles_none">Nessuno (disattivati)</string>
+  <string name="player_selected">Selezionato</string>
 </resources>

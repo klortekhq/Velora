@@ -3701,7 +3701,7 @@ fun JellyfinVideoPlayerScreen(
                                         ) {
                                             androidx.compose.material3.Icon(
                                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                                contentDescription = "Atrás",
+                                                contentDescription = stringResource(R.string.player_back),
                                                 tint = Color.White,
                                                 modifier = Modifier.size(24.dp)
                                             )
@@ -3731,7 +3731,7 @@ fun JellyfinVideoPlayerScreen(
                                         ) {
                                             androidx.compose.material3.Icon(
                                                 imageVector = Icons.Filled.FullscreenExit,
-                                                contentDescription = "Salir de pantalla completa",
+                                                contentDescription = stringResource(R.string.player_exit_fullscreen),
                                                 tint = Color.White,
                                                 modifier = Modifier.size(24.dp)
                                             )
@@ -3752,7 +3752,7 @@ fun JellyfinVideoPlayerScreen(
                                     ) {
                                         androidx.compose.material3.Icon(
                                             imageVector = Icons.Filled.Fullscreen,
-                                            contentDescription = "Pantalla completa",
+                                            contentDescription = stringResource(R.string.player_fullscreen),
                                             tint = Color.White,
                                             modifier = Modifier.size(26.dp)
                                         )
@@ -3837,7 +3837,7 @@ fun JellyfinVideoPlayerScreen(
                                         // Rewind button
                                         PlayerControlButton(
                                             icon = Icons.Filled.FastRewind,
-                                                            contentDescription = "Retroceder 15 segundos",
+                                                            contentDescription = stringResource(R.string.player_rewind_15),
                                             size = if (isMobile) 52.dp else 48.dp,
                                             iconSize = if (isMobile) 26.dp else 24.dp,
                                             onClick = {
@@ -3851,7 +3851,7 @@ fun JellyfinVideoPlayerScreen(
                                         // Play/Pause button - DEFAULT FOCUS TARGET
                                         PlayerControlButton(
                                             icon = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                                            contentDescription = if (isPlaying) "Pausa" else "Reproducir",
+                                            contentDescription = stringResource(if (isPlaying) R.string.player_pause else R.string.player_play),
                                             size = if (isMobile) 64.dp else 48.dp,
                                             iconSize = if (isMobile) 32.dp else 24.dp,
                                             onClick = {
@@ -3866,7 +3866,7 @@ fun JellyfinVideoPlayerScreen(
                                         // Fast forward button
                                         PlayerControlButton(
                                             icon = Icons.Filled.FastForward,
-                                            contentDescription = "Avanzar 15 segundos",
+                                            contentDescription = stringResource(R.string.player_forward_15),
                                             size = if (isMobile) 52.dp else 48.dp,
                                             iconSize = if (isMobile) 26.dp else 24.dp,
                                             onClick = {
@@ -3909,7 +3909,7 @@ fun JellyfinVideoPlayerScreen(
                                         // Unified playback settings: audio and subtitles
                                         PlayerControlButton(
                                             icon = Icons.Filled.Settings,
-                                            contentDescription = "Ajustes de reproducción",
+                                            contentDescription = stringResource(R.string.player_settings),
                                             onClick = {
                                                 showControls = false
                                                 settingsMenuInitialLevel = "main"
@@ -3944,7 +3944,7 @@ fun JellyfinVideoPlayerScreen(
                 androidx.compose.material3.IconButton(onClick = { onBack() }) {
                     androidx.compose.material3.Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Atrás",
+                        contentDescription = stringResource(R.string.player_back),
                         tint = Color.White
                     )
                 }
@@ -4703,7 +4703,7 @@ fun JellyfinVideoPlayerScreen(
                                     contentColor = Color.White
                                 )
                             ) {
-                                Text("Volver")
+                                Text(stringResource(R.string.player_back))
                             }
                         }
                     }
@@ -5239,7 +5239,7 @@ fun ExoPlayerSettingsMenu(
                                     colors = listItemColors,
                                     headlineContent = {
                                         Text(
-                                        text = "Ninguno (desactivados)",
+                                        text = stringResource(R.string.player_subtitles_none),
                                             style = MaterialTheme.typography.bodyLarge.copy(
                                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
                                             )
@@ -5689,7 +5689,7 @@ fun SubtitleSelectionDialog(
                     // "None" option
                     item {
                         SubtitleOptionItem(
-                            title = "Ninguno (desactivados)",
+                            title = stringResource(R.string.player_subtitles_none),
                             isSelected = currentSubtitleIndex == null,
                             onClick = {
                                 onSubtitleSelected(null)
@@ -5730,7 +5730,7 @@ fun SubtitleSelectionDialog(
                 ),
                 modifier = Modifier.focusable()
             ) {
-                androidx.compose.material3.Text("Cerrar", color = Color.White)
+                androidx.compose.material3.Text(stringResource(R.string.close), color = Color.White)
             }
         }
     }
@@ -5770,7 +5770,7 @@ fun SubtitleOptionItem(
         if (isSelected) {
             androidx.compose.material3.Icon(
                 imageVector = androidx.compose.material.icons.Icons.Default.Check,
-                contentDescription = "Seleccionado",
+                contentDescription = stringResource(R.string.player_selected),
                 tint = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp).padding(end = 8.dp)
             )
@@ -5872,7 +5872,7 @@ fun AudioSelectionDialog(
                 ),
                 modifier = Modifier.focusable()
             ) {
-                androidx.compose.material3.Text("Cerrar", color = Color.White)
+                androidx.compose.material3.Text(stringResource(R.string.close), color = Color.White)
             }
         }
     }
@@ -5948,7 +5948,7 @@ fun SpeedSelectionDialog(
                 ),
                 modifier = Modifier.focusable()
             ) {
-                androidx.compose.material3.Text("Cerrar", color = Color.White)
+                androidx.compose.material3.Text(stringResource(R.string.close), color = Color.White)
             }
         }
     }
@@ -5989,7 +5989,7 @@ fun SimpleOptionItem(
         if (isSelected) {
             androidx.compose.material3.Icon(
                 imageVector = Icons.Default.Check,
-                contentDescription = "Seleccionado",
+                contentDescription = stringResource(R.string.player_selected),
                 tint = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp).padding(end = 8.dp)
             )

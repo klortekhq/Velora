@@ -222,4 +222,13 @@
   <string name="settings_offline_storage_unlimited">Unlimited</string>
   <string name="live_tv_cancel">Отмена</string>
   <string name="live_tv_source_count">%1$d источника</string>
+  <string name="player_back">Назад</string>
+  <string name="player_fullscreen">Полный экран</string>
+  <string name="player_exit_fullscreen">Выйти из полного экрана</string>
+  <string name="player_rewind_15">Назад на 15 секунд</string>
+  <string name="player_forward_15">Вперёд на 15 секунд</string>
+  <string name="player_play">Воспроизвести</string>
+  <string name="player_pause">Пауза</string>
+  <string name="player_subtitles_none">Нет (отключены)</string>
+  <string name="player_selected">Выбрано</string>
 </resources>

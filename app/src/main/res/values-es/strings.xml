@@ -223,4 +223,13 @@
   <string name="player_aspect_stretch">Estirar</string>
   <string name="player_aspect_original">Original</string>
   <string name="player_aspect_content_description">Modo de imagen: %1$s</string>
+    <string name="player_back">Atrás</string>
+    <string name="player_fullscreen">Pantalla completa</string>
+    <string name="player_exit_fullscreen">Salir de pantalla completa</string>
+    <string name="player_rewind_15">Retroceder 15 segundos</string>
+    <string name="player_forward_15">Avanzar 15 segundos</string>
+    <string name="player_play">Reproducir</string>
+    <string name="player_pause">Pausa</string>
+    <string name="player_subtitles_none">Ninguno (desactivados)</string>
+    <string name="player_selected">Seleccionado</string>
 </resources>

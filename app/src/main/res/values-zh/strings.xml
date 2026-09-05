@@ -222,4 +222,13 @@
   <string name="settings_offline_storage_unlimited">Unlimited</string>
   <string name="live_tv_cancel">取消</string>
   <string name="live_tv_source_count">%1$d 个来源</string>
+  <string name="player_back">返回</string>
+  <string name="player_fullscreen">全屏</string>
+  <string name="player_exit_fullscreen">退出全屏</string>
+  <string name="player_rewind_15">后退 15 秒</string>
+  <string name="player_forward_15">快进 15 秒</string>
+  <string name="player_play">播放</string>
+  <string name="player_pause">暂停</string>
+  <string name="player_subtitles_none">无（已停用）</string>
+  <string name="player_selected">已选择</string>
 </resources>
