@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Velora</string>
     <string name="browse_title">Velora</string>
     <string name="related_movies">Vídeos relacionados</string>

@@ -4,6 +4,13 @@ Updated: 2026-09-05
 
 ## Última verificación
 
+La verificación adicional del 2026-09-05 corrige la configuración de lint para
+los catálogos Android con fallback parcial y vuelve a ejecutar `lintMobileDebug`:
+finaliza con 0 errores de lint. La comprobación oficial
+`node scripts/check-android-locales.mjs` mantiene los tres catálogos garantizados
+(inglés, alemán y francés) completos con 346 claves; los demás idiomas siguen
+siendo opcionales y heredan el español base de forma controlada.
+
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
 `f73bc45`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
