@@ -372,17 +372,36 @@
     var subtitleMode = preference('veloraSubtitleMode', 'off');
     if (subtitleMode !== 'off') {
       var subtitleLanguage = preference('veloraSubtitleLanguage', 'auto');
-      var subtitleStream = streams.find(function (candidate) {
-        if (candidate.Type !== 'Subtitle') return false;
-        if (subtitleLanguage === 'auto') return !!candidate.IsDefault || !!candidate.IsForced;
-        return String(candidate.Language || '').toLowerCase().split('-')[0] === subtitleLanguage;
-      });
+      var subtitleStream = selectSubtitleStream(streams, subtitleMode, subtitleLanguage);
       if (subtitleStream && subtitleStream.Index != null) {
         params.push('SubtitleStreamIndex=' + encodeURIComponent(subtitleStream.Index));
         params.push('SubtitleMethod=Encode');
       }
     }
     return base() + '/Videos/' + encodeURIComponent(item.Id) + '/stream?' + params.join('&');
+  }
+
+  // Keep subtitle policy deterministic across browser and native clients.
+  // In forced mode a default (non-forced) subtitle must never be selected as
+  // a silent fallback; when no forced track exists, playback starts without
+  // subtitles instead of violating the user's explicit preference.
+  function selectSubtitleStream(streams, mode, language) {
+    var candidates = streams.filter(function (candidate) {
+      return candidate.Type === 'Subtitle';
+    });
+    if (mode === 'forced') {
+      candidates = candidates.filter(function (candidate) { return candidate.IsForced === true; });
+    }
+    if (language !== 'auto') {
+      var languageMatches = candidates.filter(function (candidate) {
+        return String(candidate.Language || '').toLowerCase().split('-')[0] === language;
+      });
+      if (languageMatches.length) candidates = languageMatches;
+    }
+    if (mode === 'preferred' || mode === 'auto') {
+      return candidates.find(function (candidate) { return candidate.IsDefault === true; }) || candidates[0];
+    }
+    return candidates[0];
   }
 
   function stream(item) {

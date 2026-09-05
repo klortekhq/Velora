@@ -43,6 +43,10 @@ Updated: 2026-09-05
   web: no se encontraron tokens en URLs de reproducción ni en logs sensibles;
   las cabeceras Jellyfin se mantienen fuera de la URL y el proxy web solo
   acepta orígenes/rutas multimedia permitidos.
+- Web: el modo de subtítulos `forzados` filtra ahora exclusivamente pistas
+  `IsForced`, incluyendo la selección por idioma; una pista predeterminada no
+  sustituye silenciosamente a una forzada inexistente. La regresión se ejecuta
+  en `web/scripts/test-platform.mjs` y el bundle web/webOS/VIDAA se regenera.
 
 ## Última verificación
 
