@@ -27,6 +27,12 @@ sanitizar también tokens en encabezados (`Token=`, `Bearer` y
 del redactor pasan en móvil y TV; los resultados XML muestran cero fallos y
 cero errores.
 
+La higiene pública del repositorio se revisó el 2026-09-05: no quedan nombres
+de usuarios o productos antiguos en la documentación pública. La política de
+terceros conserva solo las dependencias realmente distribuidas y una nota
+genérica de independencia de identidad, sin presentar proyectos externos como
+parte de Velora.
+
 La revisión de internacionalización del 2026-09-05 migró a recursos los
 textos de Ajustes relacionados con Jellyseerr, autenticación, Descubrir y
 tráilers de TMDB. Las claves están presentes en español, inglés, francés y
