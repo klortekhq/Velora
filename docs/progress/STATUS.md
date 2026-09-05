@@ -23,9 +23,10 @@ GitHub Actions mediante el parámetro `release_tag`, comprobando antes que
 coincide con la versión del código. Un lanzamiento manual sin ese parámetro
 solo ejecuta QA y no crea una release.
 
-El smoke test contra el servidor Jellyfin indicado responde, pero devuelve
-HTTP 401; por eso no se marca como verificada la consulta autenticada de Live
-TV ni la reproducción remota. No hay ningún dispositivo ADB conectado en este
+El servidor Jellyfin indicado responde a la información pública (`HTTP 200`),
+pero la autenticación con las credenciales facilitadas para esta sesión
+devuelve `HTTP 401`; por eso no se marca como verificada la consulta autenticada
+de Live TV ni la reproducción remota. No hay ningún dispositivo ADB conectado en este
 host y el Fire TV tampoco responde en la dirección conocida, así que no se
 declara instalación ni prueba real de hardware. GitHub CLI no tiene sesión
 autenticada y la consulta pública de releases devuelve 404; no se presenta una
