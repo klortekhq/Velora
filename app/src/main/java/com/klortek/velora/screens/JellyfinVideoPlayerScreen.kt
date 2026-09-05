@@ -670,7 +670,7 @@ fun JellyfinVideoPlayerScreen(
                         isLoadingEpisodes = false
                     }
                 } catch (e: Exception) {
-                    Log.e("JellyfinPlayer", "Error fetching seasons/episodes for player layout", e)
+                    Log.e("JellyfinPlayer", "Error fetching seasons/episodes for player layout: ${SensitiveDataRedactor.message(e)}")
                 }
             }
         }
@@ -702,7 +702,7 @@ fun JellyfinVideoPlayerScreen(
                 player.stop()
                 player.release()
             } catch (e: Exception) {
-                Log.w("JellyfinPlayer", "Error stopping player on episode click", e)
+                Log.w("JellyfinPlayer", "Error stopping player on episode click: ${SensitiveDataRedactor.message(e)}")
             }
             
             val intent = com.klortek.velora.JellyfinVideoPlayerActivity.createIntent(
@@ -755,7 +755,7 @@ fun JellyfinVideoPlayerScreen(
             player.release()
             Log.d("JellyfinPlayer", "🎬 Step 2: Player stopped and released")
         } catch (e: Exception) {
-            Log.w("JellyfinPlayer", "🎬 Step 2: Error stopping player", e)
+            Log.w("JellyfinPlayer", "🎬 Step 2: Error stopping player: ${SensitiveDataRedactor.message(e)}")
         }
         
         // Step 3: Report playback stopped (fire and forget)
@@ -765,7 +765,7 @@ fun JellyfinVideoPlayerScreen(
                 apiService.markAsWatched(item.Id)
                 Log.d("JellyfinPlayer", "🎬 Step 3: Reported playback stopped")
             } catch (e: Exception) {
-                Log.w("JellyfinPlayer", "🎬 Step 3: Error reporting", e)
+                Log.w("JellyfinPlayer", "🎬 Step 3: Error reporting: ${SensitiveDataRedactor.message(e)}")
             }
         }
         
@@ -1130,7 +1130,7 @@ fun JellyfinVideoPlayerScreen(
                                     Log.e("JellyfinPlayer", "Could not find current season with IndexNumber=${details.ParentIndexNumber}")
                                 }
                             } catch (e: Exception) {
-                                Log.e("JellyfinPlayer", "Error finding next episode", e)
+                                Log.e("JellyfinPlayer", "Error finding next episode: ${SensitiveDataRedactor.message(e)}")
                                 android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
                             }
                         }
@@ -1151,7 +1151,7 @@ fun JellyfinVideoPlayerScreen(
                     isLoading = false
                 }
             } catch (e: Exception) {
-                Log.e("JellyfinPlayer", "Error preparing video", e)
+                Log.e("JellyfinPlayer", "Error preparing video: ${SensitiveDataRedactor.message(e)}")
                 isLoading = false
             }
         }
@@ -1293,7 +1293,7 @@ fun JellyfinVideoPlayerScreen(
                                     .build()
                             }
                         } catch (e: Exception) {
-                            Log.e("JellyfinPlayer", "❌ Error creating MediaItem with subtitles: ${e::class.simpleName}", e)
+                            Log.e("JellyfinPlayer", "❌ Error creating MediaItem with subtitles: ${SensitiveDataRedactor.message(e)}")
                             Log.e("JellyfinPlayer", "   Playing video without subtitles")
                             MediaItem.fromUri(Uri.parse(currentMediaUrl))
                         }
@@ -1427,7 +1427,7 @@ fun JellyfinVideoPlayerScreen(
                                         }
                                         
                                     } catch (e: Exception) {
-                                        Log.e("JellyfinPlayer", "❌ Failed to switch to transcoding: ${e::class.simpleName}", e)
+                                        Log.e("JellyfinPlayer", "❌ Failed to switch to transcoding: ${SensitiveDataRedactor.message(e)}")
                                         
                                         // Try MPV fallback if transcoding failed
                                         if (fallbackToMpv && isMpvInstalled && !hasTriedMpvFallback) {
@@ -1610,7 +1610,7 @@ fun JellyfinVideoPlayerScreen(
                                                 apiService.reportPlaybackStart(item.Id, 0)
                                             }
                                         } catch (e: Exception) {
-                                            Log.e("JellyfinPlayer", "Error retrying playback without range requests", e)
+                                            Log.e("JellyfinPlayer", "Error retrying playback without range requests: ${SensitiveDataRedactor.message(e)}")
                                         }
                                     }
                                     return // Don't log as fatal error, we're handling it
@@ -1666,7 +1666,7 @@ fun JellyfinVideoPlayerScreen(
                                                 }
                                                 builder.build()
                                             } catch (e: Exception) {
-                                                Log.e("JellyfinPlayer", "Error adding subtitle to fallback media item", e)
+                                                Log.e("JellyfinPlayer", "Error adding subtitle to fallback media item: ${SensitiveDataRedactor.message(e)}")
                                                 MediaItem.fromUri(Uri.parse(mp4Url))
                                             }
                                         } else {
@@ -1696,7 +1696,7 @@ fun JellyfinVideoPlayerScreen(
                                         
                                         Log.d("JellyfinPlayer", "Retried playback with MP4 transcoding")
                                     } catch (e: Exception) {
-                                        Log.e("JellyfinPlayer", "Error falling back to MP4 transcoding", e)
+                                        Log.e("JellyfinPlayer", "Error falling back to MP4 transcoding: ${SensitiveDataRedactor.message(e)}")
                                     }
                                 }
                                 return // Don't log as fatal error, we're handling it
@@ -1939,7 +1939,7 @@ fun JellyfinVideoPlayerScreen(
                                     player.trackSelectionParameters = updatedParameters
                                     Log.d("JellyfinPlayer", "✅ Cleared subtitle overrides (user selected None)")
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error clearing subtitle overrides: ${e::class.simpleName}", e)
+                                    Log.w("JellyfinPlayer", "Error clearing subtitle overrides: ${SensitiveDataRedactor.message(e)}")
                                 }
                             }
                             
@@ -2009,7 +2009,7 @@ fun JellyfinVideoPlayerScreen(
                                         Log.w("JellyfinPlayer", "   This might happen if track registration hasn't completed yet")
                                     }
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error applying subtitle preference: ${e::class.simpleName}", e)
+                                    Log.w("JellyfinPlayer", "Error applying subtitle preference: ${SensitiveDataRedactor.message(e)}")
                                 }
                             } else if (subtitleStreamIndex == null && currentSubtitleIndex == null && textTrackGroups.isNotEmpty() && textTrackGroups.none { it.isSelected } && !hasAppliedInitialSubtitlePreference) {
                                 // User explicitly selected "None" from series/movie page AND no subtitle is currently selected
@@ -2025,7 +2025,7 @@ fun JellyfinVideoPlayerScreen(
                                     player.trackSelectionParameters = updatedParameters
                                     Log.d("JellyfinPlayer", "✅ Cleared subtitle track selection (None selected)")
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error clearing subtitle track selection: ${e::class.simpleName}", e)
+                                    Log.w("JellyfinPlayer", "Error clearing subtitle track selection: ${SensitiveDataRedactor.message(e)}")
                                 }
                             }
                             
@@ -2132,7 +2132,7 @@ fun JellyfinVideoPlayerScreen(
                                     Log.w("JellyfinPlayer", "Could not find matching ExoPlayer track group for Jellyfin subtitle index $subtitleStreamIndex")
                                 }
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error selecting subtitle track: ${e::class.simpleName}", e)
+                                    Log.w("JellyfinPlayer", "Error selecting subtitle track: ${SensitiveDataRedactor.message(e)}")
                                 }
                             }
                             */
@@ -2311,7 +2311,7 @@ fun JellyfinVideoPlayerScreen(
                                                     Log.d("JellyfinPlayer", "⚠️ Attempted to force selection of unsupported audio track: language=${selectedFormat.language}, codec=${selectedFormat.codecs ?: "null"}, Jellyfin index=$audioIndexToApply, ExoPlayer group=$groupIndexToSelect (may not work if codec truly unsupported)")
                                                 }
                                             } catch (e: Exception) {
-                                                Log.w("JellyfinPlayer", "Error selecting audio track: ${e::class.simpleName}", e)
+                                                Log.w("JellyfinPlayer", "Error selecting audio track: ${SensitiveDataRedactor.message(e)}")
                                                 // If it's unsupported and addOverride failed, log a warning
                                                 if (!groupToSelect.isSupported) {
                                                     Log.w("JellyfinPlayer", "⚠️ Audio track index $audioIndexToApply is not supported by ExoPlayer (language=${preferredAudioStream.Language}, codec=${preferredAudioStream.Codec ?: "null"}) and cannot be forced")
@@ -2326,7 +2326,7 @@ fun JellyfinVideoPlayerScreen(
                                         }
                                     }
                                 } catch (e: Exception) {
-                                    Log.w("JellyfinPlayer", "Error selecting audio track: ${e::class.simpleName}", e)
+                                    Log.w("JellyfinPlayer", "Error selecting audio track: ${SensitiveDataRedactor.message(e)}")
                                 }
                                 } else {
                                     Log.d("JellyfinPlayer", "Audio track already matches preference, no update needed")
@@ -2417,7 +2417,7 @@ fun JellyfinVideoPlayerScreen(
                                                     }
                                                 }
                                             } catch (e: Exception) {
-                                                Log.w("JellyfinPlayer", "Error reporting playback stopped", e)
+                                                Log.w("JellyfinPlayer", "Error reporting playback stopped: ${SensitiveDataRedactor.message(e)}")
                                             }
                                             withContext(Dispatchers.Main) {
                                                 onBack()
@@ -2461,7 +2461,7 @@ fun JellyfinVideoPlayerScreen(
                     // Request focus on PlayerView so it can receive key events
                     playerViewRef.value?.requestFocus()
                 } catch (e: Exception) {
-                    Log.e("JellyfinPlayer", "Error initializing player", e)
+                    Log.e("JellyfinPlayer", "Error initializing player: ${SensitiveDataRedactor.message(e)}")
                 }
             }
         }
@@ -2573,7 +2573,7 @@ fun JellyfinVideoPlayerScreen(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e // Re-throw cancellation
             } catch (e: Exception) {
-                Log.w("JellyfinPlayer", "🎬 Error in monitoring loop", e)
+                Log.w("JellyfinPlayer", "🎬 Error in monitoring loop: ${SensitiveDataRedactor.message(e)}")
             }
         }
         
@@ -2629,7 +2629,7 @@ fun JellyfinVideoPlayerScreen(
                             Log.d("JellyfinPlayer", "⏭️ Skipping progress report - position is 0")
                         }
                     } catch (e: Exception) {
-                        Log.w("JellyfinPlayer", "Error reporting playback progress", e)
+                        Log.w("JellyfinPlayer", "Error reporting playback progress: ${SensitiveDataRedactor.message(e)}")
                     }
                 }
             }
@@ -2684,7 +2684,7 @@ fun JellyfinVideoPlayerScreen(
                         }
                     }
                 } catch (e: Exception) {
-                    Log.w("JellyfinPlayer", "🧹 Error in dispose reporting", e)
+                    Log.w("JellyfinPlayer", "🧹 Error in dispose reporting: ${SensitiveDataRedactor.message(e)}")
                 }
             }
             
@@ -2698,7 +2698,7 @@ fun JellyfinVideoPlayerScreen(
                 player.release()
                 Log.d("JellyfinPlayer", "🧹 Player released")
             } catch (e: Exception) {
-                Log.w("JellyfinPlayer", "🧹 Player may already be released", e)
+                Log.w("JellyfinPlayer", "🧹 Player may already be released: ${SensitiveDataRedactor.message(e)}")
             }
         }
     }
@@ -2760,7 +2760,7 @@ fun JellyfinVideoPlayerScreen(
                     val series = apiService.getItemDetails(itemDetails!!.SeriesId!!)
                     seriesName = series?.Name
                 } catch (e: Exception) {
-                    Log.w("JellyfinPlayer", "Error fetching series name", e)
+                    Log.w("JellyfinPlayer", "Error fetching series name: ${SensitiveDataRedactor.message(e)}")
                 }
             }
         }
@@ -4500,7 +4500,7 @@ fun JellyfinVideoPlayerScreen(
                             
                             showSettingsMenu = false
                         } catch (e: Exception) {
-                            Log.e("JellyfinPlayer", "Error selecting downloaded subtitle", e)
+                            Log.e("JellyfinPlayer", "Error selecting downloaded subtitle: ${SensitiveDataRedactor.message(e)}")
                         }
                     }
                 },
@@ -4592,7 +4592,7 @@ fun JellyfinVideoPlayerScreen(
                             
                             showSettingsMenu = false
                         } catch (e: Exception) {
-                            Log.e("JellyfinPlayer", "Error selecting subtitle track", e)
+                            Log.e("JellyfinPlayer", "Error selecting subtitle track: ${SensitiveDataRedactor.message(e)}")
                         }
                     }
                 }
@@ -4782,7 +4782,7 @@ fun ExoPlayerSettingsMenu(
                 // Normal cancellation when composable leaves composition - don't log as error
                 throw e // Re-throw to respect cancellation
             } catch (e: Exception) {
-                Log.e("ExoPlayerSettingsMenu", "Error fetching item details", e)
+                Log.e("ExoPlayerSettingsMenu", "Error fetching item details: ${SensitiveDataRedactor.message(e)}")
                 isLoadingSubtitles = false
             }
         }
@@ -5153,7 +5153,7 @@ fun ExoPlayerSettingsMenu(
                                                 exoPlayer.trackSelectionParameters = updatedParameters
                                                 Log.d("ExoPlayerSettingsMenu", "Selected audio track: $trackTitle")
                                             } catch (e: Exception) {
-                                                Log.e("ExoPlayerSettingsMenu", "Error selecting audio track", e)
+                                                Log.e("ExoPlayerSettingsMenu", "Error selecting audio track: ${SensitiveDataRedactor.message(e)}")
                                             }
                                         }
                                     },
@@ -5194,7 +5194,7 @@ fun ExoPlayerSettingsMenu(
                                                     exoPlayer.trackSelectionParameters = updatedParameters
                                                     Log.d("ExoPlayerSettingsMenu", "Selected audio track: $trackTitle")
                                                 } catch (e: Exception) {
-                                                    Log.e("ExoPlayerSettingsMenu", "Error selecting audio track", e)
+                                                    Log.e("ExoPlayerSettingsMenu", "Error selecting audio track: ${SensitiveDataRedactor.message(e)}")
                                                 }
                                             }
                                         }
@@ -5631,7 +5631,7 @@ fun SubtitleSelectionDialog(
                     ?.count { it.Type == "Subtitle" } ?: 0
                 Log.d("SubtitleDialog", "Loaded $subtitleCount subtitle streams after refresh")
             } catch (e: Exception) {
-                Log.e("SubtitleDialog", "Error fetching item details", e)
+                Log.e("SubtitleDialog", "Error fetching item details: ${SensitiveDataRedactor.message(e)}")
                 isLoading = false
             }
         }

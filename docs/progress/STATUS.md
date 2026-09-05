@@ -22,6 +22,12 @@ un WGT firmado. La APK TV debug de `1b42b70` se instaló en Fire TV
 `FATAL EXCEPTION`; esto es smoke test de arranque, no validación autenticada de
 reproducción o Live TV.
 
+La revisión adicional del reproductor Android sanitiza los errores de
+preparación, transcodificación, pistas de audio/subtítulos y reporte de
+progreso en `JellyfinVideoPlayerScreen`, evitando registrar `Throwable` con
+posibles datos de sesión. `testMobileDebugUnitTest`, `testTvDebugUnitTest`,
+`compileMobileDebugKotlin` y `compileTvDebugKotlin` pasan después del cambio.
+
 Auditoría de evidencia de releases (2026-09-05): las consultas directas a la
 API y a la URL pública de GitHub para `v1.2.32` y `v1.4.0` devolvieron HTTP
 404. Por tanto, las notas antiguas de releases que aparecen más abajo se
