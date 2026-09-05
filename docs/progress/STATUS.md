@@ -5,12 +5,19 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`c16eec9`. Los
+`3a31985`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
 como no firmados cuando faltan sus herramientas o certificados. La rama
 remota comprobada es únicamente `main`.
+
+El commit `3a31985` endurece la ruta Apple: las URLs de VOD y Live TV devueltas
+por Jellyfin se validan contra el servidor configurado y se eliminan sus
+parámetros de credencial antes de llegar a AVPlayer; la cabecera de sesión no
+se envía a hosts externos. Se añadieron regresiones Swift para ambos casos.
+Swift/Xcode no está instalado en este host Windows, por lo que la ejecución
+nativa queda pendiente del workflow macOS.
 
 La compilación release local del 2026-09-05 también genera las dos APK sin
 firmar: móvil (67 825 027 bytes, SHA-256
