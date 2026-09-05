@@ -5,12 +5,16 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`70f5c1d`. Los
+`933c99f`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
 como no firmados cuando faltan sus herramientas o certificados. La rama
 remota comprobada es únicamente `main`.
+
+El commit `933c99f` añade semántica accesible a las pestañas de detalle y a
+los selectores de temporada móviles, sin cambiar su interacción táctil o de
+mando. La compilación móvil/TV y los tests unitarios pasan después del cambio.
 
 El workflow de releases no bloquea una publicación por la ausencia de Tizen
 Studio o de un certificado Samsung en el runner: conserva el bundle web
