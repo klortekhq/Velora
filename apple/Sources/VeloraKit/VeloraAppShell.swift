@@ -9,6 +9,7 @@ import SwiftUI
 @MainActor
 public final class VeloraAppModel: ObservableObject {
     @Published public private(set) var isAuthenticated = false
+    @Published public private(set) var isLoading = false
     @Published public private(set) var items: [JellyfinItem] = []
     @Published public private(set) var liveTvChannels: [JellyfinLiveTvChannel] = []
     @Published public private(set) var offlineDownloads: [VeloraOfflineDownload] = []
@@ -62,18 +63,33 @@ public final class VeloraAppModel: ObservableObject {
             let authenticated = try await client.authenticate(username: username, password: password)
             session = authenticated
             credentialStore.save(authenticated)
-            async let library = client.items(userID: authenticated.userID, includeTypes: ["Movie", "Series"])
-            async let channels = client.liveTvChannels(userID: authenticated.userID)
-            items = try await library
-            liveTvChannels = JellyfinLiveTvChannel.grouped((try? await channels) ?? [])
-            offlineDownloads = platform.supportsOfflineDownloads
-                ? offlineStore.load().filter { $0.serverURL == url.absoluteString }
-                : []
+            await refreshContent()
             isAuthenticated = true
             errorMessage = nil
         } catch {
             isAuthenticated = false
             errorMessage = String(localized: "Unable to sign in", bundle: .module)
+        }
+    }
+
+    /// Reload server-backed content for both a fresh and a restored session.
+    /// Restored credentials must never leave the library in an empty state.
+    public func refreshContent() async {
+        guard let session else { return }
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            async let library = client.items(userID: session.userID, includeTypes: ["Movie", "Series"])
+            async let channels = client.liveTvChannels(userID: session.userID)
+            items = try await library
+            liveTvChannels = JellyfinLiveTvChannel.grouped((try? await channels) ?? [])
+            let serverURL = (await client.serverURL()).absoluteString
+            offlineDownloads = platform.supportsOfflineDownloads
+                ? offlineStore.load().filter { $0.serverURL == serverURL }
+                : []
+            errorMessage = nil
+        } catch {
+            errorMessage = String(localized: "Unable to load library", bundle: .module)
         }
     }
 
@@ -277,6 +293,9 @@ public struct VeloraAppShell: View {
             }
         }
         .environment(\.locale, model.settings.appLocale)
+        .task(id: model.isAuthenticated) {
+            if model.isAuthenticated { await model.refreshContent() }
+        }
     }
 }
 

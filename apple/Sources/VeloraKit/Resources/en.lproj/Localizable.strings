@@ -6,6 +6,7 @@
 "Password" = "Password";
 "Sign in" = "Sign in";
 "Unable to sign in" = "Unable to sign in";
+"Unable to load library" = "Unable to load the library";
 "Language and playback" = "Language and playback";
 "App language" = "App language";
 "Preferred audio" = "Preferred audio";
