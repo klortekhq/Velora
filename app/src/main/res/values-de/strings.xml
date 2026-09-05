@@ -361,4 +361,6 @@ Du kannst sie jederzeit erneut herunterladen.</string>
   <string name="settings_title">Einstellungen</string>
   <string name="settings_logout_confirm_title">Abmelden?</string>
   <string name="settings_logout_confirm_message">Möchtest du dich wirklich abmelden? Für den Zugriff auf deine Inhalte musst du dich erneut anmelden.</string>
+  <string name="settings_version">Version %1$s</string>
+  <string name="settings_by_klortek">Von Klørtek</string>
 </resources>

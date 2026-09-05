@@ -2379,12 +2379,12 @@ Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_t
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Text(
-                                    text = "Versión ${BuildConfig.VERSION_NAME}",
+                                        text = stringResource(com.klortek.velora.R.string.settings_version, BuildConfig.VERSION_NAME),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                 )
                                 Text(
-                                    text = "By Klørtek",
+                                        text = stringResource(com.klortek.velora.R.string.settings_by_klortek),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                 )

@@ -363,4 +363,6 @@ Vous pourrez les télécharger à nouveau quand vous le souhaitez.</string>
   <string name="settings_title">Paramètres</string>
   <string name="settings_logout_confirm_title">Se déconnecter ?</string>
   <string name="settings_logout_confirm_message">Voulez-vous vraiment vous déconnecter ? Vous devrez vous reconnecter pour accéder à vos contenus.</string>
+  <string name="settings_version">Version %1$s</string>
+  <string name="settings_by_klortek">Par Klørtek</string>
 </resources>
