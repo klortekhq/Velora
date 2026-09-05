@@ -68,6 +68,11 @@ Updated: 2026-09-05
   pasar. Se regeneran el bundle web, el IPK webOS y los bundles preparados de
   Samsung/VIDAA; Tizen continúa bloqueado únicamente por la ausencia local de
   Tizen Studio/CLI.
+- La auditoría de descargas confirma que Android filtra la pantalla y las
+  acciones mediante `PlatformCapabilities`/`isMobileLayout`, que la variante
+  TV termina cualquier intento de abrir la pantalla de descargas y que web,
+  webOS, VIDAA, Tizen y tvOS declaran `supportsOfflineDownloads = false`.
+  La regresión `PlatformCapabilitiesTest` cubre todas las superficies.
 
 ## Última verificación
 
