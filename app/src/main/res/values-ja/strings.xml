@@ -257,4 +257,6 @@
   <string name="settings_autoplay_next_description">現在のエピソード終了後に次のエピソードを自動再生します。</string>
   <string name="settings_autoplay_countdown">自動カウントダウン</string>
   <string name="settings_autoplay_countdown_description">カウントダウンを表示するエピソード終了前の時間（%1$ds）。</string>
+    <string name="settings_category_jellyseerr">Jellyseerr（コンテンツを探す）</string>
+    <string name="settings_category_trailers">予告編</string>
 </resources>

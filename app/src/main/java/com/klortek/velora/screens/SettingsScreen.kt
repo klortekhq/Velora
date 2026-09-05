@@ -112,19 +112,19 @@ import androidx.core.content.FileProvider
 
 // Settings categories
 enum class SettingsCategory(val title: String, val icon: ImageVector) {
-    LANGUAGE("Idioma y reproducción", Icons.Default.Language),
-    PLAYBACK("Reproducción", Icons.Default.PlayArrow),
-    VIDEO("Vídeo", Icons.Default.Videocam),
-    SUBTITLES("Audio y subtítulos", Icons.Default.Subtitles),
-    APPEARANCE("Apariencia", Icons.Default.Palette),
-    PERFORMANCE("Rendimiento", Icons.Default.Speed),
-    LIBRARY("Biblioteca", Icons.Default.VideoLibrary),
-    ADVANCED("Avanzado", Icons.Default.Settings),
-    UPDATES("Actualizaciones", Icons.Default.Update),
-    JELLYSEERR("Jellyseerr (Descubrir contenido)", Icons.Default.Videocam),
-    TRAILERS("Tráilers", Icons.Default.Movie),
-    ACCOUNT("Cuenta", Icons.Default.Person),
-    ABOUT("Acerca de", Icons.Default.Info),
+    LANGUAGE("", Icons.Default.Language),
+    PLAYBACK("", Icons.Default.PlayArrow),
+    VIDEO("", Icons.Default.Videocam),
+    SUBTITLES("", Icons.Default.Subtitles),
+    APPEARANCE("", Icons.Default.Palette),
+    PERFORMANCE("", Icons.Default.Speed),
+    LIBRARY("", Icons.Default.VideoLibrary),
+    ADVANCED("", Icons.Default.Settings),
+    UPDATES("", Icons.Default.Update),
+    JELLYSEERR("", Icons.Default.Videocam),
+    TRAILERS("", Icons.Default.Movie),
+    ACCOUNT("", Icons.Default.Person),
+    ABOUT("", Icons.Default.Info),
 }
 
 private fun SettingsCategory.localizedTitle(context: android.content.Context): String = when (this) {
@@ -139,7 +139,8 @@ private fun SettingsCategory.localizedTitle(context: android.content.Context): S
     SettingsCategory.UPDATES -> context.getString(com.klortek.velora.R.string.settings_category_updates)
     SettingsCategory.ACCOUNT -> context.getString(com.klortek.velora.R.string.settings_category_account)
     SettingsCategory.ABOUT -> context.getString(com.klortek.velora.R.string.settings_category_about)
-    else -> title
+    SettingsCategory.JELLYSEERR -> context.getString(com.klortek.velora.R.string.settings_category_jellyseerr)
+    SettingsCategory.TRAILERS -> context.getString(com.klortek.velora.R.string.settings_category_trailers)
 }
 
 // Mobile settings uses an explicit high-contrast palette. The app theme is

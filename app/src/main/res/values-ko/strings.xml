@@ -257,4 +257,6 @@
   <string name="settings_autoplay_next_description">현재 에피소드가 끝나면 다음 에피소드를 자동 재생합니다.</string>
   <string name="settings_autoplay_countdown">자동 카운트다운</string>
   <string name="settings_autoplay_countdown_description">카운트다운을 표시할 에피소드 종료 전 시간(%1$ds).</string>
+    <string name="settings_category_jellyseerr">Jellyseerr (콘텐츠 찾기)</string>
+    <string name="settings_category_trailers">예고편</string>
 </resources>

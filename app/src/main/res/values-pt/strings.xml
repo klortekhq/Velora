@@ -257,4 +257,6 @@
   <string name="settings_autoplay_next_description">Reproduz automaticamente o próximo episódio quando o atual terminar.</string>
   <string name="settings_autoplay_countdown">Contagem regressiva automática</string>
   <string name="settings_autoplay_countdown_description">Tempo antes do fim do episódio para mostrar a contagem regressiva (%1$ds).</string>
+   <string name="settings_category_jellyseerr">Jellyseerr (Descobrir conteúdo)</string>
+   <string name="settings_category_trailers">Trailers</string>
 </resources>

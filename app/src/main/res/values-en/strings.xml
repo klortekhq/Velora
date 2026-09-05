@@ -257,4 +257,6 @@
   <string name="settings_autoplay_next_description">Automatically play the next episode when the current one ends.</string>
   <string name="settings_autoplay_countdown">Automatic countdown</string>
   <string name="settings_autoplay_countdown_description">Time before the episode ends to show the countdown (%1$ds).</string>
+   <string name="settings_category_jellyseerr">Jellyseerr (Discover content)</string>
+   <string name="settings_category_trailers">Trailers</string>
 </resources>
