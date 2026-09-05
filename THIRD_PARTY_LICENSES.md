@@ -21,10 +21,10 @@ upstream project for the complete license text and notices.
 
 ## Attribution policy
 
-Velora does not copy the visual identity or source code of Moonfin, Plex,
-Netflix, Infuse, Kodi or other reference applications. Behavioral references
-are acknowledged in project documentation only. Any future dependency must be
-added here with its license before release.
+Velora maintains its own visual identity and source code. General product
+research does not add third-party application code, artwork or branding to the
+distribution. Any future dependency must be added here with its license before
+release.
 
 This inventory is maintained alongside the build files. A release reviewer
 must verify transitive dependency notices and update this file when dependency
