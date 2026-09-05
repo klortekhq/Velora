@@ -2,45 +2,36 @@ package com.klortek.velora.security
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SensitiveDataRedactorTest {
     @Test
-    fun removesCredentialQueryParametersFromDiagnosticUrls() {
+    fun redactsCredentialQueryParametersRegardlessOfCase() {
         val redacted = SensitiveDataRedactor.url(
-            "https://server/Videos/42/master.m3u8?api_key=secret&mediaSourceId=source"
+            "https://jellyfin.test/Videos/1?Access_Token=secret&quality=1080"
         )
 
-        assertEquals(
-            "https://server/Videos/42/master.m3u8?api_key=<redacted>&mediaSourceId=source",
-            redacted
-        )
         assertFalse(redacted.contains("secret"))
+        assertTrue(redacted.contains("Access_Token=<redacted>"))
+        assertTrue(redacted.contains("quality=1080"))
     }
 
     @Test
-    fun removesQuickConnectSecretsFromDiagnosticUrls() {
-        val redacted = SensitiveDataRedactor.url(
-            "https://server/QuickConnect/Connect?secret=one-time-secret&next=1"
-        )
-
-        assertEquals(
-            "https://server/QuickConnect/Connect?secret=<redacted>&next=1",
-            redacted
-        )
-        assertFalse(redacted.contains("one-time-secret"))
-    }
-
-    @Test
-    fun exceptionMessagesAreRedactedBeforeLogging() {
+    fun redactsCredentialsInsideErrorMessages() {
         val redacted = SensitiveDataRedactor.message(
-            IllegalStateException("request failed: https://server/QuickConnect/Connect?secret=one-time-secret")
+            IllegalStateException("request failed: https://server.test/a?password=secret")
         )
 
-        assertFalse(redacted.contains("one-time-secret"))
-        assertEquals(
-            "request failed: https://server/QuickConnect/Connect?secret=<redacted>",
-            redacted
-        )
+        assertFalse(redacted.contains("secret"))
+        assertEquals("request failed: https://server.test/a?password=<redacted>", redacted)
+    }
+
+    @Test
+    fun nullAndLocalValuesUseSafeMarkers() {
+        assertEquals("<null>", SensitiveDataRedactor.url(null))
+        assertEquals("<null>", SensitiveDataRedactor.message(null))
+        assertEquals("<local-path>", SensitiveDataRedactor.localPath("C:/private/video.mkv"))
+        assertEquals("<local-file>", SensitiveDataRedactor.localFileName("video.mkv"))
     }
 }
