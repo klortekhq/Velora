@@ -231,4 +231,30 @@
   <string name="player_pause">Пауза</string>
   <string name="player_subtitles_none">Нет (отключены)</string>
   <string name="player_selected">Выбрано</string>
+  <string name="settings_playback_mpv">Использовать проигрыватель MPV</string>
+  <string name="settings_playback_mpv_description">Использовать MPV для лучшей поддержки AV1, HEVC и HDR.</string>
+  <string name="settings_skip_intro">Пропускать заставку</string>
+  <string name="settings_skip_intro_description">Показывать кнопку пропуска заставки (требуется Intro Skipper).</string>
+  <string name="settings_skip_credits">Пропускать титры</string>
+  <string name="settings_skip_credits_description">Показывать кнопку пропуска финальных титров.</string>
+  <string name="settings_server_transcoding">Транскодирование на сервере</string>
+  <string name="settings_transcode_on_error">Транскодировать при ошибке автоматически</string>
+  <string name="settings_transcode_on_error_description">Повторить с серверным транскодированием при сбое прямого воспроизведения.</string>
+  <string name="settings_mpv_fallback">Использовать MPV как запасной вариант</string>
+  <string name="settings_mpv_fallback_installed">Использовать MPV при сбое ExoPlayer и отключённом транскодировании (MPV установлен ✓)</string>
+  <string name="settings_mpv_fallback_external">Использовать MPV при сбое ExoPlayer (требуется внешний MPV)</string>
+  <string name="settings_transcode_always">Всегда транскодировать</string>
+  <string name="settings_transcode_always_description">Всегда запрашивать серверное транскодирование для выбранных кодеков (AV1, HEVC).</string>
+  <string name="settings_transcode_av1">Транскодировать AV1</string>
+  <string name="settings_transcode_av1_description">Запрашивать транскодирование видео AV1.</string>
+  <string name="settings_transcode_hevc">Транскодировать HEVC/H.265</string>
+  <string name="settings_transcode_hevc_description">Запрашивать транскодирование HEVC/H.265, если устройство его не поддерживает.</string>
+  <string name="settings_transcode_target_codec">Целевой кодек</string>
+  <string name="settings_transcode_target_codec_description">Транскодировать в: %1$s</string>
+  <string name="settings_transcode_max_bitrate">Максимальный битрейт видео</string>
+  <string name="settings_transcode_max_bitrate_description">%1$d Мбит/с (выше = лучше качество)</string>
+  <string name="settings_autoplay_next">Воспроизводить следующую серию</string>
+  <string name="settings_autoplay_next_description">Автоматически воспроизводить следующую серию после текущей.</string>
+  <string name="settings_autoplay_countdown">Автоматический обратный отсчёт</string>
+  <string name="settings_autoplay_countdown_description">Время до конца серии для показа обратного отсчёта (%1$ds).</string>
 </resources>

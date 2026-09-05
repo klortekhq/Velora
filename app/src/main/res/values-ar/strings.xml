@@ -231,4 +231,30 @@
   <string name="player_pause">إيقاف مؤقت</string>
   <string name="player_subtitles_none">لا شيء (معطلة)</string>
   <string name="player_selected">محدد</string>
+  <string name="settings_playback_mpv">استخدام مشغل MPV</string>
+  <string name="settings_playback_mpv_description">استخدم MPV لتحسين التوافق مع AV1 وHEVC وHDR.</string>
+  <string name="settings_skip_intro">تخطي المقدمة</string>
+  <string name="settings_skip_intro_description">إظهار زر لتخطي مقدمات الحلقات (يتطلب Intro Skipper).</string>
+  <string name="settings_skip_credits">تخطي الشارات</string>
+  <string name="settings_skip_credits_description">إظهار زر لتخطي الشارات الختامية.</string>
+  <string name="settings_server_transcoding">تحويل على الخادم</string>
+  <string name="settings_transcode_on_error">التحويل تلقائياً عند الفشل</string>
+  <string name="settings_transcode_on_error_description">إعادة المحاولة بتحويل الخادم عند فشل التشغيل المباشر.</string>
+  <string name="settings_mpv_fallback">استخدام MPV كخيار بديل</string>
+  <string name="settings_mpv_fallback_installed">استخدم MPV عند فشل ExoPlayer وإيقاف التحويل (MPV مثبت ✓)</string>
+  <string name="settings_mpv_fallback_external">استخدم MPV عند فشل ExoPlayer (يتطلب مشغل MPV خارجياً)</string>
+  <string name="settings_transcode_always">التحويل دائماً</string>
+  <string name="settings_transcode_always_description">طلب تحويل الخادم دائماً للترميزات المحددة (AV1 وHEVC).</string>
+  <string name="settings_transcode_av1">تحويل AV1</string>
+  <string name="settings_transcode_av1_description">طلب تحويل فيديو AV1.</string>
+  <string name="settings_transcode_hevc">تحويل HEVC/H.265</string>
+  <string name="settings_transcode_hevc_description">طلب تحويل HEVC/H.265 عندما لا يدعمه الجهاز.</string>
+  <string name="settings_transcode_target_codec">الترميز المستهدف</string>
+  <string name="settings_transcode_target_codec_description">التحويل إلى: %1$s</string>
+  <string name="settings_transcode_max_bitrate">أقصى معدل للفيديو</string>
+  <string name="settings_transcode_max_bitrate_description">%1$d ميغابت/ث (الأعلى = جودة أفضل)</string>
+  <string name="settings_autoplay_next">تشغيل الحلقة التالية</string>
+  <string name="settings_autoplay_next_description">تشغيل الحلقة التالية تلقائياً عند انتهاء الحالية.</string>
+  <string name="settings_autoplay_countdown">عد تنازلي تلقائي</string>
+  <string name="settings_autoplay_countdown_description">الوقت قبل نهاية الحلقة لإظهار العد التنازلي (%1$ds).</string>
 </resources>
