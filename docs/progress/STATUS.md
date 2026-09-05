@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `3256c65`)
+## Revisión actual (commit `178e8e3`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -86,6 +86,9 @@ Updated: 2026-09-05
 - El formulario de inicio de sesión TV usa ahora campos parametrizados de
   72 dp con texto de 22 sp, manteniendo los valores móviles compactos; esto
   mejora lectura y navegación con mando en pantallas 10-foot.
+- El workflow específico de Apple corrige su directorio de trabajo para
+  ejecutar `check-apple-locales.mjs` desde la raíz del repositorio, igual que
+  el workflow continuo; el catálogo local vuelve a validar sus 45 claves.
 
 ## Última verificación
 
