@@ -107,10 +107,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.media3.common.TrackSelectionOverride
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.border
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.VolumeUp
@@ -225,7 +227,8 @@ private fun applyAspectModeToPlayerView(
     // Media3 may process a VideoSize/layout callback after the first update.
     // Reapply on the next frame so a user-selected mode cannot be overwritten
     // when entering fullscreen or switching between streams.
-    playerView.postOnAnimation {
+    fun reapply() {
+        if (!playerView.isAttachedToWindow) return
         playerView.resizeMode = resizeMode
         playerView.findViewById<AspectRatioFrameLayout>(
             androidx.media3.ui.R.id.exo_content_frame
@@ -235,7 +238,15 @@ private fun applyAspectModeToPlayerView(
             frame.requestLayout()
         }
         playerView.requestLayout()
+        playerView.invalidate()
     }
+
+    // Media3 can remeasure the content frame after the first VideoSize or
+    // after fullscreen changes its parent constraints. Reapply on the next
+    // layout ticks so the selected mode remains effective.
+    playerView.postOnAnimation(::reapply)
+    playerView.postDelayed(::reapply, 120L)
+    playerView.postDelayed(::reapply, 500L)
 }
 
 @UnstableApi
@@ -4392,10 +4403,14 @@ fun JellyfinVideoPlayerScreen(
                                             Color.Cyan.copy(alpha = 0.22f)
                                         } else Color.Transparent
                                     )
-                                    .clickable {
-                                        currentAspectModeName = mode.name
-                                        showAspectModeMenu = false
-                                    }
+                                    .selectable(
+                                        selected = mode == currentAspectMode,
+                                        role = Role.RadioButton,
+                                        onClick = {
+                                            currentAspectModeName = mode.name
+                                            showAspectModeMenu = false
+                                        }
+                                    )
                                     .focusable()
                                     .padding(horizontal = 14.dp, vertical = 14.dp),
                                 verticalAlignment = Alignment.CenterVertically
@@ -6098,8 +6113,8 @@ private fun PlayerControlButton(
                 shape = RoundedCornerShape(50)
             )
             .onFocusChanged { isFocused = it.isFocused }
-            .focusable()
-            .clickable(onClick = onClick),
+            .clickable(role = Role.Button, onClick = onClick)
+            .focusable(),
         contentAlignment = Alignment.Center
     ) {
         Icon(
