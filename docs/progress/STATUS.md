@@ -22,6 +22,12 @@ en los catálogos garantizados. La comprobación oficial queda en 356 claves;
 `lintMobileDebug` vuelve a terminar con 0 errores, junto con los tests móviles y
 la compilación TV.
 
+El commit `2859512` vuelve a generar las APK release con estos cambios y supera
+lint vital: móvil (67 836 307 bytes, SHA-256
+`225CABA35693C12393F8E14D2C0EF74B75D3E4B05E26BCCADCFC9FCC42A071B0`) y TV
+(67 836 279 bytes, SHA-256
+`F12AAF82D05FB2821EE98A5D0AE688613EB5CF67EAF45E53D0010C52F0D3B3AE`).
+
 Tras esa corrección, el commit `54bbfb7` vuelve a pasar `assembleMobileRelease`
 y `assembleTvRelease` con lint vital. Las APK unsigned vigentes son: móvil
 (67 832 683 bytes, SHA-256
