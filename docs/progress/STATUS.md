@@ -1453,16 +1453,17 @@ digests are:
   quality switching and the login layout on physical phone/TV hardware.
 - Runtime validation is also still required for touch control toggling over
   SurfaceView/PlayerView on real mobile hardware.
-- Apple shared `VeloraKit` foundation is present with mobile-only offline
-  capability semantics, header-based Jellyfin access and Original First
-  decision tests; the SwiftUI iOS/iPadOS/tvOS clients are not yet present or
-  hardware-verified.
+- Apple shared `VeloraKit` foundation and SwiftUI iOS/iPadOS/tvOS shell are
+  present with mobile-only offline capability semantics, header-based Jellyfin
+  access, Original First decision tests, native AVPlayer playback and Live TV;
+  signed app projects and hardware validation remain pending.
 - VIDAA support is not validated on a real device or certified runtime.
 - Offline queue/storage recovery, background transfer, quality selection,
-  persistence of integrity metadata, settings
-  integration and the full end-to-end offline journey are not yet verified;
-  the storage policy and digest contracts have unit coverage.
-  the durable metadata foundation is now in place.
+  persistence of integrity metadata, settings integration and the full
+  end-to-end offline journey are implemented across Android and the Apple
+  package, but the Apple path still needs macOS/iOS execution and the complete
+  journey remains unverified; storage policy and digest contracts have unit
+  coverage.
 - Completed provider downloads are now copied into Velora's private
   `filesDir/offline/media` storage and verified before offline playback; the
   transfer provider remains only as a compatibility bridge for existing
@@ -1507,7 +1508,7 @@ SHA-256 manifests. The only remote branch is `main`.
 | Samsung Tizen | Packaging path exists | Device/emulator validation pending |
 | LG webOS | Packaging path exists | Device/emulator validation pending |
 | Hisense VIDAA | Preparation only | Not verified |
-| iOS/iPadOS/tvOS | `VeloraKit` foundation package present; SwiftUI apps pending | macOS/Xcode validation pending |
+| iOS/iPadOS/tvOS | `VeloraKit` SwiftUI shell and native AVPlayer entrypoints present | macOS/Xcode, signed app and hardware validation pending |
 
 ## Quality gates
 
