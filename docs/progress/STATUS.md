@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`a85b192`. Los
+`04ca0ab`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -42,6 +42,12 @@ La validación web posterior vuelve a pasar las pruebas de capacidades,
 seguridad e interacción. El bundle web y el paquete webOS se generan; Samsung
 queda preparado sin firma por ausencia de Tizen Studio/CLI y VIDAA queda como
 bundle HTML5, sin inventar un paquete firmado que no se ha validado.
+
+El commit `04ca0ab` añade un mini-reproductor persistente para Live TV en web:
+se puede minimizar sin detener la sesión, seguir navegando por la biblioteca,
+restaurarlo con foco de teclado/mando o cerrarlo liberando la sesión. Las
+pruebas web cubren la ruta y se regeneraron los bundles web, webOS y VIDAA;
+Tizen sigue pendiente de Tizen Studio/CLI y un perfil de firma disponibles.
 
 Los catálogos Android garantizados para la experiencia principal —español base,
 inglés, alemán y francés— ya contienen las 346 claves actuales. El workflow de
