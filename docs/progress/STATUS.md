@@ -36,6 +36,12 @@ mediante ADB el 2026-09-05. La actividad se lanzó y el
 logcat no mostró `FATAL EXCEPTION`; esto valida instalación y arranque de esta
 build, no reproducción autenticada ni Live TV.
 
+La batería unitaria móvil/TV se ejecutó de nuevo el 2026-09-05 y terminó con
+éxito. Incluye la agrupación de Live TV por ID de canal, el selector de fuentes
+(principal/IPTV), decisiones de reproducción, aspecto, seguridad de URLs y
+estados de descargas. La agrupación evita duplicar filas cuando Jellyfin ofrece
+varias fuentes del mismo canal y abre el selector al pulsar la fila.
+
 La auditoría de logs de red del 2026-09-05 sanitiza los mensajes de excepción
 en `JellyfinApi`, `LiveTvActivity`, `JellyfinRepository` y `ServerEntryScreen`.
 Usan `SensitiveDataRedactor.message` en lugar de registrar el `Throwable`
