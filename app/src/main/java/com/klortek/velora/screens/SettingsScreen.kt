@@ -1012,7 +1012,7 @@ fun SettingsScreen(
                                                                 containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                                                             )
                                                         ) {
-                                                            Text("Cancelar")
+                                                            Text(stringResource(com.klortek.velora.R.string.settings_cancel))
                                                         }
                                                         
                                                         Button(
@@ -1023,7 +1023,7 @@ fun SettingsScreen(
                                                             },
                                                             modifier = Modifier.weight(1f)
                                                         ) {
-                                                            Text("Guardar")
+                                                            Text(stringResource(com.klortek.velora.R.string.settings_save))
                                                         }
                                                     } else {
                                                         androidx.compose.material3.Button(
@@ -1033,7 +1033,7 @@ fun SettingsScreen(
                                                                 containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
                                                             )
                                                         ) {
-                                                            androidx.compose.material3.Text("Cancelar", color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                            androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel), color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
                                                         }
                                                         
                                                         androidx.compose.material3.Button(
@@ -1044,7 +1044,7 @@ fun SettingsScreen(
                                                             },
                                                             modifier = Modifier.weight(1f)
                                                         ) {
-                                                            androidx.compose.material3.Text("Guardar")
+                                                            androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_save))
                                                         }
                                                     }
                                                 }
@@ -1175,7 +1175,7 @@ fun SettingsScreen(
                                                                     containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                                                                 )
                                                             ) {
-                                                                Text("Cancelar")
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_cancel))
                                                             }
                                                             
                                                             Button(
@@ -1186,7 +1186,7 @@ fun SettingsScreen(
                                                                 },
                                                                 modifier = Modifier.weight(1f)
                                                             ) {
-                                                                Text("Guardar")
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_save))
                                                             }
                                                         } else {
                                                             androidx.compose.material3.Button(
@@ -1196,7 +1196,7 @@ fun SettingsScreen(
                                                                     containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
                                                                 )
                                                             ) {
-                                                                androidx.compose.material3.Text("Cancelar", color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel), color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
                                                             }
                                                             
                                                             androidx.compose.material3.Button(
@@ -1207,7 +1207,7 @@ fun SettingsScreen(
                                                                 },
                                                                 modifier = Modifier.weight(1f)
                                                             ) {
-                                                                androidx.compose.material3.Text("Guardar")
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_save))
                                                             }
                                                         }
                                                     }
@@ -1437,7 +1437,7 @@ fun SettingsScreen(
                                                                     containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                                                                 )
                                                             ) {
-                                                                Text("Cancelar")
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_cancel))
                                                             }
                                                             
                                                             Button(
@@ -1490,7 +1490,7 @@ fun SettingsScreen(
                                                                 enabled = !isLoggingIn,
                                                                 modifier = Modifier.weight(1f)
                                                             ) {
-                                                                Text("Iniciar sesión")
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_sign_in))
                                                             }
                                                         } else {
                                                             androidx.compose.material3.Button(
@@ -1501,7 +1501,7 @@ fun SettingsScreen(
                                                                     containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
                                                                 )
                                                             ) {
-                                                                androidx.compose.material3.Text("Cancelar", color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel), color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
                                                             }
                                                             
                                                             androidx.compose.material3.Button(
@@ -1554,7 +1554,7 @@ fun SettingsScreen(
                                                                 enabled = !isLoggingIn,
                                                                 modifier = Modifier.weight(1f)
                                                             ) {
-                                                                androidx.compose.material3.Text("Iniciar sesión")
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_sign_in))
                                                             }
                                                         }
                                                     }
@@ -1726,7 +1726,7 @@ fun SettingsScreen(
                                                                 containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                                                             )
                                                         ) {
-                                                            Text("Cancelar")
+                                                            Text(stringResource(com.klortek.velora.R.string.settings_cancel))
                                                         }
                                                     } else {
                                                         androidx.compose.material3.Button(
@@ -1774,7 +1774,7 @@ fun SettingsScreen(
                                                                     strokeWidth = 2.dp
                                                                 )
                                                             } else {
-                                                                Text("Guardar")
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_save))
                                                             }
                                                         }
                                                     } else {
@@ -1807,7 +1807,7 @@ fun SettingsScreen(
                                                                     strokeWidth = 2.dp
                                                                 )
                                                             } else {
-                                                                androidx.compose.material3.Text("Guardar")
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_save))
                                                             }
                                                         }
                                                     }
@@ -2660,7 +2660,7 @@ fun SettingsScreen(
                                             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                                         )
                                     ) {
-                                        Text("Cancelar")
+                                        Text(stringResource(com.klortek.velora.R.string.settings_cancel))
                                     }
                                     
                                     Button(
@@ -2688,7 +2688,7 @@ fun SettingsScreen(
                                             containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
                                         )
                                     ) {
-                                        androidx.compose.material3.Text("Cancelar", color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                        androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel), color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                     
                                     androidx.compose.material3.Button(
@@ -3168,7 +3168,7 @@ fun SubtitleColorPickerDialog(
                                 contentColor = MaterialTheme.colorScheme.onSurface
                             )
                         ) {
-                            Text("Cancelar")
+                            Text(stringResource(com.klortek.velora.R.string.settings_cancel))
                         }
                     }
                 }
@@ -3236,7 +3236,7 @@ fun SubtitleColorPickerDialog(
                             onClick = onDismiss,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            androidx.compose.material3.Text("Cancelar")
+                            androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel))
                         }
                     }
                 }
