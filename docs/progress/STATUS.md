@@ -61,6 +61,9 @@ por lo que esta cobertura queda pendiente de ejecución en el workflow macOS.
 La comprobación ADB de esta pasada no detectó ningún dispositivo conectado;
 por tanto no se declara una prueba física nueva en Fire TV.
 
+La regresión Apple también cubre la lectura de metadatos offline antiguos sin
+los campos de tamaño/hash, además de la detección de archivos manipulados.
+
 Tras el cambio Apple, `testMobileDebugUnitTest`, `compileTvDebugKotlin`,
 `node web/scripts/test-platform.mjs` y `node --check web/app.js` vuelven a
 pasar. La compilación Android emitió únicamente los avisos ya conocidos del

@@ -95,6 +95,15 @@ final class VeloraKitTests: XCTestCase {
         try? FileManager.default.removeItem(at: root)
     }
 
+    func testOfflineDownloadDecodesLegacyMetadataWithoutIntegrityFields() throws {
+        let legacy = #"{"id":"legacy-1","itemID":"item-legacy","title":"Legacy","serverURL":"https://jellyfin.example","fileName":"media.bin","createdAt":"2026-01-01T00:00:00Z"}"#.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let entry = try decoder.decode(VeloraOfflineDownload.self, from: legacy)
+        XCTAssertNil(entry.byteCount)
+        XCTAssertNil(entry.checksumSha256)
+    }
+
     func testCredentialStoreRoundTripsAndRemovesSession() {
         let suiteName = "velora.credentials.tests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
