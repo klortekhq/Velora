@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión actual: commit `a5481e6`.
+Revisión funcional actual: commit `9b4b831`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
