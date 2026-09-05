@@ -63,6 +63,11 @@ Updated: 2026-09-05
   en silencio, solo se hace visible en `STATE_READY` y se oculta ante errores;
   cancela/libera correctamente al cambiar de título o salir. Móvil no crea
   esta instancia. La compilación y los tests móvil/TV pasan.
+- En la revisión de esta sesión, `check-version-consistency`, `check-apple-locales`,
+  `web/scripts/test-platform.mjs` y `web/scripts/build-web.mjs all` vuelven a
+  pasar. Se regeneran el bundle web, el IPK webOS y los bundles preparados de
+  Samsung/VIDAA; Tizen continúa bloqueado únicamente por la ausencia local de
+  Tizen Studio/CLI.
 
 ## Última verificación
 
