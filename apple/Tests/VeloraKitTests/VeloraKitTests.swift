@@ -177,6 +177,22 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertFalse(url?.absoluteString.contains("api_key") ?? true)
     }
 
+    func testAuthorizedMediaRequestStripsCredentialQueryAndKeepsServerScope() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        let credentialed = URL(string: "http://jellyfin.local:8096/Videos/movie-one/stream?api_key=secret&quality=original")!
+        let request = await client.authorizedRequest(for: credentialed)
+        XCTAssertEqual(request.url?.query, "quality=original")
+        XCTAssertNil(request.value(forHTTPHeaderField: "X-Emby-Token"))
+    }
+
+    func testAuthorizedRequestDoesNotSendTokenToAnotherHost() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        let external = URL(string: "https://example.com/video.m3u8?api_key=secret")!
+        let request = await client.authorizedRequest(for: external)
+        XCTAssertEqual(request.url, external)
+        XCTAssertNil(request.value(forHTTPHeaderField: "X-Emby-Token"))
+    }
+
     func testAuthenticationPayloadUsesJellyfinPasswordField() throws {
         let payload = try JSONEncoder().encode(["Username": "demo-user", "Password": "secret"])
         let json = try JSONSerialization.jsonObject(with: payload) as? [String: String]

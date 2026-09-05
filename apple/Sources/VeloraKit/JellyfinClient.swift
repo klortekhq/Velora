@@ -146,7 +146,7 @@ public actor JellyfinClient {
 
         for source in info.mediaSources {
             let candidate = source.directStreamURL ?? source.transcodingURL
-            if let candidate, isServerURL(candidate) { return candidate }
+            if let candidate, let sanitized = sanitizedServerMediaURL(candidate) { return sanitized }
         }
         return nil
     }
@@ -154,9 +154,12 @@ public actor JellyfinClient {
     /// Build an authenticated request for artwork or media without exposing
     /// the Jellyfin token in a URL. Callers can pass this to URLSession/AVURLAsset.
     public func authorizedRequest(for url: URL) -> URLRequest {
-        var request = URLRequest(url: url)
+        let safeURL = sanitizedServerMediaURL(url) ?? url
+        var request = URLRequest(url: safeURL)
         request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
-        if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
+        if isServerURL(safeURL), let accessToken {
+            request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token")
+        }
         return request
     }
 
@@ -171,6 +174,21 @@ public actor JellyfinClient {
         return parts.enumerated().reduce(baseURL) { url, entry in
             url.appendingPathComponent(entry.element, isDirectory: entry.offset < parts.count - 1)
         }
+    }
+
+    /// Jellyfin may return a playable URL containing a server-side credential
+    /// for legacy clients. Velora always authenticates through headers, so
+    /// those query items must never reach AVPlayer, logs, or share sheets.
+    private func sanitizedServerMediaURL(_ url: URL) -> URL? {
+        guard isServerURL(url) else { return nil }
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
+        let sensitiveNames: Set<String> = [
+            "api_key", "apikey", "access_token", "token", "x-emby-token", "authorization"
+        ]
+        components.queryItems = components.queryItems?.filter {
+            !sensitiveNames.contains($0.name.lowercased())
+        }
+        return components.url
     }
 
     private func isServerURL(_ url: URL) -> Bool {
@@ -244,11 +262,8 @@ public actor JellyfinClient {
         }
         let info = try JSONDecoder().decode(JellyfinLiveTvPlaybackInfo.self, from: data)
         let selected = info.mediaSources.first?.transcodingURL ?? info.mediaSources.first?.directStreamURL
-        guard let selected,
-              selected.scheme == baseURL.scheme,
-              selected.host?.lowercased() == baseURL.host?.lowercased(),
-              selected.port == baseURL.port else { return nil }
-        return selected
+        guard let selected else { return nil }
+        return sanitizedServerMediaURL(selected)
     }
 
     /// Releases a Live TV session and updates Jellyfin's playback state.
