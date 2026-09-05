@@ -311,4 +311,21 @@
   <string name="settings_subtitles_clear_button">Clear</string>
   <string name="settings_subtitles_clear_confirm">Clear downloaded subtitles?</string>
   <string name="settings_subtitles_clear_done">Downloaded subtitles cleared</string>
+  <string name="settings_jellyseerr_url">Jellyseerr URL</string>
+  <string name="settings_jellyseerr_url_description">Enter the URL of your Jellyseerr/Overseerr server</string>
+  <string name="settings_jellyseerr_url_dialog_description">Enter the full URL of your Jellyseerr instance (for example, http://192.168.1.50:5055)</string>
+  <string name="settings_url">URL</string>
+  <string name="settings_set_url">Set URL</string>
+  <string name="settings_local_email">Local/Email</string>
+  <string name="settings_jellyfin_username">Jellyfin username</string>
+  <string name="settings_signing_in">Signing in…</string>
+  <string name="settings_jellyseerr_url_required">Enter the Jellyseerr URL first</string>
+  <string name="settings_jellyseerr_discover">Enable Discover tab</string>
+  <string name="settings_jellyseerr_discover_description">Show trending, popular and upcoming Jellyseerr content.</string>
+  <string name="settings_jellyseerr_search">Include in search</string>
+  <string name="settings_jellyseerr_search_description">Show Jellyseerr results on the main search screen.</string>
+  <string name="settings_tmdb_api_key">TMDB API key (trailers)</string>
+  <string name="settings_tmdb_api_key_configured">TMDB key configured ✓</string>
+  <string name="settings_tmdb_api_key_description">Required to fetch trailers directly from The Movie Database</string>
+  <string name="settings_tmdb_api_key_dialog_description">Enter your TMDB API key to fetch trailers directly from The Movie Database.</string>
 </resources>

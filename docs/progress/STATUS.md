@@ -4,6 +4,13 @@ Updated: 2026-09-05
 
 ## Última verificación
 
+La revisión de internacionalización del 2026-09-05 migró a recursos los
+textos de Ajustes relacionados con Jellyseerr, autenticación, Descubrir y
+tráilers de TMDB. Las claves están presentes en español, inglés, francés y
+alemán; `check-android-locales.mjs` valida 374 claves y las variantes móvil/TV
+compilan y pasan sus pruebas unitarias. Esto mejora la traducción efectiva al
+cambiar el idioma desde Ajustes, sin alterar la lógica de conexión.
+
 La auditoría de logs de red del 2026-09-05 sanitiza los mensajes de excepción
 en `JellyfinApi`, `LiveTvActivity`, `JellyfinRepository` y `ServerEntryScreen`.
 Usan `SensitiveDataRedactor.message` en lugar de registrar el `Throwable`

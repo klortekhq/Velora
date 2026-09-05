@@ -291,4 +291,21 @@
   <string name="settings_subtitles_clear_button">Löschen</string>
   <string name="settings_subtitles_clear_confirm">Heruntergeladene Untertitel löschen?</string>
   <string name="settings_subtitles_clear_done">Heruntergeladene Untertitel gelöscht</string>
+  <string name="settings_jellyseerr_url">Jellyseerr-URL</string>
+  <string name="settings_jellyseerr_url_description">Gib die URL deines Jellyseerr-/Overseerr-Servers ein</string>
+  <string name="settings_jellyseerr_url_dialog_description">Gib die vollständige URL deiner Jellyseerr-Instanz ein (zum Beispiel http://192.168.1.50:5055)</string>
+  <string name="settings_url">URL</string>
+  <string name="settings_set_url">URL festlegen</string>
+  <string name="settings_local_email">Lokal/E-Mail</string>
+  <string name="settings_jellyfin_username">Jellyfin-Benutzername</string>
+  <string name="settings_signing_in">Anmeldung…</string>
+  <string name="settings_jellyseerr_url_required">Gib zuerst die Jellyseerr-URL ein</string>
+  <string name="settings_jellyseerr_discover">Entdecken-Tab aktivieren</string>
+  <string name="settings_jellyseerr_discover_description">Trendige, beliebte und kommende Jellyseerr-Inhalte anzeigen.</string>
+  <string name="settings_jellyseerr_search">In Suche einbeziehen</string>
+  <string name="settings_jellyseerr_search_description">Jellyseerr-Ergebnisse im Hauptsuchbildschirm anzeigen.</string>
+  <string name="settings_tmdb_api_key">TMDB-API-Schlüssel (Trailer)</string>
+  <string name="settings_tmdb_api_key_configured">TMDB-Schlüssel konfiguriert ✓</string>
+  <string name="settings_tmdb_api_key_description">Erforderlich, um Trailer direkt von The Movie Database abzurufen</string>
+  <string name="settings_tmdb_api_key_dialog_description">Gib deinen TMDB-API-Schlüssel ein, um Trailer direkt von The Movie Database abzurufen.</string>
 </resources>
