@@ -4,6 +4,13 @@ Updated: 2026-09-05
 
 ## Última verificación
 
+Auditoría de evidencia de releases (2026-09-05): las consultas directas a la
+API y a la URL pública de GitHub para `v1.2.32` y `v1.4.0` devolvieron HTTP
+404. Por tanto, las notas antiguas de releases que aparecen más abajo se
+consideran archivo histórico no revalidado; no se usan para afirmar que exista
+una release pública actual. Las APK locales documentadas aquí son artefactos
+unsigned verificables, no publicaciones de tienda.
+
 La verificación adicional del 2026-09-05 corrige la configuración de lint para
 los catálogos Android con fallback parcial y vuelve a ejecutar `lintMobileDebug`:
 finaliza con 0 errores de lint. La comprobación oficial
@@ -1208,9 +1215,9 @@ digests are:
   has no trailer available; this Android path is covered by a successful
   mobile/TV compilation but still needs hardware playback QA.
 - Live TV channel zapping and previous-channel shortcut are implemented in the
-  ExoPlayer OSD and covered by deterministic navigation tests. A persistent
-  mini-player in the browsing surface still needs implementation; programme
-  details are implemented but need hardware QA.
+  ExoPlayer OSD and covered by deterministic navigation tests. The web client
+  now has a persistent mini-player in the browsing surface; Android/Smart TV
+  programme playback and the complete cross-device flow still need hardware QA.
 - No hardware test result is claimed: the connected Fire TV/phone were not
   available to this automated run.
 
