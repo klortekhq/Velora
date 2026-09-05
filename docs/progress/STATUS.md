@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`69b45ae`. Los
+`257dd6a`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -44,6 +44,12 @@ JUnit Android, `lintMobileDebug` sin errores, compilación Kotlin móvil/TV,
 parseo y tests web, y `npm run build:all` con IPK webOS generado. Tizen Studio,
 la firma Samsung/VIDAA, macOS/Xcode y el hardware real siguen sin estar
 disponibles en este host, por lo que permanecen explícitamente sin certificar.
+
+La revisión web posterior detectó que las claves nuevas de reparto, filtros y
+Live TV no estaban presentes en todos los catálogos. `257dd6a` normaliza cada
+idioma contra el catálogo inglés como fallback neutral, mantiene las
+traducciones existentes y evita que una clave ausente reaparezca en español.
+Parseo, tests web y empaquetado multiplataforma pasan después del cambio.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
