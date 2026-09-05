@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`e73d724`. Los
+`05dfd8a`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -59,6 +59,11 @@ pasar.
 `e73d724` completa las mismas etiquetas para japonés, coreano, chino, ruso,
 árabe y turco, incluido el control de salida de pantalla completa. La web y
 los paquetes Smart TV vuelven a pasar sus comprobaciones.
+
+`05dfd8a` lleva el agrupado de Live TV también al modelo Apple: varias filas
+con la misma ID se presentan como un canal y conservan sus `MediaSources`.
+Incluye regresiones de decodificación y agrupado; queda pendiente la
+ejecución de Swift en el runner macOS, no se declara validado en Windows.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
