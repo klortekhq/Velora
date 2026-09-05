@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`083d222`. Los
+`69b45ae`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -34,6 +34,10 @@ de una ejecución observada en macOS/Xcode; el repositorio ya incluye
 `apple.yml`, que compila y ejecuta el Swift Package en macOS cuando GitHub
 Actions dispone del runner correspondiente. Esto valida el paquete compartido,
 pero no equivale todavía a certificar una app firmada para iOS, iPadOS o tvOS.
+
+El commit `69b45ae` añade entrypoints macOS mínimos y condicionados para que
+los ejecutables del Swift Package puedan enlazar en CI; no los presenta como
+una aplicación macOS distribuible.
 
 Tras publicar `083d222`, se repitieron las comprobaciones locales: 75 tests
 JUnit Android, `lintMobileDebug` sin errores, compilación Kotlin móvil/TV,
