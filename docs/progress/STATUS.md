@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`6384acb`. Los
+`858273c`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -76,6 +76,12 @@ La verificación Android posterior ejecutó `testMobileDebugUnitTest`,
 Los APK de QA generados quedan en `app/build/outputs/apk/` y no se presentan
 como release publicada ni como instalación en hardware, porque ADB no detecta
 ningún dispositivo.
+
+La repetición sobre `858273c` volvió a completar esas cuatro tareas Android
+con éxito. También pasaron `node --check app.js`, las pruebas de capacidades y
+seguridad web y `npm run build:all`; el empaquetado volvió a generar el IPK de
+webOS y los bundles HTML5 de Samsung/VIDAA sin afirmar firma ni certificación
+de hardware.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
