@@ -21,6 +21,14 @@ presentan como verificadas la consulta autenticada de canales, `PlaybackInfo`,
 la reproducción ni Live TV real. El smoke test sí mantiene estas etapas para
 ejecutarlas cuando el acceso sea válido.
 
+La revisión web/Smart TV del 2026-09-05 añadió una regresión explícita para la
+regla de producto de descargas: `platform.js` mantiene
+`supportsOfflineDownloads: false` y el catálogo de interfaz no contiene
+acciones `download`/`offline` en navegador, Tizen, webOS o VIDAA. Las pruebas
+de capacidades, seguridad, agrupación de Live TV y el build web completo pasan.
+Tizen Studio/CLI no está instalado en este entorno, por lo que el resultado
+Tizen es un bundle preparado y no un `.wgt` certificado.
+
 La auditoría de seguridad del 2026-09-05 amplió `SensitiveDataRedactor` para
 sanitizar también tokens en encabezados (`Token=`, `Bearer` y
 `X-Emby-Token`) cuando una excepción llega a Logcat. Las nuevas regresiones
