@@ -20,6 +20,9 @@ Updated: 2026-09-05
 - No se declara una release pública ni un APK firmado a partir de esta
   revisión: la consulta pública no confirmó una release existente y este
   entorno no dispone de credenciales de firma/GitHub CLI para publicarla.
+- El gate `scripts/check-version-consistency.mjs` pasa con `1.4.0` y se ejecuta
+  en CI, Android Release y Web Release; la etiqueta `v1.4.0` coincide con el
+  commit de `main` que contiene ese gate.
 
 ## Última verificación
 
