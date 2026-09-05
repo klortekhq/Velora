@@ -104,6 +104,20 @@ android {
         compose = true
         buildConfig = true
     }
+    // Velora lets the user change language from Settings at runtime. Keep all
+    // translated resources in the base bundle instead of requiring Play Core
+    // language downloads that the app does not implement.
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+    // AppBundleLocaleChanges does not resolve the Kotlin DSL block above in
+    // every AGP lint version. The bundle setting is intentional and keeps all
+    // locales available for Velora's in-app language switcher.
+    lint {
+        disable += "AppBundleLocaleChanges"
+    }
     packaging {
         jniLibs {
             useLegacyPackaging = true
