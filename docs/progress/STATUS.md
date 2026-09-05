@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `e5faad5`)
+## Revisión actual (commit `3256c65`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -83,6 +83,9 @@ Updated: 2026-09-05
   cubre duplicados, múltiples fuentes en una fila y etiquetas de opción.
 - La comprobación dirigida posterior pasó `LiveTvChannelQueryTest` y
   `AspectPresentationTest` en `testMobileDebugUnitTest` (`BUILD SUCCESSFUL`).
+- El formulario de inicio de sesión TV usa ahora campos parametrizados de
+  72 dp con texto de 22 sp, manteniendo los valores móviles compactos; esto
+  mejora lectura y navegación con mando en pantallas 10-foot.
 
 ## Última verificación
 
@@ -144,6 +147,11 @@ La compilación local del 2026-09-05 también completó `assembleMobileRelease` 
 `assembleTvRelease` con lint vital incluido. Generó los dos APK release
 `unsigned` de aproximadamente 67,9 MB; no se publican como release oficial
 porque este entorno no tiene la firma de distribución configurada.
+
+La build de validación posterior al ajuste de login volvió a completar
+`assembleMobileRelease` y `assembleTvRelease` (`BUILD SUCCESSFUL`, 155 tareas).
+Los APK resultantes siguen siendo unsigned y solo sirven como artefactos
+locales de QA hasta disponer de firma de distribución.
 
 La misma build incorpora una corrección del selector de aspecto: las opciones
 se exponen como controles seleccionables accesibles para táctil y mando, y el
