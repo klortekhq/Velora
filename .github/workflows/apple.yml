@@ -22,6 +22,13 @@ jobs:
         working-directory: apple
     steps:
       - uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validar catálogos Apple
+        working-directory: .
+        run: node scripts/check-apple-locales.mjs
       - name: Mostrar toolchain Swift
         run: swift --version
       - name: Compilar paquete Apple

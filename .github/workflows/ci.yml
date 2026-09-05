@@ -86,6 +86,12 @@ jobs:
         uses: swift-actions/setup-swift@v2
         with:
           swift-version: '5.9'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Apple localization catalogues
+        run: node scripts/check-apple-locales.mjs
       - name: Test VeloraKit
         run: swift test --package-path apple --parallel
       - name: Build native package entrypoints

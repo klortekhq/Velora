@@ -460,6 +460,19 @@ private struct VeloraLiveTvView: View {
         }
     }
 
+    private func sourceLabel(_ source: JellyfinLiveTvMediaSource, index: Int) -> String {
+        let descriptor = [source.protocolName, source.transcodingURL?.path, source.directStreamURL?.path]
+            .compactMap { $0?.lowercased() }
+            .joined(separator: " ")
+        if descriptor.contains("iptv") || descriptor.contains("m3u") {
+            return String(localized: "IPTV source", bundle: .module)
+        }
+        if index == 0 {
+            return String(localized: "Primary source", bundle: .module)
+        }
+        return String(format: String(localized: "Source option %d", bundle: .module), index + 1)
+    }
+
     var body: some View {
         List(model.liveTvChannels) { channel in
             Button {
@@ -482,13 +495,13 @@ private struct VeloraLiveTvView: View {
                         Button {
                             startPlayback(channel: channel, sourceID: source.id ?? source.liveStreamID)
                         } label: {
-                            Text(source.id ?? source.liveStreamID ?? "Source \(index + 1)")
+                            Text(sourceLabel(source, index: index))
                         }
                     }
                 } label: {
                     Image(systemName: "rectangle.stack")
                 }
-                .accessibilityLabel("Choose channel source")
+                .accessibilityLabel(String(localized: "Choose channel source", bundle: .module))
             }
         }
         .navigationTitle(Text("Live TV", bundle: .module))
