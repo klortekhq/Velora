@@ -11,6 +11,14 @@ finaliza con 0 errores de lint. La comprobación oficial
 (inglés, alemán y francés) completos con 346 claves; los demás idiomas siguen
 siendo opcionales y heredan el español base de forma controlada.
 
+Desde el commit `25e7158` también pasan `assembleMobileRelease` y
+`assembleTvRelease` con lint vital. Los artefactos unsigned resultantes son:
+móvil (67 830 323 bytes, SHA-256
+`1037924C2102DB0CAD26371AD89A6AEF6D6B5B9251C0F044ADFA984D84C18590`) y TV
+(67 830 447 bytes, SHA-256
+`B0505DC10D63497BAFB98095688A8B9AC6D1A4BB11AF0CB68D5983637D636A1D`). No se
+presentan como APK de tienda porque siguen sin firma de distribución.
+
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
 `f73bc45`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
