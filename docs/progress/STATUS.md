@@ -57,6 +57,13 @@ La verificación Android posterior del 2026-09-05 sobre `eed1eb0` pasó
 `compileMobileDebugKotlin`, `compileTvDebugKotlin`, `testMobileDebugUnitTest`
 y `testTvDebugUnitTest` con `BUILD SUCCESSFUL`.
 
+La APK TV de esa revisión se reinstaló en el Fire Stick por ADB el 2026-09-05.
+El paquete informa `1.4.0-tv`/`versionCode 10400`; el arranque explícito de
+`com.klortek.velora.MainActivity` devolvió `Status: ok` y no produjo
+`FATAL EXCEPTION` ni errores de `ExoPlayer`. El código de salida de `Monkey`
+que aparece en el log pertenece al lanzador de prueba, no a un proceso de
+Velora.
+
 La validación del 2026-09-05 sobre el commit actual compiló `assembleTvDebug`
 con éxito, instaló la APK resultante en el Fire TV AFTSS y la lanzó mediante
 ADB. El dispositivo informa `1.4.0-tv`/`versionCode 10400`; la actividad llegó
