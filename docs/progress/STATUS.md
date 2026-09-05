@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`71da73f`. Los
+`70f5c1d`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -86,6 +86,10 @@ de hardware.
 `71da73f` elimina de los logs Android rutas de archivos locales, rutas internas
 de subtítulos y enlaces de descarga sin redacción. La suite de tests y lint
 Android vuelven a pasar después del endurecimiento.
+
+`70f5c1d` desacopla el estado de las pestañas de detalle móvil de sus etiquetas
+traducidas y elimina un fallback de audio hardcodeado. Tests y APK de móvil/TV
+vuelven a compilar correctamente después del cambio.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
