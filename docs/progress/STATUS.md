@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`3429a3f`. Los
+`bd77e37`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -36,6 +36,10 @@ inglés, alemán y francés— ya contienen las 346 claves actuales. El workflow
 release ejecuta `scripts/check-android-locales.mjs` para impedir que vuelvan a
 quedar incompletos. Los demás idiomas instalados mantienen fallback seguro al
 catálogo base mientras se amplía su traducción.
+
+La auditoría de seguridad añade cobertura directa para la redacción sin
+distinguir mayúsculas, mensajes de error y rutas/nombres locales. El conjunto
+`testMobileDebugUnitTest` continúa pasando.
 
 La etiqueta remota `v1.4.0` se realineó con el `main` actual (`1dbb8a3`) para
 evitar que el workflow de publicación reconstruya un commit antiguo. La API
