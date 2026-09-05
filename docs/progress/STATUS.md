@@ -47,6 +47,12 @@ La validación Android ejecutada el 2026-09-05 pasó `testMobileDebugUnitTest`,
 (131 tareas, 7m35s). El lint generó los informes de ambas variantes sin
 errores bloqueantes; solo permanecen los avisos conocidos del SDK local.
 
+La compilación release del mismo día pasó `assembleMobileRelease` y
+`assembleTvRelease` con `BUILD SUCCESSFUL` (155 tareas, 10m25s). Generó
+`1.4.0-mobile` y `1.4.0-tv`, ambos con target SDK 36. La inspección de firma
+confirma que los APK locales son `unsigned`; por tanto no se anuncian como
+artefactos publicables hasta disponer de la firma configurada en CI.
+
 La verificación del 2026-09-05 sobre `3798886` pasó
 `testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
 `compileTvDebugKotlin` con `BUILD SUCCESSFUL`. Persisten únicamente avisos de
