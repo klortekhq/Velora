@@ -28,6 +28,11 @@ lint vital: móvil (67 836 307 bytes, SHA-256
 (67 836 279 bytes, SHA-256
 `F12AAF82D05FB2821EE98A5D0AE688613EB5CF67EAF45E53D0010C52F0D3B3AE`).
 
+Los botones repetidos de Ajustes (`Guardar`, `Cancelar` e `Iniciar sesión`)
+también reutilizan recursos traducibles. Tras la migración, los tests unitarios
+móviles y la compilación Kotlin de TV vuelven a pasar; no quedan esos literales
+en `SettingsScreen`.
+
 Tras esa corrección, el commit `54bbfb7` vuelve a pasar `assembleMobileRelease`
 y `assembleTvRelease` con lint vital. Las APK unsigned vigentes son: móvil
 (67 832 683 bytes, SHA-256
