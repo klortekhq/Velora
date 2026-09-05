@@ -39,3 +39,7 @@
 "Version" = "Version";
 "By Klørtek" = "Par Klørtek";
 "Play live channel" = "Lire la chaîne en direct";
+"IPTV source" = "Source IPTV";
+"Primary source" = "Source principale";
+"Source option %d" = "Option %d";
+"Choose channel source" = "Choisir la source de la chaîne";
