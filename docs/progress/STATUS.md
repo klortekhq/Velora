@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `13ea304`)
+## Revisión actual (commit `a452275`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -26,9 +26,9 @@ Updated: 2026-09-05
   revisión: la consulta pública no confirmó una release existente y este
   entorno no dispone de credenciales de firma/GitHub CLI para publicarla.
 - El APK TV de la revisión anterior se compiló correctamente; tras pedir
-  explícitamente `MediaSources` para trailers, el nuevo APK local también
-  compila y su SHA-256 es
-  `2F3275686319890E7918B61208657C6C2B9D22CEC94CEC1D2630EB3D7F7D5B78`.
+  explícitamente `MediaSources` y ocultar el preview hasta `STATE_READY`, el
+  nuevo APK local también compila y su SHA-256 es
+  `B6AEFC07E19D3CF1BC1F5DDA2274BE46134EEFD0C8BAC773D3EE7C7F42C7F410`.
   La instalación en Fire TV no pudo verificarse porque el dispositivo sigue
   sin responder en `192.168.31.112:5555` y `adb devices` no lo muestra.
 - El gate `scripts/check-version-consistency.mjs` pasa con `1.4.0` y se ejecuta
@@ -82,8 +82,9 @@ pasar `testMobileDebugUnitTest` y `testTvDebugUnitTest` (`BUILD SUCCESSFUL`) y
 `assembleTvRelease` produjo el APK anterior con la huella indicada arriba.
 
 La comprobación posterior al control de `STATE_READY` volvió a pasar ambos
-tests unitarios (`BUILD SUCCESSFUL`); aún no se anuncia un APK nuevo hasta
-regenerar el artefacto release correspondiente.
+tests unitarios (`BUILD SUCCESSFUL`) y `assembleTvRelease` produjo el APK con
+la huella indicada arriba. Sigue siendo unsigned y no se anuncia como release
+pública.
 
 La verificación del 2026-09-05 sobre `3798886` pasó
 `testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
