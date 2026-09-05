@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `cecd8d8`)
+## Revisión actual (pendiente de commit)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -1911,3 +1911,10 @@ Samsung Tizen, manteniendo `samsung` por compatibilidad y dejando claro que
 un `.wgt` publicable requiere Tizen Studio y firma del fabricante. La prueba
 `node web/scripts/build-web.mjs tizen` pasa en este entorno y reporta
 honestamente la ausencia local de esa herramienta.
+
+La compilación release del 2026-09-05 sobre el código actual pasó
+`assembleMobileRelease` y `assembleTvRelease` (`BUILD SUCCESSFUL`, 155 tareas).
+Los APK locales son unsigned y quedan identificados para QA por estas huellas:
+`mobile` SHA-256 `9556E442C2744EEC23AA7E54B31C2ED481B447659C7555EA38806CA73D7265A6`;
+`tv` SHA-256 `84DA6BB8C0AE414F46F6DCED4F6EF5318B713E5AF65D470BDF36ECE6A16160D3`.
+No se publican como release hasta disponer de la firma Android configurada.
