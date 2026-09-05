@@ -1,0 +1,73 @@
+name: Velora continuous validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'web/**'
+      - 'scripts/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: velora-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Web platform checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate web interactions and security
+        run: node web/scripts/test-platform.mjs
+      - name: Build browser and Smart TV bundles
+        run: node web/scripts/build-web.mjs all
+
+  android:
+    name: Android unit tests and Kotlin compilation
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Android SDK platform
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Validate Android locale catalogues
+        run: node scripts/check-android-locales.mjs
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Make wrapper executable
+        run: chmod +x ./gradlew
+      - name: Test and compile mobile and TV variants
+        run: >-
+          ./gradlew
+          :app:testMobileDebugUnitTest
+          :app:testTvDebugUnitTest
+          :app:compileMobileDebugKotlin
+          :app:compileTvDebugKotlin
+          --no-daemon --max-workers=2 --console=plain

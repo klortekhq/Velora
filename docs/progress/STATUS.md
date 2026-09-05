@@ -4,6 +4,15 @@ Updated: 2026-09-05
 
 ## Última verificación
 
+Se añadió `.github/workflows/ci.yml` para que cada cambio en `main` y cada
+pull request relevante valide de forma reproducible los catálogos Android, las
+pruebas de interacción/seguridad web, los bundles web/Smart TV y las pruebas y
+compilaciones Kotlin de las variantes móvil y TV. La ejecución local equivalente
+del 2026-09-05 terminó correctamente: web y empaquetado webOS pasaron, y
+`testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
+`compileTvDebugKotlin` terminaron con `BUILD SUCCESSFUL`. El workflow no afirma
+validación física de Tizen, VIDAA, Apple ni de reproducción autenticada.
+
 La revisión de internacionalización del 2026-09-05 migró a recursos los
 textos de Ajustes relacionados con Jellyseerr, autenticación, Descubrir y
 tráilers de TMDB. Las claves están presentes en español, inglés, francés y
