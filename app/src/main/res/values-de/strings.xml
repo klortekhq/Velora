@@ -129,6 +129,10 @@
   <string name="jellyseerr_request_failed">Anfrage fehlgeschlagen</string>
   <string name="jellyseerr_requesting">Anfrage wird gesendet…</string>
   <string name="jellyseerr_request_action">Bei Jellyseerr anfragen</string>
+  <string name="jellyseerr_status_available_short">Verfügbar</string>
+  <string name="jellyseerr_status_requested_short">Angefragt</string>
+  <string name="jellyseerr_status_pending_short">Ausstehend</string>
+  <string name="jellyseerr_status_request_short">Anfragen</string>
   <string name="action_go_to_settings">Zu den Einstellungen</string>
   <string name="request_no_seasons">Keine Staffeln gefunden</string>
   <string name="jellyseerr_requesting_short">Anfrage wird gesendet…</string>

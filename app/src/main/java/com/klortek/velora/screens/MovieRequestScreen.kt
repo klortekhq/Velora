@@ -433,10 +433,10 @@ fun MovieRequestScreen(
                                         Spacer(modifier = Modifier.width(6.dp))
                                         Text(
                                             text = when {
-                                                isAvailable -> "Available"
-                                                requestSuccess -> "Requested"
-                                                isAlreadyRequested -> "Pending"
-                                                else -> "Request"
+                                                isAvailable -> stringResource(com.klortek.velora.R.string.jellyseerr_status_available_short)
+                                                requestSuccess -> stringResource(com.klortek.velora.R.string.jellyseerr_status_requested_short)
+                                                isAlreadyRequested -> stringResource(com.klortek.velora.R.string.jellyseerr_status_pending_short)
+                                                else -> stringResource(com.klortek.velora.R.string.jellyseerr_status_request_short)
                                             },
                                             style = MaterialTheme.typography.labelLarge.copy(
                                                 fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
@@ -692,10 +692,10 @@ fun MovieRequestScreen(
                                 Spacer(modifier = Modifier.width(8.dp))
                                 androidx.compose.material3.Text(
                                     text = when {
-                                        isAvailable -> "Available"
-                                        requestSuccess -> "Requested"
-                                        isAlreadyRequested -> "Pending"
-                                        else -> "Request"
+                                        isAvailable -> stringResource(com.klortek.velora.R.string.jellyseerr_status_available_short)
+                                        requestSuccess -> stringResource(com.klortek.velora.R.string.jellyseerr_status_requested_short)
+                                        isAlreadyRequested -> stringResource(com.klortek.velora.R.string.jellyseerr_status_pending_short)
+                                        else -> stringResource(com.klortek.velora.R.string.jellyseerr_status_request_short)
                                     },
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold

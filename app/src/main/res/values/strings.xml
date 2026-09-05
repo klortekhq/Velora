@@ -150,6 +150,10 @@
     <string name="jellyseerr_request_failed">No se ha podido enviar la solicitud</string>
     <string name="jellyseerr_requesting">Solicitando…</string>
     <string name="jellyseerr_request_action">Solicitar en Jellyseerr</string>
+    <string name="jellyseerr_status_available_short">Disponible</string>
+    <string name="jellyseerr_status_requested_short">Solicitada</string>
+    <string name="jellyseerr_status_pending_short">Pendiente</string>
+    <string name="jellyseerr_status_request_short">Solicitar</string>
     <string name="action_go_to_settings">Ir a Ajustes</string>
     <string name="request_no_seasons">No se han encontrado temporadas</string>
     <string name="jellyseerr_requesting_short">Solicitando…</string>
