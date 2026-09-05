@@ -30,6 +30,8 @@ una comprobación no se interpreta como soporte certificado.
 - Live TV solicita `MediaSources`, agrupa filas con el mismo ID de Jellyfin y
   permite seleccionar las variantes bajo un único canal. El cambio de canal
   no reutiliza la fuente del canal anterior.
+- La comprobación de disponibilidad de Live TV en el inicio libera su cliente
+  HTTP al cambiar de sesión o salir de la pantalla.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
   de reproducción persistente.
 - El reparto abre la filmografía disponible en Jellyfin.
@@ -43,6 +45,8 @@ una comprobación no se interpreta como soporte certificado.
 ## Pruebas locales pasadas
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
+- `:app:compileMobileDebugKotlin`: `BUILD SUCCESSFUL` tras el ajuste del ciclo
+  de vida del cliente Live TV.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `node scripts/test-platform.mjs` desde `web/`: correcto para capacidades,
   seguridad, biblioteca, subtítulos y agrupación Live TV.

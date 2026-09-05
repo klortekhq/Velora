@@ -261,11 +261,17 @@ fun JellyfinHomeScreen(
 
     val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
     val isMobileLayout = LocalConfiguration.current.screenWidthDp < 600
+    val liveTvClient = remember(config.serverUrl, config.accessToken, config.userId) {
+        if (config.isConfigured()) LiveTvClient(config) else null
+    }
+    DisposableEffect(liveTvClient) {
+        onDispose { liveTvClient?.close() }
+    }
     var showLiveTv by remember { mutableStateOf(false) }
-    LaunchedEffect(apiService, config.serverUrl, config.userId) {
+    LaunchedEffect(liveTvClient) {
         showLiveTv = false
-        if (apiService != null && config.isConfigured()) {
-            showLiveTv = runCatching { LiveTvClient(config).getChannels().isNotEmpty() }.getOrDefault(false)
+        if (liveTvClient != null) {
+            showLiveTv = runCatching { liveTvClient.getChannels().isNotEmpty() }.getOrDefault(false)
         }
     }
     // Show server entry screen if server URL is not configured

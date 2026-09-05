@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android: la comprobación de disponibilidad de Live TV en el inicio cierra su
+  cliente HTTP al abandonar la pantalla, evitando conexiones acumuladas tras
+  cambiar de servidor o sesión.
 - CI: las Releases públicas ya no incluyen APK debug; esos APK quedan aislados
   como artefactos temporales de QA y la Release distribuye solo builds release
   firmados con sus sumas SHA-256.
