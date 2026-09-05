@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`ebb7685`. Los
+`e2c8ac3`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -20,6 +20,10 @@ El commit `ebb7685` sustituye los textos incrustados de los controles críticos
 del reproductor por recursos traducibles y completa esas claves en los 13
 catálogos Android. La validación XML, los tests unitarios móviles y las
 compilaciones Kotlin móvil/TV pasan después del cambio.
+
+El commit `e2c8ac3` completa las traducciones del nombre de los ajustes del
+reproductor que aún aparecían en inglés en ocho catálogos. El merge de recursos
+móvil/TV y la validación XML pasan después del cambio.
 
 El workflow de releases no bloquea una publicación por la ausencia de Tizen
 Studio o de un certificado Samsung en el runner: conserva el bundle web
