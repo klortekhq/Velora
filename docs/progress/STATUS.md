@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`c332ead`. Los
+`fb90491`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -30,6 +30,11 @@ transcodificación, códec, bitrate y reproducción automática— a recursos
 traducibles y añade las traducciones principales en español, inglés, francés y
 alemán. La validación XML y la batería Android móvil/TV pasan después del
 cambio.
+
+El commit `fb90491` completa esas mismas claves en los nueve catálogos restantes
+(español regional, italiano, portugués, turco, ruso, árabe, japonés, coreano y
+chino). La validación XML y el merge de recursos móvil/TV pasan después del
+cambio, sin dejar el menú de reproducción con un idioma parcial.
 
 El workflow de releases no bloquea una publicación por la ausencia de Tizen
 Studio o de un certificado Samsung en el runner: conserva el bundle web
