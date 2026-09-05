@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`fbac1ac`. Los
+`2133941`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -50,6 +50,13 @@ La corrección posterior migra a recursos las etiquetas accesibles de Ajustes,
 Buscar, Inicio, Ordenar y Vistos en las pantallas Android principales. La
 compilación Kotlin móvil/TV y `testMobileDebugUnitTest` pasan después del
 cambio.
+
+La validación web posterior ejecuta las pruebas de capacidades/seguridad, el
+chequeo de sintaxis y `build-web.mjs all`: el IPK webOS se genera; Samsung y
+VIDAA quedan como paquetes no firmados para sus herramientas/portales. La API
+pública de GitHub devuelve HTTP 404 para `/releases`, por lo que actualmente
+no se declara ninguna release pública ni APK publicado aunque existan flujos
+preparados para producirlos al crear una etiqueta válida.
 
 El workflow de releases no bloquea una publicación por la ausencia de Tizen
 Studio o de un certificado Samsung en el runner: conserva el bundle web
