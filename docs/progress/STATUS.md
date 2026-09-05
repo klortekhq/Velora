@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `7a58e5f`)
+## Revisión actual (commit `36678b5`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - Fire TV conectado por ADB (`192.168.31.112:5555`) con `1.4.0-tv` activo;
@@ -24,9 +24,14 @@ Updated: 2026-09-05
 - No se declara una release pública ni un APK firmado a partir de esta
   revisión: la consulta pública no confirmó una release existente y este
   entorno no dispone de credenciales de firma/GitHub CLI para publicarla.
+- El APK TV de esta revisión se compiló correctamente en `main` y su SHA-256
+  es `D852A0E1AC5B88370CFE713602B5F0634515F57E815B4325BCD9F6A91BFF9C1A`.
+  La instalación en Fire TV no pudo verificarse porque el dispositivo dejó de
+  responder en `192.168.31.112:5555` y `adb devices` no lo mostró.
 - El gate `scripts/check-version-consistency.mjs` pasa con `1.4.0` y se ejecuta
-  en CI, Android Release y Web Release; la etiqueta `v1.4.0` coincide con el
-  commit de `main` que contiene ese gate.
+  en CI, Android Release y Web Release. `main` contiene ahora cambios
+  posteriores a la etiqueta remota `v1.4.0`; no se reescribe esa referencia
+  publicada automáticamente.
 - Apple Live TV ya presenta las fuentes agrupadas con etiquetas localizadas
   (`Fuente principal`, `Fuente IPTV` u `Opción N`) en lugar de IDs internos.
   `scripts/check-apple-locales.mjs` valida las 45 claves de los catálogos
