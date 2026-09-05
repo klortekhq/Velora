@@ -696,8 +696,8 @@ fun SettingsScreen(
                         SettingsCategory.SUBTITLES -> {
                             // ExoPlayer Subtitle Text Size
                             SettingSlider(
-                                title = "Tamaño del texto de subtítulos",
-                                description = "Tamaño: $exoSubtitleTextSize (rango: 20-100)",
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitles_text_size),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitles_text_size_description, exoSubtitleTextSize),
                                 onDecrease = {
                                     if (exoSubtitleTextSize > 20) {
                                         exoSubtitleTextSize -= 5
@@ -716,31 +716,31 @@ fun SettingsScreen(
                             
                             // Subtitle Text Color
                             SettingButton(
-                                title = "Color del texto de subtítulos",
-                                description = "Elige el color del texto de los subtítulos.",
-                                buttonText = "Elegir color",
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitles_text_color),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitles_text_color_description),
+                                buttonText = context.getString(com.klortek.velora.R.string.settings_choose_color),
                                 onClick = { showExoSubtitleColorDialog = true }
                             )
                             
                             // Subtitle Background Transparency
                             SettingToggle(
-                                title = "Fondo transparente de subtítulos",
-                                description = "Hace que el fondo de los subtítulos sea transparente u opaco.",
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitles_transparent_background),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitles_transparent_background_description),
                                 isEnabled = exoSubtitleBgTransparent,
                                 onToggle = {
                                     exoSubtitleBgTransparent = !exoSubtitleBgTransparent
                                     settings.exoSubtitleBgTransparent = exoSubtitleBgTransparent
                                 },
-                                enabledText = "Transparente",
-                                disabledText = "Opaco"
+                                enabledText = context.getString(com.klortek.velora.R.string.settings_transparent),
+                                disabledText = context.getString(com.klortek.velora.R.string.settings_opaque)
                             )
                             
                             // Subtitle Background Color
                             if (!exoSubtitleBgTransparent) {
                                 SettingButton(
-                                    title = "Color del fondo de subtítulos",
-                                    description = "Elige el color del fondo de los subtítulos.",
-                                    buttonText = "Elegir color",
+                                    title = context.getString(com.klortek.velora.R.string.settings_subtitles_background_color),
+                                    description = context.getString(com.klortek.velora.R.string.settings_subtitles_background_color_description),
+                                    buttonText = context.getString(com.klortek.velora.R.string.settings_choose_color),
                                     onClick = { showExoSubtitleBgColorDialog = true }
                                 )
                             }
@@ -749,12 +749,12 @@ fun SettingsScreen(
                             
                             // OpenSubtitles API Key
                             SettingButton(
-                                title = "Clave API de OpenSubtitles",
+                                title = context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key),
                                 description = if (openSubtitlesApiKey.isNotBlank()) 
-                                    "Clave API configurada ✓" 
+                                    context.getString(com.klortek.velora.R.string.settings_api_key_configured)
                                 else 
-                                    "Necesaria para descargar subtítulos. Consigue una clave gratuita en opensubtitles.com",
-                                buttonText = if (openSubtitlesApiKey.isNotBlank()) "Cambiar" else "Definir clave",
+                                    context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key_description),
+                                buttonText = if (openSubtitlesApiKey.isNotBlank()) context.getString(com.klortek.velora.R.string.settings_change) else context.getString(com.klortek.velora.R.string.settings_set_key),
                                 onClick = { showApiKeyDialog = true }
                             )
                             
@@ -762,18 +762,18 @@ fun SettingsScreen(
                                 var apiKeyInput by remember { mutableStateOf(openSubtitlesApiKey) }
                                 AlertDialog(
                                     onDismissRequest = { showApiKeyDialog = false },
-                                            title = { Text("Clave API de OpenSubtitles") },
+                                            title = { Text(context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key)) },
                                     text = {
                                         Column {
                                             Text(
-                                                "Consigue tu clave API gratuita en:\nhttps://www.opensubtitles.com/en/consumers\n\nPlan gratuito: 100 descargas al día",
+                                                context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key_dialog),
                                                 style = MaterialTheme.typography.bodySmall,
                                                 modifier = Modifier.padding(bottom = 16.dp)
                                             )
                                             OutlinedTextField(
                                                 value = apiKeyInput,
                                                 onValueChange = { apiKeyInput = it },
-                                                label = { Text("Clave API") },
+                                                label = { Text(context.getString(com.klortek.velora.R.string.settings_api_key)) },
                                                 singleLine = true,
                                                 modifier = Modifier.fillMaxWidth()
                                             )
@@ -787,24 +787,24 @@ fun SettingsScreen(
                                                 showApiKeyDialog = false
                                             }
                                         ) {
-                                            Text("Guardar")
+                                            Text(context.getString(com.klortek.velora.R.string.settings_save))
                                         }
                                     },
                                     dismissButton = {
                                         TextButton(onClick = { showApiKeyDialog = false }) {
-                                            Text("Cancelar")
+                                            Text(context.getString(com.klortek.velora.R.string.settings_cancel))
                                         }
                                     }
                                 )
                             }
                             
                             SettingButton(
-                                title = "Acceso a OpenSubtitles",
+                                title = context.getString(com.klortek.velora.R.string.settings_opensubtitles_access),
                                 description = if (openSubtitlesUsername.isNotBlank()) 
-                                    "Sesión iniciada como: $openSubtitlesUsername ✓" 
+                                    context.getString(com.klortek.velora.R.string.settings_signed_in_as, openSubtitlesUsername)
                                 else 
-                                    "Necesario para descargar subtítulos",
-                                buttonText = if (openSubtitlesUsername.isNotBlank()) "Cambiar" else "Iniciar sesión",
+                                    context.getString(com.klortek.velora.R.string.settings_opensubtitles_access_description),
+                                buttonText = if (openSubtitlesUsername.isNotBlank()) context.getString(com.klortek.velora.R.string.settings_change) else context.getString(com.klortek.velora.R.string.settings_sign_in),
                                 onClick = { showLoginDialog = true }
                             )
                             
@@ -813,18 +813,18 @@ fun SettingsScreen(
                                 var passwordInput by remember { mutableStateOf(openSubtitlesPassword) }
                                 AlertDialog(
                                     onDismissRequest = { showLoginDialog = false },
-                                            title = { Text("Acceso a OpenSubtitles") },
+                                            title = { Text(context.getString(com.klortek.velora.R.string.settings_opensubtitles_access)) },
                                     text = {
                                         Column {
                                             Text(
-                                                "Introduce las credenciales de tu cuenta de OpenSubtitles.com.\nCrea una cuenta gratuita en opensubtitles.com si la necesitas.",
+                                                context.getString(com.klortek.velora.R.string.settings_opensubtitles_login_dialog),
                                                 style = MaterialTheme.typography.bodySmall,
                                                 modifier = Modifier.padding(bottom = 16.dp)
                                             )
                                             OutlinedTextField(
                                                 value = usernameInput,
                                                 onValueChange = { usernameInput = it },
-                                                label = { Text("Usuario") },
+                                                label = { Text(context.getString(com.klortek.velora.R.string.settings_username)) },
                                                 singleLine = true,
                                                 modifier = Modifier.fillMaxWidth()
                                             )
@@ -832,7 +832,7 @@ fun SettingsScreen(
                                             OutlinedTextField(
                                                 value = passwordInput,
                                                 onValueChange = { passwordInput = it },
-                                                label = { Text("Contraseña") },
+                                                label = { Text(context.getString(com.klortek.velora.R.string.settings_password)) },
                                                 singleLine = true,
                                                 visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
                                                 modifier = Modifier.fillMaxWidth()
@@ -849,12 +849,12 @@ fun SettingsScreen(
                                                 showLoginDialog = false
                                             }
                                         ) {
-                                            Text("Guardar")
+                                            Text(context.getString(com.klortek.velora.R.string.settings_save))
                                         }
                                     },
                                     dismissButton = {
                                         TextButton(onClick = { showLoginDialog = false }) {
-                                            Text("Cancelar")
+                                            Text(context.getString(com.klortek.velora.R.string.settings_cancel))
                                         }
                                     }
                                 )
