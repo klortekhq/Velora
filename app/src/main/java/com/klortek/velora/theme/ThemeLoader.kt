@@ -117,7 +117,7 @@ class ThemeLoader(
                         combinedCss.append(importedCss)
                         combinedCss.append("\n")
                     } else {
-                        android.util.Log.w("ThemeLoader", "Imported CSS from $importUrl is empty")
+                        android.util.Log.w("ThemeLoader", "Imported CSS from ${SensitiveDataRedactor.url(importUrl)} is empty")
                     }
                 } else {
                     android.util.Log.w("ThemeLoader", "Failed to fetch imported CSS from ${SensitiveDataRedactor.url(importUrl)}: status $importedStatus")

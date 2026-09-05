@@ -18,6 +18,16 @@ class SensitiveDataRedactorTest {
     }
 
     @Test
+    fun redactsAuthorizationStyleQueryParameters() {
+        val redacted = SensitiveDataRedactor.url(
+            "https://jellyfin.test/video.m3u8?X-Emby-Token=secret&quality=1080"
+        )
+
+        assertFalse(redacted.contains("secret"))
+        assertTrue(redacted.contains("X-Emby-Token=<redacted>"))
+    }
+
+    @Test
     fun redactsCredentialsInsideErrorMessages() {
         val redacted = SensitiveDataRedactor.message(
             IllegalStateException("request failed: https://server.test/a?password=secret")
