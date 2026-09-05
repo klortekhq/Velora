@@ -298,15 +298,17 @@ public enum PlaybackDecisionEngine {
         guard quality != .original && quality != .automatic else { return true }
         let maxBitrate: Int
         let maxWidth: Int
+        let maxHeight: Int
         switch quality {
-        case .fourK: maxBitrate = 40_000; maxWidth = 3840
-        case .fullHD20: maxBitrate = 20_000; maxWidth = 1920
-        case .fullHD10: maxBitrate = 10_000; maxWidth = 1920
-        case .hd5: maxBitrate = 5_000; maxWidth = 1280
-        case .sd2: maxBitrate = 2_000; maxWidth = 854
+        case .fourK: maxBitrate = 40_000; maxWidth = 3840; maxHeight = 2160
+        case .fullHD20: maxBitrate = 20_000; maxWidth = 1920; maxHeight = 1080
+        case .fullHD10: maxBitrate = 10_000; maxWidth = 1920; maxHeight = 1080
+        case .hd5: maxBitrate = 5_000; maxWidth = 1280; maxHeight = 720
+        case .sd2: maxBitrate = 2_000; maxWidth = 854; maxHeight = 480
         case .original, .automatic: return true
         }
         return (source.bitrateKbps == nil || source.bitrateKbps! <= maxBitrate)
             && (source.width == nil || source.width! <= maxWidth)
+            && (source.height == nil || source.height! <= maxHeight)
     }
 }

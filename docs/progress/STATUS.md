@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `9557091`)
+## Revisión actual (pendiente de commit)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -1911,6 +1911,12 @@ Samsung Tizen, manteniendo `samsung` por compatibilidad y dejando claro que
 un `.wgt` publicable requiere Tizen Studio y firma del fabricante. La prueba
 `node web/scripts/build-web.mjs tizen` pasa en este entorno y reporta
 honestamente la ausencia local de esa herramienta.
+
+La decisión de calidad del motor Apple comprueba ahora anchura y altura para
+los presets 4K, 1080p, 720p y 480p; Original y Automático siguen sin imponer
+límites artificiales. Se añadió una regresión para un vídeo 1920x2160 que debe
+transcodificarse con un preset 1080p. Swift/Xcode no está instalado en este
+host Windows, por lo que la prueba se ejecuta en el workflow macOS.
 
 La compilación release del 2026-09-05 sobre el código actual pasó
 `assembleMobileRelease` y `assembleTvRelease` (`BUILD SUCCESSFUL`, 155 tareas).
