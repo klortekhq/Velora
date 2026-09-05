@@ -4,6 +4,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android: al cambiar de canal en Live TV se vuelve a resolver la fuente del
+  canal destino en Jellyfin, evitando reutilizar la fuente del canal anterior.
 - Android TV: el carrusel de inicio reutiliza un único reproductor Media3
   silenciado para previsualizar trailers locales de Jellyfin tras un breve
   tiempo de foco; se cancela al cambiar de elemento y no se crea en móvil.
