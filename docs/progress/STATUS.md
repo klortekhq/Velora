@@ -52,6 +52,12 @@ Tizen sigue pendiente de Tizen Studio/CLI y un perfil de firma disponibles.
 El commit `122e20a` conserva el foco en el primer control al restaurar el
 mini-reproductor, de forma que teclado y mando no pierden la navegación.
 
+La revisión Apple posterior añade tamaño y SHA-256 al índice offline, valida
+la integridad del archivo gestionado antes de reproducirlo y rechaza contenido
+alterado. Los metadatos antiguos sin hash siguen siendo compatibles y se
+comprueban de forma segura. Swift/Xcode no está instalado en este host Windows,
+por lo que esta cobertura queda pendiente de ejecución en el workflow macOS.
+
 La comprobación ADB de esta pasada no detectó ningún dispositivo conectado;
 por tanto no se declara una prueba física nueva en Fire TV.
 

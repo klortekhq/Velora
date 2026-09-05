@@ -90,8 +90,8 @@ public final class VeloraAppModel: ObservableObject {
     public func play(_ item: JellyfinItem) async -> AVPlayer? {
         let configuredServer = (await client.serverURL()).absoluteString
         if let offline = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == configuredServer }),
-           FileManager.default.fileExists(atPath: offlineStore.mediaURL(for: offline).path) {
-            let player = AVPlayer(url: offlineStore.mediaURL(for: offline))
+           let verified = offlineStore.verifyIntegrity(offline) {
+            let player = AVPlayer(url: offlineStore.mediaURL(for: verified))
             let playerItem = player.currentItem
             Task { @MainActor [weak self, weak playerItem] in
                 guard let self, let playerItem else { return }
