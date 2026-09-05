@@ -21,6 +21,12 @@ presentan como verificadas la consulta autenticada de canales, `PlaybackInfo`,
 la reproducción ni Live TV real. El smoke test sí mantiene estas etapas para
 ejecutarlas cuando el acceso sea válido.
 
+La auditoría de seguridad del 2026-09-05 amplió `SensitiveDataRedactor` para
+sanitizar también tokens en encabezados (`Token=`, `Bearer` y
+`X-Emby-Token`) cuando una excepción llega a Logcat. Las nuevas regresiones
+del redactor pasan en móvil y TV; los resultados XML muestran cero fallos y
+cero errores.
+
 La revisión de internacionalización del 2026-09-05 migró a recursos los
 textos de Ajustes relacionados con Jellyseerr, autenticación, Descubrir y
 tráilers de TMDB. Las claves están presentes en español, inglés, francés y
