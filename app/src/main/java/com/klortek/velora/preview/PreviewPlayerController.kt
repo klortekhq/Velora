@@ -18,6 +18,8 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 class PreviewPlayerController(context: Context) {
     private val dataSourceFactory = DefaultHttpDataSource.Factory()
 
+    private var readyListener: ((Boolean) -> Unit)? = null
+
     val player: ExoPlayer = ExoPlayer.Builder(context.applicationContext)
         .setMediaSourceFactory(DefaultMediaSourceFactory(dataSourceFactory))
         .build().apply {
@@ -30,12 +32,27 @@ class PreviewPlayerController(context: Context) {
                     .build(),
                 false
             )
+        }.also { exoPlayer ->
+            exoPlayer.addListener(object : Player.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    readyListener?.invoke(playbackState == Player.STATE_READY)
+                }
+
+                override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                    readyListener?.invoke(false)
+                }
+            })
         }
 
     private var currentItemId: String? = null
 
+    fun setReadyListener(listener: ((Boolean) -> Unit)?) {
+        readyListener = listener
+    }
+
     fun play(itemId: String, url: String, headers: Map<String, String>) {
         if (itemId.isBlank() || url.isBlank()) return
+        readyListener?.invoke(false)
         if (currentItemId == itemId) {
             player.playWhenReady = true
             return
@@ -49,12 +66,14 @@ class PreviewPlayerController(context: Context) {
 
     fun stop() {
         currentItemId = null
+        readyListener?.invoke(false)
         player.pause()
         player.clearMediaItems()
     }
 
     fun release() {
         currentItemId = null
+        readyListener = null
         player.release()
     }
 }

@@ -60,8 +60,9 @@ Updated: 2026-09-05
   compilación y los tests unitarios móvil/TV pasan tras este cambio.
 - El inicio de Android TV ya reutiliza un único `PreviewPlayerController`
   Media3 para trailers locales de Jellyfin: espera 450 ms de foco, reproduce
-  en silencio y cancela/libera correctamente al cambiar de título o salir.
-  Móvil no crea esta instancia. La compilación y los tests móvil/TV pasan.
+  en silencio, solo se hace visible en `STATE_READY` y se oculta ante errores;
+  cancela/libera correctamente al cambiar de título o salir. Móvil no crea
+  esta instancia. La compilación y los tests móvil/TV pasan.
 
 ## Última verificación
 
@@ -79,6 +80,10 @@ artefactos publicables hasta disponer de la firma configurada en CI.
 La comprobación posterior a la consulta explícita de `MediaSources` volvió a
 pasar `testMobileDebugUnitTest` y `testTvDebugUnitTest` (`BUILD SUCCESSFUL`) y
 `assembleTvRelease` produjo el APK anterior con la huella indicada arriba.
+
+La comprobación posterior al control de `STATE_READY` volvió a pasar ambos
+tests unitarios (`BUILD SUCCESSFUL`); aún no se anuncia un APK nuevo hasta
+regenerar el artefacto release correspondiente.
 
 La verificación del 2026-09-05 sobre `3798886` pasó
 `testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y

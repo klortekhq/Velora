@@ -10,6 +10,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Android: la consulta de trailers solicita sus `MediaSources` explícitamente,
   evitando que una previsualización local quede sin fuente reproducible por una
   respuesta de metadatos incompleta.
+- Android TV: el preview solo se muestra cuando Media3 confirma que el vídeo
+  está listo y desaparece ante errores o cambios de foco, evitando un panel
+  negro durante la carga.
 - Android TV y móvil: la música de tema cambia con fade-out/fade-in al
   cambiar de título y se detiene limpiamente al salir, evitando solapamientos
   y cambios bruscos de volumen.
