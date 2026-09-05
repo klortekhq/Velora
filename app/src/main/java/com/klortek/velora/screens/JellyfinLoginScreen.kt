@@ -611,7 +611,7 @@ private fun QuickConnectLoginContent(
                 val state = quickConnectService.getQuickConnectState(quickConnectSecret!!)
                 
                 if (state != null) {
-                    android.util.Log.d("QuickConnectLogin", "Poll response: Authenticated=${state.Authenticated}, Code=${state.Code}")
+                    android.util.Log.d("QuickConnectLogin", "Poll response: Authenticated=${state.Authenticated}")
                     
                     if (state.Authenticated) {
                         // User has authorized - now get the access token via authenticateWithQuickConnect
@@ -632,7 +632,7 @@ private fun QuickConnectLoginContent(
                                 val authResult = quickConnectService.authenticateWithQuickConnect(quickConnectSecret!!)
                                 
                                 if (authResult != null) {
-                                    android.util.Log.d("QuickConnectLogin", "QuickConnect authentication successful for user ${authResult.User.Id}")
+                                    android.util.Log.d("QuickConnectLogin", "QuickConnect authentication successful")
                                     
                                     config.serverUrl = normalizedUrl
                                     config.accessToken = authResult.AccessToken
@@ -671,7 +671,7 @@ private fun QuickConnectLoginContent(
                         state.Code?.let { code ->
                             val formattedCode = code.formatCode()
                             if (formattedCode != quickConnectCode) {
-                                android.util.Log.d("QuickConnectLogin", "Code updated: $formattedCode")
+                                android.util.Log.d("QuickConnectLogin", "QuickConnect code updated")
                                 onQuickConnectCodeChange(formattedCode)
                             }
                         }

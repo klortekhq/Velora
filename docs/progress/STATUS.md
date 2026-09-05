@@ -34,6 +34,11 @@ actualizaciones, instalación de APK y Jellyseerr. Esas rutas ya usan
 pruebas unitarias móviles/TV y las compilaciones Kotlin de ambas variantes
 vuelven a pasar.
 
+También se retiraron de los logs de diagnóstico el código de Quick Connect, el
+identificador de usuario autenticado y la URI local del instalador de APK.
+Solo se conservan mensajes de estado neutros; las pruebas móviles/TV y ambas
+compilaciones Kotlin siguen pasando.
+
 Auditoría de evidencia de releases (2026-09-05): las consultas directas a la
 API y a la URL pública de GitHub para `v1.2.32` y `v1.4.0` devolvieron HTTP
 404. Por tanto, las notas antiguas de releases que aparecen más abajo se

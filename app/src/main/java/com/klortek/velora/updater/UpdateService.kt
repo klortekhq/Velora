@@ -203,7 +203,7 @@ object UpdateService {
                         apkFile
                     )
                     
-                    Log.d(TAG, "APK URI created: $fileUri")
+                    Log.d(TAG, "APK URI created in app-managed storage")
                     fileUri
                 } finally {
                     input.close()
