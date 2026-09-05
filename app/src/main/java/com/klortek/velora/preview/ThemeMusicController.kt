@@ -1,6 +1,8 @@
 package com.klortek.velora.preview
 
 import android.content.Context
+import android.animation.ValueAnimator
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
@@ -25,13 +27,22 @@ class ThemeMusicController(context: Context) {
                     .build(),
                 false
             )
-        }
+    }
     private var currentUrl: String? = null
+    private var fadeAnimator: ValueAnimator? = null
+    private var targetVolume = 0f
 
     fun play(url: String, headers: Map<String, String>, volume: Float = 0.7f) {
         if (url.isBlank()) return
+        targetVolume = volume.coerceIn(0f, 1f)
         dataSourceFactory.setDefaultRequestProperties(headers)
-        if (currentUrl != url) {
+        if (currentUrl == url) {
+            fadeTo(targetVolume, FADE_IN_MS)
+            player.playWhenReady = true
+            return
+        }
+
+        val startNewSource = {
             currentUrl = url
             player.setMediaItem(
                 MediaItem.Builder()
@@ -39,17 +50,59 @@ class ThemeMusicController(context: Context) {
                     .setMimeType(MimeTypes.APPLICATION_M3U8)
                     .build()
             )
+            player.volume = 0f
             player.prepare()
+            player.playWhenReady = true
+            fadeTo(targetVolume, FADE_IN_MS)
         }
-        player.volume = volume.coerceIn(0f, 1f)
-        player.playWhenReady = true
+
+        if (currentUrl == null) {
+            startNewSource()
+        } else {
+            fadeTo(0f, FADE_OUT_MS) { startNewSource() }
+        }
     }
 
     fun stop() {
-        currentUrl = null
-        player.pause()
-        player.clearMediaItems()
+        if (currentUrl == null && !player.isPlaying) return
+        fadeTo(0f, FADE_OUT_MS) {
+            currentUrl = null
+            player.pause()
+            player.clearMediaItems()
+        }
     }
 
-    fun release() = player.release()
+    fun release() {
+        fadeAnimator?.cancel()
+        fadeAnimator = null
+        player.release()
+    }
+
+    private fun fadeTo(target: Float, durationMs: Long, onEnd: (() -> Unit)? = null) {
+        fadeAnimator?.cancel()
+        val start = player.volume
+        fadeAnimator = ValueAnimator.ofFloat(start, target).apply {
+            duration = durationMs
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener { animator -> player.volume = animator.animatedValue as Float }
+            doOnEnd(onEnd)
+            start()
+        }
+    }
+
+    private fun ValueAnimator.doOnEnd(action: (() -> Unit)?) {
+        if (action == null) return
+        addListener(object : android.animation.AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: android.animation.Animator) {
+                if (fadeAnimator !== this@doOnEnd) return
+                fadeAnimator = null
+                action()
+            }
+        })
+    }
+
+    private companion object {
+        const val FADE_IN_MS = 500L
+        const val FADE_OUT_MS = 180L
+    }
 }
