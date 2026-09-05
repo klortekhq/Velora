@@ -42,8 +42,35 @@ android {
         }
     }
 
+    // Distribution signing is opt-in and supplied by CI/local secure properties.
+    // Without all four values the release remains explicitly unsigned for QA.
+    val releaseSigningStoreFile = providers.gradleProperty("veloraReleaseStoreFile").orNull
+    val releaseSigningStorePassword = providers.gradleProperty("veloraReleaseStorePassword").orNull
+    val releaseSigningKeyAlias = providers.gradleProperty("veloraReleaseKeyAlias").orNull
+    val releaseSigningKeyPassword = providers.gradleProperty("veloraReleaseKeyPassword").orNull
+    val hasReleaseSigning = listOf(
+        releaseSigningStoreFile,
+        releaseSigningStorePassword,
+        releaseSigningKeyAlias,
+        releaseSigningKeyPassword
+    ).all { !it.isNullOrBlank() }
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("veloraRelease") {
+                storeFile = file(releaseSigningStoreFile!!)
+                storePassword = releaseSigningStorePassword
+                keyAlias = releaseSigningKeyAlias
+                keyPassword = releaseSigningKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("veloraRelease")
+            }
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -57,7 +84,9 @@ android {
             if (variant.buildType == "release") {
                 variant.outputs.forEach { output ->
                     val out = output as com.android.build.api.variant.impl.VariantOutputImpl
-                    out.outputFileName.set("velora-release-unsigned.apk")
+                    out.outputFileName.set(
+                        if (hasReleaseSigning) "velora-release.apk" else "velora-release-unsigned.apk"
+                    )
                 }
             }
         }

@@ -59,6 +59,12 @@ arranque tardó aproximadamente 9,2 s y no produjo `FATAL EXCEPTION` ni error
 de Velora en los 500 eventos recientes. Esta es una prueba de arranque, no una
 certificación completa de Live TV o reproducción contra el servidor.
 
+El flujo Android queda preparado para firma de distribución opcional mediante
+los cuatro secretos `VELORA_ANDROID_*` de GitHub Actions. Sin ellos, conserva
+los APK release unsigned de QA; con ellos, cambia el nombre del artefacto a
+release firmado para que pueda instalarse directamente. No se ha creado ni
+publicado ninguna clave en el repositorio.
+
 Tras esa corrección, el commit `54bbfb7` vuelve a pasar `assembleMobileRelease`
 y `assembleTvRelease` con lint vital. Las APK unsigned vigentes son: móvil
 (67 832 683 bytes, SHA-256
