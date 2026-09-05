@@ -27,12 +27,13 @@ Updated: 2026-09-05
 - No se declara una release pública ni un APK firmado a partir de esta
   revisión: la consulta pública no confirmó una release existente y este
   entorno no dispone de credenciales de firma/GitHub CLI para publicarla.
-- El APK TV de la revisión anterior se compiló correctamente; tras pedir
-  explícitamente `MediaSources` y ocultar el preview hasta `STATE_READY`, el
-  nuevo APK local también compila y su SHA-256 es
-  `B6AEFC07E19D3CF1BC1F5DDA2274BE46134EEFD0C8BAC773D3EE7C7F42C7F410`.
-  La instalación en Fire TV no pudo verificarse porque el dispositivo sigue
-  sin responder en `192.168.31.112:5555` y `adb devices` no lo muestra.
+- Los APK release actuales compilan correctamente tras el timeout de
+  autenticación (`BUILD SUCCESSFUL`, 155 tareas). Siguen siendo unsigned y no
+  se presentan como releases publicables: móvil
+  `ADE011B18FEB1DF1DB3152735A2782F32A41FDA9AA4942E1A4C28895DF737F0E` y TV
+  `85F1138DACFC37A5777B87C2AE9319FCC05F802F293D6346E858E5A8852D9A18`.
+  La instalación en Fire TV no se puede verificar en este host porque ADB no
+  está disponible.
 - El gate `scripts/check-version-consistency.mjs` pasa con `1.4.0` y se ejecuta
   en CI, Android Release y Web Release. `main` contiene ahora cambios
   posteriores a la etiqueta remota `v1.4.0`; no se reescribe esa referencia
