@@ -50,11 +50,15 @@ Updated: 2026-09-05
 - La música de tema Android ya realiza transiciones con fade-out/fade-in,
   cancela animaciones anteriores y libera el reproductor al salir. La
   compilación y los tests unitarios móvil/TV pasan tras este cambio.
+- El inicio de Android TV ya reutiliza un único `PreviewPlayerController`
+  Media3 para trailers locales de Jellyfin: espera 450 ms de foco, reproduce
+  en silencio y cancela/libera correctamente al cambiar de título o salir.
+  Móvil no crea esta instancia. La compilación y los tests móvil/TV pasan.
 
 ## Última verificación
 
 La validación Android ejecutada el 2026-09-05 pasó `testMobileDebugUnitTest`,
-`testTvDebugUnitTest`, `lintMobileDebug` y `lintTvDebug` con `BUILD SUCCESSFUL`
+`testTvDebugUnitTest`, `compileMobileDebugKotlin` y `compileTvDebugKotlin` con `BUILD SUCCESSFUL`
 (131 tareas, 7m35s). El lint generó los informes de ambas variantes sin
 errores bloqueantes; solo permanecen los avisos conocidos del SDK local.
 
