@@ -19,7 +19,7 @@ private struct VeloraMobileRoot: View {
         ) {
             shell
         } else {
-            Text("Connect to Jellyfin", bundle: .module)
+            Text(VeloraLocalized.connectToJellyfin)
         }
     }
 }

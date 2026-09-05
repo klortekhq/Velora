@@ -16,7 +16,7 @@ private struct VeloraTVRoot: View {
         if let shell = try? VeloraAppShell(platform: .tvOS) {
             shell
         } else {
-            Text("Connect to Jellyfin", bundle: .module)
+            Text(VeloraLocalized.connectToJellyfin)
         }
     }
 }
