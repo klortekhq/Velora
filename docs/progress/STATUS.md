@@ -1,8 +1,8 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-05
+Updated: 2026-09-06
 
-## Revisión actual (commit `7dc408d`)
+## Revisión actual (commit `b9f23f5`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - La última comprobación histórica del Fire TV (`192.168.31.112:5555`) no
@@ -54,8 +54,8 @@ Updated: 2026-09-05
   timeout y error de red, con recursos en español, inglés, alemán y francés.
   Las pruebas unitarias móvil/TV pasan (`BUILD SUCCESSFUL`, 82 tareas). Los APK
   release regenerados siguen unsigned: móvil
-  `2DBD1E507E902401126727C4B47DE0D5F180705F140767B9BE56D9EFD21E38C2` y TV
-  `4C608C11D38F05014FF5452B45B6E00D8836E25E51143D246DD438F5B3DEEC0A`.
+  `D004B584AE0ED66245172CA5CD2CF019A0BA2207F9F00482B4CA40DA47C9B351` y TV
+  `973B6DD0BA58CF79825E0BB7DA500E748F3843B4DA2AF9DEE4CBE0DE5E45CF33`.
 - Las acciones visibles de detalle y solicitudes Android (reanudar, reproducir,
   audio, subtítulos, tráiler, visto y atrás) ya usan recursos traducibles en
   las pantallas móvil/TV; el comprobador Android valida 431 claves en los
@@ -98,6 +98,11 @@ Updated: 2026-09-05
 - Live TV solicita `MediaSources`, agrupa entradas con el mismo ID y permite
   elegir entre sus fuentes desde el mismo canal; `LiveTvChannelQueryTest`
   cubre duplicados, múltiples fuentes en una fila y etiquetas de opción.
+- El cambio de canal desde el reproductor Live TV ya no reutiliza el
+  `MediaSourceId` del canal anterior: cada canal vuelve a resolver su fuente
+  preferida en Jellyfin, evitando abrir una fuente equivocada al hacer zapping.
+- La batería web ejecutada desde `web/` pasa las comprobaciones de capacidades,
+  seguridad, agrupación Live TV, subtítulos y biblioteca.
 - La comprobación dirigida posterior pasó `LiveTvChannelQueryTest` y
   `AspectPresentationTest` en `testMobileDebugUnitTest` (`BUILD SUCCESSFUL`).
 - El formulario de inicio de sesión TV usa ahora campos parametrizados de
@@ -116,8 +121,9 @@ Updated: 2026-09-05
 
 ## Última verificación
 
-La validación Android ejecutada el 2026-09-05 pasó `testMobileDebugUnitTest`,
-`testTvDebugUnitTest`, `compileMobileDebugKotlin` y `compileTvDebugKotlin` con `BUILD SUCCESSFUL`
+La validación Android ejecutada el 2026-09-06 pasó `testMobileDebugUnitTest` y
+`testTvDebugUnitTest` con `BUILD SUCCESSFUL`. La batería web ejecutada el
+2026-09-06 pasó `node scripts/test-platform.mjs` desde `web/`.
 (131 tareas, 7m35s). El lint generó los informes de ambas variantes sin
 errores bloqueantes; solo permanecen los avisos conocidos del SDK local.
 
