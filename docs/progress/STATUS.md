@@ -33,6 +33,13 @@ terceros conserva solo las dependencias realmente distribuidas y una nota
 genérica de independencia de identidad, sin presentar proyectos externos como
 parte de Velora.
 
+La revisión de lint del 2026-09-05 detectó y corrigió la configuración del
+cambio de idioma en App Bundle: todos los locales se mantienen en el bundle
+base para que el selector interno funcione sin Play Core. `lintMobileDebug` y
+`lintTvDebug` regeneraron sus informes con cero errores; permanecen avisos de
+calidad no bloqueantes de dependencias y compatibilidad, documentados por la
+herramienta.
+
 La revisión de internacionalización del 2026-09-05 migró a recursos los
 textos de Ajustes relacionados con Jellyseerr, autenticación, Descubrir y
 tráilers de TMDB. Las claves están presentes en español, inglés, francés y
