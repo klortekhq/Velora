@@ -12,6 +12,13 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertFalse(VeloraPlatform.tvOS.supportsOfflineDownloads)
     }
 
+    func testDownloadQualityProducesBoundedRequests() {
+        XCTAssertNil(VeloraDownloadQuality.original.maxWidth)
+        XCTAssertEqual(VeloraDownloadQuality.high.maxWidth, 1920)
+        XCTAssertEqual(VeloraDownloadQuality.medium.videoBitrate, 5_000_000)
+        XCTAssertEqual(VeloraDownloadQuality.low.videoBitrate, 2_000_000)
+    }
+
     func testServerURLValidationRejectsEmbeddedCredentialsAndParameters() throws {
         XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "http://192.168.31.232:8096")!))
         XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test/base")!))

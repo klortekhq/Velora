@@ -26,6 +26,34 @@ public enum PerformanceMode: String, Codable, Sendable {
     case performance
 }
 
+/// Quality presets for managed mobile downloads.
+public enum VeloraDownloadQuality: String, CaseIterable, Codable, Identifiable, Sendable {
+    case original
+    case high
+    case medium
+    case low
+
+    public var id: String { rawValue }
+
+    public var maxWidth: Int? {
+        switch self {
+        case .original: return nil
+        case .high: return 1920
+        case .medium: return 1280
+        case .low: return 854
+        }
+    }
+
+    public var videoBitrate: Int? {
+        switch self {
+        case .original: return nil
+        case .high: return 10_000_000
+        case .medium: return 5_000_000
+        case .low: return 2_000_000
+        }
+    }
+}
+
 /// Device-local preferences. They are deliberately separate from Jellyfin
 /// account data so an Apple TV cannot overwrite an iPhone's offline settings.
 public struct VeloraSettings: Codable, Equatable, Sendable {

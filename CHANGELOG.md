@@ -4,6 +4,7 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Apple: las descargas en iPhone/iPad permiten elegir Original, Alta, Media o Baja antes de iniciar la transferencia; tvOS sigue sin mostrar funciones offline.
 - El selector de formato de imagen del reproductor vuelve a aplicar el modo
   elegido después de recibir el tamaño real del vídeo y al entrar en pantalla
   completa, con controles utilizables tanto por toque como por mando.
