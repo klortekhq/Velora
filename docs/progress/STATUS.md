@@ -65,6 +65,11 @@ los APK release unsigned de QA; con ellos, cambia el nombre del artefacto a
 release firmado para que pueda instalarse directamente. No se ha creado ni
 publicado ninguna clave en el repositorio.
 
+Después de esa modificación, el commit `2b83d57` vuelve a pasar
+`testMobileDebugUnitTest`, `testTvDebugUnitTest` y la compilación Kotlin de
+ambas variantes. La validación de firma con una clave temporal local también
+pasó; la clave fue eliminada y no forma parte del árbol de trabajo.
+
 Tras esa corrección, el commit `54bbfb7` vuelve a pasar `assembleMobileRelease`
 y `assembleTvRelease` con lint vital. Las APK unsigned vigentes son: móvil
 (67 832 683 bytes, SHA-256
