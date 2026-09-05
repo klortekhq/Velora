@@ -2,7 +2,7 @@
 
 Updated: 2026-09-05
 
-## Revisión actual (commit `20ab8e1`)
+## Revisión actual (commit `3798886`)
 
 - Repositorio sincronizado en una única rama: `main` y `origin/main`.
 - Fire TV conectado por ADB (`192.168.31.112:5555`) con `1.4.0-tv` activo;
@@ -27,8 +27,17 @@ Updated: 2026-09-05
   (`Fuente principal`, `Fuente IPTV` u `Opción N`) en lugar de IDs internos.
   `scripts/check-apple-locales.mjs` valida las 45 claves de los catálogos
   inglés, español, francés y alemán, y se ejecuta en ambos workflows Apple.
+- Las acciones visibles de detalle y solicitudes Android (reanudar, reproducir,
+  audio, subtítulos, tráiler, visto y atrás) ya usan recursos traducibles en
+  las pantallas móvil/TV; el comprobador Android valida 431 claves en los
+  catálogos garantizados.
 
 ## Última verificación
+
+La verificación del 2026-09-05 sobre `3798886` pasó
+`testMobileDebugUnitTest`, `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
+`compileTvDebugKotlin` con `BUILD SUCCESSFUL`. Persisten únicamente avisos de
+deprecaciones del SDK/Kotlin y del SDK XML local; no hay errores de compilación.
 
 La validación del 2026-09-05 sobre el commit actual compiló `assembleTvDebug`
 con éxito, instaló la APK resultante en el Fire TV AFTSS y la lanzó mediante
