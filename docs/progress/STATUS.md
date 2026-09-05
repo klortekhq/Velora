@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`6b714f4`. Los
+`65ab892`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -15,6 +15,11 @@ remota comprobada es únicamente `main`.
 El commit `933c99f` añade semántica accesible a las pestañas de detalle y a
 los selectores de temporada móviles, sin cambiar su interacción táctil o de
 mando. La compilación móvil/TV y los tests unitarios pasan después del cambio.
+
+El commit `65ab892` migra los controles visibles de subtítulos y OpenSubtitles
+en Ajustes a recursos traducibles. Los tests unitarios móviles y la compilación
+Android móvil pasan después del cambio; la compilación TV debe repetirse en la
+siguiente validación conjunta.
 
 El commit `ebb7685` sustituye los textos incrustados de los controles críticos
 del reproductor por recursos traducibles y completa esas claves en los 13
