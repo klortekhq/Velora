@@ -1085,17 +1085,21 @@ fun JellyfinHomeScreen(
                                     }
                                     
                                     // Handle movies library specially - navigate to movies library screen
-                                    if (isMoviesLibrary && library != null) {
-                                        android.util.Log.d("JellyfinHomeScreen", "🎬 Movies library clicked! Navigating to movies library screen...")
-                                        onMoviesLibraryClick(library.Id, library.Name)
-                                        return@Tab
+                                    if (isMoviesLibrary) {
+                                        library?.let {
+                                            android.util.Log.d("JellyfinHomeScreen", "🎬 Movies library clicked! Navigating to movies library screen...")
+                                            onMoviesLibraryClick(it.Id, it.Name)
+                                            return@Tab
+                                        }
                                     }
                                     
                                     // Handle TV shows library specially - navigate to TV shows library screen
-                                    if (isTvShowsLibrary && library != null) {
-                                        android.util.Log.d("JellyfinHomeScreen", "📺 TV Shows library clicked! Navigating to TV shows library screen...")
-                                        onTvShowsLibraryClick(library.Id, library.Name)
-                                        return@Tab
+                                    if (isTvShowsLibrary) {
+                                        library?.let {
+                                            android.util.Log.d("JellyfinHomeScreen", "📺 TV Shows library clicked! Navigating to TV shows library screen...")
+                                            onTvShowsLibraryClick(it.Id, it.Name)
+                                            return@Tab
+                                        }
                                     }
                                     
                                     // Only load library/collections on Enter/OK press, not on focus
