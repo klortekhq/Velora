@@ -51,6 +51,10 @@ for (const [userAgent, expected] of [
 console.log('platform capability tests passed');
 
 assert.match(appSource, /sessionStorage/);
+assert.match(appSource, /saveSessionValue\('veloraToken', state\.token\)/);
+assert.match(appSource, /delete localStorage\.veloraToken/);
+assert.doesNotMatch(appSource, /localStorage\.veloraToken\s*=/);
+assert.doesNotMatch(appSource, /localStorage\.veloraUserId\s*=/);
 assert.match(appSource, new RegExp(`var APP_VERSION = '${packageJson.version.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}'`));
 assert.match(appSource, /selected !== 'auto' && TRANSLATIONS\[selected\]/);
 assert.match(appSource, /Object\.assign\(\{\}, TRANSLATIONS\.en, TRANSLATIONS\[code\]\)/);
@@ -117,7 +121,12 @@ const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
   '  window.__veloraTest = { groupLiveTvChannels };\n}());'
 );
 assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels \}/, 'web app test hook was not injected');
-const testStorage = {
+const testLocalStorage = {
+  getItem() { return null; },
+  setItem() {},
+  removeItem() {}
+};
+const testSessionStorage = {
   getItem() { return null; },
   setItem() {},
   removeItem() {}
@@ -130,8 +139,8 @@ const testDocument = {
 const testWindow = {
   document: testDocument,
   navigator: { languages: ['es-ES'], language: 'es-ES' },
-  localStorage: testStorage,
-  sessionStorage: testStorage,
+  localStorage: testLocalStorage,
+  sessionStorage: testSessionStorage,
   setTimeout,
   clearTimeout,
   addEventListener() {},
@@ -141,8 +150,8 @@ vm.runInNewContext(testableAppSource, {
   window: testWindow,
   document: testDocument,
   navigator: testWindow.navigator,
-  localStorage: testStorage,
-  sessionStorage: testStorage,
+  localStorage: testLocalStorage,
+  sessionStorage: testSessionStorage,
   setTimeout,
   clearTimeout,
   console
