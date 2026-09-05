@@ -83,6 +83,11 @@ jobs:
              [ -z "${VELORA_ANDROID_STORE_PASSWORD:-}" ] || \
              [ -z "${VELORA_ANDROID_KEY_ALIAS:-}" ] || \
              [ -z "${VELORA_ANDROID_KEY_PASSWORD:-}" ]; then
+            if [[ "${RELEASE_TAG:-}" == v* ]]; then
+              echo "Una release etiquetada necesita los cuatro secretos de firma Android."
+              echo "Para QA sin publicar, ejecuta el workflow sin release_tag."
+              exit 1
+            fi
             echo "No hay secretos completos de firma; se generará un APK unsigned de QA."
             exit 0
           fi
@@ -134,6 +139,10 @@ jobs:
           mkdir -p dist
           release_apk="$(find app/build/outputs/apk/${{ matrix.target }}/release -maxdepth 1 -type f -name 'velora-release*.apk' -print -quit)"
           test -n "$release_apk"
+          if [[ "${RELEASE_TAG:-}" == v* && "$release_apk" == *unsigned.apk ]]; then
+            echo "Una release pública no puede contener un APK unsigned."
+            exit 1
+          fi
           if [ "${{ matrix.target }}" = "mobile" ]; then
             cp app/build/outputs/apk/mobile/debug/app-mobile-debug.apk dist/Velora-mobile-debug.apk
             if [[ "$release_apk" == *unsigned.apk ]]; then
