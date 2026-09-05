@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`04ca0ab`. Los
+`122e20a`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -48,6 +48,12 @@ se puede minimizar sin detener la sesión, seguir navegando por la biblioteca,
 restaurarlo con foco de teclado/mando o cerrarlo liberando la sesión. Las
 pruebas web cubren la ruta y se regeneraron los bundles web, webOS y VIDAA;
 Tizen sigue pendiente de Tizen Studio/CLI y un perfil de firma disponibles.
+
+El commit `122e20a` conserva el foco en el primer control al restaurar el
+mini-reproductor, de forma que teclado y mando no pierden la navegación.
+
+La comprobación ADB de esta pasada no detectó ningún dispositivo conectado;
+por tanto no se declara una prueba física nueva en Fire TV.
 
 Los catálogos Android garantizados para la experiencia principal —español base,
 inglés, alemán y francés— ya contienen las 346 claves actuales. El workflow de
