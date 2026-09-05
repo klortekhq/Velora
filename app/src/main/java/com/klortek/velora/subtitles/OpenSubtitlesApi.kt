@@ -12,6 +12,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import com.klortek.velora.security.SensitiveDataRedactor
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -381,7 +382,7 @@ object OpenSubtitlesApi {
                 return@withContext null
             }
             
-            Log.d(TAG, "📥 Downloading from: $downloadLink")
+            Log.d(TAG, "📥 Downloading subtitle from: ${SensitiveDataRedactor.url(downloadLink)}")
             
             // Download the actual subtitle file - User-Agent required
             val fileRequest = Request.Builder()
@@ -460,7 +461,7 @@ object OpenSubtitlesApi {
             val file = File(subtitleDir, fileName)
             file.writeBytes(bytes)
             
-            Log.d(TAG, "✅ Saved subtitle to: ${file.absolutePath}")
+            Log.d(TAG, "✅ Subtitle saved to app-managed storage")
             Log.d(TAG, "📁 File name: $fileName, Extension: $extension, Size: ${bytes.size} bytes")
             
             return@withContext file.absolutePath

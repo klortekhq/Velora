@@ -193,7 +193,7 @@ object UpdateService {
                     }
                     
                     output.flush()
-                    Log.d(TAG, "APK downloaded successfully: ${apkFile.absolutePath}")
+                    Log.d(TAG, "APK downloaded successfully to app-managed storage")
                     
                     // Create FileProvider URI
                     val fileUri = FileProvider.getUriForFile(

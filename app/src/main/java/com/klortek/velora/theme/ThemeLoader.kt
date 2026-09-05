@@ -42,7 +42,7 @@ class ThemeLoader(
                     "$baseUrl/Branding/CustomCss.css"
                 }
 
-                android.util.Log.d("ThemeLoader", "Fetching CSS from: $cssUrl")
+                android.util.Log.d("ThemeLoader", "Fetching CSS from: ${SensitiveDataRedactor.url(cssUrl)}")
                 
                 val cssResponse: HttpResponse = client.get(cssUrl) {
                     header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
@@ -103,7 +103,7 @@ class ThemeLoader(
         
         imports.forEach { matchResult ->
             val importUrl = matchResult.groupValues[1].trim()
-            android.util.Log.d("ThemeLoader", "Found @import: $importUrl")
+            android.util.Log.d("ThemeLoader", "Found @import: ${SensitiveDataRedactor.url(importUrl)}")
             
             try {
                 // Fetch the imported CSS file
@@ -113,7 +113,7 @@ class ThemeLoader(
                 if (importedStatus == HttpStatusCode.OK) {
                     val importedCss = importedResponse.body<String>()
                     if (importedCss.isNotBlank()) {
-                        android.util.Log.d("ThemeLoader", "Successfully fetched imported CSS from $importUrl (${importedCss.length} characters)")
+                        android.util.Log.d("ThemeLoader", "Successfully fetched imported CSS (${importedCss.length} characters)")
                         combinedCss.append(importedCss)
                         combinedCss.append("\n")
                     } else {
