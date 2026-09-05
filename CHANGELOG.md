@@ -4,6 +4,11 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- El selector de formato de imagen del reproductor vuelve a aplicar el modo
+  elegido después de recibir el tamaño real del vídeo y al entrar en pantalla
+  completa, con controles utilizables tanto por toque como por mando.
+- La base Apple recarga automáticamente biblioteca y TV en directo al abrir la
+  aplicación con una sesión guardada, en lugar de mostrar una pantalla vacía.
 - Live TV agrupa las alternativas del mismo canal y permite elegir con un
   toque o con el mando entre las fuentes que Jellyfin devuelve, incluida IPTV.
 - La selección de fuente se propaga realmente a `PlaybackInfo` en Android y
