@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`257dd6a`. Los
+`6954aa8`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -50,6 +50,11 @@ Live TV no estaban presentes en todos los catálogos. `257dd6a` normaliza cada
 idioma contra el catálogo inglés como fallback neutral, mantiene las
 traducciones existentes y evita que una clave ausente reaparezca en español.
 Parseo, tests web y empaquetado multiplataforma pasan después del cambio.
+
+`6954aa8` completa además los textos nuevos en portugués, francés, alemán e
+italiano para que reparto, ordenación, filtros y Live TV no dependan del
+fallback inglés en esos idiomas. Las regresiones web y los paquetes vuelven a
+pasar.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico
