@@ -59,6 +59,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -197,8 +198,17 @@ fun MobileSeriesDetailsLayout(
                 Text(stringResource(com.klortek.velora.R.string.mobile_seasons), color = Color.White, style = MaterialTheme.typography.titleMedium)
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp), contentPadding = PaddingValues(vertical = 2.dp)) {
                     items(seasons.indices.toList()) { index ->
-                        val selected = index == selectedSeasonIndex
-                        Text(stringResource(com.klortek.velora.R.string.mobile_season_number, seasons[index].IndexNumber ?: index + 1), color = if (selected) Color.Black else Color.White, modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(if (selected) MobileCyan else Color.White.copy(alpha = .16f)).clickable { onSeasonSelected(index) }.padding(horizontal = 18.dp, vertical = 10.dp))
+                        val isSelected = index == selectedSeasonIndex
+                        Text(
+                            stringResource(com.klortek.velora.R.string.mobile_season_number, seasons[index].IndexNumber ?: index + 1),
+                            color = if (isSelected) Color.Black else Color.White,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(24.dp))
+                                .background(if (isSelected) MobileCyan else Color.White.copy(alpha = .16f))
+                                .clickable { onSeasonSelected(index) }
+                                .semantics { role = Role.Tab; this.selected = isSelected }
+                                .padding(horizontal = 18.dp, vertical = 10.dp)
+                        )
                     }
                 }
                 if (PlatformCapabilities.supportsOfflineDownloads && episodes.isNotEmpty() && onDownloadSeason != null) {
@@ -536,7 +546,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
 }
 
 @Composable
-private fun MobileDetailTabs(selected: MobileDetailSection, onSelected: (MobileDetailSection) -> Unit) {
+private fun MobileDetailTabs(selectedSection: MobileDetailSection, onSelected: (MobileDetailSection) -> Unit) {
     val tabs = listOf(
         MobileDetailSection.CAST to stringResource(com.klortek.velora.R.string.mobile_cast),
         MobileDetailSection.CREW to stringResource(com.klortek.velora.R.string.mobile_crew),
@@ -552,12 +562,13 @@ private fun MobileDetailTabs(selected: MobileDetailSection, onSelected: (MobileD
         items(tabs) { (key, label) ->
             Text(
                 label,
-                color = if (selected == key) Color.White else Color.White.copy(alpha = .82f),
-                fontWeight = if (selected == key) FontWeight.Bold else FontWeight.Normal,
+                color = if (selectedSection == key) Color.White else Color.White.copy(alpha = .82f),
+                fontWeight = if (selectedSection == key) FontWeight.Bold else FontWeight.Normal,
                 modifier = Modifier
                     .clip(RoundedCornerShape(22.dp))
-                    .background(if (selected == key) MobileCyan else Color.White.copy(alpha = .12f))
+                    .background(if (selectedSection == key) MobileCyan else Color.White.copy(alpha = .12f))
                     .clickable { onSelected(key) }
+                    .semantics { role = Role.Tab; this.selected = selectedSection == key }
                     .padding(horizontal = 16.dp, vertical = 10.dp)
             )
         }
