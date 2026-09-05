@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- CI: las Releases públicas ya no incluyen APK debug; esos APK quedan aislados
+  como artefactos temporales de QA y la Release distribuye solo builds release
+  firmados con sus sumas SHA-256.
 - Seguridad: los logs de Android redaccionan también credenciales incrustadas
   en URLs y parámetros sensibles presentes en query o fragmento.
 - Android: al cambiar de canal en Live TV se vuelve a resolver la fuente del

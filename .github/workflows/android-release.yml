@@ -184,5 +184,14 @@ jobs:
           generate_release_notes: false
           body_path: release-notes.md
           files: |
-            dist/*.apk
+            dist/Velora-${{ matrix.target }}-release.apk
             dist/SHA256SUMS-${{ matrix.target }}.txt
+
+      - name: Guardar APK debug para QA
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Velora-${{ matrix.target }}-debug-${{ github.run_id }}
+          path: dist/Velora-${{ matrix.target }}-debug.apk
+          if-no-files-found: error
+          retention-days: 14

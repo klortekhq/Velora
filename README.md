@@ -105,10 +105,11 @@ Para generar los APK release unsigned de móvil/tablet y TV:
 
 Las variantes debug son instalables para pruebas. Las variantes release
 generadas aquí no están firmadas; deben firmarse con una clave propia antes de
-distribuirse. El flujo de GitHub Actions ejecuta estas mismas tareas y publica
-los artefactos juntos cuando se crea una etiqueta de versión completa `vX.Y.0`;
-los builds de parche se reservan para QA, salvo correcciones críticas o de
-seguridad.
+distribuirse. El flujo de GitHub Actions conserva los debug como artefactos
+temporales de QA y, cuando se crea una etiqueta de versión completa `vX.Y.0`,
+publica en la Release únicamente los APK release firmados, los paquetes web y
+sus sumas SHA-256. Los builds de parche se reservan para QA, salvo correcciones
+críticas o de seguridad.
 
 Para que GitHub Actions produzca releases instalables, configura estos secretos
 del repositorio: `VELORA_ANDROID_KEYSTORE_BASE64`,
