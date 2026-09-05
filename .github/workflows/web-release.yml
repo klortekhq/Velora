@@ -8,7 +8,7 @@ on:
         required: true
         default: all
         type: choice
-        options: [all, samsung, webos, vidaa]
+        options: [all, samsung, tizen, webos, vidaa]
       release_tag:
         description: 'Etiqueta existente que se quiere reconstruir y publicar (por ejemplo, v1.4.0). Vacío = QA sin release.'
         required: false
