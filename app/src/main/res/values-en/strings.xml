@@ -88,6 +88,9 @@
   <string name="login_password">Password</string>
   <string name="login_sign_in">Sign in</string>
   <string name="login_authenticating">Signing in…</string>
+  <string name="login_error_invalid_server">The server address is not valid.</string>
+  <string name="login_error_invalid_credentials">The username or password is incorrect.</string>
+  <string name="login_error_timeout">The server did not respond. Check the address and connection.</string>
   <string name="quick_connect_step_one">Step 1: Open Jellyfin on your phone or browser</string>
   <string name="quick_connect_step_two">Step 2: Open Quick Connect in user settings</string>
   <string name="quick_connect_step_three">Step 3: Enter the code below</string>
