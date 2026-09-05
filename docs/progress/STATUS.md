@@ -39,6 +39,11 @@ identificador de usuario autenticado y la URI local del instalador de APK.
 Solo se conservan mensajes de estado neutros; las pruebas móviles/TV y ambas
 compilaciones Kotlin siguen pasando.
 
+La regresión `MediaUrlSecurityTest.mpvAuthenticationIsCarriedByHeadersInsteadOfTheMediaUrl`
+confirma que el fallback MPV conserva el token únicamente en las cabeceras
+`X-Emby-Authorization` y no en la URL de reproducción; la prueba pasa en la
+variante móvil.
+
 Auditoría de evidencia de releases (2026-09-05): las consultas directas a la
 API y a la URL pública de GitHub para `v1.2.32` y `v1.4.0` devolvieron HTTP
 404. Por tanto, las notas antiguas de releases que aparecen más abajo se

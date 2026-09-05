@@ -32,6 +32,24 @@ class MediaUrlSecurityTest {
     }
 
     @Test
+    fun mpvAuthenticationIsCarriedByHeadersInsteadOfTheMediaUrl() {
+        val headers = MpvUrlBuilder.buildHeaders(
+            accessToken = "secret-token",
+            deviceId = "test-device"
+        )
+        val url = MpvVeloraLauncher.buildStreamUrl(
+            serverUrl = "http://jellyfin.test:8096",
+            itemId = "movie-id",
+            accessToken = "secret-token"
+        )
+
+        assertTrue(headers.contains("X-Emby-Authorization"))
+        assertTrue(headers.contains("Token=\"secret-token\""))
+        assertFalse(url.contains("secret-token"))
+        assertFalse(url.contains("token=", ignoreCase = true))
+    }
+
+    @Test
     fun mpvDownloadUrlDoesNotEmbedTheAccessToken() {
         val url = MpvUrlBuilder.buildDownloadUrl(
             serverUrl = "http://jellyfin.test:8096",
