@@ -1,6 +1,6 @@
 package com.klortek.velora.preview
 
-/** Pure lifecycle policy for a future persistent preview player. */
+/** Pure lifecycle policy for the persistent Home preview player. */
 data class PreviewRequest(val itemId: String, val sourceUrl: String)
 
 sealed interface PreviewDecision {

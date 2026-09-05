@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android TV: el carrusel de inicio reutiliza un único reproductor Media3
+  silenciado para previsualizar trailers locales de Jellyfin tras un breve
+  tiempo de foco; se cancela al cambiar de elemento y no se crea en móvil.
 - Android TV y móvil: la música de tema cambia con fade-out/fade-in al
   cambiar de título y se detiene limpiamente al salir, evitando solapamientos
   y cambios bruscos de volumen.

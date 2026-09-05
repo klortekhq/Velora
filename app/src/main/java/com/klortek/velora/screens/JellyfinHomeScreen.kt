@@ -130,6 +130,13 @@ import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.preview.ThemeMusicController
+import com.klortek.velora.preview.PreviewPlayerController
+import com.klortek.velora.preview.PreviewPlaybackPolicy
+import com.klortek.velora.preview.PreviewRequest
+import com.klortek.velora.preview.PreviewDecision
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.ui.PlayerView
+import androidx.media3.ui.AspectRatioFrameLayout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import com.klortek.velora.jellyfin.JellyfinItem
@@ -640,6 +647,61 @@ fun JellyfinHomeScreen(
             }
         }
     }
+
+    // TV-only preview: one muted Media3 instance, driven by the same debounced
+    // focus used by the hero metadata. Local Jellyfin trailers are preferred;
+    // mobile never creates this player and remote metadata is never scraped.
+    val previewController = remember(context, isMobileLayout) {
+        PreviewPlayerController(context).takeUnless { isMobileLayout }
+    }
+    val previewPolicy = remember { PreviewPlaybackPolicy() }
+    var previewRequest by remember { mutableStateOf<PreviewRequest?>(null) }
+    var previewVisible by remember { mutableStateOf(false) }
+    DisposableEffect(previewController) {
+        onDispose { previewController?.release() }
+    }
+    LaunchedEffect(debouncedHighlightedItem?.Id, apiService, isMobileLayout) {
+        previewRequest = null
+        previewVisible = false
+        if (isMobileLayout || apiService == null) return@LaunchedEffect
+        val item = debouncedHighlightedItem ?: return@LaunchedEffect
+        val trailer = apiService.getLocalTrailers(item.Id).firstOrNull()
+        val source = trailer?.MediaSources?.firstOrNull()
+        if (trailer != null && source != null) {
+            previewRequest = PreviewRequest(
+                itemId = trailer.Id,
+                sourceUrl = apiService.getVideoPlaybackUrl(
+                    itemId = trailer.Id,
+                    mediaSourceId = source.Id
+                )
+            )
+        }
+    }
+    LaunchedEffect(previewRequest, isMobileLayout, apiService) {
+        val request = previewRequest
+        if (isMobileLayout || request == null || apiService == null) {
+            previewPolicy.focusChanged(null, System.currentTimeMillis(), System.currentTimeMillis())
+            previewController?.stop()
+            previewVisible = false
+            return@LaunchedEffect
+        }
+        val startedAt = System.currentTimeMillis()
+        when (val decision = previewPolicy.focusChanged(request, startedAt, startedAt)) {
+            is PreviewDecision.Schedule -> {
+                delay(PreviewPlaybackPolicy.DEFAULT_DWELL_MS)
+                if (previewRequest?.itemId == request.itemId) {
+                    when (previewPolicy.focusChanged(request, System.currentTimeMillis(), startedAt)) {
+                        is PreviewDecision.Start -> {
+                            previewController?.play(request.itemId, request.sourceUrl, apiService.getVideoRequestHeaders())
+                            previewVisible = true
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+            else -> Unit
+        }
+    }
     
     // Track scrolling state for background optimization
     val isScrolling: State<Boolean> = remember {
@@ -835,6 +897,25 @@ fun JellyfinHomeScreen(
                 )
             }
             
+            if (!isMobileLayout && previewVisible) {
+                AndroidView(
+                    factory = { viewContext ->
+                        PlayerView(viewContext).apply {
+                            useController = false
+                            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                            player = previewController!!.player
+                            setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
+                        }
+                    },
+                    update = { playerView ->
+                        playerView.player = previewController!!.player
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .alpha(0.82f)
+                )
+            }
+
             // Dark overlay and scrim - different opacity based on view mode
             // Skip overlay in dark mode since we're using a dark background
             if ((selectedLibraryId == null && selectedCollectionId == null) && !darkModeEnabled) {
