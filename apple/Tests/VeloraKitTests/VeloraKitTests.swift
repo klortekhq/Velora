@@ -129,7 +129,7 @@ final class VeloraKitTests: XCTestCase {
     }
 
     func testLiveTvModelsDecodeServerFieldNames() throws {
-        let json = #"{"Id":"channel-1","Name":"Noticias","ChannelNumber":"24","CurrentProgram":{"Id":"program-1","Name":"Informativo","ChannelId":"channel-1","StartDate":"2026-09-01T10:00:00Z","EndDate":"2026-09-01T11:00:00Z","Overview":"Actualidad"}}"#
+        let json = #"{"Id":"channel-1","Name":"Noticias","ChannelNumber":"24","MediaSources":[{"Id":"source-1","LiveStreamId":"live-1"}],"CurrentProgram":{"Id":"program-1","Name":"Informativo","ChannelId":"channel-1","StartDate":"2026-09-01T10:00:00Z","EndDate":"2026-09-01T11:00:00Z","Overview":"Actualidad"}}"#
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let channel = try decoder.decode(JellyfinLiveTvChannel.self, from: json.data(using: .utf8)!)
@@ -137,6 +137,22 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(channel.number, "24")
         XCTAssertEqual(channel.currentProgram?.name, "Informativo")
         XCTAssertEqual(channel.currentProgram?.channelID, "channel-1")
+        XCTAssertEqual(channel.mediaSources.first?.id, "source-1")
+    }
+
+    func testLiveTvChannelsGroupDuplicateRowsAndKeepSources() {
+        let first = JellyfinLiveTvChannel(
+            id: "channel-1", name: "Noticias", number: "24",
+            mediaSources: [JellyfinLiveTvMediaSource(id: "source-1", liveStreamID: "live-1", transcodingURL: nil, directStreamURL: nil, protocolName: nil)]
+        )
+        let second = JellyfinLiveTvChannel(
+            id: "channel-1", name: "Noticias IPTV", number: nil,
+            mediaSources: [JellyfinLiveTvMediaSource(id: "source-2", liveStreamID: "live-2", transcodingURL: nil, directStreamURL: nil, protocolName: nil)]
+        )
+        let grouped = JellyfinLiveTvChannel.grouped([first, second])
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.number, "24")
+        XCTAssertEqual(grouped.first?.mediaSources.compactMap(\.id), ["source-1", "source-2"])
     }
 
     func testLiveTvPlaybackInfoDecodesSelectedStreamURL() throws {

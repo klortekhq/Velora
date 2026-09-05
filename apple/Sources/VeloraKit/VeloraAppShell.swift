@@ -65,7 +65,7 @@ public final class VeloraAppModel: ObservableObject {
             async let library = client.items(userID: authenticated.userID, includeTypes: ["Movie", "Series"])
             async let channels = client.liveTvChannels(userID: authenticated.userID)
             items = try await library
-            liveTvChannels = (try? await channels) ?? []
+            liveTvChannels = JellyfinLiveTvChannel.grouped((try? await channels) ?? [])
             offlineDownloads = platform.supportsOfflineDownloads
                 ? offlineStore.load().filter { $0.serverURL == url.absoluteString }
                 : []
