@@ -17,6 +17,10 @@ Updated: 2026-09-05
 - El servidor Jellyfin responde en `192.168.100.201:8096`, pero la
   autenticación disponible en esta sesión devuelve `HTTP 401`; no se declara
   validada la biblioteca, la reproducción autenticada ni Live TV real.
+- La comprobación autenticada repetida el 2026-09-05 con el contrato exacto
+  de Velora (`Pw` y `X-Emby-Authorization`) vuelve a recibir `HTTP 401`; el
+  servidor es alcanzable, pero no hay evidencia válida para certificar datos
+  de usuario o reproducción real.
 - No se declara una release pública ni un APK firmado a partir de esta
   revisión: la consulta pública no confirmó una release existente y este
   entorno no dispone de credenciales de firma/GitHub CLI para publicarla.
