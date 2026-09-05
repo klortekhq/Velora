@@ -83,7 +83,8 @@ object SubtitleMapper {
         }
         
         Log.d(TAG, "✅ Mapped subtitle: JF index=${stream.Index}, position=$positionIndex, lang=${stream.Language}, codec=${stream.Codec}, flags=[$flags]")
-        Log.d(TAG, "   IsExternal=${stream.IsExternal}, Path=${stream.Path}")
+        // Do not log Jellyfin filesystem paths; they can disclose server layout.
+        Log.d(TAG, "   IsExternal=${stream.IsExternal}, HasPath=${!stream.Path.isNullOrBlank()}")
         Log.d(TAG, "   Expected to appear at position $positionIndex in ExoPlayer track list")
         Log.d(TAG, "   Label: ${buildLabel(stream)}")
         
@@ -118,7 +119,7 @@ object SubtitleMapper {
             pathExtension == "ass" || pathExtension == "ssa" -> MimeTypes.TEXT_SSA
             // Default to SRT (most common for external subtitles)
             else -> {
-                Log.w(TAG, "⚠️ Unknown subtitle codec='${stream.Codec}', path='${stream.Path}' - defaulting to APPLICATION_SUBRIP")
+                Log.w(TAG, "⚠️ Unknown subtitle codec='${stream.Codec}', hasPath=${!stream.Path.isNullOrBlank()} - defaulting to APPLICATION_SUBRIP")
                 MimeTypes.APPLICATION_SUBRIP
             }
         }
