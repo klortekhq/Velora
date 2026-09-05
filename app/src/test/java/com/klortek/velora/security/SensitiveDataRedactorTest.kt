@@ -38,6 +38,30 @@ class SensitiveDataRedactorTest {
     }
 
     @Test
+    fun redactsTokensInsideAuthorizationHeaders() {
+        val redacted = SensitiveDataRedactor.message(
+            IllegalStateException(
+                "request failed: X-Emby-Authorization: MediaBrowser Token=\"header-secret\""
+            )
+        )
+
+        assertFalse(redacted.contains("header-secret"))
+        assertTrue(redacted.contains("Token=\"<redacted>\""))
+    }
+
+    @Test
+    fun redactsBearerTokensAndPasswordsInErrorText() {
+        val redacted = SensitiveDataRedactor.message(
+            IllegalStateException("Authorization: Bearer bearer-secret; password='plain-secret'")
+        )
+
+        assertFalse(redacted.contains("bearer-secret"))
+        assertFalse(redacted.contains("plain-secret"))
+        assertTrue(redacted.contains("Authorization: Bearer <redacted>"))
+        assertTrue(redacted.contains("password='<redacted>'"))
+    }
+
+    @Test
     fun nullAndLocalValuesUseSafeMarkers() {
         assertEquals("<null>", SensitiveDataRedactor.url(null))
         assertEquals("<null>", SensitiveDataRedactor.message(null))
