@@ -45,8 +45,10 @@ una comprobación no se interpreta como soporte certificado.
 ## Pruebas locales pasadas
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
+- `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:compileMobileDebugKotlin`: `BUILD SUCCESSFUL` tras el ajuste del ciclo
   de vida del cliente Live TV.
+- `:app:compileTvDebugKotlin`: `BUILD SUCCESSFUL` tras el mismo ajuste.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `node scripts/test-platform.mjs` desde `web/`: correcto para capacidades,
   seguridad, biblioteca, subtítulos y agrupación Live TV.
