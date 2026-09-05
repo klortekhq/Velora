@@ -39,9 +39,112 @@ public enum VeloraOfflineStoreError: Error, Equatable {
     case insufficientStorage
 }
 
-/// Small app-managed offline catalog for iPhone/iPad.
-/// A later background-transfer layer can use the same catalog without
-/// changing the playback or UI contract.
+/// Metadata attached to a background URLSession task. It deliberately contains
+/// no token or raw media URL; the authenticated URLRequest remains owned by
+/// URLSession and this description only identifies the catalog entry to Velora.
+public struct VeloraOfflineTransferMetadata: Codable, Sendable {
+    public let itemID: String
+    public let title: String
+    public let serverURL: String
+    public let quality: VeloraDownloadQuality
+
+    public init(itemID: String, title: String, serverURL: String, quality: VeloraDownloadQuality) {
+        self.itemID = itemID
+        self.title = title
+        self.serverURL = serverURL
+        self.quality = quality
+    }
+}
+
+/// Owns the iOS/iPadOS background transfer session. The same identifier is
+/// recreated after process termination so the OS can deliver completed tasks
+/// back to Velora. tvOS never creates or uses this coordinator.
+public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
+    public static let shared = VeloraOfflineTransferCoordinator()
+
+    private let lock = NSLock()
+    private lazy var session: URLSession = {
+        #if os(iOS)
+        let configuration = URLSessionConfiguration.background(withIdentifier: "com.klortek.velora.offline")
+        configuration.waitsForConnectivity = true
+        configuration.sessionSendsLaunchEvents = true
+        #else
+        let configuration = URLSessionConfiguration.default
+        #endif
+        return URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+    }()
+
+    private var completionHandler: (() -> Void)?
+    public var onFinished: (@Sendable (VeloraOfflineTransferMetadata, URL, URLResponse) -> Void)?
+    public var onFailed: (@Sendable (VeloraOfflineTransferMetadata, Error?) -> Void)?
+
+    public override init() {
+        super.init()
+    }
+
+    @discardableResult
+    public func enqueue(request: URLRequest, metadata: VeloraOfflineTransferMetadata) -> Int {
+        let task = session.downloadTask(with: request)
+        if let data = try? JSONEncoder().encode(metadata) {
+            task.taskDescription = String(data: data, encoding: .utf8)
+        }
+        task.resume()
+        return task.taskIdentifier
+    }
+
+    public func setBackgroundCompletionHandler(_ handler: @escaping () -> Void) {
+        lock.lock()
+        completionHandler = handler
+        lock.unlock()
+        _ = session
+    }
+
+    public func cancelAll() {
+        session.getAllTasks { tasks in
+            tasks.compactMap { $0 as? URLSessionDownloadTask }.forEach { $0.cancel() }
+        }
+    }
+
+    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        guard let metadata = metadata(for: downloadTask),
+              let response = downloadTask.response else { return }
+        // Apple only guarantees the delegate URL until this callback returns.
+        // Stage it under an opaque temporary name before handing it to the
+        // catalog, which may finish on the main actor.
+        let stagedURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("velora-offline-\(UUID().uuidString).download")
+        do {
+            try FileManager.default.moveItem(at: location, to: stagedURL)
+            onFinished?(metadata, stagedURL, response)
+        } catch {
+            onFailed?(metadata, error)
+        }
+    }
+
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        guard let error, let downloadTask = task as? URLSessionDownloadTask,
+              let metadata = metadata(for: downloadTask) else { return }
+        onFailed?(metadata, error)
+    }
+
+    public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+        lock.lock()
+        let handler = completionHandler
+        completionHandler = nil
+        lock.unlock()
+        handler?()
+    }
+
+    private func metadata(for task: URLSessionTask) -> VeloraOfflineTransferMetadata? {
+        guard let description = task.taskDescription,
+              let data = description.data(using: .utf8) else { return nil }
+        return try? JSONDecoder().decode(VeloraOfflineTransferMetadata.self, from: data)
+    }
+}
+
+/// Small app-managed offline catalog for iPhone/iPad. Background transfers
+/// hand their staged file to this same catalog, preserving one playback and
+/// integrity contract for foreground and resumed downloads.
 public final class VeloraOfflineStore: @unchecked Sendable {
     private let fileManager: FileManager
     public let rootURL: URL

@@ -6,8 +6,25 @@ import VeloraKit
 @available(iOS 16.0, *)
 @main
 struct VeloraMobileApp: App {
+    @UIApplicationDelegateAdaptor(VeloraMobileDelegate.self) private var appDelegate
+
     var body: some Scene {
         WindowGroup { VeloraMobileRoot() }
+    }
+}
+
+@available(iOS 16.0, *)
+private final class VeloraMobileDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication,
+        handleEventsForBackgroundURLSession identifier: String,
+        completionHandler: @escaping () -> Void
+    ) {
+        guard identifier == "com.klortek.velora.offline" else {
+            completionHandler()
+            return
+        }
+        VeloraOfflineTransferCoordinator.shared.setBackgroundCompletionHandler(completionHandler)
     }
 }
 

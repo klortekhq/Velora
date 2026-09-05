@@ -24,6 +24,7 @@ public final class VeloraAppModel: ObservableObject {
     private let settingsStore: VeloraSettingsStore
     private let credentialStore: VeloraCredentialStore
     private let offlineStore: VeloraOfflineStore
+    private let offlineTransfer: VeloraOfflineTransferCoordinator
     private let serverDefaults: UserDefaults
     private var session: JellyfinSession?
 
@@ -35,6 +36,9 @@ public final class VeloraAppModel: ObservableObject {
         self.settings = settingsStore.load() ?? VeloraSettings.systemDefault()
         self.credentialStore = credentialStore
         self.offlineStore = VeloraOfflineStore()
+        self.offlineTransfer = platform.supportsOfflineDownloads
+            ? VeloraOfflineTransferCoordinator.shared
+            : VeloraOfflineTransferCoordinator()
         self.serverDefaults = serverDefaults
         let configuredServer = serverDefaults.string(forKey: "velora.serverURL")
             .flatMap(URL.init(string:)) ?? serverURL
@@ -51,6 +55,20 @@ public final class VeloraAppModel: ObservableObject {
         self.offlineDownloads = platform.supportsOfflineDownloads
             ? offlineStore.load().filter { $0.serverURL == configuredServer.absoluteString }
             : []
+        if platform.supportsOfflineDownloads {
+            offlineTransfer.onFinished = { [weak self] metadata, temporaryURL, response in
+                Task { @MainActor [weak self] in
+                    await self?.completeBackgroundDownload(metadata: metadata, temporaryURL: temporaryURL, response: response)
+                }
+            }
+            offlineTransfer.onFailed = { [weak self] metadata, _ in
+                Task { @MainActor [weak self] in
+                    self?.downloadingItemID = nil
+                    self?.errorMessage = String(localized: "Unable to download", bundle: .module)
+                    _ = metadata
+                }
+            }
+        }
     }
 
     public func signIn(serverURL: String, username: String, password: String) async {
@@ -179,19 +197,36 @@ public final class VeloraAppModel: ObservableObject {
         let serverURL = await client.serverURL()
         guard !offlineDownloads.contains(where: { $0.itemID == item.id && $0.serverURL == serverURL.absoluteString }) else { return }
         downloadingItemID = item.id
-        defer { downloadingItemID = nil }
+        let request = await client.authorizedRequest(for: requestURL)
+        let metadata = VeloraOfflineTransferMetadata(
+            itemID: item.id,
+            title: item.name,
+            serverURL: serverURL.absoluteString,
+            quality: quality
+        )
+        _ = offlineTransfer.enqueue(request: request, metadata: metadata)
+    }
+
+    private func completeBackgroundDownload(
+        metadata: VeloraOfflineTransferMetadata,
+        temporaryURL: URL,
+        response: URLResponse
+    ) async {
+        downloadingItemID = nil
+        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            errorMessage = String(localized: "Unable to download", bundle: .module)
+            return
+        }
         do {
-            let request = await client.authorizedRequest(for: requestURL)
-            let (temporaryURL, response) = try await URLSession.shared.download(for: request)
-            guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else { return }
             let entry = try offlineStore.add(
                 mediaAt: temporaryURL,
-                itemID: item.id,
-                title: item.name,
-                serverURL: serverURL.absoluteString
+                itemID: metadata.itemID,
+                title: metadata.title,
+                serverURL: metadata.serverURL
             )
-            offlineDownloads = offlineStore.load().filter { $0.serverURL == serverURL.absoluteString }
-            if !offlineDownloads.contains(entry) { offlineDownloads.append(entry) }
+            let entries = offlineStore.load().filter { $0.serverURL == metadata.serverURL }
+            offlineDownloads = entries.contains(entry) ? entries : entries + [entry]
+            errorMessage = nil
         } catch VeloraOfflineStoreError.insufficientStorage {
             errorMessage = String(localized: "Not enough storage", bundle: .module)
         } catch {
