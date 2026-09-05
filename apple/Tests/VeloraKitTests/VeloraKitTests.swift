@@ -2,6 +2,10 @@ import XCTest
 @testable import VeloraKit
 
 final class VeloraKitTests: XCTestCase {
+    func testExecutableFallbackUsesSharedKitLocalization() {
+        XCTAssertFalse(VeloraLocalized.connectToJellyfin.isEmpty)
+    }
+
     func testOfflineIsMobileOnly() {
         XCTAssertTrue(VeloraPlatform.iPhone.supportsOfflineDownloads)
         XCTAssertTrue(VeloraPlatform.iPad.supportsOfflineDownloads)

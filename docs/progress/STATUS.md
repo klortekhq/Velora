@@ -30,6 +30,13 @@ La verificación local posterior al changelog volvió a terminar con
 `BUILD SUCCESSFUL` en `testMobileDebugUnitTest` y `testTvDebugUnitTest`; las
 pruebas de capacidades, seguridad e interacción del cliente web también pasan.
 
+La auditoría de los entrypoints Apple detectó que `VeloraMobile` y `VeloraTV`
+referenciaban `Bundle.module` desde sus propios ejecutables, aunque los
+recursos localizados pertenecen a `VeloraKit`. Se corrigió usando una copia
+localizada pública del módulo compartido y se añadió una regresión unitaria.
+Swift no está instalado en este host Windows; la compilación y el test quedan
+para el job macOS, sin presentarlos como ejecutados aquí.
+
 La comprobación de ramas del mismo momento devuelve únicamente `main` y
 `origin/main`; no hay ramas adicionales en el checkout ni en el remoto
 visible.
