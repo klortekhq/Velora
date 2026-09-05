@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`c0a9942`. Los
+`fbac1ac`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -40,6 +40,11 @@ El commit `c0a9942` elimina los últimos títulos incrustados de las categorías
 especiales de Ajustes y los lleva a los 13 catálogos Android, incluyendo
 Jellyseerr y Tráilers. La compilación de recursos y los tests unitarios móviles
 pasan después del cambio.
+
+El commit siguiente corrige la base Apple para no proponer `localhost` como
+servidor inicial, localiza el título de biblioteca y la pista de accesibilidad
+de Live TV en los cuatro catálogos Swift disponibles. Se revisa estáticamente;
+la compilación Apple continúa pendiente de macOS/Xcode.
 
 El workflow de releases no bloquea una publicación por la ausencia de Tizen
 Studio o de un certificado Samsung en el runner: conserva el bundle web
