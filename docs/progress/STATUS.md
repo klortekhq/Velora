@@ -12,6 +12,13 @@ pruebas `testMobileDebugUnitTest` y `testTvDebugUnitTest` del mismo checkout
 también terminaron con `BUILD SUCCESSFUL`. La única advertencia relevante del
 log es del sistema Fire OS (`CoreComponentFactory`), no un cierre de Velora.
 
+La misma build incorpora una corrección del selector de aspecto: las opciones
+se exponen como controles seleccionables accesibles para táctil y mando, y el
+modo elegido se reaplica después de los ciclos de medida de Media3, al recibir
+el tamaño real del vídeo y al cambiar a pantalla completa. La compilación y
+las pruebas Android pasan; la reproducción autenticada y el cambio visual en
+contenido real quedan pendientes de una cuenta Jellyfin que acepte el acceso.
+
 La comprobación de ramas del mismo momento devuelve únicamente `main` y
 `origin/main`; no hay ramas adicionales en el checkout ni en el remoto
 visible.
