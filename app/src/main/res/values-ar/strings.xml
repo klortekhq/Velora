@@ -257,4 +257,6 @@
   <string name="settings_autoplay_next_description">تشغيل الحلقة التالية تلقائياً عند انتهاء الحالية.</string>
   <string name="settings_autoplay_countdown">عد تنازلي تلقائي</string>
   <string name="settings_autoplay_countdown_description">الوقت قبل نهاية الحلقة لإظهار العد التنازلي (%1$ds).</string>
+    <string name="settings_category_jellyseerr">Jellyseerr (اكتشاف المحتوى)</string>
+    <string name="settings_category_trailers">الإعلانات التشويقية</string>
 </resources>
