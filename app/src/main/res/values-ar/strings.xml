@@ -222,4 +222,13 @@
   <string name="settings_offline_storage_unlimited">Unlimited</string>
   <string name="live_tv_cancel">إلغاء</string>
   <string name="live_tv_source_count">%1$d مصادر</string>
+  <string name="player_back">رجوع</string>
+  <string name="player_fullscreen">ملء الشاشة</string>
+  <string name="player_exit_fullscreen">الخروج من ملء الشاشة</string>
+  <string name="player_rewind_15">إرجاع 15 ثانية</string>
+  <string name="player_forward_15">تقديم 15 ثانية</string>
+  <string name="player_play">تشغيل</string>
+  <string name="player_pause">إيقاف مؤقت</string>
+  <string name="player_subtitles_none">لا شيء (معطلة)</string>
+  <string name="player_selected">محدد</string>
 </resources>

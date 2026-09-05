@@ -222,4 +222,13 @@
   <string name="settings_offline_storage_unlimited">Unlimited</string>
   <string name="live_tv_cancel">Cancel</string>
   <string name="live_tv_source_count">%1$d sources</string>
+  <string name="player_back">Back</string>
+  <string name="player_fullscreen">Full screen</string>
+  <string name="player_exit_fullscreen">Exit full screen</string>
+  <string name="player_rewind_15">Rewind 15 seconds</string>
+  <string name="player_forward_15">Forward 15 seconds</string>
+  <string name="player_play">Play</string>
+  <string name="player_pause">Pause</string>
+  <string name="player_subtitles_none">None (disabled)</string>
+  <string name="player_selected">Selected</string>
 </resources>

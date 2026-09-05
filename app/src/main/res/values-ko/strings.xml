@@ -222,4 +222,13 @@
   <string name="settings_offline_storage_unlimited">Unlimited</string>
   <string name="live_tv_cancel">취소</string>
   <string name="live_tv_source_count">%1$d개 소스</string>
+  <string name="player_back">뒤로</string>
+  <string name="player_fullscreen">전체 화면</string>
+  <string name="player_exit_fullscreen">전체 화면 종료</string>
+  <string name="player_rewind_15">15초 되감기</string>
+  <string name="player_forward_15">15초 빨리 감기</string>
+  <string name="player_play">재생</string>
+  <string name="player_pause">일시정지</string>
+  <string name="player_subtitles_none">없음(사용 안 함)</string>
+  <string name="player_selected">선택됨</string>
 </resources>
