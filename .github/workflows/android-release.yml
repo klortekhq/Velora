@@ -61,6 +61,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Validar catálogos Android
+        run: node scripts/check-android-locales.mjs
+
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
 

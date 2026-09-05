@@ -31,6 +31,12 @@ seguridad e interacción. El bundle web y el paquete webOS se generan; Samsung
 queda preparado sin firma por ausencia de Tizen Studio/CLI y VIDAA queda como
 bundle HTML5, sin inventar un paquete firmado que no se ha validado.
 
+Los catálogos Android garantizados para la experiencia principal —español base,
+inglés, alemán y francés— ya contienen las 346 claves actuales. El workflow de
+release ejecuta `scripts/check-android-locales.mjs` para impedir que vuelvan a
+quedar incompletos. Los demás idiomas instalados mantienen fallback seguro al
+catálogo base mientras se amplía su traducción.
+
 La etiqueta remota `v1.4.0` se realineó con el `main` actual (`1dbb8a3`) para
 evitar que el workflow de publicación reconstruya un commit antiguo. La API
 pública de GitHub sigue devolviendo 404 al consultar releases y ejecuciones
