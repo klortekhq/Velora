@@ -21,6 +21,12 @@ El workflow continuo se amplió el 2026-09-05 con un job `macos-14` que ejecuta
 Apple. Hasta que GitHub Actions complete esa ejecución no se presenta como una
 validación realizada; este host Windows no puede sustituirla.
 
+La agrupación Live TV de `VeloraKit` también quedó estabilizada: las fuentes
+que Jellyfin devuelve sin identificadores ya no reciben UUIDs aleatorios, sino
+una clave determinista, y una regresión unitaria confirma que no duplican la
+fila del canal. La prueba Swift queda para el job macOS porque Swift/Xcode no
+están instalados en este host.
+
 Se añadió `.github/workflows/ci.yml` para que cada cambio en `main` y cada
 pull request relevante valide de forma reproducible los catálogos Android, las
 pruebas de interacción/seguridad web, los bundles web/Smart TV y las pruebas y
