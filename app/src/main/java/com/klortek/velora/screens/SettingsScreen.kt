@@ -1842,8 +1842,8 @@ fun SettingsScreen(
                         SettingsCategory.APPEARANCE -> {
                             // Dark Mode
                             SettingToggle(
-                                title = "Modo oscuro",
-                                description = "Desactiva la imagen de fondo y usa el fondo oscuro de Material.",
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_dark_mode),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_dark_mode_description),
                                 isEnabled = darkModeEnabled,
                                 onToggle = {
                                     darkModeEnabled = !darkModeEnabled
@@ -1853,8 +1853,8 @@ fun SettingsScreen(
                             
                             // Use Logo for Title
                             SettingToggle(
-                                title = "Usar logo como título",
-                                description = "Muestra el logo en lugar del texto del título en las pantallas multimedia.",
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_logo_title),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_logo_title_description),
                                 isEnabled = useLogoForTitleEnabled,
                                 onToggle = {
                                     useLogoForTitleEnabled = !useLogoForTitleEnabled
@@ -1864,8 +1864,8 @@ fun SettingsScreen(
                             
                             // Animated Play Button
                             SettingToggle(
-                                title = "Botón de reproducción animado",
-                                description = "Usa un botón de reproducción animado con efecto de brillo Lottie.",
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_animated_play),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_animated_play_description),
                                 isEnabled = animatedPlayButtonEnabled,
                                 onToggle = {
                                     animatedPlayButtonEnabled = !animatedPlayButtonEnabled
@@ -1875,8 +1875,8 @@ fun SettingsScreen(
                             
                             // 24-Hour Time Format
                             SettingToggle(
-                                title = "Formato horario de 24 horas",
-                                description = "Muestra la hora en formato de 24 horas (HH:mm).",
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_24_hour_time),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_24_hour_time_description),
                                 isEnabled = use24HourTimeEnabled,
                                 onToggle = {
                                     use24HourTimeEnabled = !use24HourTimeEnabled
@@ -1886,8 +1886,8 @@ fun SettingsScreen(
 
                             // 4K Quality Backgrounds
                             SettingToggle(
-                                title = "Fondos en calidad 4K",
-                                description = "Usa resolución 4K (3840x2160) para las imágenes de fondo. Puede afectar al rendimiento.",
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_4k_backgrounds),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_4k_backgrounds_description),
                                 isEnabled = use4KBackgrounds,
                                 onToggle = {
                                     use4KBackgrounds = !use4KBackgrounds
@@ -1897,8 +1897,8 @@ fun SettingsScreen(
 
                             // Navigation Sounds
                             SettingToggle(
-                                title = "Sonidos de navegación",
-                                description = "Activa los sonidos del sistema al navegar y pulsar en la aplicación.",
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_navigation_sounds),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_navigation_sounds_description),
                                 isEnabled = navigationSoundsEnabled,
                                 onToggle = {
                                     navigationSoundsEnabled = !navigationSoundsEnabled
@@ -1909,14 +1909,14 @@ fun SettingsScreen(
                             Spacer(modifier = Modifier.height(16.dp))
                             if (isTv) {
                                 Text(
-                                    text = "Color de acento del tema",
+                                    text = context.getString(com.klortek.velora.R.string.settings_appearance_accent_color),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                                 )
                             } else {
                                 Text(
-                                    text = "Color de acento del tema",
+                                    text = context.getString(com.klortek.velora.R.string.settings_appearance_accent_color),
                                     style = androidx.compose.material3.MaterialTheme.typography.titleSmall,
                                     color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -1926,13 +1926,13 @@ fun SettingsScreen(
                             var selectedThemeColorHex by remember { mutableStateOf(settings.themeColorHex) }
 
                             val colorPresets = listOf(
-                                Pair("Blanco", "#FFFFFF"),
-                                Pair("Amarillo", "#ECC564"),
-                                Pair("Azul", "#2196F3"),
-                                Pair("Verde", "#4CAF50"),
-                                Pair("Rojo", "#F44336"),
-                                Pair("Morado", "#9C27B0"),
-                                Pair("Naranja", "#FF9800")
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_white), "#FFFFFF"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_yellow), "#ECC564"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_blue), "#2196F3"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_green), "#4CAF50"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_red), "#F44336"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_purple), "#9C27B0"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_orange), "#FF9800")
                             )
 
                             Row(
@@ -1998,8 +1998,8 @@ fun SettingsScreen(
                         SettingsCategory.PERFORMANCE -> {
                             // Use Google TV Cards
                             SettingToggle(
-                                title = "Usar tarjetas de Google TV",
-                                description = "Tarjetas ligeras con animación de escala sutil y borde luminoso.",
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_google_tv_cards),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_google_tv_cards_description),
                                 isEnabled = useGoogleTvCards,
                                 onToggle = {
                                     useGoogleTvCards = !useGoogleTvCards
@@ -2014,7 +2014,7 @@ fun SettingsScreen(
                             
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Animaciones",
+                                text = context.getString(com.klortek.velora.R.string.settings_performance_animations),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
@@ -2022,8 +2022,8 @@ fun SettingsScreen(
                             
                             // Disable UI Animations
                             SettingToggle(
-                                title = "Desactivar animaciones de interfaz",
-                                description = "Desactiva las animaciones de desplazamiento para mejorar el rendimiento.",
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_disable_animations),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_disable_animations_description),
                                 isEnabled = disableUIAnimations,
                                 onToggle = {
                                     disableUIAnimations = !disableUIAnimations
@@ -2033,8 +2033,8 @@ fun SettingsScreen(
                             
                             // Preload Library Images
                             SettingToggle(
-                                title = "Precargar imágenes de biblioteca",
-                                description = "Precarga imágenes para un desplazamiento más fluido.",
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_preload_images),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_preload_images_description),
                                 isEnabled = preloadLibraryImagesEnabled,
                                 onToggle = {
                                     preloadLibraryImagesEnabled = !preloadLibraryImagesEnabled
@@ -2044,8 +2044,8 @@ fun SettingsScreen(
                             
                             // Cache Library Images
                             SettingToggle(
-                                title = "Guardar imágenes de biblioteca en caché",
-                                description = "Guarda imágenes en disco y memoria para acelerar la carga.",
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_cache_images),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_cache_images_description),
                                 isEnabled = cacheLibraryImagesEnabled,
                                 onToggle = {
                                     cacheLibraryImagesEnabled = !cacheLibraryImagesEnabled
@@ -2055,8 +2055,8 @@ fun SettingsScreen(
                             
                             // Use Glide
                             SettingToggle(
-                                title = "Usar Glide para imágenes",
-                                description = "Usa Glide en lugar de Coil para cargar imágenes.",
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_glide),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_glide_description),
                                 isEnabled = useGlideEnabled,
                                 onToggle = {
                                     useGlideEnabled = !useGlideEnabled
@@ -2066,8 +2066,8 @@ fun SettingsScreen(
                             
                             // Reduce Poster Resolution
                             SettingToggle(
-                                title = "Reducir resolución de carteles",
-                                description = "Reduce los carteles a 600x300 px para ahorrar ancho de banda.",
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_reduce_posters),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_reduce_posters_description),
                                 isEnabled = reducePosterResolutionEnabled,
                                 onToggle = {
                                     reducePosterResolutionEnabled = !reducePosterResolutionEnabled
@@ -2079,8 +2079,8 @@ fun SettingsScreen(
                         SettingsCategory.LIBRARY -> {
                             // Auto-Refresh Media
                             SettingToggle(
-                                title = "Actualizar contenido automáticamente",
-                                description = "Busca contenido nuevo automáticamente (cada ${autoRefreshIntervalMinutes} min).",
+                                title = context.getString(com.klortek.velora.R.string.settings_library_auto_refresh),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_auto_refresh_description, autoRefreshIntervalMinutes),
                                 isEnabled = autoRefreshEnabled,
                                 onToggle = {
                                     autoRefreshEnabled = !autoRefreshEnabled
@@ -2091,8 +2091,8 @@ fun SettingsScreen(
                             // Refresh Interval
                             if (autoRefreshEnabled) {
                                 SettingCycle(
-                                    title = "Intervalo de actualización",
-                                    description = "Frecuencia de búsqueda de contenido nuevo.",
+                                    title = context.getString(com.klortek.velora.R.string.settings_library_refresh_interval),
+                                    description = context.getString(com.klortek.velora.R.string.settings_library_refresh_interval_description),
                                     currentValue = "${autoRefreshIntervalMinutes}m",
                                     onCycle = {
                                         autoRefreshIntervalMinutes = when (autoRefreshIntervalMinutes) {
@@ -2110,8 +2110,8 @@ fun SettingsScreen(
                             
                             // Hide Shows with Zero Episodes
                             SettingToggle(
-                                title = "Ocultar series vacías",
-                                description = "Oculta de Inicio y Biblioteca las series sin episodios.",
+                                title = context.getString(com.klortek.velora.R.string.settings_library_hide_empty_shows),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_hide_empty_shows_description),
                                 isEnabled = hideShowsWithZeroEpisodesEnabled,
                                 onToggle = {
                                     hideShowsWithZeroEpisodesEnabled = !hideShowsWithZeroEpisodesEnabled
@@ -2121,8 +2121,8 @@ fun SettingsScreen(
 
                             // Row Card Count
                             SettingCycle(
-                                title = "Número de tarjetas por fila",
-                                description = "Número de elementos que se cargan y muestran por fila.",
+                                title = context.getString(com.klortek.velora.R.string.settings_library_cards_per_row),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_cards_per_row_description),
                                 currentValue = rowCardCount.toString(),
                                 onCycle = {
                                     rowCardCount = when (rowCardCount) {
@@ -2136,8 +2136,8 @@ fun SettingsScreen(
                                 }
                             )
                             SettingSlider(
-                                title = "Volumen de música de tema",
-                                description = "Nivel actual: ${(themeMusicVolume * 100).toInt()}%.",
+                                title = context.getString(com.klortek.velora.R.string.settings_library_theme_music_volume),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_theme_music_volume_description, (themeMusicVolume * 100).toInt()),
                                 onDecrease = {
                                     themeMusicVolume = (themeMusicVolume - 0.1f).coerceAtLeast(0f)
                                     settings.themeMusicVolume = themeMusicVolume
@@ -2151,8 +2151,8 @@ fun SettingsScreen(
                             )
 
                             SettingToggle(
-                                title = "Música de tema",
-                                description = "Reproduce la música del contenido seleccionado cuando Velora la tenga disponible.",
+                                title = context.getString(com.klortek.velora.R.string.settings_library_theme_music),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_theme_music_description),
                                 isEnabled = themeMusicEnabled,
                                 onToggle = {
                                     themeMusicEnabled = !themeMusicEnabled
@@ -2227,8 +2227,8 @@ fun SettingsScreen(
                         SettingsCategory.ADVANCED -> {
                             // Debug Outlines
                             SettingToggle(
-                                title = "Mostrar contornos de depuración",
-                                description = "Muestra bordes de depuración para visualizar el diseño.",
+                                title = context.getString(com.klortek.velora.R.string.settings_advanced_debug_outlines),
+                                description = context.getString(com.klortek.velora.R.string.settings_advanced_debug_outlines_description),
                                 isEnabled = debugOutlinesEnabled,
                                 onToggle = {
                                     debugOutlinesEnabled = !debugOutlinesEnabled
@@ -2238,8 +2238,8 @@ fun SettingsScreen(
                             
                             // Long Press Duration
                             SettingCycle(
-                                title = "Duración de pulsación larga",
-                                description = "Tiempo que hay que mantener Enter/OK para abrir el menú del episodio.",
+                                title = context.getString(com.klortek.velora.R.string.settings_advanced_long_press),
+                                description = context.getString(com.klortek.velora.R.string.settings_advanced_long_press_description),
                                 currentValue = "${longPressDurationSeconds}s",
                                 onCycle = {
                                     longPressDurationSeconds = when (longPressDurationSeconds) {
@@ -2255,9 +2255,9 @@ fun SettingsScreen(
                             
                             // Clear Image Cache
                             SettingButton(
-                                title = "Borrar caché de imágenes",
-                                description = "Borra todas las imágenes guardadas en disco y memoria.",
-                                buttonText = "Borrar",
+                                title = context.getString(com.klortek.velora.R.string.settings_advanced_clear_image_cache),
+                                description = context.getString(com.klortek.velora.R.string.settings_advanced_clear_image_cache_description),
+                                buttonText = context.getString(com.klortek.velora.R.string.settings_clear),
                                 onClick = {
                                     scope.launch {
                                         try {
@@ -2281,7 +2281,7 @@ fun SettingsScreen(
                                             
                                             withContext(Dispatchers.Main) {
                                                 Glide.get(context).clearMemory()
-                                                Toast.makeText(context, "Caché borrada correctamente", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_cache_cleared), Toast.LENGTH_SHORT).show()
                                             }
                                         } catch (e: Exception) {
                                             android.util.Log.e("SettingsScreen", "Error clearing cache", e)
@@ -2297,8 +2297,8 @@ fun SettingsScreen(
                         SettingsCategory.UPDATES -> {
                             // Auto-Check for Updates
                             SettingToggle(
-                                title = "Buscar actualizaciones automáticamente",
-                                description = "Busca actualizaciones automáticamente al iniciar la aplicación.",
+                                title = context.getString(com.klortek.velora.R.string.settings_updates_auto_check),
+                                description = context.getString(com.klortek.velora.R.string.settings_updates_auto_check_description),
                                 isEnabled = autoUpdateEnabled,
                                 onToggle = {
                                     autoUpdateEnabled = !autoUpdateEnabled
@@ -2308,15 +2308,15 @@ fun SettingsScreen(
                             
                             // Check for Updates
                             SettingButton(
-                                title = "Buscar actualizaciones",
+                                title = context.getString(com.klortek.velora.R.string.settings_updates_check),
                                 description = if (checkingForUpdates) {
-                                    "Comprobando actualizaciones…"
+                                    context.getString(com.klortek.velora.R.string.settings_updates_checking)
                                 } else if (updateCheckMessage != null) {
                                     updateCheckMessage!!
                                 } else {
-                                    "Comprueba manualmente las actualizaciones de la aplicación en GitHub"
+                                    context.getString(com.klortek.velora.R.string.settings_updates_check_description)
                                 },
-                                buttonText = if (checkingForUpdates) "Comprobando…" else "Comprobar",
+                                buttonText = if (checkingForUpdates) context.getString(com.klortek.velora.R.string.settings_updates_checking_short) else context.getString(com.klortek.velora.R.string.settings_check),
                                 enabled = !checkingForUpdates,
                                 onClick = {
                                     scope.launch {

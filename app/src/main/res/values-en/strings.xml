@@ -259,4 +259,41 @@
   <string name="settings_autoplay_countdown_description">Time before the episode ends to show the countdown (%1$ds).</string>
    <string name="settings_category_jellyseerr">Jellyseerr (Discover content)</string>
    <string name="settings_category_trailers">Trailers</string>
+   <string name="settings_appearance_dark_mode">Dark mode</string>
+   <string name="settings_appearance_dark_mode_description">Disable the backdrop and use the dark Material background.</string>
+   <string name="settings_appearance_logo_title">Use logo as title</string>
+   <string name="settings_appearance_logo_title_description">Show the logo instead of title text on media screens.</string>
+   <string name="settings_appearance_animated_play">Animated play button</string>
+   <string name="settings_appearance_animated_play_description">Use an animated play button with a Lottie glow effect.</string>
+   <string name="settings_appearance_24_hour_time">24-hour time format</string>
+   <string name="settings_appearance_24_hour_time_description">Display time in 24-hour format (HH:mm).</string>
+   <string name="settings_appearance_4k_backgrounds">4K backgrounds</string>
+   <string name="settings_appearance_4k_backgrounds_description">Use 4K resolution (3840x2160) for backdrops. May affect performance.</string>
+   <string name="settings_appearance_navigation_sounds">Navigation sounds</string>
+   <string name="settings_appearance_navigation_sounds_description">Enable system sounds while navigating and pressing controls.</string>
+   <string name="settings_appearance_accent_color">Theme accent color</string>
+   <string name="settings_color_white">White</string><string name="settings_color_yellow">Yellow</string><string name="settings_color_blue">Blue</string><string name="settings_color_green">Green</string><string name="settings_color_red">Red</string><string name="settings_color_purple">Purple</string><string name="settings_color_orange">Orange</string>
+   <string name="settings_performance_google_tv_cards">Use Google TV cards</string>
+   <string name="settings_performance_google_tv_cards_description">Lightweight cards with subtle scaling and a glow border.</string>
+   <string name="settings_performance_animations">Animations</string>
+   <string name="settings_performance_disable_animations">Disable interface animations</string>
+   <string name="settings_performance_disable_animations_description">Disable scrolling animations to improve performance.</string>
+   <string name="settings_performance_preload_images">Preload library images</string>
+   <string name="settings_performance_preload_images_description">Preload images for smoother scrolling.</string>
+   <string name="settings_performance_cache_images">Cache library images</string>
+   <string name="settings_performance_cache_images_description">Store images on disk and in memory to speed up loading.</string>
+   <string name="settings_performance_glide">Use Glide for images</string>
+   <string name="settings_performance_glide_description">Use Glide instead of Coil to load images.</string>
+   <string name="settings_performance_reduce_posters">Reduce poster resolution</string>
+   <string name="settings_performance_reduce_posters_description">Reduce posters to 600x300 px to save bandwidth.</string>
+   <string name="settings_library_auto_refresh">Automatically refresh content</string>
+   <string name="settings_library_auto_refresh_description">Look for new content automatically (every %1$d min).</string>
+   <string name="settings_library_refresh_interval">Refresh interval</string><string name="settings_library_refresh_interval_description">How often to look for new content.</string>
+   <string name="settings_library_hide_empty_shows">Hide empty shows</string><string name="settings_library_hide_empty_shows_description">Hide shows without episodes from Home and Library.</string>
+   <string name="settings_library_cards_per_row">Cards per row</string><string name="settings_library_cards_per_row_description">Number of items loaded and shown in each row.</string>
+   <string name="settings_library_theme_music_volume">Theme music volume</string><string name="settings_library_theme_music_volume_description">Current level: %1$d%%.</string>
+   <string name="settings_library_theme_music">Theme music</string><string name="settings_library_theme_music_description">Play theme music for selected content when available.</string>
+   <string name="settings_advanced_debug_outlines">Show debug outlines</string><string name="settings_advanced_debug_outlines_description">Show debug borders to inspect the layout.</string><string name="settings_advanced_long_press">Long-press duration</string><string name="settings_advanced_long_press_description">How long Enter/OK must be held to open the episode menu.</string>
+   <string name="settings_advanced_clear_image_cache">Clear image cache</string><string name="settings_advanced_clear_image_cache_description">Delete all images stored on disk and in memory.</string><string name="settings_clear">Clear</string><string name="settings_cache_cleared">Cache cleared successfully</string>
+   <string name="settings_updates_auto_check">Automatically check for updates</string><string name="settings_updates_auto_check_description">Check for updates automatically when the app starts.</string><string name="settings_updates_check">Check for updates</string><string name="settings_updates_checking">Checking for updates…</string><string name="settings_updates_check_description">Manually check for app updates on GitHub</string><string name="settings_updates_checking_short">Checking…</string><string name="settings_check">Check</string>
 </resources>
