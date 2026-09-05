@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión actual: cambios de seguridad pendientes de publicar tras la verificación local.
+Revisión actual: commit `a5481e6`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -56,6 +56,8 @@ una comprobación no se interpreta como soporte certificado.
   `fr` y `de`.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
+- El workflow de Android fue revisado sintácticamente: los APK debug se guardan
+  como artefactos de QA y no se incluyen en las Releases públicas.
 
 ## Artefactos Android locales
 
