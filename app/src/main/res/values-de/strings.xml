@@ -38,6 +38,10 @@
   <string name="search_empty_prompt">Gib einen Titel ein oder nutze die Sprachsuche</string>
   <string name="action_play">Wiedergeben</string>
   <string name="action_back">Zurück</string>
+  <string name="action_resume">Fortsetzen</string>
+  <string name="action_play_from_start">Von Anfang an abspielen</string>
+  <string name="action_play_from_chapter">Ab Kapitel abspielen</string>
+  <string name="status_watched">Gesehen</string>
   <string name="downloads_empty">Keine heruntergeladenen Inhalte</string>
   <string name="offline_available">Offline verfügbar</string>
   <string name="downloading_progress">Wird heruntergeladen… %1$d%%</string>

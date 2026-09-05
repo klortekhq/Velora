@@ -1713,7 +1713,7 @@ fun EpisodeCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Check,
-                                contentDescription = "Visto",
+                                contentDescription = androidx.compose.ui.res.stringResource(R.string.status_watched),
                                 tint = Color.White,
                                 modifier = Modifier.size(16.dp)
                             )
@@ -1822,7 +1822,7 @@ fun ResumeEpisodeDialog(
                             shape = RoundedCornerShape(28.dp),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp)
                         ) {
-                            Text("Reanudar", maxLines = 1)
+                            Text(androidx.compose.ui.res.stringResource(R.string.action_resume), maxLines = 1)
                         }
                         MobileButton(
                             onClick = onPlayFromStart,
@@ -1837,7 +1837,7 @@ fun ResumeEpisodeDialog(
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
                         ) {
                             Text(
-                                "Reproducir desde el principio",
+                                androidx.compose.ui.res.stringResource(R.string.action_play_from_start),
                                 maxLines = 2,
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
@@ -2299,10 +2299,10 @@ fun EpisodeActionButtonsRow(
                         shape = ButtonDefaults.shape(CircleShape),
                         contentPadding = PaddingValues(8.dp)
                     ) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Continuar", modifier = Modifier.size(14.3.dp))
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = androidx.compose.ui.res.stringResource(R.string.continue_label), modifier = Modifier.size(14.3.dp))
                         if (resumeFocused) {
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text("Reanudar", style = MaterialTheme.typography.labelLarge.copy(fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f), modifier = Modifier.padding(horizontal = 12.dp))
+                            Text(androidx.compose.ui.res.stringResource(R.string.action_resume), style = MaterialTheme.typography.labelLarge.copy(fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f), modifier = Modifier.padding(horizontal = 12.dp))
                         }
                     }
                 }
@@ -2358,7 +2358,7 @@ fun EpisodeActionButtonsRow(
                     shape = ButtonDefaults.shape(CircleShape),
                     contentPadding = PaddingValues(8.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Reproducir", modifier = Modifier.size(14.3.dp))
+                    Icon(imageVector = Icons.Default.PlayArrow, contentDescription = androidx.compose.ui.res.stringResource(R.string.action_play), modifier = Modifier.size(14.3.dp))
                     if (playFocused) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(playButtonLabel, style = MaterialTheme.typography.labelLarge.copy(fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f), modifier = Modifier.padding(horizontal = 12.dp))
@@ -2404,7 +2404,7 @@ fun EpisodeActionButtonsRow(
             ) {
                 Icon(
                     imageVector = Icons.Default.VolumeUp,
-                    contentDescription = "Pista de audio",
+                    contentDescription = androidx.compose.ui.res.stringResource(R.string.player_audio_tracks),
                     modifier = Modifier.size(14.3.dp)
                 )
                 if (audioFocused) {
@@ -2456,7 +2456,7 @@ fun EpisodeActionButtonsRow(
             ) {
                 Icon(
                     imageVector = Icons.Default.Language,
-                    contentDescription = "Subtítulos",
+                    contentDescription = androidx.compose.ui.res.stringResource(R.string.player_subtitles),
                     modifier = Modifier.size(14.3.dp)
                 )
                 if (subtitleFocused) {
@@ -2520,7 +2520,7 @@ fun EpisodeActionButtonsRow(
             ) {
                 Icon(
                     imageVector = Icons.Default.Movie,
-                    contentDescription = "Ver tráiler",
+                contentDescription = androidx.compose.ui.res.stringResource(R.string.watch_trailer_1),
                     modifier = Modifier.size(14.3.dp)
                 )
                 if (trailerFocused) {
