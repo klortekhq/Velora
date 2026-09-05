@@ -29,6 +29,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 
@@ -81,7 +83,10 @@ fun TvTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     focusRequester: FocusRequester? = null,
-    onFocusChanged: ((Boolean) -> Unit)? = null
+    onFocusChanged: ((Boolean) -> Unit)? = null,
+    /** TV login/server forms can opt into a larger, 10-foot touch/focus target. */
+    fieldHeight: Dp = 48.dp,
+    textSize: TextUnit = 16.sp
 ) {
     // Use MutableInteractionSource for focus detection - Jellyfin AndroidTV approach
     val interactionSource = remember { MutableInteractionSource() }
@@ -125,7 +130,7 @@ fun TvTextField(
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
+                .height(fieldHeight)
                 .then(
                     if (focusRequester != null) Modifier.focusRequester(focusRequester)
                     else Modifier
@@ -144,7 +149,7 @@ fun TvTextField(
             visualTransformation = visualTransformation,
             textStyle = TextStyle(
                 color = textColor,
-                fontSize = 16.sp
+                fontSize = textSize
             ),
             cursorBrush = SolidColor(if (focused) InputColors.highlightText else textColor),
             decorationBox = { innerTextField ->
@@ -174,7 +179,7 @@ fun TvTextField(
                                         InputColors.highlightText.copy(alpha = 0.6f)
                                     else 
                                         InputColors.normalText.copy(alpha = 0.6f),
-                                    fontSize = 16.sp
+                                    fontSize = textSize
                                 )
                             )
                         }
