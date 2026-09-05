@@ -5,7 +5,7 @@ Updated: 2026-09-05
 ## Última verificación
 
 La verificación del 2026-09-05 se ejecutó sobre `main` en el commit
-`5abafdc`. Los
+`11d2430`. Los
 tests unitarios Android, `lintMobileDebug`, las compilaciones Kotlin móvil/TV,
 `node --check`, las pruebas web y `npm run build:all` pasan. El empaquetado
 webOS genera su IPK y los bundles de Samsung/VIDAA se preparan honestamente
@@ -30,7 +30,10 @@ host y el Fire TV tampoco responde en la dirección conocida, así que no se
 declara instalación ni prueba real de hardware. GitHub CLI no tiene sesión
 autenticada y la consulta pública de releases devuelve 404; no se presenta una
 release APK como publicada sin confirmación de Actions. Apple sigue pendiente
-de compilación en macOS/Xcode.
+de una ejecución observada en macOS/Xcode; el repositorio ya incluye
+`apple.yml`, que compila y ejecuta el Swift Package en macOS cuando GitHub
+Actions dispone del runner correspondiente. Esto valida el paquete compartido,
+pero no equivale todavía a certificar una app firmada para iOS, iPadOS o tvOS.
 
 La base Apple solicita ahora `PlaybackInfo` antes de reproducir VOD y elige la
 fuente directa o remuxada devuelta por Jellyfin, conservando el stream genérico

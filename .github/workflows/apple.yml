@@ -8,6 +8,7 @@ on:
     paths:
       - 'apple/**'
       - '.github/workflows/apple.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,5 +22,9 @@ jobs:
         working-directory: apple
     steps:
       - uses: actions/checkout@v4
-      - name: Validar VeloraKit
+      - name: Mostrar toolchain Swift
+        run: swift --version
+      - name: Compilar paquete Apple
+        run: swift build
+      - name: Ejecutar tests del paquete Apple
         run: swift test

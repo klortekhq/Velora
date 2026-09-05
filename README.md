@@ -58,8 +58,8 @@ También están disponibles los controles de aspecto, audio, subtítulos y ajust
 | LG webOS | Cliente web de TV con navegación por mando; `.ipk` con `ares-package` |
 | Hisense VIDAA | Bundle HTML5 para publicación en la tienda/portal VIDAA |
 
-La base nativa compartida de Apple está en [`apple/`](apple/) y está preparada
-para validarse como Swift Package en macOS. En este entorno no hay macOS/Xcode,
+La base nativa compartida de Apple está en [`apple/`](apple/) y se valida como
+Swift Package en macOS mediante el workflow `apple.yml`. En este entorno no hay macOS/Xcode,
 por lo que esa compilación no se presenta como verificada. Las aplicaciones
 SwiftUI completas de iPhone, iPad y Apple TV todavía no están terminadas; se
 desarrollan como clientes Apple nativos,
