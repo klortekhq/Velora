@@ -12,6 +12,10 @@ assert.doesNotMatch(appSource, /(?:exception|error)\.message/);
 assert.match(appSource, /data-velora-image-id/);
 assert.match(appSource, /'X-Emby-Token': state\.token/);
 assert.match(appSource, /URL\.createObjectURL\(blob\)/);
+// Browser and Smart TV builds must not expose offline/download actions at all.
+// This is stronger than merely disabling a button at runtime: the shared web
+// surface must not accidentally reintroduce a mobile-only download affordance.
+assert.doesNotMatch(appSource, /\b(download|downloads|offline|descargar|descargas)\b/i);
 
 function detect(userAgent) {
   const listeners = {};
