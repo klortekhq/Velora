@@ -42,6 +42,13 @@ deprecaciones del SDK/Kotlin y del SDK XML local; no hay errores de compilación
 El commit documental `cd0da5d` conserva esa misma evidencia y actualiza este
 panel para que su revisión actual coincida con `main`.
 
+La verificación web del 2026-09-05 pasó `check-version-consistency.mjs`,
+`check-android-locales.mjs`, `check-apple-locales.mjs` y
+`web/scripts/test-platform.mjs`. `build-web.mjs all` volvió a generar el
+bundle de navegador, el IPK webOS y los bundles preparados de Samsung/VIDAA.
+Tizen continúa honestamente marcado como pendiente porque el CLI/SDK y la
+firma no están instalados en este entorno.
+
 La validación del 2026-09-05 sobre el commit actual compiló `assembleTvDebug`
 con éxito, instaló la APK resultante en el Fire TV AFTSS y la lanzó mediante
 ADB. El dispositivo informa `1.4.0-tv`/`versionCode 10400`; la actividad llegó
