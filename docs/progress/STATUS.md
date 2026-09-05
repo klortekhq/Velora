@@ -40,6 +40,12 @@ El pipeline de publicación ahora acepta correctamente hitos `vX.Y.0` con
 componentes de más de un dígito (`v1.10.0`, por ejemplo), manteniendo la
 política de releases significativas y la publicación conjunta de Android y web.
 
+La verificación web del 2026-09-05 volvió a pasar las pruebas de capacidades,
+seguridad e interacción de biblioteca. `build-web.mjs all` generó de nuevo el
+bundle de navegador, los paquetes preparados de Samsung y VIDAA y el IPK de
+webOS. La salida confirma que Tizen Studio/CLI sigue ausente en este host, por
+lo que no se afirma un WGT firmado ni validación en hardware Samsung.
+
 La batería unitaria móvil/TV se ejecutó de nuevo el 2026-09-05 y terminó con
 éxito. Incluye la agrupación de Live TV por ID de canal, el selector de fuentes
 (principal/IPTV), decisiones de reproducción, aspecto, seguridad de URLs y
