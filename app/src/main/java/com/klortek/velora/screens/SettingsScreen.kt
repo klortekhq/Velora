@@ -940,12 +940,12 @@ fun SettingsScreen(
                         SettingsCategory.JELLYSEERR -> {
                             // Jellyseerr URL
                             SettingButton(
-                                title = "URL de Jellyseerr",
+                                title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_url),
                                 description = if (jellyseerrUrl.isNotBlank()) 
                                     jellyseerrUrl
                                 else 
-                                    "Define la URL de tu servidor Jellyseerr/Overseerr",
-                                buttonText = if (jellyseerrUrl.isNotBlank()) "Cambiar" else "Definir URL",
+                                    stringResource(com.klortek.velora.R.string.settings_jellyseerr_url_description),
+                                buttonText = if (jellyseerrUrl.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_change) else stringResource(com.klortek.velora.R.string.settings_set_url),
                                 onClick = { showJellyseerrUrlDialog = true }
                             )
                             
@@ -967,14 +967,14 @@ fun SettingsScreen(
                                                 verticalArrangement = Arrangement.spacedBy(24.dp)
                                             ) {
                                                 Text(
-                                                    text = "URL de Jellyseerr",
+                                                    text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_url),
                                                     style = if (isTv) MaterialTheme.typography.headlineSmall else androidx.compose.material3.MaterialTheme.typography.titleLarge,
                                                     color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
                                                 )
                                                 
                                                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                                     Text(
-                                                        text = "Introduce la URL completa de tu instancia de Jellyseerr (por ejemplo, http://192.168.1.50:5055)",
+                                                        text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_url_dialog_description),
                                                         style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                                                         color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                                     )
@@ -982,7 +982,7 @@ fun SettingsScreen(
                                                     OutlinedTextField(
                                                          value = urlInput,
                                                          onValueChange = { urlInput = it },
-                                                         label = { Text("URL") },
+                                                         label = { Text(stringResource(com.klortek.velora.R.string.settings_url)) },
                                                          placeholder = { Text("http://ip:port") },
                                                          singleLine = true,
                                                          modifier = Modifier.fillMaxWidth(),
@@ -1109,7 +1109,7 @@ fun SettingsScreen(
                                         "Clave API configurada ✓" 
                                     else 
                                         "Consíguela en Ajustes > General de Jellyseerr",
-                                    buttonText = if (jellyseerrApiKey.isNotBlank()) "Cambiar" else "Definir clave",
+                                    buttonText = if (jellyseerrApiKey.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_change) else stringResource(com.klortek.velora.R.string.settings_set_key),
                                     onClick = { showJellyseerrApiKeyDialog = true }
                                 )
                                 
@@ -1331,7 +1331,7 @@ fun SettingsScreen(
                                                                         else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                                                                     )
                                                                 ) {
-                                                                    Text("Local/Correo")
+                                                                    Text(stringResource(com.klortek.velora.R.string.settings_local_email))
                                                                 }
                                                             } else {
                                                                 androidx.compose.material3.Button(
@@ -1354,7 +1354,7 @@ fun SettingsScreen(
                                                                         else androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
                                                                     )
                                                                 ) {
-                                                                    androidx.compose.material3.Text("Local/Correo", color = if (!useJellyfinAuth) Color.White else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                                    androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_local_email), color = if (!useJellyfinAuth) Color.White else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
                                                                 }
                                                             }
                                                         }
@@ -1362,7 +1362,7 @@ fun SettingsScreen(
                                                         OutlinedTextField(
                                                              value = usernameInput,
                                                              onValueChange = { usernameInput = it },
-                                                             label = { Text(if (useJellyfinAuth) "Usuario de Jellyfin" else "Correo electrónico") },
+                                                             label = { Text(if (useJellyfinAuth) stringResource(com.klortek.velora.R.string.settings_jellyfin_username) else stringResource(com.klortek.velora.R.string.settings_username)) },
                                                              singleLine = true,
                                                              enabled = !isLoggingIn,
                                                              modifier = Modifier.fillMaxWidth(),
@@ -1382,7 +1382,7 @@ fun SettingsScreen(
                                                          OutlinedTextField(
                                                              value = passwordInput,
                                                              onValueChange = { passwordInput = it },
-                                                             label = { Text("Contraseña") },
+                                                             label = { Text(stringResource(com.klortek.velora.R.string.settings_password)) },
                                                              singleLine = true,
                                                              enabled = !isLoggingIn,
                                                              visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
@@ -1411,7 +1411,7 @@ fun SettingsScreen(
                                                                     strokeWidth = 2.dp
                                                                 )
                                                                 Spacer(modifier = Modifier.width(12.dp))
-                                                                Text("Iniciando sesión…", style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium)
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_signing_in), style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium)
                                                             }
                                                         }
                                                         
@@ -1443,7 +1443,7 @@ fun SettingsScreen(
                                                             Button(
                                                                 onClick = {
                                                                     if (jellyseerrUrl.isBlank()) {
-                                                                        loginError = "Define primero la URL de Jellyseerr"
+                                                                        loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_url_required)
                                                                         return@Button
                                                                     }
                                                                     if (usernameInput.isBlank() || passwordInput.isBlank()) {
@@ -1507,7 +1507,7 @@ fun SettingsScreen(
                                                             androidx.compose.material3.Button(
                                                                 onClick = {
                                                                     if (jellyseerrUrl.isBlank()) {
-                                                                        loginError = "Define primero la URL de Jellyseerr"
+                                                                        loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_url_required)
                                                                         return@Button
                                                                     }
                                                                     if (usernameInput.isBlank() || passwordInput.isBlank()) {
@@ -1595,8 +1595,8 @@ fun SettingsScreen(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 
                                 SettingToggle(
-                                    title = "Activar pestaña Descubrir",
-                                    description = "Muestra contenido de tendencias, popular y próximos estrenos de Jellyseerr.",
+                                    title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_discover),
+                                    description = stringResource(com.klortek.velora.R.string.settings_jellyseerr_discover_description),
                                     isEnabled = jellyseerrEnabled,
                                     onToggle = {
                                         jellyseerrEnabled = !jellyseerrEnabled
@@ -1605,8 +1605,8 @@ fun SettingsScreen(
                                 )
                                 
                                 SettingToggle(
-                                    title = "Incluir en búsquedas",
-                                    description = "Muestra resultados de Jellyseerr en la pantalla principal de búsqueda.",
+                                    title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_search),
+                                    description = stringResource(com.klortek.velora.R.string.settings_jellyseerr_search_description),
                                     isEnabled = jellyseerrSearchEnabled,
                                     onToggle = {
                                         jellyseerrSearchEnabled = !jellyseerrSearchEnabled
@@ -1621,12 +1621,12 @@ fun SettingsScreen(
                             var showTmdbKeyDialog by remember { mutableStateOf(false) }
                             
                             SettingButton(
-                                title = "Clave API de TMDB (tráilers)",
+                                title = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key),
                                 description = if (tmdbApiKey.isNotBlank()) 
-                                    "Clave de TMDB configurada ✓" 
+                                    stringResource(com.klortek.velora.R.string.settings_tmdb_api_key_configured)
                                 else 
-                                    "Necesaria para obtener tráilers directamente de The Movie Database",
-                                buttonText = if (tmdbApiKey.isNotBlank()) "Cambiar" else "Definir clave",
+                                    stringResource(com.klortek.velora.R.string.settings_tmdb_api_key_description),
+                                buttonText = if (tmdbApiKey.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_change) else stringResource(com.klortek.velora.R.string.settings_set_key),
                                 onClick = { showTmdbKeyDialog = true }
                             )
                             
@@ -1653,12 +1653,12 @@ fun SettingsScreen(
                                             ) {
                                                 if (isTv) {
                                                     Text(
-                                                        text = "Clave API de TMDB",
+                                                        text = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key),
                                                         style = MaterialTheme.typography.headlineSmall
                                                     )
                                                 } else {
                                                     androidx.compose.material3.Text(
-                                                        text = "Clave API de TMDB",
+                                                        text = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key),
                                                         style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
                                                     )
                                                 }
@@ -1666,13 +1666,13 @@ fun SettingsScreen(
                                                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                                     if (isTv) {
                                                         Text(
-                                                            text = "Introduce tu clave API de TMDB para obtener tráilers directamente de The Movie Database.",
+                                                            text = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key_dialog_description),
                                                             style = MaterialTheme.typography.bodyMedium,
                                                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                                         )
                                                     } else {
                                                         androidx.compose.material3.Text(
-                                                            text = "Introduce tu clave API de TMDB para obtener tráilers directamente de The Movie Database.",
+                                                            text = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key_dialog_description),
                                                             style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                                                             color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                                         )
@@ -1684,7 +1684,7 @@ fun SettingsScreen(
                                                              apiKeyInput = it
                                                              verificationError = null 
                                                          },
-                                                         label = { Text("Clave API de TMDB") },
+                                                         label = { Text(stringResource(com.klortek.velora.R.string.settings_tmdb_api_key)) },
                                                          singleLine = true,
                                                          modifier = Modifier.fillMaxWidth(),
                                                          isError = verificationError != null,
