@@ -4,8 +4,10 @@
 LG webOS y Hisense VIDAA, conservando el mismo cliente de Velora y una capa
 de control común para mando, OK y Back.
 
-Samsung necesita un proyecto web Tizen con `config.xml` y genera `.wgt` con
-`tizen build-web` y `tizen package -t wgt`. LG usa `appinfo.json` y genera
+Samsung/Tizen necesita un proyecto web Tizen con `config.xml` y genera `.wgt`
+con `tizen build-web` y `tizen package -t wgt`. El empaquetador acepta tanto
+el destino histórico `samsung` como el alias explícito `tizen`, y deja el
+artefacto preparado en `outputs/web/samsung`. LG usa `appinfo.json` y genera
 `.ipk` con `ares-package`. VIDAA utiliza aplicaciones HTML5 alojadas y su
 publicación oficial se tramita mediante el portal/tienda VIDAA; no hay un
 formato universal `.vpk` que pueda generarse sin el SDK y certificado del

@@ -52,7 +52,9 @@ await cp(join(root, 'platforms'), join(out, 'platforms'), { recursive: true });
 
 const results = [];
 
-if (target === 'samsung' || target === 'all') {
+// Samsung TV is the Tizen target. Keep `samsung` as the historical output
+// name and accept `tizen` as an explicit platform alias for CI/store work.
+if (target === 'samsung' || target === 'tizen' || target === 'all') {
   const stage = resolve(out, 'samsung');
   await copyCommon(stage);
   await copyFile(join(root, 'platforms', 'samsung', 'config.xml'), join(stage, 'config.xml'));

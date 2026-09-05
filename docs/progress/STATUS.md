@@ -1905,3 +1905,9 @@ errores transitorios: 408, 429 y respuestas 5xx se reintentan; errores como
 cambio temporal de ciclo de vida o restricciones, se conserva el archivo
 parcial para reanudarlo. Las pruebas offline y las compilaciones móvil/TV
 pasan; la prueba E2E en dispositivos reales sigue pendiente.
+
+El empaquetado web acepta ahora `tizen` como alias explícito del destino
+Samsung Tizen, manteniendo `samsung` por compatibilidad y dejando claro que
+un `.wgt` publicable requiere Tizen Studio y firma del fabricante. La prueba
+`node web/scripts/build-web.mjs tizen` pasa en este entorno y reporta
+honestamente la ausencia local de esa herramienta.
