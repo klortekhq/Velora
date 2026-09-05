@@ -68,6 +68,11 @@ ofrece una salida táctil y otra enfocada a mando. `testMobileDebugUnitTest`,
 terminaron correctamente. El Fire TV volvió a quedar en primer plano con
 `com.klortek.velora.tv` activo y sin excepciones de la aplicación.
 
+La prueba autenticada contra `http://192.168.100.201:8096` del mismo día llegó
+al servidor, pero Jellyfin respondió HTTP 401. No se considera validado el
+login ni Live TV contra ese servidor hasta revisar las credenciales o el
+usuario activo; el smoke test no guarda ni imprime la contraseña.
+
 El flujo Android queda preparado para firma de distribución opcional mediante
 los cuatro secretos `VELORA_ANDROID_*` de GitHub Actions. Sin ellos, conserva
 los APK release unsigned de QA; con ellos, cambia el nombre del artefacto a
