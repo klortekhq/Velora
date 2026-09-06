@@ -270,6 +270,7 @@
     itemsTotalCount: 0,
     itemsPageSize: 150,
     liveChannels: [],
+    liveChannelGroups: Object.create(null),
     query: '',
     settingsOpen: false,
     playingItem: null,
@@ -626,6 +627,13 @@
   function liveSection(title, channels) {
     if (!channels.length) return '';
     channels = groupLiveTvChannels(channels);
+    // Keep the normalized groups beside the rendered rows so the click and
+    // keyboard handlers can open the source picker instead of silently
+    // discarding alternate Jellyfin MediaSources.
+    state.liveChannelGroups = Object.create(null);
+    channels.forEach(function (group) {
+      state.liveChannelGroups[group.channelId] = group;
+    });
     return '<section><h2>' + esc(title) + '</h2><div class="live-grid">' +
       channels.map(function (group) {
         var channel = group.primary;
@@ -716,6 +724,12 @@
     if (first) first.focus();
   }
 
+  function liveRowAction(group) {
+    return group && group.channels && group.channels.length > 1
+      ? 'source-picker'
+      : 'open-item';
+  }
+
   function liveChannelGroups(channels) {
     var groups = Object.create(null);
     channels.forEach(function (channel) {
@@ -753,7 +767,14 @@
      };
     });
     Array.prototype.forEach.call(document.querySelectorAll('.live-row'), function (row) {
-      var open = function () { openItem(row.getAttribute('data-id')); };
+      var open = function () {
+        var group = state.liveChannelGroups[row.getAttribute('data-id')];
+        if (liveRowAction(group) === 'source-picker') {
+          showLiveSourcePicker(group);
+        } else {
+          openItem(row.getAttribute('data-id'));
+        }
+      };
       row.onclick = open;
       row.onkeydown = function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
