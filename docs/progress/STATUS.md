@@ -64,6 +64,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Jellyfin.
 - Android migra credenciales a Keystore; Apple usa Keychain; el cliente web
   usa su proxy autenticado sin poner tokens en la URL del vídeo.
+- El fallback MPV Android comparte el constructor de cabeceras MediaBrowser
+  con la ruta de reproducción y sus pruebas de seguridad siguen pasando.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
 
