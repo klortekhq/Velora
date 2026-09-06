@@ -59,6 +59,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - El descubrimiento de Jellyfin prioriza ahora HTTP para IPs locales con puerto
   explícito (como el endpoint LAN habitual 8096), evitando consumir primero el
   timeout TLS sobre un puerto HTTP; HTTPS sigue disponible como fallback.
+- La pantalla de conexión usa recursos localizados para título, dirección,
+  descubrimiento, detección automática, selección de servidor y errores; los
+  catálogos garantizados español, inglés, francés y alemán mantienen las 450
+  claves sincronizadas.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
   de reproducción persistente. El cliente web carga la biblioteca por páginas
   y permite ampliar los resultados sin bloquear el inicio.
@@ -182,6 +186,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL` en 11m49s tras corregir el
   orden HTTP/HTTPS del descubrimiento local; se añadieron pruebas unitarias
   para IP local con puerto explícito y URL HTTP completa.
+- `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL` en 4m42s tras localizar los
+  mensajes de la pantalla de conexión y pasar el catálogo Android a 450 claves.
 - Verificación fresca sobre `main` (`56be881`): `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m07s;
   la caché aislada de Gradle se creó correctamente.
@@ -396,7 +402,7 @@ relevantes.
 | Plataforma | Estado verificable |
 | --- | --- |
 | Android móvil/tablet | Compila y pasa tests unitarios locales |
-| Android TV / Fire TV | Compila y pasa tests unitarios; hardware no validado en este host |
+| Android TV / Fire TV | Compila y pasa tests unitarios; conexión/pantalla de acceso validada en Fire TV AFTSS; reproducción y Live TV aún pendientes |
 | Web | Bundle y tests locales correctos |
 | Samsung Tizen | Bundle preparado; falta Tizen Studio, firma y dispositivo/emulador |
 | LG webOS | IPK generado con `ares-package`; falta dispositivo/emulador |

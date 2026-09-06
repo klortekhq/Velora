@@ -41,6 +41,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -113,13 +114,13 @@ fun ServerEntryScreen(
     
     fun connect() {
         if (serverAddress.isBlank()) {
-            errorMessage = "Server address cannot be empty"
+            errorMessage = context.getString(com.klortek.velora.R.string.server_entry_empty_address)
             return
         }
         
         isConnecting = true
         errorMessage = null
-        statusMessage = "Discovering server..."
+        statusMessage = context.getString(com.klortek.velora.R.string.server_entry_discovering)
         
         connectToServer(
             address = serverAddress,
@@ -141,7 +142,7 @@ fun ServerEntryScreen(
     fun autoDetect() {
         isScanning = true
         errorMessage = null
-        statusMessage = "Scanning local network..."
+        statusMessage = context.getString(com.klortek.velora.R.string.server_entry_scanning)
         discoveredServers = emptyList()
         
         coroutineScope.launch {
@@ -154,13 +155,13 @@ fun ServerEntryScreen(
             
             if (servers.isEmpty()) {
                 statusMessage = null
-                errorMessage = "No servers found on local network"
+                errorMessage = context.getString(com.klortek.velora.R.string.server_entry_no_servers)
             } else if (servers.size == 1) {
                 // Auto-fill if only one server found
                 serverAddress = servers.first().address
-                statusMessage = "Found: ${servers.first().name}"
+                statusMessage = context.getString(com.klortek.velora.R.string.server_entry_found_one, servers.first().name)
             } else {
-                statusMessage = "Found ${servers.size} servers - select one below"
+                statusMessage = context.getString(com.klortek.velora.R.string.server_entry_found_many, servers.size)
             }
         }
     }
@@ -186,14 +187,14 @@ fun ServerEntryScreen(
         ) {
             // Title
             Text(
-                text = "Introducir dirección del servidor",
+                text = stringResource(com.klortek.velora.R.string.server_entry_title),
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             
             // Label
             Text(
-                text = "Dirección válida del servidor",
+                text = stringResource(com.klortek.velora.R.string.server_entry_valid_address),
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (addressFocused)
                     Color(0xFF9C27B0) // Purple label when focused for better visibility
@@ -206,7 +207,7 @@ fun ServerEntryScreen(
             TvTextField(
                 value = serverAddress,
                 onValueChange = { serverAddress = it },
-                label = "Dirección del servidor",
+                label = stringResource(com.klortek.velora.R.string.server_entry_address),
                 enabled = !isConnecting && prefillAddress == null,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Uri,
@@ -259,7 +260,7 @@ fun ServerEntryScreen(
                         )
                     ) {
                         Text(
-                            text = "Conectar",
+                            text = stringResource(com.klortek.velora.R.string.server_entry_connect),
                             style = MaterialTheme.typography.labelLarge
                         )
                     }
@@ -291,7 +292,7 @@ fun ServerEntryScreen(
                         )
                     ) {
                         Text(
-                        text = if (isScanning) "Buscando..." else "Detectar automáticamente",
+                        text = if (isScanning) stringResource(com.klortek.velora.R.string.server_entry_searching) else stringResource(com.klortek.velora.R.string.server_entry_detect),
                             style = MaterialTheme.typography.labelLarge
                         )
                     }
@@ -302,7 +303,7 @@ fun ServerEntryScreen(
                         modifier = Modifier.weight(1f)
                     ) {
                         MobileText(
-                            text = "Conectar",
+                            text = stringResource(com.klortek.velora.R.string.server_entry_connect),
                             style = androidx.compose.material3.MaterialTheme.typography.labelLarge
                         )
                     }
@@ -313,7 +314,7 @@ fun ServerEntryScreen(
                         modifier = Modifier.weight(1f)
                     ) {
                         MobileText(
-                            text = if (isScanning) "Buscando..." else "Detectar automáticamente",
+                            text = if (isScanning) stringResource(com.klortek.velora.R.string.server_entry_searching) else stringResource(com.klortek.velora.R.string.server_entry_detect),
                             style = androidx.compose.material3.MaterialTheme.typography.labelLarge
                         )
                     }
@@ -340,7 +341,7 @@ fun ServerEntryScreen(
             // Discovered servers list
             if (discoveredServers.isNotEmpty()) {
                 Text(
-                    text = "Servidores encontrados",
+                    text = stringResource(com.klortek.velora.R.string.server_entry_found_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
@@ -366,7 +367,7 @@ fun ServerEntryScreen(
                                 .clickable {
                                     serverAddress = server.address
                                     discoveredServers = emptyList()
-                                    statusMessage = "Selected: ${server.name}"
+                                    statusMessage = context.getString(com.klortek.velora.R.string.server_entry_selected, server.name)
                                 }
                                 .onFocusChanged { serverItemFocused = it.isFocused }
                                 .focusable()
@@ -422,11 +423,11 @@ private fun connectToServer(
     scope.launch {
         try {
             if (address.isBlank()) {
-                onResult(false, "Server address cannot be empty")
+                onResult(false, context.getString(com.klortek.velora.R.string.server_entry_empty_address))
                 return@launch
             }
             
-            onStatusUpdate?.invoke("Discovering server...")
+            onStatusUpdate?.invoke(context.getString(com.klortek.velora.R.string.server_entry_discovering))
             android.util.Log.d("ServerEntry", "Starting server discovery for: $address")
             
             // Use smart discovery to find the server
@@ -438,12 +439,12 @@ private fun connectToServer(
                 // Save the discovered URL (this is the working URL)
                 config.serverUrl = discoveredUrl
                 
-                onStatusUpdate?.invoke("Connected!")
+                onStatusUpdate?.invoke(context.getString(com.klortek.velora.R.string.server_entry_connected))
                 onResult(true, "")
             } else {
                 android.util.Log.w("ServerEntry", "❌ Server discovery failed for: $address")
                 
-                onResult(false, "Could not connect to Jellyfin server.\n\nPlease verify:\n• The address is correct\n• The server is running\n• You can access it from this network")
+                onResult(false, context.getString(com.klortek.velora.R.string.server_entry_connect_error))
             }
         } catch (e: Exception) {
             android.util.Log.e("ServerEntry", "Error during server discovery: ${SensitiveDataRedactor.message(e)}")
