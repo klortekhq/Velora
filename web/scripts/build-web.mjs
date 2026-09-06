@@ -63,6 +63,20 @@ if (target === 'samsung' || target === 'tizen' || target === 'all') {
   await makeLegacyBrowserCompatible(stage);
   const built = command('tizen', ['build-web', '--', '.'], stage);
   const packaged = built && command('tizen', ['package', '-t', 'wgt', '--', '.buildResult'], stage);
+  await writeBuildMetadata(stage, {
+    product: 'Velora',
+    version,
+    platform: 'Samsung Tizen',
+    kind: 'web',
+    entry: 'index.html',
+    generatedAt: new Date().toISOString(),
+    installablePackage: packaged,
+    packaging: packaged ? 'wgt' : 'bundle',
+    requiresTizenStudio: true,
+    note: packaged
+      ? 'Paquete WGT generado por Tizen CLI; la firma y validación en dispositivo siguen siendo requisitos de tienda.'
+      : 'Bundle preparado; falta Tizen Studio/CLI o un perfil de firma.'
+  });
   if (requireInstallable && !packaged) {
     throw new Error('Tizen Studio/CLI o un perfil de firma no está disponible; no se genera un WGT publicable');
   }
@@ -77,7 +91,22 @@ if (target === 'webos' || target === 'all') {
   await copyFile(join(root, 'platforms', 'webos', 'appinfo.json'), join(stage, 'appinfo.json'));
   await copyFile(join(root, 'platforms', 'webos', 'icon.png'), join(stage, 'icon.png'));
   await makeLegacyBrowserCompatible(stage);
-  results.push(command('ares-package', ['.'], stage)
+  const packaged = command('ares-package', ['.'], stage);
+  await writeBuildMetadata(stage, {
+    product: 'Velora',
+    version,
+    platform: 'LG webOS',
+    kind: 'web',
+    entry: 'index.html',
+    generatedAt: new Date().toISOString(),
+    installablePackage: packaged,
+    packaging: packaged ? 'ipk' : 'bundle',
+    requiresAres: true,
+    note: packaged
+      ? 'Paquete IPK generado por ares-package; la firma y validación en dispositivo siguen siendo requisitos de tienda.'
+      : 'Bundle preparado; falta ares-package o certificado.'
+  });
+  results.push(packaged
     ? 'webOS IPK generado con ares-package'
     : 'webOS bundle preparado; falta ares-package o certificado');
 }
