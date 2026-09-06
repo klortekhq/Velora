@@ -345,8 +345,11 @@ commit `adc1a5f`):
 La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
 terminó en `BUILD SUCCESSFUL` en 9m24s. Siguen siendo APK unsigned de QA.
 
-Ambas variantes se generaron correctamente en QA el 2026-09-06; no se han
-instalado en hardware porque ningún dispositivo ADB respondió.
+Ambas variantes se generaron correctamente en QA el 2026-09-06. La variante TV
+se instaló correctamente mediante ADB en un Fire TV AFTSS (1920×1080) y la
+actividad principal arrancó; la pantalla de conexión, el campo de dirección y
+los botones se verificaron visualmente. No se considera una certificación de
+reproducción ni de Live TV hasta completar una sesión Jellyfin autenticada.
 
 La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
 terminó en `BUILD SUCCESSFUL` el 2026-09-06. La regeneración web conjunta y
@@ -408,12 +411,14 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - El smoke test valida que `/System/Info/Public` sea JSON Jellyfin, elimina
   espacios accidentales de la URL y conserva el diagnóstico de respuestas sin
   código HTTP, sin registrar credenciales ni tokens.
-- ADB está disponible en el host, pero no hay ningún dispositivo conectado ni
-  servicio mDNS del Fire TV visible; no se declara instalación ni prueba
-  física reciente en Fire TV o móvil.
-- Comprobación ADB más reciente del 2026-09-06: `adb get-state` devolvió
-  `no devices/emulators found`; no se intentó instalar ni controlar el Fire TV
-  sin una conexión verificable.
+- Comprobación ADB del 2026-09-06: Fire TV AFTSS conectado por ADB; instalación
+  del APK TV de QA correcta, arranque explícito de `MainActivity` correcto y
+  captura/UIAutomator confirmaron la pantalla de conexión a 1920×1080.
+- En la misma sesión, el servidor indicado fue alcanzable por red y por el
+  puerto configurado, pero la validación de `System/Info/Public` no devolvió un
+  servidor Jellyfin aceptable para Velora. La app mostró el error de conexión
+  sin cerrarse; no se continúa con credenciales ni se certifican catálogo,
+  Live TV, `PlaybackInfo` o reproducción.
 - Intento autenticado adicional del 2026-09-06 contra el servidor indicado:
   la primera llamada de login respondió `400` y el reintento con la cabecera
   oficial de cliente terminó por timeout; no se marca como válida ninguna
