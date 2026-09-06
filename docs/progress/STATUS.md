@@ -71,6 +71,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   VIDAA con un paquete firmado.
 - El workflow de releases web ejecuta esa verificación después del build y
   antes de publicar los assets.
+- Apple: `PrivacyInfo.xcprivacy` está incluido en los recursos compartidos y
+  el CI comprueba sus claves y la declaración de no-tracking; la firma y la
+  validación final del bundle siguen requiriendo Xcode/macOS.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
 

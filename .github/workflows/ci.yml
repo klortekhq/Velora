@@ -102,6 +102,8 @@ jobs:
           node-version: '20'
       - name: Validate Apple localization catalogues
         run: node scripts/check-apple-locales.mjs
+      - name: Validate Apple privacy manifest
+        run: node scripts/check-apple-privacy-manifest.mjs
       - name: Test VeloraKit
         run: swift test --package-path apple --parallel
       - name: Build native package entrypoints

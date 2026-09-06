@@ -29,6 +29,9 @@ jobs:
       - name: Validar catálogos Apple
         working-directory: ${{ github.workspace }}
         run: node scripts/check-apple-locales.mjs
+      - name: Validar manifiesto de privacidad Apple
+        working-directory: ${{ github.workspace }}
+        run: node scripts/check-apple-privacy-manifest.mjs
       - name: Mostrar toolchain Swift
         run: swift --version
       - name: Compilar paquete Apple
