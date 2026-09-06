@@ -189,6 +189,16 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 Son builds `unsigned` para QA, no releases de distribución:
 
+Builds debug del estado actual `7346a09`:
+
+- Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`, 76,2 MB,
+  SHA-256 `CD46C39A53CE54E71CFED23A7A82ACD29C49B8F698F561F10FD65A051E411F68`.
+- TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, 76,2 MB,
+  SHA-256 `5E18C2559B44D06F7FD4D5C4068FBFA557923EB44BB200CD9CAE3E60A29D20C0`.
+
+Ambas variantes se generaron correctamente en QA el 2026-09-06; no se han
+instalado en hardware porque ningún dispositivo ADB respondió.
+
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
   SHA-256 `9B59B4D0CF60000F1864D012F307591E8DFC9D544146FD476265C8232B2467BE`.
 - TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`
