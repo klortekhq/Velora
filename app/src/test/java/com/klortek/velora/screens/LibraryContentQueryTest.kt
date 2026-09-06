@@ -54,4 +54,36 @@ class LibraryContentQueryTest {
         assertEquals(listOf("Comedy", "Drama"), genres)
         assertTrue(genres.zipWithNext().all { (a, b) -> a.compareTo(b, ignoreCase = true) < 0 })
     }
+
+    @Test
+    fun queryRemainsUsableWithLargeSyntheticLibraries() {
+        listOf(1_000, 10_000, 50_000).forEach { size ->
+            val synthetic = List(size) { index ->
+                JellyfinItem(
+                    Id = "synthetic-$index",
+                    Name = "Title ${index % 997}",
+                    DateCreated = "2025-${(index % 12 + 1).toString().padStart(2, '0')}-01",
+                    Genres = if (index % 2 == 0) listOf("Drama") else listOf("Comedy"),
+                    CommunityRating = (index % 100) / 10f,
+                    UserData = UserData(Played = index % 3 == 0)
+                )
+            }
+
+            val result = queryLibraryItems(
+                items = synthetic,
+                sortMode = LibrarySortMode.Name,
+                descending = false,
+                favoritesOnly = false,
+                playbackFilter = LibraryPlaybackFilter.Unwatched,
+                genre = "Drama"
+            )
+
+            val expected = (0 until size).count { index -> index % 2 == 0 && index % 3 != 0 }
+            assertEquals(expected, result.size)
+            assertTrue(result.zipWithNext().all { (left, right) ->
+                left.Name.lowercase() <= right.Name.lowercase() ||
+                    left.Name.equals(right.Name, ignoreCase = true)
+            })
+        }
+    }
 }
