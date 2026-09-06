@@ -25,6 +25,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Live TV: al agrupar variantes del mismo canal se conserva como fila principal
   la fuente con programa actual, favorito o imagen más completos, sin perder
   ninguna opción seleccionable.
+- Reproducción Android: las cabeceras de autenticación de Jellyfin quedan
+  limitadas al servidor configurado; las fuentes directas de proveedores
+  externos no reciben tokens del usuario.
 - Web: la limpieza de URLs de reproducción elimina todos los nombres de
   credencial de Jellyfin sin depender de la capitalización, tanto en el cliente
   como en el proxy autenticado.

@@ -94,6 +94,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   aplica la misma defensa antes de entregar el destino al proxy.
 - El fallback MPV Android comparte el constructor de cabeceras MediaBrowser
   con la ruta de reproducción y sus pruebas de seguridad siguen pasando.
+- Android: Media3/ExoPlayer y MPV solo envían cabeceras Jellyfin a recursos
+  del servidor configurado; una URL directa externa de Live TV o tráiler no
+  recibe el token y Live TV vuelve al endpoint HLS del servidor cuando existe.
 - El verificador de empaquetado Smart TV no permite declarar un WGT/IPK
   instalable si el artefacto no existe; tampoco confunde el bundle HTML5 de
   VIDAA con un paquete firmado.
@@ -237,6 +240,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `LiveTvChannelQueryTest` y `node web/scripts/test-platform.mjs` cubren que
   una variante con programa actual/favorito sea la fila principal sin perder
   las fuentes restantes.
+- `MediaUrlSecurityTest` cubre el alcance por esquema, host, puerto y prefijo
+  de ruta para impedir que una fuente externa reciba cabeceras Jellyfin.
 
 ## Artefactos Android locales
 
