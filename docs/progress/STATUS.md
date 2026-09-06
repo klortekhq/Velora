@@ -11,6 +11,9 @@ una comprobación no se interpreta como soporte certificado.
 
 - Rama de trabajo y rama remota: `main`.
 - No hay ramas de producto adicionales en GitHub.
+- La única rama remota verificada apunta a `d363dba`. El tag remoto `v1.4.0`
+  existe, pero apunta a un commit anterior (`3243d50`); por tanto no se
+  presenta esa release como equivalente al estado actual de `main`.
 - Último cambio funcional documentado: la ficha móvil etiqueta el bloque de
   códecs, resolución, fps, HDR/SDR, audio y contenedor como información
   técnica, sin presentar nombres ni rutas de archivo.
@@ -150,6 +153,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - Validar webOS, VIDAA y Fire TV en sus dispositivos reales.
 - Configurar firma Android y credenciales de publicación antes de crear una
   release pública.
+- Reconciliar el tag/release `v1.4.0` con una build firmada del estado que se
+  quiera distribuir; no se mueve ni sobrescribe el tag existente
+  automáticamente.
 - Completar pruebas de rendimiento con bibliotecas sintéticas de 1.000,
   10.000 y 50.000 elementos.
 
