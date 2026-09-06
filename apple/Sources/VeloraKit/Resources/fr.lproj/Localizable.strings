@@ -36,6 +36,8 @@
 "Unable to download" = "Téléchargement impossible";
 "Unable to remove download" = "Suppression du téléchargement impossible";
 "Play" = "Lire";
+"Fullscreen" = "Plein écran";
+"Exit fullscreen" = "Quitter le plein écran";
 "Live TV" = "TV en direct";
 "Subtitles" = "Sous-titres";
 "Quality" = "Qualité";
