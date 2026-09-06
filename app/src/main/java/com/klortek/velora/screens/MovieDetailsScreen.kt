@@ -2094,7 +2094,7 @@ fun ActionButtonsRow(
                     // Prompt user to enter TMDB key
                     android.widget.Toast.makeText(
                         context,
-                        "Please enter your TMDB API key in settings to enable trailers",
+                        context.getString(com.klortek.velora.R.string.trailer_tmdb_key_required),
                         android.widget.Toast.LENGTH_LONG
                     ).show()
                     onShowSettings()

@@ -241,6 +241,7 @@ Bitte überprüfe:
   <string name="personal_settings">Persönliche Einstellungen</string>
   <string name="watch_trailer_1">Trailer ansehen</string>
   <string name="watch_trailer_2">KOSTENLOS</string>
+  <string name="trailer_tmdb_key_required">Gib deinen TMDB-API-Schlüssel in den Einstellungen ein, um Trailer zu aktivieren</string>
   <string name="rent_1">Für einen Tag mieten</string>
   <string name="rent_2">Ab 1,99 $</string>
   <string name="buy_1">Kaufen und behalten</string>

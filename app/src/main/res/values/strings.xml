@@ -7,6 +7,7 @@
     <string name="personal_settings">Ajustes personales</string>
     <string name="watch_trailer_1">Ver tráiler</string>
     <string name="watch_trailer_2">GRATIS</string>
+    <string name="trailer_tmdb_key_required">Introduce tu clave de API de TMDB en Ajustes para activar los tráileres</string>
     <string name="rent_1">Alquilar por día</string>
     <string name="rent_2">Desde 1,99 $</string>
     <string name="buy_1">Comprar y conservar</string>
