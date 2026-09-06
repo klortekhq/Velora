@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `a58101f`.
+Revisión funcional actual: commit `977ea84`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -11,8 +11,9 @@ una comprobación no se interpreta como soporte certificado.
 
 - Rama de trabajo y rama remota: `main`.
 - No hay ramas de producto adicionales en GitHub.
-- Último cambio funcional documentado: normalización del parseo de idiomas de
-  audio en las fichas de películas y series Android.
+- Último cambio funcional documentado: la ficha móvil etiqueta el bloque de
+  códecs, resolución, fps, HDR/SDR, audio y contenedor como información
+  técnica, sin presentar nombres ni rutas de archivo.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
@@ -50,6 +51,8 @@ una comprobación no se interpreta como soporte certificado.
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- La compilación y los tests móvil/TV vuelven a terminar correctamente tras
+  el ajuste de los textos de información técnica.
 - Los controles Android del reproductor se recompilaron con semántica de botón
   para mando, toque y tecnologías de asistencia; las suites móvil y TV vuelven
   a terminar correctamente.
