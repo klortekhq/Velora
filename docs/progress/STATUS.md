@@ -191,6 +191,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   para IP local con puerto explícito y URL HTTP completa.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL` en 4m42s tras localizar los
   mensajes de la pantalla de conexión y pasar el catálogo Android a 450 claves.
+- `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` en 3m28s después del
+  ajuste compartido del selector de fuentes Live TV.
 - Verificación fresca sobre `main` (`56be881`): `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m07s;
   la caché aislada de Gradle se creó correctamente.
@@ -449,6 +451,11 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   oficial de cliente terminó por timeout; no se marca como válida ninguna
   prueba de catálogo, Live TV, `PlaybackInfo` o reproducción y no se guardaron
   credenciales ni tokens.
+- Revalidación del endpoint LAN indicado en la misma fecha: la información
+  pública de Jellyfin respondió correctamente y el puerto HTTP estaba abierto,
+  pero la petición de autenticación volvió a agotar el tiempo de espera desde
+  el host de QA. Por ello siguen sin certificarse catálogo, Live TV,
+  `PlaybackInfo` o reproducción real.
 
 ## Pendiente verificable
 
