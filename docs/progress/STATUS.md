@@ -395,6 +395,14 @@ terminó en `BUILD SUCCESSFUL` el 2026-09-06. La regeneración web conjunta y
 mantiene como bundle sin Tizen Studio, webOS genera un IPK y VIDAA un bundle
 HTML5.
 
+Comprobación adicional en el Fire TV AFTSS del 2026-09-06: el cliente
+descubrió desde el dispositivo el endpoint HTTP local de Jellyfin
+`192.168.100.201:8096` y llegó correctamente a la pantalla de inicio de
+sesión. La llamada posterior a `Users/AuthenticateByName` terminó en
+`HttpRequestTimeoutException` tras 30 segundos; por ello esta ejecución no
+certifica catálogo, Live TV ni reproducción autenticada. El proceso de Velora
+permaneció activo y no hubo excepción fatal.
+
 La carga inicial de las pantallas de películas y series ya no recorre la
 biblioteca completa mientras se muestran las recomendaciones. Se carga una
 primera página para que la transición sea inmediata y el catálogo completo se
