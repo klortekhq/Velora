@@ -2,7 +2,8 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `e59fab1`.
+Revisión funcional actual: commit `1d838c3` más la validación de identidad
+pública que se está incorporando en este cambio.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -20,6 +21,8 @@ una comprobación no se interpreta como soporte certificado.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
+- CI comprueba que README, atribuciones, documentación y código público no
+  reintroduzcan referencias heredadas a otros clientes o identidades antiguas.
 
 ## Funcionalidad implementada
 
@@ -115,6 +118,8 @@ una comprobación no se interpreta como soporte certificado.
   manual; los pull requests y los pushes normales quedan en el workflow de CI.
 - `node scripts/check-release-workflows.mjs`: correcto; protege esa política y
   evita publicar APKs por comodín.
+- `node scripts/check-public-identity.mjs`: correcto; no hay referencias
+  heredadas de identidad en el contenido público revisado.
 - `node scripts/build-web.mjs all`: correcto; vuelve a generar el bundle web,
   el paquete IPK de webOS y el bundle HTML5 de VIDAA. La salida Samsung queda
   preparada, pero no se presenta como `.wgt` firmado sin Tizen Studio.
