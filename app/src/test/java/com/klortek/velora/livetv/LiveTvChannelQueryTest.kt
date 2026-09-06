@@ -95,4 +95,22 @@ class LiveTvChannelQueryTest {
 
         assertEquals("Option 2", liveTvSourceLabel(channel, 2, "Option 2"))
     }
+
+    @Test
+    fun primaryRowKeepsGuideAndUserMetadataFromTheBestDuplicate() {
+        val stale = LiveTvChannel("same-id", "Canal", MediaSources = listOf(MediaSource(Id = "source-main")))
+        val current = LiveTvChannel(
+            "same-id",
+            "Canal IPTV",
+            UserData = LiveTvUserData(IsFavorite = true),
+            CurrentProgram = LiveTvProgram(Name = "Ahora"),
+            MediaSources = listOf(MediaSource(Id = "source-iptv"))
+        )
+
+        val group = groupLiveTvChannels(listOf(stale, current)).single()
+
+        assertEquals("Canal IPTV", group.primary.Name)
+        assertEquals("Ahora", group.primary.CurrentProgram?.Name)
+        assertEquals(2, group.channels.size)
+    }
 }

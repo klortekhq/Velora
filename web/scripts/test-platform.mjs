@@ -210,6 +210,12 @@ const duplicateGroup = testWindow.__veloraTest.groupLiveTvChannels([
 assert.equal(duplicateGroup.length, 1);
 assert.equal(duplicateGroup[0].channels.length, 1);
 assert.equal(testWindow.__veloraTest.liveRowAction(duplicateGroup[0]), 'open-item');
+const metadataGroup = testWindow.__veloraTest.groupLiveTvChannels([
+  { Id: 'metadata-channel', Name: 'Canal antiguo', MediaSources: [{ Id: 'source-a' }] },
+  { Id: 'metadata-channel', Name: 'Canal actual', CurrentProgram: { Name: 'Ahora' }, UserData: { IsFavorite: true }, MediaSources: [{ Id: 'source-b' }] }
+]);
+assert.equal(metadataGroup[0].primary.Name, 'Canal actual');
+assert.equal(metadataGroup[0].primary.CurrentProgram.Name, 'Ahora');
 const prototypeNamedGroup = testWindow.__veloraTest.groupLiveTvChannels([
   { Id: '__proto__', Name: 'Canal especial' }
 ]);
