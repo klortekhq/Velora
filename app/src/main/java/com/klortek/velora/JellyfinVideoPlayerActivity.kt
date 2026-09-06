@@ -26,6 +26,7 @@ import com.klortek.velora.player.mpv.MpvUrlBuilder
 import com.klortek.velora.screens.JellyfinVideoPlayerScreen
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.livetv.adjacentLiveTvChannelId
+import com.klortek.velora.platform.PlatformCapabilities
 import `is`.xyz.mpv.MPVLib
 
 @UnstableApi
@@ -152,6 +153,13 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         } else null
 
         if (!localPath.isNullOrBlank()) {
+            // Offline playback is intentionally mobile/tablet-only. Keep this
+            // guard at the player boundary as well as in the download UI so a
+            // TV deep link or stale intent cannot bypass the capability layer.
+            if (!PlatformCapabilities.supportsOfflineDownloads) {
+                finish()
+                return
+            }
             // Offline media belongs to Velora and must use the same default
             // Media3/ExoPlayer path as streamed media. DownloadManager may
             // return a content:// URI, which ExoPlayer resolves through the
