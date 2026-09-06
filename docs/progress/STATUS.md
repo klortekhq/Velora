@@ -213,7 +213,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Los workflows de publicación solo se activan con tags de versión o ejecución
   manual; los pull requests y los pushes normales quedan en el workflow de CI.
 - `node scripts/check-release-workflows.mjs`: correcto; protege esa política y
-  evita publicar APKs por comodín.
+  evita publicar APKs por comodín. La ejecución manual queda limitada también a
+  etiquetas públicas `vX.Y.0`, igual que el disparador automático.
 - `node scripts/check-offline-surface-policy.mjs`: correcto; verifica el límite
   mobile/tablet-only en Android, Apple, navegador y Smart TV, incluida la
   frontera del reproductor Android.

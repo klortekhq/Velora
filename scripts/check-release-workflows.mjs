@@ -11,6 +11,7 @@ for (const file of workflows) {
   assert.doesNotMatch(source, /^\s*pull_request\s*:/m, `${file}: no debe publicar desde pull requests`);
   assert.match(source, /^\s*workflow_dispatch\s*:/m, `${file}: falta ejecución manual`);
   assert.match(source, /tags:[\s\S]*?-\s*['"]v\*\.\*\.0['"]/, `${file}: falta el filtro de tags de versión`);
+  assert.match(source, /RELEASE_TAG.*\^v\[0-9\]\+\\\.\[0-9\]\+\\\.0\$/, `${file}: la ejecución manual debe aceptar solo etiquetas vX.Y.0`);
   assert.match(source, /permissions:\s*\n\s*contents:\s*write/, `${file}: falta permiso de publicación explícito`);
   assert.match(source, /softprops\/action-gh-release@v2/, `${file}: falta la acción de release`);
 }
