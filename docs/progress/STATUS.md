@@ -63,6 +63,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple móvil/tablet conserva la calidad elegida en cada descarga offline y
   migra catálogos anteriores sin ese campo a Original; la suite Swift sigue
   pendiente de ejecución en macOS porque este host no tiene Xcode.
+- Apple: la biblioteca inicial se solicita en páginas de 100 elementos y la
+  cuadrícula pide la siguiente página al alcanzar el final, sin imponer un
+  límite artificial al catálogo.
 - La migración Android desde el índice JSON antiguo conserva también checksum,
   fuente, trabajo, progreso, fechas, estado de visto y protección de descarga
   antes de pasar a SQLite.
@@ -173,6 +176,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `frame-ancestors`, `object-src` y la política `no-referrer` del cliente web.
 - Apple: la cabecera de autenticación usa ahora el idioma seleccionado por el
   usuario; la compilación Swift queda pendiente de la ejecución macOS de CI.
+- Apple: la carga incremental de bibliotecas grandes queda implementada en el
+  cliente Swift; falta confirmar la compilación y las pruebas en macOS.
 - Apple: se añadió una prueba de regresión para impedir que el token se aplique
   a rutas fuera del prefijo del servidor configurado; requiere la ejecución
   Swift en macOS para quedar verificada.

@@ -225,15 +225,21 @@ public actor JellyfinClient {
             || candidatePath.hasPrefix(normalizedPrefix + "/")
     }
 
-    public func items(userID: String, parentID: String? = nil, includeTypes: [String] = []) async throws -> [JellyfinItem] {
+    public func itemsPage(userID: String, parentID: String? = nil, includeTypes: [String] = [], startIndex: Int = 0, limit: Int = 100) async throws -> JellyfinResult<JellyfinItem> {
         var components = URLComponents(url: baseURL.appendingPathComponent("Items"), resolvingAgainstBaseURL: false)
         var query = [URLQueryItem(name: "UserId", value: userID), URLQueryItem(name: "Recursive", value: "true")]
         if let parentID { query.append(URLQueryItem(name: "ParentId", value: parentID)) }
         if !includeTypes.isEmpty { query.append(URLQueryItem(name: "IncludeItemTypes", value: includeTypes.joined(separator: ","))) }
+        query.append(URLQueryItem(name: "StartIndex", value: String(max(0, startIndex))))
+        query.append(URLQueryItem(name: "Limit", value: String(max(1, min(limit, 500)))))
         query.append(URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,MediaSources,UserData"))
         components?.queryItems = query
         guard let url = components?.url else { throw ClientError.invalidServerURL }
-        return try await request(url, as: JellyfinResult<JellyfinItem>.self).items
+        return try await request(url, as: JellyfinResult<JellyfinItem>.self)
+    }
+
+    public func items(userID: String, parentID: String? = nil, includeTypes: [String] = []) async throws -> [JellyfinItem] {
+        try await itemsPage(userID: userID, parentID: parentID, includeTypes: includeTypes).items
     }
 
     public func items(userID: String, forPerson personID: String) async throws -> [JellyfinItem] {

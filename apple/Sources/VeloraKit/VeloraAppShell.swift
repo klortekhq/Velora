@@ -11,6 +11,8 @@ public final class VeloraAppModel: ObservableObject {
     @Published public private(set) var isAuthenticated = false
     @Published public private(set) var isLoading = false
     @Published public private(set) var items: [JellyfinItem] = []
+    @Published public private(set) var totalItemCount: Int?
+    @Published public private(set) var isLoadingMoreItems = false
     @Published public private(set) var liveTvChannels: [JellyfinLiveTvChannel] = []
     @Published public private(set) var offlineDownloads: [VeloraOfflineDownload] = []
     @Published public private(set) var downloadingItemID: String?
@@ -106,9 +108,11 @@ public final class VeloraAppModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
         do {
-            async let library = client.items(userID: session.userID, includeTypes: ["Movie", "Series"])
+            async let library = client.itemsPage(userID: session.userID, includeTypes: ["Movie", "Series"])
             async let channels = client.liveTvChannels(userID: session.userID)
-            items = try await library
+            let libraryPage = try await library
+            items = libraryPage.items
+            totalItemCount = libraryPage.totalRecordCount
             liveTvChannels = JellyfinLiveTvChannel.grouped((try? await channels) ?? [])
             let serverURL = (await client.serverURL()).absoluteString
             offlineDownloads = platform.supportsOfflineDownloads
@@ -120,11 +124,37 @@ public final class VeloraAppModel: ObservableObject {
         }
     }
 
+    /// Fetches the next library page only when the user reaches the end of the
+    /// grid. This keeps initial rendering responsive without hiding catalog
+    /// items behind an arbitrary cap.
+    public func loadMoreItems() async {
+        guard let session,
+              !isLoadingMoreItems,
+              let totalItemCount,
+              items.count < totalItemCount else { return }
+        isLoadingMoreItems = true
+        defer { isLoadingMoreItems = false }
+        do {
+            let page = try await client.itemsPage(
+                userID: session.userID,
+                includeTypes: ["Movie", "Series"],
+                startIndex: items.count
+            )
+            let existingIDs = Set(items.map(\.id))
+            items.append(contentsOf: page.items.filter { !existingIDs.contains($0.id) })
+            if let total = page.totalRecordCount { self.totalItemCount = total }
+        } catch {
+            errorMessage = String(localized: "Unable to load library", bundle: .module)
+        }
+    }
+
     public func signOut() async {
         await client.setAccessToken(nil)
         credentialStore.remove()
         session = nil
         items = []
+        totalItemCount = nil
+        isLoadingMoreItems = false
         liveTvChannels = []
         offlineDownloads = []
         isAuthenticated = false
@@ -310,7 +340,9 @@ public struct VeloraAppShell: View {
         Group {
             if model.isAuthenticated {
                 NavigationStack {
-                    VeloraLibraryView(title: String(localized: "Library", bundle: .module), items: model.items, artworkClient: model.jellyfinClient) { item in
+                    VeloraLibraryView(title: String(localized: "Library", bundle: .module), items: model.items, artworkClient: model.jellyfinClient, onReachEnd: {
+                        Task { await model.loadMoreItems() }
+                    }) { item in
                         selectedItem = item
                     }
                     .toolbar {
