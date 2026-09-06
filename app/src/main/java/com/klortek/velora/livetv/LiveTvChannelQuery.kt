@@ -48,7 +48,22 @@ fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup>
             )
         }
     }
-    return groups.map { (key, entries) -> LiveTvChannelGroup(key, entries.toList()) }
+    return groups.map { (key, entries) ->
+        // Some Jellyfin providers repeat the same channel row without a
+        // MediaSource. Do not turn that transport duplicate into a fake
+        // selectable option. Distinct source IDs (for example principal and
+        // IPTV) remain separate and therefore selectable.
+        val uniqueEntries = entries.distinctBy { channel ->
+            val sourceId = liveTvMediaSourceId(channel)
+            sourceId ?: listOf(
+                channel.Type.orEmpty(),
+                channel.ChannelNumber.orEmpty(),
+                channel.Name.trim().lowercase(),
+                channel.Tags.orEmpty().sorted().joinToString("|")
+            ).joinToString("|")
+        }
+        LiveTvChannelGroup(key, uniqueEntries)
+    }
 }
 
 /** Human-readable source label for the picker, never exposing URLs or tokens. */
