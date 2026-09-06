@@ -42,7 +42,10 @@ object UpdateService {
 
     /** Select only the APK matching this installation's form factor. */
     fun apkAssetFor(release: GitHubRelease, isTv: Boolean): GitHubAsset? {
-        val expected = if (isTv) "Velora-tv-release-unsigned.apk" else "Velora-mobile-release-unsigned.apk"
+        // Public releases contain signed APKs. Unsigned artifacts are kept for
+        // CI QA only and must never be offered as an in-app update because an
+        // unsigned package cannot replace the installed signed application.
+        val expected = if (isTv) "Velora-tv-release.apk" else "Velora-mobile-release.apk"
         return release.assets.firstOrNull { it.name == expected }
     }
     
