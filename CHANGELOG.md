@@ -4,6 +4,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Apple: las tarjetas de la filmografía ahora abren la ficha completa del
+  título seleccionado, en lugar de quedarse sin acción al pulsarlas.
 - Apple móvil/tablet: las descargas sin conexión conservan la calidad elegida
   (Original, High, Medium o Low) y los catálogos antiguos se migran de forma
   segura a Original.
