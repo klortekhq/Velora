@@ -64,6 +64,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Jellyfin.
 - Android migra credenciales a Keystore; Apple usa Keychain; el cliente web
   usa su proxy autenticado sin poner tokens en la URL del vídeo.
+- El proxy multimedia web aplica una segunda limpieza de parámetros sensibles
+  (`api_key`, `access_token`, `token` y equivalentes) antes de reenviar la
+  reproducción al servidor.
 - El fallback MPV Android comparte el constructor de cabeceras MediaBrowser
   con la ruta de reproducción y sus pruebas de seguridad siguen pasando.
 - El verificador de empaquetado Smart TV no permite declarar un WGT/IPK
