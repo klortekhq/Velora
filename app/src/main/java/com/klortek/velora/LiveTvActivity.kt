@@ -48,11 +48,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -651,6 +656,7 @@ private fun LiveTvFilterPill(label: String, selected: Boolean, onClick: () -> Un
             .background(if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
             .clickable(onClick = onClick)
             .focusable()
+            .semantics { role = Role.Button }
             .padding(horizontal = 14.dp, vertical = 8.dp)
     ) {
         Text(label, color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface, maxLines = 1)
@@ -664,12 +670,22 @@ private fun LiveTvTouchButton(
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
+    var focused by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .size(52.dp)
             .clip(RoundedCornerShape(26.dp))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = if (enabled) 1f else .45f))
-            .clickable(enabled = enabled, onClick = onClick),
+            .background(
+                if (focused) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.surface.copy(alpha = if (enabled) 1f else .45f)
+            )
+            .onFocusChanged { focused = it.isFocused }
+            .clickable(enabled = enabled, onClick = onClick)
+            .focusable(enabled)
+            .semantics {
+                this.contentDescription = description
+                role = Role.Button
+            },
         contentAlignment = Alignment.Center
     ) {
         Icon(icon, description, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(26.dp))
