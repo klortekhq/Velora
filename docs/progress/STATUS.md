@@ -193,6 +193,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   hosts, rutas, esquemas o credenciales incrustadas no confiables.
 - `node web/scripts/test-platform.mjs`: correcto; valida también CSP,
   `frame-ancestors`, `object-src` y la política `no-referrer` del cliente web.
+- Batería estática completa del 2026-09-06: identidad pública, versiones,
+  locales Android/Apple, privacidad Apple, política offline, contrato de
+  autenticación Jellyfin, releases y pruebas web terminaron correctamente.
+- `node web/scripts/build-web.mjs all` y `node scripts/check-tv-packaging-output.mjs`
+  terminaron correctamente; se generó el IPK webOS y los bundles Samsung y
+  VIDAA. Tizen sigue marcado como no instalable hasta disponer de Tizen
+  Studio/CLI y firma, sin presentarlo como paquete certificado.
 - Apple: la cabecera de autenticación usa ahora el idioma seleccionado por el
   usuario; la compilación Swift queda pendiente de la ejecución macOS de CI.
 - Apple: el inicio de sesión distingue y localiza credenciales rechazadas,
