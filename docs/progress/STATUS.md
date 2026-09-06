@@ -264,6 +264,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - La revalidación posterior de esta sesión no obtuvo respuesta HTTP del host
   configurado (`health=ERR`, `auth=ERR`); por tanto no se sustituye el resultado
   anterior ni se declara una prueba funcional nueva.
+- La comprobación más reciente de esta continuación obtuvo `health=200`, pero
+  la autenticación no completó una respuesta HTTP utilizable (`auth=ERR`); se
+  mantiene sin certificar la biblioteca, la reproducción y Live TV reales.
 - ADB está disponible en el host, pero no hay ningún dispositivo conectado ni
   servicio mDNS del Fire TV visible; no se declara instalación ni prueba
   física reciente en Fire TV o móvil.
