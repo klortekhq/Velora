@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `51bc769` más endurecimiento Apple pendiente de publicar.
+Revisión funcional actual: commit `15a7481`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
