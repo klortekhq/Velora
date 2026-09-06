@@ -11,6 +11,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Apple: la biblioteca usa páginas de 100 elementos y carga más contenido al
   llegar al final de la cuadrícula, evitando bloquear el inicio con catálogos
   grandes sin ocultar elementos.
+- Apple: las respuestas de catálogo son más ligeras al resolver las fuentes de
+  reproducción únicamente cuando el usuario inicia un título.
 - Android Live TV: la ruta predeterminada de ExoPlayer ya no fuerza H.264/AAC
   al abrir el HLS; conserva la decisión de Jellyfin y evita transcodificaciones
   innecesarias cuando el dispositivo puede reproducir la fuente original.
