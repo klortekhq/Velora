@@ -348,8 +348,8 @@ commit `adc1a5f`):
 - TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`,
   SHA-256 `1529907A1ABF0A0EF1E06F2F6C42CE822EDBE71B9D279D609BFC44C61431564C`.
 
-Build TV de QA posterior al ajuste de descubrimiento local (commit pendiente de
-este registro): `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+Build TV de QA posterior al ajuste de descubrimiento local (commit `74f70e7`):
+`app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
 `722D77BC445FF1232737CCCFD550BFFBAFA946577BE5795B59FD892252A02EA9`.
 
 La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
