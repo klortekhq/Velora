@@ -82,13 +82,15 @@ public struct VeloraLibraryView: View {
     public let items: [JellyfinItem]
     public let imageProvider: (JellyfinItem) -> Image?
     public let artworkClient: JellyfinClient?
+    public let onReachEnd: () -> Void
     public let onSelect: (JellyfinItem) -> Void
 
-    public init(title: String, items: [JellyfinItem], imageProvider: @escaping (JellyfinItem) -> Image? = { _ in nil }, artworkClient: JellyfinClient? = nil, onSelect: @escaping (JellyfinItem) -> Void) {
+    public init(title: String, items: [JellyfinItem], imageProvider: @escaping (JellyfinItem) -> Image? = { _ in nil }, artworkClient: JellyfinClient? = nil, onReachEnd: @escaping () -> Void = {}, onSelect: @escaping (JellyfinItem) -> Void) {
         self.title = title
         self.items = items
         self.imageProvider = imageProvider
         self.artworkClient = artworkClient
+        self.onReachEnd = onReachEnd
         self.onSelect = onSelect
     }
 
@@ -97,6 +99,9 @@ public struct VeloraLibraryView: View {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 16)], spacing: 20) {
                 ForEach(items) { item in
                     VeloraItemCard(item: item, image: imageProvider(item), artworkClient: artworkClient) { onSelect(item) }
+                        .onAppear {
+                            if item.id == items.last?.id { onReachEnd() }
+                        }
                 }
             }
             .padding()
