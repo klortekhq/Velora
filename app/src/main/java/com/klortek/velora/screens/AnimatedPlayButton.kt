@@ -60,14 +60,18 @@ fun AnimatedPlayButton(
 ) {
     var focused by remember { mutableStateOf(false) }
     
-    // Lottie glow animation composition (optional - will skip if resource not found)
-    val glowComposition by rememberLottieComposition(
-        spec = if (glowAnimationResId != null && glowAnimationResId != 0) {
-            LottieCompositionSpec.RawRes(glowAnimationResId)
-        } else {
-            LottieCompositionSpec.RawRes(0) // Will return null gracefully
-        }
-    )
+    // Lottie is optional. Do not manufacture RawRes(0): it is not a valid
+    // Android resource and can make an otherwise usable button fail during
+    // composition. When no animation is configured, keep the composition
+    // absent and render the normal focus treatment below.
+    val glowComposition = if (glowAnimationResId != null && glowAnimationResId != 0) {
+        val composition by rememberLottieComposition(
+            spec = LottieCompositionSpec.RawRes(glowAnimationResId)
+        )
+        composition
+    } else {
+        null
+    }
     
     // Animate glow based on focus (only if composition is loaded)
     val glowProgress by animateLottieCompositionAsState(
