@@ -174,6 +174,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   y `:app:assembleTvRelease` terminaron en `BUILD SUCCESSFUL`; la firma no se
   declara verificada en este host y, por tanto, no se publica ningún APK como
   release de distribución desde esta ejecución.
+- `apksigner verify` confirmó explícitamente que ambos artefactos actuales son
+  unsigned (`DOES NOT VERIFY`); quedan correctamente restringidos a QA.
 - `git diff --check`: sin errores en los cambios publicados.
 - `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
 - `node scripts/check-jellyfin-auth-contract.mjs`: contrato `Pw` coherente en
