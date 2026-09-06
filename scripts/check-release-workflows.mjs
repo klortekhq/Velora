@@ -19,4 +19,9 @@ const android = fs.readFileSync(workflows[0], 'utf8');
 assert.match(android, /dist\/Velora-\$\{\{ matrix\.target \}\}-release\.apk/, 'Android: la release debe seleccionar solo APK release firmado');
 assert.doesNotMatch(android, /files:\s*\n\s+dist\/\*\.apk/, 'Android: no debe publicar APKs por comodín');
 
-console.log('Release workflow policy passed: manual/version tag only, no pull requests, no APK wildcard.');
+const updater = fs.readFileSync('app/src/main/java/com/klortek/velora/updater/UpdateService.kt', 'utf8');
+assert.match(updater, /Velora-tv-release\.apk/, 'Actualizador: falta el nombre del APK firmado de TV');
+assert.match(updater, /Velora-mobile-release\.apk/, 'Actualizador: falta el nombre del APK firmado móvil');
+assert.doesNotMatch(updater, /expected\s*=.*release-unsigned\.apk/, 'Actualizador: no debe seleccionar APK unsigned');
+
+console.log('Release workflow policy passed: manual/version tag only, signed APK names, no pull requests or APK wildcard.');
