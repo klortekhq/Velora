@@ -13,17 +13,15 @@ if ([string]::IsNullOrWhiteSpace($ServerUrl) -or
     throw 'Define VELORA_JELLYFIN_URL, VELORA_JELLYFIN_USER y VELORA_JELLYFIN_PASSWORD.'
 }
 
-$base = $ServerUrl.TrimEnd('/')
+$base = $ServerUrl.Trim().TrimEnd('/')
 $clientHeader = 'MediaBrowser Client="Velora QA", Device="QA", DeviceId="velora-qa", Version="1.4.0"'
 
 try {
     $stage = 'información pública'
     $publicEndpointInvalid = $false
-    $publicResponse = Invoke-WebRequest -Uri "$base/System/Info/Public" -Headers @{
+    $public = Invoke-RestMethod -Uri "$base/System/Info/Public" -Headers @{
         'X-Emby-Authorization' = $clientHeader
     } -TimeoutSec 15
-    $public = $null
-    try { $public = $publicResponse.Content | ConvertFrom-Json } catch { $public = $null }
     if ($null -eq $public -or [string]::IsNullOrWhiteSpace([string]$public.Version)) {
         $publicEndpointInvalid = $true
         throw 'La URL configurada no devolvió JSON de Jellyfin en /System/Info/Public; puede apuntar a la WebGUI de otro servicio o requerir una ruta base de Jellyfin.'
