@@ -438,6 +438,7 @@ private struct VeloraItemDetailView: View {
     let item: JellyfinItem
     @ObservedObject var model: VeloraAppModel
     @State private var player: AVPlayer?
+    @State private var isPlayerFullscreen = false
     @State private var downloadQuality: VeloraDownloadQuality = .original
 
     var body: some View {
@@ -451,7 +452,28 @@ private struct VeloraItemDetailView: View {
                 } label: {
                     Text("Play", bundle: .module)
                 }
-                if let player { VideoPlayer(player: player).aspectRatio(16 / 9, contentMode: .fit) }
+                if let player {
+                    ZStack(alignment: .topTrailing) {
+                        VideoPlayer(player: player)
+                            .aspectRatio(16 / 9, contentMode: .fit)
+                        Button {
+                            isPlayerFullscreen = true
+                        } label: {
+                            Label {
+                                Text("Fullscreen", bundle: .module)
+                            } icon: {
+                                Image(systemName: "arrow.up.left.and.arrow.down.right")
+                            }
+                            .labelStyle(.iconOnly)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityLabel(Text("Fullscreen", bundle: .module))
+                        .padding(10)
+                    }
+                    .fullScreenCover(isPresented: $isPlayerFullscreen) {
+                        VeloraFullscreenPlayer(player: player, isPresented: $isPlayerFullscreen)
+                    }
+                }
                 if let people = item.people, !people.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Cast", bundle: .module).font(.title2.bold())
@@ -508,6 +530,34 @@ private struct VeloraItemDetailView: View {
             .padding()
         }
         .navigationTitle(item.name)
+    }
+}
+
+@available(iOS 16.0, tvOS 16.0, *)
+private struct VeloraFullscreenPlayer: View {
+    let player: AVPlayer
+    @Binding var isPresented: Bool
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            Color.black.ignoresSafeArea()
+            VideoPlayer(player: player)
+                .ignoresSafeArea()
+            Button {
+                isPresented = false
+            } label: {
+                Label {
+                    Text("Exit fullscreen", bundle: .module)
+                } icon: {
+                    Image(systemName: "arrow.down.right.and.arrow.up.left")
+                }
+                .labelStyle(.iconOnly)
+            }
+            .buttonStyle(.borderedProminent)
+            .accessibilityLabel(Text("Exit fullscreen", bundle: .module))
+            .padding()
+        }
+        .onAppear { player.play() }
     }
 }
 

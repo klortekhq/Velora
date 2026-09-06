@@ -126,6 +126,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   identificadores de proveedor con nombres especiales.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
+- Apple: el reproductor nativo de la ficha ofrece ahora un control explícito
+  de pantalla completa y una vista AVPlayer inmersiva para iPhone/iPad/tvOS;
+  los textos de entrada y salida están presentes en los cuatro catálogos.
+  La compilación Swift sigue pendiente de macOS/Xcode, por lo que esta mejora
+  queda documentada como código validado estáticamente, no como prueba de
+  hardware Apple.
 
 ## Pruebas locales pasadas
 

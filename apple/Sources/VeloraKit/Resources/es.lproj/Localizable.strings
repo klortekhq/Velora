@@ -36,6 +36,8 @@
 "Unable to download" = "No se ha podido descargar";
 "Unable to remove download" = "No se ha podido eliminar la descarga";
 "Play" = "Reproducir";
+"Fullscreen" = "Pantalla completa";
+"Exit fullscreen" = "Salir de pantalla completa";
 "Live TV" = "TV en directo";
 "Subtitles" = "Subtítulos";
 "Quality" = "Calidad";
