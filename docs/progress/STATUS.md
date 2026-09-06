@@ -334,6 +334,17 @@ Builds debug regeneradas tras la validación de entrega (QA, 2026-09-06):
 - TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`,
   SHA-256 `79679AF438E098176F1A44936A5E9FD348B8583376A99862618E2F7CCDDD510A`.
 
+Regeneración posterior al ajuste de accesibilidad del reproductor (QA,
+commit `adc1a5f`):
+
+- Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`,
+  SHA-256 `535933CBBBBB9217FBEAEB450280E0415481E09C45FED2B2283FB070F5394E1C`.
+- TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`,
+  SHA-256 `1529907A1ABF0A0EF1E06F2F6C42CE822EDBE71B9D279D609BFC44C61431564C`.
+
+La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
+terminó en `BUILD SUCCESSFUL` en 9m24s. Siguen siendo APK unsigned de QA.
+
 Ambas variantes se generaron correctamente en QA el 2026-09-06; no se han
 instalado en hardware porque ningún dispositivo ADB respondió.
 
