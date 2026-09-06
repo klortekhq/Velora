@@ -270,6 +270,17 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertNil(request.value(forHTTPHeaderField: "X-Emby-Token"))
     }
 
+    func testAuthorizedRequestDoesNotSendTokenOutsideConfiguredServerPrefix() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test/jellyfin")!)
+        await client.setAccessToken("session-secret")
+
+        let outside = URL(string: "https://jellyfin.example.test/admin/video.m3u8")!
+        let request = await client.authorizedRequest(for: outside)
+
+        XCTAssertEqual(request.url, outside)
+        XCTAssertNil(request.value(forHTTPHeaderField: "X-Emby-Token"))
+    }
+
     func testAuthenticationPayloadUsesJellyfinPasswordField() throws {
         let payload = try JSONEncoder().encode(["Username": "demo-user", "Pw": "secret"])
         let json = try JSONSerialization.jsonObject(with: payload) as? [String: String]
