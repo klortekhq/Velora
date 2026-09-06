@@ -34,6 +34,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   usuario lo selecciona o si el fallback configurado resulta necesario.
 - La reproducción sigue la estrategia Original First: Direct Play, Direct
   Stream/Remux y transcodificación solo cuando las capacidades lo requieren.
+- El selector de aspecto de Media3/ExoPlayer y de la superficie GL reaplica el
+  modo seleccionado después de cambios de tamaño, orientación y fullscreen;
+  las reaplicaciones retrasadas obsoletas ya no pueden sobrescribir una
+  selección nueva.
 - Live TV usa exclusivamente fuentes devueltas por Jellyfin. No hay ingestión
   M3U arbitraria en Velora.
 - Live TV solicita `MediaSources`, agrupa filas con el mismo ID de Jellyfin y
