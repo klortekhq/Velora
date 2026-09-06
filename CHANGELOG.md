@@ -13,6 +13,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   GitHub y rechaza correctamente artefactos unsigned de QA.
 - CI: la política de releases comprueba también que los nombres de APK
   publicados coincidan con los que consume el actualizador de Velora.
+- Seguridad Android: el actualizador solo acepta URLs HTTPS de assets bajo
+  `github.com/klortekhq/Velora/releases/download/`.
 - CI: se añade una comprobación automática que impide reintroducir releases
   desde pull requests, pushes normales o comodines de APK.
 - CI: los workflows de publicación ya no se ejecutan en pull requests ni en

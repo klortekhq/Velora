@@ -46,4 +46,20 @@ class UpdateServiceTest {
 
         assertNull(UpdateService.apkAssetFor(release, isTv = false))
     }
+
+    @Test
+    fun releaseAssetUrlMustBelongToVeloraGithubReleases() {
+        assertTrue(UpdateService.isTrustedReleaseAssetUrl(
+            "https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-release.apk"
+        ))
+        assertFalse(UpdateService.isTrustedReleaseAssetUrl(
+            "https://example.invalid/Velora-mobile-release.apk"
+        ))
+        assertFalse(UpdateService.isTrustedReleaseAssetUrl(
+            "https://github.com/other/Velora/releases/download/v1.4.0/Velora-mobile-release.apk"
+        ))
+        assertFalse(UpdateService.isTrustedReleaseAssetUrl(
+            "http://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-release.apk"
+        ))
+    }
 }

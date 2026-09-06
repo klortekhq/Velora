@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URI
 import java.util.concurrent.TimeUnit
 
 /**
@@ -47,6 +48,15 @@ object UpdateService {
         // unsigned package cannot replace the installed signed application.
         val expected = if (isTv) "Velora-tv-release.apk" else "Velora-mobile-release.apk"
         return release.assets.firstOrNull { it.name == expected }
+    }
+
+    /** Accept only browser download URLs belonging to Velora's public releases. */
+    fun isTrustedReleaseAssetUrl(url: String): Boolean {
+        val parsed = runCatching { URI(url) }.getOrNull() ?: return false
+        return parsed.scheme.equals("https", ignoreCase = true) &&
+            parsed.host.equals("github.com", ignoreCase = true) &&
+            parsed.rawPath?.startsWith("/klortekhq/Velora/releases/download/") == true &&
+            parsed.userInfo == null
     }
     
     /**
@@ -128,6 +138,10 @@ object UpdateService {
     ): Uri? {
         return withContext(Dispatchers.IO) {
             try {
+                if (!isTrustedReleaseAssetUrl(apkUrl)) {
+                    Log.w(TAG, "Refusing APK download from an untrusted release URL")
+                    return@withContext null
+                }
                 Log.d(TAG, "Starting APK download from: ${SensitiveDataRedactor.url(apkUrl)}")
                 
                 // Create download directory in app-specific external storage

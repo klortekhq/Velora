@@ -101,6 +101,8 @@ una comprobación no se interpreta como soporte certificado.
   y la exclusión de un artefacto unsigned como actualización instalable.
 - `node scripts/check-release-workflows.mjs`: correcto; verifica además el
   contrato entre los nombres de APK firmados publicados y el actualizador.
+- `UpdateServiceTest`: correcto; cubre URLs de assets oficiales y rechaza
+  hosts, rutas, esquemas o credenciales incrustadas no confiables.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
 - El workflow de Android fue revisado sintácticamente: los APK debug se guardan
