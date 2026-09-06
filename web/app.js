@@ -232,9 +232,27 @@
     zh: '加载更多', ru: 'Загрузить ещё', ar: 'تحميل المزيد', tr: 'Daha fazla yükle'
   };
 
+  var PLAYER_ASPECT_TRANSLATIONS = {
+    es: { aspectRatio: 'Formato', aspectFit: 'Ajustar', aspectFill: 'Rellenar', aspectOriginal: 'Original' },
+    en: { aspectRatio: 'Aspect ratio', aspectFit: 'Fit', aspectFill: 'Fill', aspectOriginal: 'Original' },
+    pt: { aspectRatio: 'Formato', aspectFit: 'Ajustar', aspectFill: 'Preencher', aspectOriginal: 'Original' },
+    fr: { aspectRatio: 'Format', aspectFit: 'Ajuster', aspectFill: 'Remplir', aspectOriginal: 'Original' },
+    de: { aspectRatio: 'Bildformat', aspectFit: 'Einpassen', aspectFill: 'Füllen', aspectOriginal: 'Original' },
+    it: { aspectRatio: 'Formato', aspectFit: 'Adatta', aspectFill: 'Riempi', aspectOriginal: 'Originale' },
+    ja: { aspectRatio: '表示形式', aspectFit: '全体表示', aspectFill: '拡大表示', aspectOriginal: 'オリジナル' },
+    ko: { aspectRatio: '화면 비율', aspectFit: '맞춤', aspectFill: '채우기', aspectOriginal: '원본' },
+    zh: { aspectRatio: '画面比例', aspectFit: '适应', aspectFill: '填充', aspectOriginal: '原始' },
+    ru: { aspectRatio: 'Формат', aspectFit: 'Вписать', aspectFill: 'Заполнить', aspectOriginal: 'Оригинал' },
+    ar: { aspectRatio: 'نسبة العرض', aspectFit: 'ملاءمة', aspectFill: 'ملء', aspectOriginal: 'أصلي' },
+    tr: { aspectRatio: 'En-boy oranı', aspectFit: 'Sığdır', aspectFill: 'Doldur', aspectOriginal: 'Orijinal' }
+  };
+
   function t(key) {
     var code = languageCode();
     if (key === 'loadMore' && LOAD_MORE_TRANSLATIONS[code]) return LOAD_MORE_TRANSLATIONS[code];
+    if (PLAYER_ASPECT_TRANSLATIONS[code] && PLAYER_ASPECT_TRANSLATIONS[code][key]) {
+      return PLAYER_ASPECT_TRANSLATIONS[code][key];
+    }
     if (LIVE_SOURCE_TRANSLATIONS[code] && LIVE_SOURCE_TRANSLATIONS[code][key]) {
       return LIVE_SOURCE_TRANSLATIONS[code][key];
     }
@@ -961,6 +979,29 @@
     }
   }
 
+  function applyAspectMode(player, mode) {
+    if (!player) return 'fit';
+    var valid = ['fit', 'fill', 'original'];
+    var selected = valid.indexOf(mode) >= 0 ? mode : 'fit';
+    valid.forEach(function (candidate) { player.classList.remove('video-aspect-' + candidate); });
+    player.classList.add('video-aspect-' + selected);
+    player.setAttribute('data-aspect', selected);
+    var button = player.querySelector('#playerAspect');
+    if (button) {
+      button.textContent = t('aspectRatio') + ': ' + t('aspect' + selected.charAt(0).toUpperCase() + selected.slice(1));
+      button.setAttribute('aria-label', button.textContent);
+    }
+    return selected;
+  }
+
+  function cycleAspectMode(player) {
+    var modes = ['fit', 'fill', 'original'];
+    var current = player && player.getAttribute('data-aspect') || 'fit';
+    var next = modes[(modes.indexOf(current) + 1) % modes.length];
+    applyAspectMode(player, next);
+    savePreference('veloraAspectMode', next);
+  }
+
   function restorePlayer() {
     var player = document.querySelector('#player');
     if (!player) return;
@@ -1045,6 +1086,7 @@
         '<video controls autoplay playsinline preload="metadata"></video>' +
         '<div class="video-controls">' +
         '<button type="button" id="fullscreen">' + esc(t('fullscreen')) + '</button>' +
+        '<button type="button" id="playerAspect" aria-label="' + esc(t('aspectRatio')) + '">' + esc(t('aspectRatio')) + '</button>' +
         (item.Type === 'LiveTvChannel' ? '<button type="button" id="playerMinimize">' + esc(t('minimizePlayer')) + '</button>' : '') +
         '<button type="button" id="playerSettings">' + esc(t('settings')) + '</button>' +
         '<button type="button" id="playerClose">' + esc(t('close')) + '</button>' +
@@ -1065,6 +1107,8 @@
         var minimizeButton = player.querySelector('#playerMinimize');
         if (minimizeButton) minimizeButton.onclick = minimizePlayer;
         player.querySelector('#fullscreen').onclick = function () { toggleFullscreen(player, video); };
+        applyAspectMode(player, preference('veloraAspectMode', 'fit'));
+        player.querySelector('#playerAspect').onclick = function () { cycleAspectMode(player); };
         player.querySelector('#playerSettings').onclick = showSettings;
         video.onerror = function () { toast(t('playbackError')); };
         video.onloadedmetadata = function () { player.querySelector('#fullscreen').focus(); };

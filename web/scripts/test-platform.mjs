@@ -13,6 +13,11 @@ assert.doesNotMatch(appSource, /(?:exception|error)\.message/);
 assert.match(appSource, /data-velora-image-id/);
 assert.match(appSource, /'X-Emby-Token': state\.token/);
 assert.match(appSource, /URL\.createObjectURL\(blob\)/);
+assert.match(appSource, /function applyAspectMode\(player, mode\)/);
+assert.match(appSource, /function cycleAspectMode\(player\)/);
+assert.match(appSource, /id=\"playerAspect\"/);
+assert.match(appSource, /savePreference\('veloraAspectMode', next\)/);
+assert.match(appSource, /video-aspect-' \+ candidate/);
 // Browser and Smart TV builds must not expose offline/download actions at all.
 // This is stronger than merely disabling a button at runtime: the shared web
 // surface must not accidentally reintroduce a mobile-only download affordance.

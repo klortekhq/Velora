@@ -51,6 +51,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   no reutiliza la fuente del canal anterior.
 - Web/Smart TV abre ahora ese selector al pulsar o confirmar con teclado una
   fila agrupada; los canales sin variantes siguen entrando directamente.
+- Web/Smart TV: el reproductor permite cambiar de forma real entre Ajustar,
+  Rellenar y Original, también en pantalla completa, con la preferencia
+  guardada localmente y textos traducidos en los 12 idiomas web.
 - La comprobación de disponibilidad de Live TV en el inicio libera su cliente
   HTTP al cambiar de sesión o salir de la pantalla.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
