@@ -78,7 +78,9 @@ public actor JellyfinClient {
             "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"\(Self.clientVersion)\", Language=\"en\"",
             forHTTPHeaderField: "X-Emby-Authorization"
         )
-        request.httpBody = try JSONEncoder().encode(["Username": username, "Password": password])
+        // Jellyfin's AuthenticateByName contract calls the password field
+        // `Pw`; keep this identical to Android and the QA smoke test.
+        request.httpBody = try JSONEncoder().encode(["Username": username, "Pw": password])
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }
         guard http.statusCode != 401 else { throw ClientError.unauthorized }

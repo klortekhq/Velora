@@ -268,11 +268,11 @@ final class VeloraKitTests: XCTestCase {
     }
 
     func testAuthenticationPayloadUsesJellyfinPasswordField() throws {
-        let payload = try JSONEncoder().encode(["Username": "demo-user", "Password": "secret"])
+        let payload = try JSONEncoder().encode(["Username": "demo-user", "Pw": "secret"])
         let json = try JSONSerialization.jsonObject(with: payload) as? [String: String]
         XCTAssertEqual(json?["Username"], "demo-user")
-        XCTAssertEqual(json?["Password"], "secret")
-        XCTAssertNil(json?["Pw"])
+        XCTAssertEqual(json?["Pw"], "secret")
+        XCTAssertNil(json?["Password"])
     }
 
     func testMediaIdentifiersAreEncodedAsPathComponents() async throws {
