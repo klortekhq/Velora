@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android: se centraliza la selección del backend de reproducción para que
+  Media3/ExoPlayer sea siempre la ruta inicial en móvil, tablet, Android TV,
+  Fire TV y Live TV; MPV solo entra por elección explícita o tras un fallo real
+  de decodificación, con regresiones unitarias para ambas reglas.
 - Android TV/Fire TV: el reproductor rechaza también las aperturas directas de
   archivos offline; así ningún intent antiguo o enlace profundo puede reactivar
   descargas fuera de móvil/tablet.
