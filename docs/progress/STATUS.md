@@ -33,7 +33,8 @@ una comprobación no se interpreta como soporte certificado.
 - La comprobación de disponibilidad de Live TV en el inicio libera su cliente
   HTTP al cambiar de sesión o salir de la pantalla.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
-  de reproducción persistente.
+  de reproducción persistente. El cliente web carga la biblioteca por páginas
+  y permite ampliar los resultados sin bloquear el inicio.
 - El reparto abre la filmografía disponible en Jellyfin.
 - Las descargas gestionadas, su base SQLite, reanudación, integridad y Smart
   Downloads están limitadas a móvil/tablet. No aparecen en TV, Smart TV ni web.
@@ -55,7 +56,8 @@ una comprobación no se interpreta como soporte certificado.
 - `:app:compileTvDebugKotlin`: `BUILD SUCCESSFUL` tras el mismo ajuste.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `node scripts/test-platform.mjs` desde `web/`: correcto para capacidades,
-  seguridad, autenticación, biblioteca, subtítulos y agrupación Live TV.
+  seguridad, autenticación, biblioteca paginada, subtítulos y agrupación Live
+  TV.
 - `node scripts/build-web.mjs all` desde `web/`: genera bundle web, bundle
   Samsung, IPK webOS y bundle HTML5 VIDAA. Tizen queda pendiente de validar
   hasta disponer de Tizen Studio/CLI y un perfil de firma.

@@ -27,7 +27,7 @@
       searchPlaceholder: 'Buscar películas y series', search: 'Buscar', all: 'Todo', movies: 'Películas',
       series: 'Series', live: 'Televisión en directo', back: 'Atrás', play: 'Reproducir',
       close: 'Cerrar', minimizePlayer: 'Minimizar reproductor', restorePlayer: 'Restaurar reproductor', noDescription: 'Sin descripción disponible.', refresh: 'Actualizar', logout: 'Salir',
-      loading: 'Cargando biblioteca…', retry: 'Reintentar', player: 'Reproductor', fullscreen: 'Pantalla completa', exitFullscreen: 'Salir de pantalla completa',
+      loading: 'Cargando biblioteca…', loadMore: 'Cargar más', retry: 'Reintentar', player: 'Reproductor', fullscreen: 'Pantalla completa', exitFullscreen: 'Salir de pantalla completa',
       settings: 'Ajustes', languageSettings: 'Idioma y reproducción', appLanguage: 'Idioma de la aplicación',
       automatic: 'Automático (idioma del dispositivo)', preferredAudio: 'Audio preferido', audioAuto: 'Automático / servidor',
       subtitles: 'Subtítulos', subtitleOff: 'Desactivados', subtitlePreferred: 'Preferidos', subtitleForced: 'Forzados',
@@ -44,7 +44,7 @@
       searchPlaceholder: 'Search movies and series', search: 'Search', all: 'All', movies: 'Movies', series: 'Series',
       live: 'Live TV', back: 'Back', play: 'Play', close: 'Close', noDescription: 'No description available.',
       refresh: 'Refresh', logout: 'Sign out', minimizePlayer: 'Minimize player', restorePlayer: 'Restore player', loading: 'Loading library…', retry: 'Retry', player: 'Player',
-      fullscreen: 'Fullscreen', exitFullscreen: 'Exit fullscreen', settings: 'Settings', languageSettings: 'Language and playback', appLanguage: 'App language',
+      fullscreen: 'Fullscreen', exitFullscreen: 'Exit fullscreen', loadMore: 'Load more', settings: 'Settings', languageSettings: 'Language and playback', appLanguage: 'App language',
       automatic: 'Automatic (device language)', preferredAudio: 'Preferred audio', audioAuto: 'Automatic / server',
       subtitles: 'Subtitles', subtitleOff: 'Disabled', subtitlePreferred: 'Preferred', subtitleForced: 'Forced',
       subtitleAuto: 'Automatic', subtitleLanguage: 'Subtitle language', save: 'Save', cancel: 'Cancel',
@@ -213,8 +213,15 @@
     tr: { liveSources: 'kaynak', liveSourceOption: 'Seçenek' }
   };
 
+  var LOAD_MORE_TRANSLATIONS = {
+    es: 'Cargar más', en: 'Load more', pt: 'Carregar mais', fr: 'Charger plus',
+    de: 'Mehr laden', it: 'Carica altro', ja: 'さらに読み込む', ko: '더 불러오기',
+    zh: '加载更多', ru: 'Загрузить ещё', ar: 'تحميل المزيد', tr: 'Daha fazla yükle'
+  };
+
   function t(key) {
     var code = languageCode();
+    if (key === 'loadMore' && LOAD_MORE_TRANSLATIONS[code]) return LOAD_MORE_TRANSLATIONS[code];
     if (LIVE_SOURCE_TRANSLATIONS[code] && LIVE_SOURCE_TRANSLATIONS[code][key]) {
       return LIVE_SOURCE_TRANSLATIONS[code][key];
     }
@@ -259,6 +266,9 @@
     token: sessionValue('veloraToken'),
     userId: sessionValue('veloraUserId'),
     items: [],
+    itemsStartIndex: 0,
+    itemsTotalCount: 0,
+    itemsPageSize: 150,
     liveChannels: [],
     query: '',
     settingsOpen: false,
@@ -529,23 +539,36 @@
     });
   }
 
-  function loadItems() {
+  function loadItemsPage(startIndex) {
     if (!state.userId) {
       return api('/Users/Me').then(function (me) {
         state.userId = me.Id;
         saveSessionValue('veloraUserId', state.userId);
-      }).then(loadItems);
+      }).then(function () { return loadItemsPage(startIndex); });
     }
+    var pageSize = state.itemsPageSize;
     var params = 'Recursive=true&IncludeItemTypes=Movie%2CSeries%2CLiveTvChannel&' +
-      'SortBy=DateCreated&SortOrder=Descending&Limit=150&' +
+      'SortBy=DateCreated&SortOrder=Descending&StartIndex=' + encodeURIComponent(startIndex) + '&Limit=' + encodeURIComponent(pageSize) + '&' +
       'Fields=Overview%2CProductionYear%2CDateCreated%2CPremiereDate%2CRunTimeTicks%2CCommunityRating%2CCriticRating%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData%2CPeople%2CSeriesName%2CSeriesId%2CIndexNumber%2CParentIndexNumber';
-    return Promise.all([
-      api('/Users/' + state.userId + '/Items?' + params),
-      loadLiveTvChannels()
-    ]).then(function (responses) {
-      state.items = responses[0].Items || [];
-      state.liveChannels = responses[1].Items || [];
+    return api('/Users/' + state.userId + '/Items?' + params).then(function (response) {
+      var page = response.Items || [];
+      state.items = startIndex === 0 ? page : state.items.concat(page);
+      state.itemsStartIndex = startIndex + page.length;
+      state.itemsTotalCount = Number(response.TotalRecordCount || state.itemsStartIndex);
     });
+  }
+
+  function loadItems() {
+    state.itemsStartIndex = 0;
+    state.itemsTotalCount = 0;
+    return Promise.all([loadItemsPage(0), loadLiveTvChannels()]).then(function (responses) {
+      state.liveChannels = responses[1] || [];
+    });
+  }
+
+  function loadMoreItems() {
+    if (state.itemsStartIndex >= state.itemsTotalCount) return Promise.resolve();
+    return loadItemsPage(state.itemsStartIndex);
   }
 
   function loadLiveTvChannels() {
@@ -1034,7 +1057,8 @@
       '<button type="button" data-tab="movies">' + esc(t('movies')) + '</button><button type="button" data-tab="series">' + esc(t('series')) + '</button>' +
       (live.length ? '<button type="button" data-tab="live">' + esc(t('live')) + '</button>' : '') +
       '</nav><div id="results">' + section(t('movies'), movies) + section(t('series'), series) +
-       liveSection(t('live'), visibleLive) + '</div>';
+       liveSection(t('live'), visibleLive) + '</div>' +
+       (state.itemsStartIndex < state.itemsTotalCount ? '<button type="button" class="load-more" id="loadMore">' + esc(t('loadMore')) + '</button>' : '');
 
     var submit = function () {
       state.query = document.querySelector('#query').value;
@@ -1055,6 +1079,14 @@
     document.querySelector('#libraryPlayback').onchange = function (event) {
       savePreference('veloraLibraryPlayback', event.target.value);
       renderHome();
+    };
+    var loadMoreButton = document.querySelector('#loadMore');
+    if (loadMoreButton) loadMoreButton.onclick = function () {
+      loadMoreButton.disabled = true;
+      loadMoreItems().then(renderHome).catch(function () {
+        loadMoreButton.disabled = false;
+        toast(t('retry'));
+      });
     };
     if (live.length) {
       document.querySelector('#liveFavorites').onchange = function (event) {
