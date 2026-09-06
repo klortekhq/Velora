@@ -13,14 +13,6 @@ on:
       # Public releases are cut only at a meaningful minor/major boundary.
       # Patch builds can still be produced with workflow_dispatch for QA.
       - 'v*.*.0'
-  pull_request:
-    paths:
-      - 'app/**'
-      - 'build.gradle.kts'
-      - 'settings.gradle.kts'
-      - 'gradle/**'
-      - 'gradlew'
-      - 'gradlew.bat'
 
 permissions:
   contents: write

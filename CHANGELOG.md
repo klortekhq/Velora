@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- CI: los workflows de publicación ya no se ejecutan en pull requests ni en
+  cada push de `main`; la validación queda en CI y la publicación requiere un
+  tag de versión o una ejecución manual.
 - Android TV: la capacidad de descargas se comprueba también en el callback
   de entrada, evitando que una ruta secundaria pueda abrir la pantalla offline.
 - QA: el smoke test de Jellyfin distingue ahora un servidor inaccesible de
