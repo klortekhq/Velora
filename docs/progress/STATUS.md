@@ -64,11 +64,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   timeout TLS sobre un puerto HTTP; HTTPS sigue disponible como fallback.
 - La pantalla de conexión usa recursos localizados para título, dirección,
   descubrimiento, detección automática, selección de servidor y errores; los
-  catálogos garantizados español, inglés, francés y alemán mantienen las 451
+  catálogos garantizados español, inglés, francés y alemán mantienen las 452
   claves sincronizadas.
 - Los avisos de trailers que aparecen en las fichas de películas y series
   también usan recursos localizados; la cobertura Android garantizada queda en
-  451 claves.
+  452 claves.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
   de reproducción persistente. El cliente web carga la biblioteca por páginas
   y permite ampliar los resultados sin bloquear el inicio.
@@ -238,7 +238,7 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
 - `node scripts/check-jellyfin-auth-contract.mjs`: contrato `Pw` coherente en
   Android, Apple, web y smoke test.
-- `node scripts/check-android-locales.mjs`: 434 claves en los catálogos Android.
+- `node scripts/check-android-locales.mjs`: 452 claves en los catálogos Android.
 - `node scripts/check-apple-locales.mjs`: 58 claves coherentes en `en`, `es`,
   `fr` y `de`.
 - `node scripts/check-web-locales.mjs`: 69 claves efectivas coherentes en los
