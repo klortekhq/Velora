@@ -24,6 +24,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
   Media3/ExoPlayer sea siempre la ruta inicial en móvil, tablet, Android TV,
   Fire TV y Live TV; MPV solo entra por elección explícita o tras un fallo real
   de decodificación, con regresiones unitarias para ambas reglas.
+- Android: el selector de formato del reproductor expone semántica de botón
+  también para lectores de pantalla y navegación por mando, manteniendo la
+  interacción táctil y la selección real de aspecto.
 - CI: se añade una comprobación estática para impedir que una preferencia o una
   ruta de entrada vuelva a convertir MPV en el reproductor predeterminado.
 - Android TV/Fire TV: el reproductor rechaza también las aperturas directas de
