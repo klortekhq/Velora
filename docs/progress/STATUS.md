@@ -197,6 +197,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   las credenciales configuradas con HTTP 401; no se certifican en esta sesión
   biblioteca, reproducción ni Live TV real. No se han registrado credenciales,
   contraseñas ni tokens en este documento.
+- Último intento de comprobación del 2026-09-06: el health check y el smoke
+  autenticado expiraron por tiempo de espera antes de recibir respuesta; no se
+  interpreta como una validación de credenciales ni de reproducción.
 - ADB no está instalado/disponible en el host actual; no se declara instalación
   ni prueba física reciente en Fire TV o móvil.
 
