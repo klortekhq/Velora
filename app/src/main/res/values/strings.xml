@@ -333,7 +333,7 @@
     <string name="settings_subtitles_clear_done">Subtítulos descargados eliminados</string>
     <string name="settings_jellyseerr_url">URL de Jellyseerr</string>
     <string name="settings_jellyseerr_url_description">Define la URL de tu servidor Jellyseerr/Overseerr</string>
-    <string name="settings_jellyseerr_url_dialog_description">Introduce la URL completa de tu instancia de Jellyseerr (por ejemplo, http://192.168.1.50:5055)</string>
+    <string name="settings_jellyseerr_url_dialog_description">Introduce la URL completa de tu instancia de Jellyseerr (por ejemplo, https://jellyseerr.example.test:5055)</string>
     <string name="settings_url">URL</string>
     <string name="settings_set_url">Definir URL</string>
     <string name="settings_local_email">Local/Correo</string>

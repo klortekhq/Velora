@@ -300,7 +300,7 @@
   <string name="settings_subtitles_clear_done">Heruntergeladene Untertitel gelöscht</string>
   <string name="settings_jellyseerr_url">Jellyseerr-URL</string>
   <string name="settings_jellyseerr_url_description">Gib die URL deines Jellyseerr-/Overseerr-Servers ein</string>
-  <string name="settings_jellyseerr_url_dialog_description">Gib die vollständige URL deiner Jellyseerr-Instanz ein (zum Beispiel http://192.168.1.50:5055)</string>
+  <string name="settings_jellyseerr_url_dialog_description">Gib die vollständige URL deiner Jellyseerr-Instanz ein (zum Beispiel https://jellyseerr.example.test:5055)</string>
   <string name="settings_url">URL</string>
   <string name="settings_set_url">URL festlegen</string>
   <string name="settings_local_email">Lokal/E-Mail</string>
