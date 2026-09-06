@@ -64,7 +64,9 @@ class LiveTvChannelQueryTest {
     @Test
     fun groupedChannelCountRepresentsVisibleRows() {
         val duplicate = LiveTvChannel("same-id", "DAZN F1")
-        assertEquals(1, groupLiveTvChannels(listOf(duplicate, duplicate)).size)
+        val groups = groupLiveTvChannels(listOf(duplicate, duplicate))
+        assertEquals(1, groups.size)
+        assertEquals(1, groups.single().channels.size)
     }
 
     @Test
