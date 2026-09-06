@@ -241,6 +241,7 @@ Vérifiez que :
   <string name="personal_settings">Paramètres personnels</string>
   <string name="watch_trailer_1">Voir la bande-annonce</string>
   <string name="watch_trailer_2">GRATUIT</string>
+  <string name="trailer_tmdb_key_required">Saisissez votre clé API TMDB dans les réglages pour activer les bandes-annonces</string>
   <string name="rent_1">Louer pour un jour</string>
   <string name="rent_2">À partir de 1,99 $</string>
   <string name="buy_1">Acheter et conserver</string>

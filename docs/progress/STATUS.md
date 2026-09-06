@@ -64,8 +64,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   timeout TLS sobre un puerto HTTP; HTTPS sigue disponible como fallback.
 - La pantalla de conexión usa recursos localizados para título, dirección,
   descubrimiento, detección automática, selección de servidor y errores; los
-  catálogos garantizados español, inglés, francés y alemán mantienen las 450
+  catálogos garantizados español, inglés, francés y alemán mantienen las 451
   claves sincronizadas.
+- Los avisos de trailers que aparecen en las fichas de películas y series
+  también usan recursos localizados; la cobertura Android garantizada queda en
+  451 claves.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
   de reproducción persistente. El cliente web carga la biblioteca por páginas
   y permite ampliar los resultados sin bloquear el inicio.
@@ -193,6 +196,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   mensajes de la pantalla de conexión y pasar el catálogo Android a 450 claves.
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` en 3m28s después del
   ajuste compartido del selector de fuentes Live TV.
+- `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest`: `BUILD
+  SUCCESSFUL` en 5m52s tras localizar el aviso de configuración de trailers.
 - Verificación fresca sobre `main` (`56be881`): `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m07s;
   la caché aislada de Gradle se creó correctamente.
