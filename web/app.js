@@ -662,11 +662,29 @@
       var key = String(channel.Id || '').trim() ||
         ('fallback:' + String(channel.ChannelNumber || '') + '|' + String(channel.Name || '').trim().toLocaleLowerCase(languageCode()));
       if (!groups[key]) {
-        groups[key] = { channelId: key, primary: channel, channels: [] };
+        groups[key] = { channelId: key, primary: channel, channels: [], sourceKeys: {} };
         order.push(groups[key]);
       }
-      groups[key].channels.push(channel);
+      var source = Array.isArray(channel.MediaSources) ? channel.MediaSources[0] : null;
+      var sourceKey = source && String(source.Id || '').trim();
+      if (!sourceKey) {
+        sourceKey = [
+          channel.ChannelType || '',
+          channel.ServiceName || '',
+          channel.ChannelNumber || '',
+          String(channel.Name || '').trim().toLocaleLowerCase(languageCode()),
+          (Array.isArray(channel.Tags) ? channel.Tags : []).slice().sort().join('|')
+        ].join('|');
+      }
+      // Providers sometimes repeat the same row without a source ID. Keep
+      // real source variants, but never expose a transport duplicate as a
+      // second selectable option.
+      if (!groups[key].sourceKeys[sourceKey]) {
+        groups[key].sourceKeys[sourceKey] = true;
+        groups[key].channels.push(channel);
+      }
     });
+    order.forEach(function (group) { delete group.sourceKeys; });
     return order;
   }
 
