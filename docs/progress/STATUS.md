@@ -300,6 +300,10 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - La revalidación HTTP directa posterior sí obtuvo `auth=401 Unauthorized`;
   Jellyfin está accesible, pero las credenciales probadas no son aceptadas.
   La aplicación lo clasifica como credenciales inválidas sin registrar secretos.
+- El smoke test autenticado más reciente del 2026-09-06 devolvió `HTTP 401`
+  específicamente en la etapa de autenticación; el script ahora identifica la
+  etapa (`información pública`, `autenticación`, `listado Live TV` o
+  `PlaybackInfo`) sin imprimir credenciales ni tokens.
 - ADB está disponible en el host, pero no hay ningún dispositivo conectado ni
   servicio mDNS del Fire TV visible; no se declara instalación ni prueba
   física reciente en Fire TV o móvil.
