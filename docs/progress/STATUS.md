@@ -2,18 +2,20 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `44ef690`.
+Revisión funcional actual: commit `32db644`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
 ## Estado del repositorio
 
-- Rama de trabajo y rama remota: `main`.
-- No hay ramas de producto adicionales en GitHub.
-- La única rama remota verificada apunta a `0ac7fd4`. El tag remoto `v1.4.0`
-  existe, pero apunta a un commit anterior (`3243d50`); por tanto no se
-  presenta esa release como equivalente al estado actual de `main`.
+- Rama de trabajo: `main`; la política del repositorio exige que sea la única
+  rama pública.
+- La última subida confirmada por `git push` apunta a `32db644`. La consulta
+  independiente de ramas remotas está temporalmente sin conectividad y no se
+  presenta como verificada en esta revisión. La evidencia anterior del tag
+  remoto `v1.4.0` lo situaba en un commit anterior; por tanto no se presenta
+  esa release como equivalente al estado actual de `main`.
 - Último cambio funcional documentado: la ficha móvil etiqueta el bloque de
   códecs, resolución, fps, HDR/SDR, audio y contenedor como información
   técnica, sin presentar nombres ni rutas de archivo.
