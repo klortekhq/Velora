@@ -291,16 +291,21 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 Son builds `unsigned` para QA, no releases de distribución:
 
-Builds debug regeneradas tras el endurecimiento de offline en TV (QA,
-2026-09-06):
+Builds debug regeneradas tras la validación de entrega (QA, 2026-09-06):
 
-- Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`, 78,2 MB,
-  SHA-256 `C12D11E6871199653F16FA65AB076BF99F98162823199989FBD32023769185DB`.
-- TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, 78,2 MB,
-  SHA-256 `1DE3126FF8B4C36255437DB4D02B2F738E27ED5699AC4CF93127CE034E971A52`.
+- Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`,
+  SHA-256 `50D0DA51C614A42BAB37DB5D35866AACA6EBB4A65771A0CF57B621596FFACB47`.
+- TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`,
+  SHA-256 `79679AF438E098176F1A44936A5E9FD348B8583376A99862618E2F7CCDDD510A`.
 
 Ambas variantes se generaron correctamente en QA el 2026-09-06; no se han
 instalado en hardware porque ningún dispositivo ADB respondió.
+
+La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
+terminó en `BUILD SUCCESSFUL` el 2026-09-06. La regeneración web conjunta y
+`check-tv-packaging-output.mjs` también terminaron correctamente: Samsung se
+mantiene como bundle sin Tizen Studio, webOS genera un IPK y VIDAA un bundle
+HTML5.
 
 La carga inicial de las pantallas de películas y series ya no recorre la
 biblioteca completa mientras se muestran las recomendaciones. Se carga una
