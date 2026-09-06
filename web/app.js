@@ -187,8 +187,21 @@
     TRANSLATIONS[code] = Object.assign({}, TRANSLATIONS[code], TRANSLATION_OVERRIDES[code]);
   });
 
+  function durableStorageValue(key, fallback) {
+    try {
+      var value = window.localStorage.getItem(key);
+      return value == null || value === '' ? fallback : value;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function saveDurableStorageValue(key, value) {
+    try { window.localStorage.setItem(key, value); } catch (error) { /* optional storage */ }
+  }
+
   function languageCode() {
-    var selected = localStorage.veloraLanguage || 'auto';
+    var selected = durableStorageValue('veloraLanguage', 'auto');
     if (selected !== 'auto' && TRANSLATIONS[selected]) return selected;
     var candidates = navigator.languages || [navigator.language || 'es'];
     for (var i = 0; i < candidates.length; i += 1) {
@@ -230,11 +243,11 @@
   }
 
   function preference(key, fallback) {
-    return localStorage[key] || fallback;
+    return durableStorageValue(key, fallback);
   }
 
   function savePreference(key, value) {
-    localStorage[key] = value;
+    saveDurableStorageValue(key, value);
   }
 
   // Authentication state is intentionally scoped to the browser session. The
@@ -253,16 +266,27 @@
     try { window.sessionStorage.removeItem(key); } catch (error) { /* best effort */ }
   }
 
-  var legacyToken = localStorage.veloraToken || '';
+  // Some TV browsers and private contexts expose localStorage but throw on
+  // access. Legacy migration must never prevent the login screen from
+  // rendering; durable localStorage is used only for non-secret preferences.
+  function legacyStorageValue(key) {
+    try { return window.localStorage.getItem(key) || ''; } catch (error) { return ''; }
+  }
+
+  function removeLegacyStorageValue(key) {
+    try { window.localStorage.removeItem(key); } catch (error) { /* best effort */ }
+  }
+
+  var legacyToken = legacyStorageValue('veloraToken');
   if (legacyToken && !sessionValue('veloraToken')) saveSessionValue('veloraToken', legacyToken);
-  if (legacyToken) delete localStorage.veloraToken;
-  var legacyUserId = localStorage.veloraUserId || '';
+  if (legacyToken) removeLegacyStorageValue('veloraToken');
+  var legacyUserId = legacyStorageValue('veloraUserId');
   if (legacyUserId && !sessionValue('veloraUserId')) saveSessionValue('veloraUserId', legacyUserId);
-  if (legacyUserId) delete localStorage.veloraUserId;
+  if (legacyUserId) removeLegacyStorageValue('veloraUserId');
 
   var root = document.querySelector('#app');
   var state = {
-    server: localStorage.veloraServer || '',
+    server: durableStorageValue('veloraServer', ''),
     token: sessionValue('veloraToken'),
     userId: sessionValue('veloraUserId'),
     items: [],
@@ -537,8 +561,8 @@
     }).then(function (data) {
       state.token = data.AccessToken;
       state.userId = data.User && data.User.Id ? data.User.Id : '';
-      localStorage.veloraServer = state.server;
-      localStorage.veloraUser = username;
+      saveDurableStorageValue('veloraServer', state.server);
+      saveDurableStorageValue('veloraUser', username);
       saveSessionValue('veloraToken', state.token);
       saveSessionValue('veloraUserId', state.userId);
       syncMediaProxyCredentials();

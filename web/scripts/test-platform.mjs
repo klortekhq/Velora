@@ -58,7 +58,15 @@ console.log('platform capability tests passed');
 
 assert.match(appSource, /sessionStorage/);
 assert.match(appSource, /saveSessionValue\('veloraToken', state\.token\)/);
-assert.match(appSource, /delete localStorage\.veloraToken/);
+assert.match(appSource, /function legacyStorageValue\(key\)/);
+assert.match(appSource, /function removeLegacyStorageValue\(key\)/);
+assert.match(appSource, /function durableStorageValue\(key, fallback\)/);
+assert.match(appSource, /function saveDurableStorageValue\(key, value\)/);
+assert.match(appSource, /removeLegacyStorageValue\('veloraToken'\)/);
+assert.match(appSource, /removeLegacyStorageValue\('veloraUserId'\)/);
+assert.doesNotMatch(appSource, /delete localStorage\.veloraToken/);
+assert.doesNotMatch(appSource, /localStorage\.veloraServer/);
+assert.doesNotMatch(appSource, /localStorage\.veloraUser/);
 assert.doesNotMatch(appSource, /localStorage\.veloraToken\s*=/);
 assert.doesNotMatch(appSource, /localStorage\.veloraUserId\s*=/);
 assert.match(appSource, new RegExp(`var APP_VERSION = '${packageJson.version.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}'`));
@@ -146,9 +154,9 @@ assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // pattern checks. This protects the one-row/multiple-source Live TV contract.
 const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
   '  renderApp();\n}());',
-  '  window.__veloraTest = { groupLiveTvChannels, liveRowAction, selectSubtitleStream };\n}());'
+  '  window.__veloraTest = { groupLiveTvChannels, liveRowAction, selectSubtitleStream, durableStorageValue, saveDurableStorageValue };\n}());'
 );
-assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, liveRowAction, selectSubtitleStream \}/, 'web app test hook was not injected');
+assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, liveRowAction, selectSubtitleStream, durableStorageValue, saveDurableStorageValue \}/, 'web app test hook was not injected');
 const testLocalStorage = {
   getItem() { return null; },
   setItem() {},
@@ -184,6 +192,15 @@ vm.runInNewContext(testableAppSource, {
   clearTimeout,
   console
 });
+const storageBeforeFailureTest = testWindow.localStorage;
+testWindow.localStorage = {
+  getItem() { throw new Error('storage blocked'); },
+  setItem() { throw new Error('storage blocked'); },
+  removeItem() { throw new Error('storage blocked'); }
+};
+assert.equal(testWindow.__veloraTest.durableStorageValue('unavailable', 'fallback'), 'fallback');
+assert.doesNotThrow(() => testWindow.__veloraTest.saveDurableStorageValue('unavailable', 'value'));
+testWindow.localStorage = storageBeforeFailureTest;
 const groupedLiveTv = testWindow.__veloraTest.groupLiveTvChannels([
   {
     Id: 'same-channel',
