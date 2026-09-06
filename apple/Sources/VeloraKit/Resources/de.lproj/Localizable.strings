@@ -7,6 +7,9 @@
 "Sign in" = "Anmelden";
 "Unable to sign in" = "Anmeldung nicht möglich";
 "Unable to load library" = "Bibliothek konnte nicht geladen werden";
+"Cast" = "Besetzung";
+"Unable to load filmography" = "Filmografie konnte nicht geladen werden";
+"No other titles available" = "Keine weiteren Titel verfügbar";
 "Language and playback" = "Sprache und Wiedergabe";
 "App language" = "App-Sprache";
 "Preferred audio" = "Bevorzugte Audiosprache";

@@ -17,6 +17,8 @@ public struct JellyfinItem: Codable, Identifiable, Sendable {
     public let type: String?
     public let overview: String?
     public let imageTags: [String: String]?
+    public let productionYear: Int?
+    public let people: [JellyfinPerson]?
 
     private enum CodingKeys: String, CodingKey {
         case id = "Id"
@@ -24,14 +26,42 @@ public struct JellyfinItem: Codable, Identifiable, Sendable {
         case type = "Type"
         case overview = "Overview"
         case imageTags = "ImageTags"
+        case productionYear = "ProductionYear"
+        case people = "People"
     }
 
-    public init(id: String, name: String, type: String? = nil, overview: String? = nil, imageTags: [String: String]? = nil) {
+    public init(id: String, name: String, type: String? = nil, overview: String? = nil, imageTags: [String: String]? = nil, productionYear: Int? = nil, people: [JellyfinPerson]? = nil) {
         self.id = id
         self.name = name
         self.type = type
         self.overview = overview
         self.imageTags = imageTags
+        self.productionYear = productionYear
+        self.people = people
+    }
+}
+
+public struct JellyfinPerson: Codable, Identifiable, Sendable, Hashable {
+    public let id: String?
+    public let name: String
+    public let type: String?
+    public let role: String?
+    public let primaryImageTag: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case id = "Id"
+        case name = "Name"
+        case type = "Type"
+        case role = "Role"
+        case primaryImageTag = "PrimaryImageTag"
+    }
+
+    public init(id: String? = nil, name: String, type: String? = nil, role: String? = nil, primaryImageTag: String? = nil) {
+        self.id = id
+        self.name = name
+        self.type = type
+        self.role = role
+        self.primaryImageTag = primaryImageTag
     }
 }
 

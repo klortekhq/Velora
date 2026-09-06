@@ -126,6 +126,12 @@ public final class VeloraAppModel: ObservableObject {
         isAuthenticated = false
     }
 
+    public func filmography(for person: JellyfinPerson) async throws -> [JellyfinItem] {
+        guard let personID = person.id else { return [] }
+        guard let session else { return [] }
+        return try await client.items(userID: session.userID, forPerson: personID)
+    }
+
     public func play(_ item: JellyfinItem) async -> AVPlayer? {
         let configuredServer = (await client.serverURL()).absoluteString
         if let offline = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == configuredServer }),
@@ -385,6 +391,7 @@ private struct VeloraItemDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text(item.name).font(.largeTitle.bold())
+                if let year = item.productionYear { Text(String(year)).foregroundStyle(.secondary) }
                 if let overview = item.overview, !overview.isEmpty { Text(overview) }
                 Button {
                     Task { player = await model.play(item); player?.play() }
@@ -392,6 +399,27 @@ private struct VeloraItemDetailView: View {
                     Text("Play", bundle: .module)
                 }
                 if let player { VideoPlayer(player: player).aspectRatio(16 / 9, contentMode: .fit) }
+                if let people = item.people, !people.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Cast", bundle: .module).font(.title2.bold())
+                        ForEach(Array(people.prefix(12).enumerated()), id: \.offset) { _, person in
+                            if person.id != nil {
+                                NavigationLink {
+                                    VeloraFilmographyView(person: person, model: model)
+                                } label: {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(person.name)
+                                        if let role = person.role, !role.isEmpty {
+                                            Text(role).font(.caption).foregroundStyle(.secondary)
+                                        }
+                                    }
+                                }
+                            } else {
+                                Text(person.name)
+                            }
+                        }
+                    }
+                }
                 if model.platform.supportsOfflineDownloads {
                     if model.offlineDownloads.contains(where: { $0.itemID == item.id }) {
                         Button {
@@ -427,6 +455,40 @@ private struct VeloraItemDetailView: View {
             .padding()
         }
         .navigationTitle(item.name)
+    }
+}
+
+@available(iOS 16.0, tvOS 16.0, *)
+private struct VeloraFilmographyView: View {
+    let person: JellyfinPerson
+    @ObservedObject var model: VeloraAppModel
+    @State private var works: [JellyfinItem] = []
+    @State private var isLoading = true
+    @State private var failed = false
+
+    var body: some View {
+        Group {
+            if isLoading {
+                ProgressView()
+            } else if failed {
+                Text("Unable to load filmography", bundle: .module)
+                    .foregroundStyle(.secondary)
+            } else if works.isEmpty {
+                Text("No other titles available", bundle: .module)
+                    .foregroundStyle(.secondary)
+            } else {
+                VeloraLibraryView(title: person.name, items: works, artworkClient: model.jellyfinClient) { _ in }
+            }
+        }
+        .navigationTitle(person.name)
+        .task {
+            do {
+                works = try await model.filmography(for: person)
+            } catch {
+                failed = true
+            }
+            isLoading = false
+        }
     }
 }
 
