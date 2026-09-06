@@ -748,6 +748,9 @@ fun SettingsScreen(
                             
                             Spacer(modifier = Modifier.height(16.dp))
                             
+                            // Subtitle downloads, OpenSubtitles credentials and their
+                            // cleanup are mobile/tablet-only. TV remains streaming-only.
+                            if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) {
                             // OpenSubtitles API Key
                             SettingButton(
                                 title = context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key),
@@ -921,6 +924,7 @@ fun SettingsScreen(
                                         }
                                     }
                                 )
+                            }
                             }
                             
                             Spacer(modifier = Modifier.height(16.dp))

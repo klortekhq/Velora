@@ -1055,7 +1055,11 @@ fun SubtitleSelectionDialog(
     
     // Load downloaded subtitles
     LaunchedEffect(item.Id) {
-        downloadedSubtitles = com.klortek.velora.subtitles.OpenSubtitlesApi.getDownloadedSubtitles(context, item.Id)
+        downloadedSubtitles = if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) {
+            com.klortek.velora.subtitles.OpenSubtitlesApi.getDownloadedSubtitles(context, item.Id)
+        } else {
+            emptyList()
+        }
     }
     
     // Fetch full item details to get MediaSources with subtitle streams
@@ -1250,7 +1254,7 @@ fun SubtitleSelectionDialog(
                             }
                             
                             // Divider before downloaded subtitles
-                            if (downloadedSubtitles.isNotEmpty()) {
+                            if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads && downloadedSubtitles.isNotEmpty()) {
                                 item {
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
@@ -1303,8 +1307,8 @@ fun SubtitleSelectionDialog(
                                 }
                             }
                             
-                            // Download Subtitles button
-                            item {
+                            // Downloaded subtitle storage is a mobile/tablet-only capability.
+                            if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) item {
                                 Spacer(modifier = Modifier.height(12.dp))
                                 Button(
                                     onClick = { 
