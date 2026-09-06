@@ -229,7 +229,13 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
             lifecycleScope.launch {
                 var finalUrl: String
                 var extraSubtitleUrl: String? = null
-                val headers = "X-Emby-Token: $accessToken" // Basic header needed
+                // Keep MPV on the same canonical Jellyfin authentication contract
+                // as the rest of the app. The token stays in request headers and
+                // never needs to be appended to a playback URL.
+                val headers = MpvUrlBuilder.buildHeaders(
+                    accessToken = accessToken,
+                    deviceId = config.deviceId
+                )
 
                 // Jellyfin must open an M3U/Acestream Live TV source first so
                 // it can return the MediaSourceId and LiveStreamId required by

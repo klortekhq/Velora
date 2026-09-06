@@ -12,6 +12,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Android TV: el reproductor deja de consultar o añadir subtítulos descargados
   del almacenamiento offline móvil; las pistas proporcionadas por Jellyfin
   siguen disponibles.
+- Android: el fallback MPV usa ahora la misma cabecera MediaBrowser autenticada
+  que el resto de la aplicación, manteniendo el token fuera de las URLs.
 - Android: el actualizador selecciona ahora los APK release firmados que publica
   GitHub y rechaza correctamente artefactos unsigned de QA.
 - CI: la política de releases comprueba también que los nombres de APK
