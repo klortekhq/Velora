@@ -11,6 +11,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Apple: el reproductor incorpora un selector funcional de relación de aspecto
   (`Ajustar`, `Rellenar` y `Original`) que se conserva al entrar en pantalla
   completa.
+- Apple Live TV: el reproductor integrado permite abrir la emisión en pantalla
+  completa y cambiar su relación de aspecto sin crear una segunda sesión.
 - Android: se centraliza la selección del backend de reproducción para que
   Media3/ExoPlayer sea siempre la ruta inicial en móvil, tablet, Android TV,
   Fire TV y Live TV; MPV solo entra por elección explícita o tras un fallo real
