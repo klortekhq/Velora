@@ -43,6 +43,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Live TV solicita `MediaSources`, agrupa filas con el mismo ID de Jellyfin y
   permite seleccionar las variantes bajo un único canal. El cambio de canal
   no reutiliza la fuente del canal anterior.
+- Web/Smart TV abre ahora ese selector al pulsar o confirmar con teclado una
+  fila agrupada; los canales sin variantes siguen entrando directamente.
 - La comprobación de disponibilidad de Live TV en el inicio libera su cliente
   HTTP al cambiar de sesión o salir de la pantalla.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
@@ -179,6 +181,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   obsoletos cuando se reconstruye una etiqueta mediante ejecución manual.
 - `node scripts/check-public-identity.mjs`: correcto; no hay referencias
   heredadas de identidad en el contenido público revisado.
+- `node web/scripts/test-platform.mjs` y `node web/scripts/build-web.mjs all`:
+  correctos; el bundle web y el IPK de webOS se regeneraron. Tizen sigue
+  pendiente por falta de Tizen Studio/CLI y firma.
 
 ## Artefactos Android locales
 

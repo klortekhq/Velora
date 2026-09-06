@@ -139,9 +139,9 @@ assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // pattern checks. This protects the one-row/multiple-source Live TV contract.
 const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
   '  renderApp();\n}());',
-  '  window.__veloraTest = { groupLiveTvChannels, selectSubtitleStream };\n}());'
+  '  window.__veloraTest = { groupLiveTvChannels, liveRowAction, selectSubtitleStream };\n}());'
 );
-assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, selectSubtitleStream \}/, 'web app test hook was not injected');
+assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, liveRowAction, selectSubtitleStream \}/, 'web app test hook was not injected');
 const testLocalStorage = {
   getItem() { return null; },
   setItem() {},
@@ -191,6 +191,7 @@ const groupedLiveTv = testWindow.__veloraTest.groupLiveTvChannels([
 assert.equal(groupedLiveTv.length, 2);
 assert.equal(groupedLiveTv[0].channelId, 'same-channel');
 assert.equal(groupedLiveTv[0].channels.length, 2);
+assert.equal(testWindow.__veloraTest.liveRowAction(groupedLiveTv[0]), 'source-picker');
 assert.deepEqual(
   Array.from(groupedLiveTv[0].channels, channel => channel.MediaSources[0].Id),
   ['source-main', 'source-iptv']
@@ -201,6 +202,7 @@ const duplicateGroup = testWindow.__veloraTest.groupLiveTvChannels([
 ]);
 assert.equal(duplicateGroup.length, 1);
 assert.equal(duplicateGroup[0].channels.length, 1);
+assert.equal(testWindow.__veloraTest.liveRowAction(duplicateGroup[0]), 'open-item');
 const prototypeNamedGroup = testWindow.__veloraTest.groupLiveTvChannels([
   { Id: '__proto__', Name: 'Canal especial' }
 ]);
