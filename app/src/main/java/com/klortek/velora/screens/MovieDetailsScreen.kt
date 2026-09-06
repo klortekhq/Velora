@@ -1687,7 +1687,7 @@ fun ActionButtonsRow(
                          if (audioLang != null) {
                              try {
                                  // Convert 3-letter code (eng) to 2-letter (en) if needed
-                                 iso639Code = java.util.Locale(audioLang).language
+                                 iso639Code = java.util.Locale.forLanguageTag(audioLang.replace('_', '-')).language.ifBlank { audioLang }
                                  // Handle edge cases where Locale doesn't convert 3-letter properly (though usually it does if valid)
                                  if (iso639Code == audioLang && audioLang.length == 3) {
                                      // Fallback for some codes if Locale constructor didn't parse it as iso3
