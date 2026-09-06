@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Web/Smart TV: la biblioteca carga los resultados por páginas y permite
+  continuar con «Cargar más», evitando bloquear el inicio al trabajar con
+  catálogos grandes.
 - Multiplataforma: Apple y web envían ahora el campo `Pw` que exige
   `AuthenticateByName` de Jellyfin, alineándose con Android y el smoke test.
 - CI: se añade una comprobación automática del contrato de autenticación para
