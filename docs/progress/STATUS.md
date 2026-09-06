@@ -103,6 +103,8 @@ una comprobación no se interpreta como soporte certificado.
   contrato entre los nombres de APK firmados publicados y el actualizador.
 - `UpdateServiceTest`: correcto; cubre URLs de assets oficiales y rechaza
   hosts, rutas, esquemas o credenciales incrustadas no confiables.
+- `node web/scripts/test-platform.mjs`: correcto; valida también CSP,
+  `frame-ancestors`, `object-src` y la política `no-referrer` del cliente web.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
 - El workflow de Android fue revisado sintácticamente: los APK debug se guardan

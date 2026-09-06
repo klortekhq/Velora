@@ -4,6 +4,7 @@ import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../platform.js', import.meta.url), 'utf8');
 const appSource = fs.readFileSync(new URL('../app.js', import.meta.url), 'utf8');
+const indexSource = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const packageJson = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
 assert.doesNotMatch(appSource, /\/Images\/Primary\?api_key=/);
@@ -16,6 +17,11 @@ assert.match(appSource, /URL\.createObjectURL\(blob\)/);
 // This is stronger than merely disabling a button at runtime: the shared web
 // surface must not accidentally reintroduce a mobile-only download affordance.
 assert.doesNotMatch(appSource, /\b(download|downloads|offline|descargar|descargas)\b/i);
+assert.match(indexSource, /Content-Security-Policy/);
+assert.match(indexSource, /default-src 'self'/);
+assert.match(indexSource, /frame-ancestors 'none'/);
+assert.match(indexSource, /object-src 'none'/);
+assert.match(indexSource, /referrer.*no-referrer/);
 
 function detect(userAgent) {
   const listeners = {};

@@ -15,6 +15,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
   publicados coincidan con los que consume el actualizador de Velora.
 - Seguridad Android: el actualizador solo acepta URLs HTTPS de assets bajo
   `github.com/klortekhq/Velora/releases/download/`.
+- Web: se añade una política CSP y `no-referrer` para reducir superficie de
+  inyección y evitar filtraciones accidentales de navegación durante el uso de
+  Jellyfin.
 - CI: se añade una comprobación automática que impide reintroducir releases
   desde pull requests, pushes normales o comodines de APK.
 - CI: los workflows de publicación ya no se ejecutan en pull requests ni en
