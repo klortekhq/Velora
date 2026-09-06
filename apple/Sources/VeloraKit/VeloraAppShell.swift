@@ -96,6 +96,16 @@ public final class VeloraAppModel: ObservableObject {
             await refreshContent()
             isAuthenticated = true
             errorMessage = nil
+        } catch let error as JellyfinClient.ClientError {
+            isAuthenticated = false
+            switch error {
+            case .unauthorized:
+                errorMessage = String(localized: "Invalid credentials", bundle: .module)
+            case .invalidServerURL:
+                errorMessage = String(localized: "Invalid server address", bundle: .module)
+            case .invalidResponse:
+                errorMessage = String(localized: "Unable to sign in", bundle: .module)
+            }
         } catch {
             isAuthenticated = false
             errorMessage = String(localized: "Unable to sign in", bundle: .module)

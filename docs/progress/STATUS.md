@@ -181,6 +181,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `frame-ancestors`, `object-src` y la política `no-referrer` del cliente web.
 - Apple: la cabecera de autenticación usa ahora el idioma seleccionado por el
   usuario; la compilación Swift queda pendiente de la ejecución macOS de CI.
+- Apple: el inicio de sesión distingue y localiza credenciales rechazadas,
+  servidor no válido y respuesta inesperada, sin exponer detalles de red ni
+  secretos.
 - Apple: la carga incremental de bibliotecas grandes queda implementada en el
   cliente Swift; falta confirmar la compilación y las pruebas en macOS.
 - Apple: se añadió una prueba de regresión para impedir que el token se aplique

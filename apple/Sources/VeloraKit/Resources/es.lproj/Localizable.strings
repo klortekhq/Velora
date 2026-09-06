@@ -6,6 +6,8 @@
 "Password" = "Contraseña";
 "Sign in" = "Iniciar sesión";
 "Unable to sign in" = "No se ha podido iniciar sesión";
+"Invalid credentials" = "Usuario o contraseña incorrectos";
+"Invalid server address" = "Dirección del servidor no válida";
 "Unable to load library" = "No se ha podido cargar la biblioteca";
 "Cast" = "Reparto";
 "Unable to load filmography" = "No se ha podido cargar la filmografía";

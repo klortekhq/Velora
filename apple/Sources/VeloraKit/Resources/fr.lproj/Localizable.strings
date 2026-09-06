@@ -6,6 +6,8 @@
 "Password" = "Mot de passe";
 "Sign in" = "Se connecter";
 "Unable to sign in" = "Connexion impossible";
+"Invalid credentials" = "Nom d’utilisateur ou mot de passe incorrect";
+"Invalid server address" = "Adresse du serveur non valide";
 "Unable to load library" = "Impossible de charger la bibliothèque";
 "Cast" = "Distribution";
 "Unable to load filmography" = "Impossible de charger la filmographie";
