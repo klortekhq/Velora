@@ -405,6 +405,14 @@ La accesibilidad web/Smart TV también se ha reforzado: las tarjetas de
 filmografía exponen su título a lectores de pantalla, conservan activación por
 teclado/mando y Escape cierra los paneles modales o el reproductor activo.
 
+Revalidación fresca posterior a la localización del error de descarga de
+subtítulos (2026-09-06): `:app:testMobileDebugUnitTest` y
+`:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 7m17s. El
+mensaje de reserva ya no está escrito en inglés en las pantallas de películas
+y episodios; queda cubierto por los cuatro catálogos Android garantizados, con
+452 claves cada uno. La compilación emitió únicamente avisos de APIs
+deprecadas, sin errores.
+
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
   SHA-256 `06EF392D2A0FD6C09868D4E934BBF2B46672125235B5347A147FC052B93CB1EA`.
 - TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`

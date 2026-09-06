@@ -188,6 +188,7 @@ Comprueba que:
     <string name="request_no_seasons">No se han encontrado temporadas</string>
     <string name="jellyseerr_requesting_short">Solicitando…</string>
     <string name="subtitle_downloading">Descargando…</string>
+    <string name="subtitle_download_failed">No se ha podido descargar el subtítulo</string>
     <string name="subtitle_downloaded_title">Subtítulos descargados</string>
     <string name="subtitle_none_downloaded">No hay subtítulos descargados</string>
     <string name="subtitle_delete">Eliminar</string>
