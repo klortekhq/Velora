@@ -8,7 +8,7 @@ import org.junit.Test
 class ServerUrlValidatorTest {
     @Test
     fun acceptsLocalAndRemoteHttpServers() {
-        assertTrue(ServerUrlValidator.isValid("http://192.168.31.232:8096"))
+        assertTrue(ServerUrlValidator.isValid("http://192.0.2.10:8096"))
         assertTrue(ServerUrlValidator.isValid("https://jellyfin.example.test/jellyfin"))
         assertTrue(ServerUrlValidator.isValid("HTTP://[::1]:8096"))
     }

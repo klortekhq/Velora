@@ -40,7 +40,7 @@ final class VeloraKitTests: XCTestCase {
     }
 
     func testServerURLValidationRejectsEmbeddedCredentialsAndParameters() throws {
-        XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "http://192.168.31.232:8096")!))
+        XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "http://192.0.2.10:8096")!))
         XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test/base")!))
         XCTAssertThrowsError(try JellyfinClient(serverURL: URL(string: "https://user:pass@jellyfin.example.test")!))
         XCTAssertThrowsError(try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test?token=secret")!))

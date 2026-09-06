@@ -149,6 +149,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   a terminar correctamente.
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` tras el ajuste del cierre
   del cliente HTTP de autenticación.
+- Se eliminaron del código de ejemplo y del dashboard las direcciones privadas
+  y credenciales usadas durante pruebas locales; los ejemplos usan ahora
+  dominios reservados para documentación. `ServerUrlValidatorTest` y
+  `VeloraLocaleTest` terminaron en `BUILD SUCCESSFUL`.
 - La validación de login cubre también el ciclo de vida de Quick Connect; el
   test móvil volvió a terminar correctamente después del cambio.
 - `:app:compileMobileDebugKotlin`: `BUILD SUCCESSFUL` tras el ajuste del ciclo
@@ -311,7 +315,8 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 
 ## Jellyfin y hardware conectado
 
-- `http://192.168.100.201:8096/health` respondió HTTP 200 en la última prueba.
+- El endpoint de salud del servidor Jellyfin local respondió HTTP 200 en la
+  última prueba.
 - El smoke test autenticado confirmó que el servidor responde, pero rechazó
   las credenciales configuradas con HTTP 401; no se certifican en esta sesión
   biblioteca, reproducción ni Live TV real. No se han registrado credenciales,
