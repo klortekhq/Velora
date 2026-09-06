@@ -374,6 +374,12 @@ Build TV de QA posterior al ajuste de etiquetas de fuentes Live TV:
 Se instaló correctamente en el mismo Fire TV AFTSS y la actividad principal
 permaneció activa tras el arranque explícito.
 
+Build TV de QA posterior a la localización del aviso de trailers:
+`app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+`ECEF2930F02CD4AADF194C5D41B4CA726567ACBDC9BE89CD9DB2BC3ACBDAC714`.
+Se instaló correctamente y el proceso de la actividad quedó activo; no se
+detectaron excepciones fatales en el logcat de arranque.
+
 La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
 terminó en `BUILD SUCCESSFUL` en 9m24s. Siguen siendo APK unsigned de QA.
 
