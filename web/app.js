@@ -645,7 +645,7 @@
   }
 
   function groupLiveTvChannels(channels) {
-    var groups = {};
+    var groups = Object.create(null);
     var order = [];
     var normalized = [];
     channels.forEach(function (channel) {
@@ -662,7 +662,7 @@
       var key = String(channel.Id || '').trim() ||
         ('fallback:' + String(channel.ChannelNumber || '') + '|' + String(channel.Name || '').trim().toLocaleLowerCase(languageCode()));
       if (!groups[key]) {
-        groups[key] = { channelId: key, primary: channel, channels: [], sourceKeys: {} };
+        groups[key] = { channelId: key, primary: channel, channels: [], sourceKeys: Object.create(null) };
         order.push(groups[key]);
       }
       var source = Array.isArray(channel.MediaSources) ? channel.MediaSources[0] : null;
@@ -717,7 +717,7 @@
   }
 
   function liveChannelGroups(channels) {
-    var groups = {};
+    var groups = Object.create(null);
     channels.forEach(function (channel) {
       var tags = Array.isArray(channel.Tags) ? channel.Tags : [];
       var names = tags.filter(Boolean).map(String);

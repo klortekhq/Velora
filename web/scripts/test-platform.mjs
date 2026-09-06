@@ -198,6 +198,11 @@ const duplicateGroup = testWindow.__veloraTest.groupLiveTvChannels([
 ]);
 assert.equal(duplicateGroup.length, 1);
 assert.equal(duplicateGroup[0].channels.length, 1);
+const prototypeNamedGroup = testWindow.__veloraTest.groupLiveTvChannels([
+  { Id: '__proto__', Name: 'Canal especial' }
+]);
+assert.equal(prototypeNamedGroup.length, 1);
+assert.equal(prototypeNamedGroup[0].channelId, '__proto__');
 console.log('web security and library interaction tests passed');
 
 const selectSubtitleStream = testWindow.__veloraTest.selectSubtitleStream;
