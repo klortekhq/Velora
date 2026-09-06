@@ -214,11 +214,16 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `node scripts/check-tv-packaging-output.mjs` correctos; se regeneraron los
   metadatos de Samsung, webOS y VIDAA. La ausencia de Tizen Studio/CLI se
   mantiene como limitación explícita, no como paquete instalable simulado.
-- Batería completa reejecutada en el estado publicado `75878f9`: versiones,
+- Batería completa reejecutada en el estado publicado `514261e`: versiones,
   identidad, contrato Jellyfin, catálogos Android/Apple/web, privacidad Apple,
   workflows de release, política offline, seguridad web, tests de interacción
   y metadatos Smart TV correctos. El IPK webOS se regeneró; Tizen continúa
   pendiente de su SDK y firma.
+
+- Tests Android reejecutados en `main`: `testMobileDebugUnitTest` y
+  `testTvDebugUnitTest` correctos. El bundle web y el IPK webOS también se
+  regeneraron correctamente; Samsung queda como bundle porque este host no
+  tiene Tizen Studio/CLI.
 
 ## Artefactos Android locales
 
