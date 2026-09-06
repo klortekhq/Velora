@@ -9,6 +9,7 @@ import com.klortek.velora.platform.PlatformCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.InputStream
 import java.io.File
 import java.security.MessageDigest
@@ -390,7 +391,7 @@ object OfflineDownloadManager {
         val migrated = buildList {
             for (i in 0 until json.length()) {
                 val item = json.optJSONObject(i) ?: continue
-                add(OfflineDownload(item.optString("itemId"), item.optString("name"), item.optString("type"), item.optString("seriesName").ifBlank { null }, item.optInt("seasonNumber").takeIf { item.has("seasonNumber") }, item.optInt("episodeNumber").takeIf { item.has("episodeNumber") }, item.optLong("downloadId"), item.optString("quality", OfflineDownloadQuality.ORIGINAL.storageKey), item.optString("localPath").ifBlank { null }, item.optInt("status"), item.optInt("reason"), item.optLong("bytesDownloaded"), item.optLong("totalBytes", -1L)))
+                add(offlineDownloadFromLegacyJson(item))
             }
         }
         if (migrated.isNotEmpty()) db.replaceAll(migrated)
@@ -415,4 +416,58 @@ object OfflineDownloadManager {
         // The preference is intentionally removed once the SQLite index is live.
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().remove(KEY_ENTRIES).apply()
     }
+}
+
+/**
+ * Reads both the original camelCase JSON index and the later snake_case
+ * exports. Keeping every durable field here makes upgrades lossless before
+ * the entry is rewritten into SQLite.
+ */
+internal fun offlineDownloadFromLegacyJson(item: JSONObject): OfflineDownload {
+    val values = item.keys().asSequence().associateWith { key -> item.opt(key) }
+    return offlineDownloadFromLegacyValues(values)
+}
+
+/** Pure JVM-friendly form of the legacy converter; the Android JSON adapter above stays tiny. */
+internal fun offlineDownloadFromLegacyValues(values: Map<String, Any?>): OfflineDownload {
+    fun string(vararg keys: String): String? = keys
+        .asSequence()
+        .mapNotNull { values[it]?.toString() }
+        .firstOrNull { it.isNotBlank() }
+
+    fun has(key: String): Boolean = values.containsKey(key)
+
+    fun long(default: Long, vararg keys: String): Long = keys
+        .firstOrNull { has(it) }
+        ?.let { (values[it] as? Number)?.toLong() ?: values[it]?.toString()?.toLongOrNull() ?: default }
+        ?: default
+
+    fun int(default: Int, vararg keys: String): Int = keys
+        .firstOrNull { has(it) }
+        ?.let { (values[it] as? Number)?.toInt() ?: values[it]?.toString()?.toIntOrNull() ?: default }
+        ?: default
+
+    return OfflineDownload(
+        itemId = string("itemId", "item_id").orEmpty(),
+        name = string("name").orEmpty(),
+        type = string("type").orEmpty(),
+        seriesName = string("seriesName", "series_name"),
+        seasonNumber = if (has("seasonNumber") || has("season_number")) int(0, "seasonNumber", "season_number") else null,
+        episodeNumber = if (has("episodeNumber") || has("episode_number")) int(0, "episodeNumber", "episode_number") else null,
+        downloadId = long(0L, "downloadId", "download_id"),
+        quality = string("quality") ?: OfflineDownloadQuality.ORIGINAL.storageKey,
+        localPath = string("localPath", "local_path"),
+        status = int(DownloadManager.STATUS_PENDING, "status"),
+        reason = int(0, "reason"),
+        bytesDownloaded = long(0L, "bytesDownloaded", "bytes_downloaded"),
+        totalBytes = long(-1L, "totalBytes", "total_bytes"),
+        checksumSha256 = string("checksumSha256", "checksum_sha256"),
+        workName = string("workName", "work_name"),
+        createdAtEpochMs = long(0L, "createdAtEpochMs", "created_at"),
+        completedAtEpochMs = if (has("completedAtEpochMs") || has("completed_at")) long(0L, "completedAtEpochMs", "completed_at") else null,
+        lastPlayedAtEpochMs = if (has("lastPlayedAtEpochMs") || has("last_played_at")) long(0L, "lastPlayedAtEpochMs", "last_played_at") else null,
+        isWatched = values["isWatched"] as? Boolean ?: values["is_watched"] as? Boolean ?: false,
+        keepDownload = values["keepDownload"] as? Boolean ?: values["keep_download"] as? Boolean ?: false,
+        mediaSourceId = string("mediaSourceId", "media_source_id")
+    )
 }
