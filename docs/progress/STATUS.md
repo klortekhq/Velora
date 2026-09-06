@@ -302,9 +302,13 @@ filmografía exponen su título a lectores de pantalla, conservan activación po
 teclado/mando y Escape cierra los paneles modales o el reproductor activo.
 
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
-  SHA-256 `9B59B4D0CF60000F1864D012F307591E8DFC9D544146FD476265C8232B2467BE`.
+  SHA-256 `06EF392D2A0FD6C09868D4E934BBF2B46672125235B5347A147FC052B93CB1EA`.
 - TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`
-  SHA-256 `195931A715A72046600924A20A14B462EAAAB3A191E593DD4CB40F41E440B89C`.
+  SHA-256 `AD1C8525CA7A867B2D71AEF1678D3176128C2F7F461B79B4B743AE69976FE857`.
+
+Las variantes release se regeneraron correctamente después del selector
+centralizado de backend el 2026-09-06. Siguen sin firma: `apksigner` las rechaza
+con `Missing META-INF/MANIFEST.MF`, por lo que no se publican como release.
 
 Las releases etiquetadas `vX.Y.0` exigen secretos de firma Android. Sin ellos,
 el workflow falla deliberadamente en vez de publicar un APK no instalable como
