@@ -85,9 +85,9 @@ una comprobación no se interpreta como soporte certificado.
 - `node scripts/test-platform.mjs` desde `web/`: correcto para capacidades,
   seguridad, autenticación, biblioteca paginada, subtítulos, agrupación Live
   TV, etiquetas accesibles de tarjetas y pestañas con selección anunciada.
-- `node scripts/build-web.mjs all` desde `web/`: genera bundle web, bundle
-  Samsung, IPK webOS y bundle HTML5 VIDAA. Tizen queda pendiente de validar
-  hasta disponer de Tizen Studio/CLI y un perfil de firma.
+- `node web/scripts/build-web.mjs all`: genera correctamente el bundle web,
+  el bundle Samsung, el IPK webOS y el bundle HTML5 VIDAA; Tizen sigue
+  pendiente de Tizen Studio/CLI y firma.
 - `:app:assembleMobileRelease` y `:app:assembleTvRelease`: `BUILD SUCCESSFUL`.
 - `git diff --check`: sin errores en los cambios publicados.
 - `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
@@ -123,9 +123,6 @@ una comprobación no se interpreta como soporte certificado.
   obsoletos cuando se reconstruye una etiqueta mediante ejecución manual.
 - `node scripts/check-public-identity.mjs`: correcto; no hay referencias
   heredadas de identidad en el contenido público revisado.
-- `node scripts/build-web.mjs all`: correcto; vuelve a generar el bundle web,
-  el paquete IPK de webOS y el bundle HTML5 de VIDAA. La salida Samsung queda
-  preparada, pero no se presenta como `.wgt` firmado sin Tizen Studio.
 
 ## Artefactos Android locales
 
