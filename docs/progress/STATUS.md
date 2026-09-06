@@ -135,6 +135,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple: el reproductor nativo añade un selector funcional de relación de
   aspecto (`Ajustar`, `Rellenar` y `Original`) tanto en la ficha como en la
   vista de pantalla completa; sus cuatro etiquetas están localizadas.
+- Apple Live TV: el reproductor incrustado comparte ahora la pantalla completa
+  y el selector de aspecto con las fichas, conservando la misma sesión AVPlayer
+  y evitando iniciar una segunda emisión.
 
 ## Pruebas locales pasadas
 

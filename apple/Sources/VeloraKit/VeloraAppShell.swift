@@ -665,6 +665,8 @@ private struct VeloraLiveTvView: View {
     @State private var player: AVPlayer?
     @State private var selectedChannel: JellyfinLiveTvChannel?
     @State private var playbackTask: Task<Void, Never>?
+    @State private var isLiveFullscreen = false
+    @State private var liveAspectMode: VeloraAspectMode = .fit
 
     private func startPlayback(channel: JellyfinLiveTvChannel, sourceID: String? = nil) {
         let previousChannel = selectedChannel
@@ -749,12 +751,30 @@ private struct VeloraLiveTvView: View {
             if let player, let selectedChannel {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(selectedChannel.name).font(.headline)
-                    VideoPlayer(player: player)
-                        .aspectRatio(16 / 9, contentMode: .fit)
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    ZStack(alignment: .topTrailing) {
+                        VideoPlayer(player: player)
+                            .veloraVideoAspect(liveAspectMode)
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        Button {
+                            isLiveFullscreen = true
+                        } label: {
+                            Image(systemName: "arrow.up.left.and.arrow.down.right")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityLabel(Text("Fullscreen", bundle: .module))
+                        .padding(10)
+                    }
+                    VeloraAspectMenu(selection: $liveAspectMode)
                 }
                 .padding()
                 .background(.regularMaterial)
+                .fullScreenCover(isPresented: $isLiveFullscreen) {
+                    VeloraFullscreenPlayer(
+                        player: player,
+                        isPresented: $isLiveFullscreen,
+                        aspectMode: $liveAspectMode
+                    )
+                }
             }
         }
     }
