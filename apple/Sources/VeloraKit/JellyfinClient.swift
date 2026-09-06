@@ -208,9 +208,21 @@ public actor JellyfinClient {
     }
 
     private func isServerURL(_ url: URL) -> Bool {
-        url.scheme?.lowercased() == baseURL.scheme?.lowercased()
-            && url.host?.lowercased() == baseURL.host?.lowercased()
-            && url.port == baseURL.port
+        guard url.scheme?.lowercased() == baseURL.scheme?.lowercased(),
+              url.host?.lowercased() == baseURL.host?.lowercased(),
+              url.port == baseURL.port else { return false }
+
+        // Jellyfin can live below a reverse-proxy prefix. Same-origin is not
+        // enough here: a URL on the same host but outside that prefix must not
+        // be handed to AVPlayer with the session token.
+        let configuredPath = baseURL.path.isEmpty ? "/" : baseURL.path
+        let candidatePath = url.path.isEmpty ? "/" : url.path
+        let normalizedPrefix = configuredPath.hasSuffix("/")
+            ? String(configuredPath.dropLast())
+            : configuredPath
+        return normalizedPrefix == "/"
+            || candidatePath == normalizedPrefix
+            || candidatePath.hasPrefix(normalizedPrefix + "/")
     }
 
     public func items(userID: String, parentID: String? = nil, includeTypes: [String] = []) async throws -> [JellyfinItem] {
