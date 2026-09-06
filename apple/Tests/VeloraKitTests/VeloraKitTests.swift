@@ -199,6 +199,7 @@ final class VeloraKitTests: XCTestCase {
     func testLanguageSelectionUsesDeviceLocaleByDefaultAndSupportsSupportedLocales() {
         let automatic = VeloraSettings()
         XCTAssertFalse(automatic.appLocale.identifier.isEmpty)
+        XCTAssertNil(automatic.languageIdentifier)
         XCTAssertEqual(Set(VeloraLanguage.allCases.map(\.rawValue)), Set(["es", "en", "fr", "de"]))
 
         let settings = VeloraSettings(languageIdentifier: VeloraLanguage.spanish.rawValue)
