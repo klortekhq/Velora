@@ -84,7 +84,11 @@ public struct VeloraSettings: Codable, Equatable, Sendable {
     }
 
     public static func systemDefault() -> Self {
-        Self(languageIdentifier: Locale.preferredLanguages.first)
+        // Keep the preference unset for the system-default mode. The current
+        // device locale is resolved by `appLocale` at read time, so a locale
+        // change in iOS/iPadOS/tvOS is reflected without turning it into an
+        // accidental user override.
+        Self()
     }
 
     /// The locale used by SwiftUI. A nil choice follows the device locale.
