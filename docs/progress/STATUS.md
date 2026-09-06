@@ -13,9 +13,9 @@ una comprobación no se interpreta como soporte certificado.
 - No hay ramas de producto adicionales en GitHub.
 - Último cambio funcional documentado: contrato de autenticación Jellyfin
   consistente (`Pw`) en Android, Apple, web y smoke test.
-- Identidad pública: Velora por Klørtek; no se encontraron referencias a
-  Elefin, Moonfin o Ruvik/Ruvikitten en el producto público. `com.klortek.velora`
-  se conserva únicamente como identificador técnico Android.
+- Identidad pública: Velora por Klørtek. Los identificadores de paquete se
+  conservan únicamente donde los exige el sistema de distribución de cada
+  plataforma y no forman parte de la identidad visible del producto.
 
 ## Funcionalidad implementada
 
