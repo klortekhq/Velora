@@ -170,6 +170,11 @@ internal data class AspectPresentation(
     val forcedRatio: Float
 )
 
+// View tags let delayed layout callbacks identify whether they are still the
+// latest request. Without this guard, selecting two modes quickly could let a
+// callback for the first mode overwrite the second one a few frames later.
+private const val ASPECT_MODE_TAG_KEY = 0x56454C52
+
 /**
  * Returns the aspect ratio for the Compose container around the actual video
  * surface. Keeping this decision pure and shared by portrait and fullscreen
@@ -208,6 +213,8 @@ private fun applyAspectModeToPlayerView(
     val resizeMode = presentation.resizeMode
     val forcedRatio = presentation.forcedRatio
 
+    playerView.setTag(ASPECT_MODE_TAG_KEY, mode.name)
+
     // Set PlayerView first. The content frame is normally present immediately,
     // but can be attached a moment later on some Media3/device combinations.
     // Do not make the whole operation a no-op when that child is temporarily
@@ -229,6 +236,7 @@ private fun applyAspectModeToPlayerView(
     // when entering fullscreen or switching between streams.
     fun reapply() {
         if (!playerView.isAttachedToWindow) return
+        if (playerView.getTag(ASPECT_MODE_TAG_KEY) != mode.name) return
         playerView.resizeMode = resizeMode
         playerView.findViewById<AspectRatioFrameLayout>(
             androidx.media3.ui.R.id.exo_content_frame
