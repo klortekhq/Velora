@@ -431,8 +431,10 @@
       var target = new URL(value, base());
       var server = new URL(base());
       if (target.origin !== server.origin) return '';
-      target.searchParams.delete('api_key');
-      target.searchParams.delete('ApiKey');
+      var sensitiveNames = ['api_key', 'apikey', 'access_token', 'token', 'x-emby-token', 'authorization'];
+      Array.from(target.searchParams.keys()).forEach(function (name) {
+        if (sensitiveNames.indexOf(String(name).toLowerCase()) !== -1) target.searchParams.delete(name);
+      });
       return target.href;
     } catch (error) {
       return '';

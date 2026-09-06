@@ -22,6 +22,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Android: la consulta compartida de películas y series incorpora cobertura
   de estrés con bibliotecas sintéticas de 1.000, 10.000 y 50.000 elementos,
   verificando filtros, ordenación y estabilidad del resultado.
+- Web: la limpieza de URLs de reproducción elimina todos los nombres de
+  credencial de Jellyfin sin depender de la capitalización, tanto en el cliente
+  como en el proxy autenticado.
 - Rendimiento Android: películas y series ya no descargan toda la biblioteca
   al abrir la pantalla de recomendaciones; el catálogo completo se carga bajo
   demanda al entrar en la vista de biblioteca, mejorando el arranque con

@@ -83,7 +83,8 @@ assert.match(appSource, /if \(!state\.server\)/);
 assert.match(appSource, /response\.status === 401 \|\| response\.status === 403/);
 assert.match(appSource, /failure\.code =/);
 assert.match(appSource, /t\(failure && failure\.code \? failure\.code : 'connectionError'\)/);
-assert.match(appSource, /searchParams\.delete\('api_key'\)/);
+assert.match(appSource, /sensitiveNames = \['api_key', 'apikey', 'access_token', 'token', 'x-emby-token', 'authorization'\]/);
+assert.match(appSource, /sensitiveNames\.indexOf\(String\(name\)\.toLowerCase\(\)\)/);
 assert.match(appSource, /function toggleFullscreen/);
 assert.match(appSource, /function minimizePlayer/);
 assert.match(appSource, /function restorePlayer/);
@@ -139,6 +140,7 @@ assert.match(proxySource, /LiveTv\\\/LiveStreamFiles/);
 assert.match(proxySource, /access_token/);
 assert.match(proxySource, /x-emby-token/);
 assert.match(proxySource, /target\.searchParams\.delete/);
+assert.match(proxySource, /sensitiveNames\.indexOf\(String\(name\)\.toLowerCase\(\)\)/);
 assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // Execute the real web grouping function instead of relying only on source
 // pattern checks. This protects the one-row/multiple-source Live TV contract.
