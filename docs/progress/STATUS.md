@@ -61,6 +61,8 @@ una comprobación no se interpreta como soporte certificado.
 - `:app:assembleMobileRelease` y `:app:assembleTvRelease`: `BUILD SUCCESSFUL`.
 - `git diff --check`: sin errores en los cambios publicados.
 - `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
+- `node scripts/check-jellyfin-auth-contract.mjs`: contrato `Pw` coherente en
+  Android, Apple, web y smoke test.
 - `node scripts/check-android-locales.mjs`: 434 claves en los catálogos Android.
 - `node scripts/check-apple-locales.mjs`: 45 claves coherentes en `en`, `es`,
   `fr` y `de`.
