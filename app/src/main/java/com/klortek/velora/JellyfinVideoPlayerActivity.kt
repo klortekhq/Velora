@@ -23,6 +23,9 @@ import com.klortek.velora.jellyfin.JellyfinItem
 import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.player.mpv.MpvTvPlayerActivity
 import com.klortek.velora.player.mpv.MpvUrlBuilder
+import com.klortek.velora.playback.PlaybackBackend
+import com.klortek.velora.playback.PlaybackBackendPreferences
+import com.klortek.velora.playback.PlaybackBackendSelector
 import com.klortek.velora.screens.JellyfinVideoPlayerScreen
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.security.MediaUrlHeaderPolicy
@@ -229,7 +232,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         // ExoPlayer is the default for every playback type, including Live TV.
         // MPV is only selected explicitly in Ajustes. ExoPlayer's existing
         // error listener can still hand off to MPV when fallbackToMpv is enabled.
-        if (settings.isMpvEnabled) {
+        val initialBackend = PlaybackBackendSelector.initialBackend(
+            PlaybackBackendPreferences(mpvExplicitlyEnabled = settings.isMpvEnabled)
+        )
+        if (initialBackend == PlaybackBackend.MPV) {
             val serverUrl = config.serverUrl.removeSuffix("/")
             val accessToken = config.accessToken ?: ""
             

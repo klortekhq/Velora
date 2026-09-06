@@ -271,6 +271,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   las fuentes restantes.
 - `MediaUrlSecurityTest` cubre el alcance por esquema, host, puerto y prefijo
   de ruta para impedir que una fuente externa reciba cabeceras Jellyfin.
+- `PlaybackBackendTest` cubre la regla de reproductor: Media3/ExoPlayer es el
+  backend inicial, MPV requiere elección explícita y el fallback solo se activa
+  después de un error real de decodificación. La suite móvil volvió a pasar el
+  2026-09-06.
 
 ## Artefactos Android locales
 
