@@ -511,7 +511,7 @@
         'Accept-Language': languageCode(),
       'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="' + APP_VERSION + '", Language="' + languageCode() + '"'
       },
-      body: JSON.stringify({ Username: username, Password: document.querySelector('#password').value })
+      body: JSON.stringify({ Username: username, Pw: document.querySelector('#password').value })
     }).then(function (response) {
       if (!response.ok) throw Error(t('loginError'));
       return response.json();

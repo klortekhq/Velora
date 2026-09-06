@@ -63,6 +63,8 @@ assert.match(appSource, /media-proxy-sw\.js/);
 assert.match(appSource, /__velora_media/);
 assert.match(appSource, /waitForMediaProxy/);
 assert.match(appSource, /\/Items\/'.*PlaybackInfo\?UserId=/);
+assert.match(appSource, /JSON\.stringify\(\{ Username: username, Pw:/);
+assert.doesNotMatch(appSource, /JSON\.stringify\(\{ Username: username, Password:/);
 assert.match(appSource, /AutoOpenLiveStream=true/);
 assert.match(appSource, /MediaSourceId=/);
 assert.match(appSource, /\/Sessions\/Playing\/Stopped/);
