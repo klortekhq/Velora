@@ -210,12 +210,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 Son builds `unsigned` para QA, no releases de distribución:
 
-Builds debug regeneradas tras la corrección de Live TV (QA, 2026-09-06):
+Builds debug regeneradas tras el endurecimiento de offline en TV (QA,
+2026-09-06):
 
 - Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`, 78,2 MB,
-  SHA-256 `D7A399EBC435F2D91B4F43E27306281D5852B4EA750B8B5241F5D69A57DC314A`.
+  SHA-256 `C12D11E6871199653F16FA65AB076BF99F98162823199989FBD32023769185DB`.
 - TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, 78,2 MB,
-  SHA-256 `D0B1046408572FF5C1BB2D93CB1F57C8DF197431208F121453AB6DED39299BFA`.
+  SHA-256 `1DE3126FF8B4C36255437DB4D02B2F738E27ED5699AC4CF93127CE034E971A52`.
 
 Ambas variantes se generaron correctamente en QA el 2026-09-06; no se han
 instalado en hardware porque ningún dispositivo ADB respondió.
