@@ -49,6 +49,8 @@ jobs:
         run: node web/scripts/test-platform.mjs
       - name: Build browser and Smart TV bundles
         run: node web/scripts/build-web.mjs all
+      - name: Validate Smart TV packaging metadata
+        run: node scripts/check-tv-packaging-output.mjs
 
   android:
     name: Android unit tests and Kotlin compilation

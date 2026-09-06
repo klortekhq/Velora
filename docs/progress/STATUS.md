@@ -92,6 +92,8 @@ una comprobación no se interpreta como soporte certificado.
   pendiente de Tizen Studio/CLI y firma.
 - Los artefactos Samsung y webOS incluyen `velora-build.json` con su estado
   real (`installablePackage`, tipo de empaquetado y requisito de SDK/firma).
+- `node scripts/check-tv-packaging-output.mjs`: correcto; valida Samsung,
+  webOS y VIDAA tras generar sus bundles y paquetes.
 - `:app:assembleMobileRelease` y `:app:assembleTvRelease`: `BUILD SUCCESSFUL`.
 - `git diff --check`: sin errores en los cambios publicados.
 - `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
