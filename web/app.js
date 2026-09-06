@@ -831,7 +831,7 @@
         var html = '<h2>' + esc(t('actorWorks')) + '</h2>';
         if (!works.length) html += '<p class="muted">' + esc(t('noActorWorks')) + '</p>';
         else html += '<div class="grid">' + works.map(function (work) {
-          return '<article class="card" tabindex="0" role="button" data-id="' + esc(work.Id) + '">' +
+          return '<article class="card" tabindex="0" role="button" aria-label="' + esc(work.Name || '') + '" data-id="' + esc(work.Id) + '">' +
             '<img loading="lazy" data-velora-image-id="' + esc(work.Id) + '" alt=""><div class="label">' + esc(work.Name) + '</div></article>';
         }).join('') + '</div>';
         details.querySelector('.person-results').innerHTML = html;
@@ -1257,6 +1257,23 @@
   }
 
   document.addEventListener('velora:back', function (event) {
+    var settings = document.querySelector('#settings');
+    var details = document.querySelector('#details');
+    var player = document.querySelector('#player');
+    if (settings) {
+      closeSettings();
+      event.preventDefault();
+    } else if (player) {
+      closePlayer();
+      event.preventDefault();
+    } else if (details) {
+      closeDetails();
+      event.preventDefault();
+    }
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Escape') return;
     var settings = document.querySelector('#settings');
     var details = document.querySelector('#details');
     var player = document.querySelector('#player');

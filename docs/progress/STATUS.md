@@ -241,6 +241,10 @@ primera página para que la transición sea inmediata y el catálogo completo se
 solicita solo al abrir la pestaña de biblioteca, manteniendo disponibles el
 ordenado y los filtros completos.
 
+La accesibilidad web/Smart TV también se ha reforzado: las tarjetas de
+filmografía exponen su título a lectores de pantalla, conservan activación por
+teclado/mando y Escape cierra los paneles modales o el reproductor activo.
+
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
   SHA-256 `9B59B4D0CF60000F1864D012F307591E8DFC9D544146FD476265C8232B2467BE`.
 - TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`
