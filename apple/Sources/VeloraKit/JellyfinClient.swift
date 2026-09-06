@@ -232,7 +232,9 @@ public actor JellyfinClient {
         if !includeTypes.isEmpty { query.append(URLQueryItem(name: "IncludeItemTypes", value: includeTypes.joined(separator: ","))) }
         query.append(URLQueryItem(name: "StartIndex", value: String(max(0, startIndex))))
         query.append(URLQueryItem(name: "Limit", value: String(max(1, min(limit, 500)))))
-        query.append(URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,MediaSources,UserData"))
+        // Keep catalog pages light. MediaSources are resolved by PlaybackInfo
+        // when the user presses Play; they do not belong in every card.
+        query.append(URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,UserData"))
         components?.queryItems = query
         guard let url = components?.url else { throw ClientError.invalidServerURL }
         return try await request(url, as: JellyfinResult<JellyfinItem>.self)
@@ -254,7 +256,7 @@ public actor JellyfinClient {
             URLQueryItem(name: "Recursive", value: "true"),
             URLQueryItem(name: "PersonIds", value: personID),
             URLQueryItem(name: "IncludeItemTypes", value: "Movie,Series"),
-            URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,MediaSources,UserData"),
+            URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,UserData"),
             URLQueryItem(name: "SortBy", value: "DateCreated"),
             URLQueryItem(name: "SortOrder", value: "Descending"),
             URLQueryItem(name: "Limit", value: "100")

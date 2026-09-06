@@ -66,6 +66,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple: la biblioteca inicial se solicita en páginas de 100 elementos y la
   cuadrícula pide la siguiente página al alcanzar el final, sin imponer un
   límite artificial al catálogo.
+- Apple: las páginas de catálogo ya no solicitan `MediaSources` completos por
+  tarjeta; la decisión de reproducción se resuelve al iniciar la reproducción.
 - La migración Android desde el índice JSON antiguo conserva también checksum,
   fuente, trabajo, progreso, fechas, estado de visto y protección de descarga
   antes de pasar a SQLite.
