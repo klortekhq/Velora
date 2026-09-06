@@ -398,6 +398,11 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - Comprobación ADB más reciente del 2026-09-06: `adb get-state` devolvió
   `no devices/emulators found`; no se intentó instalar ni controlar el Fire TV
   sin una conexión verificable.
+- Intento autenticado adicional del 2026-09-06 contra el servidor indicado:
+  la primera llamada de login respondió `400` y el reintento con la cabecera
+  oficial de cliente terminó por timeout; no se marca como válida ninguna
+  prueba de catálogo, Live TV, `PlaybackInfo` o reproducción y no se guardaron
+  credenciales ni tokens.
 
 ## Pendiente verificable
 
