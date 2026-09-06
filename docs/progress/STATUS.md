@@ -92,6 +92,8 @@ una comprobación no se interpreta como soporte certificado.
 - `node scripts/check-android-locales.mjs`: 434 claves en los catálogos Android.
 - `node scripts/check-apple-locales.mjs`: 48 claves coherentes en `en`, `es`,
   `fr` y `de`.
+- `node scripts/check-web-locales.mjs`: 69 claves efectivas coherentes en los
+  12 idiomas de la web, incluyendo los fallbacks y overrides traducidos.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
 - El workflow de Android fue revisado sintácticamente: los APK debug se guardan

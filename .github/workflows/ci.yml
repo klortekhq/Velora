@@ -66,6 +66,8 @@ jobs:
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
       - name: Validate Android locale catalogues
         run: node scripts/check-android-locales.mjs
+      - name: Validate web locale catalogues
+        run: node scripts/check-web-locales.mjs
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: Make wrapper executable
