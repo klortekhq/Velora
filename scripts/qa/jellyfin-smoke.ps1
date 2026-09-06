@@ -18,9 +18,16 @@ $clientHeader = 'MediaBrowser Client="Velora QA", Device="QA", DeviceId="velora-
 
 try {
     $stage = 'información pública'
-    $public = Invoke-RestMethod -Uri "$base/System/Info/Public" -Headers @{
+    $publicEndpointInvalid = $false
+    $publicResponse = Invoke-WebRequest -Uri "$base/System/Info/Public" -Headers @{
         'X-Emby-Authorization' = $clientHeader
     } -TimeoutSec 15
+    $public = $null
+    try { $public = $publicResponse.Content | ConvertFrom-Json } catch { $public = $null }
+    if ($null -eq $public -or [string]::IsNullOrWhiteSpace([string]$public.Version)) {
+        $publicEndpointInvalid = $true
+        throw 'La URL configurada no devolvió JSON de Jellyfin en /System/Info/Public; puede apuntar a la WebGUI de otro servicio o requerir una ruta base de Jellyfin.'
+    }
 
     $stage = 'autenticación'
     $authBody = @{ Username = $Username; Pw = $Password } | ConvertTo-Json
@@ -58,7 +65,13 @@ try {
     Write-Output "Live TV: $($items.Count) canales; $multiSourceRows filas con varias fuentes; $duplicateIds IDs duplicadas"
 }
 catch {
-    $status = $_.Exception.Response.StatusCode.value__
+    $status = $null
+    if ($null -ne $_.Exception.Response -and $null -ne $_.Exception.Response.StatusCode) {
+        $status = $_.Exception.Response.StatusCode.value__
+    }
+    if ($publicEndpointInvalid) {
+        throw "Smoke test Jellyfin fallido en ${stage}: la dirección responde, pero no es un endpoint Jellyfin válido (la respuesta no contiene JSON de /System/Info/Public)."
+    }
     if ($status -eq 401) {
         throw "Smoke test Jellyfin fallido en ${stage}: el servidor responde, pero las credenciales configuradas fueron rechazadas (HTTP 401)."
     }

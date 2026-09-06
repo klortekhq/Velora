@@ -368,6 +368,11 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   específicamente en la etapa de autenticación; el script ahora identifica la
   etapa (`información pública`, `autenticación`, `listado Live TV` o
   `PlaybackInfo`) sin imprimir credenciales ni tokens.
+- En la revalidación del 2026-09-06, `192.168.100.201/System/Info/Public`
+  respondió una página HTML de la WebGUI de Unraid en lugar del JSON de
+  Jellyfin. El smoke test se endureció para rechazar explícitamente esa ruta
+  y conservar el diagnóstico, sin confundir un HTTP 200 de otro servicio con
+  un servidor Jellyfin saludable.
 - ADB está disponible en el host, pero no hay ningún dispositivo conectado ni
   servicio mDNS del Fire TV visible; no se declara instalación ni prueba
   física reciente en Fire TV o móvil.
