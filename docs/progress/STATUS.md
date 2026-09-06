@@ -80,6 +80,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Android TV: Live TV se integra en la misma fila centrada de navegación que
   las bibliotecas de películas y series; la pestaña sigue siendo condicional a
   los canales visibles para el usuario.
+- Android móvil/tablet: la navegación inferior mantiene destinos condicionales
+  y ahora expone foco, rol de botón y estado visual para toque, teclado, mando
+  y tecnologías de asistencia.
 - Live TV: la normalización Android y web descarta duplicados idénticos sin
   `MediaSource`, pero conserva cada fuente identificada como una opción
   seleccionable.
@@ -92,6 +95,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- Las suites móvil y TV vuelven a terminar correctamente tras hacer enfocables
+  y accesibles los destinos de navegación inferior móvil/tablet.
 - `:app:compileMobileDebugKotlin`, `:app:compileTvDebugKotlin`,
   `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest`: `BUILD
   SUCCESSFUL` tras corregir la carga opcional de Lottie.
