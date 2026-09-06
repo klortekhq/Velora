@@ -56,6 +56,12 @@ jobs:
       - name: Validar coherencia de versiones
         run: node scripts/check-version-consistency.mjs
 
+      - name: Validar identidad pública
+        run: node scripts/check-public-identity.mjs
+
+      - name: Validar contrato de autenticación Jellyfin
+        run: node scripts/check-jellyfin-auth-contract.mjs
+
       - name: Validar catálogos Android
         run: node scripts/check-android-locales.mjs
 

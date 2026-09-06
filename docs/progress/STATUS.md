@@ -71,6 +71,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   VIDAA con un paquete firmado.
 - El workflow de releases web ejecuta esa verificación después del build y
   antes de publicar los assets.
+- Los workflows de release vuelven a validar identidad pública y contrato de
+  autenticación Jellyfin antes de producir o publicar cualquier artefacto.
 - Apple: `PrivacyInfo.xcprivacy` está incluido en los recursos compartidos y
   el CI comprueba sus claves y la declaración de no-tracking; la firma y la
   validación final del bundle siguen requiriendo Xcode/macOS.
