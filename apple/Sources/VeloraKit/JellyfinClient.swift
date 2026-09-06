@@ -215,7 +215,24 @@ public actor JellyfinClient {
         var query = [URLQueryItem(name: "UserId", value: userID), URLQueryItem(name: "Recursive", value: "true")]
         if let parentID { query.append(URLQueryItem(name: "ParentId", value: parentID)) }
         if !includeTypes.isEmpty { query.append(URLQueryItem(name: "IncludeItemTypes", value: includeTypes.joined(separator: ","))) }
+        query.append(URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,MediaSources,UserData"))
         components?.queryItems = query
+        guard let url = components?.url else { throw ClientError.invalidServerURL }
+        return try await request(url, as: JellyfinResult<JellyfinItem>.self).items
+    }
+
+    public func items(userID: String, forPerson personID: String) async throws -> [JellyfinItem] {
+        guard !personID.isEmpty, !personID.contains("/"), !personID.contains("\\") else { return [] }
+        var components = URLComponents(url: baseURL.appendingPathComponent("Users/\(userID)/Items"), resolvingAgainstBaseURL: false)
+        components?.queryItems = [
+            URLQueryItem(name: "Recursive", value: "true"),
+            URLQueryItem(name: "PersonIds", value: personID),
+            URLQueryItem(name: "IncludeItemTypes", value: "Movie,Series"),
+            URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,MediaSources,UserData"),
+            URLQueryItem(name: "SortBy", value: "DateCreated"),
+            URLQueryItem(name: "SortOrder", value: "Descending"),
+            URLQueryItem(name: "Limit", value: "100")
+        ]
         guard let url = components?.url else { throw ClientError.invalidServerURL }
         return try await request(url, as: JellyfinResult<JellyfinItem>.self).items
     }

@@ -7,6 +7,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Web/Smart TV: la biblioteca carga los resultados por páginas y permite
   continuar con «Cargar más», evitando bloquear el inicio al trabajar con
   catálogos grandes.
+- Apple: las fichas muestran el reparto de Jellyfin y permiten abrir la
+  filmografía disponible de cada persona, manteniendo la navegación nativa.
 - Multiplataforma: Apple y web envían ahora el campo `Pw` que exige
   `AuthenticateByName` de Jellyfin, alineándose con Android y el smoke test.
 - CI: se añade una comprobación automática del contrato de autenticación para

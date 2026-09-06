@@ -7,6 +7,9 @@
 "Sign in" = "Se connecter";
 "Unable to sign in" = "Connexion impossible";
 "Unable to load library" = "Impossible de charger la bibliothèque";
+"Cast" = "Distribution";
+"Unable to load filmography" = "Impossible de charger la filmographie";
+"No other titles available" = "Aucun autre titre disponible";
 "Language and playback" = "Langue et lecture";
 "App language" = "Langue de l’application";
 "Preferred audio" = "Audio préféré";

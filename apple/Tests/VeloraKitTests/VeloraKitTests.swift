@@ -177,13 +177,16 @@ final class VeloraKitTests: XCTestCase {
     }
 
     func testJellyfinItemDecodesServerFieldNames() throws {
-        let data = #"{"Id":"movie-1","Name":"Una película","Type":"Movie","Overview":"Descripción","ImageTags":{"Primary":"abc"}}"#.data(using: .utf8)!
+        let data = #"{"Id":"movie-1","Name":"Una película","Type":"Movie","Overview":"Descripción","ImageTags":{"Primary":"abc"},"ProductionYear":2025,"People":[{"Id":"person-1","Name":"Actriz","Type":"Actor","Role":"Protagonista","PrimaryImageTag":"person-art"}]}"#.data(using: .utf8)!
         let item = try JSONDecoder().decode(JellyfinItem.self, from: data)
         XCTAssertEqual(item.id, "movie-1")
         XCTAssertEqual(item.name, "Una película")
         XCTAssertEqual(item.type, "Movie")
         XCTAssertEqual(item.overview, "Descripción")
         XCTAssertEqual(item.imageTags?["Primary"], "abc")
+        XCTAssertEqual(item.productionYear, 2025)
+        XCTAssertEqual(item.people?.first?.id, "person-1")
+        XCTAssertEqual(item.people?.first?.role, "Protagonista")
     }
 
     func testLiveTvModelsDecodeServerFieldNames() throws {
