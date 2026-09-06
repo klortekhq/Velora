@@ -91,6 +91,9 @@ una comprobación no se interpreta como soporte certificado.
   manual; los pull requests y los pushes normales quedan en el workflow de CI.
 - `node scripts/check-release-workflows.mjs`: correcto; protege esa política y
   evita publicar APKs por comodín.
+- `node scripts/build-web.mjs all`: correcto; vuelve a generar el bundle web,
+  el paquete IPK de webOS y el bundle HTML5 de VIDAA. La salida Samsung queda
+  preparada, pero no se presenta como `.wgt` firmado sin Tizen Studio.
 
 ## Artefactos Android locales
 
@@ -126,7 +129,8 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - `http://192.168.100.201:8096/health` respondió HTTP 200 en la última prueba.
 - El smoke test autenticado confirmó que el servidor responde, pero rechazó
   las credenciales configuradas con HTTP 401; no se certifican en esta sesión
-  biblioteca, reproducción ni Live TV real.
+  biblioteca, reproducción ni Live TV real. No se han registrado credenciales,
+  contraseñas ni tokens en este documento.
 - ADB no está instalado/disponible en el host actual; no se declara instalación
   ni prueba física reciente en Fire TV o móvil.
 
