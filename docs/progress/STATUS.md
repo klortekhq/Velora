@@ -208,6 +208,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `node scripts/check-tv-packaging-output.mjs` correctos; se regeneraron los
   metadatos de Samsung, webOS y VIDAA. La ausencia de Tizen Studio/CLI se
   mantiene como limitación explícita, no como paquete instalable simulado.
+- Batería completa reejecutada en el estado publicado `75878f9`: versiones,
+  identidad, contrato Jellyfin, catálogos Android/Apple/web, privacidad Apple,
+  workflows de release, política offline, seguridad web, tests de interacción
+  y metadatos Smart TV correctos. El IPK webOS se regeneró; Tizen continúa
+  pendiente de su SDK y firma.
 
 ## Artefactos Android locales
 
