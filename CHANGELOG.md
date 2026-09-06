@@ -6,6 +6,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 - Web: las tarjetas de películas, series y Live TV exponen su título a
   lectores de pantalla y mantienen activación por teclado además del ratón.
+- Android: los controles del reproductor y sus selectores de audio, subtítulos
+  y aspecto exponen una semántica de botón uniforme para toque y mando.
 - Web/Smart TV: la biblioteca carga los resultados por páginas y permite
   continuar con «Cargar más», evitando bloquear el inicio al trabajar con
   catálogos grandes.

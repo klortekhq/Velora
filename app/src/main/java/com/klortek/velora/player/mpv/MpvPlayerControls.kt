@@ -59,6 +59,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -625,7 +626,7 @@ private fun PlayerControlButton(
             )
             .onFocusChanged { isFocused = it.isFocused }
             .focusable()
-            .clickable(onClick = onClick),
+            .clickable(role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -753,7 +754,7 @@ private fun AspectModeButton(
             )
             .onFocusChanged { isFocused = it.isFocused }
             .focusable()
-            .clickable(onClick = onClick),
+            .clickable(role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -814,7 +815,7 @@ private fun SettingsMenuItem(
             )
             .onFocusChanged { isFocused = it.isFocused }
             .focusable()
-            .clickable(onClick = onClick)
+            .clickable(role = Role.Button, onClick = onClick)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -873,7 +874,7 @@ private fun TrackMenuItem(
             )
             .onFocusChanged { isFocused = it.isFocused }
             .focusable()
-            .clickable(onClick = onClick)
+            .clickable(role = Role.Button, onClick = onClick)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

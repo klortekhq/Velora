@@ -50,6 +50,9 @@ una comprobación no se interpreta como soporte certificado.
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- Los controles Android del reproductor se recompilaron con semántica de botón
+  para mando, toque y tecnologías de asistencia; las suites móvil y TV vuelven
+  a terminar correctamente.
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` tras el ajuste del cierre
   del cliente HTTP de autenticación.
 - La validación de login cubre también el ciclo de vida de Quick Connect; el
