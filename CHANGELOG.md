@@ -13,6 +13,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   grandes sin ocultar elementos.
 - Apple: las respuestas de catálogo son más ligeras al resolver las fuentes de
   reproducción únicamente cuando el usuario inicia un título.
+- Apple: la paginación continúa funcionando incluso si Jellyfin omite el total
+  de resultados, usando el tamaño de página como señal de continuación.
 - Android Live TV: la ruta predeterminada de ExoPlayer ya no fuerza H.264/AAC
   al abrir el HLS; conserva la decisión de Jellyfin y evita transcodificaciones
   innecesarias cuando el dispositivo puede reproducir la fuente original.
