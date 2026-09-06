@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `977ea84`.
+Revisión funcional actual: commit pendiente tras validar el siguiente cambio.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -88,9 +88,9 @@ una comprobación no se interpreta como soporte certificado.
 Son builds `unsigned` para QA, no releases de distribución:
 
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
-  SHA-256 `D6CD67146F4274F2AC18219928A24507303DE31F33763CD6E3EED2C267699F65`.
+  SHA-256 `7CE46D92CB21BF38EAA09BDAFD93569DC573A950B7030BCBEFD614116475B64D`.
 - TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`
-  SHA-256 `A854016183AB9A108DFCDBED1D0A504C60850E12F427AA290F9AA53A214D94A7`.
+  SHA-256 `7F7347D9AF1C0729733AE73E0D1B749804AD06423FA840647DFDA1CF7020433C`.
 
 Las releases etiquetadas `vX.Y.0` exigen secretos de firma Android. Sin ellos,
 el workflow falla deliberadamente en vez de publicar un APK no instalable como

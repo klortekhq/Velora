@@ -4,6 +4,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android TV: la capacidad de descargas se comprueba también en el callback
+  de entrada, evitando que una ruta secundaria pueda abrir la pantalla offline.
 - QA: el smoke test de Jellyfin distingue ahora un servidor inaccesible de
   unas credenciales rechazadas, sin revelar información sensible.
 - Web: las tarjetas de películas, series y Live TV exponen su título a

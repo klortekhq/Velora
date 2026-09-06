@@ -143,7 +143,9 @@ class MainActivity : ComponentActivity() {
                             startActivity(LiveTvActivity.createIntent(this@MainActivity))
                         },
                         onDownloadsClick = {
-                            startActivity(OfflineDownloadsActivity.createIntent(this@MainActivity))
+                            if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) {
+                                startActivity(OfflineDownloadsActivity.createIntent(this@MainActivity))
+                            }
                         },
                         onMusicClick = {
                             // Navigate to Music screen
