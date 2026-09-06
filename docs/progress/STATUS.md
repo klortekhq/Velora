@@ -52,8 +52,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   y permite ampliar los resultados sin bloquear el inicio.
 - El reparto abre la filmografía disponible en Jellyfin.
 - En Apple, las fichas también solicitan el reparto y permiten abrir su
-  filmografía en una vista nativa; la compilación Swift queda pendiente de la
-  ejecución CI en macOS.
+  filmografía en una vista nativa; las tarjetas de esa filmografía abren ahora
+  la ficha completa del título seleccionado. La compilación Swift queda
+  pendiente de la ejecución CI en macOS.
 - Las descargas gestionadas, su base SQLite, reanudación, integridad y Smart
   Downloads están limitadas a móvil/tablet. No aparecen en TV, Smart TV ni web.
 - Apple móvil/tablet conserva la calidad elegida en cada descarga offline y

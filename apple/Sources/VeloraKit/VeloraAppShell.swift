@@ -470,6 +470,7 @@ private struct VeloraFilmographyView: View {
     @State private var works: [JellyfinItem] = []
     @State private var isLoading = true
     @State private var failed = false
+    @State private var selectedItem: JellyfinItem?
 
     var body: some View {
         Group {
@@ -482,10 +483,15 @@ private struct VeloraFilmographyView: View {
                 Text("No other titles available", bundle: .module)
                     .foregroundStyle(.secondary)
             } else {
-                VeloraLibraryView(title: person.name, items: works, artworkClient: model.jellyfinClient) { _ in }
+                VeloraLibraryView(title: person.name, items: works, artworkClient: model.jellyfinClient) { item in
+                    selectedItem = item
+                }
             }
         }
         .navigationTitle(person.name)
+        .sheet(item: $selectedItem) { item in
+            NavigationStack { VeloraItemDetailView(item: item, model: model) }
+        }
         .task {
             do {
                 works = try await model.filmography(for: person)
