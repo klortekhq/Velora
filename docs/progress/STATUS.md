@@ -113,6 +113,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Android: el botón de reproducción opcional no construye ya una referencia
   `RawRes(0)`; el modo sin Lottie queda cubierto por la ruta normal de foco,
   toque y mando.
+- Android: el selector de formato del reproductor declara explícitamente el
+  rol de botón, igual que el resto de controles, para que tacto, mando y
+  tecnologías de asistencia reciban la misma interacción.
 - Android TV: Live TV se integra en la misma fila centrada de navegación que
   las bibliotecas de películas y series; la pestaña sigue siendo condicional a
   los canales visibles para el usuario.
@@ -176,6 +179,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Verificación fresca sobre `main` (`56be881`): `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m07s;
   la caché aislada de Gradle se creó correctamente.
+- Verificación posterior al ajuste de accesibilidad: ambas suites terminaron
+  en `BUILD SUCCESSFUL` en 11m30s.
 - El empaquetado web se verificó en una salida aislada: el bundle Samsung se
   preparó sin declarar un WGT al no estar instalado Tizen Studio, webOS generó
   un IPK y VIDAA generó el bundle HTML5; el script acepta ahora una carpeta de

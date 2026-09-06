@@ -6404,7 +6404,7 @@ private fun AspectModeButton(
             )
             .onFocusChanged { isFocused = it.isFocused }
             .focusable()
-            .clickable(onClick = onClick),
+            .clickable(role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Column(
