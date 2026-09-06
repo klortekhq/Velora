@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `3a099d0`.
+Revisión funcional actual: commit `70da098`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -82,6 +82,8 @@ una comprobación no se interpreta como soporte certificado.
   usuario de una URL y parámetros sensibles en query/fragmento.
 - El workflow de Android fue revisado sintácticamente: los APK debug se guardan
   como artefactos de QA y no se incluyen en las Releases públicas.
+- Los workflows de publicación solo se activan con tags de versión o ejecución
+  manual; los pull requests y los pushes normales quedan en el workflow de CI.
 
 ## Artefactos Android locales
 
