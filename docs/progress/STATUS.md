@@ -47,6 +47,10 @@ una comprobación no se interpreta como soporte certificado.
   acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen
   `supportsOfflineDownloads: false`. La regla queda cubierta por tests de
   capacidades Android/Apple/web.
+- Las descargas de subtítulos externos siguen la misma regla: sus resultados,
+  almacenamiento y ajustes de OpenSubtitles solo se muestran en móvil/tablet;
+  las superficies de TV conservan únicamente las pistas que ya entrega
+  Jellyfin.
 - Android migra credenciales a Keystore; Apple usa Keychain; el cliente web
   usa su proxy autenticado sin poner tokens en la URL del vídeo.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
@@ -56,6 +60,8 @@ una comprobación no se interpreta como soporte certificado.
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- Las suites móvil y TV vuelven a terminar correctamente tras ocultar el
+  almacenamiento y la gestión de subtítulos externos en TV.
 - La compilación y los tests móvil/TV vuelven a terminar correctamente tras
   el ajuste de los textos de información técnica.
 - Los controles Android del reproductor se recompilaron con semántica de botón
