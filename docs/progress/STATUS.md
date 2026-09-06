@@ -56,6 +56,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   guardada localmente y textos traducidos en los 12 idiomas web.
 - La comprobación de disponibilidad de Live TV en el inicio libera su cliente
   HTTP al cambiar de sesión o salir de la pantalla.
+- El descubrimiento de Jellyfin prioriza ahora HTTP para IPs locales con puerto
+  explícito (como el endpoint LAN habitual 8096), evitando consumir primero el
+  timeout TLS sobre un puerto HTTP; HTTPS sigue disponible como fallback.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
   de reproducción persistente. El cliente web carga la biblioteca por páginas
   y permite ampliar los resultados sin bloquear el inicio.
@@ -176,6 +179,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   a terminar correctamente.
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` tras el ajuste del cierre
   del cliente HTTP de autenticación.
+- `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL` en 11m49s tras corregir el
+  orden HTTP/HTTPS del descubrimiento local; se añadieron pruebas unitarias
+  para IP local con puerto explícito y URL HTTP completa.
 - Verificación fresca sobre `main` (`56be881`): `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m07s;
   la caché aislada de Gradle se creó correctamente.
@@ -341,6 +347,10 @@ commit `adc1a5f`):
   SHA-256 `535933CBBBBB9217FBEAEB450280E0415481E09C45FED2B2283FB070F5394E1C`.
 - TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`,
   SHA-256 `1529907A1ABF0A0EF1E06F2F6C42CE822EDBE71B9D279D609BFC44C61431564C`.
+
+Build TV de QA posterior al ajuste de descubrimiento local (commit pendiente de
+este registro): `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+`722D77BC445FF1232737CCCFD550BFFBAFA946577BE5795B59FD892252A02EA9`.
 
 La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
 terminó en `BUILD SUCCESSFUL` en 9m24s. Siguen siendo APK unsigned de QA.

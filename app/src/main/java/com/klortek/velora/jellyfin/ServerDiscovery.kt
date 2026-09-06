@@ -75,7 +75,7 @@ object ServerDiscovery {
      * 2. HTTPS with explicit ports - reverse proxy setups
      * 3. HTTPS default port 443 - cloud/external servers
      */
-    private fun buildUrlCandidates(input: String): List<String> {
+    internal fun buildUrlCandidates(input: String): List<String> {
         val normalized = input
             .removeSuffix("/")
             .replace(" ", "")
@@ -136,11 +136,21 @@ object ServerDiscovery {
                 candidates += "http://$normalized/jellyfin/System/Info/Public"
             }
         } else {
-            // User specified a port or path - respect their input
-            candidates += "https://$normalized/System/Info/Public"
-            candidates += "http://$normalized/System/Info/Public"
-            candidates += "https://$normalized/jellyfin/System/Info/Public"
-            candidates += "http://$normalized/jellyfin/System/Info/Public"
+            // User specified a port or path - respect their input. For a local
+            // address, try cleartext first: Jellyfin's normal LAN endpoint is
+            // HTTP on 8096, while probing TLS on that same port can spend the
+            // full timeout before the usable HTTP candidate is attempted.
+            if (isLocalIp) {
+                candidates += "http://$normalized/System/Info/Public"
+                candidates += "http://$normalized/jellyfin/System/Info/Public"
+                candidates += "https://$normalized/System/Info/Public"
+                candidates += "https://$normalized/jellyfin/System/Info/Public"
+            } else {
+                candidates += "https://$normalized/System/Info/Public"
+                candidates += "https://$normalized/jellyfin/System/Info/Public"
+                candidates += "http://$normalized/System/Info/Public"
+                candidates += "http://$normalized/jellyfin/System/Info/Public"
+            }
         }
         
         return candidates.distinct()
@@ -165,7 +175,7 @@ object ServerDiscovery {
         
         for (url in candidates) {
             try {
-                Log.d(TAG, "Trying discovered server endpoint")
+                Log.d(TAG, "Trying Jellyfin public endpoint: ${com.klortek.velora.security.SensitiveDataRedactor.url(url)}")
                 
                 val request = Request.Builder()
                     .url(url)
@@ -189,10 +199,10 @@ object ServerDiscovery {
                             Log.i(TAG, "Discovered reachable server base URL")
                             return@withContext baseUrl
                         } else {
-                            Log.d(TAG, "Response OK but not Jellyfin: ${body?.take(100)}")
+                            Log.d(TAG, "Response OK but not Jellyfin (body length=${body?.length ?: 0})")
                         }
                     } else {
-                        Log.d(TAG, "HTTP ${resp.code} from discovered server endpoint")
+                        Log.d(TAG, "HTTP ${resp.code} from Jellyfin public endpoint")
                     }
                 }
             } catch (e: Exception) {
