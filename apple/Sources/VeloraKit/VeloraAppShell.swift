@@ -83,7 +83,11 @@ public final class VeloraAppModel: ObservableObject {
             }
             try await client.setServerURL(url)
             serverDefaults.set(url.absoluteString, forKey: "velora.serverURL")
-            let authenticated = try await client.authenticate(username: username, password: password)
+            let authenticated = try await client.authenticate(
+                username: username,
+                password: password,
+                languageIdentifier: settings.languageIdentifier
+            )
             session = authenticated
             credentialStore.save(authenticated)
             await refreshContent()

@@ -70,12 +70,15 @@ public actor JellyfinClient {
         sessionState = nil
     }
 
-    public func authenticate(username: String, password: String) async throws -> JellyfinSession {
+    public func authenticate(username: String, password: String, languageIdentifier: String? = nil) async throws -> JellyfinSession {
         var request = URLRequest(url: baseURL.appendingPathComponent("Users/AuthenticateByName"))
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let language = languageIdentifier?
+            .split(separator: "-", maxSplits: 1, omittingEmptySubsequences: true)
+            .first.map(String.init) ?? "en"
         request.setValue(
-            "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"\(Self.clientVersion)\", Language=\"en\"",
+            "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"\(Self.clientVersion)\", Language=\"\(language)\"",
             forHTTPHeaderField: "X-Emby-Authorization"
         )
         // Jellyfin's AuthenticateByName contract calls the password field
