@@ -69,6 +69,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - El verificador de empaquetado Smart TV no permite declarar un WGT/IPK
   instalable si el artefacto no existe; tampoco confunde el bundle HTML5 de
   VIDAA con un paquete firmado.
+- El workflow de releases web ejecuta esa verificación después del build y
+  antes de publicar los assets.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
 

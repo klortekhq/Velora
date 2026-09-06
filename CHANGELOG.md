@@ -36,6 +36,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - CI: la validación Smart TV ya exige que un metadato que declare un WGT/IPK
   instalable tenga realmente el paquete correspondiente; VIDAA sigue siendo
   explícitamente un bundle HTML5 para su portal.
+- Releases web: la publicación comprueba los artefactos Smart TV después de
+  construirlos, antes de intentar adjuntarlos a una release.
 - CI: se validan los metadatos generados de Samsung, webOS y VIDAA después del
   empaquetado, evitando presentar un bundle como una aplicación certificada.
 - CI: se añade una comprobación automática que impide reintroducir releases
