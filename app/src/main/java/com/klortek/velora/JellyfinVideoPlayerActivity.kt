@@ -25,6 +25,7 @@ import com.klortek.velora.player.mpv.MpvTvPlayerActivity
 import com.klortek.velora.player.mpv.MpvUrlBuilder
 import com.klortek.velora.screens.JellyfinVideoPlayerScreen
 import com.klortek.velora.security.SensitiveDataRedactor
+import com.klortek.velora.security.MediaUrlHeaderPolicy
 import com.klortek.velora.livetv.adjacentLiveTvChannelId
 import com.klortek.velora.platform.PlatformCapabilities
 import `is`.xyz.mpv.MPVLib
@@ -274,6 +275,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     val liveStreamId = liveSource?.LiveStreamId
                     val directSource = liveSource?.Path
                     if (liveSource?.SupportsDirectPlay == true && !directSource.isNullOrBlank() &&
+                        MediaUrlHeaderPolicy.isServerResource(serverUrl, directSource) &&
                         (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
                         finalUrl = MpvUrlBuilder.buildLiveTvDirectSourceUrl(directSource)
                         android.util.Log.d("VideoPlayer", "Live TV Direct Play source selected from Jellyfin PlaybackInfo")
@@ -392,6 +394,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 val directSource = liveSource?.Path
                 val finalUrl = if (liveSource?.SupportsDirectPlay == true &&
                     !directSource.isNullOrBlank() &&
+                    MediaUrlHeaderPolicy.isServerResource(serverUrl, directSource) &&
                     (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
                     MpvUrlBuilder.buildLiveTvDirectSourceUrl(directSource)
                 } else if (!liveMediaSourceId.isNullOrBlank() && !liveStreamId.isNullOrBlank()) {

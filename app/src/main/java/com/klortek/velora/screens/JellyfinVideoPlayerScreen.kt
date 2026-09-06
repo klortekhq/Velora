@@ -62,6 +62,7 @@ import com.klortek.velora.playback.PlaybackDecisionEngine
 import com.klortek.velora.playback.PlaybackPath
 import com.klortek.velora.playback.PlaybackQuality as DecisionQuality
 import com.klortek.velora.security.SensitiveDataRedactor
+import com.klortek.velora.security.MediaUrlHeaderPolicy
 import android.widget.FrameLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -1191,7 +1192,11 @@ fun JellyfinVideoPlayerScreen(
                 try {
                     
                     // Get authentication headers
-                    val headers = apiService.getVideoRequestHeaders()
+                    val headers = if (MediaUrlHeaderPolicy.isServerResource(apiService.serverBaseUrl, mediaUrl ?: "")) {
+                        apiService.getVideoRequestHeaders()
+                    } else {
+                        emptyMap()
+                    }
 
                     // Create HTTP data source factory with headers
                     // For 416 errors, we'll retry with range requests disabled

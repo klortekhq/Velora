@@ -8,6 +8,26 @@ import org.junit.Test
 
 class MediaUrlSecurityTest {
     @Test
+    fun jellyfinHeadersAreScopedToTheConfiguredServerAndPath() {
+        assertTrue(MediaUrlHeaderPolicy.isServerResource(
+            "https://jellyfin.test/base",
+            "https://jellyfin.test/base/Videos/channel/master.m3u8"
+        ))
+        assertFalse(MediaUrlHeaderPolicy.isServerResource(
+            "https://jellyfin.test/base",
+            "https://provider.test/channel/master.m3u8"
+        ))
+        assertFalse(MediaUrlHeaderPolicy.isServerResource(
+            "https://jellyfin.test/base",
+            "https://jellyfin.test/other-provider/channel.m3u8"
+        ))
+        assertFalse(MediaUrlHeaderPolicy.isServerResource(
+            "https://jellyfin.test/base",
+            "content://velora/offline/item-1"
+        ))
+    }
+
+    @Test
     fun mpvPlaybackUrlsDoNotEmbedTheAccessToken() {
         val stream = MpvUrlBuilder.buildStreamUrl(
             serverUrl = "http://jellyfin.test:8096",
