@@ -90,7 +90,7 @@ jobs:
         run: |
           set -euo pipefail
           version="$(node -p "require('./web/package.json').version")"
-          release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${GITHUB_REF_NAME}" 2>/dev/null || true)"
+          release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" 2>/dev/null || true)"
           if [ -z "$release_json" ]; then
             exit 0
           fi

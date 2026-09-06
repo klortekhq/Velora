@@ -22,6 +22,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   Jellyfin, incluyendo la normalización de locales regionales.
 - CI: se añade una comprobación de identidad pública para evitar que README,
   atribuciones, documentación o código vuelvan a incluir referencias heredadas.
+- Releases: la limpieza de paquetes Smart TV usa correctamente la etiqueta
+  solicitada también cuando una publicación se reconstruye manualmente.
 - CI: se añade una comprobación automática que impide reintroducir releases
   desde pull requests, pushes normales o comodines de APK.
 - CI: los workflows de publicación ya no se ejecutan en pull requests ni en

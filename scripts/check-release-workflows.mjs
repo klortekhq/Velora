@@ -24,4 +24,8 @@ assert.match(updater, /Velora-tv-release\.apk/, 'Actualizador: falta el nombre d
 assert.match(updater, /Velora-mobile-release\.apk/, 'Actualizador: falta el nombre del APK firmado móvil');
 assert.doesNotMatch(updater, /expected\s*=.*release-unsigned\.apk/, 'Actualizador: no debe seleccionar APK unsigned');
 
+const web = fs.readFileSync(workflows[1], 'utf8');
+assert.match(web, /releases\/tags\/\$\{RELEASE_TAG\}/, 'Web: la limpieza manual debe resolver la etiqueta solicitada');
+assert.doesNotMatch(web, /releases\/tags\/\$\{GITHUB_REF_NAME\}/, 'Web: no debe usar la rama de ejecución para localizar la release');
+
 console.log('Release workflow policy passed: manual/version tag only, signed APK names, no pull requests or APK wildcard.');
