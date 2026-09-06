@@ -42,6 +42,11 @@ una comprobación no se interpreta como soporte certificado.
   ejecución CI en macOS.
 - Las descargas gestionadas, su base SQLite, reanudación, integridad y Smart
   Downloads están limitadas a móvil/tablet. No aparecen en TV, Smart TV ni web.
+- Auditoría multiplataforma de offline: Android TV/Fire TV bloquea tanto la
+  navegación como la apertura directa de descargas; Apple TV no renderiza las
+  acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen
+  `supportsOfflineDownloads: false`. La regla queda cubierta por tests de
+  capacidades Android/Apple/web.
 - Android migra credenciales a Keystore; Apple usa Keychain; el cliente web
   usa su proxy autenticado sin poner tokens en la URL del vídeo.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
