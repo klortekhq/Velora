@@ -4,6 +4,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- CI: se añade una comprobación automática que impide reintroducir releases
+  desde pull requests, pushes normales o comodines de APK.
 - CI: los workflows de publicación ya no se ejecutan en pull requests ni en
   cada push de `main`; la validación queda en CI y la publicación requiere un
   tag de versión o una ejecución manual.
