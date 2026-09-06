@@ -16,6 +16,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Web/Smart TV: el inicio de sesión diferencia credenciales rechazadas,
   dirección inválida y fallo de conexión, y conserva el mensaje localizado
   sin mostrar respuestas del servidor.
+- Web/Smart TV: las tarjetas de filmografía son accesibles con lector de
+  pantalla y teclado/mando, y Escape cierra ajustes, fichas y reproducción
+  sin depender del botón de retroceso del navegador.
 - Rendimiento Android: películas y series ya no descargan toda la biblioteca
   al abrir la pantalla de recomendaciones; el catálogo completo se carga bajo
   demanda al entrar en la vista de biblioteca, mejorando el arranque con
