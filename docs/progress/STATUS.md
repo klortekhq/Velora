@@ -275,6 +275,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   backend inicial, MPV requiere elección explícita y el fallback solo se activa
   después de un error real de decodificación. Las suites móvil y TV volvieron a
   pasar el 2026-09-06.
+- `node scripts/check-android-playback-policy.mjs` protege además por CI que la
+  preferencia nueva no cambie accidentalmente el backend inicial.
 
 ## Artefactos Android locales
 
