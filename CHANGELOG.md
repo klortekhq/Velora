@@ -16,6 +16,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Apple: la tuerca del reproductor permite seleccionar pista de audio y
   subtítulos, incluida la opción de desactivarlos; funciona en la ficha, Live
   TV y pantalla completa.
+- Web/Smart TV: el reproductor incorpora un selector funcional de formato
+  (`Ajustar`, `Rellenar` y `Original`) que cambia el encuadre al instante,
+  funciona también en pantalla completa y conserva la elección en el
+  dispositivo.
 - Android: se centraliza la selección del backend de reproducción para que
   Media3/ExoPlayer sea siempre la ruta inicial en móvil, tablet, Android TV,
   Fire TV y Live TV; MPV solo entra por elección explícita o tras un fallo real
