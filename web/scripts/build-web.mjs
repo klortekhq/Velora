@@ -125,6 +125,7 @@ if (target === 'vidaa' || target === 'all') {
     entry: 'index.html',
     generatedAt: new Date().toISOString(),
     installablePackage: false,
+    packaging: 'hosted-html5',
     note: 'La publicación oficial se tramita en el portal VIDAA y depende del modelo, región y certificado del fabricante.'
   });
   results.push('VIDAA bundle HTML5 preparado para portal/tienda; no existe un paquete genérico firmado');

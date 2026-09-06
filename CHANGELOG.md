@@ -28,6 +28,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   subruta configurada del servidor Jellyfin, no solo a su dominio y puerto.
 - Smart TV: los bundles Samsung y webOS incluyen metadatos que distinguen un
   paquete instalable de un bundle pendiente de SDK, firma o certificación.
+- CI: se validan los metadatos generados de Samsung, webOS y VIDAA después del
+  empaquetado, evitando presentar un bundle como una aplicación certificada.
 - CI: se añade una comprobación automática que impide reintroducir releases
   desde pull requests, pushes normales o comodines de APK.
 - CI: los workflows de publicación ya no se ejecutan en pull requests ni en
