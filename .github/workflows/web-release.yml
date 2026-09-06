@@ -59,7 +59,9 @@ jobs:
           tar -czf "dist/Velora-Web-${package}.tar.gz" -C outputs/web .
           (cd outputs/web && zip -qr "../../dist/Velora-Web-${package}.zip" .)
 
-          if [ -d outputs/web/samsung ]; then
+          if compgen -G 'outputs/web/samsung/*.wgt' > /dev/null; then
+            cp "$(compgen -G 'outputs/web/samsung/*.wgt' | head -n 1)" "dist/Velora-tizen-${version}.wgt"
+          elif [ -d outputs/web/samsung ]; then
             (cd outputs/web/samsung && zip -qr "../../../dist/Velora-samsung-bundle-${version}.zip" .)
           fi
           if [ -d outputs/web/vidaa ]; then
@@ -96,8 +98,8 @@ jobs:
           fi
           stale_ids="$(printf '%s' "$release_json" | jq -r --arg version "$version" '
             (.assets // [])[]
-            | select(.name | test("^Velora-(samsung|vidaa)-bundle-|^Velora-webos-(bundle-)?"))
-            | select(.name | test("-" + $version + "\\.(zip|ipk)$") | not)
+            | select(.name | test("^Velora-(samsung|tizen|vidaa)-bundle-|^Velora-webos-(bundle-)?|^Velora-tizen-"))
+            | select(.name | test("-" + $version + "\\.(zip|ipk|wgt)$") | not)
             | .id')"
           for asset_id in $stale_ids; do
             gh api --method DELETE "repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"
