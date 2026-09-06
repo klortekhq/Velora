@@ -170,6 +170,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `node scripts/check-tv-packaging-output.mjs`: correcto; valida Samsung,
   webOS y VIDAA tras generar sus bundles y paquetes.
 - `:app:assembleMobileRelease` y `:app:assembleTvRelease`: `BUILD SUCCESSFUL`.
+- Compilación Android release focalizada del 2026-09-06: `:app:assembleMobileRelease`
+  y `:app:assembleTvRelease` terminaron en `BUILD SUCCESSFUL`; la firma no se
+  declara verificada en este host y, por tanto, no se publica ningún APK como
+  release de distribución desde esta ejecución.
 - `git diff --check`: sin errores en los cambios publicados.
 - `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
 - `node scripts/check-jellyfin-auth-contract.mjs`: contrato `Pw` coherente en
