@@ -343,37 +343,16 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 
 ## Jellyfin y hardware conectado
 
-- El endpoint de salud del servidor Jellyfin local respondió HTTP 200 en la
-  última prueba.
-- El smoke test autenticado confirmó que el servidor responde, pero rechazó
-  las credenciales configuradas con HTTP 401; no se certifican en esta sesión
-  biblioteca, reproducción ni Live TV real. No se han registrado credenciales,
-  contraseñas ni tokens en este documento.
-- La última prueba se realizó el 2026-09-06 con el servidor operativo; el
-  health check fue correcto y la autenticación devolvió HTTP 401.
-- La revalidación posterior de esta sesión no obtuvo respuesta HTTP del host
-  configurado (`health=ERR`, `auth=ERR`); por tanto no se sustituye el resultado
-  anterior ni se declara una prueba funcional nueva.
-- La comprobación más reciente de esta continuación obtuvo `health=200`, pero
-  la autenticación no completó una respuesta HTTP utilizable (`auth=ERR`); se
-  mantiene sin certificar la biblioteca, la reproducción y Live TV reales.
-- La revalidación HTTP directa posterior sí obtuvo `auth=401 Unauthorized`;
-  Jellyfin está accesible, pero las credenciales probadas no son aceptadas.
-  La aplicación lo clasifica como credenciales inválidas sin registrar secretos.
-- El smoke test solicitado contra el servidor indicado en esta sesión llegó a
-  la etapa de autenticación, pero terminó sin código HTTP utilizable
-  (`WebException`); por ello tampoco se certifican sus canales, `PlaybackInfo`
-  ni una reproducción real.
-- El smoke test autenticado más reciente del 2026-09-06 devolvió `HTTP 401`
-  específicamente en la etapa de autenticación; el script ahora identifica la
-  etapa (`información pública`, `autenticación`, `listado Live TV` o
-  `PlaybackInfo`) sin imprimir credenciales ni tokens.
 - En la revalidación del 2026-09-06, la raíz del servidor configurado respondió
   la WebGUI de Unraid; el endpoint Jellyfin correcto quedó localizado en el
-  puerto HTTP configurado, cuya información pública devuelve Jellyfin
-  `10.11.11`. La autenticación en ese endpoint sigue devolviendo `HTTP 401`
-  con las credenciales probadas, por lo que todavía no se certifican catálogo,
-  Live TV ni reproducción real. No se publica aquí la dirección privada.
+  puerto HTTP configurado y su información pública devuelve Jellyfin `10.11.11`.
+  La autenticación en ese endpoint devuelve `HTTP 401` con las credenciales
+  probadas, por lo que todavía no se certifican catálogo, Live TV,
+  `PlaybackInfo` ni reproducción real. No se publica aquí la dirección privada.
+- El smoke test identifica la etapa (`información pública`, `autenticación`,
+  `listado Live TV` o `PlaybackInfo`), exige JSON Jellyfin en
+  `/System/Info/Public`, elimina espacios accidentales de la URL y no registra
+  credenciales ni tokens.
 - El smoke test valida que `/System/Info/Public` sea JSON Jellyfin, elimina
   espacios accidentales de la URL y conserva el diagnóstico de respuestas sin
   código HTTP, sin registrar credenciales ni tokens.
