@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android: Quick Connect reutiliza un único cliente HTTP durante la pantalla
+  de espera y lo libera al salir, evitando crear una conexión nueva por cada
+  sondeo.
 - Android: los intentos de inicio de sesión liberan el cliente HTTP de un solo
   uso al terminar, evitando conexiones acumuladas tras reintentos.
 - Android: la comprobación de disponibilidad de Live TV en el inicio cierra su

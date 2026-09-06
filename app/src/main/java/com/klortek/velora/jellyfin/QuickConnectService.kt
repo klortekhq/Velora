@@ -36,6 +36,11 @@ class QuickConnectService(
         return context?.let(DeviceIdentity::get) ?: "velora-android"
     }
 
+    /** Release the client when the Quick Connect screen is disposed. */
+    fun close() {
+        client.close()
+    }
+
     /**
      * Normalize the base URL for API calls.
      * The URL should already be properly formatted by ServerDiscovery,
