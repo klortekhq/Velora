@@ -215,6 +215,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `node scripts/check-release-workflows.mjs`: correcto; protege esa política y
   evita publicar APKs por comodín. La ejecución manual queda limitada también a
   etiquetas públicas `vX.Y.0`, igual que el disparador automático.
+- Smoke real contra el servidor Jellyfin local proporcionado el 2026-09-06: la
+  información pública del servidor responde, pero la cuenta proporcionada
+  devuelve `401` en autenticación; quedan sin certificar con ese servidor el
+  catálogo, Live TV y `PlaybackInfo` hasta disponer de credenciales válidas.
 - `node scripts/check-offline-surface-policy.mjs`: correcto; verifica el límite
   mobile/tablet-only en Android, Apple, navegador y Smart TV, incluida la
   frontera del reproductor Android.
