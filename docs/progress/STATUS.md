@@ -94,6 +94,9 @@ una comprobación no se interpreta como soporte certificado.
   `fr` y `de`.
 - `node scripts/check-web-locales.mjs`: 69 claves efectivas coherentes en los
   12 idiomas de la web, incluyendo los fallbacks y overrides traducidos.
+- `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
+  `:app:compileMobileDebugKotlin` y `:app:compileTvDebugKotlin`: correctos tras
+  blindar la ruta de subtítulos offline para superficies TV.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
 - El workflow de Android fue revisado sintácticamente: los APK debug se guardan
