@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `e94bec9`.
+Revisión funcional actual: commit `b71ef68`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -65,6 +65,8 @@ una comprobación no se interpreta como soporte certificado.
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- Ejecución fresca sobre el estado actual: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 3m49s.
 - Las suites móvil y TV vuelven a terminar correctamente tras ocultar el
   almacenamiento y la gestión de subtítulos externos en TV.
 - La compilación y los tests móvil/TV vuelven a terminar correctamente tras
