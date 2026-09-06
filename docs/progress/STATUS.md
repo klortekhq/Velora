@@ -178,6 +178,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
   `:app:compileMobileDebugKotlin` y `:app:compileTvDebugKotlin`: correctos tras
   blindar la ruta de subtítulos offline para superficies TV.
+- Ejecución focalizada del 2026-09-06: `AspectPresentationTest` y
+  `LiveTvChannelQueryTest` terminaron en `BUILD SUCCESSFUL`; cubren la
+  presentación de aspecto en los distintos contenedores y la agrupación de
+  variantes de un canal bajo un único elemento seleccionable.
 - Ejecución fresca del estado actual `b35f482` el 2026-09-06:
   `:app:testMobileDebugUnitTest :app:testTvDebugUnitTest` terminó en `BUILD
   SUCCESSFUL` en 6m35s.
