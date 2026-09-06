@@ -36,7 +36,7 @@
       cast: 'Reparto', actorWorks: 'Películas y series de este actor', noActorWorks: 'No hay otros títulos disponibles.', personError: 'No se pudo cargar la filmografía',
       sortAndFilter: 'Ordenar y filtrar', sortName: 'Nombre', sortDateAdded: 'Fecha de incorporación', sortPremiere: 'Fecha de estreno', sortRuntime: 'Duración', sortRating: 'Valoración de la comunidad', favorites: 'Favoritos', playbackState: 'Estado de reproducción', playbackAll: 'Todos', playbackWatched: 'Vistos', playbackUnwatched: 'No vistos',
       liveAll: 'Todos los canales', liveFavorites: 'Solo favoritos', liveGroup: 'Grupo de canales', liveNoChannels: 'No hay canales disponibles', liveSources: 'fuentes', liveSourceOption: 'Opción',
-      loginError: 'No se pudo iniciar sesión', playbackError: 'El dispositivo no puede reproducir este formato directamente.'
+      loginError: 'No se pudo iniciar sesión', loginInvalidCredentials: 'Usuario o contraseña incorrectos', loginInvalidServer: 'Dirección del servidor no válida', loginConnectionError: 'No se pudo conectar con el servidor', playbackError: 'El dispositivo no puede reproducir este formato directamente.'
     },
     en: {
       server: 'Server', user: 'User', password: 'Password', signIn: 'Sign in', connectServer: 'Connect your Jellyfin server',
@@ -52,7 +52,7 @@
       actorWorks: 'Movies and series with this actor', noActorWorks: 'No other titles available.', personError: 'Could not load filmography',
       sortAndFilter: 'Sort and filter', sortName: 'Name', sortDateAdded: 'Date added', sortPremiere: 'Premiere date', sortRuntime: 'Runtime', sortRating: 'Community rating', favorites: 'Favorites', playbackState: 'Playback state', playbackAll: 'All', playbackWatched: 'Watched', playbackUnwatched: 'Unwatched',
       liveAll: 'All channels', liveFavorites: 'Favorites only', liveGroup: 'Channel group', liveNoChannels: 'No channels available', liveSources: 'sources', liveSourceOption: 'Option',
-      loginError: 'Sign-in failed', playbackError: 'This device cannot play this format directly.'
+      loginError: 'Sign-in failed', loginInvalidCredentials: 'Invalid username or password', loginInvalidServer: 'Invalid server address', loginConnectionError: 'Could not connect to the server', playbackError: 'This device cannot play this format directly.'
     },
     pt: {
       server: 'Servidor', user: 'Utilizador', password: 'Palavra-passe', signIn: 'Iniciar sessão', connectServer: 'Ligue o seu servidor Jellyfin',
@@ -78,7 +78,7 @@
       subtitles: 'Sous-titres', subtitleOff: 'Désactivés', subtitlePreferred: 'Préférés', subtitleForced: 'Forcés',
       subtitleAuto: 'Automatiques', subtitleLanguage: 'Langue des sous-titres', save: 'Enregistrer', cancel: 'Annuler',
       saved: 'Préférences enregistrées', settingDescription: 'Appliquées à la prochaine lecture et enregistrées sur cet appareil.',
-      loginError: 'Échec de la connexion', playbackError: 'Cet appareil ne peut pas lire ce format directement.'
+      loginError: 'Échec de la connexion', loginInvalidCredentials: 'Nom d’utilisateur ou mot de passe incorrect', loginInvalidServer: 'Adresse du serveur non valide', loginConnectionError: 'Impossible de joindre le serveur', playbackError: 'Cet appareil ne peut pas lire ce format directement.'
     },
     de: {
       server: 'Server', user: 'Benutzer', password: 'Passwort', signIn: 'Anmelden', connectServer: 'Jellyfin-Server verbinden',
@@ -91,7 +91,7 @@
       subtitles: 'Untertitel', subtitleOff: 'Deaktiviert', subtitlePreferred: 'Bevorzugt', subtitleForced: 'Erzwungen',
       subtitleAuto: 'Automatisch', subtitleLanguage: 'Untertitelsprache', save: 'Speichern', cancel: 'Abbrechen',
       saved: 'Einstellungen gespeichert', settingDescription: 'Für die nächste Wiedergabe angewendet und auf diesem Gerät gespeichert.',
-      loginError: 'Anmeldung fehlgeschlagen', playbackError: 'Dieses Gerät kann dieses Format nicht direkt wiedergeben.'
+      loginError: 'Anmeldung fehlgeschlagen', loginInvalidCredentials: 'Benutzername oder Passwort ungültig', loginInvalidServer: 'Ungültige Serveradresse', loginConnectionError: 'Verbindung zum Server nicht möglich', playbackError: 'Dieses Gerät kann dieses Format nicht direkt wiedergeben.'
     },
     it: {
       server: 'Server', user: 'Utente', password: 'Password', signIn: 'Accedi', connectServer: 'Collega il server Jellyfin',
@@ -511,7 +511,7 @@
     var error = document.querySelector('#loginError');
     state.server = normalizeServerUrl(document.querySelector('#server').value);
     if (!state.server) {
-      error.textContent = t('loginError');
+      error.textContent = t('loginInvalidServer');
       return;
     }
     var username = document.querySelector('#user').value.trim();
@@ -524,7 +524,13 @@
       },
       body: JSON.stringify({ Username: username, Pw: document.querySelector('#password').value })
     }).then(function (response) {
-      if (!response.ok) throw Error(t('loginError'));
+      if (!response.ok) {
+        var failure = new Error('authentication failed');
+        failure.code = response.status === 401 || response.status === 403
+          ? 'invalidCredentials'
+          : response.status >= 500 ? 'connectionError' : 'loginError';
+        throw failure;
+      }
       return response.json();
     }).then(function (data) {
       state.token = data.AccessToken;
@@ -535,8 +541,8 @@
       saveSessionValue('veloraUserId', state.userId);
       syncMediaProxyCredentials();
       return renderApp();
-    }).catch(function () {
-      error.textContent = t('loginError');
+    }).catch(function (failure) {
+      error.textContent = t(failure && failure.code ? failure.code : 'connectionError');
     });
   }
 
