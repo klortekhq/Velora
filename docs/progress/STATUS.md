@@ -25,6 +25,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   plataforma y no forman parte de la identidad visible del producto.
 - CI comprueba que README, atribuciones, documentación y código público no
   reintroduzcan referencias heredadas a otros clientes o identidades antiguas.
+- Auditoría pública de GitHub del 2026-09-06: no hay ninguna Release publicada
+  actualmente; solo permanecen etiquetas históricas. No se presenta ningún APK
+  unsigned como descarga pública.
 
 ## Funcionalidad implementada
 
