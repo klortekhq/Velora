@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `ddd0d02`.
+Revisión funcional actual: commit `a0fac56`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -11,8 +11,8 @@ una comprobación no se interpreta como soporte certificado.
 
 - Rama de trabajo y rama remota: `main`.
 - No hay ramas de producto adicionales en GitHub.
-- Último cambio funcional documentado: contrato de autenticación Jellyfin
-  consistente (`Pw`) en Android, Apple, web y smoke test.
+- Último cambio funcional documentado: paginación incremental de bibliotecas
+  grandes en web y Smart TV.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
