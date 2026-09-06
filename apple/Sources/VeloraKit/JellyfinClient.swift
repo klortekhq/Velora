@@ -222,8 +222,13 @@ public actor JellyfinClient {
     }
 
     public func items(userID: String, forPerson personID: String) async throws -> [JellyfinItem] {
-        guard !personID.isEmpty, !personID.contains("/"), !personID.contains("\\") else { return [] }
-        var components = URLComponents(url: baseURL.appendingPathComponent("Users/\(userID)/Items"), resolvingAgainstBaseURL: false)
+        guard !userID.isEmpty, !userID.contains("/"), !userID.contains("\\"),
+              !personID.isEmpty, !personID.contains("/"), !personID.contains("\\") else { return [] }
+        let itemsPath = baseURL
+            .appendingPathComponent("Users", isDirectory: true)
+            .appendingPathComponent(userID, isDirectory: true)
+            .appendingPathComponent("Items")
+        var components = URLComponents(url: itemsPath, resolvingAgainstBaseURL: false)
         components?.queryItems = [
             URLQueryItem(name: "Recursive", value: "true"),
             URLQueryItem(name: "PersonIds", value: personID),

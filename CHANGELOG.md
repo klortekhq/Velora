@@ -9,6 +9,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   catálogos grandes.
 - Apple: las fichas muestran el reparto de Jellyfin y permiten abrir la
   filmografía disponible de cada persona, manteniendo la navegación nativa.
+- Seguridad Apple: la consulta de filmografía valida los identificadores de
+  usuario y persona antes de construir la ruta de Jellyfin.
 - Multiplataforma: Apple y web envían ahora el campo `Pw` que exige
   `AuthenticateByName` de Jellyfin, alineándose con Android y el smoke test.
 - CI: se añade una comprobación automática del contrato de autenticación para
