@@ -2,8 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `1d838c3` más la validación de identidad
-pública que se está incorporando en este cambio.
+Revisión funcional actual: commit `0ac7fd4`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -12,7 +11,7 @@ una comprobación no se interpreta como soporte certificado.
 
 - Rama de trabajo y rama remota: `main`.
 - No hay ramas de producto adicionales en GitHub.
-- La única rama remota verificada apunta a `d363dba`. El tag remoto `v1.4.0`
+- La única rama remota verificada apunta a `0ac7fd4`. El tag remoto `v1.4.0`
   existe, pero apunta a un commit anterior (`3243d50`); por tanto no se
   presenta esa release como equivalente al estado actual de `main`.
 - Último cambio funcional documentado: la ficha móvil etiqueta el bloque de
