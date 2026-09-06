@@ -440,6 +440,7 @@ private struct VeloraItemDetailView: View {
     @State private var player: AVPlayer?
     @State private var isPlayerFullscreen = false
     @State private var downloadQuality: VeloraDownloadQuality = .original
+    @State private var aspectMode: VeloraAspectMode = .fit
 
     var body: some View {
         ScrollView {
@@ -455,7 +456,7 @@ private struct VeloraItemDetailView: View {
                 if let player {
                     ZStack(alignment: .topTrailing) {
                         VideoPlayer(player: player)
-                            .aspectRatio(16 / 9, contentMode: .fit)
+                            .veloraVideoAspect(aspectMode)
                         Button {
                             isPlayerFullscreen = true
                         } label: {
@@ -471,8 +472,13 @@ private struct VeloraItemDetailView: View {
                         .padding(10)
                     }
                     .fullScreenCover(isPresented: $isPlayerFullscreen) {
-                        VeloraFullscreenPlayer(player: player, isPresented: $isPlayerFullscreen)
+                        VeloraFullscreenPlayer(
+                            player: player,
+                            isPresented: $isPlayerFullscreen,
+                            aspectMode: $aspectMode
+                        )
                     }
+                    VeloraAspectMenu(selection: $aspectMode)
                 }
                 if let people = item.people, !people.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
@@ -533,15 +539,63 @@ private struct VeloraItemDetailView: View {
     }
 }
 
+private enum VeloraAspectMode: String, CaseIterable, Identifiable {
+    case fit
+    case fill
+    case original
+
+    var id: String { rawValue }
+
+}
+
+private extension View {
+    @ViewBuilder
+    func veloraVideoAspect(_ mode: VeloraAspectMode) -> some View {
+        switch mode {
+        case .fit:
+            self.aspectRatio(16 / 9, contentMode: .fit)
+        case .fill:
+            self.aspectRatio(16 / 9, contentMode: .fill).clipped()
+        case .original:
+            self.aspectRatio(contentMode: .fit)
+        }
+    }
+}
+
+@available(iOS 16.0, tvOS 16.0, *)
+private struct VeloraAspectMenu: View {
+    @Binding var selection: VeloraAspectMode
+
+    var body: some View {
+        Menu {
+            Picker(String(localized: "Aspect ratio", bundle: .module), selection: $selection) {
+                Text("Fit", bundle: .module).tag(VeloraAspectMode.fit)
+                Text("Fill", bundle: .module).tag(VeloraAspectMode.fill)
+                Text("Original", bundle: .module).tag(VeloraAspectMode.original)
+            }
+        } label: {
+            Label {
+                Text("Aspect ratio", bundle: .module)
+            } icon: {
+                Image(systemName: "rectangle.arrowtriangle.2.outward")
+            }
+        }
+        .accessibilityLabel(Text("Aspect ratio", bundle: .module))
+    }
+}
+
 @available(iOS 16.0, tvOS 16.0, *)
 private struct VeloraFullscreenPlayer: View {
     let player: AVPlayer
     @Binding var isPresented: Bool
+    @Binding var aspectMode: VeloraAspectMode
 
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color.black.ignoresSafeArea()
             VideoPlayer(player: player)
+                .veloraVideoAspect(aspectMode)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
             Button {
                 isPresented = false
@@ -556,6 +610,10 @@ private struct VeloraFullscreenPlayer: View {
             .buttonStyle(.borderedProminent)
             .accessibilityLabel(Text("Exit fullscreen", bundle: .module))
             .padding()
+            VeloraAspectMenu(selection: $aspectMode)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding(.top, 56)
+                .padding(.trailing)
         }
         .onAppear { player.play() }
     }

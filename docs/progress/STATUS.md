@@ -132,6 +132,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   La compilación Swift sigue pendiente de macOS/Xcode, por lo que esta mejora
   queda documentada como código validado estáticamente, no como prueba de
   hardware Apple.
+- Apple: el reproductor nativo añade un selector funcional de relación de
+  aspecto (`Ajustar`, `Rellenar` y `Original`) tanto en la ficha como en la
+  vista de pantalla completa; sus cuatro etiquetas están localizadas.
 
 ## Pruebas locales pasadas
 
