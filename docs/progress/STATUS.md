@@ -115,8 +115,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 ## Jellyfin y hardware conectado
 
 - `http://192.168.100.201:8096/health` respondió HTTP 200 en la última prueba.
-- El smoke test autenticado respondió HTTP 401 para la cuenta configurada;
-  no se certifican en esta sesión biblioteca, reproducción ni Live TV real.
+- El smoke test autenticado confirmó que el servidor responde, pero rechazó
+  las credenciales configuradas con HTTP 401; no se certifican en esta sesión
+  biblioteca, reproducción ni Live TV real.
 - ADB no está instalado/disponible en el host actual; no se declara instalación
   ni prueba física reciente en Fire TV o móvil.
 
