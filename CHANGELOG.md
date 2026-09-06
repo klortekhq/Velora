@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android Live TV: la ruta predeterminada de ExoPlayer ya no fuerza H.264/AAC
+  al abrir el HLS; conserva la decisión de Jellyfin y evita transcodificaciones
+  innecesarias cuando el dispositivo puede reproducir la fuente original.
 - Apple: las tarjetas de la filmografía ahora abren la ficha completa del
   título seleccionado, en lugar de quedarse sin acción al pulsarlas.
 - Apple móvil/tablet: las descargas sin conexión conservan la calidad elegida

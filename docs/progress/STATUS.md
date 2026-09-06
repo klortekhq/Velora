@@ -32,6 +32,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   mantienen layouts táctil y de mando separados.
 - Media3/ExoPlayer es el backend Android predeterminado; MPV solo se usa si el
   usuario lo selecciona o si el fallback configurado resulta necesario.
+- Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
+  códecs y la decisión de copia de Jellyfin; la ruta MPV explícita mantiene sus
+  parámetros propios sin alterar el backend predeterminado.
 - La reproducción sigue la estrategia Original First: Direct Play, Direct
   Stream/Remux y transcodificación solo cuando las capacidades lo requieren.
 - El selector de aspecto de Media3/ExoPlayer y de la superficie GL reaplica el
@@ -193,12 +196,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 Son builds `unsigned` para QA, no releases de distribución:
 
-Builds debug del estado actual `7346a09`:
+Builds debug regeneradas tras la corrección de Live TV (QA, 2026-09-06):
 
 - Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`, 76,2 MB,
-  SHA-256 `CD46C39A53CE54E71CFED23A7A82ACD29C49B8F698F561F10FD65A051E411F68`.
-- TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, 76,2 MB,
-  SHA-256 `5E18C2559B44D06F7FD4D5C4068FBFA557923EB44BB200CD9CAE3E60A29D20C0`.
+  SHA-256 `6F07A24DF5CF45922EAEFE3B35E2E6E1382EEB109A84FD1E0031761DA5C4F2BB`.
+- TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, 78,2 MB,
+  SHA-256 `F06839B29BE8814EAE34248DC2FFB8146BECBB4D5190D3FA17E1501DBF1A2DC1`.
 
 Ambas variantes se generaron correctamente en QA el 2026-09-06; no se han
 instalado en hardware porque ningún dispositivo ADB respondió.
