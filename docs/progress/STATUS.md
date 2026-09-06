@@ -17,9 +17,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La consulta independiente a `origin` del 2026-09-06 confirma únicamente
   `refs/heads/main` en GitHub, apuntando al commit que contiene este dashboard.
   No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: el botón de reproducción animado no
-  intenta cargar un recurso Lottie inválido cuando no hay animación configurada
-  y conserva la interacción normal por toque, foco y mando.
+- Último cambio funcional documentado: la navegación de Live TV comparte la
+  fila centrada de bibliotecas y su selector descarta duplicados de proveedor
+  sin perder fuentes realmente distintas.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
