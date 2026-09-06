@@ -1100,7 +1100,7 @@ fun JellyfinHomeScreen(
 
                 // Library buttons with underlined indicator using TV Material3 TabRow
                 // Add a single "Collections" tab if collections are available
-                val allTabs = remember(libraries, collections) {
+                val allTabs = remember(libraries, collections, showLiveTv) {
                     // Debug: Log all libraries and their CollectionType
                     libraries.forEach { lib ->
                         android.util.Log.d("JellyfinHomeScreen", "📚 Library loaded: ${lib.Name}, Type: ${lib.Type}, CollectionType: ${lib.CollectionType}, Id: ${lib.Id}")
@@ -1120,6 +1120,12 @@ fun JellyfinHomeScreen(
                         // Use a unique identifier to avoid conflicts with library names
                         if (collections.isNotEmpty()) {
                             add("__COLLECTIONS__" to "__COLLECTIONS__")
+                        }
+                        // Keep Live TV in the same centered navigation row as
+                        // the media libraries. It remains conditional on the
+                        // user's Jellyfin account exposing channels.
+                        if (showLiveTv) {
+                            add("__LIVE_TV__" to "__LIVE_TV__")
                         }
                     }
                 }
@@ -1149,13 +1155,18 @@ fun JellyfinHomeScreen(
                             var isFocused by remember { mutableStateOf(false) }
                             
                             val isCollectionsTab = tabName == "__COLLECTIONS__"
+                            val isLiveTvTab = itemId == "__LIVE_TV__"
                             val isSelected = if (isCollectionsTab) {
                                 selectedCollectionId == "__COLLECTIONS__"
+                            } else if (isLiveTvTab) {
+                                false
                             } else {
                                 selectedLibraryId == itemId
                             }
                             val itemName = if (isCollectionsTab) {
                                 androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.collections)
+                            } else if (isLiveTvTab) {
+                                androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.live_tv_nav)
                             } else {
                                 libraries.find { it.Id == itemId }?.Name ?: ""
                             }
@@ -1175,6 +1186,10 @@ fun JellyfinHomeScreen(
                                     // Do nothing on focus - only load on click
                                 },
                                 onClick = {
+                                    if (isLiveTvTab) {
+                                        onLiveTvClick()
+                                        return@Tab
+                                    }
                                     // Handle music library specially - navigate to music screen
                                     if (isMusicLibrary) {
                                         android.util.Log.d("JellyfinHomeScreen", "🎵 Music library clicked! Navigating to music screen...")
@@ -1259,44 +1274,6 @@ fun JellyfinHomeScreen(
                     }
                 }
 
-                // Live TV is the single centralized entry point. It is placed
-                // after Películas/Series and never exposed as a separate IPTV tab.
-                if (showLiveTv) {
-                    var liveTvFocused by remember { mutableStateOf(false) }
-                    TabRow(
-                        modifier = Modifier.padding(end = 14.dp),
-                        selectedTabIndex = -1,
-                        indicator = { _, _ -> }
-                    ) {
-                        Tab(
-                            selected = false,
-                            onFocus = { },
-                            onClick = onLiveTvClick,
-                            colors = TabDefaults.underlinedIndicatorTabColors(),
-                            modifier = Modifier
-                                .onFocusChanged { focusState ->
-                                    liveTvFocused = focusState.isFocused || focusState.hasFocus
-                                }
-                                .then(
-                                    if (liveTvFocused) {
-                                        Modifier.background(Color.White, RoundedCornerShape(4.dp))
-                                    } else {
-                                        Modifier
-                                    }
-                                )
-                        ) {
-                            Text(
-                                text = androidx.compose.ui.res.stringResource(com.klortek.velora.R.string.live_tv_nav),
-                                style = MaterialTheme.typography.labelLarge.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.90f
-                                ),
-                                color = if (liveTvFocused) Color.Black else Color.White,
-                                modifier = Modifier.padding(horizontal = 13.dp, vertical = 6.dp)
-                            )
-                        }
-                    }
-                }
             }
                 
             // Digital clock on the far right

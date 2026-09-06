@@ -77,6 +77,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Android: el botón de reproducción opcional no construye ya una referencia
   `RawRes(0)`; el modo sin Lottie queda cubierto por la ruta normal de foco,
   toque y mando.
+- Android TV: Live TV se integra en la misma fila centrada de navegación que
+  las bibliotecas de películas y series; la pestaña sigue siendo condicional a
+  los canales visibles para el usuario.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
 
