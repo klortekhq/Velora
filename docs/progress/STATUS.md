@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `e0396e5`.
+Revisión funcional actual: commit `44ef690`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -88,6 +88,8 @@ una comprobación no se interpreta como soporte certificado.
 - `node web/scripts/build-web.mjs all`: genera correctamente el bundle web,
   el bundle Samsung, el IPK webOS y el bundle HTML5 VIDAA; Tizen sigue
   pendiente de Tizen Studio/CLI y firma.
+- Los artefactos Samsung y webOS incluyen `velora-build.json` con su estado
+  real (`installablePackage`, tipo de empaquetado y requisito de SDK/firma).
 - `:app:assembleMobileRelease` y `:app:assembleTvRelease`: `BUILD SUCCESSFUL`.
 - `git diff --check`: sin errores en los cambios publicados.
 - `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
