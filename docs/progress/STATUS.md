@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `387639f`.
+Revisión funcional actual: commit `e0396e5`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -111,6 +111,9 @@ una comprobación no se interpreta como soporte certificado.
   `frame-ancestors`, `object-src` y la política `no-referrer` del cliente web.
 - Apple: la cabecera de autenticación usa ahora el idioma seleccionado por el
   usuario; la compilación Swift queda pendiente de la ejecución macOS de CI.
+- Apple: se añadió una prueba de regresión para impedir que el token se aplique
+  a rutas fuera del prefijo del servidor configurado; requiere la ejecución
+  Swift en macOS para quedar verificada.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
 - El workflow de Android fue revisado sintácticamente: los APK debug se guardan
