@@ -83,6 +83,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Live TV: la normalización Android y web descarta duplicados idénticos sin
   `MediaSource`, pero conserva cada fuente identificada como una opción
   seleccionable.
+- Web/Smart TV: la agrupación usa mapas sin prototipo y está cubierta frente a
+  identificadores de proveedor con nombres especiales.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
 
