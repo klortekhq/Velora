@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `9b4b831`.
+Revisión funcional actual: commit `ddd0d02`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -11,8 +11,8 @@ una comprobación no se interpreta como soporte certificado.
 
 - Rama de trabajo y rama remota: `main`.
 - No hay ramas de producto adicionales en GitHub.
-- Último cambio funcional documentado: corrección del cambio de canal Live TV
-  para resolver la fuente de cada canal de forma independiente.
+- Último cambio funcional documentado: contrato de autenticación Jellyfin
+  consistente (`Pw`) en Android, Apple, web y smoke test.
 - Identidad pública: Velora por Klørtek; no se encontraron referencias a
   Elefin, Moonfin o Ruvik/Ruvikitten en el producto público. `com.klortek.velora`
   se conserva únicamente como identificador técnico Android.
@@ -57,7 +57,8 @@ una comprobación no se interpreta como soporte certificado.
 - `node scripts/test-platform.mjs` desde `web/`: correcto para capacidades,
   seguridad, autenticación, biblioteca, subtítulos y agrupación Live TV.
 - `node scripts/build-web.mjs all` desde `web/`: genera bundle web, bundle
-  Samsung, IPK webOS y bundle HTML5 VIDAA.
+  Samsung, IPK webOS y bundle HTML5 VIDAA. Tizen queda pendiente de validar
+  hasta disponer de Tizen Studio/CLI y un perfil de firma.
 - `:app:assembleMobileRelease` y `:app:assembleTvRelease`: `BUILD SUCCESSFUL`.
 - `git diff --check`: sin errores en los cambios publicados.
 - `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
