@@ -192,6 +192,12 @@ assert.deepEqual(
   Array.from(groupedLiveTv[0].channels, channel => channel.MediaSources[0].Id),
   ['source-main', 'source-iptv']
 );
+const duplicateGroup = testWindow.__veloraTest.groupLiveTvChannels([
+  { Id: 'duplicate-channel', Name: 'Noticias' },
+  { Id: 'duplicate-channel', Name: 'Noticias' }
+]);
+assert.equal(duplicateGroup.length, 1);
+assert.equal(duplicateGroup[0].channels.length, 1);
 console.log('web security and library interaction tests passed');
 
 const selectSubtitleStream = testWindow.__veloraTest.selectSubtitleStream;

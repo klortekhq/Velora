@@ -48,7 +48,7 @@ Los cambios relevantes de Velora se documentan en este archivo.
   canales para el usuario activo.
 - Live TV: las respuestas duplicadas del proveedor ya no aparecen como falsas
   opciones repetidas; las fuentes realmente distintas, como principal e IPTV,
-  siguen agrupadas bajo el mismo canal y se pueden elegir.
+  siguen agrupadas bajo el mismo canal y se pueden elegir en Android y web.
 - CI: se validan los metadatos generados de Samsung, webOS y VIDAA después del
   empaquetado, evitando presentar un bundle como una aplicación certificada.
 - CI: se añade una comprobación automática que impide reintroducir releases

@@ -80,8 +80,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Android TV: Live TV se integra en la misma fila centrada de navegación que
   las bibliotecas de películas y series; la pestaña sigue siendo condicional a
   los canales visibles para el usuario.
-- Live TV: la normalización descarta duplicados idénticos sin `MediaSource`,
-  pero conserva cada fuente identificada como una opción seleccionable.
+- Live TV: la normalización Android y web descarta duplicados idénticos sin
+  `MediaSource`, pero conserva cada fuente identificada como una opción
+  seleccionable.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
 
