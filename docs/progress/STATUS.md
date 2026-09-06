@@ -53,6 +53,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple móvil/tablet conserva la calidad elegida en cada descarga offline y
   migra catálogos anteriores sin ese campo a Original; la suite Swift sigue
   pendiente de ejecución en macOS porque este host no tiene Xcode.
+- La migración Android desde el índice JSON antiguo conserva también checksum,
+  fuente, trabajo, progreso, fechas, estado de visto y protección de descarga
+  antes de pasar a SQLite.
 - Auditoría multiplataforma de offline: Android TV/Fire TV bloquea tanto la
   navegación como la apertura directa de descargas; Apple TV no renderiza las
   acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen
@@ -102,6 +105,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
 - Las suites móvil y TV vuelven a terminar correctamente tras hacer enfocables
   y accesibles los destinos de navegación inferior móvil/tablet.
+- La suite móvil pasa 85 pruebas tras cubrir la migración completa del índice
+  offline; la suite TV también vuelve a terminar correctamente.
 - `:app:compileMobileDebugKotlin`, `:app:compileTvDebugKotlin`,
   `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest`: `BUILD
   SUCCESSFUL` tras corregir la carga opcional de Lottie.

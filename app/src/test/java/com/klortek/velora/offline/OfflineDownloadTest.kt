@@ -8,6 +8,28 @@ import org.junit.Test
 
 class OfflineDownloadTest {
     @Test
+    fun legacyJsonMigrationPreservesManagedDownloadMetadata() {
+        val migrated = offlineDownloadFromLegacyValues(mapOf(
+            "itemId" to "episode-1", "name" to "Piloto", "type" to "Episode",
+            "downloadId" to 0L, "quality" to "medium", "localPath" to "file:///private/media",
+            "status" to 8, "bytesDownloaded" to 120L, "totalBytes" to 240L,
+            "checksumSha256" to "abc123", "workName" to "offline-work",
+            "createdAtEpochMs" to 10L, "completedAtEpochMs" to 20L,
+            "lastPlayedAtEpochMs" to 30L, "isWatched" to true, "keepDownload" to true,
+            "mediaSourceId" to "source-1"
+        ))
+
+        assertEquals("medium", migrated.quality)
+        assertEquals("abc123", migrated.checksumSha256)
+        assertEquals("offline-work", migrated.workName)
+        assertEquals(20L, migrated.completedAtEpochMs)
+        assertEquals(30L, migrated.lastPlayedAtEpochMs)
+        assertTrue(migrated.isWatched)
+        assertTrue(migrated.keepDownload)
+        assertEquals("source-1", migrated.mediaSourceId)
+    }
+
+    @Test
     fun successfulContentUriIsPlayableWithoutFilesystemPath() {
         val download = OfflineDownload(
             itemId = "movie-1",
