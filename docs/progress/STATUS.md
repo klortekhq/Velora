@@ -250,6 +250,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   contraseñas ni tokens en este documento.
 - La última prueba se realizó el 2026-09-06 con el servidor operativo; el
   health check fue correcto y la autenticación devolvió HTTP 401.
+- La revalidación posterior de esta sesión no obtuvo respuesta HTTP del host
+  configurado (`health=ERR`, `auth=ERR`); por tanto no se sustituye el resultado
+  anterior ni se declara una prueba funcional nueva.
 - ADB está disponible en el host, pero no hay ningún dispositivo conectado ni
   servicio mDNS del Fire TV visible; no se declara instalación ni prueba
   física reciente en Fire TV o móvil.
