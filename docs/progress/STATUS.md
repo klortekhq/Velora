@@ -413,6 +413,14 @@ y episodios; queda cubierto por los cuatro catálogos Android garantizados, con
 452 claves cada uno. La compilación emitió únicamente avisos de APIs
 deprecadas, sin errores.
 
+Build TV de QA posterior a esa corrección: `:app:assembleTvDebug` terminó en
+`BUILD SUCCESSFUL` el 2026-09-06. APK
+`app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+`183A45E568BBB3322C870698E8CB59D81F0E18D4A6B9382A4B02E49E791CE3CA`.
+Se instaló correctamente por ADB en el Fire TV AFTSS y la actividad principal
+quedó activa; el log de arranque no mostró `FATAL EXCEPTION` ni
+`AndroidRuntime`.
+
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
   SHA-256 `06EF392D2A0FD6C09868D4E934BBF2B46672125235B5347A147FC052B93CB1EA`.
 - TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`
