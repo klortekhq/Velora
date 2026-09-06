@@ -255,6 +255,7 @@ fun MoviesLibraryScreen(
     
     // Data states for library grid
     var libraryItems by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
+    var libraryFullyLoaded by remember { mutableStateOf(false) }
     
     var isLoading by remember { mutableStateOf(true) }
     
@@ -327,7 +328,6 @@ fun MoviesLibraryScreen(
                         val genre3Deferred = async { apiService.getMoviesByGenreFromLibrary(libraryId, genre3, settings.rowCardCount) }
                         val genre4Deferred = async { apiService.getMoviesByGenreFromLibrary(libraryId, genre4, settings.rowCardCount) }
                         val genre5Deferred = async { apiService.getMoviesByGenreFromLibrary(libraryId, genre5, settings.rowCardCount) }
-                        val libraryDeferred = async { apiService.getAllLibraryItems(libraryId) }
                         
                         continueWatchingMovies = continueWatchingDeferred.await()
                         recentlyReleasedMovies = recentlyReleasedDeferred.await()
@@ -340,7 +340,11 @@ fun MoviesLibraryScreen(
                         genreMovies3 = genre3Deferred.await()
                         genreMovies4 = genre4Deferred.await()
                         genreMovies5 = genre5Deferred.await()
-                        libraryItems = libraryDeferred.await()
+                        // Recommendations do not need the complete library. Keep the first
+                        // page ready for an immediate transition, and defer the expensive
+                        // full-library scan until the user opens the library tab.
+                        libraryItems = apiService.getLibraryItems(libraryId, limit = 100, startIndex = 0).Items
+                        libraryFullyLoaded = false
                     }
                     
                     Log.d("MoviesLibraryScreen", "Loaded movies for '$libraryName': " +
@@ -367,6 +371,15 @@ fun MoviesLibraryScreen(
                 }
             }
             isLoading = false
+        }
+    }
+
+    LaunchedEffect(selectedTab, apiService, libraryId) {
+        if (selectedTab == "library" && apiService != null && !libraryFullyLoaded) {
+            withContext(Dispatchers.IO) {
+                libraryItems = apiService.getAllLibraryItems(libraryId)
+                libraryFullyLoaded = true
+            }
         }
     }
     

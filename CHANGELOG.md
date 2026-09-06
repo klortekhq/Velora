@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Rendimiento Android: películas y series ya no descargan toda la biblioteca
+  al abrir la pantalla de recomendaciones; el catálogo completo se carga bajo
+  demanda al entrar en la vista de biblioteca, mejorando el arranque con
+  bibliotecas grandes sin perder ordenado ni filtros.
 - Android Live TV: la ruta predeterminada de ExoPlayer ya no fuerza H.264/AAC
   al abrir el HLS; conserva la decisión de Jellyfin y evita transcodificaciones
   innecesarias cuando el dispositivo puede reproducir la fuente original.

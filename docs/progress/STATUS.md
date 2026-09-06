@@ -198,13 +198,19 @@ Son builds `unsigned` para QA, no releases de distribución:
 
 Builds debug regeneradas tras la corrección de Live TV (QA, 2026-09-06):
 
-- Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`, 76,2 MB,
-  SHA-256 `6F07A24DF5CF45922EAEFE3B35E2E6E1382EEB109A84FD1E0031761DA5C4F2BB`.
+- Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`, 78,2 MB,
+  SHA-256 `D7A399EBC435F2D91B4F43E27306281D5852B4EA750B8B5241F5D69A57DC314A`.
 - TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, 78,2 MB,
-  SHA-256 `F06839B29BE8814EAE34248DC2FFB8146BECBB4D5190D3FA17E1501DBF1A2DC1`.
+  SHA-256 `D0B1046408572FF5C1BB2D93CB1F57C8DF197431208F121453AB6DED39299BFA`.
 
 Ambas variantes se generaron correctamente en QA el 2026-09-06; no se han
 instalado en hardware porque ningún dispositivo ADB respondió.
+
+La carga inicial de las pantallas de películas y series ya no recorre la
+biblioteca completa mientras se muestran las recomendaciones. Se carga una
+primera página para que la transición sea inmediata y el catálogo completo se
+solicita solo al abrir la pestaña de biblioteca, manteniendo disponibles el
+ordenado y los filtros completos.
 
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
   SHA-256 `9B59B4D0CF60000F1864D012F307591E8DFC9D544146FD476265C8232B2467BE`.

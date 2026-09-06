@@ -249,6 +249,7 @@ fun TvShowsLibraryScreen(
     
     // Data states for library grid
     var libraryItems by remember { mutableStateOf<List<JellyfinItem>>(emptyList()) }
+    var libraryFullyLoaded by remember { mutableStateOf(false) }
     
     var isLoading by remember { mutableStateOf(true) }
     
@@ -326,7 +327,6 @@ fun TvShowsLibraryScreen(
                         val genre3Deferred = async { apiService.getShowsByGenreFromLibrary(libraryId, genre3, settings.rowCardCount) }
                         val genre4Deferred = async { apiService.getShowsByGenreFromLibrary(libraryId, genre4, settings.rowCardCount) }
                         val genre5Deferred = async { apiService.getShowsByGenreFromLibrary(libraryId, genre5, settings.rowCardCount) }
-                        val libraryDeferred = async { apiService.getAllLibraryItems(libraryId) }
                         
                         continueWatchingEpisodes = continueWatchingDeferred.await()
                         nextUpEpisodes = nextUpDeferred.await()
@@ -339,7 +339,12 @@ fun TvShowsLibraryScreen(
                         genreShows3 = genre3Deferred.await()
                         genreShows4 = genre4Deferred.await()
                         genreShows5 = genre5Deferred.await()
-                        libraryItems = libraryDeferred.await().filter { it.Type == "Series" }
+                        // Recommendations do not need the complete library. Keep the first
+                        // page ready for an immediate transition, and defer the expensive
+                        // full-library scan until the user opens the library tab.
+                        libraryItems = apiService.getLibraryItems(libraryId, limit = 100, startIndex = 0).Items
+                            .filter { it.Type == "Series" }
+                        libraryFullyLoaded = false
                     }
                     
                     Log.d("TvShowsLibraryScreen", "Loaded TV shows for '$libraryName': " +
@@ -370,6 +375,15 @@ fun TvShowsLibraryScreen(
                 }
             }
             isLoading = false
+        }
+    }
+
+    LaunchedEffect(selectedTab, apiService, libraryId) {
+        if (selectedTab == "library" && apiService != null && !libraryFullyLoaded) {
+            withContext(Dispatchers.IO) {
+                libraryItems = apiService.getAllLibraryItems(libraryId).filter { it.Type == "Series" }
+                libraryFullyLoaded = true
+            }
         }
     }
     
