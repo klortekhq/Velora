@@ -173,6 +173,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   a terminar correctamente.
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` tras el ajuste del cierre
   del cliente HTTP de autenticación.
+- El empaquetado web se verificó en una salida aislada: el bundle Samsung se
+  preparó sin declarar un WGT al no estar instalado Tizen Studio, webOS generó
+  un IPK y VIDAA generó el bundle HTML5; el script acepta ahora una carpeta de
+  salida explícita para evitar que artefactos bloqueados contaminen otro build.
 - Se eliminaron del código de ejemplo y del dashboard las direcciones privadas
   y credenciales usadas durante pruebas locales; los ejemplos usan ahora
   dominios reservados para documentación. `ServerUrlValidatorTest` y

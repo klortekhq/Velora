@@ -6,7 +6,10 @@ import { readFile } from 'node:fs/promises';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = resolve(root, '..');
-const out = resolve(repo, 'outputs', 'web');
+// Allow CI and local verification to use an isolated output directory. This
+// avoids stale/locked generated files affecting a later build while keeping
+// the normal repository output unchanged.
+const out = resolve(process.env.VELORA_WEB_OUTPUT_DIR || join(repo, 'outputs', 'web'));
 const target = process.argv[2] || 'all';
 const requireInstallable = process.env.VELORA_REQUIRE_INSTALLABLE_PACKAGES === '1';
 const packageMetadata = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
