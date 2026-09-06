@@ -45,6 +45,8 @@ jobs:
         run: node scripts/check-public-identity.mjs
       - name: Validate release workflow policy
         run: node scripts/check-release-workflows.mjs
+      - name: Validate offline surface policy
+        run: node scripts/check-offline-surface-policy.mjs
       - name: Validate web interactions and security
         run: node web/scripts/test-platform.mjs
       - name: Build browser and Smart TV bundles
