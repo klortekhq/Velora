@@ -2201,7 +2201,7 @@ fun EpisodeActionButtonsRow(
                           var iso639Code: String? = null
                           if (audioLang != null) {
                               try {
-                                  iso639Code = java.util.Locale(audioLang).language
+                                  iso639Code = java.util.Locale.forLanguageTag(audioLang.replace('_', '-')).language.ifBlank { audioLang }
                                   if (iso639Code == audioLang && audioLang.length == 3) {
                                       iso639Code = java.util.Locale.getAvailableLocales()
                                           .find { try { it.getISO3Language() == audioLang } catch (e: Exception) { false } }?.language ?: audioLang.take(2)
