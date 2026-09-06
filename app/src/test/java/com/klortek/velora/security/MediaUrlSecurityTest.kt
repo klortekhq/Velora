@@ -32,6 +32,24 @@ class MediaUrlSecurityTest {
     }
 
     @Test
+    fun exoPlayerLiveTvUrlPreservesServerCodecDecision() {
+        val url = MpvUrlBuilder.buildLiveTvStreamUrlForExoPlayer(
+            serverUrl = "http://jellyfin.test:8096",
+            itemId = "channel-id",
+            accessToken = "secret-token",
+            mediaSourceId = "source-id",
+            liveStreamId = "live-id"
+        )
+
+        assertTrue(url.contains("MediaSourceId=source-id"))
+        assertTrue(url.contains("LiveStreamId=live-id"))
+        assertTrue(url.contains("EnableAutoStreamCopy=true"))
+        assertFalse(url.contains("VideoCodec", ignoreCase = true))
+        assertFalse(url.contains("AudioCodec", ignoreCase = true))
+        assertFalse(url.contains("secret-token"))
+    }
+
+    @Test
     fun mpvAuthenticationIsCarriedByHeadersInsteadOfTheMediaUrl() {
         val headers = MpvUrlBuilder.buildHeaders(
             accessToken = "secret-token",

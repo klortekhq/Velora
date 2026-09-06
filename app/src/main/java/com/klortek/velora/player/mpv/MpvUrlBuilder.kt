@@ -121,6 +121,39 @@ object MpvUrlBuilder {
     }
 
     /**
+     * Build the Jellyfin Live TV HLS endpoint for Media3/ExoPlayer.
+     *
+     * Unlike the legacy MPV route above, this must not force h264/aac: those
+     * codec parameters can make Jellyfin transcode a source that the device
+     * can play directly. PlaybackInfo already contains Jellyfin's source
+     * decision; the ExoPlayer route only supplies the identifiers needed to
+     * open that source and lets the server preserve/copy what it can.
+     */
+    fun buildLiveTvStreamUrlForExoPlayer(
+        serverUrl: String,
+        itemId: String,
+        accessToken: String,
+        mediaSourceId: String?,
+        liveStreamId: String?
+    ): String {
+        val baseUrl = serverUrl.removeSuffix("/")
+        return buildString {
+            append("$baseUrl/Videos/$itemId/master.m3u8?")
+            mediaSourceId?.takeIf { it.isNotBlank() }?.let { append("MediaSourceId=${queryValue(it)}") }
+            liveStreamId?.takeIf { it.isNotBlank() }?.let {
+                append(if (endsWith("?")) "" else "&")
+                append("LiveStreamId=${queryValue(it)}")
+            }
+            append(if (endsWith("?")) "" else "&")
+            append("TranscodingProtocol=hls")
+            append("&TranscodingContainer=ts")
+            append("&EnableAutoStreamCopy=true")
+            append("&AllowVideoStreamCopy=true")
+            append("&AllowAudioStreamCopy=true")
+        }
+    }
+
+    /**
      * Direct Play URL returned by Jellyfin's Live TV PlaybackInfo.
      * We do not read or parse the provider M3U in the app; Jellyfin resolves
      * the selected channel and returns this source URL through its API.

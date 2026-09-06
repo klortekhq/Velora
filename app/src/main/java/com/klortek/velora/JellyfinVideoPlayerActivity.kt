@@ -387,7 +387,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
                     MpvUrlBuilder.buildLiveTvDirectSourceUrl(directSource)
                 } else if (!liveMediaSourceId.isNullOrBlank() && !liveStreamId.isNullOrBlank()) {
-                    MpvUrlBuilder.buildLiveTvStreamUrl(
+                    MpvUrlBuilder.buildLiveTvStreamUrlForExoPlayer(
                         serverUrl = serverUrl,
                         itemId = itemId,
                         accessToken = accessToken,
