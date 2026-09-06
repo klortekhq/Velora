@@ -91,7 +91,11 @@ class LiveTvChannelQueryTest {
 
     @Test
     fun sourceLabelAcceptsLocalizedFallbackWhenProviderHasNoLabel() {
-        val channel = LiveTvChannel("unlabelled", "Canal")
+        val channel = LiveTvChannel(
+            "unlabelled",
+            "Canal",
+            MediaSources = listOf(MediaSource(Id = "internal-source-id"))
+        )
 
         assertEquals("Option 2", liveTvSourceLabel(channel, 2, "Option 2"))
     }

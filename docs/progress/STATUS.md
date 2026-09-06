@@ -51,6 +51,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   no reutiliza la fuente del canal anterior.
 - Web/Smart TV abre ahora ese selector al pulsar o confirmar con teclado una
   fila agrupada; los canales sin variantes siguen entrando directamente.
+- Las variantes sin nombre legible ya no muestran IDs técnicos en el selector
+  de Live TV: se presentan como opciones numeradas, conservando el ID solo
+  para solicitar la fuente correcta a Jellyfin.
 - Web/Smart TV: el reproductor permite cambiar de forma real entre Ajustar,
   Rellenar y Original, también en pantalla completa, con la preferencia
   guardada localmente y textos traducidos en los 12 idiomas web.
@@ -357,6 +360,12 @@ commit `adc1a5f`):
 Build TV de QA posterior al ajuste de descubrimiento local (commit `74f70e7`):
 `app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
 `722D77BC445FF1232737CCCFD550BFFBAFA946577BE5795B59FD892252A02EA9`.
+
+Build TV de QA posterior al ajuste de etiquetas de fuentes Live TV:
+`app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+`409FCF24B6C218F67808D964483EA39340A23E5306D7847F30CCEF02C6CAE8C9`.
+Se instaló correctamente en el mismo Fire TV AFTSS y la actividad principal
+permaneció activa tras el arranque explícito.
 
 La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
 terminó en `BUILD SUCCESSFUL` en 9m24s. Siguen siendo APK unsigned de QA.
