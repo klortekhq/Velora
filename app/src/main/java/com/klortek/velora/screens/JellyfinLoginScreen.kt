@@ -27,6 +27,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -553,6 +554,12 @@ private fun QuickConnectLoginContent(
     val scope = rememberCoroutineScope()
     val authScope = rememberCoroutineScope() // Separate scope for authentication to avoid cancellation
     val config = remember { JellyfinConfig(context) }
+    val quickConnectService = remember(serverUrl, context) {
+        QuickConnectService(serverUrl.trim().removeSuffix("/"), context)
+    }
+    DisposableEffect(quickConnectService) {
+        onDispose { quickConnectService.close() }
+    }
     var quickConnectSecret by remember { mutableStateOf<String?>(null) }
 
     // Initiate QuickConnect when composable is first shown
@@ -560,9 +567,7 @@ private fun QuickConnectLoginContent(
         if (quickConnectSecret == null && !isUnavailable) {
             onAuthenticatingChange(true)
             try {
-                val trimmedUrl = serverUrl.trim().removeSuffix("/")
                 android.util.Log.d("QuickConnectLogin", "Attempting QuickConnect connection")
-                val quickConnectService = QuickConnectService(trimmedUrl, context)
                 val result = quickConnectService.initiateQuickConnect()
                 
                 when {
@@ -612,7 +617,6 @@ private fun QuickConnectLoginContent(
             
             try {
                 val trimmedUrl = serverUrl.trim().removeSuffix("/")
-                val quickConnectService = QuickConnectService(trimmedUrl, context)
                 val state = quickConnectService.getQuickConnectState(quickConnectSecret!!)
                 
                 if (state != null) {

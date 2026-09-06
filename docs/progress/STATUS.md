@@ -48,6 +48,8 @@ una comprobación no se interpreta como soporte certificado.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` tras el ajuste del cierre
   del cliente HTTP de autenticación.
+- La validación de login cubre también el ciclo de vida de Quick Connect; el
+  test móvil volvió a terminar correctamente después del cambio.
 - `:app:compileMobileDebugKotlin`: `BUILD SUCCESSFUL` tras el ajuste del ciclo
   de vida del cliente Live TV.
 - `:app:compileTvDebugKotlin`: `BUILD SUCCESSFUL` tras el mismo ajuste.
