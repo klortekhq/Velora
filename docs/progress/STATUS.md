@@ -368,11 +368,15 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   específicamente en la etapa de autenticación; el script ahora identifica la
   etapa (`información pública`, `autenticación`, `listado Live TV` o
   `PlaybackInfo`) sin imprimir credenciales ni tokens.
-- En la revalidación del 2026-09-06, `192.168.100.201/System/Info/Public`
-  respondió una página HTML de la WebGUI de Unraid en lugar del JSON de
-  Jellyfin. El smoke test se endureció para rechazar explícitamente esa ruta
-  y conservar el diagnóstico, sin confundir un HTTP 200 de otro servicio con
-  un servidor Jellyfin saludable.
+- En la revalidación del 2026-09-06, la raíz del servidor configurado respondió
+  la WebGUI de Unraid; el endpoint Jellyfin correcto quedó localizado en el
+  puerto HTTP configurado, cuya información pública devuelve Jellyfin
+  `10.11.11`. La autenticación en ese endpoint sigue devolviendo `HTTP 401`
+  con las credenciales probadas, por lo que todavía no se certifican catálogo,
+  Live TV ni reproducción real. No se publica aquí la dirección privada.
+- El smoke test valida que `/System/Info/Public` sea JSON Jellyfin, elimina
+  espacios accidentales de la URL y conserva el diagnóstico de respuestas sin
+  código HTTP, sin registrar credenciales ni tokens.
 - ADB está disponible en el host, pero no hay ningún dispositivo conectado ni
   servicio mDNS del Fire TV visible; no se declara instalación ni prueba
   física reciente en Fire TV o móvil.
