@@ -46,6 +46,8 @@ una comprobación no se interpreta como soporte certificado.
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` tras el ajuste del cierre
+  del cliente HTTP de autenticación.
 - `:app:compileMobileDebugKotlin`: `BUILD SUCCESSFUL` tras el ajuste del ciclo
   de vida del cliente Live TV.
 - `:app:compileTvDebugKotlin`: `BUILD SUCCESSFUL` tras el mismo ajuste.

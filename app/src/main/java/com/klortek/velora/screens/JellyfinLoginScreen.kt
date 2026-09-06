@@ -844,6 +844,7 @@ private fun performCredentialsLogin(
 ) {
     val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main)
     scope.launch {
+        var authService: JellyfinAuthService? = null
         try {
             if (serverUrl.isBlank() || username.isBlank() || password.isBlank()) {
                 onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
@@ -851,8 +852,9 @@ private fun performCredentialsLogin(
             }
 
             val trimmedUrl = serverUrl.trim().removeSuffix("/")
-            val authService = JellyfinAuthService(trimmedUrl, context)
-            val authResponse = authService.authenticate(username.trim(), password.trim())
+            val service = JellyfinAuthService(trimmedUrl, context)
+            authService = service
+            val authResponse = service.authenticate(username.trim(), password.trim())
 
             if (authResponse != null) {
                 config.serverUrl = trimmedUrl
@@ -864,7 +866,7 @@ private fun performCredentialsLogin(
                 config.deviceId = DeviceIdentity.get(context)
                 onSuccess()
             } else {
-                val errorRes = when (authService.lastFailure) {
+                val errorRes = when (service.lastFailure) {
                     com.klortek.velora.jellyfin.AuthenticationFailure.INVALID_SERVER -> com.klortek.velora.R.string.login_error_invalid_server
                     com.klortek.velora.jellyfin.AuthenticationFailure.INVALID_CREDENTIALS -> com.klortek.velora.R.string.login_error_invalid_credentials
                     com.klortek.velora.jellyfin.AuthenticationFailure.TIMEOUT -> com.klortek.velora.R.string.login_error_timeout
@@ -876,6 +878,8 @@ private fun performCredentialsLogin(
             }
         } catch (e: Exception) {
             onError(context.getString(com.klortek.velora.R.string.error_fragment_message))
+        } finally {
+            authService?.close()
         }
     }
 }

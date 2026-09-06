@@ -4,6 +4,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android: los intentos de inicio de sesión liberan el cliente HTTP de un solo
+  uso al terminar, evitando conexiones acumuladas tras reintentos.
 - Android: la comprobación de disponibilidad de Live TV en el inicio cierra su
   cliente HTTP al abandonar la pantalla, evitando conexiones acumuladas tras
   cambiar de servidor o sesión.
