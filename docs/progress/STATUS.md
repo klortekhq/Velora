@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `15a7481`.
+Revisión funcional actual: commit `a58101f`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -11,8 +11,8 @@ una comprobación no se interpreta como soporte certificado.
 
 - Rama de trabajo y rama remota: `main`.
 - No hay ramas de producto adicionales en GitHub.
-- Último cambio funcional documentado: reparto y filmografía interactiva en
-  las fichas Apple.
+- Último cambio funcional documentado: normalización del parseo de idiomas de
+  audio en las fichas de películas y series Android.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
@@ -70,7 +70,7 @@ una comprobación no se interpreta como soporte certificado.
 - `node scripts/check-jellyfin-auth-contract.mjs`: contrato `Pw` coherente en
   Android, Apple, web y smoke test.
 - `node scripts/check-android-locales.mjs`: 434 claves en los catálogos Android.
-- `node scripts/check-apple-locales.mjs`: 45 claves coherentes en `en`, `es`,
+- `node scripts/check-apple-locales.mjs`: 48 claves coherentes en `en`, `es`,
   `fr` y `de`.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
