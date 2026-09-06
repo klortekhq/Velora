@@ -144,6 +144,11 @@ class JellyfinAuthService(
             null
         }
     }
+
+    /** Release the Ktor engine when a one-shot login attempt is complete. */
+    fun close() {
+        client.close()
+    }
 }
 
 
