@@ -74,6 +74,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple: `PrivacyInfo.xcprivacy` está incluido en los recursos compartidos y
   el CI comprueba sus claves y la declaración de no-tracking; la firma y la
   validación final del bundle siguen requiriendo Xcode/macOS.
+- Android: el botón de reproducción opcional no construye ya una referencia
+  `RawRes(0)`; el modo sin Lottie queda cubierto por la ruta normal de foco,
+  toque y mando.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
 

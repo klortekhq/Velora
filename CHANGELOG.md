@@ -40,6 +40,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
   construirlos, antes de intentar adjuntarlos a una release.
 - Apple: se incorpora y valida en CI el manifiesto de privacidad del cliente,
   declarando explícitamente que Velora no hace tracking ni recopila datos.
+- Android: el botón de reproducción animado ya no intenta cargar un recurso
+  Lottie inválido cuando no hay animación configurada; mantiene sus controles
+  de foco y pulsación con el tratamiento visual normal.
 - CI: se validan los metadatos generados de Samsung, webOS y VIDAA después del
   empaquetado, evitando presentar un bundle como una aplicación certificada.
 - CI: se añade una comprobación automática que impide reintroducir releases
