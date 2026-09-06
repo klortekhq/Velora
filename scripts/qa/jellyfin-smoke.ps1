@@ -55,6 +55,9 @@ try {
 }
 catch {
     $status = $_.Exception.Response.StatusCode.value__
+    if ($status -eq 401) {
+        throw 'Smoke test Jellyfin fallido: el servidor responde, pero las credenciales configuradas fueron rechazadas (HTTP 401).'
+    }
     if ($status) {
         throw "Smoke test Jellyfin fallido (HTTP $status)."
     }

@@ -4,6 +4,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- QA: el smoke test de Jellyfin distingue ahora un servidor inaccesible de
+  unas credenciales rechazadas, sin revelar información sensible.
 - Web: las tarjetas de películas, series y Live TV exponen su título a
   lectores de pantalla y mantienen activación por teclado además del ratón.
 - Web: las pestañas de biblioteca usan el patrón accesible `tablist`/`tabpanel`
