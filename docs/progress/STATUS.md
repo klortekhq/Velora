@@ -184,6 +184,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple: el inicio de sesión distingue y localiza credenciales rechazadas,
   servidor no válido y respuesta inesperada, sin exponer detalles de red ni
   secretos.
+- Web/Smart TV: el inicio de sesión clasifica `401/403` como credenciales
+  inválidas y separa dirección inválida de fallo de conexión; la prueba web
+  cubre explícitamente esas ramas sin imprimir la respuesta del servidor.
 - Apple: la carga incremental de bibliotecas grandes queda implementada en el
   cliente Swift; falta confirmar la compilación y las pruebas en macOS.
 - Apple: se añadió una prueba de regresión para impedir que el token se aplique

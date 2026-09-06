@@ -13,6 +13,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Apple: el inicio de sesión distingue ahora credenciales rechazadas (401),
   dirección de servidor no válida y respuesta inesperada, con mensajes
   localizados en español, inglés, francés y alemán.
+- Web/Smart TV: el inicio de sesión diferencia credenciales rechazadas,
+  dirección inválida y fallo de conexión, y conserva el mensaje localizado
+  sin mostrar respuestas del servidor.
 - Rendimiento Android: películas y series ya no descargan toda la biblioteca
   al abrir la pantalla de recomendaciones; el catálogo completo se carga bajo
   demanda al entrar en la vista de biblioteca, mejorando el arranque con
