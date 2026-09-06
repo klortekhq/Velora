@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `70da098`.
+Revisión funcional actual: commit `e59fab1`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -84,6 +84,8 @@ una comprobación no se interpreta como soporte certificado.
   como artefactos de QA y no se incluyen en las Releases públicas.
 - Los workflows de publicación solo se activan con tags de versión o ejecución
   manual; los pull requests y los pushes normales quedan en el workflow de CI.
+- `node scripts/check-release-workflows.mjs`: correcto; protege esa política y
+  evita publicar APKs por comodín.
 
 ## Artefactos Android locales
 
