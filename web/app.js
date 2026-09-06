@@ -600,7 +600,7 @@
     if (!items.length) return '';
     return '<section><h2>' + esc(title) + '</h2><div class="grid">' +
       items.map(function (item) {
-        return '<article class="card" tabindex="0" role="button" data-id="' + esc(item.Id) + '">' +
+        return '<article class="card" tabindex="0" role="button" aria-label="' + esc(item.Name || '') + '" data-id="' + esc(item.Id) + '">' +
           '<img loading="lazy" data-velora-image-id="' + esc(item.Id) + '" alt="">' +
           '<div class="label">' + esc(item.Name) + '</div></article>';
       }).join('') + '</div></section>';
@@ -632,7 +632,7 @@
         var current = channel.CurrentProgram || null;
         var upcoming = channel.UpcomingProgram || null;
         var progress = Math.round(liveProgramProgress(current) * 100);
-        return '<article class="live-row" tabindex="0" role="button" data-id="' + esc(channel.Id) + '">' +
+        return '<article class="live-row" tabindex="0" role="button" aria-label="' + esc(channel.Name || '') + '" data-id="' + esc(channel.Id) + '">' +
           '<img loading="lazy" data-velora-image-id="' + esc(channel.Id) + '" alt="">' +
           '<div class="live-copy"><strong>' + esc(channel.Name || '') + '</strong>' +
           (group.channels.length > 1 ? '<small class="live-sources">' + group.channels.length + ' ' + esc(t('liveSources')) + '</small>' : '') +
