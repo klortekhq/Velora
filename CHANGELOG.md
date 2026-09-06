@@ -7,6 +7,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Android TV/Fire TV: el reproductor rechaza también las aperturas directas de
   archivos offline; así ningún intent antiguo o enlace profundo puede reactivar
   descargas fuera de móvil/tablet.
+- CI: se añade una prueba transversal que verifica que la UI y las rutas de
+  reproducción no expongan descargas offline en TV, Smart TV, navegador ni
+  tvOS.
 - Rendimiento Android: películas y series ya no descargan toda la biblioteca
   al abrir la pantalla de recomendaciones; el catálogo completo se carga bajo
   demanda al entrar en la vista de biblioteca, mejorando el arranque con

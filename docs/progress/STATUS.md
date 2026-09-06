@@ -194,6 +194,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   manual; los pull requests y los pushes normales quedan en el workflow de CI.
 - `node scripts/check-release-workflows.mjs`: correcto; protege esa política y
   evita publicar APKs por comodín.
+- `node scripts/check-offline-surface-policy.mjs`: correcto; verifica el límite
+  mobile/tablet-only en Android, Apple, navegador y Smart TV, incluida la
+  frontera del reproductor Android.
 - La validación de releases cubre también la limpieza correcta de artefactos
   obsoletos cuando se reconstruye una etiqueta mediante ejecución manual.
 - `node scripts/check-public-identity.mjs`: correcto; no hay referencias
