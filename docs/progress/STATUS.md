@@ -227,6 +227,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `testTvDebugUnitTest` correctos. El bundle web y el IPK webOS también se
   regeneraron correctamente; Samsung queda como bundle porque este host no
   tiene Tizen Studio/CLI.
+- La prueba `LibraryContentQueryTest` cubre ahora bibliotecas sintéticas de
+  1.000, 10.000 y 50.000 elementos en las variantes móvil y TV; valida que
+  el filtrado de reproducción/género y el ordenado sigan siendo deterministas.
 
 ## Artefactos Android locales
 
