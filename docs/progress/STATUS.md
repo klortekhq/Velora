@@ -68,6 +68,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   límite artificial al catálogo.
 - Apple: las páginas de catálogo ya no solicitan `MediaSources` completos por
   tarjeta; la decisión de reproducción se resuelve al iniciar la reproducción.
+- Apple: la carga incremental también funciona con respuestas Jellyfin que no
+  incluyen `TotalRecordCount`, sin truncar el catálogo a la primera página.
 - La migración Android desde el índice JSON antiguo conserva también checksum,
   fuente, trabajo, progreso, fechas, estado de visto y protección de descarga
   antes de pasar a SQLite.

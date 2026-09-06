@@ -13,6 +13,7 @@ public final class VeloraAppModel: ObservableObject {
     @Published public private(set) var items: [JellyfinItem] = []
     @Published public private(set) var totalItemCount: Int?
     @Published public private(set) var isLoadingMoreItems = false
+    @Published public private(set) var hasMoreItems = true
     @Published public private(set) var liveTvChannels: [JellyfinLiveTvChannel] = []
     @Published public private(set) var offlineDownloads: [VeloraOfflineDownload] = []
     @Published public private(set) var downloadingItemID: String?
@@ -113,6 +114,8 @@ public final class VeloraAppModel: ObservableObject {
             let libraryPage = try await library
             items = libraryPage.items
             totalItemCount = libraryPage.totalRecordCount
+            hasMoreItems = libraryPage.totalRecordCount.map { libraryPage.items.count < $0 }
+                ?? libraryPage.items.count >= 100
             liveTvChannels = JellyfinLiveTvChannel.grouped((try? await channels) ?? [])
             let serverURL = (await client.serverURL()).absoluteString
             offlineDownloads = platform.supportsOfflineDownloads
@@ -130,8 +133,7 @@ public final class VeloraAppModel: ObservableObject {
     public func loadMoreItems() async {
         guard let session,
               !isLoadingMoreItems,
-              let totalItemCount,
-              items.count < totalItemCount else { return }
+              hasMoreItems else { return }
         isLoadingMoreItems = true
         defer { isLoadingMoreItems = false }
         do {
@@ -141,8 +143,11 @@ public final class VeloraAppModel: ObservableObject {
                 startIndex: items.count
             )
             let existingIDs = Set(items.map(\.id))
-            items.append(contentsOf: page.items.filter { !existingIDs.contains($0.id) })
+            let newItems = page.items.filter { !existingIDs.contains($0.id) }
+            items.append(contentsOf: newItems)
             if let total = page.totalRecordCount { self.totalItemCount = total }
+            hasMoreItems = !page.items.isEmpty && !newItems.isEmpty &&
+                (page.totalRecordCount.map { items.count < $0 } ?? page.items.count >= 100)
         } catch {
             errorMessage = String(localized: "Unable to load library", bundle: .module)
         }
@@ -155,6 +160,7 @@ public final class VeloraAppModel: ObservableObject {
         items = []
         totalItemCount = nil
         isLoadingMoreItems = false
+        hasMoreItems = false
         liveTvChannels = []
         offlineDownloads = []
         isAuthenticated = false
