@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `0ac7fd4`.
+Revisión funcional actual: commit `e94bec9`.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -117,6 +117,8 @@ una comprobación no se interpreta como soporte certificado.
   manual; los pull requests y los pushes normales quedan en el workflow de CI.
 - `node scripts/check-release-workflows.mjs`: correcto; protege esa política y
   evita publicar APKs por comodín.
+- La validación de releases cubre también la limpieza correcta de artefactos
+  obsoletos cuando se reconstruye una etiqueta mediante ejecución manual.
 - `node scripts/check-public-identity.mjs`: correcto; no hay referencias
   heredadas de identidad en el contenido público revisado.
 - `node scripts/build-web.mjs all`: correcto; vuelve a generar el bundle web,
