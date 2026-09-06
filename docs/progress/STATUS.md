@@ -187,7 +187,7 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `node scripts/check-jellyfin-auth-contract.mjs`: contrato `Pw` coherente en
   Android, Apple, web y smoke test.
 - `node scripts/check-android-locales.mjs`: 434 claves en los catálogos Android.
-- `node scripts/check-apple-locales.mjs`: 48 claves coherentes en `en`, `es`,
+- `node scripts/check-apple-locales.mjs`: 52 claves coherentes en `en`, `es`,
   `fr` y `de`.
 - `node scripts/check-web-locales.mjs`: 69 claves efectivas coherentes en los
   12 idiomas de la web, incluyendo los fallbacks y overrides traducidos.
