@@ -17,9 +17,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La consulta independiente a `origin` del 2026-09-06 confirma únicamente
   `refs/heads/main` en GitHub, apuntando al commit que contiene este dashboard.
   No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: la navegación de Live TV comparte la
-  fila centrada de bibliotecas y su selector descarta duplicados de proveedor
-  sin perder fuentes realmente distintas.
+- Último cambio funcional documentado: la carga inicial de películas y series
+  difiere el recorrido completo de la biblioteca hasta abrir la vista de
+  catálogo, sin perder ordenado ni filtros.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
@@ -191,6 +191,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - `node web/scripts/test-platform.mjs` y `node web/scripts/build-web.mjs all`:
   correctos; el bundle web y el IPK de webOS se regeneraron. Tizen sigue
   pendiente por falta de Tizen Studio/CLI y firma.
+- Revalidación del estado actual: `node web/scripts/build-web.mjs all` y
+  `node scripts/check-tv-packaging-output.mjs` correctos; se regeneraron los
+  metadatos de Samsung, webOS y VIDAA. La ausencia de Tizen Studio/CLI se
+  mantiene como limitación explícita, no como paquete instalable simulado.
 
 ## Artefactos Android locales
 
