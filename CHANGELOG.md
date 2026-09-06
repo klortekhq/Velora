@@ -6,6 +6,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 - Multiplataforma: Apple y web envían ahora el campo `Pw` que exige
   `AuthenticateByName` de Jellyfin, alineándose con Android y el smoke test.
+- CI: se añade una comprobación automática del contrato de autenticación para
+  impedir que una plataforma vuelva a enviar `Password` por error.
 - Android: Quick Connect reutiliza un único cliente HTTP durante la pantalla
   de espera y lo libera al salir, evitando crear una conexión nueva por cada
   sondeo.
