@@ -139,6 +139,35 @@ final class VeloraKitTests: XCTestCase {
         try? FileManager.default.removeItem(at: root)
     }
 
+    func testOfflineStorePersistsSelectedDownloadQuality() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let store = VeloraOfflineStore(rootURL: root)
+        let temporary = root.appendingPathComponent("medium.bin")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        try Data("medium-media".utf8).write(to: temporary)
+
+        let entry = try store.add(
+            mediaAt: temporary,
+            itemID: "item-medium",
+            title: "Example",
+            serverURL: "https://jellyfin.example",
+            quality: .medium
+        )
+
+        XCTAssertEqual(entry.quality, .medium)
+        XCTAssertEqual(store.load().first?.quality, .medium)
+        try? FileManager.default.removeItem(at: root)
+    }
+
+    func testOfflineCatalogDefaultsLegacyEntriesToOriginalQuality() throws {
+        let legacy = """
+        {"id":"legacy","itemID":"item-legacy","title":"Legacy","serverURL":"https://jellyfin.example","fileName":"media.bin","createdAt":0,"byteCount":4,"checksumSha256":null}
+        """.data(using: .utf8)!
+
+        let entry = try JSONDecoder().decode(VeloraOfflineDownload.self, from: legacy)
+        XCTAssertEqual(entry.quality, .original)
+    }
+
     func testOfflineDownloadDecodesLegacyMetadataWithoutIntegrityFields() throws {
         let legacy = #"{"id":"legacy-1","itemID":"item-legacy","title":"Legacy","serverURL":"https://jellyfin.example","fileName":"media.bin","createdAt":"2026-01-01T00:00:00Z"}"#.data(using: .utf8)!
         let decoder = JSONDecoder()

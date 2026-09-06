@@ -210,7 +210,7 @@ public final class VeloraAppModel: ObservableObject {
         guard platform.supportsOfflineDownloads, downloadingItemID == nil else { return }
         guard let requestURL = await client.videoURL(itemID: item.id, quality: quality) else { return }
         let serverURL = await client.serverURL()
-        guard !offlineDownloads.contains(where: { $0.itemID == item.id && $0.serverURL == serverURL.absoluteString }) else { return }
+        guard !offlineDownloads.contains(where: { $0.itemID == item.id && $0.serverURL == serverURL.absoluteString && $0.quality == quality }) else { return }
         downloadingItemID = item.id
         let request = await client.authorizedRequest(for: requestURL)
         let metadata = VeloraOfflineTransferMetadata(
@@ -237,7 +237,8 @@ public final class VeloraAppModel: ObservableObject {
                 mediaAt: temporaryURL,
                 itemID: metadata.itemID,
                 title: metadata.title,
-                serverURL: metadata.serverURL
+                serverURL: metadata.serverURL,
+                quality: metadata.quality
             )
             let entries = offlineStore.load().filter { $0.serverURL == metadata.serverURL }
             offlineDownloads = entries.contains(entry) ? entries : entries + [entry]

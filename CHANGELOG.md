@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Apple móvil/tablet: las descargas sin conexión conservan la calidad elegida
+  (Original, High, Medium o Low) y los catálogos antiguos se migran de forma
+  segura a Original.
 - CI: se añade una validación del catálogo web que compara todos los idiomas
   soportados con el catálogo base y detecta claves duplicadas o desincronizadas.
 - Android TV: el reproductor deja de consultar o añadir subtítulos descargados
