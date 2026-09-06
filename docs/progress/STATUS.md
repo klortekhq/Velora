@@ -97,6 +97,8 @@ una comprobación no se interpreta como soporte certificado.
 - `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
   `:app:compileMobileDebugKotlin` y `:app:compileTvDebugKotlin`: correctos tras
   blindar la ruta de subtítulos offline para superficies TV.
+- Las pruebas de `UpdateService` cubren la selección de APK firmado por formato
+  y la exclusión de un artefacto unsigned como actualización instalable.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
 - El workflow de Android fue revisado sintácticamente: los APK debug se guardan

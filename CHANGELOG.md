@@ -9,6 +9,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Android TV: el reproductor deja de consultar o añadir subtítulos descargados
   del almacenamiento offline móvil; las pistas proporcionadas por Jellyfin
   siguen disponibles.
+- Android: el actualizador selecciona ahora los APK release firmados que publica
+  GitHub y rechaza correctamente artefactos unsigned de QA.
 - CI: se añade una comprobación automática que impide reintroducir releases
   desde pull requests, pushes normales o comodines de APK.
 - CI: los workflows de publicación ya no se ejecutan en pull requests ni en
