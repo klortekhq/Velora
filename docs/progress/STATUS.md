@@ -203,6 +203,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   hosts, rutas, esquemas o credenciales incrustadas no confiables.
 - `node web/scripts/test-platform.mjs`: correcto; valida también CSP,
   `frame-ancestors`, `object-src` y la política `no-referrer` del cliente web.
+- Web: la sesión y las preferencias toleran navegadores TV/modos privados que
+  bloquean `localStorage`; los tokens solo se mantienen en `sessionStorage` y
+  la prueba web cubre el fallo de almacenamiento sin impedir el arranque.
 - Batería estática completa del 2026-09-06: identidad pública, versiones,
   locales Android/Apple, privacidad Apple, política offline, contrato de
   autenticación Jellyfin, releases y pruebas web terminaron correctamente.
