@@ -182,7 +182,7 @@
   <string name="mobile_episodes">Episodes</string>
   <string name="mobile_details">Details</string>
   <string name="mobile_similar">Similar</string>
-  <string name="mobile_file_info">File information</string>
+  <string name="mobile_file_info">기술 정보</string>
   <string name="mobile_video">Video</string>
   <string name="mobile_no_video_info">Video information unavailable</string>
   <string name="mobile_no_audio_info">Audio information unavailable</string>
