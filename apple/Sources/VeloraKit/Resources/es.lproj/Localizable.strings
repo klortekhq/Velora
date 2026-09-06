@@ -38,6 +38,9 @@
 "Play" = "Reproducir";
 "Fullscreen" = "Pantalla completa";
 "Exit fullscreen" = "Salir de pantalla completa";
+"Aspect ratio" = "Relación de aspecto";
+"Fit" = "Ajustar";
+"Fill" = "Rellenar";
 "Live TV" = "TV en directo";
 "Subtitles" = "Subtítulos";
 "Quality" = "Calidad";

@@ -8,6 +8,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
   completa explícita con entrada y salida accesibles, sin depender de girar el
   dispositivo; los textos están localizados en español, inglés, francés y
   alemán.
+- Apple: el reproductor incorpora un selector funcional de relación de aspecto
+  (`Ajustar`, `Rellenar` y `Original`) que se conserva al entrar en pantalla
+  completa.
 - Android: se centraliza la selección del backend de reproducción para que
   Media3/ExoPlayer sea siempre la ruta inicial en móvil, tablet, Android TV,
   Fire TV y Live TV; MPV solo entra por elección explícita o tras un fallo real

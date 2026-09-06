@@ -38,6 +38,9 @@
 "Play" = "Wiedergeben";
 "Fullscreen" = "Vollbild";
 "Exit fullscreen" = "Vollbild verlassen";
+"Aspect ratio" = "Seitenverhältnis";
+"Fit" = "Einpassen";
+"Fill" = "Füllen";
 "Live TV" = "Live-TV";
 "Subtitles" = "Untertitel";
 "Quality" = "Qualität";

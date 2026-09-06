@@ -38,6 +38,9 @@
 "Play" = "Play";
 "Fullscreen" = "Fullscreen";
 "Exit fullscreen" = "Exit fullscreen";
+"Aspect ratio" = "Aspect ratio";
+"Fit" = "Fit";
+"Fill" = "Fill";
 "Live TV" = "Live TV";
 "Subtitles" = "Subtitles";
 "Quality" = "Quality";

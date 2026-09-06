@@ -38,6 +38,9 @@
 "Play" = "Lire";
 "Fullscreen" = "Plein écran";
 "Exit fullscreen" = "Quitter le plein écran";
+"Aspect ratio" = "Format d’image";
+"Fit" = "Ajuster";
+"Fill" = "Remplir";
 "Live TV" = "TV en direct";
 "Subtitles" = "Sous-titres";
 "Quality" = "Qualité";
