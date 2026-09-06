@@ -275,6 +275,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - La comprobación más reciente de esta continuación obtuvo `health=200`, pero
   la autenticación no completó una respuesta HTTP utilizable (`auth=ERR`); se
   mantiene sin certificar la biblioteca, la reproducción y Live TV reales.
+- La revalidación HTTP directa posterior sí obtuvo `auth=401 Unauthorized`;
+  Jellyfin está accesible, pero las credenciales probadas no son aceptadas.
+  La aplicación lo clasifica como credenciales inválidas sin registrar secretos.
 - ADB está disponible en el host, pero no hay ningún dispositivo conectado ni
   servicio mDNS del Fire TV visible; no se declara instalación ni prueba
   física reciente en Fire TV o móvil.
