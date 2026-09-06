@@ -287,4 +287,10 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertNil(slashURL)
         XCTAssertNil(traversalURL)
     }
+
+    func testPersonFilmographyRejectsPathTraversalIdentifiers() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        XCTAssertTrue(try await client.items(userID: "../escape", forPerson: "person-1").isEmpty)
+        XCTAssertTrue(try await client.items(userID: "user-1", forPerson: "../escape").isEmpty)
+    }
 }
