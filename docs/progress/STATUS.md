@@ -14,11 +14,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 - Rama de trabajo: `main`; la política del repositorio exige que sea la única
   rama pública.
-- La última subida confirmada por `git push` incluyó este dashboard. La consulta
-  independiente de ramas remotas está temporalmente sin conectividad y no se
-  presenta como verificada en esta revisión. La evidencia anterior del tag
-  remoto `v1.4.0` lo situaba en un commit anterior; por tanto no se presenta
-  esa release como equivalente al estado actual de `main`.
+- La consulta independiente a `origin` del 2026-09-06 confirma únicamente
+  `refs/heads/main` en GitHub, apuntando al commit que contiene este dashboard.
+  No se presenta ninguna otra rama pública.
 - Último cambio funcional documentado: la ficha móvil etiqueta el bloque de
   códecs, resolución, fps, HDR/SDR, audio y contenedor como información
   técnica, sin presentar nombres ni rutas de archivo.
