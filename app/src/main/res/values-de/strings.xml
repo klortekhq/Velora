@@ -165,6 +165,7 @@ Bitte überprüfe:
   <string name="request_no_seasons">Keine Staffeln gefunden</string>
   <string name="jellyseerr_requesting_short">Anfrage wird gesendet…</string>
   <string name="subtitle_downloading">Wird heruntergeladen…</string>
+  <string name="subtitle_download_failed">Untertitel konnten nicht heruntergeladen werden</string>
   <string name="subtitle_downloaded_title">Heruntergeladene Untertitel</string>
   <string name="subtitle_none_downloaded">Keine Untertitel heruntergeladen</string>
   <string name="subtitle_delete">Löschen</string>

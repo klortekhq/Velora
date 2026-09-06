@@ -1421,7 +1421,7 @@ fun SubtitleSelectionDialog(
                         } else {
                             // Show error toast
                             val errorMsg = com.klortek.velora.subtitles.OpenSubtitlesApi.lastError 
-                                ?: "Download failed"
+                                ?: context.getString(com.klortek.velora.R.string.subtitle_download_failed)
                             android.widget.Toast.makeText(context, errorMsg, android.widget.Toast.LENGTH_LONG).show()
                         }
                     } catch (e: Exception) {

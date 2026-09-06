@@ -165,6 +165,7 @@ Vérifiez que :
   <string name="request_no_seasons">Aucune saison trouvée</string>
   <string name="jellyseerr_requesting_short">Demande en cours…</string>
   <string name="subtitle_downloading">Téléchargement…</string>
+  <string name="subtitle_download_failed">Impossible de télécharger le sous-titre</string>
   <string name="subtitle_downloaded_title">Sous-titres téléchargés</string>
   <string name="subtitle_none_downloaded">Aucun sous-titre téléchargé</string>
   <string name="subtitle_delete">Supprimer</string>
