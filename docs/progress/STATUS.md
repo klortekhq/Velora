@@ -66,6 +66,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   usa su proxy autenticado sin poner tokens en la URL del vídeo.
 - El fallback MPV Android comparte el constructor de cabeceras MediaBrowser
   con la ruta de reproducción y sus pruebas de seguridad siguen pasando.
+- El verificador de empaquetado Smart TV no permite declarar un WGT/IPK
+  instalable si el artefacto no existe; tampoco confunde el bundle HTML5 de
+  VIDAA con un paquete firmado.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
   del sistema como valor inicial.
 
