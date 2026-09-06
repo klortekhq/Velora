@@ -15,15 +15,9 @@ on:
         type: string
         default: ''
   push:
-    branches:
-      - main
     tags:
       # Keep public releases focused on meaningful product milestones.
       - 'v*.*.0'
-  pull_request:
-    paths:
-      - 'web/**'
-      - '.github/workflows/web-release.yml'
 
 permissions:
   contents: write
