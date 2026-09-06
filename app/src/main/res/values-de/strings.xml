@@ -91,6 +91,27 @@
   <string name="login_error_invalid_server">Die Serveradresse ist ungültig.</string>
   <string name="login_error_invalid_credentials">Benutzername oder Passwort ist falsch.</string>
   <string name="login_error_timeout">Der Server antwortet nicht. Überprüfe Adresse und Verbindung.</string>
+  <string name="server_entry_title">Serveradresse eingeben</string>
+  <string name="server_entry_valid_address">Gültige Serveradresse</string>
+  <string name="server_entry_address">Serveradresse</string>
+  <string name="server_entry_connect">Verbinden</string>
+  <string name="server_entry_detect">Automatisch erkennen</string>
+  <string name="server_entry_searching">Suche…</string>
+  <string name="server_entry_discovering">Server wird gesucht…</string>
+  <string name="server_entry_scanning">Lokales Netzwerk wird durchsucht…</string>
+  <string name="server_entry_no_servers">Keine Server im lokalen Netzwerk gefunden</string>
+  <string name="server_entry_found_one">Gefunden: %1$s</string>
+  <string name="server_entry_found_many">%1$d Server gefunden; bitte einen auswählen</string>
+  <string name="server_entry_selected">Ausgewählt: %1$s</string>
+  <string name="server_entry_found_title">Gefundene Server</string>
+  <string name="server_entry_connected">Verbunden</string>
+  <string name="server_entry_empty_address">Die Serveradresse darf nicht leer sein</string>
+  <string name="server_entry_connect_error">Verbindung zum Jellyfin-Server nicht möglich.
+
+Bitte überprüfe:
+• Die Adresse ist korrekt
+• Der Server läuft
+• Du kannst aus diesem Netzwerk darauf zugreifen</string>
   <string name="quick_connect_step_one">Schritt 1: Öffne Jellyfin auf deinem Smartphone oder im Browser</string>
   <string name="quick_connect_step_two">Schritt 2: Öffne Quick Connect in den Benutzereinstellungen</string>
   <string name="quick_connect_step_three">Schritt 3: Gib den folgenden Code ein</string>

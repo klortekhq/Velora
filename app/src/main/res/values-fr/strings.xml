@@ -91,6 +91,27 @@
   <string name="login_error_invalid_server">L’adresse du serveur n’est pas valide.</string>
   <string name="login_error_invalid_credentials">Le nom d’utilisateur ou le mot de passe est incorrect.</string>
   <string name="login_error_timeout">Le serveur ne répond pas. Vérifiez l’adresse et la connexion.</string>
+  <string name="server_entry_title">Saisir l’adresse du serveur</string>
+  <string name="server_entry_valid_address">Adresse de serveur valide</string>
+  <string name="server_entry_address">Adresse du serveur</string>
+  <string name="server_entry_connect">Se connecter</string>
+  <string name="server_entry_detect">Détection automatique</string>
+  <string name="server_entry_searching">Recherche…</string>
+  <string name="server_entry_discovering">Recherche du serveur…</string>
+  <string name="server_entry_scanning">Analyse du réseau local…</string>
+  <string name="server_entry_no_servers">Aucun serveur trouvé sur le réseau local</string>
+  <string name="server_entry_found_one">Trouvé : %1$s</string>
+  <string name="server_entry_found_many">%1$d serveurs trouvés ; sélectionnez-en un</string>
+  <string name="server_entry_selected">Sélectionné : %1$s</string>
+  <string name="server_entry_found_title">Serveurs trouvés</string>
+  <string name="server_entry_connected">Connecté</string>
+  <string name="server_entry_empty_address">L’adresse du serveur ne peut pas être vide</string>
+  <string name="server_entry_connect_error">Impossible de se connecter au serveur Jellyfin.
+
+Vérifiez que :
+• L’adresse est correcte
+• Le serveur est démarré
+• Vous pouvez y accéder depuis ce réseau</string>
   <string name="quick_connect_step_one">Étape 1 : ouvrez Jellyfin sur votre mobile ou navigateur</string>
   <string name="quick_connect_step_two">Étape 2 : ouvrez Quick Connect dans les paramètres utilisateur</string>
   <string name="quick_connect_step_three">Étape 3 : saisissez le code ci-dessous</string>
