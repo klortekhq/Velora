@@ -22,6 +22,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Android: la consulta compartida de películas y series incorpora cobertura
   de estrés con bibliotecas sintéticas de 1.000, 10.000 y 50.000 elementos,
   verificando filtros, ordenación y estabilidad del resultado.
+- Live TV: al agrupar variantes del mismo canal se conserva como fila principal
+  la fuente con programa actual, favorito o imagen más completos, sin perder
+  ninguna opción seleccionable.
 - Web: la limpieza de URLs de reproducción elimina todos los nombres de
   credencial de Jellyfin sin depender de la capitalización, tanto en el cliente
   como en el proxy autenticado.

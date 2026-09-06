@@ -116,6 +116,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Live TV: la normalización Android y web descarta duplicados idénticos sin
   `MediaSource`, pero conserva cada fuente identificada como una opción
   seleccionable.
+- Live TV: Android y web eligen como fila principal la variante del canal con
+  metadatos más completos (programa actual, favorito, imagen o número), para
+  que una fuente alternativa no oculte el estado visible del canal.
 - Web/Smart TV: la agrupación usa mapas sin prototipo y está cubierta frente a
   identificadores de proveedor con nombres especiales.
 - Hay catálogos localizados Android, Apple y web con selección manual y locale
@@ -231,6 +234,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La prueba `LibraryContentQueryTest` cubre ahora bibliotecas sintéticas de
   1.000, 10.000 y 50.000 elementos en las variantes móvil y TV; valida que
   el filtrado de reproducción/género y el ordenado sigan siendo deterministas.
+- `LiveTvChannelQueryTest` y `node web/scripts/test-platform.mjs` cubren que
+  una variante con programa actual/favorito sea la fila principal sin perder
+  las fuentes restantes.
 
 ## Artefactos Android locales
 

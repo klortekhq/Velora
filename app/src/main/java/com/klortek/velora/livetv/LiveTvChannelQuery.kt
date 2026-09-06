@@ -21,7 +21,15 @@ data class LiveTvChannelGroup(
     val channelId: String,
     val channels: List<LiveTvChannel>,
 ) {
-    val primary: LiveTvChannel get() = channels.first()
+    /** Providers may attach guide, favourite or artwork metadata to only one
+     * of several source rows representing the same visible channel. */
+    val primary: LiveTvChannel
+        get() = channels.maxByOrNull { channel ->
+            (if (channel.CurrentProgram != null) 4 else 0) +
+                (if (channel.UserData?.IsFavorite == true) 2 else 0) +
+                (if (!channel.ImageTags.isNullOrEmpty()) 1 else 0) +
+                (if (!channel.ChannelNumber.isNullOrBlank()) 1 else 0)
+        } ?: channels.first()
 }
 
 /**

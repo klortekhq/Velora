@@ -681,6 +681,9 @@
         groups[key] = { channelId: key, primary: channel, channels: [], sourceKeys: Object.create(null) };
         order.push(groups[key]);
       }
+      if (liveChannelPrimaryScore(channel) > liveChannelPrimaryScore(groups[key].primary)) {
+        groups[key].primary = channel;
+      }
       var source = Array.isArray(channel.MediaSources) ? channel.MediaSources[0] : null;
       var sourceKey = source && String(source.Id || '').trim();
       if (!sourceKey) {
@@ -702,6 +705,13 @@
     });
     order.forEach(function (group) { delete group.sourceKeys; });
     return order;
+  }
+
+  function liveChannelPrimaryScore(channel) {
+    return (channel && channel.CurrentProgram ? 4 : 0) +
+      (channel && channel.UserData && channel.UserData.IsFavorite ? 2 : 0) +
+      (channel && channel.ImageTags && Object.keys(channel.ImageTags).length ? 1 : 0) +
+      (channel && channel.ChannelNumber ? 1 : 0);
   }
 
   function liveSourceLabel(channel, index) {
