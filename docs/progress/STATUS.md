@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-Revisión funcional actual: commit `32db644`.
+Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
@@ -11,7 +11,7 @@ una comprobación no se interpreta como soporte certificado.
 
 - Rama de trabajo: `main`; la política del repositorio exige que sea la única
   rama pública.
-- La última subida confirmada por `git push` apunta a `32db644`. La consulta
+- La última subida confirmada por `git push` incluyó este dashboard. La consulta
   independiente de ramas remotas está temporalmente sin conectividad y no se
   presenta como verificada en esta revisión. La evidencia anterior del tag
   remoto `v1.4.0` lo situaba en un commit anterior; por tanto no se presenta
