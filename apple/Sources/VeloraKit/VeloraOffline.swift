@@ -13,6 +13,11 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
     public let createdAt: Date
     public let byteCount: Int64?
     public let checksumSha256: String?
+    public let quality: VeloraDownloadQuality
+
+    private enum CodingKeys: String, CodingKey {
+        case id, itemID, title, serverURL, fileName, createdAt, byteCount, checksumSha256, quality
+    }
 
     public init(
         id: String = UUID().uuidString,
@@ -22,7 +27,8 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
         fileName: String,
         createdAt: Date = Date(),
         byteCount: Int64? = nil,
-        checksumSha256: String? = nil
+        checksumSha256: String? = nil,
+        quality: VeloraDownloadQuality = .original
     ) {
         self.id = id
         self.itemID = itemID
@@ -32,6 +38,21 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
         self.createdAt = createdAt
         self.byteCount = byteCount
         self.checksumSha256 = checksumSha256
+        self.quality = quality
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(String.self, forKey: .id)
+        itemID = try values.decode(String.self, forKey: .itemID)
+        title = try values.decode(String.self, forKey: .title)
+        serverURL = try values.decode(String.self, forKey: .serverURL)
+        fileName = try values.decode(String.self, forKey: .fileName)
+        createdAt = try values.decode(Date.self, forKey: .createdAt)
+        byteCount = try values.decodeIfPresent(Int64.self, forKey: .byteCount)
+        checksumSha256 = try values.decodeIfPresent(String.self, forKey: .checksumSha256)
+        // Older catalogs predate quality metadata and are Original by definition.
+        quality = try values.decodeIfPresent(VeloraDownloadQuality.self, forKey: .quality) ?? .original
     }
 }
 
@@ -205,12 +226,13 @@ public final class VeloraOfflineStore: @unchecked Sendable {
             fileName: entry.fileName,
             createdAt: entry.createdAt,
             byteCount: size,
-            checksumSha256: checksum
+            checksumSha256: checksum,
+            quality: entry.quality
         )
     }
 
     @discardableResult
-    public func add(mediaAt temporaryURL: URL, itemID: String, title: String, serverURL: String) throws -> VeloraOfflineDownload {
+    public func add(mediaAt temporaryURL: URL, itemID: String, title: String, serverURL: String, quality: VeloraDownloadQuality = .original) throws -> VeloraOfflineDownload {
         guard let temporaryAttributes = try? fileManager.attributesOfItem(atPath: temporaryURL.path),
               let byteCount = (temporaryAttributes[.size] as? NSNumber)?.int64Value else {
             throw VeloraOfflineStoreError.insufficientStorage
@@ -226,7 +248,7 @@ public final class VeloraOfflineStore: @unchecked Sendable {
         let storedByteCount = (attributes[.size] as? NSNumber)?.int64Value
         let checksum = sha256(url: destination)
         var entries = load()
-        let entry = VeloraOfflineDownload(itemID: itemID, title: title, serverURL: serverURL, fileName: fileName)
+        let entry = VeloraOfflineDownload(itemID: itemID, title: title, serverURL: serverURL, fileName: fileName, quality: quality)
         let verifiedEntry = VeloraOfflineDownload(
             id: entry.id,
             itemID: entry.itemID,
@@ -235,7 +257,8 @@ public final class VeloraOfflineStore: @unchecked Sendable {
             fileName: entry.fileName,
             createdAt: entry.createdAt,
             byteCount: storedByteCount,
-            checksumSha256: checksum
+            checksumSha256: checksum,
+            quality: quality
         )
         entries.removeAll { $0.itemID == itemID && $0.serverURL == serverURL }
         entries.append(verifiedEntry)

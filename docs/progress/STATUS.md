@@ -50,6 +50,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   ejecución CI en macOS.
 - Las descargas gestionadas, su base SQLite, reanudación, integridad y Smart
   Downloads están limitadas a móvil/tablet. No aparecen en TV, Smart TV ni web.
+- Apple móvil/tablet conserva la calidad elegida en cada descarga offline y
+  migra catálogos anteriores sin ese campo a Original; la suite Swift sigue
+  pendiente de ejecución en macOS porque este host no tiene Xcode.
 - Auditoría multiplataforma de offline: Android TV/Fire TV bloquea tanto la
   navegación como la apertura directa de descargas; Apple TV no renderiza las
   acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen
