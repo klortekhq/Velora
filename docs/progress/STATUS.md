@@ -77,7 +77,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   navegación como la apertura directa de descargas; Apple TV no renderiza las
   acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen
   `supportsOfflineDownloads: false`. La regla queda cubierta por tests de
-  capacidades Android/Apple/web.
+  capacidades Android/Apple/web y por un guardia adicional en el reproductor
+  Android que rechaza intents locales en builds de TV.
 - Las descargas de subtítulos externos siguen la misma regla: sus resultados,
   almacenamiento y ajustes de OpenSubtitles solo se muestran en móvil/tablet;
   las superficies de TV conservan únicamente las pistas que ya entrega
