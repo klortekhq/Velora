@@ -27,5 +27,8 @@ assert.doesNotMatch(updater, /expected\s*=.*release-unsigned\.apk/, 'Actualizado
 const web = fs.readFileSync(workflows[1], 'utf8');
 assert.match(web, /releases\/tags\/\$\{RELEASE_TAG\}/, 'Web: la limpieza manual debe resolver la etiqueta solicitada');
 assert.doesNotMatch(web, /releases\/tags\/\$\{GITHUB_REF_NAME\}/, 'Web: no debe usar la rama de ejecución para localizar la release');
+assert.match(web, /outputs\/web\/samsung\/\*\.wgt/, 'Web: debe publicar el WGT de Tizen cuando el SDK lo genere');
+assert.match(web, /Velora-tizen-\$\{version\}\.wgt/, 'Web: falta el nombre estable del paquete Tizen');
+assert.match(web, /Velora-samsung-bundle-\$\{version\}\.zip/, 'Web: falta el fallback bundle de Samsung');
 
 console.log('Release workflow policy passed: manual/version tag only, signed APK names, no pull requests or APK wildcard.');
