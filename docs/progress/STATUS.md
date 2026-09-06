@@ -281,6 +281,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   pasar el 2026-09-06.
 - `node scripts/check-android-playback-policy.mjs` protege además por CI que la
   preferencia nueva no cambie accidentalmente el backend inicial.
+- Revalidación de continuación del 2026-09-06: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 49 s;
+  las comprobaciones web, identidad, versiones, locales, privacidad Apple,
+  política offline, autenticación Jellyfin y workflows de release también
+  terminaron correctamente.
 
 ## Artefactos Android locales
 
@@ -366,6 +371,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - ADB está disponible en el host, pero no hay ningún dispositivo conectado ni
   servicio mDNS del Fire TV visible; no se declara instalación ni prueba
   física reciente en Fire TV o móvil.
+- Comprobación ADB más reciente del 2026-09-06: `adb get-state` devolvió
+  `no devices/emulators found`; no se intentó instalar ni controlar el Fire TV
+  sin una conexión verificable.
 
 ## Pendiente verificable
 
