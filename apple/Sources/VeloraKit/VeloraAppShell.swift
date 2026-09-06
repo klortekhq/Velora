@@ -478,7 +478,10 @@ private struct VeloraItemDetailView: View {
                             aspectMode: $aspectMode
                         )
                     }
-                    VeloraAspectMenu(selection: $aspectMode)
+                    HStack {
+                        VeloraAspectMenu(selection: $aspectMode)
+                        VeloraMediaSelectionMenu(player: player)
+                    }
                 }
                 if let people = item.people, !people.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
@@ -585,6 +588,57 @@ private struct VeloraAspectMenu: View {
 }
 
 @available(iOS 16.0, tvOS 16.0, *)
+private struct VeloraMediaSelectionMenu: View {
+    let player: AVPlayer
+    @State private var audioGroup: AVMediaSelectionGroup?
+    @State private var subtitleGroup: AVMediaSelectionGroup?
+
+    var body: some View {
+        Menu {
+            if let audioGroup, !audioGroup.options.isEmpty {
+                Section {
+                    ForEach(Array(audioGroup.options.enumerated()), id: \.offset) { _, option in
+                        Button(option.displayName) {
+                            player.currentItem?.select(option, in: audioGroup)
+                        }
+                    }
+                } header: {
+                    Text("Audio track", bundle: .module)
+                }
+            }
+            if let subtitleGroup {
+                Section {
+                    Button {
+                        player.currentItem?.select(nil, in: subtitleGroup)
+                    } label: {
+                        Text("Subtitles off", bundle: .module)
+                    }
+                    ForEach(Array(subtitleGroup.options.enumerated()), id: \.offset) { _, option in
+                        Button(option.displayName) {
+                            player.currentItem?.select(option, in: subtitleGroup)
+                        }
+                    }
+                } header: {
+                    Text("Subtitles", bundle: .module)
+                }
+            }
+        } label: {
+            Label {
+                Text("Player settings", bundle: .module)
+            } icon: {
+                Image(systemName: "gearshape")
+            }
+        }
+        .accessibilityLabel(Text("Player settings", bundle: .module))
+        .task {
+            guard let item = player.currentItem else { return }
+            audioGroup = try? await item.asset.loadMediaSelectionGroup(for: .audible)
+            subtitleGroup = try? await item.asset.loadMediaSelectionGroup(for: .legible)
+        }
+    }
+}
+
+@available(iOS 16.0, tvOS 16.0, *)
 private struct VeloraFullscreenPlayer: View {
     let player: AVPlayer
     @Binding var isPresented: Bool
@@ -613,6 +667,10 @@ private struct VeloraFullscreenPlayer: View {
             VeloraAspectMenu(selection: $aspectMode)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                 .padding(.top, 56)
+                .padding(.trailing)
+            VeloraMediaSelectionMenu(player: player)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding(.top, 104)
                 .padding(.trailing)
         }
         .onAppear { player.play() }
@@ -764,7 +822,10 @@ private struct VeloraLiveTvView: View {
                         .accessibilityLabel(Text("Fullscreen", bundle: .module))
                         .padding(10)
                     }
-                    VeloraAspectMenu(selection: $liveAspectMode)
+                    HStack {
+                        VeloraAspectMenu(selection: $liveAspectMode)
+                        VeloraMediaSelectionMenu(player: player)
+                    }
                 }
                 .padding()
                 .background(.regularMaterial)
