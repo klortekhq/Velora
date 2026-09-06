@@ -131,6 +131,9 @@ assert.match(proxySource, /target\.protocol !== server\.protocol/);
 assert.match(proxySource, /function isAllowedMediaPath/);
 assert.match(proxySource, /Videos\\\/\[\^\/\]\+\\\/stream/);
 assert.match(proxySource, /LiveTv\\\/LiveStreamFiles/);
+assert.match(proxySource, /access_token/);
+assert.match(proxySource, /x-emby-token/);
+assert.match(proxySource, /target\.searchParams\.delete/);
 assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // Execute the real web grouping function instead of relying only on source
 // pattern checks. This protects the one-row/multiple-source Live TV contract.

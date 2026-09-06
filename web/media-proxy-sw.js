@@ -67,6 +67,12 @@ self.addEventListener('fetch', function (event) {
     } catch (error) {
       return new Response('Invalid Velora media target', { status: 400 });
     }
+    // Defense in depth: media targets are generated without credentials, but
+    // scrub credential-like query parameters again before forwarding any
+    // request that reaches this worker.
+    ['api_key', 'apikey', 'access_token', 'token', 'x-emby-token', 'authorization'].forEach(function (name) {
+      target.searchParams.delete(name);
+    });
     var headers = new Headers(event.request.headers);
     headers.set('X-Emby-Token', credentials.token);
     headers.delete('Cookie');
