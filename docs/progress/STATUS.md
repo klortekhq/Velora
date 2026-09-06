@@ -82,9 +82,9 @@ una comprobación no se interpreta como soporte certificado.
 Son builds `unsigned` para QA, no releases de distribución:
 
 - Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
-  SHA-256 `0143A87E63E541EC864EB2BCB36CCCAD74EF085A0EB0EC2F41265B0D64159376`.
+  SHA-256 `1F1F2DCFD9EE1FE95EC0A6136213469319437EF700A929D8A3A6C88877A99189`.
 - TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`
-  SHA-256 `1BA67EF1F7B540E84ED894C5DAB9FAAFAEA3F9E4B4045AD3BD6CDB45372CE2C0`.
+  SHA-256 `4AA24F7D93E3CBA16274C455B880F1B294673F0C2DD512DDCBAD561980A2449A`.
 
 Las releases etiquetadas `vX.Y.0` exigen secretos de firma Android. Sin ellos,
 el workflow falla deliberadamente en vez de publicar un APK no instalable como
