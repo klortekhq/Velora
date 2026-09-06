@@ -4,6 +4,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Web: las tarjetas de películas, series y Live TV exponen su título a
+  lectores de pantalla y mantienen activación por teclado además del ratón.
 - Web/Smart TV: la biblioteca carga los resultados por páginas y permite
   continuar con «Cargar más», evitando bloquear el inicio al trabajar con
   catálogos grandes.

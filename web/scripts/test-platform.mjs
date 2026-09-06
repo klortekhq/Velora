@@ -109,6 +109,8 @@ assert.match(appSource, /StartIndex=' \+ encodeURIComponent\(startIndex\)/);
 assert.match(appSource, /function loadMoreItems/);
 assert.match(appSource, /id="loadMore"/);
 assert.match(appSource, /var LOAD_MORE_TRANSLATIONS/);
+assert.match(appSource, /class="card" tabindex="0" role="button" aria-label=/);
+assert.match(appSource, /class="live-row" tabindex="0" role="button" aria-label=/);
 assert.doesNotMatch(appSource, /data-velora-image-id[^>]+src=/);
 const proxySource = fs.readFileSync(new URL('../media-proxy-sw.js', import.meta.url), 'utf8');
 assert.match(proxySource, /function normalizeServer/);
