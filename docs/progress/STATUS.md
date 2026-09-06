@@ -135,6 +135,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 ## Pruebas locales pasadas
 
+- Revalidación fresca posterior al commit `d6a7710`: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m10s.
+  También pasaron `check-apple-locales`, `check-public-identity`,
+  `check-offline-surface-policy`, `check-android-playback-policy` y
+  `web/scripts/test-platform.mjs`.
+
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
 - Las suites móvil y TV vuelven a terminar correctamente tras hacer enfocables
