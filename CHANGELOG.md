@@ -10,6 +10,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - CI: se añade una prueba transversal que verifica que la UI y las rutas de
   reproducción no expongan descargas offline en TV, Smart TV, navegador ni
   tvOS.
+- Apple: el inicio de sesión distingue ahora credenciales rechazadas (401),
+  dirección de servidor no válida y respuesta inesperada, con mensajes
+  localizados en español, inglés, francés y alemán.
 - Rendimiento Android: películas y series ya no descargan toda la biblioteca
   al abrir la pantalla de recomendaciones; el catálogo completo se carga bajo
   demanda al entrar en la vista de biblioteca, mejorando el arranque con

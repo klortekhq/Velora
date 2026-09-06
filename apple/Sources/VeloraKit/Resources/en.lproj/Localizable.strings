@@ -6,6 +6,8 @@
 "Password" = "Password";
 "Sign in" = "Sign in";
 "Unable to sign in" = "Unable to sign in";
+"Invalid credentials" = "Invalid username or password";
+"Invalid server address" = "Invalid server address";
 "Unable to load library" = "Unable to load the library";
 "Cast" = "Cast";
 "Unable to load filmography" = "Unable to load filmography";
