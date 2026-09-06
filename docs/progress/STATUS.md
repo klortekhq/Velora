@@ -7,6 +7,9 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
+Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
+de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
+
 ## Estado del repositorio
 
 - Rama de trabajo: `main`; la política del repositorio exige que sea la única
