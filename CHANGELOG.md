@@ -6,6 +6,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 - Web: las tarjetas de películas, series y Live TV exponen su título a
   lectores de pantalla y mantienen activación por teclado además del ratón.
+- Web: las pestañas de biblioteca usan el patrón accesible `tablist`/`tabpanel`
+  y anuncian correctamente la pestaña seleccionada.
 - Android: los controles del reproductor y sus selectores de audio, subtítulos
   y aspecto exponen una semántica de botón uniforme para toque y mando.
 - Web/Smart TV: la biblioteca carga los resultados por páginas y permite
