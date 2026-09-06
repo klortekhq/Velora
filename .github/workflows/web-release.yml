@@ -47,15 +47,16 @@ jobs:
         run: |
           node web/scripts/test-platform.mjs
           node web/scripts/build-web.mjs "${{ inputs.platform || 'all' }}"
+          node scripts/check-tv-packaging-output.mjs
       - name: Package source
         run: |
           mkdir -p dist
           package="${{ inputs.platform || 'all' }}"
           version="$(node -p "require('./web/package.json').version")"
 
-          # Always publish the browser client and the complete platform bundle
-          # together. The Android workflow contributes the four APKs to the
-          # same tag release.
+          # Publish the browser client and the complete platform bundle
+          # together. The Android workflow contributes the mobile and TV APKs
+          # to the same tag release.
           tar -czf "dist/Velora-Web-${package}.tar.gz" -C outputs/web .
           (cd outputs/web && zip -qr "../../dist/Velora-Web-${package}.zip" .)
 
