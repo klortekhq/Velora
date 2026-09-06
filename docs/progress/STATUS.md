@@ -253,6 +253,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `node scripts/check-tv-packaging-output.mjs` correctos; se regeneraron los
   metadatos de Samsung, webOS y VIDAA. La ausencia de Tizen Studio/CLI se
   mantiene como limitación explícita, no como paquete instalable simulado.
+- Revalidación adicional del 2026-09-06: el bundle Samsung quedó marcado como
+  `packaging: bundle`, webOS generó un IPK real con `installablePackage: true`
+  y VIDAA quedó marcado como `hosted-html5`; ninguno se presenta como paquete
+  firmado o certificado de tienda.
 - Batería completa reejecutada en el estado publicado `514261e`: versiones,
   identidad, contrato Jellyfin, catálogos Android/Apple/web, privacidad Apple,
   workflows de release, política offline, seguridad web, tests de interacción
