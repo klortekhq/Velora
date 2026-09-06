@@ -18,6 +18,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Web: se añade una política CSP y `no-referrer` para reducir superficie de
   inyección y evitar filtraciones accidentales de navegación durante el uso de
   Jellyfin.
+- Apple: la autenticación comunica el idioma elegido en los ajustes al servidor
+  Jellyfin, incluyendo la normalización de locales regionales.
 - CI: se añade una comprobación automática que impide reintroducir releases
   desde pull requests, pushes normales o comodines de APK.
 - CI: los workflows de publicación ya no se ejecutan en pull requests ni en

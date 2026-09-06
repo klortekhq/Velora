@@ -105,6 +105,8 @@ una comprobación no se interpreta como soporte certificado.
   hosts, rutas, esquemas o credenciales incrustadas no confiables.
 - `node web/scripts/test-platform.mjs`: correcto; valida también CSP,
   `frame-ancestors`, `object-src` y la política `no-referrer` del cliente web.
+- Apple: la cabecera de autenticación usa ahora el idioma seleccionado por el
+  usuario; la compilación Swift queda pendiente de la ejecución macOS de CI.
 - `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
   usuario de una URL y parámetros sensibles en query/fragmento.
 - El workflow de Android fue revisado sintácticamente: los APK debug se guardan
