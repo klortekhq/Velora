@@ -89,8 +89,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Android migra credenciales a Keystore; Apple usa Keychain; el cliente web
   usa su proxy autenticado sin poner tokens en la URL del vídeo.
 - El proxy multimedia web aplica una segunda limpieza de parámetros sensibles
-  (`api_key`, `access_token`, `token` y equivalentes) antes de reenviar la
-  reproducción al servidor.
+  (`api_key`, `access_token`, `token` y equivalentes), sin depender de la
+  capitalización, antes de reenviar la reproducción al servidor; el cliente
+  aplica la misma defensa antes de entregar el destino al proxy.
 - El fallback MPV Android comparte el constructor de cabeceras MediaBrowser
   con la ruta de reproducción y sus pruebas de seguridad siguen pasando.
 - El verificador de empaquetado Smart TV no permite declarar un WGT/IPK
