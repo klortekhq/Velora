@@ -1053,10 +1053,10 @@
       '<option value="unwatched"' + (playback === 'unwatched' ? ' selected' : '') + '>' + esc(t('playbackUnwatched')) + '</option></select></label></div></div>' +
       (live.length ? '<div class="live-filters" aria-label="' + esc(t('live')) + '"><label class="checkbox"><input type="checkbox" id="liveFavorites"' + (preference('veloraLiveFavorites', 'false') === 'true' ? ' checked' : '') + '>' + esc(t('liveFavorites')) + '</label>' +
       (liveGroups.length ? '<label>' + esc(t('liveGroup')) + '<select id="liveGroup"><option value="all">' + esc(t('all')) + '</option>' + liveGroups.map(function (group) { return '<option value="' + esc(group) + '"' + (preference('veloraLiveGroup', 'all') === group ? ' selected' : '') + '>' + esc(group) + '</option>'; }).join('') + '</select></label>' : '') + '</div>' : '') +
-      '<nav class="tabs" aria-label="' + esc(t('library')) + '"><button type="button" class="active" data-tab="all">' + esc(t('all')) + '</button>' +
-      '<button type="button" data-tab="movies">' + esc(t('movies')) + '</button><button type="button" data-tab="series">' + esc(t('series')) + '</button>' +
-      (live.length ? '<button type="button" data-tab="live">' + esc(t('live')) + '</button>' : '') +
-      '</nav><div id="results">' + section(t('movies'), movies) + section(t('series'), series) +
+      '<nav class="tabs" role="tablist" aria-label="' + esc(t('library')) + '"><button type="button" role="tab" aria-selected="true" aria-controls="results" class="active" data-tab="all">' + esc(t('all')) + '</button>' +
+      '<button type="button" role="tab" aria-selected="false" aria-controls="results" data-tab="movies">' + esc(t('movies')) + '</button><button type="button" role="tab" aria-selected="false" aria-controls="results" data-tab="series">' + esc(t('series')) + '</button>' +
+      (live.length ? '<button type="button" role="tab" aria-selected="false" aria-controls="results" data-tab="live">' + esc(t('live')) + '</button>' : '') +
+      '</nav><div id="results" role="tabpanel" tabindex="0">' + section(t('movies'), movies) + section(t('series'), series) +
        liveSection(t('live'), visibleLive) + '</div>' +
        (state.itemsStartIndex < state.itemsTotalCount ? '<button type="button" class="load-more" id="loadMore">' + esc(t('loadMore')) + '</button>' : '');
 
@@ -1101,7 +1101,10 @@
     }
     Array.prototype.forEach.call(document.querySelectorAll('[data-tab]'), function (tab) {
       tab.onclick = function () {
-        Array.prototype.forEach.call(document.querySelectorAll('[data-tab]'), function (candidate) { candidate.classList.remove('active'); });
+        Array.prototype.forEach.call(document.querySelectorAll('[data-tab]'), function (candidate) {
+          candidate.classList.remove('active');
+          candidate.setAttribute('aria-selected', candidate === tab ? 'true' : 'false');
+        });
         tab.classList.add('active');
         var view = tab.getAttribute('data-tab');
         document.querySelector('#results').innerHTML = view === 'movies' ? section(t('movies'), movies) :

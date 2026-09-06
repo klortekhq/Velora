@@ -63,7 +63,7 @@ una comprobación no se interpreta como soporte certificado.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `node scripts/test-platform.mjs` desde `web/`: correcto para capacidades,
   seguridad, autenticación, biblioteca paginada, subtítulos, agrupación Live
-  TV y etiquetas accesibles de tarjetas.
+  TV, etiquetas accesibles de tarjetas y pestañas con selección anunciada.
 - `node scripts/build-web.mjs all` desde `web/`: genera bundle web, bundle
   Samsung, IPK webOS y bundle HTML5 VIDAA. Tizen queda pendiente de validar
   hasta disponer de Tizen Studio/CLI y un perfil de firma.
