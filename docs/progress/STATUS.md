@@ -138,6 +138,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple Live TV: el reproductor incrustado comparte ahora la pantalla completa
   y el selector de aspecto con las fichas, conservando la misma sesión AVPlayer
   y evitando iniciar una segunda emisión.
+- Apple: la tuerca del reproductor ya expone selección real de audio y
+  subtítulos sobre el `AVPlayerItem`, incluida la desactivación de subtítulos,
+  en fichas, Live TV y pantalla completa; las etiquetas están localizadas.
 
 ## Pruebas locales pasadas
 
