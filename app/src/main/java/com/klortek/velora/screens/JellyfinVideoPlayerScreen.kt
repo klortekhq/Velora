@@ -850,8 +850,15 @@ fun JellyfinVideoPlayerScreen(
 
     // Load downloaded subtitles from OpenSubtitles
     LaunchedEffect(item.Id) {
-        downloadedSubtitles = com.klortek.velora.subtitles.OpenSubtitlesApi.getDownloadedSubtitles(context, item.Id)
-        Log.d("JellyfinPlayer", "📁 Loaded ${downloadedSubtitles.size} downloaded subtitle(s) for item ${item.Id}")
+        if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) {
+            downloadedSubtitles = com.klortek.velora.subtitles.OpenSubtitlesApi.getDownloadedSubtitles(context, item.Id)
+            Log.d("JellyfinPlayer", "📁 Loaded ${downloadedSubtitles.size} downloaded subtitle(s) for item ${item.Id}")
+        } else {
+            // TV/browser-like Android surfaces must never expose or consume the
+            // mobile offline subtitle store, even through an internal playback
+            // path. Jellyfin-provided subtitle tracks remain available below.
+            downloadedSubtitles = emptyList()
+        }
     }
     
     // Fetch skip markers for intro/credits (only for episodes)
@@ -1257,7 +1264,11 @@ fun JellyfinVideoPlayerScreen(
                             }
                             
                             // ⭐ ADD DOWNLOADED OPENSUBTITLES (if any exist for this item)
-                            val downloadedSubtitles = com.klortek.velora.subtitles.OpenSubtitlesApi.getDownloadedSubtitles(context, item.Id)
+                            val downloadedSubtitles = if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) {
+                                com.klortek.velora.subtitles.OpenSubtitlesApi.getDownloadedSubtitles(context, item.Id)
+                            } else {
+                                emptyList()
+                            }
                             val downloadedSubtitleConfigs = downloadedSubtitles.mapNotNull { downloadedSub ->
                                 try {
                                     Log.d("JellyfinPlayer", "📁 Adding downloaded subtitle: ${com.klortek.velora.security.SensitiveDataRedactor.localFileName(downloadedSub.fileName)}")
