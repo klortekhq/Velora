@@ -56,6 +56,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `Opción N` cuando no existe ningún nombre legible.
 - Web/Smart TV abre ahora ese selector al pulsar o confirmar con teclado una
   fila agrupada; los canales sin variantes siguen entrando directamente.
+- Web/Smart TV también prioriza el nombre de `MediaSources` al rotular cada
+  variante; la prueba de interacción y seguridad web volvió a pasar tras
+  este ajuste (`c15ae02`). El bundle web se generó correctamente en un
+  directorio QA aislado.
 - Las variantes sin nombre legible ya no muestran IDs técnicos en el selector
   de Live TV: se presentan como opciones numeradas, conservando el ID solo
   para solicitar la fuente correcta a Jellyfin.
