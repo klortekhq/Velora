@@ -1,6 +1,6 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-06
+Updated: 2026-09-08
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
