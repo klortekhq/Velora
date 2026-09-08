@@ -750,7 +750,10 @@ private struct VeloraLiveTvView: View {
     }
 
     private func sourceLabel(_ source: JellyfinLiveTvMediaSource, index: Int) -> String {
-        let descriptor = [source.protocolName, source.transcodingURL?.path, source.directStreamURL?.path]
+        if let name = source.name?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty {
+            return name
+        }
+        let descriptor = [source.protocolName]
             .compactMap { $0?.lowercased() }
             .joined(separator: " ")
         if descriptor.contains("iptv") || descriptor.contains("m3u") {

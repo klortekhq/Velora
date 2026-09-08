@@ -79,6 +79,8 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
     public let id: String
     public let name: String
     public let number: String?
+    public let channelType: String?
+    public let serviceName: String?
     public let currentProgram: JellyfinLiveTvProgram?
     public let mediaSources: [JellyfinLiveTvMediaSource]
 
@@ -86,14 +88,18 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
         case id = "Id"
         case name = "Name"
         case number = "ChannelNumber"
+        case channelType = "ChannelType"
+        case serviceName = "ServiceName"
         case currentProgram = "CurrentProgram"
         case mediaSources = "MediaSources"
     }
 
-    public init(id: String, name: String, number: String? = nil, currentProgram: JellyfinLiveTvProgram? = nil, mediaSources: [JellyfinLiveTvMediaSource] = []) {
+    public init(id: String, name: String, number: String? = nil, channelType: String? = nil, serviceName: String? = nil, currentProgram: JellyfinLiveTvProgram? = nil, mediaSources: [JellyfinLiveTvMediaSource] = []) {
         self.id = id
         self.name = name
         self.number = number
+        self.channelType = channelType
+        self.serviceName = serviceName
         self.currentProgram = currentProgram
         self.mediaSources = mediaSources
     }
@@ -103,6 +109,8 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         number = try container.decodeIfPresent(String.self, forKey: .number)
+        channelType = try container.decodeIfPresent(String.self, forKey: .channelType)
+        serviceName = try container.decodeIfPresent(String.self, forKey: .serviceName)
         currentProgram = try container.decodeIfPresent(JellyfinLiveTvProgram.self, forKey: .currentProgram)
         mediaSources = try container.decodeIfPresent([JellyfinLiveTvMediaSource].self, forKey: .mediaSources) ?? []
     }
@@ -133,6 +141,8 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
                     id: existing.id,
                     name: existing.name,
                     number: existing.number ?? channel.number,
+                    channelType: existing.channelType ?? channel.channelType,
+                    serviceName: existing.serviceName ?? channel.serviceName,
                     currentProgram: existing.currentProgram ?? channel.currentProgram,
                     mediaSources: sources
                 )
@@ -174,6 +184,7 @@ public struct JellyfinLiveTvProgram: Codable, Identifiable, Sendable {
 
 public struct JellyfinLiveTvMediaSource: Codable, Sendable {
     public let id: String?
+    public let name: String?
     public let liveStreamID: String?
     public let transcodingURL: URL?
     public let directStreamURL: URL?
@@ -181,10 +192,27 @@ public struct JellyfinLiveTvMediaSource: Codable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case id = "Id"
+        case name = "Name"
         case liveStreamID = "LiveStreamId"
         case transcodingURL = "TranscodingUrl"
         case directStreamURL = "DirectStreamUrl"
         case protocolName = "Protocol"
+    }
+
+    public init(
+        id: String? = nil,
+        name: String? = nil,
+        liveStreamID: String? = nil,
+        transcodingURL: URL? = nil,
+        directStreamURL: URL? = nil,
+        protocolName: String? = nil
+    ) {
+        self.id = id
+        self.name = name
+        self.liveStreamID = liveStreamID
+        self.transcodingURL = transcodingURL
+        self.directStreamURL = directStreamURL
+        self.protocolName = protocolName
     }
 }
 

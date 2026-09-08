@@ -220,7 +220,7 @@ final class VeloraKitTests: XCTestCase {
     }
 
     func testLiveTvModelsDecodeServerFieldNames() throws {
-        let json = #"{"Id":"channel-1","Name":"Noticias","ChannelNumber":"24","MediaSources":[{"Id":"source-1","LiveStreamId":"live-1"}],"CurrentProgram":{"Id":"program-1","Name":"Informativo","ChannelId":"channel-1","StartDate":"2026-09-01T10:00:00Z","EndDate":"2026-09-01T11:00:00Z","Overview":"Actualidad"}}"#
+        let json = #"{"Id":"channel-1","Name":"Noticias","ChannelNumber":"24","ChannelType":"IPTV","ServiceName":"Lista local","MediaSources":[{"Id":"source-1","Name":"Fuente IPTV","LiveStreamId":"live-1"}],"CurrentProgram":{"Id":"program-1","Name":"Informativo","ChannelId":"channel-1","StartDate":"2026-09-01T10:00:00Z","EndDate":"2026-09-01T11:00:00Z","Overview":"Actualidad"}}"#
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let channel = try decoder.decode(JellyfinLiveTvChannel.self, from: json.data(using: .utf8)!)
@@ -229,6 +229,9 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(channel.currentProgram?.name, "Informativo")
         XCTAssertEqual(channel.currentProgram?.channelID, "channel-1")
         XCTAssertEqual(channel.mediaSources.first?.id, "source-1")
+        XCTAssertEqual(channel.channelType, "IPTV")
+        XCTAssertEqual(channel.serviceName, "Lista local")
+        XCTAssertEqual(channel.mediaSources.first?.name, "Fuente IPTV")
     }
 
     func testLiveTvChannelsGroupDuplicateRowsAndKeepSources() {

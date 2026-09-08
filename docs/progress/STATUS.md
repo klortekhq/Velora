@@ -521,6 +521,10 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   instalado y por eso no se presenta un `.wgt`; `ares-package` sí generó el
   `.ipk` webOS `com.klortek.velora_1.4.0_all.ipk`. Ninguno de estos resultados
   certifica firma, tienda ni ejecución en hardware real.
+- Apple Live TV conserva ahora `ChannelType`, `ServiceName` y `MediaSource.Name`
+  para rotular el selector de variantes sin inspeccionar ni mostrar rutas de
+  reproducción. Se añadió cobertura de decodificación; la ejecución Swift
+  sigue pendiente de macOS/Xcode en CI.
 - Build TV de QA instalada en Fire TV AFTSS el 2026-09-08 desde el estado
   `6ff83ef`, SHA-256 `5CACDBD89C02A94B4E854FF762CD9458EA13929836917E680C62388C573A72EE`.
   La actividad principal arrancó y el logcat no mostró `FATAL EXCEPTION`,
