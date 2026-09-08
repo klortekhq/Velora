@@ -722,6 +722,7 @@ private struct VeloraLiveTvView: View {
     @ObservedObject var model: VeloraAppModel
     @State private var player: AVPlayer?
     @State private var selectedChannel: JellyfinLiveTvChannel?
+    @State private var sourceSelection: JellyfinLiveTvChannel?
     @State private var playbackTask: Task<Void, Never>?
     @State private var isLiveFullscreen = false
     @State private var liveAspectMode: VeloraAspectMode = .fit
@@ -768,7 +769,11 @@ private struct VeloraLiveTvView: View {
     var body: some View {
         List(model.liveTvChannels) { channel in
             Button {
-                startPlayback(channel: channel)
+                if channel.mediaSources.count > 1 {
+                    sourceSelection = channel
+                } else {
+                    startPlayback(channel: channel)
+                }
             } label: {
                 VStack(alignment: .leading, spacing: 4) {
                     Text((channel.number.map { "\($0) · " } ?? "") + channel.name)
@@ -780,23 +785,36 @@ private struct VeloraLiveTvView: View {
                 }
             }
             .buttonStyle(.plain)
-                    .accessibilityHint(String(localized: "Play live channel", bundle: .module))
-            if channel.mediaSources.count > 1 {
-                Menu {
-                    ForEach(Array(channel.mediaSources.enumerated()), id: \.offset) { index, source in
-                        Button {
-                            startPlayback(channel: channel, sourceID: source.id ?? source.liveStreamID)
-                        } label: {
-                            Text(sourceLabel(source, index: index))
-                        }
-                    }
-                } label: {
-                    Image(systemName: "rectangle.stack")
-                }
-                .accessibilityLabel(String(localized: "Choose channel source", bundle: .module))
-            }
+            .accessibilityHint(String(
+                localized: channel.mediaSources.count > 1 ? "Choose channel source" : "Play live channel",
+                bundle: .module
+            ))
         }
         .navigationTitle(Text("Live TV", bundle: .module))
+        .confirmationDialog(
+            String(localized: "Choose channel source", bundle: .module),
+            isPresented: Binding(
+                get: { sourceSelection != nil },
+                set: { if !$0 { sourceSelection = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            if let channel = sourceSelection {
+                ForEach(Array(channel.mediaSources.enumerated()), id: \.offset) { index, source in
+                    Button(sourceLabel(source, index: index)) {
+                        sourceSelection = nil
+                        startPlayback(channel: channel, sourceID: source.id ?? source.liveStreamID)
+                    }
+                }
+            }
+            Button(String(localized: "Cancel", bundle: .module), role: .cancel) {
+                sourceSelection = nil
+            }
+        } message: {
+            if let channel = sourceSelection {
+                Text(channel.name)
+            }
+        }
         .onDisappear {
             playbackTask?.cancel()
             let activeChannel = selectedChannel
@@ -804,6 +822,7 @@ private struct VeloraLiveTvView: View {
             player?.pause()
             player = nil
             selectedChannel = nil
+            sourceSelection = nil
             if let activeChannel {
                 Task { await model.stopLiveTv(channel: activeChannel, positionSeconds: position) }
             }
