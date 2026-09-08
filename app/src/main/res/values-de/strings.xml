@@ -65,6 +65,9 @@
   <string name="live_tv_next_channel">Nächster Sender</string>
   <string name="player_settings">Player-Einstellungen</string>
   <string name="player_audio_tracks">Audiospuren</string>
+  <string name="player_speed">Wiedergabegeschwindigkeit</string>
+  <string name="player_track_fallback">Spur %1$s</string>
+  <string name="player_subtitle_track_fallback">Untertitel %1$s</string>
   <string name="player_subtitles">Untertitel</string>
   <string name="player_subtitles_unavailable">Keine Untertitel verfügbar</string>
   <string name="player_playback_speed">Wiedergabegeschwindigkeit</string>
