@@ -2027,7 +2027,9 @@ fun JellyfinVideoPlayerScreen(
                             playerViewRef.value?.let { view ->
                                 view.post {
                                     // Explicitly show subtitle button when tracks are available
-                                    view.setShowSubtitleButton(textTrackGroups.isNotEmpty())
+                                    // Audio and subtitles are exposed through
+                                    // the Velora gear, not a separate CC button.
+                                    view.setShowSubtitleButton(false)
                                     
                                     val controller = view.findViewById<androidx.media3.ui.PlayerControlView>(androidx.media3.ui.R.id.exo_controller)
                                     controller?.let { controlView ->
@@ -3121,7 +3123,7 @@ fun JellyfinVideoPlayerScreen(
                                                     )
                                                 }
                                                 
-                                                setShowSubtitleButton(true)
+                                                setShowSubtitleButton(false)
                                                 
                                                 // Get the PlayerControlView for custom settings button
                                                 val controller = findViewById<androidx.media3.ui.PlayerControlView>(androidx.media3.ui.R.id.exo_controller)
@@ -3319,7 +3321,7 @@ fun JellyfinVideoPlayerScreen(
                                         }
                                         
                                         // Explicitly show subtitle button again after view is attached
-                                        setShowSubtitleButton(true)
+                                        setShowSubtitleButton(false)
                                         
                                         // Get the PlayerControlView and ensure subtitle button is visible
                                         val controller = findViewById<androidx.media3.ui.PlayerControlView>(androidx.media3.ui.R.id.exo_controller)
@@ -3538,7 +3540,7 @@ fun JellyfinVideoPlayerScreen(
                                         pv.alpha = 1f
                                     }
                                     // Explicitly show subtitle button - this ensures it's visible when tracks are available
-                                    pv.setShowSubtitleButton(true)
+                                    pv.setShowSubtitleButton(false)
                                     
                                     // Hide next/previous track buttons whenever controller is shown
                                     pv.findViewById<android.view.View>(androidx.media3.ui.R.id.exo_prev)?.visibility = android.view.View.GONE
