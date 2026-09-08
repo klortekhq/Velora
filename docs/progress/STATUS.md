@@ -104,6 +104,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Suite Android completa reejecutada tras el cambio MPV: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminan en `BUILD SUCCESSFUL` (82 tareas); solo
   permanecen avisos de APIs obsoletas y del SDK local.
+- Revalidación web del 2026-09-08: `npm run test` pasa en seguridad, capacidades,
+  preferencias de subtítulos y agrupación/interacción de Live TV; `npm run
+  build:all` genera los bundles web, Samsung y VIDAA y el IPK de webOS. Tizen
+  Studio/CLI no está instalado en este host, por lo que no se afirma un WGT
+  firmado ni validación en hardware Tizen.
 - Revalidación del 2026-09-08: la ficha de películas Android comparte ahora
   recursos localizados para estado visto, acciones de reproducción, audio,
   subtítulos, tráiler y contenido similar; la compilación móvil/TV pasó después
