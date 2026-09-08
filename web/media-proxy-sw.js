@@ -27,6 +27,7 @@ function isAllowedMediaPath(pathname) {
   // The proxy exists only because media elements cannot attach Jellyfin
   // headers. Never turn it into a generic authenticated same-origin proxy.
   return /^\/Videos\/[^/]+\/stream(?:\.[^/]+)?$/i.test(pathname) ||
+    /^\/Audio\/[^/]+\/universal$/i.test(pathname) ||
     /^\/LiveTv\/LiveStreamFiles\//i.test(pathname);
 }
 
