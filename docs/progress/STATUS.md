@@ -73,6 +73,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La misma identidad dinámica y el `deviceId` persistido se aplican también al
   resto de peticiones autenticadas de `JellyfinApi`, incluidas imágenes y
   metadatos; la comprobación de contrato de autenticación sigue pasando.
+- La carga de tema remoto y el servicio de música en segundo plano reutilizan
+  ahora esa misma identidad por variante, evitando que las sesiones auxiliares
+  se anuncien erróneamente como Android TV o sin `deviceId`.
 - Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
   códecs y la decisión de copia de Jellyfin; la ruta MPV explícita mantiene sus
   parámetros propios sin alterar el backend predeterminado.

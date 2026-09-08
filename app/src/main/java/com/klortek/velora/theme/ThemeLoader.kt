@@ -14,6 +14,8 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import com.klortek.velora.BuildConfig
 import com.klortek.velora.security.SensitiveDataRedactor
+import com.klortek.velora.jellyfin.veloraClientDeviceId
+import com.klortek.velora.jellyfin.veloraClientDeviceName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -24,9 +26,12 @@ import kotlinx.coroutines.withContext
  */
 class ThemeLoader(
     private val baseUrl: String,
-    private val accessToken: String
+    private val accessToken: String,
+    private val deviceId: String? = null
 ) {
     private val client = HttpClient(Android)
+    private val clientDeviceName = veloraClientDeviceName(BuildConfig.TV_BUILD)
+    private val clientDeviceId = veloraClientDeviceId(deviceId)
 
     /**
      * Fetches and parses theme from Jellyfin server
@@ -46,7 +51,7 @@ class ThemeLoader(
                 
                 val cssResponse: HttpResponse = client.get(cssUrl) {
                     header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
-                    header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
+                    header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\"")
                 }
                 
                 val cssStatus = cssResponse.status

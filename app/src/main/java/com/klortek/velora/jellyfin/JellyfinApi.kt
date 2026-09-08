@@ -55,6 +55,9 @@ data class ChapterInfo(
 internal fun veloraClientDeviceName(tvBuild: Boolean): String =
     if (tvBuild) "Android TV" else "Android"
 
+internal fun veloraClientDeviceId(rawDeviceId: String?): String =
+    rawDeviceId?.takeIf { it.isNotBlank() } ?: "velora-android"
+
 @Stable
 @Serializable
 data class JellyfinItem(
@@ -334,7 +337,7 @@ class JellyfinApiService(
     private val languageTag: String = java.util.Locale.getDefault().toLanguageTag()
 ) {
     private val clientDeviceName = veloraClientDeviceName(BuildConfig.TV_BUILD)
-    private val clientDeviceId = config?.deviceId?.takeIf { it.isNotBlank() } ?: "velora-android"
+    private val clientDeviceId = veloraClientDeviceId(config?.deviceId)
 
     // Expose baseUrl, accessToken, userId for external use (e.g., MPV URL selector)
     val serverBaseUrl: String get() = baseUrl

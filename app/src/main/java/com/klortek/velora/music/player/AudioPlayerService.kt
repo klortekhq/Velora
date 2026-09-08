@@ -27,6 +27,8 @@ import com.klortek.velora.R
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.klortek.velora.jellyfin.JellyfinConfig
+import com.klortek.velora.jellyfin.veloraClientDeviceId
+import com.klortek.velora.jellyfin.veloraClientDeviceName
 
 private const val TAG = "AudioPlayerService"
 private const val NOTIFICATION_CHANNEL_ID = "velora_music_playback"
@@ -56,7 +58,7 @@ class AudioPlayerService : MediaSessionService() {
             .setDefaultRequestProperties(
                 mapOf(
                     "X-Emby-Token" to jellyfinConfig.accessToken,
-                    "X-Emby-Authorization" to "MediaBrowser Client=\"Velora\", Device=\"Android\", Version=\"${BuildConfig.VERSION_NAME}\""
+                    "X-Emby-Authorization" to "MediaBrowser Client=\"Velora\", Device=\"${veloraClientDeviceName(BuildConfig.TV_BUILD)}\", DeviceId=\"${veloraClientDeviceId(jellyfinConfig.deviceId)}\", Version=\"${BuildConfig.VERSION_NAME}\""
                 )
             )
 
