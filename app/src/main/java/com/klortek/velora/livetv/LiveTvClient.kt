@@ -35,6 +35,10 @@ data class LiveTvChannel(
     val Name: String,
     val ChannelNumber: String? = null,
     val Type: String? = null,
+    /** Provider/source classification when Jellyfin exposes it (for example IPTV). */
+    val ChannelType: String? = null,
+    /** Human-readable provider name when several sources share one channel. */
+    val ServiceName: String? = null,
     val ImageTags: Map<String, String>? = null,
     val UserData: LiveTvUserData? = null,
     val Tags: List<String>? = null,

@@ -81,7 +81,10 @@ fun liveTvSourceLabel(
     fallbackLabel: String = "Opción $optionNumber"
 ): String =
     channel.Tags.orEmpty().firstOrNull { it.isNotBlank() }
-        ?: channel.Type?.takeIf { it.isNotBlank() }
+        ?: channel.ChannelType?.takeIf { it.isNotBlank() }
+        ?: channel.ServiceName?.takeIf { it.isNotBlank() }
+        ?: channel.MediaSources.orEmpty().firstOrNull()?.Name?.takeIf { it.isNotBlank() }
+        ?: channel.Type?.takeIf { it.isNotBlank() && !it.equals("TvChannel", ignoreCase = true) }
         ?: channel.ChannelNumber?.takeIf { it.isNotBlank() }?.let { "Canal $it" }
         ?: fallbackLabel
 
