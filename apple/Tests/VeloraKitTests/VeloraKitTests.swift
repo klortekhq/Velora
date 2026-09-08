@@ -47,6 +47,33 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertThrowsError(try JellyfinClient(serverURL: URL(string: "ftp://jellyfin.example.test")!))
     }
 
+    func testThemeSongURLUsesAuthenticatedServerPathWithoutTokenQuery() async throws {
+        MockURLProtocol.handler = { request in
+            XCTAssertEqual(request.url?.path, "/Items/title-1/ThemeSongs")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "X-Emby-Token"), "session-secret")
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(#"{"Items":[{"Id":"theme-1"}]}"#.utf8))
+        }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let client = try JellyfinClient(
+            serverURL: URL(string: "http://jellyfin.example.test:8096")!,
+            session: URLSession(configuration: configuration)
+        )
+        await client.setAccessToken("session-secret")
+
+        let url = await client.themeSongURL(itemID: "title-1", userID: "user-1")
+        XCTAssertEqual(url?.path, "/Audio/theme-1/universal")
+        let query = URLComponents(url: try XCTUnwrap(url), resolvingAgainstBaseURL: false)?.queryItems ?? []
+        XCTAssertEqual(query.first(where: { $0.name == "UserId" })?.value, "user-1")
+        XCTAssertEqual(query.first(where: { $0.name == "TranscodingProtocol" })?.value, "hls")
+        XCTAssertFalse(url?.absoluteString.localizedCaseInsensitiveContains("token") ?? true)
+        MockURLProtocol.handler = nil
+    }
+
     func testPlaybackPrefersDirectPlay() {
         let caps = PlaybackCapabilities(videoCodecs: ["H264"], audioCodecs: ["AAC"], containers: ["MP4"])
         let source = PlaybackSource(container: "MP4", videoCodec: "H264", audioCodec: "AAC")
@@ -358,4 +385,22 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertTrue(try await client.items(userID: "../escape", forPerson: "person-1").isEmpty)
         XCTAssertTrue(try await client.items(userID: "user-1", forPerson: "../escape").isEmpty)
     }
+}
+
+private final class MockURLProtocol: URLProtocol {
+    static var handler: ((URLRequest) -> (HTTPURLResponse, Data))?
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func startLoading() {
+        guard let handler = Self.handler else {
+            client?.urlProtocol(self, didFailWithError: URLError(.badServerResponse))
+            return
+        }
+        let (response, data) = handler(request)
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: data)
+        client?.urlProtocolDidFinishLoading(self)
+    }
+    override func stopLoading() {}
 }
