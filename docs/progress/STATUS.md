@@ -197,6 +197,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La migración Android desde el índice JSON antiguo conserva también checksum,
   fuente, trabajo, progreso, fechas, estado de visto y protección de descarga
   antes de pasar a SQLite.
+- El trabajador offline comprueba también el espacio libre y el límite de
+  almacenamiento mientras escribe cada bloque, no solo al poner la descarga
+  en cola. Si el archivo real crece más de lo estimado, conserva el `.part`
+  reanudable, registra el fallo por falta de espacio y evita consumir la
+  reserva mínima del dispositivo.
 - Auditoría multiplataforma de offline: Android TV/Fire TV bloquea tanto la
   navegación como la apertura directa de descargas; Apple TV no renderiza las
   acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen

@@ -2,8 +2,10 @@ package com.klortek.velora.offline
 
 import android.app.DownloadManager
 import android.content.Context
+import android.os.StatFs
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.jellyfin.JellyfinConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -35,6 +37,12 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         if (!temporary.exists() && legacyTemporary.exists()) legacyTemporary.renameTo(temporary)
         if (!destination.exists() && legacyDestination.exists()) legacyDestination.renameTo(destination)
         val existingBytes = temporary.length().coerceAtLeast(0L)
+        // The current .part file is already included in managedBytes. Keep a
+        // stable baseline for the rest of Velora's offline media so the
+        // per-chunk gate does not double-count the resumed prefix.
+        val managedBaselineBytes = (OfflineStorageEngine.managedBytes(applicationContext) - existingBytes)
+            .coerceAtLeast(0L)
+        val maxOfflineBytes = AppSettings(applicationContext).offlineMaxStorageBytes.takeIf { it > 0L }
         val requestUrl = OfflineDownloadRequest.url(config.serverUrl, itemId, sourceId, quality)
         val connection = (URL(requestUrl).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
@@ -82,6 +90,33 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
                         if (isStopped) return@withContext Result.retry()
                         val count = input.read(buffer)
                         if (count < 0) break
+                        val storageRoot = File(applicationContext.filesDir, "offline/media")
+                        val storageDecision = OfflineStoragePolicy.evaluate(
+                            snapshot = OfflineStorageSnapshot(
+                                availableBytes = StatFs(storageRoot.path).availableBytes,
+                                managedBytes = managedBaselineBytes + copied
+                            ),
+                            limits = OfflineStorageLimits(maximumBytes = maxOfflineBytes),
+                            incomingBytes = count.toLong()
+                        )
+                        if (!storageDecision.allowed) {
+                            // Preserve the verified prefix. A later retry
+                            // after the user frees space can continue with
+                            // Range instead of restarting the transfer.
+                            val current = OfflineDownloadManager.load(applicationContext)
+                                .firstOrNull { it.workName == workName }
+                            if (current != null) {
+                                OfflineDownloadManager.persist(applicationContext, current.copy(
+                                    status = DownloadManager.STATUS_FAILED,
+                                    reason = DownloadManager.ERROR_INSUFFICIENT_SPACE,
+                                    bytesDownloaded = copied,
+                                    totalBytes = total
+                                ))
+                            }
+                            return@withContext Result.failure(androidx.work.workDataOf(
+                                KEY_ERROR to OfflineStorageRejection.INSUFFICIENT_FREE_SPACE.name
+                            ))
+                        }
                         output.write(buffer, 0, count)
                         copied += count
                         setProgress(androidx.work.workDataOf(KEY_BYTES to copied, KEY_TOTAL_BYTES to total))
@@ -125,6 +160,7 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         const val KEY_LOCAL_PATH = "local_path"
         const val KEY_BYTES = "bytes"
         const val KEY_TOTAL_BYTES = "total_bytes"
+        const val KEY_ERROR = "error"
         internal fun isRetryableResponse(code: Int): Boolean = code == 408 || code == 429 || code >= 500
     }
 
