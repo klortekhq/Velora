@@ -52,6 +52,8 @@ class JellyfinAuthService(
     var lastFailure: AuthenticationFailure = AuthenticationFailure.NONE
         private set
 
+    private val deviceName = if (BuildConfig.TV_BUILD) "Android TV" else "Android"
+
     // Keep authentication on the same OkHttp transport used by server
     // discovery. This avoids an Android-engine-specific stall observed on
     // some Fire TV firmware while the server was returning an auth response.
@@ -94,7 +96,7 @@ class JellyfinAuthService(
                 }
                 val url = "$normalizedBaseUrl/Users/authenticatebyname"
                 val deviceId = getDeviceId()
-                val embyAuthHeader = "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
+                val embyAuthHeader = "MediaBrowser Client=\"Velora\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
                 val body = json.encodeToString(AuthenticationRequest(Username = username, Pw = password))
                     .toRequestBody("application/json; charset=utf-8".toMediaType())
                 val request = Request.Builder()
