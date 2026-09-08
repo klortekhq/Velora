@@ -17,9 +17,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La consulta independiente a `origin` del 2026-09-06 confirma únicamente
   `refs/heads/main` en GitHub, apuntando al commit que contiene este dashboard.
   No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: la carga inicial de películas y series
-  difiere el recorrido completo de la biblioteca hasta abrir la vista de
-  catálogo, sin perder ordenado ni filtros.
+- Último cambio funcional documentado: las peticiones de reproducción usan una
+  identidad de cliente coherente con la variante Android móvil o TV, incluida
+  la cabecera que Jellyfin recibe al resolver el `PlaybackInfo`.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
@@ -38,6 +38,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
   códecs y la decisión de copia de Jellyfin; la ruta MPV explícita mantiene sus
   parámetros propios sin alterar el backend predeterminado.
+- Las cabeceras de autenticación y reproducción distinguen Android móvil de
+  Android TV/Fire TV sin registrar credenciales, tokens ni cabeceras sensibles.
 - La reproducción sigue la estrategia Original First: Direct Play, Direct
   Stream/Remux y transcodificación solo cuando las capacidades lo requieren.
 - El selector de aspecto de Media3/ExoPlayer y de la superficie GL reaplica el
@@ -500,6 +502,10 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   no fue aceptada por el servidor y por tanto siguen sin certificarse catálogo,
   Live TV, `PlaybackInfo` o reproducción. No se registraron credenciales ni
   tokens.
+- Tras el ajuste de identidad de cliente de reproducción (`bf6db85`), la suite
+  de compilación de las variantes móvil y TV y sus tests unitarios vuelven a
+  pasar. Esto valida el contrato de código, pero no sustituye la prueba de
+  reproducción con una sesión Jellyfin autenticada.
 
 ## Pendiente verificable
 
