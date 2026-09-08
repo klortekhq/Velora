@@ -180,6 +180,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Android: el selector de formato del reproductor declara explícitamente el
   rol de botón, igual que el resto de controles, para que tacto, mando y
   tecnologías de asistencia reciban la misma interacción.
+- Android MPV: los modos 4:3, 16:9 y Cine constriñen también el contenedor
+  visual en pantalla completa; Ajustar, Rellenar, Estirar y Original dejan
+  que MPV gestione la superficie completa. Así el selector no queda anulado
+  por un padre 16:9 fijo. La política tiene prueba unitaria dedicada.
 - Android TV: Live TV se integra en la misma fila centrada de navegación que
   las bibliotecas de películas y series; la pestaña sigue siendo condicional a
   los canales visibles para el usuario.
@@ -243,6 +247,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Revalidación completa posterior a esa alineación: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` el 2026-09-08
   (`1m05s`, 82 tareas; 7 ejecutadas, 75 en caché).
+
+- Corrección de aspecto MPV validada el 2026-09-08: las pruebas focalizadas de
+  `MpvAspectContainerTest` y `AspectPresentationTest` terminaron en
+  `BUILD SUCCESSFUL`; la batería móvil y TV completa volvió a terminar en
+  `BUILD SUCCESSFUL` (`3m30s`, 82 tareas; 11 ejecutadas, 71 en caché).
 
 - La deduplicación Live TV conserva ahora la fila con guía, favorito y artwork
   más completos cuando Jellyfin repite el mismo `MediaSource`; Android y web
