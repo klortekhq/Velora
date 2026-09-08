@@ -66,6 +66,7 @@
   <string name="player_settings">Réglages du lecteur</string>
   <string name="player_audio_tracks">Pistes audio</string>
   <string name="player_subtitles">Sous-titres</string>
+  <string name="player_subtitles_unavailable">Aucun sous-titre disponible</string>
   <string name="player_playback_speed">Vitesse de lecture</string>
   <string name="player_quality">Qualité</string>
   <string name="player_unknown">Inconnu</string>
@@ -232,11 +233,13 @@ Vérifiez que :
   <string name="mobile_shuffle">Aléatoire</string>
   <string name="mobile_restart">Recommencer</string>
   <string name="mobile_audio">Audio</string>
+  <string name="mobile_chapters">Chapitres</string>
   <string name="mobile_cast">Diffuser</string>
   <string name="mobile_crew">Équipe</string>
   <string name="mobile_studios">Studios</string>
   <string name="mobile_audio_track">Piste audio</string>
   <string name="mobile_no_audio_tracks">Aucune piste audio disponible</string>
+  <string name="mobile_audio_loading">Chargement des pistes audio…</string>
   <string name="mobile_remote_playback">Lecture à distance</string>
   <string name="mobile_searching_devices">Recherche d’appareils…</string>
   <string name="mobile_no_devices">Aucun appareil disponible</string>
@@ -245,6 +248,7 @@ Vérifiez que :
   <string name="mobile_seasons">Saisons</string>
   <string name="mobile_season_number">Saison %1$d</string>
   <string name="mobile_episodes">Épisodes</string>
+  <string name="mobile_no_episodes">Aucun épisode disponible</string>
   <string name="mobile_details">Détails</string>
   <string name="mobile_similar">Similaires</string>
   <string name="mobile_file_info">Informations techniques</string>

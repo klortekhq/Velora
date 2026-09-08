@@ -66,6 +66,7 @@
   <string name="player_settings">Player-Einstellungen</string>
   <string name="player_audio_tracks">Audiospuren</string>
   <string name="player_subtitles">Untertitel</string>
+  <string name="player_subtitles_unavailable">Keine Untertitel verfügbar</string>
   <string name="player_playback_speed">Wiedergabegeschwindigkeit</string>
   <string name="player_quality">Qualität</string>
   <string name="player_unknown">Unbekannt</string>
@@ -232,11 +233,13 @@ Bitte überprüfe:
   <string name="mobile_shuffle">Zufällig</string>
   <string name="mobile_restart">Neu starten</string>
   <string name="mobile_audio">Audio</string>
+  <string name="mobile_chapters">Kapitel</string>
   <string name="mobile_cast">Übertragen</string>
   <string name="mobile_crew">Team</string>
   <string name="mobile_studios">Studios</string>
   <string name="mobile_audio_track">Audiospur</string>
   <string name="mobile_no_audio_tracks">Keine Audiospuren verfügbar</string>
+  <string name="mobile_audio_loading">Audiospuren werden geladen…</string>
   <string name="mobile_remote_playback">Remote-Wiedergabe</string>
   <string name="mobile_searching_devices">Geräte werden gesucht…</string>
   <string name="mobile_no_devices">Keine Geräte verfügbar</string>
@@ -245,6 +248,7 @@ Bitte überprüfe:
   <string name="mobile_seasons">Staffeln</string>
   <string name="mobile_season_number">Staffel %1$d</string>
   <string name="mobile_episodes">Folgen</string>
+  <string name="mobile_no_episodes">Keine Folgen verfügbar</string>
   <string name="mobile_details">Details</string>
   <string name="mobile_similar">Ähnlich</string>
   <string name="mobile_file_info">Technische Informationen</string>

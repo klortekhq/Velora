@@ -99,6 +99,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   recursos localizados para estado visto, acciones de reproducción, audio,
   subtítulos, tráiler y contenido similar; la compilación móvil/TV pasó después
   de corregir una referencia nullable del reparto.
+- Revalidación del 2026-09-08: se añadieron recursos localizados para capítulos,
+  estados vacíos de subtítulos/episodios y carga de pistas de audio, usados por
+  los diálogos de películas y series; el catálogo pasó con 500 claves y ambas
+  variantes Android compilaron correctamente.
 - El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
   `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo

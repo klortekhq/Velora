@@ -691,7 +691,7 @@ fun BottomContainer(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Capítulos",
+                        text = stringResource(R.string.mobile_chapters),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -1244,7 +1244,7 @@ fun SubtitleSelectionDialog(
                             if (subtitleStreams.isEmpty() && downloadedSubtitles.isEmpty()) {
                                 item {
                                     Text(
-                                        text = "No hay subtítulos disponibles",
+                                        text = stringResource(R.string.player_subtitles_unavailable),
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                         ),
@@ -1550,7 +1550,7 @@ fun AudioSelectionDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                        text = "Cargando pistas de audio…",
+                                        text = stringResource(R.string.mobile_audio_loading),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                 ),
