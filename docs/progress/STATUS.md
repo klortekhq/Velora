@@ -172,6 +172,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 ## Pruebas locales pasadas
 
+- Revalidación estática del 2026-09-08 sobre `main` (`e107ef7`): identidad
+  pública, coherencia de versión, política offline mobile/tablet-only,
+  contrato de autenticación `Pw`, workflows de releases, catálogos Android,
+  Apple y web, y `web/scripts/test-platform.mjs` terminaron correctamente.
+
 - Revalidación fresca posterior al commit `d6a7710`: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m10s.
   También pasaron `check-apple-locales`, `check-public-identity`,
