@@ -397,8 +397,10 @@
   }
 
   function image(id) {
+    var mode = preference('veloraPerformanceMode', 'automatic');
+    var maxWidth = mode === 'quality' ? 900 : mode === 'performance' ? 320 : 600;
     return base() + '/Items/' + encodeURIComponent(id) +
-      '/Images/Primary?maxWidth=600';
+      '/Images/Primary?maxWidth=' + maxWidth;
   }
 
   function hydrateProtectedImages(scope) {

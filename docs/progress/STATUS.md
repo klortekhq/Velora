@@ -39,7 +39,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   unitaria para evitar perder la preferencia al actualizar.
 - El cliente web expone los mismos cuatro perfiles, guarda la elección por
   dispositivo y aplica el modo Rendimiento reduciendo transiciones y animaciones
-  sin ofrecer descargas offline en navegador.
+  y solicitando artwork de menor resolución; Calidad solicita artwork de mayor
+  resolución, sin ofrecer descargas offline en navegador.
 - Media3/ExoPlayer es el backend Android predeterminado; MPV solo se usa si el
   usuario lo selecciona o si el fallback configurado resulta necesario.
 - Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
