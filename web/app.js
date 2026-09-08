@@ -740,9 +740,12 @@
       // Providers sometimes repeat the same row without a source ID. Keep
       // real source variants, but never expose a transport duplicate as a
       // second selectable option.
-      if (!groups[key].sourceKeys[sourceKey]) {
-        groups[key].sourceKeys[sourceKey] = true;
+      var existingIndex = groups[key].sourceKeys[sourceKey];
+      if (typeof existingIndex !== 'number') {
+        groups[key].sourceKeys[sourceKey] = groups[key].channels.length;
         groups[key].channels.push(channel);
+      } else if (liveChannelPrimaryScore(channel) > liveChannelPrimaryScore(groups[key].channels[existingIndex])) {
+        groups[key].channels[existingIndex] = channel;
       }
     });
     order.forEach(function (group) { delete group.sourceKeys; });

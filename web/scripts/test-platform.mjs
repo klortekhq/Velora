@@ -236,6 +236,18 @@ const duplicateGroup = testWindow.__veloraTest.groupLiveTvChannels([
 ]);
 assert.equal(duplicateGroup.length, 1);
 assert.equal(duplicateGroup[0].channels.length, 1);
+const enrichedDuplicateGroup = testWindow.__veloraTest.groupLiveTvChannels([
+  { Id: 'enriched-channel', Name: 'Noticias', MediaSources: [{ Id: 'source-main' }] },
+  {
+    Id: 'enriched-channel',
+    Name: 'Noticias',
+    CurrentProgram: { Name: 'Ahora' },
+    UserData: { IsFavorite: true },
+    MediaSources: [{ Id: 'source-main' }]
+  }
+]);
+assert.equal(enrichedDuplicateGroup[0].channels.length, 1);
+assert.equal(enrichedDuplicateGroup[0].channels[0].CurrentProgram.Name, 'Ahora');
 assert.equal(testWindow.__veloraTest.liveRowAction(duplicateGroup[0]), 'open-item');
 const metadataGroup = testWindow.__veloraTest.groupLiveTvChannels([
   { Id: 'metadata-channel', Name: 'Canal antiguo', MediaSources: [{ Id: 'source-a' }] },
