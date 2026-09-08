@@ -352,10 +352,10 @@ fun MpvSettingsMenu(
                 ) {
                     Text(
                         text = when (currentMenuLevel) {
-                            "subtitles" -> "Subtítulos"
-                            "audio" -> "Pistas de audio"
-                            "speed" -> "Velocidad de reproducción"
-                            else -> "Ajustes del reproductor"
+                            "subtitles" -> stringResource(com.klortek.velora.R.string.player_subtitles)
+                            "audio" -> stringResource(com.klortek.velora.R.string.player_audio_tracks)
+                            "speed" -> stringResource(com.klortek.velora.R.string.player_speed)
+                            else -> stringResource(com.klortek.velora.R.string.player_settings)
                         },
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.8f
@@ -383,7 +383,8 @@ fun MpvSettingsMenu(
                             ) {
                                 // Subtitles (Main)
                                 item {
-                                    val currentSubTrackName = subTracks.find { it.mpvId == selectedSub }?.name ?: "Desactivados"
+                                    val currentSubTrackName = subTracks.find { it.mpvId == selectedSub }?.name
+                                        ?: stringResource(com.klortek.velora.R.string.player_subtitles_none)
                                     androidx.tv.material3.ListItem(
                                         selected = false,
                                         onClick = { currentMenuLevel = "subtitles" },
@@ -399,7 +400,7 @@ fun MpvSettingsMenu(
                                                     modifier = Modifier.size(24.dp)
                                                 )
                                                 Text(
-                                                    text = "Subtítulos",
+                                                    text = stringResource(com.klortek.velora.R.string.player_subtitles),
                                                     style = MaterialTheme.typography.titleMedium.copy(
                                                         fontSize = MaterialTheme.typography.titleMedium.fontSize * 0.9f
                                                     )
@@ -419,7 +420,8 @@ fun MpvSettingsMenu(
                                 }
                                 // Audio (Main)
                                 item {
-                                    val currentAudioTrackName = audioTracks.find { it.mpvId == selectedAudio }?.name ?: "Predeterminado"
+                                    val currentAudioTrackName = audioTracks.find { it.mpvId == selectedAudio }?.name
+                                        ?: stringResource(com.klortek.velora.R.string.settings_audio_auto)
                                     androidx.tv.material3.ListItem(
                                         selected = false,
                                         onClick = { currentMenuLevel = "audio" },
@@ -435,7 +437,7 @@ fun MpvSettingsMenu(
                                                     modifier = Modifier.size(24.dp)
                                                 )
                                                 Text(
-                                                    text = "Audio",
+                                                    text = stringResource(com.klortek.velora.R.string.mobile_audio),
                                                     style = MaterialTheme.typography.titleMedium.copy(
                                                         fontSize = MaterialTheme.typography.titleMedium.fontSize * 0.9f
                                                     )
@@ -468,7 +470,7 @@ fun MpvSettingsMenu(
                                                     modifier = Modifier.size(24.dp)
                                                 )
                                                 Text(
-                                                text = "Velocidad de reproducción",
+                                                text = stringResource(com.klortek.velora.R.string.player_speed),
                                                     style = MaterialTheme.typography.titleMedium.copy(
                                                         fontSize = MaterialTheme.typography.titleMedium.fontSize * 0.9f
                                                     )
@@ -495,7 +497,7 @@ fun MpvSettingsMenu(
                                     val track = audioTracks[index]
                                     val isSelected = track.mpvId == selectedAudio
                                     val title = buildString { 
-                                        append(track.name ?: "Track ${track.mpvId}")
+                                        append(track.name ?: stringResource(com.klortek.velora.R.string.player_track_fallback, track.mpvId))
                                         if (track.lang != null) append(" - ${track.lang}")
                                     }
                                     
@@ -537,7 +539,7 @@ fun MpvSettingsMenu(
                                         colors = listItemColors,
                                         headlineContent = {
                                             Text(
-                                                text = "Ninguno (desactivados)",
+                                                text = stringResource(com.klortek.velora.R.string.player_subtitles_none),
                                                 style = MaterialTheme.typography.bodyLarge.copy(
                                                     fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.8f
                                                 )
@@ -553,7 +555,7 @@ fun MpvSettingsMenu(
                                     val track = subTracks[index]
                                     val isSelected = track.mpvId == selectedSub
                                     val title = buildString {
-                                         append(track.name ?: "Subtitle ${track.mpvId}")
+                                         append(track.name ?: stringResource(com.klortek.velora.R.string.player_subtitle_track_fallback, track.mpvId))
                                          if (track.lang != null) append(" - ${track.lang}")
                                     }
                                     

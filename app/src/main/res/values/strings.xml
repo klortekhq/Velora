@@ -89,6 +89,9 @@
     <string name="live_tv_source_option">Opción %1$d</string>
     <string name="player_settings">Ajustes del reproductor</string>
     <string name="player_audio_tracks">Pistas de audio</string>
+    <string name="player_speed">Velocidad de reproducción</string>
+    <string name="player_track_fallback">Pista %1$s</string>
+    <string name="player_subtitle_track_fallback">Subtítulo %1$s</string>
     <string name="player_subtitles">Subtítulos</string>
     <string name="player_subtitles_unavailable">No hay subtítulos disponibles</string>
     <string name="player_playback_speed">Velocidad de reproducción</string>
