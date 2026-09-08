@@ -92,6 +92,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Revalidación del 2026-09-08: los controles de detalle Android que aún tenían
   etiquetas directas para volver y descargar ahora usan el catálogo localizado;
   `:app:compileMobileDebugKotlin :app:compileTvDebugKotlin` terminó correctamente.
+- Revalidación del 2026-09-08: la ficha de series Android también localiza
+  temporadas, reanudación, audio, subtítulos y descarga de subtítulos; ambas
+  variantes Android vuelven a compilar correctamente.
 - El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
   `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo

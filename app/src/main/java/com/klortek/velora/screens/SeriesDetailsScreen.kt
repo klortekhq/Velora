@@ -1032,7 +1032,7 @@ fun SeriesSeasonSelectorContainer(
             ) {
                 // "Seasons" title
                 Text(
-                    text = "Temporadas",
+                    text = androidx.compose.ui.res.stringResource(R.string.mobile_seasons),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(bottom = 12.dp)
@@ -1093,7 +1093,7 @@ fun SeriesSeasonSelectorContainer(
                             } else {
                                 // Show "Season X" when focused or selected
                                 Text(
-                                    text = "Temporada $seasonNumber",
+                                    text = androidx.compose.ui.res.stringResource(R.string.mobile_season_number, seasonNumber),
                                     style = MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                         fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
@@ -1271,7 +1271,7 @@ fun SeriesBottomContainer(
                     ) {
                         // "Seasons" title
                         Text(
-                            text = "Temporadas",
+                            text = androidx.compose.ui.res.stringResource(R.string.mobile_seasons),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(bottom = 12.dp)
@@ -1378,7 +1378,7 @@ fun SeriesBottomContainer(
                                     } else {
                                         // Show "Season X" when focused or selected
                                         Text(
-                                            text = "Temporada $seasonNumber",
+                                             text = androidx.compose.ui.res.stringResource(R.string.mobile_season_number, seasonNumber),
                                             style = MaterialTheme.typography.labelLarge.copy(
                                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                                 fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
@@ -1887,7 +1887,7 @@ fun ResumeEpisodeDialog(
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
                     ) {
                         Text(
-                            "Reanudar",
+                            androidx.compose.ui.res.stringResource(R.string.action_resume),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.6f
                             )
@@ -1900,7 +1900,7 @@ fun ResumeEpisodeDialog(
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
                     ) {
                         Text(
-                        "Reproducir desde el principio",
+                        androidx.compose.ui.res.stringResource(R.string.action_play_from_start),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.6f
                             )
@@ -1923,7 +1923,7 @@ fun ResumeEpisodeDialog(
                     contentPadding = PaddingValues(horizontal = 18.dp, vertical = 10.dp)
                 ) {
                     Text(
-                        "Atrás",
+                        androidx.compose.ui.res.stringResource(R.string.library_back),
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -2230,7 +2230,9 @@ fun EpisodeActionButtonsRow(
         }
     }
     
-    val playButtonLabel = if (isResumable) "Reproducir desde el principio" else "Reproducir"
+    val playButtonLabel = androidx.compose.ui.res.stringResource(
+        if (isResumable) R.string.action_play_from_start else R.string.action_play
+    )
     
     Box(
         modifier = modifier
@@ -2410,7 +2412,7 @@ fun EpisodeActionButtonsRow(
                 if (audioFocused) {
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "Audio",
+                        text = androidx.compose.ui.res.stringResource(R.string.mobile_audio),
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                         ),
@@ -2462,7 +2464,7 @@ fun EpisodeActionButtonsRow(
                 if (subtitleFocused) {
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "Subtítulos",
+                        text = androidx.compose.ui.res.stringResource(R.string.player_subtitles),
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                         ),
@@ -3285,7 +3287,7 @@ fun EpisodeSubtitleSelectionDialog(
                                 item {
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "Subtítulos descargados",
+                                         text = androidx.compose.ui.res.stringResource(R.string.player_downloaded_subtitles),
                                         style = MaterialTheme.typography.labelMedium.copy(
                                             fontSize = MaterialTheme.typography.labelMedium.fontSize * 0.8f
                                         ),
@@ -3362,7 +3364,7 @@ fun EpisodeSubtitleSelectionDialog(
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                        text = "Descargar subtítulos",
+                         text = androidx.compose.ui.res.stringResource(R.string.subtitle_download_more),
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                                         )
