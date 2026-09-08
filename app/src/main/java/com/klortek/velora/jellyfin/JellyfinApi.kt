@@ -52,6 +52,9 @@ data class ChapterInfo(
     }
 }
 
+internal fun veloraClientDeviceName(tvBuild: Boolean): String =
+    if (tvBuild) "Android TV" else "Android"
+
 @Stable
 @Serializable
 data class JellyfinItem(
@@ -330,7 +333,8 @@ class JellyfinApiService(
     private val config: JellyfinConfig? = null,
     private val languageTag: String = java.util.Locale.getDefault().toLanguageTag()
 ) {
-    private val clientDeviceName = if (BuildConfig.TV_BUILD) "Android TV" else "Android"
+    private val clientDeviceName = veloraClientDeviceName(BuildConfig.TV_BUILD)
+    private val clientDeviceId = config?.deviceId?.takeIf { it.isNotBlank() } ?: "velora-android"
 
     // Expose baseUrl, accessToken, userId for external use (e.g., MPV URL selector)
     val serverBaseUrl: String get() = baseUrl
@@ -463,7 +467,7 @@ class JellyfinApiService(
             
             val response: ItemsResponse = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
-                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
+                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\"")
             }.body()
             
             val nextUpEpisode = response.Items.firstOrNull()
@@ -1312,8 +1316,7 @@ class JellyfinApiService(
     fun getVideoRequestHeaders(): Map<String, String> {
         // Get DeviceId from config (should be stored during login)
         // If not available, use fallback (but it should be stored)
-        val deviceId = config?.deviceId?.takeIf { it.isNotEmpty() } 
-            ?: "velora-android" // Safe stable fallback when an old session has no persisted device ID.
+        val deviceId = clientDeviceId
         
         // Build X-Emby-Authorization header with Token and DeviceId
         // Format: MediaBrowser Client="...", Device="...", DeviceId="...", Version="...", Token="..."
