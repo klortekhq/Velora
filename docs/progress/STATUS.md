@@ -25,6 +25,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   plataforma y no forman parte de la identidad visible del producto.
 - CI comprueba que README, atribuciones, documentación y código público no
   reintroduzcan referencias heredadas a otros clientes o identidades antiguas.
+- Build QA regenerada el 2026-09-08 tras la protección de espacio en descargas:
+  móvil `velora-release-unsigned.apk`, SHA-256
+  `493E6D634B5F1798767637B2052395CF111ABE57242E8B66825EBC87A80D3780`; TV
+  `velora-release-unsigned.apk`, SHA-256
+  `31D8F0EEC731A224518C0FC6251CC066EBE6AB35D8F591BE7ADE814F922C9736`.
+  Siguen siendo artefactos de QA sin firma y no se publican como release.
 - Auditoría de seguridad del 2026-09-08: no se encontraron valores de tokens,
   contraseñas ni cabeceras de autorización en mensajes de log del runtime; las
   comprobaciones de identidad pública y de redacción de datos sensibles siguen
