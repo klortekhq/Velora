@@ -14,6 +14,8 @@ assert.match(appSource, /data-velora-image-id/);
 assert.match(appSource, /'X-Emby-Token': state\.token/);
 assert.match(appSource, /URL\.createObjectURL\(blob\)/);
 assert.match(appSource, /function applyAspectMode\(player, mode\)/);
+assert.match(appSource, /function applyPerformanceMode\(mode\)/);
+assert.match(appSource, /veloraPerformanceMode/);
 assert.match(appSource, /function cycleAspectMode\(player\)/);
 assert.match(appSource, /id=\"playerAspect\"/);
 assert.match(appSource, /savePreference\('veloraAspectMode', next\)/);
@@ -159,9 +161,9 @@ assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // pattern checks. This protects the one-row/multiple-source Live TV contract.
 const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
   '  renderApp();\n}());',
-  '  window.__veloraTest = { groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue };\n}());'
+  '  window.__veloraTest = { groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode };\n}());'
 );
-assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue \}/, 'web app test hook was not injected');
+assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode \}/, 'web app test hook was not injected');
 const preferenceValues = Object.create(null);
 const testLocalStorage = {
   getItem(key) { return preferenceValues[key] || null; },
@@ -207,6 +209,10 @@ testWindow.localStorage = {
 assert.equal(testWindow.__veloraTest.durableStorageValue('unavailable', 'fallback'), 'fallback');
 assert.doesNotThrow(() => testWindow.__veloraTest.saveDurableStorageValue('unavailable', 'value'));
 testWindow.localStorage = storageBeforeFailureTest;
+testWindow.__veloraTest.applyPerformanceMode('performance');
+assert.equal(testDocument.documentElement.dataset.veloraPerformance, 'performance');
+testWindow.__veloraTest.applyPerformanceMode('unknown');
+assert.equal(testDocument.documentElement.dataset.veloraPerformance, 'automatic');
 const groupedLiveTv = testWindow.__veloraTest.groupLiveTvChannels([
   {
     Id: 'same-channel',
