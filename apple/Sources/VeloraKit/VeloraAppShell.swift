@@ -16,6 +16,7 @@ public final class VeloraAppModel: ObservableObject {
     @Published public private(set) var isLoadingMoreItems = false
     @Published public private(set) var hasMoreItems = true
     @Published public private(set) var liveTvChannels: [JellyfinLiveTvChannel] = []
+    @Published public private(set) var liveTvPrograms: [JellyfinLiveTvProgram] = []
     @Published public private(set) var offlineDownloads: [VeloraOfflineDownload] = []
     @Published public private(set) var downloadingItemID: String?
     @Published public var errorMessage: String?
@@ -123,11 +124,23 @@ public final class VeloraAppModel: ObservableObject {
             async let library = client.itemsPage(userID: session.userID, includeTypes: ["Movie", "Series"])
             async let channels = client.liveTvChannels(userID: session.userID)
             let libraryPage = try await library
+            let loadedChannels = JellyfinLiveTvChannel.grouped((try? await channels) ?? [])
             items = libraryPage.items
             totalItemCount = libraryPage.totalRecordCount
             hasMoreItems = libraryPage.totalRecordCount.map { libraryPage.items.count < $0 }
                 ?? libraryPage.items.count >= 100
-            liveTvChannels = JellyfinLiveTvChannel.grouped((try? await channels) ?? [])
+            liveTvChannels = loadedChannels
+            if loadedChannels.isEmpty {
+                liveTvPrograms = []
+            } else {
+                let now = Date()
+                liveTvPrograms = (try? await client.liveTvPrograms(
+                    userID: session.userID,
+                    channelIDs: loadedChannels.map(\.id),
+                    from: now,
+                    until: now.addingTimeInterval(6 * 60 * 60)
+                )) ?? []
+            }
             let serverURL = (await client.serverURL()).absoluteString
             offlineDownloads = platform.supportsOfflineDownloads
                 ? offlineStore.load().filter { $0.serverURL == serverURL }
@@ -173,6 +186,7 @@ public final class VeloraAppModel: ObservableObject {
         isLoadingMoreItems = false
         hasMoreItems = false
         liveTvChannels = []
+        liveTvPrograms = []
         offlineDownloads = []
         isAuthenticated = false
     }
@@ -835,6 +849,15 @@ private struct VeloraLiveTvView: View {
         return String(format: String(localized: "Source option %d", bundle: .module), index + 1)
     }
 
+    private func upcomingPrograms(for channel: JellyfinLiveTvChannel) -> [JellyfinLiveTvProgram] {
+        let now = Date()
+        return model.liveTvPrograms
+            .filter { $0.channelID == channel.id && ($0.endDate ?? .distantPast) > now }
+            .sorted { ($0.startDate ?? .distantPast) < ($1.startDate ?? .distantPast) }
+            .prefix(3)
+            .map { $0 }
+    }
+
     var body: some View {
         List(model.liveTvChannels) { channel in
             Button {
@@ -850,6 +873,18 @@ private struct VeloraLiveTvView: View {
                     if let program = channel.currentProgram {
                         Text(program.name)
                             .foregroundStyle(.secondary)
+                    }
+                    ForEach(upcomingPrograms(for: channel)) { program in
+                        HStack(spacing: 6) {
+                            if let startDate = program.startDate {
+                                Text(startDate, style: .time)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(program.name)
+                                .font(.caption)
+                                .lineLimit(1)
+                        }
                     }
                 }
             }
