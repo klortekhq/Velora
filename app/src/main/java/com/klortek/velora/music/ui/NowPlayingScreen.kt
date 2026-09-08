@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.*
 import coil.compose.AsyncImage
@@ -129,7 +130,7 @@ private fun EmptyNowPlaying(onBackPress: () -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Atrás",
+                contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                 tint = Color.White
             )
         }
@@ -216,7 +217,7 @@ private fun MainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Atrás",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                         tint = Color.White
                     )
                 }
@@ -227,7 +228,7 @@ private fun MainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.Default.QueueMusic,
-                        contentDescription = "Queue",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_queue),
                         tint = Color.White
                     )
                 }
@@ -392,7 +393,7 @@ private fun MainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Shuffle,
-                        contentDescription = "Shuffle",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_shuffle),
                         tint = if (shuffleEnabled) Color(0xFF1DB954) else Color.Gray,
                         modifier = Modifier.size(28.dp)
                     )
@@ -404,7 +405,7 @@ private fun MainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.Default.SkipPrevious,
-                        contentDescription = "Previous",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_previous),
                         tint = Color.White,
                         modifier = Modifier.size(40.dp)
                     )
@@ -432,7 +433,7 @@ private fun MainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.Default.SkipNext,
-                        contentDescription = "Next",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_next),
                         tint = Color.White,
                         modifier = Modifier.size(40.dp)
                     )
@@ -447,7 +448,7 @@ private fun MainNowPlayingView(
                             AudioQueueManager.RepeatMode.ONE -> Icons.Default.RepeatOne
                             else -> Icons.Default.Repeat
                         },
-                        contentDescription = "Repeat",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_repeat),
                         tint = when (repeatMode) {
                             AudioQueueManager.RepeatMode.OFF -> Color.Gray
                             else -> Color(0xFF1DB954)
@@ -507,7 +508,7 @@ private fun QueueView(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Atrás",
+                    contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                     tint = Color.White
                 )
             }
@@ -583,7 +584,7 @@ private fun QueueTrackRow(
                 if (isCurrentTrack) {
                     Icon(
                         imageVector = Icons.Default.GraphicEq,
-                        contentDescription = "Playing",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_playing),
                         tint = Color(0xFF1DB954),
                         modifier = Modifier.size(20.dp)
                     )
