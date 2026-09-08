@@ -27,9 +27,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
   y dejar la tuerca como punto único para audio y subtítulos: móvil
   `app-mobile-debug.apk`, SHA-256
-  `C741CC5836C1ACEA0B0946A2F636083984F7C6774E670325E05F9440ECD505CB`;
+  `0DB60A677F8403FABABBC998BD667DF80F9E0EFD4EB16ED5F5C6EC021124626D`;
   TV `app-tv-debug.apk`, SHA-256
-  `5B7618A6F10490F8CA20CC23F40CA4A068DFE7BB1A19779181C5485E55B703F8`.
+  `8A8CEED8AD48BF683747B5619F699DF4581383147F356C8EC596848D7E8A0B24`.
   Ambas compilaciones terminaron correctamente y siguen siendo artefactos de
   QA sin firma; no se publican como release.
 - Build QA regenerada el 2026-09-08 tras la protección de espacio en descargas:
