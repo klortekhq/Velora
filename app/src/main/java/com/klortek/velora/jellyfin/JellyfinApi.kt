@@ -328,6 +328,8 @@ class JellyfinApiService(
     private val config: JellyfinConfig? = null,
     private val languageTag: String = java.util.Locale.getDefault().toLanguageTag()
 ) {
+    private val clientDeviceName = if (BuildConfig.TV_BUILD) "Android TV" else "Android"
+
     // Expose baseUrl, accessToken, userId for external use (e.g., MPV URL selector)
     val serverBaseUrl: String get() = baseUrl
     val apiKey: String get() = accessToken
@@ -1304,12 +1306,12 @@ class JellyfinApiService(
         // Get DeviceId from config (should be stored during login)
         // If not available, use fallback (but it should be stored)
         val deviceId = config?.deviceId?.takeIf { it.isNotEmpty() } 
-            ?: "56be65b97eb43eca" // Fallback DeviceId - should match what's used in authentication
+            ?: "velora-android" // Safe stable fallback when an old session has no persisted device ID.
         
         // Build X-Emby-Authorization header with Token and DeviceId
         // Format: MediaBrowser Client="...", Device="...", DeviceId="...", Version="...", Token="..."
         // CRITICAL: Token MUST be included in X-Emby-Authorization header for MPV/FFmpeg
-        val embyAuthHeader = "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\", Token=\"$accessToken\""
+        val embyAuthHeader = "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\", Token=\"$accessToken\""
         
         return mapOf(
             "Authorization" to "MediaBrowser Token=\"$accessToken\"",
