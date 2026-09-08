@@ -127,6 +127,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   tres programas próximos por canal, manteniendo la lista acotada para no
   bloquear la interfaz. El cambio queda pendiente de la compilación/test de
   Swift en macOS CI; Swift/Xcode no está instalado en este host Windows.
+- Apple aplica ahora el comportamiento de música temática previsto: espera de
+  700 ms, fade-in por pasos, cancelación al cambiar rápidamente de ficha y
+  fade-out al salir. La verificación de compilación Swift queda pendiente de
+  macOS CI por la misma limitación de este host.
 - Revalidación del 2026-09-08: la ruta opcional MPV también usa recursos
   localizados para ajustes, audio, subtítulos, velocidad y estados de pista;
   el catálogo queda en 506 claves y las variantes móvil/TV compilan.

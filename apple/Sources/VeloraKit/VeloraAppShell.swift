@@ -597,8 +597,32 @@ private struct VeloraItemDetailView: View {
         }
         .task(id: item.id) {
             guard model.settings.themeMusicEnabled else { return }
-            themePlayer = await model.themeMusicPlayer(for: item)
-            themePlayer?.play()
+            do {
+                try await Task.sleep(nanoseconds: 700_000_000)
+            } catch {
+                return
+            }
+            guard !Task.isCancelled else { return }
+            guard let nextPlayer = await model.themeMusicPlayer(for: item) else { return }
+            guard !Task.isCancelled else {
+                nextPlayer.pause()
+                return
+            }
+            nextPlayer.volume = 0
+            themePlayer = nextPlayer
+            nextPlayer.play()
+            for step in 1...8 {
+                do {
+                    try await Task.sleep(nanoseconds: 50_000_000)
+                } catch {
+                    return
+                }
+                guard !Task.isCancelled else {
+                    nextPlayer.pause()
+                    return
+                }
+                nextPlayer.volume = Float(step) / 8
+            }
         }
         .onDisappear {
             if let player {
@@ -612,9 +636,21 @@ private struct VeloraItemDetailView: View {
                     }
                 }
             }
-            themePlayer?.pause()
+            if let outgoingThemePlayer = themePlayer {
+                Task { await fadeOutThemeMusic(outgoingThemePlayer) }
+            }
             themePlayer = nil
         }
+    }
+
+    private func fadeOutThemeMusic(_ player: AVPlayer) async {
+        for step in stride(from: 8, through: 0, by: -1) {
+            player.volume = Float(step) / 8
+            if step > 0 {
+                try? await Task.sleep(nanoseconds: 50_000_000)
+            }
+        }
+        player.pause()
     }
 
     private func seekAndPlay(to seconds: Double) {
