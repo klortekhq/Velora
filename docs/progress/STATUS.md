@@ -183,6 +183,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   proveedores IPTV). La prueba focalizada Android y la suite web terminaron
   correctamente tras este ajuste.
 
+- Revalidación completa posterior a esa alineación: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` el 2026-09-08
+  (`1m05s`, 82 tareas; 7 ejecutadas, 75 en caché).
+
 - Revalidación estática del 2026-09-08 sobre `main` (`e107ef7`): identidad
   pública, coherencia de versión, política offline mobile/tablet-only,
   contrato de autenticación `Pw`, workflows de releases, catálogos Android,
