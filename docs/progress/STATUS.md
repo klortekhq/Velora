@@ -16,9 +16,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   rama pública.
 - La consulta independiente a `origin` confirma únicamente `refs/heads/main`
   en GitHub. No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: el trabajador de descargas offline
-  protege el espacio libre durante la escritura y conserva las transferencias
-  parciales para reanudarlas.
+- Último cambio funcional documentado: Live TV conserva como opciones
+  seleccionables las fuentes que no traen `MediaSource.Id`, usando sus
+  descriptores de proveedor como identidad secundaria.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
@@ -27,9 +27,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
   y dejar la tuerca como punto único para audio y subtítulos: móvil
   `app-mobile-debug.apk`, SHA-256
-  `6858099B68BBD6375F31A03875FA98AA3CF0D9ECCAF0DCC9CBCE55FE15CAF122`;
+  `C741CC5836C1ACEA0B0946A2F636083984F7C6774E670325E05F9440ECD505CB`;
   TV `app-tv-debug.apk`, SHA-256
-  `8FE70412FEACEB26EC482C63A138CB437E42BF1F5D342957D30189116D467C6D`.
+  `5B7618A6F10490F8CA20CC23F40CA4A068DFE7BB1A19779181C5485E55B703F8`.
   Ambas compilaciones terminaron correctamente y siguen siendo artefactos de
   QA sin firma; no se publican como release.
 - Build QA regenerada el 2026-09-08 tras la protección de espacio en descargas:
@@ -126,6 +126,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   variante móvil. Confirma que los canales con la misma identidad Jellyfin se
   muestran como una sola tarjeta y que sus MediaSources quedan disponibles
   como opciones seleccionables; la misma lógica se comparte con TV.
+- Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
+  fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
+  confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
+  no se colapsan en una sola opción.
 - Apple Live TV ahora carga la biblioteca sin esperar la EPG, solicita después
   una ventana de seis horas y muestra hasta tres programas próximos por canal;
   las cargas obsoletas se cancelan al cambiar de sesión. El cambio queda

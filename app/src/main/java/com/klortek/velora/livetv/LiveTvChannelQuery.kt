@@ -87,11 +87,15 @@ fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup>
         // IPTV) remain separate and therefore selectable.
         val uniqueEntries = entries.fold(linkedMapOf<String, LiveTvChannel>()) { unique, channel ->
             val sourceId = liveTvMediaSourceId(channel)
+            val source = channel.MediaSources.orEmpty().firstOrNull()
             val sourceKey = sourceId ?: listOf(
                 channel.Type.orEmpty(),
                 channel.ChannelNumber.orEmpty(),
                 channel.Name.trim().lowercase(),
-                channel.Tags.orEmpty().sorted().joinToString("|")
+                channel.Tags.orEmpty().sorted().joinToString("|"),
+                source?.Name.orEmpty().trim().lowercase(),
+                source?.LiveStreamId.orEmpty(),
+                source?.Protocol.orEmpty().lowercase()
             ).joinToString("|")
             val existing = unique[sourceKey]
             if (existing == null || liveTvChannelPrimaryScore(channel) > liveTvChannelPrimaryScore(existing)) {
