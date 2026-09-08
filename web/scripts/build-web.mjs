@@ -15,7 +15,17 @@ const requireInstallable = process.env.VELORA_REQUIRE_INSTALLABLE_PACKAGES === '
 const packageMetadata = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
 const version = packageMetadata.version;
 
+function commandAvailable(name) {
+  const lookup = process.platform === 'win32'
+    ? spawnSync('where.exe', [name], { stdio: 'ignore' })
+    : spawnSync('sh', ['-lc', `command -v ${name}`], { stdio: 'ignore' });
+  return lookup.status === 0;
+}
+
 function command(name, args, cwd) {
+  // Missing optional vendor CLIs are a supported QA state: the build should
+  // leave a truthful bundle and metadata instead of printing a shell error.
+  if (!commandAvailable(name)) return false;
   const result = spawnSync(name, args, {
     stdio: 'inherit',
     cwd,
