@@ -23,6 +23,8 @@ class QuickConnectService(
     private val baseUrl: String,
     private val context: Context? = null
 ) {
+    private val deviceName = if (BuildConfig.TV_BUILD) "Android TV" else "Android"
+
     private val client = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
@@ -65,7 +67,6 @@ class QuickConnectService(
             }
             
             val deviceId = getDeviceId()
-            val deviceName = "Android TV"
             val clientName = "Velora"
             val clientVersion = BuildConfig.VERSION_NAME
             
@@ -128,7 +129,6 @@ class QuickConnectService(
             }
             
             val deviceId = getDeviceId()
-            val deviceName = "Android TV"
             val clientName = "Velora"
             val clientVersion = BuildConfig.VERSION_NAME
             
@@ -181,7 +181,6 @@ class QuickConnectService(
             }
             
             val deviceId = getDeviceId()
-            val deviceName = "Android TV"
             val clientName = "Velora"
             val clientVersion = BuildConfig.VERSION_NAME
             
