@@ -15,7 +15,7 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Rama de trabajo: `main`; la política del repositorio exige que sea la única
   rama pública.
 - La consulta independiente a `origin` del 2026-09-09 confirma únicamente
-  `refs/heads/main` en GitHub, apuntando a `e8679dd`. No se presenta ninguna
+  `refs/heads/main` en GitHub, apuntando a `d0c2e53`. No se presenta ninguna
   otra rama pública.
 - Último cambio funcional documentado: el trabajador de descargas offline
   protege el espacio libre durante la escritura y conserva las transferencias
