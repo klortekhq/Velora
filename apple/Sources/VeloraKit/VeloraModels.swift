@@ -19,6 +19,7 @@ public struct JellyfinItem: Codable, Identifiable, Sendable {
     public let imageTags: [String: String]?
     public let productionYear: Int?
     public let people: [JellyfinPerson]?
+    public let userData: JellyfinUserData?
 
     private enum CodingKeys: String, CodingKey {
         case id = "Id"
@@ -28,9 +29,10 @@ public struct JellyfinItem: Codable, Identifiable, Sendable {
         case imageTags = "ImageTags"
         case productionYear = "ProductionYear"
         case people = "People"
+        case userData = "UserData"
     }
 
-    public init(id: String, name: String, type: String? = nil, overview: String? = nil, imageTags: [String: String]? = nil, productionYear: Int? = nil, people: [JellyfinPerson]? = nil) {
+    public init(id: String, name: String, type: String? = nil, overview: String? = nil, imageTags: [String: String]? = nil, productionYear: Int? = nil, people: [JellyfinPerson]? = nil, userData: JellyfinUserData? = nil) {
         self.id = id
         self.name = name
         self.type = type
@@ -38,6 +40,25 @@ public struct JellyfinItem: Codable, Identifiable, Sendable {
         self.imageTags = imageTags
         self.productionYear = productionYear
         self.people = people
+        self.userData = userData
+    }
+}
+
+/// Playback metadata returned by Jellyfin when `UserData` is requested.
+/// Ticks are kept as Int64 to avoid losing precision before converting to
+/// AVPlayer seconds at the UI boundary.
+public struct JellyfinUserData: Codable, Sendable, Equatable {
+    public let playbackPositionTicks: Int64?
+    public let played: Bool?
+
+    private enum CodingKeys: String, CodingKey {
+        case playbackPositionTicks = "PlaybackPositionTicks"
+        case played = "Played"
+    }
+
+    public init(playbackPositionTicks: Int64? = nil, played: Bool? = nil) {
+        self.playbackPositionTicks = playbackPositionTicks
+        self.played = played
     }
 }
 

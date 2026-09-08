@@ -193,6 +193,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple móvil/tablet conserva la calidad elegida en cada descarga offline y
   migra catálogos anteriores sin ese campo a Original; la suite Swift sigue
   pendiente de ejecución en macOS porque este host no tiene Xcode.
+- Apple: las fichas nativas consumen `UserData.PlaybackPositionTicks`, ofrecen
+  Reanudar/Empezar desde el principio desde 30 segundos y notifican la
+  posición al salir; la cobertura de decodificación está añadida, pero la
+  compilación y prueba real siguen pendientes de macOS/Xcode.
 - Apple: la biblioteca inicial se solicita en páginas de 100 elementos y la
   cuadrícula pide la siguiente página al alcanzar el final, sin imponer un
   límite artificial al catálogo.
