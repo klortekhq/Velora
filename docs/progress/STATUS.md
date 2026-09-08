@@ -101,6 +101,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Revalidación del 2026-09-08: la ruta opcional MPV también usa recursos
   localizados para ajustes, audio, subtítulos, velocidad y estados de pista;
   el catálogo queda en 506 claves y las variantes móvil/TV compilan.
+- Suite Android completa reejecutada tras el cambio MPV: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminan en `BUILD SUCCESSFUL` (82 tareas); solo
+  permanecen avisos de APIs obsoletas y del SDK local.
 - Revalidación del 2026-09-08: la ficha de películas Android comparte ahora
   recursos localizados para estado visto, acciones de reproducción, audio,
   subtítulos, tráiler y contenido similar; la compilación móvil/TV pasó después
