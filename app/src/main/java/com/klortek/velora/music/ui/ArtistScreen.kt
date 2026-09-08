@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.*
 import coil.compose.AsyncImage
@@ -249,7 +250,7 @@ private fun ArtistHeader(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Atrás",
+                    contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                     tint = Color.White
                 )
             }
@@ -302,7 +303,7 @@ private fun ArtistHeader(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = artist?.name ?: "Unknown Artist",
+                        text = artist?.name ?: stringResource(com.klortek.velora.R.string.music_unknown_artist),
                         style = MaterialTheme.typography.displaySmall,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
@@ -331,7 +332,7 @@ private fun ArtistHeader(
                                 modifier = Modifier.size(20.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Play All", fontWeight = FontWeight.Bold)
+                            Text(stringResource(com.klortek.velora.R.string.music_play_all), fontWeight = FontWeight.Bold)
                         }
 
                         OutlinedButton(
@@ -347,7 +348,7 @@ private fun ArtistHeader(
                                 modifier = Modifier.size(20.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Shuffle")
+                            Text(stringResource(com.klortek.velora.R.string.music_shuffle))
                         }
                     }
                 }

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.*
@@ -220,7 +221,7 @@ private fun MusicHeader(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Atrás",
+                    contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                     tint = Color.White,
                     modifier = Modifier.size(17.dp) // Reduced icon size
                 )
@@ -237,7 +238,7 @@ private fun MusicHeader(
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "Música",
+                text = stringResource(com.klortek.velora.R.string.music_title),
                 style = MaterialTheme.typography.headlineSmall, // Reduced from Medium to Small
                 color = Color.White,
                 fontWeight = FontWeight.Bold
@@ -325,8 +326,8 @@ private fun MusicHomeContent(
             if (recentAlbums.isNotEmpty()) {
                 item {
                     MusicSection(
-                        title = "Añadido recientemente",
-                        subtitle = "${recentAlbums.size} albums"
+                        title = stringResource(com.klortek.velora.R.string.music_recently_added),
+                        subtitle = stringResource(com.klortek.velora.R.string.music_albums_count, recentAlbums.size)
                     ) {
                         LazyRow(
                             contentPadding = PaddingValues(horizontal = 48.dp),
@@ -348,8 +349,8 @@ private fun MusicHomeContent(
             if (artists.isNotEmpty()) {
                 item {
                     MusicSection(
-                        title = "Artists",
-                        subtitle = "${artists.size} artists"
+                        title = stringResource(com.klortek.velora.R.string.music_artists),
+                        subtitle = stringResource(com.klortek.velora.R.string.music_artists_count, artists.size)
                     ) {
                         LazyRow(
                             contentPadding = PaddingValues(horizontal = 48.dp),
@@ -469,7 +470,7 @@ private fun AlbumCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Reproducir",
+                                contentDescription = stringResource(com.klortek.velora.R.string.music_play),
                                 tint = Color.Black,
                                 modifier = Modifier.size(32.dp)
                             )
@@ -747,7 +748,7 @@ private fun MiniPlayer(
                 IconButton(onClick = onNext) {
                     Icon(
                         imageVector = Icons.Default.SkipNext,
-                        contentDescription = "Next",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_next),
                         tint = Color.White,
                         modifier = Modifier.size(28.dp)
                     )

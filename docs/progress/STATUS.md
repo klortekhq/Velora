@@ -86,6 +86,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   y series ya usan recursos localizados para navegación, recomendaciones,
   filtros, acciones y estados de Jellyseerr; la compilación de móvil y TV pasó
   y las pruebas focalizadas de ordenación/filtros y agrupación Live TV pasaron.
+- Revalidación del 2026-09-08: las pantallas Android de música ya usan recursos
+  localizados para navegación, cola, transporte, álbumes y artistas; la
+  compilación Kotlin de móvil y TV pasó con estas claves nuevas.
 - El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
   `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo

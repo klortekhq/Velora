@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.*
 import coil.compose.AsyncImage
@@ -174,7 +175,7 @@ private fun AlbumInfoPanel(
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Atrás",
+                contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                 tint = Color.White
             )
         }
@@ -207,7 +208,7 @@ private fun AlbumInfoPanel(
 
         // Album title
         Text(
-            text = album?.name ?: "Unknown Album",
+            text = album?.name ?: stringResource(com.klortek.velora.R.string.music_unknown_album),
             style = MaterialTheme.typography.headlineMedium,
             color = Color.White,
             fontWeight = FontWeight.Bold,
@@ -227,7 +228,7 @@ private fun AlbumInfoPanel(
             )
         ) {
             Text(
-                text = album?.artist ?: "Unknown Artist",
+                text = album?.artist ?: stringResource(com.klortek.velora.R.string.music_unknown_artist),
                 style = MaterialTheme.typography.titleMedium,
                 color = Color(0xFF1DB954),
                 fontWeight = FontWeight.Medium,
@@ -254,7 +255,7 @@ private fun AlbumInfoPanel(
                 )
             }
             Text(
-                text = "${tracks.size} songs",
+                text = stringResource(com.klortek.velora.R.string.music_songs_count, tracks.size),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
             )
@@ -290,7 +291,7 @@ private fun AlbumInfoPanel(
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Play", fontWeight = FontWeight.Bold)
+                Text(stringResource(com.klortek.velora.R.string.music_play), fontWeight = FontWeight.Bold)
             }
 
             OutlinedButton(
@@ -307,7 +308,7 @@ private fun AlbumInfoPanel(
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Shuffle")
+                Text(stringResource(com.klortek.velora.R.string.music_shuffle))
             }
         }
     }
@@ -381,14 +382,14 @@ private fun AlbumTrackRow(
                 if (isCurrentTrack && isPlaying) {
                     Icon(
                         imageVector = Icons.Default.GraphicEq,
-                        contentDescription = "Playing",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_playing),
                         tint = Color(0xFF1DB954),
                         modifier = Modifier.size(20.dp)
                     )
                 } else if (isFocused) {
                     Icon(
                         imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "Reproducir",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_play),
                         tint = Color.White,
                         modifier = Modifier.size(20.dp)
                     )
