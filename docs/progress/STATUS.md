@@ -64,6 +64,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Las peticiones de catálogo, personas y “seguir viendo” usan ahora el nombre
   de dispositivo de la variante Android activa (móvil o TV), sin etiquetar el
   cliente móvil como Android TV.
+- El cliente Android de Live TV aplica la misma identidad: Android en móvil y
+  Android TV en la variante de televisión, incluida la selección de fuentes.
 - La ficha de personas formatea nacimiento y fallecimiento con el idioma activo
   del dispositivo en vez de forzar meses en inglés; los valores ISO inválidos
   conservan un fallback legible y tienen cobertura unitaria.

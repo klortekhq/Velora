@@ -79,6 +79,7 @@ class LiveTvClient(private val config: JellyfinConfig) {
     private val baseUrl = config.serverUrl.removeSuffix("/")
     private val accessToken = config.accessToken
     private val userId = config.userId
+    private val clientDeviceName = if (BuildConfig.TV_BUILD) "Android TV" else "Android"
 
     // Live TV is optional on the home screen. Do not pay the Android engine
     // construction cost before the first frame, especially on Fire TV.
@@ -192,7 +193,7 @@ class LiveTvClient(private val config: JellyfinConfig) {
         header("X-Emby-Token", accessToken)
         header(
             "X-Emby-Authorization",
-            "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"${config.deviceId}\", Version=\"${BuildConfig.VERSION_NAME}\""
+            "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"${config.deviceId}\", Version=\"${BuildConfig.VERSION_NAME}\""
         )
     }
 }
