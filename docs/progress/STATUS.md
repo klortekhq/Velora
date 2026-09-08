@@ -537,6 +537,12 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - La APK TV del commit `6c512be` se recompiló e instaló después con SHA-256
   `9F7E55ED62F3C9D334A56E0301CA4D483EAAC8F7ABF75D78DACA0DB396959050` y volvió
   a arrancar en `MainActivity` sin `FATAL EXCEPTION`, `AndroidRuntime` ni `ANR`.
+- Revalidación autenticada del 2026-09-08 contra el endpoint Jellyfin activo:
+  la información pública responde, pero el contrato `Pw` usado por Velora
+  recibe `HTTP 400 Error processing request` desde el servidor. La APK TV
+  instalada queda enfocada en `MainActivity` sin excepciones fatales; no se
+  marca como válida ninguna prueba posterior de catálogo, Live TV o
+  reproducción hasta que la autenticación sea aceptada.
 
 ## Pendiente verificable
 
