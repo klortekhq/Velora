@@ -758,7 +758,9 @@
 
   function liveSourceLabel(channel, index) {
     var tags = Array.isArray(channel.Tags) ? channel.Tags.filter(Boolean) : [];
+    var source = Array.isArray(channel.MediaSources) ? channel.MediaSources[0] : null;
     return String(tags[0] || channel.ChannelType || channel.ServiceName ||
+      (source && source.Name) ||
       (t('liveSourceOption') + ' ' + index));
   }
 
