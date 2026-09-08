@@ -1,8 +1,15 @@
 Velora
 Copyright (c) 2026 Klørtek
 
-Velora is an independent, open-source Jellyfin client. Jellyfin is a
-separate project and is not endorsed by or affiliated with Klørtek.
+Velora is an independent open-source Jellyfin client. It is not affiliated
+with or endorsed by the Jellyfin project.
 
-Third-party components are listed in THIRD_PARTY_LICENSES.md. Their
-respective copyright and license terms remain with their authors.
+Third-party components
+----------------------
+The distribution includes or links to open-source components maintained by
+their respective authors. Their licenses and upstream references are listed
+in THIRD_PARTY_LICENSES.md. Those notices remain applicable to the relevant
+components and do not change the license of Velora itself.
+
+Jellyfin is a trademark of the Jellyfin contributors and is used only to
+identify the compatible server software and API.
