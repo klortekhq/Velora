@@ -20,6 +20,9 @@ paquete sin copiar la interfaz Android; el target de tvOS debe omitir descargas
 mediante `VeloraPlatform.tvOS.supportsOfflineDownloads`. La base compartida,
 el shell y los entrypoints SwiftPM ya están implementados, pero todavía no hay
 proyectos `.app` firmados ni un pipeline de firma.
+Las fichas Apple consumen `UserData.PlaybackPositionTicks` y ofrecen reanudar o
+empezar desde el principio; al salir notifican la posición a Jellyfin para que
+el progreso continúe sincronizado entre dispositivos.
 La compilación de Apple y la validación en hardware requieren macOS con Xcode;
 este host Windows no las certifica.
 Los entrypoints incluyen una ruta mínima de enlace exclusiva para macOS CI;
