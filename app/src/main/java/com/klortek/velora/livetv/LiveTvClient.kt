@@ -92,8 +92,11 @@ class LiveTvClient(private val config: JellyfinConfig) {
                 })
             }
             engine {
-                connectTimeout = 10_000
-                socketTimeout = 20_000
+                // Tuner/provider allocation can be slower than metadata. Keep
+                // the request bounded without failing valid Live TV sources
+                // during startup or channel changes.
+                connectTimeout = 45_000
+                socketTimeout = 45_000
             }
         }
     }

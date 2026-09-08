@@ -66,6 +66,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   cliente móvil como Android TV.
 - El cliente Android de Live TV aplica la misma identidad: Android en móvil y
   Android TV en la variante de televisión, incluida la selección de fuentes.
+- Live TV amplía sus límites de conexión y socket a 45 segundos para permitir
+  la asignación lenta de sintonizadores/proveedores sin abandonar fuentes
+  válidas durante el arranque o el cambio de canal; la paginación y agrupación
+  siguen pasando sus pruebas focalizadas.
 - La ficha de personas formatea nacimiento y fallecimiento con el idioma activo
   del dispositivo en vez de forzar meses en inglés; los valores ISO inválidos
   conservan un fallback legible y tienen cobertura unitaria.
