@@ -233,6 +233,9 @@ Please verify:
   <string name="mobile_shuffle">Shuffle</string>
   <string name="mobile_restart">Restart</string>
   <string name="mobile_audio">Audio</string>
+  <string name="mobile_device">Device</string>
+  <string name="mobile_sent">Sent</string>
+  <string name="mobile_episode_label">E%1$s · %2$s</string>
   <string name="mobile_chapters">Chapters</string>
   <string name="mobile_cast">Cast</string>
   <string name="mobile_crew">Crew</string>
