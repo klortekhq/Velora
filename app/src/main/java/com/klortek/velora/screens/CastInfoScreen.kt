@@ -268,7 +268,7 @@ fun CastInfoScreen(
 
                                 // Birth date (uses helper that checks both PremiereDate and BirthDate)
                                 personDetails?.birthDateValue?.let { birthDate ->
-                                    val formattedDate = formatBirthDate(birthDate)
+                                    val formattedDate = formatPersonDate(birthDate)
                                     Text(
                                         text = stringResource(R.string.person_birth, formattedDate),
                                         style = MaterialTheme.typography.bodyMedium,
@@ -278,7 +278,7 @@ fun CastInfoScreen(
 
                                 // Death date (uses helper that checks both EndDate and DeathDate)
                                 personDetails?.deathDateValue?.let { deathDate ->
-                                    val formattedDate = formatBirthDate(deathDate)
+                                    val formattedDate = formatPersonDate(deathDate)
                                     Text(
                                         text = stringResource(R.string.person_death, formattedDate),
                                         style = MaterialTheme.typography.bodyMedium,
@@ -501,26 +501,4 @@ private fun FilmographyCard(
         )
     }
 }
-
-private fun formatBirthDate(dateString: String): String {
-    return try {
-        val datePart = dateString.substringBefore("T")
-        val parts = datePart.split("-")
-        if (parts.size >= 3) {
-            val year = parts[0]
-            val month = parts[1].toIntOrNull() ?: return datePart
-            val day = parts[2].toIntOrNull() ?: return datePart
-            
-            val monthNames = listOf(
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            )
-            val monthName = monthNames.getOrNull(month - 1) ?: return datePart
-            "$monthName $day, $year"
-        } else {
-            datePart
-        }
-    } catch (e: Exception) {
-        dateString
-    }
-}
+// End of cast info components.
