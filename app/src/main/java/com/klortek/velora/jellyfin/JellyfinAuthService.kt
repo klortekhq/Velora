@@ -41,6 +41,13 @@ enum class AuthenticationFailure {
     NETWORK
 }
 
+/** Jellyfin installations use both 400 and 401/403 for rejected credentials. */
+internal fun authenticationFailureForHttpStatus(statusCode: Int): AuthenticationFailure =
+    when (statusCode) {
+        400, 401, 403 -> AuthenticationFailure.INVALID_CREDENTIALS
+        else -> AuthenticationFailure.SERVER_ERROR
+    }
+
 class JellyfinAuthService(
     private val baseUrl: String,
     private val context: Context? = null
@@ -111,10 +118,7 @@ class JellyfinAuthService(
                         val responseBody = response.body?.string().orEmpty()
                         json.decodeFromString<AuthenticationResponse>(responseBody)
                     } else {
-                        lastFailure = when (response.code) {
-                            401, 403 -> AuthenticationFailure.INVALID_CREDENTIALS
-                            else -> AuthenticationFailure.SERVER_ERROR
-                        }
+                        lastFailure = authenticationFailureForHttpStatus(response.code)
                         Log.w(TAG, "Authentication failed with HTTP ${response.code}")
                         null
                     }
