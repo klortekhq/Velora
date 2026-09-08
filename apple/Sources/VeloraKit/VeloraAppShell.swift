@@ -211,6 +211,17 @@ public final class VeloraAppModel: ObservableObject {
         return player
     }
 
+    public func themeMusicPlayer(for item: JellyfinItem) async -> AVPlayer? {
+        guard settings.themeMusicEnabled, let session,
+              let requestURL = await client.themeSongURL(itemID: item.id, userID: session.userID) else { return nil }
+        let request = await client.authorizedRequest(for: requestURL)
+        guard let url = request.url else { return nil }
+        let asset = AVURLAsset(url: url, options: ["AVURLAssetHTTPHeaderFieldsKey": request.allHTTPHeaderFields ?? [:]])
+        let player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
+        player.volume = Float(settings.themeMusicVolume)
+        return player
+    }
+
     /// Apply device-local audio and subtitle preferences to Apple's native
     /// media selection groups without modifying the server's source decision.
     private func applyMediaPreferences(to playerItem: AVPlayerItem) async {
@@ -441,6 +452,7 @@ private struct VeloraItemDetailView: View {
     @State private var isPlayerFullscreen = false
     @State private var downloadQuality: VeloraDownloadQuality = .original
     @State private var aspectMode: VeloraAspectMode = .fit
+    @State private var themePlayer: AVPlayer?
 
     var body: some View {
         ScrollView {
@@ -539,6 +551,15 @@ private struct VeloraItemDetailView: View {
             .padding()
         }
         .navigationTitle(item.name)
+        .task(id: item.id) {
+            guard model.settings.themeMusicEnabled else { return }
+            themePlayer = await model.themeMusicPlayer(for: item)
+            themePlayer?.play()
+        }
+        .onDisappear {
+            themePlayer?.pause()
+            themePlayer = nil
+        }
     }
 }
 
