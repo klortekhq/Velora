@@ -103,6 +103,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   estados vacíos de subtítulos/episodios y carga de pistas de audio, usados por
   los diálogos de películas y series; el catálogo pasó con 500 claves y ambas
   variantes Android compilaron correctamente.
+- Auditoría funcional del 2026-09-08: las tarjetas de reparto de móvil y TV
+  mantienen navegación activa hacia `CastInfoActivity`; desde allí se cargan
+  detalles y filmografía mediante los endpoints de personas de Jellyfin. No se
+  ha encontrado una ruta de reparto que sea únicamente decorativa.
 - El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
   `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo
