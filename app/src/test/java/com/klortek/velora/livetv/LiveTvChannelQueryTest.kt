@@ -149,6 +149,28 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun duplicateRowsWithTheSameSourceKeepTheRichestMetadata() {
+        val stale = LiveTvChannel(
+            "same-id",
+            "Canal",
+            MediaSources = listOf(MediaSource(Id = "source-main"))
+        )
+        val enriched = LiveTvChannel(
+            "same-id",
+            "Canal",
+            UserData = LiveTvUserData(IsFavorite = true),
+            CurrentProgram = LiveTvProgram(Name = "Ahora"),
+            MediaSources = listOf(MediaSource(Id = "source-main"))
+        )
+
+        val group = groupLiveTvChannels(listOf(stale, enriched)).single()
+
+        assertEquals(1, group.channels.size)
+        assertEquals("Ahora", group.primary.CurrentProgram?.Name)
+        assertEquals(true, group.primary.UserData?.IsFavorite)
+    }
+
+    @Test
     fun filteringAGroupKeepsAlternateSourcesWhenMetadataIsOnOneRow() {
         val main = LiveTvChannel(
             "same-id",

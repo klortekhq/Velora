@@ -47,13 +47,14 @@ data class LiveTvChannelGroup(
     /** Providers may attach guide, favourite or artwork metadata to only one
      * of several source rows representing the same visible channel. */
     val primary: LiveTvChannel
-        get() = channels.maxByOrNull { channel ->
-            (if (channel.CurrentProgram != null) 4 else 0) +
-                (if (channel.UserData?.IsFavorite == true) 2 else 0) +
-                (if (!channel.ImageTags.isNullOrEmpty()) 1 else 0) +
-                (if (!channel.ChannelNumber.isNullOrBlank()) 1 else 0)
-        } ?: channels.first()
+        get() = channels.maxByOrNull(::liveTvChannelPrimaryScore) ?: channels.first()
 }
+
+private fun liveTvChannelPrimaryScore(channel: LiveTvChannel): Int =
+    (if (channel.CurrentProgram != null) 4 else 0) +
+        (if (channel.UserData?.IsFavorite == true) 2 else 0) +
+        (if (!channel.ImageTags.isNullOrEmpty()) 1 else 0) +
+        (if (!channel.ChannelNumber.isNullOrBlank()) 1 else 0)
 
 /**
  * Collapses duplicate provider entries into one channel row. Jellyfin's Id is
@@ -84,15 +85,20 @@ fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup>
         // MediaSource. Do not turn that transport duplicate into a fake
         // selectable option. Distinct source IDs (for example principal and
         // IPTV) remain separate and therefore selectable.
-        val uniqueEntries = entries.distinctBy { channel ->
+        val uniqueEntries = entries.fold(linkedMapOf<String, LiveTvChannel>()) { unique, channel ->
             val sourceId = liveTvMediaSourceId(channel)
-            sourceId ?: listOf(
+            val sourceKey = sourceId ?: listOf(
                 channel.Type.orEmpty(),
                 channel.ChannelNumber.orEmpty(),
                 channel.Name.trim().lowercase(),
                 channel.Tags.orEmpty().sorted().joinToString("|")
             ).joinToString("|")
-        }
+            val existing = unique[sourceKey]
+            if (existing == null || liveTvChannelPrimaryScore(channel) > liveTvChannelPrimaryScore(existing)) {
+                unique[sourceKey] = channel
+            }
+            unique
+        }.values.toList()
         LiveTvChannelGroup(key, uniqueEntries)
     }
 }
