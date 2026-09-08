@@ -31,6 +31,8 @@ iOS/iPadOS/tvOS.
 Los textos del shell se sirven mediante recursos nativos `Localizable.strings`
 en español, inglés, francés y alemán; la opción automática sigue el idioma del
 dispositivo y una selección explícita se aplica al entorno SwiftUI.
+La música temática espera 700 ms después de abrir una ficha, se desvanece al
+entrar y salir, y cancela la carga si el usuario cambia de título rápidamente.
 
 `JellyfinClient` también expone canales y programación de Live TV con consultas
 acotadas por usuario y ventana temporal. La reproducción de canal usa una ruta
