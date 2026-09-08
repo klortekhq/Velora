@@ -37,6 +37,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Equilibrado y Rendimiento) que aplican de forma conjunta las optimizaciones
   de animación, tarjetas, fondos y resolución; el mapeo de claves tiene prueba
   unitaria para evitar perder la preferencia al actualizar.
+- El cliente web expone los mismos cuatro perfiles, guarda la elección por
+  dispositivo y aplica el modo Rendimiento reduciendo transiciones y animaciones
+  sin ofrecer descargas offline en navegador.
 - Media3/ExoPlayer es el backend Android predeterminado; MPV solo se usa si el
   usuario lo selecciona o si el fallback configurado resulta necesario.
 - Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
