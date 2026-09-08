@@ -517,6 +517,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   La actividad principal arrancó y el logcat no mostró `FATAL EXCEPTION`,
   `AndroidRuntime` ni `ANR`; no se interpreta como certificación de catálogo,
   Live TV o reproducción autenticada.
+- La APK TV del commit `6c512be` se recompiló e instaló después con SHA-256
+  `9F7E55ED62F3C9D334A56E0301CA4D483EAAC8F7ABF75D78DACA0DB396959050` y volvió
+  a arrancar en `MainActivity` sin `FATAL EXCEPTION`, `AndroidRuntime` ni `ANR`.
 
 ## Pendiente verificable
 
