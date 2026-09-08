@@ -123,6 +123,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   generó el bundle de navegador, Samsung/Tizen y VIDAA, y un IPK de webOS de
   86.676 bytes; Tizen sigue correctamente marcado como bundle porque este
   host no tiene Tizen Studio/CLI ni firma de dispositivo.
+- Apple Live TV ahora solicita una ventana EPG de seis horas y muestra hasta
+  tres programas próximos por canal, manteniendo la lista acotada para no
+  bloquear la interfaz. El cambio queda pendiente de la compilación/test de
+  Swift en macOS CI; Swift/Xcode no está instalado en este host Windows.
 - Revalidación del 2026-09-08: la ruta opcional MPV también usa recursos
   localizados para ajustes, audio, subtítulos, velocidad y estados de pista;
   el catálogo queda en 506 claves y las variantes móvil/TV compilan.
