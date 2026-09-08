@@ -188,6 +188,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo
   de la respuesta. La prueba de canales y `PlaybackInfo` queda pendiente hasta
   que exista una credencial válida.
+- Reintento de integración del 2026-09-09 con el servidor LAN y las credenciales
+  proporcionadas: el servidor vuelve a responder HTTP 200 en su endpoint
+  público, pero `AuthenticateByName` continúa devolviendo HTTP 400 incluso con
+  la cabecera estándar de Jellyfin. No se ha ejecutado una prueba autenticada
+  de canales o reproducción ni se presenta como pasada.
 - La reproducción sigue la estrategia Original First: Direct Play, Direct
   Stream/Remux y transcodificación solo cuando las capacidades lo requieren.
 - El selector de aspecto de Media3/ExoPlayer y de la superficie GL reaplica el
