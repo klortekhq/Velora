@@ -61,6 +61,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   reconexión ADB estable.
 - Android presenta como credenciales inválidas las respuestas `400`, `401` y
   `403` de `AuthenticateByName`; el contrato está cubierto por prueba unitaria.
+- Las peticiones de catálogo, personas y “seguir viendo” usan ahora el nombre
+  de dispositivo de la variante Android activa (móvil o TV), sin etiquetar el
+  cliente móvil como Android TV.
 - Verificación del 2026-09-08: `:app:testMobileDebugUnitTest` y
   `:app:testTvDebugUnitTest` pasan; `node web/scripts/test-platform.mjs` también
   pasa, incluyendo agrupación de canales Live TV, selección de fuentes,
