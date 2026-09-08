@@ -90,6 +90,23 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun unnamedSourceIdsStillRemainDistinctWhenProviderSuppliesDescriptors() {
+        val channel = LiveTvChannel(
+            "descriptor-only",
+            "DAZN F1",
+            MediaSources = listOf(
+                MediaSource(Name = "Principal", LiveStreamId = "stream-main", Protocol = "hls"),
+                MediaSource(Name = "IPTV", LiveStreamId = "stream-iptv", Protocol = "hls")
+            )
+        )
+
+        val group = groupLiveTvChannels(listOf(channel)).single()
+
+        assertEquals(2, group.channels.size)
+        assertEquals(listOf("Principal", "IPTV"), group.channels.map { it.MediaSources?.single()?.Name })
+    }
+
+    @Test
     fun sourceLabelAcceptsLocalizedFallbackWhenProviderHasNoLabel() {
         val channel = LiveTvChannel(
             "unlabelled",
