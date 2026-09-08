@@ -130,6 +130,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
   no se colapsan en una sola opción.
+- Regresión completa del 2026-09-09 sobre ese cambio: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` (82 tareas);
+  también pasaron versión, identidad pública, contrato de autenticación,
+  política offline, catálogos Android y la suite web de capacidades,
+  seguridad, Live TV y subtítulos.
 - Apple Live TV ahora carga la biblioteca sin esperar la EPG, solicita después
   una ventana de seis horas y muestra hasta tres programas próximos por canal;
   las cargas obsoletas se cancelan al cambiar de sesión. El cambio queda
