@@ -184,6 +184,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   visual en pantalla completa; Ajustar, Rellenar, Estirar y Original dejan
   que MPV gestione la superficie completa. Así el selector no queda anulado
   por un padre 16:9 fijo. La política tiene prueba unitaria dedicada.
+- Android MPV: las etiquetas y descripciones accesibles de reproducción,
+  aspecto, avance, retroceso, ajustes y navegación ya respetan el idioma
+  activo en vez de mezclar textos fijos en español/inglés.
 - Android TV: Live TV se integra en la misma fila centrada de navegación que
   las bibliotecas de películas y series; la pestaña sigue siendo condicional a
   los canales visibles para el usuario.
@@ -258,6 +261,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   identificados como artefactos debug/QA y no como releases públicas firmadas.
   También pasaron `check-public-identity`, `check-offline-surface-policy`,
   `check-release-workflows`, `check-version-consistency` y la suite web.
+
+- Revalidación de i18n MPV el 2026-09-08: `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` (`7m17s`, 82
+  tareas); catálogos Android (458 claves), suite web y `git diff --check`
+  también pasaron.
 
 - La deduplicación Live TV conserva ahora la fila con guía, favorito y artwork
   más completos cuando Jellyfin repite el mismo `MediaSource`; Android y web

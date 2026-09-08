@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.klortek.velora.JellyfinAppTheme
 import com.klortek.velora.jellyfin.AppSettings
@@ -1134,7 +1135,7 @@ private fun MpvPlayerScreen(
                 IconButton(onClick = onBack) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(com.klortek.velora.R.string.player_back),
                         tint = Color.White
                     )
                 }
