@@ -830,7 +830,7 @@ fun MoviesLibraryScreen(
                             // Show refresh icon on recommendations tab
                             Icon(
                                 imageVector = Icons.Default.Refresh,
-                                contentDescription = if (isRefreshing) "Refreshing..." else "Refresh",
+                                        contentDescription = stringResource(com.klortek.velora.R.string.library_refresh),
                                 modifier = Modifier
                                     .size(14.dp) // Reduced from 20dp to 14dp
                                     .then(
@@ -883,8 +883,8 @@ fun MoviesLibraryScreen(
                     // Recommendations, Library, and Discover tabs
                     val hasJellyseerr = settings.isJellyseerrConfigured
                     val tabs = buildList {
-                        add("Recomendaciones" to "recommendations")
-                        add("Biblioteca de $libraryName" to "library")
+                                add(stringResource(com.klortek.velora.R.string.library_recommendations) to "recommendations")
+                                add(stringResource(com.klortek.velora.R.string.library_tab_library, libraryName) to "library")
                     }
                     val selectedTabIndex = tabs.indexOfFirst { it.second == selectedTab }.takeIf { it >= 0 } ?: 0
                     
@@ -945,19 +945,19 @@ fun MoviesLibraryScreen(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    androidx.compose.material3.IconButton(onClick = onBackPressed) {
-                        androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás", tint = Color.White)
+                        androidx.compose.material3.IconButton(onClick = onBackPressed) {
+                        androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(com.klortek.velora.R.string.library_back), tint = Color.White)
                     }
                     Text(libraryName, color = Color.White, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.weight(1f))
-                    androidx.compose.material3.IconButton(onClick = { showSearch = true }) {
-                        androidx.compose.material3.Icon(Icons.Default.Search, "Buscar", tint = Color.White)
+                        androidx.compose.material3.IconButton(onClick = { showSearch = true }) {
+                        androidx.compose.material3.Icon(Icons.Default.Search, stringResource(com.klortek.velora.R.string.library_search), tint = Color.White)
                     }
-                    androidx.compose.material3.IconButton(onClick = { showSortDialog = true }) {
-                        androidx.compose.material3.Icon(Icons.Default.SwapVert, "Ordenar y filtrar", tint = Color.White)
+                        androidx.compose.material3.IconButton(onClick = { showSortDialog = true }) {
+                        androidx.compose.material3.Icon(Icons.Default.SwapVert, stringResource(com.klortek.velora.R.string.library_sort_filter), tint = Color.White)
                     }
-                    androidx.compose.material3.IconButton(onClick = { showSettings = true }) {
-                        androidx.compose.material3.Icon(Icons.Default.Settings, "Ajustes", tint = Color.White)
+                        androidx.compose.material3.IconButton(onClick = { showSettings = true }) {
+                        androidx.compose.material3.Icon(Icons.Default.Settings, stringResource(com.klortek.velora.R.string.library_settings), tint = Color.White)
                     }
                 }
             }
@@ -1123,7 +1123,7 @@ fun MoviesLibraryScreen(
                             // Continue Watching row - using vertical poster cards
                             if (continueWatchingMovies.isNotEmpty()) {
                                 Text(
-                                    text = "Seguir viendo",
+                                    text = stringResource(com.klortek.velora.R.string.home_continue_watching),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1170,7 +1170,7 @@ fun MoviesLibraryScreen(
                             // Recently Released row (same styling as home screen)
                             if (recentlyReleasedMovies.isNotEmpty()) {
                                 Text(
-                                    text = "Estrenos recientes en $libraryName",
+                                    text = stringResource(com.klortek.velora.R.string.library_recent_releases, libraryName),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1213,7 +1213,7 @@ fun MoviesLibraryScreen(
                             // Recently Added row (same styling as home screen)
                             if (recentlyAddedMovies.isNotEmpty()) {
                                 Text(
-                                    text = "Añadidas recientemente en $libraryName",
+                                    text = stringResource(com.klortek.velora.R.string.library_added_recently, libraryName),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1256,7 +1256,7 @@ fun MoviesLibraryScreen(
                             // Top Unwatched row (same styling as home screen)
                             if (topUnwatchedMovies.isNotEmpty()) {
                                 Text(
-                                    text = "Más populares sin ver en $libraryName",
+                                    text = stringResource(com.klortek.velora.R.string.library_top_unwatched, libraryName),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1299,7 +1299,7 @@ fun MoviesLibraryScreen(
                             // Recently Watched row (same styling as home screen)
                             if (recentlyWatchedMovies.isNotEmpty()) {
                                 Text(
-                                    text = "Vistas recientemente en $libraryName",
+                                    text = stringResource(com.klortek.velora.R.string.library_recently_watched, libraryName),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1342,7 +1342,7 @@ fun MoviesLibraryScreen(
                             // Favorites row (same styling as home screen)
                             if (favoriteMovies.isNotEmpty()) {
                                 Text(
-                                    text = "Favoritas en $libraryName",
+                                    text = stringResource(com.klortek.velora.R.string.library_favorites_for, libraryName),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1385,7 +1385,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 1 row
                             if (genreMovies1.isNotEmpty() && selectedGenre1.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de ${localizedGenreName(selectedGenre1)}",
+                                    text = stringResource(com.klortek.velora.R.string.library_best_movies_genre, localizedGenreName(selectedGenre1)),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1428,7 +1428,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 2 row
                             if (genreMovies2.isNotEmpty() && selectedGenre2.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de ${localizedGenreName(selectedGenre2)}",
+                                    text = stringResource(com.klortek.velora.R.string.library_best_movies_genre, localizedGenreName(selectedGenre2)),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1471,7 +1471,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 3 row
                             if (genreMovies3.isNotEmpty() && selectedGenre3.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de ${localizedGenreName(selectedGenre3)}",
+                                    text = stringResource(com.klortek.velora.R.string.library_best_movies_genre, localizedGenreName(selectedGenre3)),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1514,7 +1514,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 4 row
                             if (genreMovies4.isNotEmpty() && selectedGenre4.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de ${localizedGenreName(selectedGenre4)}",
+                                    text = stringResource(com.klortek.velora.R.string.library_best_movies_genre, localizedGenreName(selectedGenre4)),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1557,7 +1557,7 @@ fun MoviesLibraryScreen(
                             // Top Movies in Genre 5 row
                             if (genreMovies5.isNotEmpty() && selectedGenre5.isNotEmpty()) {
                                 Text(
-                                    text = "Mejores películas de ${localizedGenreName(selectedGenre5)}",
+                                    text = stringResource(com.klortek.velora.R.string.library_best_movies_genre, localizedGenreName(selectedGenre5)),
                                     style = MaterialTheme.typography.headlineMedium.copy(
                                         fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                     ),
@@ -1776,13 +1776,13 @@ fun MoviesLibraryScreen(
                             verticalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = "Jellyseerr Not Configured",
+                                text = stringResource(com.klortek.velora.R.string.library_discover_not_configured),
                                 style = MaterialTheme.typography.headlineMedium,
                                 color = Color.White
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "Add your Jellyseerr URL and API key in Settings to discover movies",
+                                text = stringResource(com.klortek.velora.R.string.library_discover_configure_hint),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Color.White.copy(alpha = 0.7f)
                             )
@@ -1805,7 +1805,7 @@ fun MoviesLibraryScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Loading discover movies...",
+                        text = stringResource(com.klortek.velora.R.string.library_discover_loading),
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White
                     )
@@ -1831,7 +1831,7 @@ fun MoviesLibraryScreen(
                         ) {
                             // Title
                             Text(
-                                text = discoverMovie.title ?: "Unknown",
+                                        text = discoverMovie.title ?: stringResource(com.klortek.velora.R.string.jellyseerr_unknown_title),
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                 ),
@@ -1878,7 +1878,7 @@ fun MoviesLibraryScreen(
                                 // Availability badge
                                 if (discoverMovie.mediaInfo?.isAvailable == true) {
                                     Text(
-                                        text = "In Library",
+                                        text = stringResource(com.klortek.velora.R.string.library_in_library),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = Color.White,
                                         modifier = Modifier

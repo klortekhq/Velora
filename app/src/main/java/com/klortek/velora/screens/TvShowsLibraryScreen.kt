@@ -884,7 +884,7 @@ fun TvShowsLibraryScreen(
                                     // Show refresh icon on recommendations tab
                                     Icon(
                                         imageVector = Icons.Default.Refresh,
-                                        contentDescription = if (isRefreshing) "Refreshing..." else "Refresh",
+                                        contentDescription = stringResource(com.klortek.velora.R.string.library_refresh),
                                         modifier = Modifier
                                         .size(14.dp) // Reduced from 20dp to 14dp
                                             .then(
@@ -937,8 +937,8 @@ fun TvShowsLibraryScreen(
                             // Recommendations, Library, and Trending tabs
                             val hasJellyseerr = settings.isJellyseerrConfigured
                             val tabs = buildList {
-                                add("Recomendaciones" to "recommendations")
-                                add("Biblioteca de $libraryName" to "library")
+                                add(stringResource(com.klortek.velora.R.string.library_recommendations) to "recommendations")
+                                add(stringResource(com.klortek.velora.R.string.library_tab_library, libraryName) to "library")
                             }
                             val selectedTabIndex = tabs.indexOfFirst { it.second == selectedTab }.takeIf { it >= 0 } ?: 0
                             
@@ -1000,18 +1000,18 @@ fun TvShowsLibraryScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     androidx.compose.material3.IconButton(onClick = onBackPressed) {
-                        androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás", tint = Color.White)
+                        androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(com.klortek.velora.R.string.library_back), tint = Color.White)
                     }
                     Text(libraryName, color = Color.White, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.weight(1f))
                     androidx.compose.material3.IconButton(onClick = { showSearch = true }) {
-                        androidx.compose.material3.Icon(Icons.Default.Search, "Buscar", tint = Color.White)
+                        androidx.compose.material3.Icon(Icons.Default.Search, stringResource(com.klortek.velora.R.string.library_search), tint = Color.White)
                     }
                     androidx.compose.material3.IconButton(onClick = { showSortDialog = true }) {
-                        androidx.compose.material3.Icon(Icons.Default.SwapVert, "Ordenar y filtrar", tint = Color.White)
+                        androidx.compose.material3.Icon(Icons.Default.SwapVert, stringResource(com.klortek.velora.R.string.library_sort_filter), tint = Color.White)
                     }
                     androidx.compose.material3.IconButton(onClick = { showSettings = true }) {
-                        androidx.compose.material3.Icon(Icons.Default.Settings, "Ajustes", tint = Color.White)
+                        androidx.compose.material3.Icon(Icons.Default.Settings, stringResource(com.klortek.velora.R.string.library_settings), tint = Color.White)
                     }
                 }
             }
@@ -1206,7 +1206,7 @@ fun TvShowsLibraryScreen(
                                     // Continue Watching row
                                     if (continueWatchingEpisodes.isNotEmpty()) {
                                         Text(
-                                            text = "Seguir viendo",
+                                            text = stringResource(com.klortek.velora.R.string.home_continue_watching),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1256,7 +1256,7 @@ fun TvShowsLibraryScreen(
                                     // Next Up row
                                     if (nextUpEpisodes.isNotEmpty()) {
                                         Text(
-                                            text = "A continuación",
+                                            text = stringResource(com.klortek.velora.R.string.library_up_next),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1305,7 +1305,7 @@ fun TvShowsLibraryScreen(
                                     // Recently Released Episodes row - using poster cards (vertical)
                                     if (recentlyReleasedEpisodes.isNotEmpty()) {
                                         Text(
-                                            text = "Episodios estrenados recientemente",
+                                            text = stringResource(com.klortek.velora.R.string.library_recent_episodes),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1350,7 +1350,7 @@ fun TvShowsLibraryScreen(
                                     // Recently Added in TV Shows row
                                     if (filteredRecentlyAddedShows.isNotEmpty()) {
                                         Text(
-                                            text = "Añadidas recientemente en $libraryName",
+                                            text = stringResource(com.klortek.velora.R.string.library_added_recently, libraryName),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1393,7 +1393,7 @@ fun TvShowsLibraryScreen(
                                     // Start Watching row (random unwatched suggestions)
                                     if (filteredStartWatchingShows.isNotEmpty()) {
                                         Text(
-                                            text = "Start Watching",
+                                            text = stringResource(com.klortek.velora.R.string.library_start_watching),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1436,7 +1436,7 @@ fun TvShowsLibraryScreen(
                                     // Top Rated TV Shows row
                                     if (filteredTopRatedShows.isNotEmpty()) {
                                         Text(
-                                            text = "Series mejor valoradas",
+                                            text = stringResource(com.klortek.velora.R.string.library_top_rated_series),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1479,7 +1479,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 1 (randomly selected genre)
                                     if (filteredGenreShows1.isNotEmpty() && selectedGenre1.isNotEmpty()) {
                                         Text(
-                                            text = "Más de ${localizedGenreName(selectedGenre1)}",
+                                            text = stringResource(com.klortek.velora.R.string.library_more_series_genre, localizedGenreName(selectedGenre1)),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1522,7 +1522,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 2 (randomly selected genre)
                                     if (filteredGenreShows2.isNotEmpty() && selectedGenre2.isNotEmpty()) {
                                         Text(
-                                            text = "Más de ${localizedGenreName(selectedGenre2)}",
+                                            text = stringResource(com.klortek.velora.R.string.library_more_series_genre, localizedGenreName(selectedGenre2)),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1565,7 +1565,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 3 (randomly selected genre)
                                     if (filteredGenreShows3.isNotEmpty() && selectedGenre3.isNotEmpty()) {
                                         Text(
-                                            text = "Más de ${localizedGenreName(selectedGenre3)}",
+                                            text = stringResource(com.klortek.velora.R.string.library_more_series_genre, localizedGenreName(selectedGenre3)),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1608,7 +1608,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 4 (randomly selected genre)
                                     if (filteredGenreShows4.isNotEmpty() && selectedGenre4.isNotEmpty()) {
                                         Text(
-                                            text = "Más de ${localizedGenreName(selectedGenre4)}",
+                                            text = stringResource(com.klortek.velora.R.string.library_more_series_genre, localizedGenreName(selectedGenre4)),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1651,7 +1651,7 @@ fun TvShowsLibraryScreen(
                                     // More in <Genre> row 5 (randomly selected genre)
                                     if (filteredGenreShows5.isNotEmpty() && selectedGenre5.isNotEmpty()) {
                                         Text(
-                                            text = "Más de ${localizedGenreName(selectedGenre5)}",
+                                            text = stringResource(com.klortek.velora.R.string.library_more_series_genre, localizedGenreName(selectedGenre5)),
                                             style = MaterialTheme.typography.headlineMedium.copy(
                                                 fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                             ),
@@ -1870,13 +1870,13 @@ fun TvShowsLibraryScreen(
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = "Jellyseerr Not Configured",
+                                    text = stringResource(com.klortek.velora.R.string.library_discover_not_configured),
                                     style = MaterialTheme.typography.headlineMedium,
                                     color = Color.White
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Text(
-                                    text = "Add your Jellyseerr URL and API key in Settings to discover TV shows",
+                                    text = stringResource(com.klortek.velora.R.string.library_discover_configure_hint),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = Color.White.copy(alpha = 0.7f)
                                 )
@@ -1899,7 +1899,7 @@ fun TvShowsLibraryScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Loading discover TV shows...",
+                                text = stringResource(com.klortek.velora.R.string.library_discover_loading),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Color.White
                             )
@@ -1925,7 +1925,7 @@ fun TvShowsLibraryScreen(
                                 ) {
                                     // Title
                                     Text(
-                                        text = discoverShow.name ?: "Unknown",
+                                        text = discoverShow.name ?: stringResource(com.klortek.velora.R.string.jellyseerr_unknown_title),
                                         style = MaterialTheme.typography.headlineMedium.copy(
                                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                         ),
@@ -1972,7 +1972,7 @@ fun TvShowsLibraryScreen(
                                         // Availability badge
                                         if (discoverShow.mediaInfo?.isAvailable == true) {
                                             Text(
-                                                text = "In Library",
+                                                text = stringResource(com.klortek.velora.R.string.library_in_library),
                                                 style = MaterialTheme.typography.labelSmall,
                                                 color = Color.White,
                                                 modifier = Modifier
