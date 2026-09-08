@@ -14,12 +14,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 - Rama de trabajo: `main`; la política del repositorio exige que sea la única
   rama pública.
-- La consulta independiente a `origin` del 2026-09-06 confirma únicamente
-  `refs/heads/main` en GitHub, apuntando al commit que contiene este dashboard.
-  No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: las peticiones de reproducción usan una
-  identidad de cliente coherente con la variante Android móvil o TV, incluida
-  la cabecera que Jellyfin recibe al resolver el `PlaybackInfo`.
+- La consulta independiente a `origin` del 2026-09-08 confirma únicamente
+  `refs/heads/main` en GitHub, apuntando a `ecd7a0b`. No se presenta ninguna
+  otra rama pública.
+- Último cambio funcional documentado: el trabajador de descargas offline
+  protege el espacio libre durante la escritura y conserva las transferencias
+  parciales para reanudarlas.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
