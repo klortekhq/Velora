@@ -82,6 +82,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `:app:testTvDebugUnitTest` pasan; `node web/scripts/test-platform.mjs` también
   pasa, incluyendo agrupación de canales Live TV, selección de fuentes,
   seguridad web y preferencias de subtítulos.
+- Revalidación del 2026-09-08: las pantallas Android de biblioteca de películas
+  y series ya usan recursos localizados para navegación, recomendaciones,
+  filtros, acciones y estados de Jellyseerr; la compilación de móvil y TV pasó
+  y las pruebas focalizadas de ordenación/filtros y agrupación Live TV pasaron.
 - El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
   `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo
