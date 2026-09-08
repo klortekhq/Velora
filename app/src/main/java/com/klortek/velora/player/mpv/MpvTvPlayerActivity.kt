@@ -58,6 +58,24 @@ import kotlinx.coroutines.*
 import java.io.File
 
 /**
+ * Returns the container ratio for modes that intentionally impose one.
+ *
+ * Fit, Fill, Stretch and Original must keep the whole available player
+ * surface: MPV applies those modes against the real video/container geometry.
+ * A parent ratio is only useful for the explicit presentation modes; without
+ * this distinction fullscreen made every selection look identical.
+ */
+internal fun mpvForcedContainerAspectRatio(mode: AspectMode): Float? = when (mode) {
+    AspectMode.FOUR_THREE -> 4f / 3f
+    AspectMode.LETTERBOX -> 16f / 9f
+    AspectMode.CINEMA -> 2.39f
+    AspectMode.FIT,
+    AspectMode.FILL,
+    AspectMode.STRETCH,
+    AspectMode.ORIGINAL -> null
+}
+
+/**
  * Android TV optimized MPV player activity.
  * 
  * Features:
@@ -1133,17 +1151,14 @@ private fun MpvPlayerScreen(
             // Keep the Compose frame in sync with MPV's runtime geometry.
             // A permanently fixed 16:9 parent made the aspect button appear
             // to work while the visible mobile frame never changed.
-            val playerFrameAspect = when (currentAspectMode) {
-                AspectMode.FOUR_THREE -> 4f / 3f
-                AspectMode.LETTERBOX -> 16f / 9f
-                AspectMode.CINEMA -> 2.39f
-                AspectMode.FIT, AspectMode.FILL, AspectMode.STRETCH,
-                AspectMode.ORIGINAL -> 16f / 9f
-            }
+            // Do not invent a 16:9 parent for modes whose geometry is owned
+            // by MPV. That parent used to hide the visible difference between
+            // Fit/Original/Fill and the explicit ratios.
+            val playerFrameAspect = mpvForcedContainerAspectRatio(currentAspectMode)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(playerFrameAspect)
+                    .aspectRatio(playerFrameAspect ?: (16f / 9f))
             ) {
                 playerContent(Modifier.fillMaxSize())
             }
@@ -1410,7 +1425,13 @@ private fun MpvPlayerScreen(
                 }
                 .focusable()
         ) {
-            playerContent(Modifier.fillMaxSize())
+            val forcedAspect = mpvForcedContainerAspectRatio(currentAspectMode)
+            val fullscreenPlayerModifier = forcedAspect?.let { ratio ->
+                Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(ratio, matchHeightConstraintsFirst = true)
+            } ?: Modifier.fillMaxSize()
+            playerContent(fullscreenPlayerModifier)
 
             AnimatedVisibility(
                 visible = controlsVisible && title.isNotEmpty(),
