@@ -43,6 +43,15 @@ public actor JellyfinClient {
         enum CodingKeys: String, CodingKey { case mediaSources = "MediaSources" }
     }
 
+    private struct ThemeSongResult: Decodable {
+        struct ThemeSong: Decodable {
+            let id: String
+            enum CodingKeys: String, CodingKey { case id = "Id" }
+        }
+        let items: [ThemeSong]
+        enum CodingKeys: String, CodingKey { case items = "Items" }
+    }
+
     private var baseURL: URL
     private let session: URLSession
     private var accessToken: String?
@@ -130,6 +139,30 @@ public actor JellyfinClient {
         }
         components?.queryItems = queryItems
         return components?.url
+    }
+
+    /// Resolves the first server-managed theme song without placing the
+    /// Jellyfin token in the returned URL. The caller authenticates the final
+    /// audio request through `authorizedRequest(for:)`.
+    public func themeSongURL(itemID: String, userID: String) async -> URL? {
+        guard !userID.isEmpty,
+              let itemURL = itemURL(root: "Items", itemID: itemID, suffix: ["ThemeSongs"])
+        else { return nil }
+        var components = URLComponents(url: itemURL, resolvingAgainstBaseURL: false)
+        components?.queryItems = [URLQueryItem(name: "UserId", value: userID)]
+        guard let url = components?.url,
+              let result = try? await request(url, as: ThemeSongResult.self),
+              let songID = result.items.first?.id,
+              let audioURL = itemURL(root: "Audio", itemID: songID, suffix: ["universal"]) else { return nil }
+        var audioComponents = URLComponents(url: audioURL, resolvingAgainstBaseURL: false)
+        audioComponents?.queryItems = [
+            URLQueryItem(name: "UserId", value: userID),
+            URLQueryItem(name: "Container", value: "mp3,aac,m4a,flac,ogg,webm"),
+            URLQueryItem(name: "TranscodingContainer", value: "ts"),
+            URLQueryItem(name: "TranscodingProtocol", value: "hls"),
+            URLQueryItem(name: "AudioCodec", value: "aac")
+        ]
+        return audioComponents?.url
     }
 
     /// Ask Jellyfin for its canonical source decision before opening VOD.

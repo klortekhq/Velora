@@ -183,6 +183,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Apple: la tuerca del reproductor ya expone selección real de audio y
   subtítulos sobre el `AVPlayerItem`, incluida la desactivación de subtítulos,
   en fichas, Live TV y pantalla completa; las etiquetas están localizadas.
+- Apple: las fichas pueden resolver la primera música de tema gestionada por
+  Jellyfin cuando el ajuste está activado y reproducirla con un `AVPlayer`
+  autenticado mediante cabeceras, sin incluir el token en la URL. El ciclo de
+  vida se detiene al salir de la ficha; la compilación y prueba de AVPlayer
+  siguen pendientes de macOS/Xcode.
 
 ## Pruebas locales pasadas
 
