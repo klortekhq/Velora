@@ -568,6 +568,11 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   instalada queda enfocada en `MainActivity` sin excepciones fatales; no se
   marca como válida ninguna prueba posterior de catálogo, Live TV o
   reproducción hasta que la autenticación sea aceptada.
+- Diagnóstico adicional del mismo endpoint: las solicitudes controladas con el
+  contrato estándar `Pw` y con el campo alternativo `Password` reciben ambas
+  `HTTP 400`. Esto descarta un simple desajuste de nombre de campo en Velora;
+  el rechazo queda atribuido al endpoint/proxy/configuración del servidor sin
+  registrar credenciales, tokens ni cuerpos de respuesta.
 - Build TV de QA del commit `2f6184f` instalada en el Fire TV AFTSS el
   2026-09-08: `app-tv-debug.apk`, SHA-256
   `CD2E8482B4817D91213987576A8A820EC216F75190A1D7E2C607AD4DB93608E8`.
