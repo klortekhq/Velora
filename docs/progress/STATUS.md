@@ -51,6 +51,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Live TV solicita `MediaSources`, agrupa filas con el mismo ID de Jellyfin y
   permite seleccionar las variantes bajo un único canal. El cambio de canal
   no reutiliza la fuente del canal anterior.
+- Android conserva también `ChannelType` y `ServiceName` de Jellyfin para que
+  el selector pueda rotular variantes como `IPTV` o por proveedor; solo cae a
+  `Opción N` cuando no existe ningún nombre legible.
 - Web/Smart TV abre ahora ese selector al pulsar o confirmar con teclado una
   fila agrupada; los canales sin variantes siguen entrando directamente.
 - Las variantes sin nombre legible ya no muestran IDs técnicos en el selector
@@ -506,6 +509,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   de compilación de las variantes móvil y TV y sus tests unitarios vuelven a
   pasar. Esto valida el contrato de código, pero no sustituye la prueba de
   reproducción con una sesión Jellyfin autenticada.
+- La suite Android móvil y TV volvió a pasar después de esta mejora del
+  selector Live TV: `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` terminaron con `BUILD SUCCESSFUL` el 2026-09-08.
 - Build TV de QA instalada en Fire TV AFTSS el 2026-09-08 desde el estado
   `6ff83ef`, SHA-256 `5CACDBD89C02A94B4E854FF762CD9458EA13929836917E680C62388C573A72EE`.
   La actividad principal arrancó y el logcat no mostró `FATAL EXCEPTION`,

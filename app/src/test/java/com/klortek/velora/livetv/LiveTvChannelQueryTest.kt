@@ -101,6 +101,20 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun sourceLabelPrefersProviderClassificationOverTechnicalType() {
+        val channel = LiveTvChannel(
+            "iptv",
+            "DAZN F1",
+            Type = "TvChannel",
+            ChannelType = "IPTV",
+            ServiceName = "Lista local",
+            MediaSources = listOf(MediaSource(Id = "source-iptv", Name = "Fuente IPTV"))
+        )
+
+        assertEquals("IPTV", liveTvSourceLabel(channel, 1))
+    }
+
+    @Test
     fun primaryRowKeepsGuideAndUserMetadataFromTheBestDuplicate() {
         val stale = LiveTvChannel("same-id", "Canal", MediaSources = listOf(MediaSource(Id = "source-main")))
         val current = LiveTvChannel(
