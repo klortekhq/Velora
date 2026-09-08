@@ -80,18 +80,24 @@ class LiveTvClient(private val config: JellyfinConfig) {
     private val accessToken = config.accessToken
     private val userId = config.userId
 
-    private val client = HttpClient(Android) {
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                isLenient = true
-            })
-        }
-        engine {
-            connectTimeout = 10_000
-            socketTimeout = 20_000
+    // Live TV is optional on the home screen. Do not pay the Android engine
+    // construction cost before the first frame, especially on Fire TV.
+    private val clientDelegate = lazy(LazyThreadSafetyMode.NONE) {
+        HttpClient(Android) {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                })
+            }
+            engine {
+                connectTimeout = 10_000
+                socketTimeout = 20_000
+            }
         }
     }
+    private val client: HttpClient
+        get() = clientDelegate.value
 
     val imageHeaders: Headers
         get() = Headers.Builder()
@@ -178,7 +184,7 @@ class LiveTvClient(private val config: JellyfinConfig) {
     }
 
     fun close() {
-        client.close()
+        if (clientDelegate.isInitialized()) clientDelegate.value.close()
     }
 
     private fun io.ktor.client.request.HttpRequestBuilder.jellyfinHeaders() {

@@ -54,6 +54,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   parámetros propios sin alterar el backend predeterminado.
 - Las cabeceras de autenticación y reproducción distinguen Android móvil de
   Android TV/Fire TV sin registrar credenciales, tokens ni cabeceras sensibles.
+- Android difiere la creación de los clientes HTTP principal y Live TV hasta la
+  primera petición, evitando inicializar el motor de red durante la primera
+  composición de la pantalla de inicio; la mejora está cubierta por compilación
+  y tests, pero la medición final de arranque en Fire TV queda pendiente de una
+  reconexión ADB estable.
 - La reproducción sigue la estrategia Original First: Direct Play, Direct
   Stream/Remux y transcodificación solo cuando las capacidades lo requieren.
 - El selector de aspecto de Media3/ExoPlayer y de la superficie GL reaplica el
@@ -201,6 +206,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   etiquetas, los filtros reconocen `ChannelType` y `ServiceName` (incluidos
   proveedores IPTV). La prueba focalizada Android y la suite web terminaron
   correctamente tras este ajuste.
+
+- Revalidación del ajuste de inicialización lazy HTTP del 2026-09-08:
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest` terminaron en
+  `BUILD SUCCESSFUL`; la instalación del APK TV de QA terminó correctamente,
+  pero el dispositivo Fire TV quedó offline durante la medición comparativa,
+  por lo que no se declara una mejora de tiempo en hardware.
 
 - Revalidación completa posterior a esa alineación: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` el 2026-09-08

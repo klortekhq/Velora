@@ -343,23 +343,28 @@ class JellyfinApiService(
     private val seasonCache = mutableMapOf<String, Pair<Long, List<JellyfinItem>>>()
     private val CACHE_DURATION_MS = 5 * 60 * 1000L // 5 minutes cache
     
-    private val client = HttpClient(Android) {
-        defaultRequest {
-            header(HttpHeaders.AcceptLanguage, languageTag)
-        }
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                isLenient = true
-            })
-        }
-        engine {
-            // Opening a Jellyfin Live TV stream can legitimately take longer
-            // than a normal metadata request while the tuner/provider is
-            // allocating the live stream. Keep this bounded, but do not abort
-            // at 10–15 seconds and then hand MPV an unusable manifest URL.
-            connectTimeout = 45_000
-            socketTimeout = 45_000
+    // Creating the Android engine performs class loading and dispatcher setup.
+    // Defer that work until the first request so the TV home screen can render
+    // before background metadata loading starts.
+    private val client by lazy(LazyThreadSafetyMode.NONE) {
+        HttpClient(Android) {
+            defaultRequest {
+                header(HttpHeaders.AcceptLanguage, languageTag)
+            }
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                })
+            }
+            engine {
+                // Opening a Jellyfin Live TV stream can legitimately take longer
+                // than a normal metadata request while the tuner/provider is
+                // allocating the live stream. Keep this bounded, but do not abort
+                // at 10–15 seconds and then hand MPV an unusable manifest URL.
+                connectTimeout = 45_000
+                socketTimeout = 45_000
+            }
         }
     }
 
