@@ -16,6 +16,22 @@ fun liveTvGroups(channels: List<LiveTvChannel>): List<String> = channels
     .distinctBy { it.lowercase() }
     .sortedWith(String.CASE_INSENSITIVE_ORDER)
 
+/**
+ * Filters already-grouped channels without discarding alternate sources.
+ * Jellyfin can attach favourite/group metadata to only one provider row; the
+ * visible channel must remain a single row with every selectable source.
+ */
+fun filterLiveTvChannelGroups(
+    groups: List<LiveTvChannelGroup>,
+    favoritesOnly: Boolean = false,
+    group: String? = null
+): List<LiveTvChannelGroup> = groups.filter { channelGroup ->
+    (!favoritesOnly || channelGroup.channels.any { it.UserData?.IsFavorite == true }) &&
+        (group == null || channelGroup.channels.any { channel ->
+            channel.Tags.orEmpty().any { it.equals(group, ignoreCase = true) }
+        })
+}
+
 /** A single visible channel with all Jellyfin entries that share its identity. */
 data class LiveTvChannelGroup(
     val channelId: String,

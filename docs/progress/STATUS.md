@@ -172,6 +172,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 ## Pruebas locales pasadas
 
+- Corrección de filtrado Live TV validada el 2026-09-08: Android móvil y TV
+  agrupan primero y filtran después, por lo que favoritos o grupos no eliminan
+  fuentes alternativas del mismo canal. `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`; el cliente web
+  también cubre este caso en `web/scripts/test-platform.mjs`.
+
 - Revalidación estática del 2026-09-08 sobre `main` (`e107ef7`): identidad
   pública, coherencia de versión, política offline mobile/tablet-only,
   contrato de autenticación `Pw`, workflows de releases, catálogos Android,
