@@ -119,6 +119,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
 import com.klortek.velora.TrailerLauncher
 import com.klortek.velora.tmdb.TmdbApiService
 import com.klortek.velora.trailer.TrailerResolver
@@ -556,7 +557,7 @@ fun TopContainer(
                         val isWatched = (displayItemForMetadata.UserData?.Played == true) ||
                                        (displayItemForMetadata.UserData?.PlayedPercentage == 100.0)
                         if (isWatched) {
-                            MetadataBox(text = "Visto")
+                            MetadataBox(text = stringResource(R.string.status_watched))
                         }
                     }
                 )
@@ -742,7 +743,7 @@ fun BottomContainer(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Películas similares",
+                        text = "Más películas con ${firstCastMember?.Name.orEmpty()}",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -777,7 +778,7 @@ fun BottomContainer(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Más películas con ${firstCastMember.Name}",
+                        text = stringResource(R.string.mobile_similar),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -1130,7 +1131,7 @@ fun SubtitleSelectionDialog(
                 ) {
                     // Dialog title - 30% smaller
                     Text(
-                        text = "Seleccionar subtítulos",
+                                text = stringResource(R.string.player_subtitles),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -1157,7 +1158,7 @@ fun SubtitleSelectionDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Cargando subtítulos…",
+                                text = stringResource(R.string.subtitle_downloading),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                 ),
@@ -1180,7 +1181,7 @@ fun SubtitleSelectionDialog(
                                     colors = listItemColors,
                                     headlineContent = {
                                         Text(
-                                            text = "Ninguno (desactivados)",
+                                            text = stringResource(R.string.player_subtitles_none),
                                             style = MaterialTheme.typography.bodyLarge.copy(
                                                 fontSize = MaterialTheme.typography.bodyLarge.fontSize * 0.7f
                                             )
@@ -1258,7 +1259,7 @@ fun SubtitleSelectionDialog(
                                 item {
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "Subtítulos descargados",
+                                        text = stringResource(R.string.player_downloaded_subtitles),
                                         style = MaterialTheme.typography.labelMedium.copy(
                                             fontSize = MaterialTheme.typography.labelMedium.fontSize * 0.8f
                                         ),
@@ -1334,7 +1335,7 @@ fun SubtitleSelectionDialog(
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        text = "Descargar subtítulos",
+                                        text = stringResource(R.string.subtitle_download_more),
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                                         )
@@ -1522,7 +1523,7 @@ fun AudioSelectionDialog(
                 ) {
                     // Dialog title
                     Text(
-                        text = "Seleccionar pista de audio",
+                        text = stringResource(R.string.mobile_audio_track),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -1615,7 +1616,7 @@ fun AudioSelectionDialog(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Text(
-                                            text = "No hay pistas de audio disponibles",
+                                        text = stringResource(R.string.mobile_no_audio_tracks),
                                             style = MaterialTheme.typography.bodyMedium.copy(
                                                 fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                             ),
@@ -1872,7 +1873,7 @@ fun ActionButtonsRow(
                     if (resumeFocused) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "Continuar",
+                            text = stringResource(R.string.continue_label),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                             ),
@@ -2019,7 +2020,7 @@ fun ActionButtonsRow(
             if (audioFocused) {
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = "Audio",
+                    text = stringResource(R.string.mobile_audio),
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                     ),
@@ -2071,7 +2072,7 @@ fun ActionButtonsRow(
             if (subtitleFocused) {
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = "Subtítulos",
+                    text = stringResource(R.string.player_subtitles),
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                     ),
@@ -2135,7 +2136,7 @@ fun ActionButtonsRow(
             if (trailerFocused) {
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = "Ver tráiler",
+                    text = stringResource(R.string.watch_trailer_1),
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                     ),

@@ -95,6 +95,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Revalidación del 2026-09-08: la ficha de series Android también localiza
   temporadas, reanudación, audio, subtítulos y descarga de subtítulos; ambas
   variantes Android vuelven a compilar correctamente.
+- Revalidación del 2026-09-08: la ficha de películas Android comparte ahora
+  recursos localizados para estado visto, acciones de reproducción, audio,
+  subtítulos, tráiler y contenido similar; la compilación móvil/TV pasó después
+  de corregir una referencia nullable del reparto.
 - El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
   `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo
