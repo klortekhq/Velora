@@ -123,10 +123,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   generó el bundle de navegador, Samsung/Tizen y VIDAA, y un IPK de webOS de
   86.676 bytes; Tizen sigue correctamente marcado como bundle porque este
   host no tiene Tizen Studio/CLI ni firma de dispositivo.
-- Apple Live TV ahora solicita una ventana EPG de seis horas y muestra hasta
-  tres programas próximos por canal, manteniendo la lista acotada para no
-  bloquear la interfaz. El cambio queda pendiente de la compilación/test de
-  Swift en macOS CI; Swift/Xcode no está instalado en este host Windows.
+- Apple Live TV ahora carga la biblioteca sin esperar la EPG, solicita después
+  una ventana de seis horas y muestra hasta tres programas próximos por canal;
+  las cargas obsoletas se cancelan al cambiar de sesión. El cambio queda
+  pendiente de la compilación/test de Swift en macOS CI; Swift/Xcode no está
+  instalado en este host Windows.
 - Apple aplica ahora el comportamiento de música temática previsto: espera de
   700 ms, fade-in por pasos, cancelación al cambiar rápidamente de ficha y
   fade-out al salir. La verificación de compilación Swift queda pendiente de

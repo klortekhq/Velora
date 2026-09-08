@@ -32,6 +32,7 @@ public final class VeloraAppModel: ObservableObject {
     private let offlineTransfer: VeloraOfflineTransferCoordinator
     private let serverDefaults: UserDefaults
     private var session: JellyfinSession?
+    private var liveTvProgramTask: Task<Void, Never>?
 
     public var jellyfinClient: JellyfinClient { client }
 
@@ -130,16 +131,24 @@ public final class VeloraAppModel: ObservableObject {
             hasMoreItems = libraryPage.totalRecordCount.map { libraryPage.items.count < $0 }
                 ?? libraryPage.items.count >= 100
             liveTvChannels = loadedChannels
-            if loadedChannels.isEmpty {
-                liveTvPrograms = []
-            } else {
+            liveTvProgramTask?.cancel()
+            liveTvProgramTask = nil
+            liveTvPrograms = []
+            if !loadedChannels.isEmpty {
+                let channelIDs = loadedChannels.map(\.id)
+                let userID = session.userID
                 let now = Date()
-                liveTvPrograms = (try? await client.liveTvPrograms(
-                    userID: session.userID,
-                    channelIDs: loadedChannels.map(\.id),
-                    from: now,
-                    until: now.addingTimeInterval(6 * 60 * 60)
-                )) ?? []
+                let jellyfinClient = client
+                liveTvProgramTask = Task { [weak self] in
+                    let programs = (try? await jellyfinClient.liveTvPrograms(
+                        userID: userID,
+                        channelIDs: channelIDs,
+                        from: now,
+                        until: now.addingTimeInterval(6 * 60 * 60)
+                    )) ?? []
+                    guard !Task.isCancelled else { return }
+                    self?.liveTvPrograms = programs
+                }
             }
             let serverURL = (await client.serverURL()).absoluteString
             offlineDownloads = platform.supportsOfflineDownloads
@@ -186,6 +195,8 @@ public final class VeloraAppModel: ObservableObject {
         isLoadingMoreItems = false
         hasMoreItems = false
         liveTvChannels = []
+        liveTvProgramTask?.cancel()
+        liveTvProgramTask = nil
         liveTvPrograms = []
         offlineDownloads = []
         isAuthenticated = false

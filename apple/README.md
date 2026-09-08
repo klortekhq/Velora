@@ -37,9 +37,9 @@ entrar y salir, y cancela la carga si el usuario cambia de título rápidamente.
 `JellyfinClient` también expone canales y programación de Live TV con consultas
 acotadas por usuario y ventana temporal. La reproducción de canal usa una ruta
 AVPlayer específica y el shell no presenta controles de Live TV sin acción real.
-La pantalla carga una ventana EPG limitada a las próximas seis horas y muestra
-hasta tres programas futuros por canal, evitando renderizar una guía completa
-de forma eager.
+La pantalla inicia la biblioteca sin esperar la EPG, carga en segundo plano una
+ventana limitada a las próximas seis horas y muestra hasta tres programas
+futuros por canal; una carga obsoleta se cancela al cambiar de sesión.
 La ruta `liveTvPlaybackURL` abre el tuner mediante `PlaybackInfo`, valida que la
 URL devuelta pertenezca al servidor configurado y entrega un `AVPlayer` con la
 cabecera autenticada; tvOS no ofrece descargas.
