@@ -16,9 +16,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   rama pública.
 - La consulta independiente a `origin` confirma únicamente `refs/heads/main`
   en GitHub. No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: Live TV conserva como opciones
-  seleccionables las fuentes que no traen `MediaSource.Id`, usando sus
-  descriptores de proveedor como identidad secundaria.
+- Último cambio funcional documentado: `PlaybackInfo` usa la identidad real de
+  la variante Android (móvil o TV) y el `deviceId` persistido, en lugar de
+  identificarse siempre como Android TV con un identificador vacío.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
@@ -67,6 +67,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   defecto y se controla desde Ajustes con volumen persistente.
 - Media3/ExoPlayer es el backend Android predeterminado; MPV solo se usa si el
   usuario lo selecciona o si el fallback configurado resulta necesario.
+- La identidad de cliente para `PlaybackInfo` está cubierta por prueba
+  unitaria en las variantes móvil y TV, evitando que Jellyfin aplique un perfil
+  de capacidades de reproducción equivocado en móvil.
 - Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
   códecs y la decisión de copia de Jellyfin; la ruta MPV explícita mantiene sus
   parámetros propios sin alterar el backend predeterminado.
