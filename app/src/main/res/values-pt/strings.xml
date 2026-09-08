@@ -188,7 +188,7 @@
   <string name="mobile_no_audio_info">Audio information unavailable</string>
   <string name="mobile_format">Format</string>
   <string name="mobile_no_similar">No similar titles available</string>
-  <string name="player_av1_unsupported_title">10-bit AV1 video not supported</string>
+  <string name="player_av1_unsupported_title">Vídeo AV1 de 10 bits não suportado</string>
   <string name="player_av1_solution_mpv">1. Enable the MPV player in Settings → Playback</string>
   <string name="player_av1_solution_transcode">2. Configure Jellyfin to transcode AV1 content</string>
   <string name="player_solutions">Solutions:</string>
