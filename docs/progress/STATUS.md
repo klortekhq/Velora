@@ -41,6 +41,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   dispositivo y aplica el modo Rendimiento reduciendo transiciones y animaciones
   y solicitando artwork de menor resolución; Calidad solicita artwork de mayor
   resolución, sin ofrecer descargas offline en navegador.
+- Web: la música de tema de Jellyfin usa un único elemento de audio persistente,
+  espera 700 ms de foco antes de consultar `ThemeSongs`, cancela solicitudes
+  obsoletas y hace fade-in/fade-out. El proxy del navegador autoriza únicamente
+  la ruta de audio de tema además de las rutas multimedia existentes; el token
+  sigue viajando solo en la cabecera del proxy. La función está desactivada por
+  defecto y se controla desde Ajustes con volumen persistente.
 - Media3/ExoPlayer es el backend Android predeterminado; MPV solo se usa si el
   usuario lo selecciona o si el fallback configurado resulta necesario.
 - Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
@@ -218,6 +224,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 - `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
 - `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- Revalidación web posterior a la música de tema: `node --check` para la
+  aplicación y el service worker, `web/scripts/test-platform.mjs`,
+  `check-offline-surface-policy` y `git diff --check` terminaron correctamente.
 - Las suites móvil y TV vuelven a terminar correctamente tras hacer enfocables
   y accesibles los destinos de navegación inferior móvil/tablet.
 - La suite móvil pasa 85 pruebas tras cubrir la migración completa del índice

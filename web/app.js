@@ -37,7 +37,7 @@
       cast: 'Reparto', actorWorks: 'Películas y series de este actor', noActorWorks: 'No hay otros títulos disponibles.', personError: 'No se pudo cargar la filmografía',
       sortAndFilter: 'Ordenar y filtrar', sortName: 'Nombre', sortDateAdded: 'Fecha de incorporación', sortPremiere: 'Fecha de estreno', sortRuntime: 'Duración', sortRating: 'Valoración de la comunidad', favorites: 'Favoritos', playbackState: 'Estado de reproducción', playbackAll: 'Todos', playbackWatched: 'Vistos', playbackUnwatched: 'No vistos',
       liveAll: 'Todos los canales', liveFavorites: 'Solo favoritos', liveGroup: 'Grupo de canales', liveNoChannels: 'No hay canales disponibles', liveSources: 'fuentes', liveSourceOption: 'Opción',
-      loginError: 'No se pudo iniciar sesión', loginInvalidCredentials: 'Usuario o contraseña incorrectos', loginInvalidServer: 'Dirección del servidor no válida', loginConnectionError: 'No se pudo conectar con el servidor', playbackError: 'El dispositivo no puede reproducir este formato directamente.'
+      loginError: 'No se pudo iniciar sesión', loginInvalidCredentials: 'Usuario o contraseña incorrectos', loginInvalidServer: 'Dirección del servidor no válida', loginConnectionError: 'No se pudo conectar con el servidor', playbackError: 'El dispositivo no puede reproducir este formato directamente.', themeMusic: 'Música de tema', themeMusicDescription: 'Reproduce la música oficial al mantener el foco sobre un título.', themeMusicOn: 'Activada', themeMusicOff: 'Desactivada', themeMusicVolume: 'Volumen de música de tema'
     },
     en: {
       server: 'Server', user: 'User', password: 'Password', signIn: 'Sign in', connectServer: 'Connect your Jellyfin server',
@@ -54,7 +54,7 @@
       actorWorks: 'Movies and series with this actor', noActorWorks: 'No other titles available.', personError: 'Could not load filmography',
       sortAndFilter: 'Sort and filter', sortName: 'Name', sortDateAdded: 'Date added', sortPremiere: 'Premiere date', sortRuntime: 'Runtime', sortRating: 'Community rating', favorites: 'Favorites', playbackState: 'Playback state', playbackAll: 'All', playbackWatched: 'Watched', playbackUnwatched: 'Unwatched',
       liveAll: 'All channels', liveFavorites: 'Favorites only', liveGroup: 'Channel group', liveNoChannels: 'No channels available', liveSources: 'sources', liveSourceOption: 'Option',
-      loginError: 'Sign-in failed', loginInvalidCredentials: 'Invalid username or password', loginInvalidServer: 'Invalid server address', loginConnectionError: 'Could not connect to the server', playbackError: 'This device cannot play this format directly.'
+      loginError: 'Sign-in failed', loginInvalidCredentials: 'Invalid username or password', loginInvalidServer: 'Invalid server address', loginConnectionError: 'Could not connect to the server', playbackError: 'This device cannot play this format directly.', themeMusic: 'Theme music', themeMusicDescription: 'Play official theme music while a title stays focused.', themeMusicOn: 'On', themeMusicOff: 'Off', themeMusicVolume: 'Theme music volume'
     },
     pt: {
       server: 'Servidor', user: 'Utilizador', password: 'Palavra-passe', signIn: 'Iniciar sessão', connectServer: 'Ligue o seu servidor Jellyfin',
@@ -80,7 +80,7 @@
       subtitles: 'Sous-titres', subtitleOff: 'Désactivés', subtitlePreferred: 'Préférés', subtitleForced: 'Forcés',
       subtitleAuto: 'Automatiques', subtitleLanguage: 'Langue des sous-titres', save: 'Enregistrer', cancel: 'Annuler',
       saved: 'Préférences enregistrées', settingDescription: 'Appliquées à la prochaine lecture et enregistrées sur cet appareil.',
-      loginError: 'Échec de la connexion', loginInvalidCredentials: 'Nom d’utilisateur ou mot de passe incorrect', loginInvalidServer: 'Adresse du serveur non valide', loginConnectionError: 'Impossible de joindre le serveur', playbackError: 'Cet appareil ne peut pas lire ce format directement.'
+      loginError: 'Échec de la connexion', loginInvalidCredentials: 'Nom d’utilisateur ou mot de passe incorrect', loginInvalidServer: 'Adresse du serveur non valide', loginConnectionError: 'Impossible de joindre le serveur', playbackError: 'Cet appareil ne peut pas lire ce format directement.', themeMusic: 'Musique de thème', themeMusicDescription: 'Lire la musique officielle lorsqu’un titre reste sélectionné.', themeMusicOn: 'Activée', themeMusicOff: 'Désactivée', themeMusicVolume: 'Volume de la musique de thème'
     },
     de: {
       server: 'Server', user: 'Benutzer', password: 'Passwort', signIn: 'Anmelden', connectServer: 'Jellyfin-Server verbinden',
@@ -93,7 +93,7 @@
       subtitles: 'Untertitel', subtitleOff: 'Deaktiviert', subtitlePreferred: 'Bevorzugt', subtitleForced: 'Erzwungen',
       subtitleAuto: 'Automatisch', subtitleLanguage: 'Untertitelsprache', save: 'Speichern', cancel: 'Abbrechen',
       saved: 'Einstellungen gespeichert', settingDescription: 'Für die nächste Wiedergabe angewendet und auf diesem Gerät gespeichert.',
-      loginError: 'Anmeldung fehlgeschlagen', loginInvalidCredentials: 'Benutzername oder Passwort ungültig', loginInvalidServer: 'Ungültige Serveradresse', loginConnectionError: 'Verbindung zum Server nicht möglich', playbackError: 'Dieses Gerät kann dieses Format nicht direkt wiedergeben.'
+      loginError: 'Anmeldung fehlgeschlagen', loginInvalidCredentials: 'Benutzername oder Passwort ungültig', loginInvalidServer: 'Ungültige Serveradresse', loginConnectionError: 'Verbindung zum Server nicht möglich', playbackError: 'Dieses Gerät kann dieses Format nicht direkt wiedergeben.', themeMusic: 'Titelmusik', themeMusicDescription: 'Offizielle Titelmusik abspielen, wenn ein Titel fokussiert bleibt.', themeMusicOn: 'Ein', themeMusicOff: 'Aus', themeMusicVolume: 'Lautstärke der Titelmusik'
     },
     it: {
       server: 'Server', user: 'Utente', password: 'Password', signIn: 'Accedi', connectServer: 'Collega il server Jellyfin',
@@ -330,7 +330,8 @@
     query: '',
     settingsOpen: false,
     playingItem: null,
-    liveTvPlaySessionId: ''
+    liveTvPlaySessionId: '',
+    themeMusic: { audio: null, itemId: '', timer: null, fadeTimer: null, request: 0 }
   };
 
   function syncMediaProxyCredentials() {
@@ -475,6 +476,72 @@
 
   function stream(item) {
     return protectedMediaUrl(streamTarget(item));
+  }
+
+  function themeSongTarget(itemId) {
+    if (!itemId || !state.userId) return '';
+    return base() + '/Audio/' + encodeURIComponent(itemId) + '/universal?UserId=' +
+      encodeURIComponent(state.userId) + '&Container=mp3%2Caac%2Cm4a%2Cflac%2Cogg%2Cwebm&TranscodingContainer=ts&TranscodingProtocol=hls&AudioCodec=aac';
+  }
+
+  function stopThemeMusic(immediate) {
+    var theme = state.themeMusic;
+    theme.request += 1;
+    if (theme.timer) { window.clearTimeout(theme.timer); theme.timer = null; }
+    if (theme.fadeTimer) { window.clearInterval(theme.fadeTimer); theme.fadeTimer = null; }
+    if (!theme.audio) { theme.itemId = ''; return; }
+    var audio = theme.audio;
+    var finish = function () {
+      audio.pause();
+      audio.removeAttribute('src');
+      try { audio.load(); } catch (error) { /* optional */ }
+      theme.itemId = '';
+      theme.fadeTimer = null;
+    };
+    if (immediate || audio.paused || audio.volume <= 0.01) finish();
+    else {
+      var start = audio.volume;
+      theme.fadeTimer = window.setInterval(function () {
+        audio.volume = Math.max(0, audio.volume - start / 6);
+        if (audio.volume <= 0.01) { window.clearInterval(theme.fadeTimer); finish(); }
+      }, 30);
+    }
+  }
+
+  function startThemeMusic(itemId) {
+    if (preference('veloraThemeMusic', 'false') !== 'true' || !itemId || !state.token) return;
+    var theme = state.themeMusic;
+    if (theme.itemId === itemId) return;
+    if (!theme.audio && typeof Audio === 'undefined') return;
+    var requestID = ++theme.request;
+    if (theme.timer) window.clearTimeout(theme.timer);
+    theme.timer = window.setTimeout(function () {
+      api('/Items/' + encodeURIComponent(itemId) + '/ThemeSongs?UserId=' + encodeURIComponent(state.userId))
+        .then(function (response) {
+          if (requestID !== theme.request || preference('veloraThemeMusic', 'false') !== 'true') return;
+          var song = response && response.Items && response.Items[0];
+          if (!song || !song.Id) return;
+          if (!theme.audio) {
+            theme.audio = new Audio();
+            theme.audio.loop = true;
+            theme.audio.preload = 'auto';
+          }
+          stopThemeMusic(true);
+          theme.request = requestID;
+          theme.itemId = itemId;
+          theme.audio.src = protectedMediaUrl(themeSongTarget(song.Id));
+          theme.audio.volume = 0;
+          theme.audio.play().then(function () {
+            var target = Math.max(0, Math.min(1, Number(preference('veloraThemeMusicVolume', '0.7')) || 0.7));
+            var step = target / 10;
+            theme.fadeTimer = window.setInterval(function () {
+              if (!theme.audio) return;
+              theme.audio.volume = Math.min(target, theme.audio.volume + step);
+              if (theme.audio.volume >= target) { window.clearInterval(theme.fadeTimer); theme.fadeTimer = null; }
+            }, 50);
+          }).catch(function () { theme.itemId = ''; });
+        }).catch(function () { /* optional; never block navigation */ });
+    }, 700);
   }
 
   function protectedMediaUrl(target) {
@@ -861,6 +928,10 @@
     Array.prototype.forEach.call(document.querySelectorAll('.card'), function (card) {
       var open = function () { openItem(card.getAttribute('data-id')); };
       card.onclick = open;
+      card.onfocus = function () { startThemeMusic(card.getAttribute('data-id')); };
+      card.onblur = function () {
+        if (state.themeMusic.timer) { window.clearTimeout(state.themeMusic.timer); state.themeMusic.timer = null; }
+      };
       card.onkeydown = function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
@@ -1095,6 +1166,7 @@
     if ((document.fullscreenElement || document.webkitFullscreenElement) && exit) exit.call(document);
     player.classList.remove('video-fullscreen');
     player.remove();
+    stopThemeMusic(false);
     state.playingItem = null;
     state.liveTvPlaySessionId = '';
   }
@@ -1299,6 +1371,8 @@
     var subtitleMode = preference('veloraSubtitleMode', 'off');
     var subtitleLanguage = preference('veloraSubtitleLanguage', 'auto');
     var performanceMode = preference('veloraPerformanceMode', 'automatic');
+    var themeMusicEnabled = preference('veloraThemeMusic', 'false') === 'true';
+    var themeMusicVolume = preference('veloraThemeMusicVolume', '0.7');
     root.insertAdjacentHTML('beforeend', '<div class="modal" id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">' +
       '<div class="modal-card settings-card">' +
       '<div class="settings-heading"><h2 id="settingsTitle">' + esc(t('settings')) + '</h2><button type="button" class="close" id="settingsClose">' + esc(t('close')) + '</button></div>' +
@@ -1324,6 +1398,11 @@
       '<option value="balanced"' + (performanceMode === 'balanced' ? ' selected' : '') + '>' + esc(t('performanceBalanced')) + '</option>' +
       '<option value="performance"' + (performanceMode === 'performance' ? ' selected' : '') + '>' + esc(t('performancePerformance')) + '</option>' +
       '</select>' +
+      '<label for="themeMusicEnabled">' + esc(t('themeMusic')) + '</label>' +
+      '<p class="muted settings-inline-description">' + esc(t('themeMusicDescription')) + '</p>' +
+      '<select id="themeMusicEnabled"><option value="false"' + (!themeMusicEnabled ? ' selected' : '') + '>' + esc(t('themeMusicOff')) + '</option><option value="true"' + (themeMusicEnabled ? ' selected' : '') + '>' + esc(t('themeMusicOn')) + '</option></select>' +
+      '<label for="themeMusicVolume">' + esc(t('themeMusicVolume')) + '</label>' +
+      '<input id="themeMusicVolume" type="range" min="0" max="1" step="0.05" value="' + esc(themeMusicVolume) + '">' +
       '<div class="settings-actions"><button type="button" class="primary" id="settingsSave">' + esc(t('save')) + '</button><button type="button" id="settingsCancel">' + esc(t('cancel')) + '</button></div>' +
       '<p class="muted settings-about">' + esc(t('aboutVersion')) + ' ' + esc(APP_VERSION) + ' · ' + esc(t('aboutBy')) + '</p>' +
       '</div></div>');
@@ -1334,6 +1413,9 @@
       savePreference('veloraAudioLanguage', document.querySelector('#audioLanguage').value);
       savePreference('veloraSubtitleMode', document.querySelector('#subtitleMode').value);
       savePreference('veloraSubtitleLanguage', document.querySelector('#subtitleLanguage').value);
+      savePreference('veloraThemeMusic', document.querySelector('#themeMusicEnabled').value);
+      savePreference('veloraThemeMusicVolume', document.querySelector('#themeMusicVolume').value);
+      if (document.querySelector('#themeMusicEnabled').value !== 'true') stopThemeMusic(true);
       applyPerformanceMode(document.querySelector('#performanceMode').value);
       savePreference('veloraPerformanceMode', document.querySelector('#performanceMode').value);
       document.documentElement.lang = languageCode();
