@@ -234,7 +234,7 @@ final class VeloraKitTests: XCTestCase {
     }
 
     func testJellyfinItemDecodesServerFieldNames() throws {
-        let data = #"{"Id":"movie-1","Name":"Una película","Type":"Movie","Overview":"Descripción","ImageTags":{"Primary":"abc"},"ProductionYear":2025,"People":[{"Id":"person-1","Name":"Actriz","Type":"Actor","Role":"Protagonista","PrimaryImageTag":"person-art"}]}"#.data(using: .utf8)!
+        let data = #"{"Id":"movie-1","Name":"Una película","Type":"Movie","Overview":"Descripción","ImageTags":{"Primary":"abc"},"ProductionYear":2025,"UserData":{"PlaybackPositionTicks":450000000,"Played":false},"People":[{"Id":"person-1","Name":"Actriz","Type":"Actor","Role":"Protagonista","PrimaryImageTag":"person-art"}]}"#.data(using: .utf8)!
         let item = try JSONDecoder().decode(JellyfinItem.self, from: data)
         XCTAssertEqual(item.id, "movie-1")
         XCTAssertEqual(item.name, "Una película")
@@ -244,6 +244,8 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(item.productionYear, 2025)
         XCTAssertEqual(item.people?.first?.id, "person-1")
         XCTAssertEqual(item.people?.first?.role, "Protagonista")
+        XCTAssertEqual(item.userData?.playbackPositionTicks, 450000000)
+        XCTAssertEqual(item.userData?.played, false)
     }
 
     func testLiveTvModelsDecodeServerFieldNames() throws {

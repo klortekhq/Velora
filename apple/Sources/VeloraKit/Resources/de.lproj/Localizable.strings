@@ -58,3 +58,7 @@
 "Source option %d" = "Option %d";
 "Choose channel source" = "Kanalquelle auswählen";
 "Cancel" = "Abbrechen";
+"Resume playback?" = "Wiedergabe fortsetzen?";
+"Continue where you left off?" = "An der letzten Stelle fortsetzen?";
+"Resume" = "Fortsetzen";
+"Start over" = "Von vorn beginnen";

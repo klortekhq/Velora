@@ -1,5 +1,6 @@
 #if canImport(SwiftUI) && canImport(AVKit)
 import AVKit
+import CoreMedia
 import SwiftUI
 
 /// Shared native application shell. iOS/iPadOS and tvOS apps can embed this
@@ -453,6 +454,8 @@ private struct VeloraItemDetailView: View {
     @State private var downloadQuality: VeloraDownloadQuality = .original
     @State private var aspectMode: VeloraAspectMode = .fit
     @State private var themePlayer: AVPlayer?
+    @State private var resumePositionSeconds: Double?
+    @State private var showResumePrompt = false
 
     var body: some View {
         ScrollView {
@@ -461,7 +464,19 @@ private struct VeloraItemDetailView: View {
                 if let year = item.productionYear { Text(String(year)).foregroundStyle(.secondary) }
                 if let overview = item.overview, !overview.isEmpty { Text(overview) }
                 Button {
-                    Task { player = await model.play(item); player?.play() }
+                    Task {
+                        let nextPlayer = await model.play(item)
+                        player = nextPlayer
+                        guard let nextPlayer else { return }
+                        let ticks = item.userData?.playbackPositionTicks ?? 0
+                        let seconds = Double(ticks) / 10_000_000
+                        if item.userData?.played != true, seconds >= 30 {
+                            resumePositionSeconds = seconds
+                            showResumePrompt = true
+                        } else {
+                            nextPlayer.play()
+                        }
+                    }
                 } label: {
                     Text("Play", bundle: .module)
                 }
@@ -551,15 +566,48 @@ private struct VeloraItemDetailView: View {
             .padding()
         }
         .navigationTitle(item.name)
+        .alert(Text("Resume playback?", bundle: .module), isPresented: $showResumePrompt) {
+            Button(Text("Resume", bundle: .module)) {
+                seekAndPlay(to: resumePositionSeconds ?? 0)
+            }
+            Button(Text("Start over", bundle: .module)) {
+                seekAndPlay(to: 0)
+            }
+            Button(Text("Cancel", bundle: .module), role: .cancel) {
+                player?.pause()
+                player = nil
+                resumePositionSeconds = nil
+            }
+        } message: {
+            Text("Continue where you left off?", bundle: .module)
+        }
         .task(id: item.id) {
             guard model.settings.themeMusicEnabled else { return }
             themePlayer = await model.themeMusicPlayer(for: item)
             themePlayer?.play()
         }
         .onDisappear {
+            if let player {
+                let position = player.currentTime().seconds
+                if position.isFinite, position >= 0 {
+                    Task {
+                        await model.jellyfinClient.reportPlaybackStopped(
+                            itemID: item.id,
+                            positionTicks: Int64(position * 10_000_000)
+                        )
+                    }
+                }
+            }
             themePlayer?.pause()
             themePlayer = nil
         }
+    }
+
+    private func seekAndPlay(to seconds: Double) {
+        guard let player else { return }
+        player.seek(to: CMTime(seconds: max(0, seconds), preferredTimescale: 600))
+        player.play()
+        resumePositionSeconds = nil
     }
 }
 
