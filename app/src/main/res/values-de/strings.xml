@@ -233,6 +233,9 @@ Bitte überprüfe:
   <string name="mobile_shuffle">Zufällig</string>
   <string name="mobile_restart">Neu starten</string>
   <string name="mobile_audio">Audio</string>
+  <string name="mobile_device">Gerät</string>
+  <string name="mobile_sent">Gesendet</string>
+  <string name="mobile_episode_label">E%1$s · %2$s</string>
   <string name="mobile_chapters">Kapitel</string>
   <string name="mobile_cast">Übertragen</string>
   <string name="mobile_crew">Team</string>

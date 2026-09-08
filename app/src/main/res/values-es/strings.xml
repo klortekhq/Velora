@@ -194,6 +194,9 @@
   <string name="mobile_shuffle">Aleatorio</string>
   <string name="mobile_restart">Reiniciar</string>
   <string name="mobile_audio">Audio</string>
+  <string name="mobile_device">Dispositivo</string>
+  <string name="mobile_sent">Enviado</string>
+  <string name="mobile_episode_label">E%1$s · %2$s</string>
   <string name="mobile_chapters">Capítulos</string>
   <string name="mobile_cast">Transmitir</string>
   <string name="mobile_crew">Equipo</string>

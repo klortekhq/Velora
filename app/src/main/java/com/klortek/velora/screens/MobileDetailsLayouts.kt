@@ -307,7 +307,7 @@ private fun SeasonEpisodeSelectionDialog(
                         )
                         Column(Modifier.padding(start = 8.dp)) {
                             Text(
-                                "E${episode.IndexNumber ?: "?"} · ${episode.Name}",
+                                stringResource(com.klortek.velora.R.string.mobile_episode_label, episode.IndexNumber ?: "?", episode.Name),
                                 color = Color.White,
                                 fontWeight = FontWeight.SemiBold,
                                 maxLines = 1,
@@ -492,12 +492,12 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
                         Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Color.White.copy(alpha = .06f)).clickable {
                             session.Id?.let { id -> scope.launch { if (apiService?.playOnRemoteSession(id, item.Id, item.UserData?.PositionTicks?.div(10_000L) ?: 0L) == true) sentTo = session.DeviceName } }
                         }.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Cast, "Dispositivo", tint = MobileCyan, modifier = Modifier.size(28.dp))
+                            Icon(Icons.Default.Cast, stringResource(com.klortek.velora.R.string.mobile_device), tint = MobileCyan, modifier = Modifier.size(28.dp))
                             Column(Modifier.padding(start = 14.dp).weight(1f)) {
-                                Text(session.DeviceName ?: "Dispositivo", color = Color.White, fontWeight = FontWeight.SemiBold)
+                                Text(session.DeviceName ?: stringResource(com.klortek.velora.R.string.mobile_device), color = Color.White, fontWeight = FontWeight.SemiBold)
                                 Text(listOfNotNull(session.UserName, session.Client).joinToString(" · "), color = Color.White.copy(alpha = .62f), style = MaterialTheme.typography.bodySmall)
                             }
-                            if (sentTo == session.DeviceName) Icon(Icons.Default.Check, "Enviado", tint = MobileCyan)
+                            if (sentTo == session.DeviceName) Icon(Icons.Default.Check, stringResource(com.klortek.velora.R.string.mobile_sent), tint = MobileCyan)
                         }
                     }
                 }
@@ -524,7 +524,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
             apiService?.getImageUrl(episode.Id, "Primary", null, maxWidth = 500, maxHeight = 280, quality = 82)
         }
         MobileArtwork(image, apiService, episode.Name, Modifier.width(140.dp).aspectRatio(1.65f))
-        Column(Modifier.weight(1f).padding(start = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text("E${episode.IndexNumber ?: ""} · ${episode.Name}", color = Color.White, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(episode.formattedRuntime ?: "", color = Color.White.copy(alpha = .7f)); Text(episode.Overview ?: "", color = Color.White.copy(alpha = .78f), maxLines = 2, overflow = TextOverflow.Ellipsis) }
+        Column(Modifier.weight(1f).padding(start = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text(stringResource(com.klortek.velora.R.string.mobile_episode_label, episode.IndexNumber ?: "", episode.Name), color = Color.White, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(episode.formattedRuntime ?: "", color = Color.White.copy(alpha = .7f)); Text(episode.Overview ?: "", color = Color.White.copy(alpha = .78f), maxLines = 2, overflow = TextOverflow.Ellipsis) }
         if (PlatformCapabilities.supportsOfflineDownloads) {
             androidx.compose.material3.IconButton(onClick = onDownload) {
                 androidx.compose.material3.Icon(Icons.Default.Download, stringResource(com.klortek.velora.R.string.action_download), tint = MobileCyan)
