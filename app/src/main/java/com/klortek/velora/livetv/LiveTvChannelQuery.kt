@@ -7,11 +7,13 @@ fun filterLiveTvChannels(
     group: String? = null
 ): List<LiveTvChannel> = channels.filter { channel ->
     (!favoritesOnly || channel.UserData?.IsFavorite == true) &&
-        (group == null || channel.Tags.orEmpty().any { it.equals(group, ignoreCase = true) })
+        (group == null || liveTvChannelMatchesGroup(channel, group))
 }
 
 fun liveTvGroups(channels: List<LiveTvChannel>): List<String> = channels
-    .flatMap { it.Tags.orEmpty() }
+    .flatMap { channel ->
+        channel.Tags.orEmpty() + listOfNotNull(channel.ChannelType, channel.ServiceName)
+    }
     .filter { it.isNotBlank() }
     .distinctBy { it.lowercase() }
     .sortedWith(String.CASE_INSENSITIVE_ORDER)
@@ -26,11 +28,16 @@ fun filterLiveTvChannelGroups(
     favoritesOnly: Boolean = false,
     group: String? = null
 ): List<LiveTvChannelGroup> = groups.filter { channelGroup ->
-    (!favoritesOnly || channelGroup.channels.any { it.UserData?.IsFavorite == true }) &&
+        (!favoritesOnly || channelGroup.channels.any { it.UserData?.IsFavorite == true }) &&
         (group == null || channelGroup.channels.any { channel ->
-            channel.Tags.orEmpty().any { it.equals(group, ignoreCase = true) }
+            liveTvChannelMatchesGroup(channel, group)
         })
 }
+
+private fun liveTvChannelMatchesGroup(channel: LiveTvChannel, group: String): Boolean =
+    channel.Tags.orEmpty().any { it.equals(group, ignoreCase = true) } ||
+        channel.ChannelType?.equals(group, ignoreCase = true) == true ||
+        channel.ServiceName?.equals(group, ignoreCase = true) == true
 
 /** A single visible channel with all Jellyfin entries that share its identity. */
 data class LiveTvChannelGroup(
