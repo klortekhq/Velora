@@ -401,7 +401,7 @@ class JellyfinApiService(
             
             val response: ItemsResponse = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
-                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
+                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
             }.body()
             
             // Log raw order from server
@@ -432,7 +432,7 @@ class JellyfinApiService(
             
             val response: ItemsResponse = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
-                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
+                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -874,7 +874,7 @@ class JellyfinApiService(
             
             val response = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
-                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
+                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
             }
             val person: PersonDetails = response.body()
             android.util.Log.d("JellyfinAPI", "Person details fetched: ${person.Name}, Overview length: ${person.Overview?.length ?: 0}, Type: ${person.Type}")
@@ -905,7 +905,7 @@ class JellyfinApiService(
             
             val response = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
-                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
+                header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"\", Version=\"${BuildConfig.VERSION_NAME}\"")
             }
             val itemsResponse: ItemsResponse = response.body()
             android.util.Log.d("JellyfinAPI", "Person filmography fetched: ${itemsResponse.Items.size} items")
