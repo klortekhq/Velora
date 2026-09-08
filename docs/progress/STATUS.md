@@ -212,6 +212,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   en cola. Si el archivo real crece más de lo estimado, conserva el `.part`
   reanudable, registra el fallo por falta de espacio y evita consumir la
   reserva mínima del dispositivo.
+- El reproductor Android mantiene oculto el control CC independiente: los
+  callbacks de Media3 ya no lo vuelven a mostrar después de cargar pistas.
+  Audio y subtítulos quedan concentrados en la tuerca de ajustes. La
+  compilación y las suites unitarias móvil/TV vuelven a pasar tras el cambio.
 - Auditoría multiplataforma de offline: Android TV/Fire TV bloquea tanto la
   navegación como la apertura directa de descargas; Apple TV no renderiza las
   acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen
