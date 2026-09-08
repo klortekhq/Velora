@@ -117,6 +117,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   ruso, turco y chino. `node scripts/check-android-locales.mjs`, las dos
   suites unitarias Android y la compilación Kotlin móvil/TV terminaron en
   `BUILD SUCCESSFUL` (82 tareas).
+- Revalidación web/Smart TV del 2026-09-09 en salida QA aislada:
+  `node web/scripts/test-platform.mjs` y los contratos de versión, identidad,
+  releases y superficies offline pasaron. `node web/scripts/build-web.mjs all`
+  generó el bundle de navegador, Samsung/Tizen y VIDAA, y un IPK de webOS de
+  86.676 bytes; Tizen sigue correctamente marcado como bundle porque este
+  host no tiene Tizen Studio/CLI ni firma de dispositivo.
 - Revalidación del 2026-09-08: la ruta opcional MPV también usa recursos
   localizados para ajustes, audio, subtítulos, velocidad y estados de pista;
   el catálogo queda en 506 claves y las variantes móvil/TV compilan.
