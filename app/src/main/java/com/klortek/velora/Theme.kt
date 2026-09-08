@@ -69,7 +69,8 @@ fun JellyfinAppTheme(
             try {
                 val loader = ThemeLoader(
                     baseUrl = config.serverUrl,
-                    accessToken = config.accessToken
+                    accessToken = config.accessToken,
+                    deviceId = config.deviceId
                 )
                 val loadedTheme = loader.loadThemeFromServer()
                 if (loadedTheme != null) {
