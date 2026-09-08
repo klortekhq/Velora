@@ -112,6 +112,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Revalidación del 2026-09-08: la reproducción remota y las etiquetas de
   episodio de la superficie móvil ya usan recursos localizados; el catálogo
   Android queda en 503 claves y móvil/TV compilan correctamente.
+- Revalidación del 2026-09-09: el aviso de incompatibilidad AV1 de 10 bits
+  dejó de caer al inglés en árabe, italiano, japonés, coreano, portugués,
+  ruso, turco y chino. `node scripts/check-android-locales.mjs`, las dos
+  suites unitarias Android y la compilación Kotlin móvil/TV terminaron en
+  `BUILD SUCCESSFUL` (82 tareas).
 - Revalidación del 2026-09-08: la ruta opcional MPV también usa recursos
   localizados para ajustes, audio, subtítulos, velocidad y estados de pista;
   el catálogo queda en 506 claves y las variantes móvil/TV compilan.
