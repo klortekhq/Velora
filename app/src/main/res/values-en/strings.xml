@@ -310,6 +310,12 @@ Please verify:
    <string name="settings_color_white">White</string><string name="settings_color_yellow">Yellow</string><string name="settings_color_blue">Blue</string><string name="settings_color_green">Green</string><string name="settings_color_red">Red</string><string name="settings_color_purple">Purple</string><string name="settings_color_orange">Orange</string>
    <string name="settings_performance_google_tv_cards">Use Google TV cards</string>
    <string name="settings_performance_google_tv_cards_description">Lightweight cards with subtle scaling and a glow border.</string>
+   <string name="settings_performance_mode">Performance mode</string>
+   <string name="settings_performance_mode_description">Choose the balance between visual quality, smoothness and power use.</string>
+   <string name="settings_performance_mode_automatic">Automatic</string>
+   <string name="settings_performance_mode_quality">Quality</string>
+   <string name="settings_performance_mode_balanced">Balanced</string>
+   <string name="settings_performance_mode_performance">Performance</string>
    <string name="settings_performance_animations">Animations</string>
    <string name="settings_performance_disable_animations">Disable interface animations</string>
    <string name="settings_performance_disable_animations_description">Disable scrolling animations to improve performance.</string>
