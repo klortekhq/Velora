@@ -2,23 +2,17 @@ package com.klortek.velora.jellyfin
 
 import android.content.Context
 import android.util.Log
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.engine.android.Android
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import com.klortek.velora.BuildConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.MediaType.Companion.toMediaType
+import java.util.concurrent.TimeUnit
 
 @Serializable
 data class AuthenticationRequest(
@@ -58,22 +52,22 @@ class JellyfinAuthService(
     var lastFailure: AuthenticationFailure = AuthenticationFailure.NONE
         private set
 
-    private val client = HttpClient(Android) {
-        // Authentication must fail promptly when a server accepts the socket
-        // but never completes the response. Without a request timeout the
-        // login screen could remain blocked indefinitely on TV and mobile.
-        install(HttpTimeout) {
-            requestTimeoutMillis = 20_000
-            connectTimeoutMillis = 10_000
-            socketTimeoutMillis = 20_000
-        }
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                isLenient = true
-                encodeDefaults = false
-            })
-        }
+    // Keep authentication on the same OkHttp transport used by server
+    // discovery. This avoids an Android-engine-specific stall observed on
+    // some Fire TV firmware while the server was returning an auth response.
+    // The bounded call timeout guarantees that a broken endpoint cannot leave
+    // the login screen spinning indefinitely.
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
+        .writeTimeout(20, TimeUnit.SECONDS)
+        .callTimeout(20, TimeUnit.SECONDS)
+        .build()
+
+    private val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+        encodeDefaults = false
     }
 
     private fun getDeviceId(): String {
@@ -91,63 +85,58 @@ class JellyfinAuthService(
 
     suspend fun authenticate(username: String, password: String): AuthenticationResponse? {
         lastFailure = AuthenticationFailure.NONE
-        return try {
-            val normalizedBaseUrl = normalizeBaseUrl(baseUrl)
-            if (!ServerUrlValidator.isValid(normalizedBaseUrl)) {
-                lastFailure = AuthenticationFailure.INVALID_SERVER
-                return null
-            }
-            val url = if (normalizedBaseUrl.endsWith("/")) {
-                "${normalizedBaseUrl}Users/authenticatebyname"
-            } else {
-                "$normalizedBaseUrl/Users/authenticatebyname"
-            }
-            
-            val deviceId = getDeviceId()
-            val deviceName = "Android TV"
-            val clientName = "Velora"
-            val clientVersion = BuildConfig.VERSION_NAME
-            
-            val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
-            
-            val requestBody = AuthenticationRequest(Username = username, Pw = password)
-            
-            val response: HttpResponse = client.post(url) {
-                header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                header(HttpHeaders.Accept, ContentType.Application.Json.toString())
-                header("X-Emby-Authorization", embyAuthHeader)
-                setBody(requestBody)
-            }
-            
-            if (response.status == HttpStatusCode.OK) {
-                response.body<AuthenticationResponse>()
-            } else {
-                lastFailure = when (response.status) {
-                    HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden -> AuthenticationFailure.INVALID_CREDENTIALS
-                    else -> AuthenticationFailure.SERVER_ERROR
+        return withContext(Dispatchers.IO) {
+            try {
+                val normalizedBaseUrl = normalizeBaseUrl(baseUrl)
+                if (!ServerUrlValidator.isValid(normalizedBaseUrl)) {
+                    lastFailure = AuthenticationFailure.INVALID_SERVER
+                    return@withContext null
                 }
-                Log.w(TAG, "Authentication failed with HTTP ${response.status.value}")
+                val url = "$normalizedBaseUrl/Users/authenticatebyname"
+                val deviceId = getDeviceId()
+                val embyAuthHeader = "MediaBrowser Client=\"Velora\", Device=\"Android TV\", DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
+                val body = json.encodeToString(AuthenticationRequest(Username = username, Pw = password))
+                    .toRequestBody("application/json; charset=utf-8".toMediaType())
+                val request = Request.Builder()
+                    .url(url)
+                    .header("Accept", "application/json")
+                    .header("X-Emby-Authorization", embyAuthHeader)
+                    .post(body)
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    if (response.code == 200) {
+                        val responseBody = response.body?.string().orEmpty()
+                        json.decodeFromString<AuthenticationResponse>(responseBody)
+                    } else {
+                        lastFailure = when (response.code) {
+                            401, 403 -> AuthenticationFailure.INVALID_CREDENTIALS
+                            else -> AuthenticationFailure.SERVER_ERROR
+                        }
+                        Log.w(TAG, "Authentication failed with HTTP ${response.code}")
+                        null
+                    }
+                }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                lastFailure = when {
+                    e is java.net.SocketTimeoutException ||
+                        e::class.simpleName == "InterruptedIOException" -> AuthenticationFailure.TIMEOUT
+                    else -> AuthenticationFailure.NETWORK
+                }
+                // Do not print exception text or a stack trace: network exceptions can
+                // include the configured server URL or request details.
+                Log.w(TAG, "Authentication request failed (${e::class.simpleName})")
                 null
             }
-        } catch (e: kotlinx.coroutines.CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            lastFailure = when {
-                e is java.net.SocketTimeoutException ||
-                    e::class.simpleName == "HttpRequestTimeoutException" ||
-                    e::class.simpleName == "ConnectTimeoutException" -> AuthenticationFailure.TIMEOUT
-                else -> AuthenticationFailure.NETWORK
-            }
-            // Do not print exception text or a stack trace: network exceptions can
-            // include the configured server URL or request details.
-            Log.w(TAG, "Authentication request failed (${e::class.simpleName})")
-            null
         }
     }
 
-    /** Release the Ktor engine when a one-shot login attempt is complete. */
+    /** Release resources when a one-shot login attempt is complete. */
     fun close() {
-        client.close()
+        client.connectionPool.evictAll()
+        client.dispatcher.executorService.shutdown()
     }
 }
 
