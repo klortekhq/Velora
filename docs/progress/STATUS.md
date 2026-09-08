@@ -70,6 +70,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La identidad de cliente para `PlaybackInfo` está cubierta por prueba
   unitaria en las variantes móvil y TV, evitando que Jellyfin aplique un perfil
   de capacidades de reproducción equivocado en móvil.
+- La misma identidad dinámica y el `deviceId` persistido se aplican también al
+  resto de peticiones autenticadas de `JellyfinApi`, incluidas imágenes y
+  metadatos; la comprobación de contrato de autenticación sigue pasando.
 - Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
   códecs y la decisión de copia de Jellyfin; la ruta MPV explícita mantiene sus
   parámetros propios sin alterar el backend predeterminado.
