@@ -131,4 +131,31 @@ class LiveTvChannelQueryTest {
         assertEquals("Ahora", group.primary.CurrentProgram?.Name)
         assertEquals(2, group.channels.size)
     }
+
+    @Test
+    fun filteringAGroupKeepsAlternateSourcesWhenMetadataIsOnOneRow() {
+        val main = LiveTvChannel(
+            "same-id",
+            "DAZN F1",
+            Tags = listOf("Deportes"),
+            MediaSources = listOf(MediaSource(Id = "source-main"))
+        )
+        val iptv = LiveTvChannel(
+            "same-id",
+            "DAZN F1",
+            UserData = LiveTvUserData(IsFavorite = true),
+            MediaSources = listOf(MediaSource(Id = "source-iptv"))
+        )
+        val grouped = groupLiveTvChannels(listOf(main, iptv))
+
+        val favorites = filterLiveTvChannelGroups(grouped, favoritesOnly = true)
+        val sports = filterLiveTvChannelGroups(grouped, group = "deportes")
+
+        assertEquals(2, favorites.single().channels.size)
+        assertEquals(
+            listOf("source-main", "source-iptv"),
+            favorites.single().channels.map(::liveTvMediaSourceId)
+        )
+        assertEquals(2, sports.single().channels.size)
+    }
 }

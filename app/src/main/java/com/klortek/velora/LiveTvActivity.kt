@@ -81,7 +81,7 @@ import com.klortek.velora.livetv.LiveTvClient
 import com.klortek.velora.livetv.LiveTvProgram
 import com.klortek.velora.livetv.formatProgramTimeRange
 import com.klortek.velora.livetv.programProgress
-import com.klortek.velora.livetv.filterLiveTvChannels
+import com.klortek.velora.livetv.filterLiveTvChannelGroups
 import com.klortek.velora.livetv.liveTvGroups
 import com.klortek.velora.livetv.groupLiveTvChannels
 import com.klortek.velora.livetv.LiveTvChannelGroup
@@ -317,8 +317,11 @@ private fun LiveTvScreen(
             }
 
             else -> {
-                val visibleChannels = filterLiveTvChannels(channels, favoritesOnly, selectedGroup)
-                val visibleGroups = groupLiveTvChannels(visibleChannels)
+                val visibleGroups = filterLiveTvChannelGroups(
+                    groupLiveTvChannels(channels),
+                    favoritesOnly = favoritesOnly,
+                    group = selectedGroup
+                )
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier.fillMaxSize()

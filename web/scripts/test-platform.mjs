@@ -159,12 +159,13 @@ assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // pattern checks. This protects the one-row/multiple-source Live TV contract.
 const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
   '  renderApp();\n}());',
-  '  window.__veloraTest = { groupLiveTvChannels, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue };\n}());'
+  '  window.__veloraTest = { groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue };\n}());'
 );
-assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue \}/, 'web app test hook was not injected');
+assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue \}/, 'web app test hook was not injected');
+const preferenceValues = Object.create(null);
 const testLocalStorage = {
-  getItem() { return null; },
-  setItem() {},
+  getItem(key) { return preferenceValues[key] || null; },
+  setItem(key, value) { preferenceValues[key] = String(value); },
   removeItem() {}
 };
 const testSessionStorage = {
@@ -242,6 +243,30 @@ const metadataGroup = testWindow.__veloraTest.groupLiveTvChannels([
 ]);
 assert.equal(metadataGroup[0].primary.Name, 'Canal actual');
 assert.equal(metadataGroup[0].primary.CurrentProgram.Name, 'Ahora');
+const filterInput = [
+  {
+    Id: 'filtered-channel',
+    Name: 'Deportes',
+    Tags: ['Deportes'],
+    MediaSources: [{ Id: 'source-main' }]
+  },
+  {
+    Id: 'filtered-channel',
+    Name: 'Deportes',
+    UserData: { IsFavorite: true },
+    MediaSources: [{ Id: 'source-iptv' }]
+  }
+];
+preferenceValues.veloraLiveFavorites = 'true';
+preferenceValues.veloraLiveGroup = 'all';
+const favoriteGroups = testWindow.__veloraTest.filteredLiveChannelGroups(filterInput);
+assert.equal(favoriteGroups.length, 1);
+assert.equal(favoriteGroups[0].channels.length, 2);
+preferenceValues.veloraLiveFavorites = 'false';
+preferenceValues.veloraLiveGroup = 'Deportes';
+const taggedGroups = testWindow.__veloraTest.filteredLiveChannelGroups(filterInput);
+assert.equal(taggedGroups.length, 1);
+assert.equal(taggedGroups[0].channels.length, 2);
 const prototypeNamedGroup = testWindow.__veloraTest.groupLiveTvChannels([
   { Id: '__proto__', Name: 'Canal especial' }
 ]);

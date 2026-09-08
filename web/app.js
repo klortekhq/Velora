@@ -676,7 +676,7 @@
 
   function liveSection(title, channels) {
     if (!channels.length) return '';
-    channels = groupLiveTvChannels(channels);
+    channels = Array.isArray(channels[0].channels) ? channels : groupLiveTvChannels(channels);
     // Keep the normalized groups beside the rendered rows so the click and
     // keyboard handlers can open the source picker instead of silently
     // discarding alternate Jellyfin MediaSources.
@@ -806,15 +806,33 @@
   }
 
   function filteredLiveChannels(channels) {
+    return channels.filter(function (channel) {
+      return liveChannelMatchesFilter(channel);
+    });
+  }
+
+  function filteredLiveChannelGroups(channels) {
     var favoriteOnly = preference('veloraLiveFavorites', 'false') === 'true';
     var group = preference('veloraLiveGroup', 'all');
-    return channels.filter(function (channel) {
-      if (favoriteOnly && !(channel.UserData && channel.UserData.IsFavorite)) return false;
-      if (group === 'all') return true;
-      var tags = Array.isArray(channel.Tags) ? channel.Tags.map(String) : [];
-      return tags.indexOf(group) !== -1 || channel.ChannelType === group || channel.ServiceName === group ||
-        (group === 'Sin grupo' && !tags.length && !channel.ChannelType && !channel.ServiceName);
+    return groupLiveTvChannels(channels).filter(function (channelGroup) {
+      return channelGroup.channels.some(function (channel) {
+        return (!favoriteOnly || (channel.UserData && channel.UserData.IsFavorite)) &&
+          (group === 'all' || liveChannelMatchesGroup(channel, group));
+      });
     });
+  }
+
+  function liveChannelMatchesFilter(channel) {
+    var favoriteOnly = preference('veloraLiveFavorites', 'false') === 'true';
+    var group = preference('veloraLiveGroup', 'all');
+    return (!favoriteOnly || (channel.UserData && channel.UserData.IsFavorite)) &&
+      (group === 'all' || liveChannelMatchesGroup(channel, group));
+  }
+
+  function liveChannelMatchesGroup(channel, group) {
+    var tags = Array.isArray(channel.Tags) ? channel.Tags.map(String) : [];
+    return tags.indexOf(group) !== -1 || channel.ChannelType === group || channel.ServiceName === group ||
+      (group === 'Sin grupo' && !tags.length && !channel.ChannelType && !channel.ServiceName);
   }
 
   function bindCards() {
@@ -1158,7 +1176,7 @@
     var series = sortedLibraryItems(items.filter(function (item) { return item.Type === 'Series'; }));
     var live = state.liveChannels && state.liveChannels.length ? state.liveChannels : items.filter(function (item) { return item.Type === 'LiveTvChannel'; });
     var liveGroups = liveChannelGroups(live);
-    var visibleLive = filteredLiveChannels(live);
+    var visibleLive = filteredLiveChannelGroups(live);
     var sort = preference('veloraLibrarySort', 'name');
     var playback = preference('veloraLibraryPlayback', 'all');
     var favoritesOnly = preference('veloraLibraryFavorites', 'false') === 'true';
@@ -1236,8 +1254,8 @@
         var view = tab.getAttribute('data-tab');
         document.querySelector('#results').innerHTML = view === 'movies' ? section(t('movies'), movies) :
           view === 'series' ? section(t('series'), series) :
-          view === 'live' ? liveSection(t('live'), filteredLiveChannels(live)) :
-          section(t('movies'), movies) + section(t('series'), series) + liveSection(t('live'), filteredLiveChannels(live));
+          view === 'live' ? liveSection(t('live'), filteredLiveChannelGroups(live)) :
+          section(t('movies'), movies) + section(t('series'), series) + liveSection(t('live'), filteredLiveChannelGroups(live));
         bindCards();
         hydrateProtectedImages(document.querySelector('#results'));
       };
