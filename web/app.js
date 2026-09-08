@@ -831,7 +831,10 @@
 
   function liveChannelMatchesGroup(channel, group) {
     var tags = Array.isArray(channel.Tags) ? channel.Tags.map(String) : [];
-    return tags.indexOf(group) !== -1 || channel.ChannelType === group || channel.ServiceName === group ||
+    var normalizedGroup = String(group).toLocaleLowerCase(languageCode());
+    return tags.some(function (tag) { return tag.toLocaleLowerCase(languageCode()) === normalizedGroup; }) ||
+      String(channel.ChannelType || '').toLocaleLowerCase(languageCode()) === normalizedGroup ||
+      String(channel.ServiceName || '').toLocaleLowerCase(languageCode()) === normalizedGroup ||
       (group === 'Sin grupo' && !tags.length && !channel.ChannelType && !channel.ServiceName);
   }
 

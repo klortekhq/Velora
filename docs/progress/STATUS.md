@@ -178,6 +178,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`; el cliente web
   también cubre este caso en `web/scripts/test-platform.mjs`.
 
+- La semántica de grupos Live TV quedó alineada entre Android y web: además de
+  etiquetas, los filtros reconocen `ChannelType` y `ServiceName` (incluidos
+  proveedores IPTV). La prueba focalizada Android y la suite web terminaron
+  correctamente tras este ajuste.
+
 - Revalidación estática del 2026-09-08 sobre `main` (`e107ef7`): identidad
   pública, coherencia de versión, política offline mobile/tablet-only,
   contrato de autenticación `Pw`, workflows de releases, catálogos Android,

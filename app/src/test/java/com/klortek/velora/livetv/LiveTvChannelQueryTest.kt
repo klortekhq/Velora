@@ -115,6 +115,22 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun channelTypeAndServiceNameAreAvailableAsLiveTvGroups() {
+        val channel = LiveTvChannel(
+            "iptv-group",
+            "DAZN F1",
+            ChannelType = "IPTV",
+            ServiceName = "Lista local"
+        )
+
+        assertEquals(listOf("IPTV", "Lista local"), liveTvGroups(listOf(channel)))
+        assertEquals(
+            listOf("DAZN F1"),
+            filterLiveTvChannels(listOf(channel), group = "lista LOCAL").map { it.Name }
+        )
+    }
+
+    @Test
     fun primaryRowKeepsGuideAndUserMetadataFromTheBestDuplicate() {
         val stale = LiveTvChannel("same-id", "Canal", MediaSources = listOf(MediaSource(Id = "source-main")))
         val current = LiveTvChannel(
