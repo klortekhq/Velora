@@ -559,6 +559,12 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   instalada queda enfocada en `MainActivity` sin excepciones fatales; no se
   marca como válida ninguna prueba posterior de catálogo, Live TV o
   reproducción hasta que la autenticación sea aceptada.
+- Build TV de QA del commit `2f6184f` instalada en el Fire TV AFTSS el
+  2026-09-08: `app-tv-debug.apk`, SHA-256
+  `CD2E8482B4817D91213987576A8A820EC216F75190A1D7E2C607AD4DB93608E8`.
+  `MainActivity` quedó reanudada y los logs no muestran `FATAL EXCEPTION`,
+  `AndroidRuntime` ni `ANR`; esto valida el arranque, no una sesión Jellyfin
+  autenticada.
 
 ## Pendiente verificable
 
