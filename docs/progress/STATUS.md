@@ -216,6 +216,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   opción de reproducción. Se añadió prueba Swift; la ejecución queda
   pendiente de macOS/Xcode, que no está disponible en este host.
 
+- Se añadió una prueba Swift con `URLProtocol` para la música de tema: verifica
+  que Jellyfin recibe el token por cabecera, que la URL final apunta a
+  `Audio/<id>/universal` y que no contiene credenciales. Su ejecución queda
+  pendiente de macOS/Xcode junto con el resto de la suite Apple.
+
 - Revalidación estática del 2026-09-08 sobre `main` (`e107ef7`): identidad
   pública, coherencia de versión, política offline mobile/tablet-only,
   contrato de autenticación `Pw`, workflows de releases, catálogos Android,
