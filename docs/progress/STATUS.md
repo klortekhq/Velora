@@ -253,6 +253,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `BUILD SUCCESSFUL`; la batería móvil y TV completa volvió a terminar en
   `BUILD SUCCESSFUL` (`3m30s`, 82 tareas; 11 ejecutadas, 71 en caché).
 
+- Build de QA reproducida desde `65e5493` el 2026-09-08: `:app:assembleMobileDebug`
+  y `:app:assembleTvDebug` terminaron en `BUILD SUCCESSFUL`. Los APK quedan
+  identificados como artefactos debug/QA y no como releases públicas firmadas.
+  También pasaron `check-public-identity`, `check-offline-surface-policy`,
+  `check-release-workflows`, `check-version-consistency` y la suite web.
+
 - La deduplicación Live TV conserva ahora la fila con guía, favorito y artwork
   más completos cuando Jellyfin repite el mismo `MediaSource`; Android y web
   tienen cobertura específica y la prueba focalizada Android (`3m30s`) y la
