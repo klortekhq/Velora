@@ -132,6 +132,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   700 ms, fade-in por pasos, cancelación al cambiar rápidamente de ficha y
   fade-out al salir. La verificación de compilación Swift queda pendiente de
   macOS CI por la misma limitación de este host.
+- Regresión completa del 2026-09-09 sobre `main` tras la optimización EPG:
+  contratos de versión, identidad, autenticación, superficies offline y
+  localización Android pasaron; `node web/scripts/test-platform.mjs` pasó en
+  capacidades, seguridad, interacción Live TV y preferencias de subtítulos;
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest` terminaron en
+  `BUILD SUCCESSFUL` (82 tareas, todas al día).
 - Revalidación del 2026-09-08: la ruta opcional MPV también usa recursos
   localizados para ajustes, audio, subtítulos, velocidad y estados de pista;
   el catálogo queda en 506 claves y las variantes móvil/TV compilan.
