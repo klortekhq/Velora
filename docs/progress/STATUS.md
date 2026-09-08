@@ -1,6 +1,6 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-08
+Updated: 2026-09-09
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
@@ -25,6 +25,14 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   plataforma y no forman parte de la identidad visible del producto.
 - CI comprueba que README, atribuciones, documentación y código público no
   reintroduzcan referencias heredadas a otros clientes o identidades antiguas.
+- Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
+  y dejar la tuerca como punto único para audio y subtítulos: móvil
+  `app-mobile-debug.apk`, SHA-256
+  `6858099B68BBD6375F31A03875FA98AA3CF0D9ECCAF0DCC9CBCE55FE15CAF122`;
+  TV `app-tv-debug.apk`, SHA-256
+  `8FE70412FEACEB26EC482C63A138CB437E42BF1F5D342957D30189116D467C6D`.
+  Ambas compilaciones terminaron correctamente y siguen siendo artefactos de
+  QA sin firma; no se publican como release.
 - Build QA regenerada el 2026-09-08 tras la protección de espacio en descargas:
   móvil `velora-release-unsigned.apk`, SHA-256
   `493E6D634B5F1798767637B2052395CF111ABE57242E8B66825EBC87A80D3780`; TV
