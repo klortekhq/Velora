@@ -70,8 +70,8 @@ catch {
     if ($publicEndpointInvalid) {
         throw "Smoke test Jellyfin fallido en ${stage}: la dirección responde, pero no es un endpoint Jellyfin válido (la respuesta no contiene JSON de /System/Info/Public)."
     }
-    if ($status -eq 401) {
-        throw "Smoke test Jellyfin fallido en ${stage}: el servidor responde, pero las credenciales configuradas fueron rechazadas (HTTP 401)."
+    if ($status -eq 400 -or $status -eq 401) {
+        throw "Smoke test Jellyfin fallido en ${stage}: el servidor responde, pero las credenciales configuradas fueron rechazadas (HTTP $status)."
     }
     if ($status) {
         throw "Smoke test Jellyfin fallido en $stage (HTTP $status)."

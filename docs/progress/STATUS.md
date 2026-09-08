@@ -59,6 +59,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   composición de la pantalla de inicio; la mejora está cubierta por compilación
   y tests, pero la medición final de arranque en Fire TV queda pendiente de una
   reconexión ADB estable.
+- El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
+  `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
+  el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo
+  de la respuesta. La prueba de canales y `PlaybackInfo` queda pendiente hasta
+  que exista una credencial válida.
 - La reproducción sigue la estrategia Original First: Direct Play, Direct
   Stream/Remux y transcodificación solo cuando las capacidades lo requieren.
 - El selector de aspecto de Media3/ExoPlayer y de la superficie GL reaplica el
@@ -212,6 +217,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `BUILD SUCCESSFUL`; la instalación del APK TV de QA terminó correctamente,
   pero el dispositivo Fire TV quedó offline durante la medición comparativa,
   por lo que no se declara una mejora de tiempo en hardware.
+
+- Comprobación Fire TV del 2026-09-08: el dispositivo de la red local dejó de
+  responder por ADB y la reconexión terminó en timeout 10060; no se declara
+  validación de reproducción o Live TV en hardware en esta sesión.
 
 - Revalidación completa posterior a esa alineación: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` el 2026-09-08
@@ -474,7 +483,7 @@ HTML5.
 
 Comprobación adicional en el Fire TV AFTSS del 2026-09-06: el cliente
 descubrió desde el dispositivo el endpoint HTTP local de Jellyfin
-`192.168.100.201:8096` y llegó correctamente a la pantalla de inicio de
+el servidor Jellyfin de la red local y llegó correctamente a la pantalla de inicio de
 sesión. La llamada posterior a `Users/AuthenticateByName` terminó en
 `HttpRequestTimeoutException` tras 30 segundos; por ello esta ejecución no
 certifica catálogo, Live TV ni reproducción autenticada. El proceso de Velora
