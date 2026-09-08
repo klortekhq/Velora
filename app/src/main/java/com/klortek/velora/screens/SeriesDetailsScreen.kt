@@ -1850,7 +1850,7 @@ fun ResumeEpisodeDialog(
                             .heightIn(min = 52.dp),
                         shape = RoundedCornerShape(28.dp)
                     ) {
-                        Text("Atrás")
+                        Text(androidx.compose.ui.res.stringResource(R.string.library_back))
                     }
                 }
             } else {

@@ -357,7 +357,7 @@ private fun SeasonEpisodeSelectionDialog(
             onClick = onBack,
             modifier = Modifier.size(52.dp)
         ) {
-            androidx.compose.material3.Icon(Icons.Default.ArrowBack, "Atrás", tint = Color.White)
+            androidx.compose.material3.Icon(Icons.Default.ArrowBack, stringResource(com.klortek.velora.R.string.library_back), tint = Color.White)
         }
     }
 }
@@ -527,7 +527,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
         Column(Modifier.weight(1f).padding(start = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text("E${episode.IndexNumber ?: ""} · ${episode.Name}", color = Color.White, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis); Text(episode.formattedRuntime ?: "", color = Color.White.copy(alpha = .7f)); Text(episode.Overview ?: "", color = Color.White.copy(alpha = .78f), maxLines = 2, overflow = TextOverflow.Ellipsis) }
         if (PlatformCapabilities.supportsOfflineDownloads) {
             androidx.compose.material3.IconButton(onClick = onDownload) {
-                androidx.compose.material3.Icon(Icons.Default.Download, "Descargar", tint = MobileCyan)
+                androidx.compose.material3.Icon(Icons.Default.Download, stringResource(com.klortek.velora.R.string.action_download), tint = MobileCyan)
             }
         }
     }

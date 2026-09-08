@@ -89,6 +89,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Revalidación del 2026-09-08: las pantallas Android de música ya usan recursos
   localizados para navegación, cola, transporte, álbumes y artistas; la
   compilación Kotlin de móvil y TV pasó con estas claves nuevas.
+- Revalidación del 2026-09-08: los controles de detalle Android que aún tenían
+  etiquetas directas para volver y descargar ahora usan el catálogo localizado;
+  `:app:compileMobileDebugKotlin :app:compileTvDebugKotlin` terminó correctamente.
 - El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
   `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo
