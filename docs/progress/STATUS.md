@@ -15,7 +15,7 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Rama de trabajo: `main`; la política del repositorio exige que sea la única
   rama pública.
 - La consulta independiente a `origin` del 2026-09-09 confirma únicamente
-  `refs/heads/main` en GitHub, apuntando a `7ff17e0`. No se presenta ninguna
+  `refs/heads/main` en GitHub, apuntando a `e8679dd`. No se presenta ninguna
   otra rama pública.
 - Último cambio funcional documentado: el trabajador de descargas offline
   protege el espacio libre durante la escritura y conserva las transferencias
@@ -123,6 +123,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   generó el bundle de navegador, Samsung/Tizen y VIDAA, y un IPK de webOS de
   86.676 bytes; Tizen sigue correctamente marcado como bundle porque este
   host no tiene Tizen Studio/CLI ni firma de dispositivo.
+- Revalidación móvil del 2026-09-09: `LiveTvChannelQueryTest` pasa con la
+  variante móvil. Confirma que los canales con la misma identidad Jellyfin se
+  muestran como una sola tarjeta y que sus MediaSources quedan disponibles
+  como opciones seleccionables; la misma lógica se comparte con TV.
 - Apple Live TV ahora carga la biblioteca sin esperar la EPG, solicita después
   una ventana de seis horas y muestra hasta tres programas próximos por canal;
   las cargas obsoletas se cancelan al cambiar de sesión. El cambio queda
