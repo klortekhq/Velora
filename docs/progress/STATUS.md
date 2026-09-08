@@ -448,7 +448,7 @@ relevantes.
 | Plataforma | Estado verificable |
 | --- | --- |
 | Android móvil/tablet | Compila y pasa tests unitarios locales |
-| Android TV / Fire TV | Compila y pasa tests unitarios; conexión/pantalla de acceso validada en Fire TV AFTSS; reproducción y Live TV aún pendientes |
+| Android TV / Fire TV | Compila y pasa tests unitarios; pantalla de acceso y transporte de autenticación validados en Fire TV AFTSS; sesión Jellyfin válida, reproducción y Live TV aún pendientes |
 | Web | Bundle y tests locales correctos |
 | Samsung Tizen | Bundle preparado; falta Tizen Studio, firma y dispositivo/emulador |
 | LG webOS | IPK generado con `ares-package`; falta dispositivo/emulador |
@@ -491,6 +491,15 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   pero la petición de autenticación volvió a agotar el tiempo de espera desde
   el host de QA. Por ello siguen sin certificarse catálogo, Live TV,
   `PlaybackInfo` o reproducción real.
+- Prueba limpia en Fire TV AFTSS del 2026-09-08 con la build de QA
+  `1C4B8469341E85A9B9181754D4EBFAFD687E1BD95A7ECCAC2CE910AB5327E3DD`:
+  tras borrar los datos locales, descubrir el servidor y enviar el formulario
+  de contraseña, el cliente recibió inmediatamente `HTTP 401` y mostró el
+  error de credenciales en español. El cambio de autenticación a OkHttp evita
+  el bloqueo/timeout observado con el transporte Android anterior; la sesión
+  no fue aceptada por el servidor y por tanto siguen sin certificarse catálogo,
+  Live TV, `PlaybackInfo` o reproducción. No se registraron credenciales ni
+  tokens.
 
 ## Pendiente verificable
 
