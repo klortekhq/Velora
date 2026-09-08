@@ -110,6 +110,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Auditoría de contratos del 2026-09-08: catálogos Android (500 claves),
   política de releases, superficies offline, identidad pública, consistencia de
   versión (`1.4.0`) y pruebas web terminaron correctamente en el estado actual.
+- Suite Android completa reejecutada el 2026-09-08 sobre el estado actual:
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest` terminaron en
+  `BUILD SUCCESSFUL` (82 tareas); solo permanecen avisos de APIs obsoletas.
 - El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
   `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
   el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo
