@@ -63,6 +63,7 @@ import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import com.klortek.velora.jellyfin.AppSettings
+import com.klortek.velora.jellyfin.PerformanceMode
 import com.klortek.velora.BuildConfig
 import coil.ImageLoader
 import coil.imageLoader
@@ -261,6 +262,7 @@ fun SettingsScreen(
     var useGoogleTvCards by remember { mutableStateOf(settings.useGoogleTvCards) }
     var lowPowerMode by remember { mutableStateOf(settings.lowPowerMode) }
     var use4KBackgrounds by remember { mutableStateOf(settings.use4KBackgrounds) }
+    var performanceMode by remember { mutableStateOf(settings.performanceMode) }
     var navigationSoundsEnabled by remember { mutableStateOf(settings.navigationSoundsEnabled) }
     var themeMusicEnabled by remember { mutableStateOf(settings.themeMusicEnabled) }
     var themeMusicVolume by remember { mutableStateOf(settings.themeMusicVolume) }
@@ -2001,6 +2003,32 @@ Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_t
                         }
                         
                         SettingsCategory.PERFORMANCE -> {
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_mode),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_mode_description),
+                                currentValue = when (performanceMode) {
+                                    PerformanceMode.AUTOMATIC -> context.getString(com.klortek.velora.R.string.settings_performance_mode_automatic)
+                                    PerformanceMode.QUALITY -> context.getString(com.klortek.velora.R.string.settings_performance_mode_quality)
+                                    PerformanceMode.BALANCED -> context.getString(com.klortek.velora.R.string.settings_performance_mode_balanced)
+                                    PerformanceMode.PERFORMANCE -> context.getString(com.klortek.velora.R.string.settings_performance_mode_performance)
+                                },
+                                onCycle = {
+                                    performanceMode = when (performanceMode) {
+                                        PerformanceMode.AUTOMATIC -> PerformanceMode.QUALITY
+                                        PerformanceMode.QUALITY -> PerformanceMode.BALANCED
+                                        PerformanceMode.BALANCED -> PerformanceMode.PERFORMANCE
+                                        PerformanceMode.PERFORMANCE -> PerformanceMode.AUTOMATIC
+                                    }
+                                    settings.applyPerformanceMode(performanceMode)
+                                    disableUIAnimations = settings.disableUIAnimations
+                                    useSimpleCards = settings.useSimpleCards
+                                    useGoogleTvCards = settings.useGoogleTvCards
+                                    lowPowerMode = settings.lowPowerMode
+                                    use4KBackgrounds = settings.use4KBackgrounds
+                                    reducePosterResolutionEnabled = settings.reducePosterResolution
+                                }
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
                             // Use Google TV Cards
                             SettingToggle(
                                 title = context.getString(com.klortek.velora.R.string.settings_performance_google_tv_cards),

@@ -99,6 +99,7 @@ class AppSettings(context: Context) {
         private const val KEY_USE_GOOGLE_TV_CARDS = "use_google_tv_cards"
         private const val KEY_LOW_POWER_MODE = "low_power_mode"
         private const val KEY_USE_4K_BACKGROUNDS = "use_4k_backgrounds"
+        private const val KEY_PERFORMANCE_MODE = "performance_mode"
         
         // OpenSubtitles settings
         private const val KEY_OPENSUBTITLES_API_KEY = "opensubtitles_api_key"
@@ -476,6 +477,33 @@ class AppSettings(context: Context) {
     var use4KBackgrounds: Boolean
         get() = prefs.getBoolean(KEY_USE_4K_BACKGROUNDS, false)
         set(value) = prefs.edit().putBoolean(KEY_USE_4K_BACKGROUNDS, value).apply()
+
+    var performanceMode: PerformanceMode
+        get() = PerformanceMode.fromStorageKey(prefs.getString(KEY_PERFORMANCE_MODE, null))
+        set(value) = prefs.edit().putString(KEY_PERFORMANCE_MODE, value.storageKey).apply()
+
+    /** Apply a preset without touching account, playback or offline settings. */
+    fun applyPerformanceMode(mode: PerformanceMode) {
+        performanceMode = mode
+        when (mode) {
+            PerformanceMode.AUTOMATIC -> {
+                lowPowerMode = false; disableUIAnimations = false; useSimpleCards = false
+                useGoogleTvCards = false; use4KBackgrounds = false; reducePosterResolution = false
+            }
+            PerformanceMode.QUALITY -> {
+                lowPowerMode = false; disableUIAnimations = false; useSimpleCards = false
+                useGoogleTvCards = true; use4KBackgrounds = true; reducePosterResolution = false
+            }
+            PerformanceMode.BALANCED -> {
+                lowPowerMode = false; disableUIAnimations = false; useSimpleCards = false
+                useGoogleTvCards = true; use4KBackgrounds = false; reducePosterResolution = false
+            }
+            PerformanceMode.PERFORMANCE -> {
+                lowPowerMode = true; disableUIAnimations = true; useSimpleCards = true
+                useGoogleTvCards = false; use4KBackgrounds = false; reducePosterResolution = true
+            }
+        }
+    }
     
     // OpenSubtitles API key - users need to get their own key from opensubtitles.com
     var openSubtitlesApiKey: String

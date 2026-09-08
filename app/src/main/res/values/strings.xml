@@ -317,6 +317,12 @@ Comprueba que:
    <string name="settings_color_orange">Naranja</string>
    <string name="settings_performance_google_tv_cards">Usar tarjetas de Google TV</string>
    <string name="settings_performance_google_tv_cards_description">Tarjetas ligeras con animación de escala sutil y borde luminoso.</string>
+   <string name="settings_performance_mode">Modo de rendimiento</string>
+   <string name="settings_performance_mode_description">Elige el equilibrio entre calidad visual, fluidez y consumo.</string>
+   <string name="settings_performance_mode_automatic">Automático</string>
+   <string name="settings_performance_mode_quality">Calidad</string>
+   <string name="settings_performance_mode_balanced">Equilibrado</string>
+   <string name="settings_performance_mode_performance">Rendimiento</string>
    <string name="settings_performance_animations">Animaciones</string>
    <string name="settings_performance_disable_animations">Desactivar animaciones de interfaz</string>
    <string name="settings_performance_disable_animations_description">Desactiva las animaciones de desplazamiento para mejorar el rendimiento.</string>

@@ -33,6 +33,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
 - Android móvil/tablet y Android TV/Fire TV comparten dominio Jellyfin, pero
   mantienen layouts táctil y de mando separados.
+- Android incorpora perfiles de rendimiento persistentes (Automático, Calidad,
+  Equilibrado y Rendimiento) que aplican de forma conjunta las optimizaciones
+  de animación, tarjetas, fondos y resolución; el mapeo de claves tiene prueba
+  unitaria para evitar perder la preferencia al actualizar.
 - Media3/ExoPlayer es el backend Android predeterminado; MPV solo se usa si el
   usuario lo selecciona o si el fallback configurado resulta necesario.
 - Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
