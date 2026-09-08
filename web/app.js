@@ -32,6 +32,7 @@
       automatic: 'Automático (idioma del dispositivo)', preferredAudio: 'Audio preferido', audioAuto: 'Automático / servidor',
       subtitles: 'Subtítulos', subtitleOff: 'Desactivados', subtitlePreferred: 'Preferidos', subtitleForced: 'Forzados',
       subtitleAuto: 'Automáticos', subtitleLanguage: 'Idioma de subtítulos', save: 'Guardar', cancel: 'Cancelar',
+      performanceMode: 'Modo de rendimiento', performanceModeDescription: 'Equilibra calidad visual, fluidez y consumo.', performanceAutomatic: 'Automático', performanceQuality: 'Calidad', performanceBalanced: 'Equilibrado', performancePerformance: 'Rendimiento',
       saved: 'Preferencias guardadas', settingDescription: 'Se aplican al próximo contenido y se guardan en este dispositivo.', aboutVersion: 'Versión', aboutBy: 'Por Klørtek',
       cast: 'Reparto', actorWorks: 'Películas y series de este actor', noActorWorks: 'No hay otros títulos disponibles.', personError: 'No se pudo cargar la filmografía',
       sortAndFilter: 'Ordenar y filtrar', sortName: 'Nombre', sortDateAdded: 'Fecha de incorporación', sortPremiere: 'Fecha de estreno', sortRuntime: 'Duración', sortRating: 'Valoración de la comunidad', favorites: 'Favoritos', playbackState: 'Estado de reproducción', playbackAll: 'Todos', playbackWatched: 'Vistos', playbackUnwatched: 'No vistos',
@@ -48,6 +49,7 @@
       automatic: 'Automatic (device language)', preferredAudio: 'Preferred audio', audioAuto: 'Automatic / server',
       subtitles: 'Subtitles', subtitleOff: 'Disabled', subtitlePreferred: 'Preferred', subtitleForced: 'Forced',
       subtitleAuto: 'Automatic', subtitleLanguage: 'Subtitle language', save: 'Save', cancel: 'Cancel',
+      performanceMode: 'Performance mode', performanceModeDescription: 'Balance visual quality, smoothness and power use.', performanceAutomatic: 'Automatic', performanceQuality: 'Quality', performanceBalanced: 'Balanced', performancePerformance: 'Performance',
       saved: 'Preferences saved', settingDescription: 'Applied to new playback and saved on this device.', aboutVersion: 'Version', aboutBy: 'By Klørtek', cast: 'Cast',
       actorWorks: 'Movies and series with this actor', noActorWorks: 'No other titles available.', personError: 'Could not load filmography',
       sortAndFilter: 'Sort and filter', sortName: 'Name', sortDateAdded: 'Date added', sortPremiere: 'Premiere date', sortRuntime: 'Runtime', sortRating: 'Community rating', favorites: 'Favorites', playbackState: 'Playback state', playbackAll: 'All', playbackWatched: 'Watched', playbackUnwatched: 'Unwatched',
@@ -266,6 +268,18 @@
 
   function savePreference(key, value) {
     saveDurableStorageValue(key, value);
+  }
+
+  function applyPerformanceMode(mode) {
+    var allowed = ['automatic', 'quality', 'balanced', 'performance'];
+    var selected = allowed.indexOf(mode) >= 0 ? mode : 'automatic';
+    // Keep the preference usable in headless/TV test harnesses that do not
+    // expose a full documentElement, while real browsers receive the CSS
+    // performance contract.
+    if (document.documentElement) {
+      if (!document.documentElement.dataset) document.documentElement.dataset = {};
+      document.documentElement.dataset.veloraPerformance = selected;
+    }
   }
 
   // Authentication state is intentionally scoped to the browser session. The
@@ -1282,6 +1296,7 @@
     var audioLanguage = preference('veloraAudioLanguage', 'auto');
     var subtitleMode = preference('veloraSubtitleMode', 'off');
     var subtitleLanguage = preference('veloraSubtitleLanguage', 'auto');
+    var performanceMode = preference('veloraPerformanceMode', 'automatic');
     root.insertAdjacentHTML('beforeend', '<div class="modal" id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">' +
       '<div class="modal-card settings-card">' +
       '<div class="settings-heading"><h2 id="settingsTitle">' + esc(t('settings')) + '</h2><button type="button" class="close" id="settingsClose">' + esc(t('close')) + '</button></div>' +
@@ -1299,6 +1314,14 @@
       '</select>' +
       '<label for="subtitleLanguage">' + esc(t('subtitleLanguage')) + '</label>' +
       '<select id="subtitleLanguage">' + languageOptionMarkup(subtitleLanguage, true) + '</select>' +
+      '<label for="performanceMode">' + esc(t('performanceMode')) + '</label>' +
+      '<p class="muted settings-inline-description">' + esc(t('performanceModeDescription')) + '</p>' +
+      '<select id="performanceMode">' +
+      '<option value="automatic"' + (performanceMode === 'automatic' ? ' selected' : '') + '>' + esc(t('performanceAutomatic')) + '</option>' +
+      '<option value="quality"' + (performanceMode === 'quality' ? ' selected' : '') + '>' + esc(t('performanceQuality')) + '</option>' +
+      '<option value="balanced"' + (performanceMode === 'balanced' ? ' selected' : '') + '>' + esc(t('performanceBalanced')) + '</option>' +
+      '<option value="performance"' + (performanceMode === 'performance' ? ' selected' : '') + '>' + esc(t('performancePerformance')) + '</option>' +
+      '</select>' +
       '<div class="settings-actions"><button type="button" class="primary" id="settingsSave">' + esc(t('save')) + '</button><button type="button" id="settingsCancel">' + esc(t('cancel')) + '</button></div>' +
       '<p class="muted settings-about">' + esc(t('aboutVersion')) + ' ' + esc(APP_VERSION) + ' · ' + esc(t('aboutBy')) + '</p>' +
       '</div></div>');
@@ -1309,6 +1332,8 @@
       savePreference('veloraAudioLanguage', document.querySelector('#audioLanguage').value);
       savePreference('veloraSubtitleMode', document.querySelector('#subtitleMode').value);
       savePreference('veloraSubtitleLanguage', document.querySelector('#subtitleLanguage').value);
+      applyPerformanceMode(document.querySelector('#performanceMode').value);
+      savePreference('veloraPerformanceMode', document.querySelector('#performanceMode').value);
       document.documentElement.lang = languageCode();
       closeSettings();
       var video = document.querySelector('#player video');
@@ -1395,5 +1420,6 @@
     }
   });
 
+  applyPerformanceMode(preference('veloraPerformanceMode', 'automatic'));
   renderApp();
 }());
