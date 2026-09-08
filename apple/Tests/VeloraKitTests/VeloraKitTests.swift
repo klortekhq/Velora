@@ -263,6 +263,27 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(grouped.first?.mediaSources.count, 1)
     }
 
+    func testLiveTvGroupingPrefersRicherMetadataForRepeatedSource() {
+        let source = JellyfinLiveTvMediaSource(
+            id: "source-1", liveStreamID: "live-1", transcodingURL: nil,
+            directStreamURL: nil, protocolName: nil
+        )
+        let stale = JellyfinLiveTvChannel(id: "channel-1", name: "Noticias", mediaSources: [source])
+        let enriched = JellyfinLiveTvChannel(
+            id: "channel-1", name: "Noticias IPTV", number: "24", channelType: "IPTV",
+            currentProgram: JellyfinLiveTvProgram(id: "program-1", name: "Ahora"),
+            mediaSources: [source]
+        )
+
+        let grouped = JellyfinLiveTvChannel.grouped([stale, enriched])
+
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.mediaSources.count, 1)
+        XCTAssertEqual(grouped.first?.name, "Noticias IPTV")
+        XCTAssertEqual(grouped.first?.currentProgram?.name, "Ahora")
+        XCTAssertEqual(grouped.first?.channelType, "IPTV")
+    }
+
     func testLiveTvPlaybackInfoDecodesSelectedStreamURL() throws {
         let json = #"{"MediaSources":[{"Id":"source-1","LiveStreamId":"live-1","TranscodingUrl":"http://jellyfin.local:8096/Videos/channel-1/stream.m3u8","Protocol":"hls"}]}"#
         let info = try JSONDecoder().decode(JellyfinLiveTvPlaybackInfo.self, from: json.data(using: .utf8)!)

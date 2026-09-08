@@ -122,6 +122,7 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
         var grouped: [String: Self] = [:]
         for channel in channels {
             if let existing = grouped[channel.id] {
+                let preferred = metadataScore(channel) > metadataScore(existing) ? channel : existing
                 var sources = existing.mediaSources + channel.mediaSources
                 var seen = Set<String>()
                 sources = sources.filter { source in
@@ -139,11 +140,11 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
                 }
                 grouped[channel.id] = Self(
                     id: existing.id,
-                    name: existing.name,
-                    number: existing.number ?? channel.number,
-                    channelType: existing.channelType ?? channel.channelType,
-                    serviceName: existing.serviceName ?? channel.serviceName,
-                    currentProgram: existing.currentProgram ?? channel.currentProgram,
+                    name: preferred.name,
+                    number: preferred.number ?? existing.number ?? channel.number,
+                    channelType: preferred.channelType ?? existing.channelType ?? channel.channelType,
+                    serviceName: preferred.serviceName ?? existing.serviceName ?? channel.serviceName,
+                    currentProgram: preferred.currentProgram ?? existing.currentProgram ?? channel.currentProgram,
                     mediaSources: sources
                 )
             } else {
@@ -152,6 +153,13 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
             }
         }
         return order.compactMap { grouped[$0] }
+    }
+
+    private static func metadataScore(_ channel: Self) -> Int {
+        (channel.currentProgram == nil ? 0 : 4) +
+            (channel.number == nil ? 0 : 1) +
+            (channel.channelType == nil ? 0 : 1) +
+            (channel.serviceName == nil ? 0 : 1)
     }
 }
 

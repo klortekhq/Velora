@@ -192,6 +192,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   tienen cobertura específica y la prueba focalizada Android (`3m30s`) y la
   suite web terminaron correctamente.
 
+- Apple comparte también esa regla de deduplicación: al repetir una fuente,
+  conserva la fila con metadatos Live TV más completos y mantiene una sola
+  opción de reproducción. Se añadió prueba Swift; la ejecución queda
+  pendiente de macOS/Xcode, que no está disponible en este host.
+
 - Revalidación estática del 2026-09-08 sobre `main` (`e107ef7`): identidad
   pública, coherencia de versión, política offline mobile/tablet-only,
   contrato de autenticación `Pw`, workflows de releases, catálogos Android,
