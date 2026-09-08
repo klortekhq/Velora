@@ -1410,7 +1410,7 @@ fun SeriesBottomContainer(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                                            text = "No hay episodios disponibles",
+                                            text = androidx.compose.ui.res.stringResource(R.string.mobile_no_episodes),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
@@ -2528,7 +2528,7 @@ fun EpisodeActionButtonsRow(
                 if (trailerFocused) {
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "Ver tráiler",
+                        text = androidx.compose.ui.res.stringResource(R.string.watch_trailer_1),
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                         ),
@@ -3158,7 +3158,7 @@ fun EpisodeSubtitleSelectionDialog(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Seleccionar subtítulos",
+                        text = androidx.compose.ui.res.stringResource(R.string.player_subtitles),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -3172,7 +3172,7 @@ fun EpisodeSubtitleSelectionDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Cargando subtítulos…",
+                                text = androidx.compose.ui.res.stringResource(R.string.subtitle_downloading),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                             )
@@ -3274,7 +3274,7 @@ fun EpisodeSubtitleSelectionDialog(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Text(
-                                        text = "No hay subtítulos disponibles",
+                                        text = androidx.compose.ui.res.stringResource(R.string.player_subtitles_unavailable),
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                         )
@@ -3559,7 +3559,7 @@ fun EpisodeAudioSelectionDialog(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Seleccionar pista de audio",
+                        text = androidx.compose.ui.res.stringResource(R.string.mobile_audio_track),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -3573,7 +3573,7 @@ fun EpisodeAudioSelectionDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Cargando pistas de audio…",
+                                text = androidx.compose.ui.res.stringResource(R.string.mobile_audio_loading),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                             )
@@ -3651,7 +3651,7 @@ fun EpisodeAudioSelectionDialog(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Text(
-                                            text = "No hay pistas de audio disponibles",
+                                            text = androidx.compose.ui.res.stringResource(R.string.mobile_no_audio_tracks),
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                         )
