@@ -117,6 +117,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Live TV: las respuestas duplicadas del proveedor ya no aparecen como falsas
   opciones repetidas; las fuentes realmente distintas, como principal e IPTV,
   siguen agrupadas bajo el mismo canal y se pueden elegir en Android y web.
+- Live TV multiplataforma: Android, web y Apple muestran el selector al elegir
+  un canal con varias fuentes, conservan etiquetas como IPTV o proveedor cuando
+  Jellyfin las entrega y evitan exponer rutas técnicas.
 - Web/Smart TV: los identificadores y grupos de Live TV se procesan con mapas
   sin prototipo, evitando que nombres de proveedor especiales alteren la lista.
 - CI: se validan los metadatos generados de Samsung, webOS y VIDAA después del
