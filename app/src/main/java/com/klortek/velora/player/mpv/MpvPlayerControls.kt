@@ -59,6 +59,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -84,6 +85,19 @@ enum class AspectMode(val label: String) {
         return modes[(ordinal + 1) % modes.size]
     }
 }
+
+@Composable
+private fun localizedAspectModeLabel(mode: AspectMode): String = stringResource(
+    when (mode) {
+        AspectMode.FIT -> com.klortek.velora.R.string.player_aspect_fit
+        AspectMode.FILL -> com.klortek.velora.R.string.player_aspect_fill
+        AspectMode.FOUR_THREE -> com.klortek.velora.R.string.player_aspect_four_three
+        AspectMode.LETTERBOX -> com.klortek.velora.R.string.player_aspect_letterbox
+        AspectMode.CINEMA -> com.klortek.velora.R.string.player_aspect_cinema
+        AspectMode.STRETCH -> com.klortek.velora.R.string.player_aspect_stretch
+        AspectMode.ORIGINAL -> com.klortek.velora.R.string.player_aspect_original
+    }
+)
 
 @Composable
 fun MpvControls(
@@ -210,7 +224,7 @@ fun MpvControls(
                     // Rewind button
                     PlayerControlButton(
                         icon = Icons.Filled.FastRewind,
-                        contentDescription = "Retroceder 15 segundos",
+                        contentDescription = stringResource(com.klortek.velora.R.string.player_rewind_15),
                         onClick = onFastRewind
                     )
 
@@ -219,7 +233,10 @@ fun MpvControls(
                     // Play/Pause button - DEFAULT FOCUS TARGET
                     PlayerControlButton(
                         icon = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                        contentDescription = if (isPlaying) "Pausa" else "Reproducir",
+                        contentDescription = stringResource(
+                            if (isPlaying) com.klortek.velora.R.string.player_pause
+                            else com.klortek.velora.R.string.player_play
+                        ),
                         onClick = onPlayPause,
                         modifier = Modifier.focusRequester(playPauseFocusRequester)
                     )
@@ -229,7 +246,7 @@ fun MpvControls(
                     // Fast forward button
                     PlayerControlButton(
                         icon = Icons.Filled.FastForward,
-                        contentDescription = "Avanzar 15 segundos",
+                        contentDescription = stringResource(com.klortek.velora.R.string.player_forward_15),
                         onClick = onFastForward
                     )
 
@@ -246,7 +263,7 @@ fun MpvControls(
                     // Unified playback settings: audio, subtitles, speed and quality.
                     PlayerControlButton(
                         icon = Icons.Filled.Settings,
-                        contentDescription = "Ajustes de reproducción",
+                        contentDescription = stringResource(com.klortek.velora.R.string.player_settings),
                         onClick = { onOpenSettings("main") }
                     )
                 }
@@ -736,6 +753,7 @@ private fun AspectModeButton(
     modifier: Modifier = Modifier
 ) {
     var isFocused by remember { mutableStateOf(false) }
+    val localizedLabel = localizedAspectModeLabel(currentMode)
 
     Box(
         modifier = modifier
@@ -763,12 +781,15 @@ private fun AspectModeButton(
         ) {
             Icon(
                 imageVector = Icons.Filled.AspectRatio,
-                contentDescription = "Modo de imagen: ${currentMode.label}",
+                contentDescription = stringResource(
+                    com.klortek.velora.R.string.player_aspect_content_description,
+                    localizedLabel
+                ),
                 tint = if (isFocused) Color.Black else Color.White,
                 modifier = Modifier.size(18.dp)
             )
             Text(
-                text = currentMode.label,
+                text = localizedLabel,
                 color = if (isFocused) Color.Black else Color.White,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold
@@ -887,7 +908,7 @@ private fun TrackMenuItem(
         if (isSelected) {
             androidx.tv.material3.Icon(
                 imageVector = Icons.Filled.Check,
-                contentDescription = "Seleccionado",
+                contentDescription = stringResource(com.klortek.velora.R.string.player_selected),
                 tint = Color(0xFF9C27B0)
             )
         }
