@@ -866,6 +866,11 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - La suite Android móvil y TV volvió a pasar después de esta mejora del
   selector Live TV: `:app:testMobileDebugUnitTest` y
   `:app:testTvDebugUnitTest` terminaron con `BUILD SUCCESSFUL` el 2026-09-08.
+- La suite web/Smart TV terminó correctamente el 2026-09-09 (`node
+  web/scripts/test-platform.mjs`): sus contratos verifican que Live TV agrupa
+  variantes por la ID del canal, conserva cada `MediaSource`, abre el selector
+  cuando hay varias fuentes y mantiene la reproducción directa cuando solo
+  existe una.
 - Empaquetado web multiplataforma en QA aislado: el bundle Samsung/Tizen y el
   bundle VIDAA se generan correctamente, pero Tizen Studio/CLI no está
   instalado y por eso no se presenta un `.wgt`; `ares-package` sí generó el
