@@ -72,6 +72,9 @@ jobs:
       - name: Validar contrato de autenticación Jellyfin
         run: node scripts/check-jellyfin-auth-contract.mjs
 
+      - name: Validar preferencias de reproducción
+        run: node scripts/check-playback-preferences-contract.mjs
+
       - name: Validar catálogos Android
         run: node scripts/check-android-locales.mjs
 
