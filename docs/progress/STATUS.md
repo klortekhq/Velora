@@ -270,6 +270,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `MediaBrowser` completa a Live TV (incluidas imágenes), música y el trabajador
   de descargas offline. Así esas superficies ya no dependen de la variante
   token-only; la compilación y las suites móvil/TV vuelven a pasar.
+- Compatibilidad Jellyfin 12 del 2026-09-09: `ThemeLoader` usa también la
+  cabecera `MediaBrowser` completa al cargar `Branding/CustomCss.css`, por lo
+  que la identidad cliente/dispositivo se conserva en la personalización de
+  tema. Las variantes Kotlin móvil/TV compilan correctamente.
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
