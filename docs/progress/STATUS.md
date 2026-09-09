@@ -64,6 +64,7 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   ahora dibuja un realce de foco visible cuando recibe el mando/teclado sin
   estar seleccionada; esto evita que el foco de TV parezca perdido. La
   compilación y las pruebas Android móvil/TV del cambio terminan correctamente.
+- Las APK QA del cambio `362b939` quedaron adjuntas a `v1.4.0`: [`Velora-mobile-qa-live-tv-focus.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-focus.apk), SHA-256 `C8EE5996303F0E33D6744F20F3FA91DF419BBC99D3F9D6BE135F87CF5700097F`, y [`Velora-tv-qa-live-tv-focus.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-focus.apk), SHA-256 `3CB9EF0F9B5BFCBD9114D798A2F010C0DAD70B28099CE4CF883CEF1CA338DF6A`.
 - Las APK generadas desde `0ce17b7` incorporan esta mejora y quedaron
   publicadas en `v1.4.0` como [`Velora-mobile-qa-live-tv-filters.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-filters.apk),
   SHA-256 `E2CC05760E3C1539FEA29321A6F93A4522FB36F956EE947620F839111EA84BF8`,
