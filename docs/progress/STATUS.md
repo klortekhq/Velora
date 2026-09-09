@@ -216,9 +216,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Verificación reproducida el 2026-09-09: las APK recién ensambladas desde
   `main` se publicaron además con nombres inequívocos para esta corrección:
   [`Velora-mobile-qa-live-tv-grouping.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-grouping.apk)
-  (SHA-256 `59015EB79594B20CD0CEAA18861992A4969D00BCED53789686EE88A29D49F7FE`)
+  (SHA-256 `B29FF319A3D5B60837B1E84D3C149B53C31A88CDEFF60EBC05715673DE46374A`)
   y [`Velora-tv-qa-live-tv-grouping.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-grouping.apk)
-  (SHA-256 `0B4EDF9224F6FBDA83DA04F2825F91E05B6297249A926D9872B04D27FC51F9C6`).
+  (SHA-256 `47EE44EC624FEBA2569DAF63C465EFC766AE6F593C72B27EAB7791ED73FF4B57`).
   La suite `LiveTvChannelQueryTest` pasa en móvil y TV. Estas son builds QA sin
   firma para comprobar el comportamiento, no releases de tienda.
 - Corrección de aspecto MPV: el selector usa ahora el valor de reinicio
