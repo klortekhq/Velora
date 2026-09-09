@@ -59,7 +59,7 @@ public final class VeloraAppModel: ObservableObject {
         self.session = restoredSession
         self.isAuthenticated = restoredSession != nil
         self.offlineDownloads = platform.supportsOfflineDownloads
-            ? offlineStore.load().filter { $0.serverURL == configuredServer.absoluteString }
+            ? offlineStore.load().filter { $0.serverURL == configuredServer.absoluteString && $0.userID == restoredSession?.userID }
             : []
         if platform.supportsOfflineDownloads {
             offlineTransfer.onFinished = { [weak self] metadata, temporaryURL, response in
@@ -152,7 +152,7 @@ public final class VeloraAppModel: ObservableObject {
             }
             let serverURL = (await client.serverURL()).absoluteString
             offlineDownloads = platform.supportsOfflineDownloads
-                ? offlineStore.load().filter { $0.serverURL == serverURL }
+                ? offlineStore.load().filter { $0.serverURL == serverURL && $0.userID == session.userID }
                 : []
             errorMessage = nil
         } catch {
@@ -295,16 +295,17 @@ public final class VeloraAppModel: ObservableObject {
     }
 
     public func download(_ item: JellyfinItem, quality: VeloraDownloadQuality = .original) async {
-        guard platform.supportsOfflineDownloads, downloadingItemID == nil else { return }
+        guard platform.supportsOfflineDownloads, downloadingItemID == nil, let session else { return }
         guard let requestURL = await client.videoURL(itemID: item.id, quality: quality) else { return }
         let serverURL = await client.serverURL()
-        guard !offlineDownloads.contains(where: { $0.itemID == item.id && $0.serverURL == serverURL.absoluteString && $0.quality == quality }) else { return }
+        guard !offlineDownloads.contains(where: { $0.itemID == item.id && $0.serverURL == serverURL.absoluteString && $0.userID == session.userID && $0.quality == quality }) else { return }
         downloadingItemID = item.id
         let request = await client.authorizedRequest(for: requestURL)
         let metadata = VeloraOfflineTransferMetadata(
             itemID: item.id,
             title: item.name,
             serverURL: serverURL.absoluteString,
+            userID: session.userID,
             quality: quality
         )
         _ = offlineTransfer.enqueue(request: request, metadata: metadata)
@@ -326,9 +327,10 @@ public final class VeloraAppModel: ObservableObject {
                 itemID: metadata.itemID,
                 title: metadata.title,
                 serverURL: metadata.serverURL,
+                userID: metadata.userID,
                 quality: metadata.quality
             )
-            let entries = offlineStore.load().filter { $0.serverURL == metadata.serverURL }
+            let entries = offlineStore.load().filter { $0.serverURL == metadata.serverURL && $0.userID == metadata.userID }
             offlineDownloads = entries.contains(entry) ? entries : entries + [entry]
             errorMessage = nil
         } catch VeloraOfflineStoreError.insufficientStorage {
@@ -340,10 +342,10 @@ public final class VeloraAppModel: ObservableObject {
 
     public func removeDownload(for item: JellyfinItem) async {
         let configuredServer = (await client.serverURL()).absoluteString
-        guard let entry = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == configuredServer }) else { return }
+        guard let entry = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == configuredServer && $0.userID == session?.userID }) else { return }
         do {
             try offlineStore.remove(entry)
-            offlineDownloads = offlineStore.load().filter { $0.serverURL == configuredServer }
+            offlineDownloads = offlineStore.load().filter { $0.serverURL == configuredServer && $0.userID == session?.userID }
         } catch {
             errorMessage = String(localized: "Unable to remove download", bundle: .module)
         }

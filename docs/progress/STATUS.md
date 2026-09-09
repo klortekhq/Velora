@@ -252,6 +252,14 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   registros asociados al servidor y usuario activos; las entradas legacy sin
   asociación siguen visibles para poder reproducirlas o migrarlas. La lógica
   comparte el refresco durable y las suites móvil/TV terminan correctamente.
+- Corrección Apple del 2026-09-09: el catálogo offline ahora conserva el
+  `userID` y deduplica por servidor normalizado, usuario, contenido y calidad;
+  el JSON antiguo sigue pudiendo decodificarse con usuario vacío, pero no se
+  muestra automáticamente a otra cuenta. Las transferencias en segundo plano
+  transportan la misma identidad para completar el registro correcto. Se
+  añadió prueba de aislamiento entre cuentas/calidades; las validaciones
+  estáticas pasan. La compilación Swift queda pendiente de macOS/Xcode, que no
+  están instalados en este entorno.
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos

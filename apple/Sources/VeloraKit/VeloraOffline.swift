@@ -9,6 +9,9 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
     public let itemID: String
     public let title: String
     public let serverURL: String
+    /// Jellyfin user ownership. Empty only for legacy catalogs created before
+    /// account-scoped offline storage was introduced.
+    public let userID: String
     public let fileName: String
     public let createdAt: Date
     public let byteCount: Int64?
@@ -16,7 +19,7 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
     public let quality: VeloraDownloadQuality
 
     private enum CodingKeys: String, CodingKey {
-        case id, itemID, title, serverURL, fileName, createdAt, byteCount, checksumSha256, quality
+        case id, itemID, title, serverURL, userID, fileName, createdAt, byteCount, checksumSha256, quality
     }
 
     public init(
@@ -24,6 +27,7 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
         itemID: String,
         title: String,
         serverURL: String,
+        userID: String = "",
         fileName: String,
         createdAt: Date = Date(),
         byteCount: Int64? = nil,
@@ -34,6 +38,7 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
         self.itemID = itemID
         self.title = title
         self.serverURL = serverURL
+        self.userID = userID
         self.fileName = fileName
         self.createdAt = createdAt
         self.byteCount = byteCount
@@ -47,6 +52,7 @@ public struct VeloraOfflineDownload: Codable, Equatable, Identifiable, Sendable 
         itemID = try values.decode(String.self, forKey: .itemID)
         title = try values.decode(String.self, forKey: .title)
         serverURL = try values.decode(String.self, forKey: .serverURL)
+        userID = try values.decodeIfPresent(String.self, forKey: .userID) ?? ""
         fileName = try values.decode(String.self, forKey: .fileName)
         createdAt = try values.decode(Date.self, forKey: .createdAt)
         byteCount = try values.decodeIfPresent(Int64.self, forKey: .byteCount)
@@ -67,12 +73,14 @@ public struct VeloraOfflineTransferMetadata: Codable, Sendable {
     public let itemID: String
     public let title: String
     public let serverURL: String
+    public let userID: String
     public let quality: VeloraDownloadQuality
 
-    public init(itemID: String, title: String, serverURL: String, quality: VeloraDownloadQuality) {
+    public init(itemID: String, title: String, serverURL: String, userID: String = "", quality: VeloraDownloadQuality) {
         self.itemID = itemID
         self.title = title
         self.serverURL = serverURL
+        self.userID = userID
         self.quality = quality
     }
 }
@@ -223,6 +231,7 @@ public final class VeloraOfflineStore: @unchecked Sendable {
             itemID: entry.itemID,
             title: entry.title,
             serverURL: entry.serverURL,
+            userID: entry.userID,
             fileName: entry.fileName,
             createdAt: entry.createdAt,
             byteCount: size,
@@ -232,7 +241,7 @@ public final class VeloraOfflineStore: @unchecked Sendable {
     }
 
     @discardableResult
-    public func add(mediaAt temporaryURL: URL, itemID: String, title: String, serverURL: String, quality: VeloraDownloadQuality = .original) throws -> VeloraOfflineDownload {
+    public func add(mediaAt temporaryURL: URL, itemID: String, title: String, serverURL: String, userID: String = "", quality: VeloraDownloadQuality = .original) throws -> VeloraOfflineDownload {
         guard let temporaryAttributes = try? fileManager.attributesOfItem(atPath: temporaryURL.path),
               let byteCount = (temporaryAttributes[.size] as? NSNumber)?.int64Value else {
             throw VeloraOfflineStoreError.insufficientStorage
@@ -248,19 +257,25 @@ public final class VeloraOfflineStore: @unchecked Sendable {
         let storedByteCount = (attributes[.size] as? NSNumber)?.int64Value
         let checksum = sha256(url: destination)
         var entries = load()
-        let entry = VeloraOfflineDownload(itemID: itemID, title: title, serverURL: serverURL, fileName: fileName, quality: quality)
+        let entry = VeloraOfflineDownload(itemID: itemID, title: title, serverURL: serverURL, userID: userID, fileName: fileName, quality: quality)
         let verifiedEntry = VeloraOfflineDownload(
             id: entry.id,
             itemID: entry.itemID,
             title: entry.title,
             serverURL: entry.serverURL,
+            userID: entry.userID,
             fileName: entry.fileName,
             createdAt: entry.createdAt,
             byteCount: storedByteCount,
             checksumSha256: checksum,
             quality: quality
         )
-        entries.removeAll { $0.itemID == itemID && $0.serverURL == serverURL }
+        entries.removeAll {
+            $0.itemID == itemID &&
+            normalizedServer($0.serverURL) == normalizedServer(serverURL) &&
+            $0.userID == userID &&
+            $0.quality == quality
+        }
         entries.append(verifiedEntry)
         try write(entries)
         return verifiedEntry
@@ -284,6 +299,12 @@ public final class VeloraOfflineStore: @unchecked Sendable {
         try fileManager.createDirectory(at: rootURL, withIntermediateDirectories: true)
         let data = try JSONEncoder().encode(entries)
         try data.write(to: metadataURL, options: .atomic)
+    }
+
+    private func normalizedServer(_ value: String) -> String {
+        value.trimmingCharacters(in: .whitespacesAndNewlines)
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+            .lowercased()
     }
 
     private func sha256(url: URL) -> String? {
