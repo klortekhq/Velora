@@ -39,8 +39,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Discovery (2026-09-10): móvil SHA-256
   `7E9AFD2C3CF0AAC6C7AC42B24A62B35C0DBC3218C4D65520F2A881D219D7438D` y TV
   SHA-256 `FB7A592AF7CA76CEC223B9DC9937C3EB5BBC989D1E2D249A2A77648B2F75CBFD`.
-  Son artefactos locales verificables; no se han sustituido los adjuntos de
-  GitHub porque la sesión `gh` de este entorno no está autenticada.
+  La sesión autenticada del navegador adjuntó ambos artefactos a la pre-release
+  pública `v1.4.0`: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-20260910.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-20260910.apk).
+  Son APK debug de QA, no paquetes firmados de tienda; la publicación está
+  verificada en la lista pública de assets de GitHub.
 - Pantalla de inicio de sesión Android: el contrato
   `check-android-login-layout.mjs` protege safe area, desplazamiento vertical,
   tamaños adaptativos de los campos y foco de mando en el botón TV. La
