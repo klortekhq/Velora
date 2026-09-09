@@ -912,10 +912,10 @@ class JellyfinApiService(
      * before consulting an optional external metadata provider.
      */
     /**
-     * Resolve trailers through the Jellyfin 12 GetItems contract first.
-     * Older servers may not expose trailer items in the user's catalog, so
-     * retain the local/remote relationship endpoints as a compatibility
-     * fallback without making them the primary path.
+     * Resolve trailers through the Jellyfin 12 GetItems contract.
+     * Jellyfin 12 removed the old LocalTrailers/RemoteTrailers relationship
+     * routes from the supported API, so do not issue a second legacy request
+     * after the catalog query returns no results.
      */
     suspend fun getTrailers(itemId: String): List<JellyfinItem> {
         val catalogTrailers = try {
@@ -935,12 +935,7 @@ class JellyfinApiService(
         } catch (_: Exception) {
             emptyList()
         }
-        if (catalogTrailers.isNotEmpty()) return catalogTrailers
-
-        val local = getMediaItems("Items/$itemId/LocalTrailers", fields = "MediaSources")
-        return local.ifEmpty {
-            getMediaItems("Items/$itemId/RemoteTrailers", fields = "MediaSources")
-        }
+        return catalogTrailers
     }
 
     /** Returns theme songs resolved by Jellyfin, including inherited parent media. */

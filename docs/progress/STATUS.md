@@ -60,6 +60,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de
   cliente/dispositivo. Las pruebas web y los contratos estáticos pasan; la
   compilación Swift sigue pendiente del runner macOS/Xcode.
+- Jellyfin 12.0: el resolver de trailers Android ya no intenta las rutas
+  retiradas `LocalTrailers`/`RemoteTrailers` después de consultar `GetItems`;
+  así se evita una segunda petición 404 en servidores 12.0. El contrato de
+  API y las regresiones de presentación/autenticación móvil y TV pasan.
 - Regresión Android del 2026-09-09: `JellyfinAuthServiceTest` verifica en móvil
   y TV que la cabecera completa conserva cliente, dispositivo, `deviceId`,
   versión y token, y que no reintroduce `X-Emby-*`; ambos tests terminan en
@@ -71,9 +75,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   compilación nativa sigue pendiente del runner macOS con Xcode.
 - Trailers Android: películas, series y la pantalla de inicio usan ahora un
   resolver único basado en `GetItems` con `IncludeItemTypes=Trailer`, la ruta
-  recomendada por Jellyfin 12.0, y solo caen a `LocalTrailers`/`RemoteTrailers`
-  en servidores antiguos. El contrato `check-jellyfin-api-contract.mjs` lo
-  protege y las suites móvil/TV pasaron el 2026-09-09.
+  recomendada por Jellyfin 12.0, sin llamadas legacy adicionales. El contrato
+  `check-jellyfin-api-contract.mjs` lo protege y las suites móvil/TV pasaron
+  el 2026-09-09.
 - Trailers Apple: iPhone, iPad y tvOS resuelven el tráiler de la ficha mediante
   el mismo catálogo `GetItems`/`IncludeItemTypes=Trailer` y lo exponen como
   acción reproducible localizada; el contrato de API y los cuatro catálogos
