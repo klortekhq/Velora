@@ -241,6 +241,7 @@ Please verify:
   <string name="mobile_episode_label">E%1$s · %2$s</string>
   <string name="mobile_chapters">Chapters</string>
   <string name="mobile_cast">Cast</string>
+  <string name="details_cast">Cast</string>
   <string name="mobile_crew">Crew</string>
   <string name="mobile_studios">Studios</string>
   <string name="mobile_audio_track">Audio track</string>

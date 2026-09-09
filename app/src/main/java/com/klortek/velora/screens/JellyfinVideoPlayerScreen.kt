@@ -4157,7 +4157,7 @@ fun JellyfinVideoPlayerScreen(
                     item {
                         Column(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
                             Text(
-                                    text = stringResource(com.klortek.velora.R.string.mobile_cast),
+                                    text = stringResource(com.klortek.velora.R.string.details_cast),
                                 style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
