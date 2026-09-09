@@ -184,6 +184,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
   no se colapsan en una sola opción.
+- Corrección Android del 2026-09-09: la reproducción Live TV de ExoPlayer y
+  del fallback MPV conserva ahora la fuente elegida por el usuario al procesar
+  `PlaybackInfo`, buscando por `MediaSourceId` o `LiveStreamId` y usando la
+  primera solo como fallback de servidores incompletos. La prueba se ejecutó
+  en las variantes móvil y TV.
 - Regresión completa del 2026-09-09 sobre ese cambio: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` (82 tareas);
   también pasaron versión, identidad pública, contrato de autenticación,

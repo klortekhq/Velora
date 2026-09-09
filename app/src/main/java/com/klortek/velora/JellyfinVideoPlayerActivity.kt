@@ -30,6 +30,7 @@ import com.klortek.velora.screens.JellyfinVideoPlayerScreen
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.security.MediaUrlHeaderPolicy
 import com.klortek.velora.livetv.adjacentLiveTvChannelId
+import com.klortek.velora.livetv.selectLiveTvPlaybackSource
 import com.klortek.velora.platform.PlatformCapabilities
 import `is`.xyz.mpv.MPVLib
 
@@ -265,7 +266,14 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     autoOpenLiveStream = isLiveTv
                 )
                 
-                val mediaSource = playbackInfo?.MediaSources?.firstOrNull()
+                val mediaSource = if (isLiveTv) {
+                    selectLiveTvPlaybackSource(
+                        sources = playbackInfo?.MediaSources.orEmpty(),
+                        requestedId = liveTvMediaSourceId
+                    )
+                } else {
+                    playbackInfo?.MediaSources?.firstOrNull()
+                }
                 val videoStream = mediaSource?.MediaStreams?.firstOrNull { it.Type == "Video" }
                 val videoCodec = videoStream?.Codec?.lowercase() ?: ""
                 
@@ -276,7 +284,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 )
 
                 if (isLiveTv) {
-                    val liveSource = playbackInfo?.MediaSources?.firstOrNull()
+                    val liveSource = selectLiveTvPlaybackSource(
+                        sources = playbackInfo?.MediaSources.orEmpty(),
+                        requestedId = liveTvMediaSourceId
+                    )
                     val liveMediaSourceId = liveSource?.Id
                     val liveStreamId = liveSource?.LiveStreamId
                     val directSource = liveSource?.Path
@@ -394,7 +405,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     // Acestream channels return a usable LiveStreamId.
                     autoOpenLiveStream = true
                 )
-                val liveSource = playbackInfo?.MediaSources?.firstOrNull()
+                val liveSource = selectLiveTvPlaybackSource(
+                    sources = playbackInfo?.MediaSources.orEmpty(),
+                    requestedId = liveTvMediaSourceId
+                )
                 val liveMediaSourceId = liveSource?.Id
                 val liveStreamId = liveSource?.LiveStreamId
                 val directSource = liveSource?.Path
