@@ -16,6 +16,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   no pierden canales y siguen permitiendo agrupar fuentes bajo el mismo canal.
 - Android: el catálogo español se completa con todas las claves de producto y
   queda protegido por CI junto con inglés, francés y alemán.
+- Reproducción: la etiqueta de subtítulo descargado respeta ahora el idioma
+  seleccionado en la aplicación, también en la interfaz de TV.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.

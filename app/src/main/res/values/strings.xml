@@ -103,6 +103,7 @@
     <string name="player_stream_index">Índice %1$d</string>
     <string name="player_cancel">Cancelar</string>
     <string name="player_downloaded_subtitles">Subtítulos descargados</string>
+    <string name="player_downloaded_label">Descargado</string>
     <string name="settings_offline_wifi_only">Solo Wi‑Fi para descargas</string>
     <string name="settings_offline_wifi_only_description">Espera una conexión Wi‑Fi antes de iniciar nuevas descargas.</string>
     <string name="login_title">Iniciar sesión</string>

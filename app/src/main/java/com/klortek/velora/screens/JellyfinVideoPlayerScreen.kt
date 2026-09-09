@@ -1290,7 +1290,7 @@ fun JellyfinVideoPlayerScreen(
                                     com.klortek.velora.player.SubtitleMapper.buildLocalSubtitleConfiguration(
                                         filePath = downloadedSub.filePath,
                                         language = downloadedSub.language,
-                                        label = "${com.klortek.velora.subtitles.SubtitleLanguages.getDisplayName(downloadedSub.language)} (Descargado)"
+                                        label = "${com.klortek.velora.subtitles.SubtitleLanguages.getDisplayName(downloadedSub.language)} (${context.getString(R.string.player_downloaded_label)})"
                                     )
                                 } catch (e: Exception) {
                                     Log.w("JellyfinPlayer", "Failed to add downloaded subtitle ${com.klortek.velora.security.SensitiveDataRedactor.localFileName(downloadedSub.fileName)}: ${e::class.simpleName}")
