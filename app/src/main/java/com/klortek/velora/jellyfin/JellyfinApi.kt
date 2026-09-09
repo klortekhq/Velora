@@ -477,7 +477,7 @@ class JellyfinApiService(
                 parameters.append("EnableResumable", "true") // Include in-progress episodes
             }.buildString()
             
-            android.util.Log.d("JellyfinAPI", "Fetching NextUp for series: $seriesId")
+            android.util.Log.d("JellyfinAPI", "Fetching NextUp")
             
             val response: ItemsResponse = client.get(url) {
                 header(HttpHeaders.Authorization, mediaBrowserAuthorization())
@@ -487,11 +487,11 @@ class JellyfinApiService(
             if (nextUpEpisode != null) {
                 android.util.Log.d("JellyfinAPI", "NextUp episode found")
             } else {
-                android.util.Log.d("JellyfinAPI", "No NextUp episode found for series $seriesId (series may be fully watched or not started)")
+                android.util.Log.d("JellyfinAPI", "No NextUp episode found")
             }
             nextUpEpisode
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching NextUp for series $seriesId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching NextUp: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -505,12 +505,12 @@ class JellyfinApiService(
      */
     suspend fun getFirstEpisode(seriesId: String): JellyfinItem? {
         return try {
-            android.util.Log.d("JellyfinAPI", "Getting first episode (S1E1) for series: $seriesId")
+            android.util.Log.d("JellyfinAPI", "Getting first episode (S1E1)")
             
             // Get all seasons for the series
             val seasons = getSeasons(seriesId)
             if (seasons.isEmpty()) {
-                android.util.Log.d("JellyfinAPI", "No seasons found for series $seriesId")
+                android.util.Log.d("JellyfinAPI", "No seasons found")
                 return null
             }
             
@@ -521,7 +521,7 @@ class JellyfinApiService(
             // Get the first regular season (Season 1), or fall back to Specials if no regular seasons
             val firstSeason = regularSeasons.firstOrNull() ?: sortedSeasons.firstOrNull()
             if (firstSeason == null) {
-                android.util.Log.d("JellyfinAPI", "No first season found for series $seriesId")
+                android.util.Log.d("JellyfinAPI", "No first season found")
                 return null
             }
             
@@ -533,11 +533,11 @@ class JellyfinApiService(
             if (firstEpisode != null) {
                 android.util.Log.d("JellyfinAPI", "First episode found")
             } else {
-                android.util.Log.d("JellyfinAPI", "No episodes found in first season for series $seriesId")
+                android.util.Log.d("JellyfinAPI", "No episodes found in first season")
             }
             firstEpisode
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error getting first episode for series $seriesId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error getting first episode: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -552,12 +552,12 @@ class JellyfinApiService(
      */
     suspend fun getFirstUnwatchedEpisode(seriesId: String): JellyfinItem? {
         return try {
-            android.util.Log.d("JellyfinAPI", "Finding first unwatched episode for series: $seriesId")
+            android.util.Log.d("JellyfinAPI", "Finding first unwatched episode")
             
             // Get all seasons for the series
             val seasons = getSeasons(seriesId)
             if (seasons.isEmpty()) {
-                android.util.Log.d("JellyfinAPI", "No seasons found for series $seriesId")
+                android.util.Log.d("JellyfinAPI", "No seasons found")
                 return null
             }
             
@@ -599,10 +599,10 @@ class JellyfinApiService(
                 }
             }
             
-            android.util.Log.d("JellyfinAPI", "All episodes watched for series $seriesId")
+            android.util.Log.d("JellyfinAPI", "All episodes watched")
             null
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error finding first unwatched episode for series $seriesId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error finding first unwatched episode: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             null
         }
@@ -1341,7 +1341,7 @@ class JellyfinApiService(
                 parameters.append("IncludeSegmentTypes", "Intro,Outro")
             }.buildString()
             
-            android.util.Log.d("JellyfinAPI", "Fetching MediaSegments for item: $itemId")
+            android.util.Log.d("JellyfinAPI", "Fetching MediaSegments")
             
             val response: MediaSegmentsResponse = client.get(url) {
                 header(HttpHeaders.Authorization, mediaBrowserAuthorization())
@@ -1476,7 +1476,7 @@ class JellyfinApiService(
         if (!forceRefresh) {
             seasonCache[seriesId]?.let { (timestamp, seasons) ->
                 if (System.currentTimeMillis() - timestamp < CACHE_DURATION_MS) {
-                    android.util.Log.d("JellyfinAPI", "Using cached seasons for series $seriesId")
+                    android.util.Log.d("JellyfinAPI", "Using cached seasons")
                     return seasons
                 }
             }
@@ -1500,7 +1500,7 @@ class JellyfinApiService(
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching seasons for series $seriesId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching seasons: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1511,7 +1511,7 @@ class JellyfinApiService(
         if (!forceRefresh) {
             episodeCache[seasonId]?.let { (timestamp, episodes) ->
                 if (System.currentTimeMillis() - timestamp < CACHE_DURATION_MS) {
-                    android.util.Log.d("JellyfinAPI", "Using cached episodes for season $seasonId")
+                android.util.Log.d("JellyfinAPI", "Using cached episodes")
                     return episodes
                 }
             }
@@ -1536,7 +1536,7 @@ class JellyfinApiService(
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching episodes for season $seasonId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching episodes: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1574,16 +1574,16 @@ class JellyfinApiService(
                 parameters.append("Fields", "Overview,UserData,SeriesName,SeriesId,ImageTags,IndexNumber,ParentIndexNumber")
             }.buildString()
             
-            android.util.Log.d("JellyfinAPI", "Fetching next episodes: seasonId=$seasonId, startIndex=$startIndex (API: $apiStartIndex)")
+            android.util.Log.d("JellyfinAPI", "Fetching next episodes")
             
             val response: ItemsResponse = client.get(url) {
                 header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
-            android.util.Log.d("JellyfinAPI", "Found ${response.Items.size} episodes starting from index $startIndex")
+            android.util.Log.d("JellyfinAPI", "Found ${response.Items.size} episodes")
             response.Items.sortedBy { it.IndexNumber ?: 0 }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching next episodes for season $seasonId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching next episodes: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             emptyList()
         }
@@ -1611,7 +1611,7 @@ class JellyfinApiService(
                 parameters.append("SortOrder", "Ascending")
             }.buildString()
             
-            android.util.Log.d("JellyfinAPI", "Fetching episodes in season: seriesId=$seriesId, seasonId=$seasonId, currentEpisode=$currentEpisodeIndex, season=$currentSeasonNumber")
+            android.util.Log.d("JellyfinAPI", "Fetching episodes in season")
             
             val response: ItemsResponse = client.get(url) {
                 header(HttpHeaders.Authorization, mediaBrowserAuthorization())
@@ -1624,7 +1624,7 @@ class JellyfinApiService(
             if (nextEpisode != null) {
                 android.util.Log.d("JellyfinAPI", "Next episode in season found")
             } else {
-                android.util.Log.d("JellyfinAPI", "No next episode in S${currentSeasonNumber} after E${currentEpisodeIndex} (last episode of season)")
+                android.util.Log.d("JellyfinAPI", "No next episode in season")
             }
             nextEpisode
         } catch (e: Exception) {
@@ -1655,7 +1655,7 @@ class JellyfinApiService(
                 parameters.append("Fields", "MediaSources,Overview,UserData,SeriesName,SeriesId,ImageTags,IndexNumber,ParentIndexNumber")
             }.buildString()
             
-            android.util.Log.d("JellyfinAPI", "Fetching next episode (all seasons): seriesId=$seriesId, StartIndex=$startIndex (current episode index=$currentEpisodeIndex)")
+            android.util.Log.d("JellyfinAPI", "Fetching next episode across seasons")
             
             val response: ItemsResponse = client.get(url) {
                 header(HttpHeaders.Authorization, mediaBrowserAuthorization())
@@ -1693,7 +1693,7 @@ class JellyfinApiService(
             
             unwatchedCount
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error getting unwatched episode count for series $seriesId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error getting unwatched episode count: ${SensitiveDataRedactor.message(e)}")
             0
         }
     }
@@ -1898,7 +1898,7 @@ class JellyfinApiService(
                 item.getLastPlayedDateForSort()
             }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching continue watching movies from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching continue watching movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1925,7 +1925,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching top unwatched movies from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching top unwatched movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1952,7 +1952,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching recently watched movies from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching recently watched movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -1979,7 +1979,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching favorite movies from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching favorite movies: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2013,7 +2013,7 @@ class JellyfinApiService(
                 item.getLastPlayedDateForSort()
             }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching continue watching episodes from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching continue watching episodes: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2038,7 +2038,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching next up episodes from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching next up episodes: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2065,7 +2065,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching recently released episodes from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching recently released episodes: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2092,7 +2092,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching random unwatched shows from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching random unwatched shows: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2118,7 +2118,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching top rated shows from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching top rated shows: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2145,7 +2145,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching shows by genre '$genre' from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching shows by genre: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2168,7 +2168,7 @@ class JellyfinApiService(
             }.body()
             response.Items.mapNotNull { it.Name }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching genres from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching genres: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2191,7 +2191,7 @@ class JellyfinApiService(
             }.body()
             response.Items.mapNotNull { it.Name }
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching movie genres from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching movie genres: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2218,7 +2218,7 @@ class JellyfinApiService(
             }.body()
             response.Items
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error fetching movies by genre '$genre' from library $libraryId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error fetching movies by genre: ${SensitiveDataRedactor.message(e)}")
             emptyList()
         }
     }
@@ -2250,9 +2250,9 @@ class JellyfinApiService(
                 android.util.Log.d("JellyfinAPI", "Invalidating episode caches after marking as watched")
                 episodeCache.clear()
                 // itemDetailsCache.remove(itemId)
-                android.util.Log.d("JellyfinAPI", "Marked item $itemId as watched")
+                android.util.Log.d("JellyfinAPI", "Marked item as watched")
             } else {
-                android.util.Log.e("JellyfinAPI", "Failed to mark item $itemId as watched. Status: ${response.status.value}")
+                android.util.Log.e("JellyfinAPI", "Failed to mark item as watched. Status: ${response.status.value}")
             }
             isSuccessful
         } catch (e: Exception) {
@@ -2335,7 +2335,7 @@ class JellyfinApiService(
                 contentType(ContentType.Application.Json)
                 setBody(requestBody)
             }
-            android.util.Log.d("JellyfinAPI", "✅ Reported playback START for item $itemId at position $positionTicks ticks (status: ${response.status})")
+            android.util.Log.d("JellyfinAPI", "✅ Reported playback START (status: ${response.status})")
             true
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "❌ Error reporting playback start: ${SensitiveDataRedactor.message(e)}")
@@ -2390,7 +2390,7 @@ class JellyfinApiService(
                 contentType(ContentType.Application.Json)
                 setBody(requestBody)
             }
-            android.util.Log.d("JellyfinAPI", "📊 Reported playback PROGRESS for item $itemId at ${positionTicks / 10_000_000}s (status: ${response.status})")
+            android.util.Log.d("JellyfinAPI", "📊 Reported playback PROGRESS (status: ${response.status})")
             true
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "❌ Error reporting playback progress: ${SensitiveDataRedactor.message(e)}")
@@ -2429,7 +2429,7 @@ class JellyfinApiService(
                 contentType(ContentType.Application.Json)
                 setBody(requestBody)
             }
-            android.util.Log.d("JellyfinAPI", "🛑 Reported playback STOPPED for item $itemId at ${positionTicks / 10_000_000}s (status: ${response.status})")
+            android.util.Log.d("JellyfinAPI", "🛑 Reported playback STOPPED (status: ${response.status})")
             true
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "❌ Error reporting playback stopped: ${SensitiveDataRedactor.message(e)}")
@@ -2466,15 +2466,15 @@ class JellyfinApiService(
                 parameters.append("ReplaceAllImages", replaceAllImages.toString())
             }.buildString()
             
-            android.util.Log.d("JellyfinAPI", "Refreshing item metadata for $itemId")
+            android.util.Log.d("JellyfinAPI", "Refreshing item metadata")
             
             client.post(url) {
                 header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }
-            android.util.Log.d("JellyfinAPI", "Item metadata refresh triggered successfully for $itemId")
+            android.util.Log.d("JellyfinAPI", "Item metadata refresh triggered successfully")
             true
         } catch (e: Exception) {
-            android.util.Log.e("JellyfinAPI", "Error refreshing item metadata for $itemId: ${SensitiveDataRedactor.message(e)}")
+            android.util.Log.e("JellyfinAPI", "Error refreshing item metadata: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
             false
         }
@@ -2572,7 +2572,7 @@ class JellyfinApiService(
             if (matchingItem != null) {
                 android.util.Log.d("JellyfinAPI", "Matching item found by provider ID")
             } else {
-                android.util.Log.d("JellyfinAPI", "No $itemType found with TMDB ID $tmdbId")
+                android.util.Log.d("JellyfinAPI", "No matching item found by provider ID")
             }
             
             matchingItem
@@ -2624,7 +2624,7 @@ class JellyfinApiService(
             if (matchingItem != null) {
                 android.util.Log.d("JellyfinAPI", "Matching item found by title")
             } else {
-                android.util.Log.d("JellyfinAPI", "No $itemType found with title '$title'")
+                android.util.Log.d("JellyfinAPI", "No matching item found by title")
             }
             
             matchingItem

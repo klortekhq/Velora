@@ -149,7 +149,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "Overview,ChildCount,RunTimeTicks")
             }.buildString()
 
-            Log.d(TAG, "Fetching albums for artist $artistId")
+            Log.d(TAG, "Fetching albums")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("Authorization", authorizationHeader())
@@ -169,7 +169,7 @@ class JellyfinMusicApi(
                 )
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching albums for artist $artistId", e)
+            Log.e(TAG, "Error fetching albums", e)
             emptyList()
         }
     }
@@ -266,7 +266,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "MediaSources,MediaStreams")
             }.buildString()
 
-            Log.d(TAG, "Fetching tracks for album $albumId")
+            Log.d(TAG, "Fetching tracks")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("Authorization", authorizationHeader())
@@ -299,7 +299,7 @@ class JellyfinMusicApi(
                 )
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching tracks for album $albumId", e)
+            Log.e(TAG, "Error fetching tracks", e)
             emptyList()
         }
     }
@@ -319,7 +319,7 @@ class JellyfinMusicApi(
                 parameters.append("Fields", "MediaSources,MediaStreams")
             }.buildString()
 
-            Log.d(TAG, "Fetching tracks for artist $artistId")
+            Log.d(TAG, "Fetching tracks")
 
             val response: MusicItemsResponse = client.get(url) {
                 header("Authorization", authorizationHeader())
@@ -352,7 +352,7 @@ class JellyfinMusicApi(
                 )
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching tracks for artist $artistId", e)
+            Log.e(TAG, "Error fetching tracks", e)
             emptyList()
         }
     }
