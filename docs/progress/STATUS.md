@@ -20,6 +20,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   fuente. `web/scripts/test-platform.mjs` pasa y `node web/scripts/build-web.mjs
   all` regenera correctamente el bundle web y el IPK webOS; Samsung queda como
   bundle preparado y VIDAA como HTML5 sin afirmar firma ni certificación.
+- Revalidación web/Smart TV del 2026-09-10: `web/scripts/test-platform.mjs`
+  pasa con seguridad, interacción de biblioteca y preferencias de subtítulos;
+  `node web/scripts/build-web.mjs all` vuelve a generar el bundle web, el IPK
+  webOS y los bundles HTML5 de Samsung/Tizen y VIDAA. Samsung sigue necesitando
+  Tizen Studio/perfil de firma y VIDAA su portal/SDK: no se presentan como
+  paquetes certificados.
 - Apple: el shell SwiftUI incorpora navegación real por Inicio, Películas y
   Series, con Live TV condicionado a los canales devueltos por Jellyfin y
   Ajustes accesibles desde cada pestaña. `check-apple-navigation.mjs` y los
