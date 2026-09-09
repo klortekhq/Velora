@@ -13,6 +13,9 @@ conexión solo están disponibles en iPhone y iPad; tvOS es streaming.
 (`Pw` y el esquema estándar `Authorization`). Incluye autenticación Jellyfin, sesión tipada, preferencias
 locales de idioma/audio/subtítulos/rendimiento, requests autenticadas para
 artwork o AVPlayer y componentes SwiftUI adaptativos para bibliotecas y ajustes.
+El shell compartido ofrece pestañas nativas de Inicio, Películas y Series; la
+pestaña Live TV solo se añade cuando el usuario tiene canales disponibles y
+las fichas conservan la navegación a reparto, reproducción y ajustes.
 También incluye `VeloraAppShell`, una superficie SwiftUI nativa que conecta
 inicio de sesión, biblioteca, detalle, ajustes, AVPlayer y Live TV; en tvOS no
 muestra acciones de descarga. Las apps iOS/iPadOS y tvOS deben consumir este
