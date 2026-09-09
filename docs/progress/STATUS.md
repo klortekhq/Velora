@@ -60,6 +60,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Rendimiento de filtros Live TV: la tira de favoritos y grupos usa ahora
   `LazyRow`, evitando que una lista grande de grupos desborde la pantalla o
   fuerce a Compose a medir todos los controles como un `Row` estático.
+- Las APK generadas desde `0ce17b7` incorporan esta mejora y quedaron
+  publicadas en `v1.4.0` como [`Velora-mobile-qa-live-tv-filters.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-filters.apk),
+  SHA-256 `E2CC05760E3C1539FEA29321A6F93A4522FB36F956EE947620F839111EA84BF8`,
+  y [`Velora-tv-qa-live-tv-filters.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-filters.apk),
+  SHA-256 `A29B588D4FAABF3B73FE2A49D9FDC0E36129DA6652134400D2AD3CAD678E179C`.
 - Motor de decisión original-first del 2026-09-09: la comparación de
   capacidades normaliza alias equivalentes de códec, HDR y contenedor (por
   ejemplo `H265`/`HEVC`, `EC-3`/`EAC3`, `matroska`/`MKV` y Dolby Vision),
