@@ -52,6 +52,19 @@ data class LiveTvChannelGroup(
         get() = channels.maxByOrNull(::liveTvChannelPrimaryScore) ?: channels.first()
 }
 
+/**
+ * Builds the channel list handed to the player/zapper. The selected source
+ * must replace the group's primary row, otherwise a provider with a distinct
+ * Jellyfin ID cannot be used for next/previous channel navigation.
+ */
+fun liveTvPlaybackChannelList(
+    groups: List<LiveTvChannelGroup>,
+    selectedGroup: LiveTvChannelGroup,
+    selectedChannel: LiveTvChannel,
+): List<LiveTvChannel> = groups.map { group ->
+    if (group.channelId == selectedGroup.channelId) selectedChannel else group.primary
+}
+
 private fun liveTvChannelPrimaryScore(channel: LiveTvChannel): Int =
     (if (channel.CurrentProgram != null) 4 else 0) +
         (if (channel.UserData?.IsFavorite == true) 2 else 0) +

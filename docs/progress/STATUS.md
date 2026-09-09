@@ -52,6 +52,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   se muestran en una sola fila y sus fuentes siguen siendo seleccionables.
   `LiveTvChannelQueryTest` cubre ambos formatos y las suites Android móvil/TV
   terminan en `BUILD SUCCESSFUL`.
+- Navegación Live TV tras seleccionar una fuente alternativa: la fuente
+  elegida reemplaza ahora a la principal dentro de la lista de zapping, aunque
+  el proveedor use otra ID Jellyfin. Así los botones de canal anterior/siguiente
+  conservan la variante seleccionada; `selectedAlternateSourceReplacesPrimaryForChannelNavigation`
+  cubre la regresión en móvil y TV.
 - Motor de decisión original-first del 2026-09-09: la comparación de
   capacidades normaliza alias equivalentes de códec, HDR y contenedor (por
   ejemplo `H265`/`HEVC`, `EC-3`/`EAC3`, `matroska`/`MKV` y Dolby Vision),
