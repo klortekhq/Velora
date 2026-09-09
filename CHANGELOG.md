@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- **Reproducción móvil:** el control de pantalla completa está disponible en
+  la fila principal del reproductor, con entrada y salida explícitas mediante
+  toque y etiquetas accesibles; no es necesario girar el teléfono.
+
 - Reproducción Android: el selector de formato de imagen del reproductor MPV
   vuelve a aplicar correctamente Ajustar, Rellenar, 4:3, 16:9, Cine,
   Estirar y Original en tiempo de reproducción; el reinicio del override usa

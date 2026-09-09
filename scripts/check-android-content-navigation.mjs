@@ -33,6 +33,12 @@ assert.match(
 );
 assert.match(castActivity, /"Movie"\s*->\s*startActivity\(MovieDetailsActivity\.createIntent/, 'La filmografía debe abrir películas.');
 assert.match(castActivity, /"Series"\s*->\s*startActivity\(SeriesDetailsActivity\.createIntent/, 'La filmografía debe abrir series.');
+const videoPlayer = read('app/src/main/java/com/klortek/velora/screens/JellyfinVideoPlayerScreen.kt');
+assert.match(
+  videoPlayer,
+  /if \(isMobile\) \{[\s\S]*?R\.string\.player_fullscreen[\s\S]*?R\.string\.player_exit_fullscreen[\s\S]*?toggleMobileFullscreen\(\)/,
+  'El reproductor móvil debe ofrecer entrada y salida de pantalla completa desde los controles táctiles.'
+);
 
 assert.match(
   mobileHome,
