@@ -87,6 +87,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   webOS y VIDAA. Tizen sigue sin WGT porque este entorno no tiene Tizen Studio
   ni perfil de firma; webOS y VIDAA conservan la misma limitación de certificado
   o portal oficial.
+- Localización Apple del 2026-09-09: el selector de idioma ya usa claves del
+  catálogo en lugar de nombres codificados; los cuatro catálogos mantienen
+  ahora 70 claves coherentes y `check-apple-locales.mjs` pasa.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
