@@ -104,6 +104,12 @@ assert.match(appSource, /sensitiveNames = \['api_key', 'apikey', 'access_token',
 assert.match(appSource, /sensitiveNames\.indexOf\(String\(name\)\.toLowerCase\(\)\)/);
 assert.match(appSource, /function toggleFullscreen/);
 assert.match(appSource, /function minimizePlayer/);
+assert.match(appSource, /function rememberFocus\(\)/);
+assert.match(appSource, /function restoreFocus\(\)/);
+assert.match(appSource, /document\.querySelector\('#detailsClose'\)\.focus\(\)/);
+assert.match(appSource, /document\.querySelector\('#settingsClose'\)\.focus\(\)/);
+assert.match(appSource, /function closeDetails\(\)[\s\S]*restoreFocus\(\)/);
+assert.match(appSource, /function closeSettings\(\)[\s\S]*restoreFocus\(\)/);
 assert.match(appSource, /function startThemeMusic/);
 assert.match(appSource, /function stopThemeMusic/);
 assert.match(appSource, /ThemeSongs\?UserId=/);
