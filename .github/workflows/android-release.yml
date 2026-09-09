@@ -75,6 +75,9 @@ jobs:
       - name: Validar preferencias de reproducción
         run: node scripts/check-playback-preferences-contract.mjs
 
+      - name: Validar diseño del inicio de sesión Android
+        run: node scripts/check-android-login-layout.mjs
+
       - name: Validar catálogos Android
         run: node scripts/check-android-locales.mjs
 
