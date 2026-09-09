@@ -43,6 +43,8 @@ jobs:
         run: node scripts/check-jellyfin-auth-contract.mjs
       - name: Validate Jellyfin API contract
         run: node scripts/check-jellyfin-api-contract.mjs
+      - name: Validate playback language preferences
+        run: node scripts/check-playback-preferences-contract.mjs
       - name: Validate public identity
         run: node scripts/check-public-identity.mjs
       - name: Validate release workflow policy
