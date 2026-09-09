@@ -1001,6 +1001,10 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 
 ## Pendiente verificable
 
+- Comprobación de entorno del 2026-09-09: el endpoint LAN de QA está accesible
+  y `/System/Info/Public` identifica Jellyfin `12.0.0`. Esta prueba no
+  autentica ni modifica el servidor; el smoke completo sigue separado para no
+  registrar credenciales ni direcciones privadas en el entorno de trabajo.
 - Obtener una ejecución autenticada completa contra Jellyfin para probar
   biblioteca, Live TV, reproducción ExoPlayer, audio, subtítulos y zapping.
 - Ejecutar la suite Swift en macOS y validar iOS/iPadOS/tvOS en simulador o
