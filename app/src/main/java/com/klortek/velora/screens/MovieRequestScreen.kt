@@ -236,7 +236,7 @@ fun MovieRequestScreen(
                             ) {
                             // Title
                             Text(
-                                text = displayMovie.title ?: "Unknown Title",
+                                text = displayMovie.title ?: stringResource(com.klortek.velora.R.string.jellyseerr_unknown_title),
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.64f
                                 ),
@@ -343,7 +343,7 @@ fun MovieRequestScreen(
                                                 requestStatus = request.status
                                                 Toast.makeText(
                                                     context,
-                                                    "${displayMovie.title} has been requested!",
+                                                    context.getString(com.klortek.velora.R.string.jellyseerr_request_sent),
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             },
@@ -413,7 +413,7 @@ fun MovieRequestScreen(
                                     if (buttonFocused) {
                                         Spacer(modifier = Modifier.width(6.dp))
                                         Text(
-                                            text = "Requesting...",
+                                            text = stringResource(com.klortek.velora.R.string.jellyseerr_requesting),
                                             style = MaterialTheme.typography.labelLarge.copy(
                                                 fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                                             ),
@@ -478,7 +478,7 @@ fun MovieRequestScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                        ) {
                            Text(
-                               text = "Reparto",
+                               text = stringResource(com.klortek.velora.R.string.details_cast),
                                style = MaterialTheme.typography.titleMedium,
                                color = MaterialTheme.colorScheme.onSurface
                            )
@@ -573,7 +573,7 @@ fun MovieRequestScreen(
                                 .padding(horizontal = 24.dp, vertical = 20.dp)
                         ) {
                             androidx.compose.material3.Text(
-                                text = displayMovie.title ?: "Unknown Title",
+                                text = displayMovie.title ?: stringResource(com.klortek.velora.R.string.jellyseerr_unknown_title),
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
@@ -581,7 +581,7 @@ fun MovieRequestScreen(
                             Spacer(modifier = Modifier.height(6.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 androidx.compose.material3.Text(
-                                    text = "Movie",
+                                    text = stringResource(com.klortek.velora.R.string.movie),
                                     fontSize = 13.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = com.klortek.velora.theme.JetcasterPrimary
@@ -630,7 +630,7 @@ fun MovieRequestScreen(
                                         requestStatus = request.status
                                         Toast.makeText(
                                             context,
-                                            "${displayMovie.title} has been requested!",
+                                                    context.getString(com.klortek.velora.R.string.jellyseerr_request_sent),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     },
@@ -726,7 +726,7 @@ fun MovieRequestScreen(
                                     .padding(horizontal = 24.dp, vertical = 16.dp)
                             ) {
                                 androidx.compose.material3.Text(
-                                    text = "Sinopsis",
+                                    text = stringResource(com.klortek.velora.R.string.details_overview),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = com.klortek.velora.theme.JetcasterOnSurface
@@ -753,7 +753,7 @@ fun MovieRequestScreen(
                                 .padding(vertical = 16.dp)
                         ) {
                             androidx.compose.material3.Text(
-                                text = "Reparto",
+                                text = stringResource(com.klortek.velora.R.string.details_cast),
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = com.klortek.velora.theme.JetcasterOnSurface,

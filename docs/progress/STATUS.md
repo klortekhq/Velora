@@ -41,6 +41,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Interfaz principal y reproducción: búsqueda vacía, descubrimiento y descripción
   del aviso AV1 están localizados; el catálogo garantizado queda en 546 claves y
   ambas compilaciones Kotlin pasan.
+- Jellyseerr Android: las fichas de solicitudes de películas y series localizan
+  sus etiquetas, temporadas, episodios y confirmaciones; el catálogo queda en
+  552 claves y ambas variantes compilan correctamente.
 - Revisión Jellyfin 12 del 2026-09-09: los nombres internos heredados de
   cabeceras y comentarios de otros clientes se sustituyeron por terminología
   propia de Velora; no se alteraron namespaces ni identificadores de paquete.
