@@ -4,6 +4,10 @@ public actor JellyfinClient {
     public enum ClientError: Error { case invalidServerURL, invalidResponse, unauthorized }
     public static let clientVersion = "1.4.0"
 
+    private static func mediaBrowserAuthorization(token: String) -> String {
+        "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"\(clientVersion)\", Token=\"\(token)\""
+    }
+
     private static func isValidServerURL(_ url: URL) -> Bool {
         guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https",
               let host = url.host, !host.isEmpty,
@@ -206,7 +210,7 @@ public actor JellyfinClient {
         let safeURL = sanitizedServerMediaURL(url) ?? url
         var request = URLRequest(url: safeURL)
         if isServerURL(safeURL), let accessToken {
-            request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
+            request.setValue(Self.mediaBrowserAuthorization(token: accessToken), forHTTPHeaderField: "Authorization")
         }
         return request
     }
@@ -396,7 +400,7 @@ public actor JellyfinClient {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if let accessToken {
-            request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
+            request.setValue(Self.mediaBrowserAuthorization(token: accessToken), forHTTPHeaderField: "Authorization")
         }
         request.httpBody = try? JSONEncoder().encode(
             JellyfinPlaybackStoppedRequest(itemID: itemID, positionTicks: max(0, positionTicks))
@@ -407,7 +411,7 @@ public actor JellyfinClient {
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
         if let accessToken {
-            request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
+            request.setValue(Self.mediaBrowserAuthorization(token: accessToken), forHTTPHeaderField: "Authorization")
         }
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }

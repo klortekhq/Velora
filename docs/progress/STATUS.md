@@ -55,6 +55,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `BUILD SUCCESSFUL`, la suite web pasó y los 18 verificadores de contrato
   (`locales`, navegación, logs, playback, Apple, Jellyfin, offline, identidad,
   releases, packaging y versiones) terminaron correctamente sobre `main`.
+- Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
+  peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
+  proxy del navegador y peticiones de vídeo usan ahora identidad completa de
+  cliente/dispositivo. Las pruebas web y los contratos estáticos pasan; la
+  compilación Swift sigue pendiente del runner macOS/Xcode.
 - Apple SwiftUI: los entrypoints móvil y tvOS conservan ahora una única
   instancia de `VeloraAppShell` en `@State`; ya no reconstruyen el cliente,
   la sesión ni el estado de navegación durante cada recomposición. El contrato

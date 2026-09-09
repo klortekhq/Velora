@@ -379,12 +379,16 @@
     });
   }
 
+  function mediaBrowserAuthorization() {
+    return 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="' + APP_VERSION + '", Language="' + languageCode() + '", Token="' + state.token + '"';
+  }
+
   function api(path, options) {
     var request = options || {};
     var headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'MediaBrowser Token="' + state.token + '"',
+      'Authorization': mediaBrowserAuthorization(),
       'Accept-Language': languageCode()
     };
     Object.keys(request.headers || {}).forEach(function (key) {
@@ -413,7 +417,7 @@
       fetch(image(id), {
         headers: {
           Accept: 'image/*',
-          'Authorization': 'MediaBrowser Token="' + state.token + '"'
+          'Authorization': mediaBrowserAuthorization()
         }
       }).then(function (response) {
         if (!response.ok) throw Error('No se pudo cargar la imagen');
@@ -1248,7 +1252,7 @@
           video.src = sourceUrl;
         } else {
           fetch(sourceUrl, {
-          headers: { 'Authorization': 'MediaBrowser Token="' + state.token + '"', Accept: 'video/*' },
+          headers: { 'Authorization': mediaBrowserAuthorization(), Accept: 'video/*' },
           cache: 'no-store',
           signal: player._veloraAbortController.signal
           }).then(function (response) {
