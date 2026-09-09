@@ -226,6 +226,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   cambios como propiedades de runtime de MPV. Esto evita que la interfaz cambie
   de etiqueta mientras el vídeo conserva el formato anterior; la regresión
   queda cubierta por `MpvAspectContainerTest`.
+- Reparto en la vista MPV de TV: las tarjetas de actores dejaron de ser
+  decorativas; ahora tienen acción `Card` con foco de mando/toque y abren
+  `CastInfoActivity`, que carga la filmografía de películas y series. El
+  contrato `check-android-content-navigation.mjs` protege esta ruta.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
