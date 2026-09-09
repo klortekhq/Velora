@@ -1066,10 +1066,11 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   `PlaybackInfo` o reproducción real.
 - Smoke test autenticado repetido el 2026-09-09 contra el endpoint LAN
   configurado por el usuario: `/System/Info/Public` respondió como Jellyfin, pero
-  `Users/AuthenticateByName` devolvió `HTTP 400`. No se guardaron credenciales
-  ni tokens y no se certifican catálogo, agrupación de canales, Live TV,
-  `PlaybackInfo` ni reproducción real. El host de QA tampoco dispone de `adb`
-  en esta sesión, por lo que no se ejecutó una comprobación adicional en Fire TV.
+  `Users/AuthenticateByName` devolvió `HTTP 401` en la revalidación posterior.
+  No se guardaron credenciales ni tokens y no se certifican catálogo,
+  agrupación de canales, Live TV, `PlaybackInfo` ni reproducción real. El host
+  de QA tampoco dispone de `adb` en esta sesión, por lo que no se ejecutó una
+  comprobación adicional en Fire TV.
 - Prueba limpia en Fire TV AFTSS del 2026-09-08 con la build de QA
   `1C4B8469341E85A9B9181754D4EBFAFD687E1BD95A7ECCAC2CE910AB5327E3DD`:
   tras borrar los datos locales, descubrir el servidor y enviar el formulario
