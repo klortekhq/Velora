@@ -228,6 +228,11 @@ Please verify:
   <string name="request_no_seasons">No seasons found</string>
   <string name="jellyseerr_requesting_short">Requesting…</string>
   <string name="subtitle_downloading">Downloading…</string>
+  <string name="subtitle_select_language">Select language</string>
+  <string name="subtitle_searching">Searching…</string>
+  <string name="subtitle_select">Select subtitle</string>
+  <string name="subtitle_searching_provider">Searching OpenSubtitles…</string>
+  <string name="subtitle_none_found">No subtitles found</string>
   <string name="subtitle_download_failed">Could not download the subtitle</string>
   <string name="subtitle_downloaded_title">Downloaded subtitles</string>
   <string name="subtitle_none_downloaded">No downloaded subtitles</string>

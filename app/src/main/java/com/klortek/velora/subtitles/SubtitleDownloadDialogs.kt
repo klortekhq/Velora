@@ -54,7 +54,7 @@ fun SubtitleLanguageDialog(
                 ) {
                     // Title - 30% smaller to match subtitle picker
                     Text(
-                        text = "Select Language",
+                        text = stringResource(R.string.subtitle_select_language),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -146,7 +146,9 @@ fun SubtitleResultsDialog(
                 ) {
                     // Title - 30% smaller to match subtitle picker
                     Text(
-                        text = if (isLoading) "Searching..." else "Select Subtitle",
+                        text = stringResource(
+                            if (isLoading) R.string.subtitle_searching else R.string.subtitle_select
+                        ),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
                         ),
@@ -163,7 +165,7 @@ fun SubtitleResultsDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Searching OpenSubtitles...",
+                                text = stringResource(R.string.subtitle_searching_provider),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                 ),
@@ -179,7 +181,7 @@ fun SubtitleResultsDialog(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "No subtitles found",
+                                text = stringResource(R.string.subtitle_none_found),
                                 style = MaterialTheme.typography.bodyMedium.copy(
                                     fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                 ),
