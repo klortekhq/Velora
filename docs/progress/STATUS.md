@@ -80,6 +80,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   las 508 claves base y queda incluido en el verificador de catálogos completos;
   los idiomas adicionales siguen usando fallback seguro mientras se completa
   su traducción.
+- Accesibilidad/localización Android del 2026-09-09: la etiqueta visible de
+  subtítulos descargados dejó de estar fija en español y usa el catálogo activo
+  en móvil y TV; contratos, compilación y tests de ambas variantes pasan.
 - Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
   peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de

@@ -79,6 +79,7 @@
   <string name="player_stream_index">Index %1$d</string>
   <string name="player_cancel">Abbrechen</string>
   <string name="player_downloaded_subtitles">Heruntergeladene Untertitel</string>
+  <string name="player_downloaded_label">Heruntergeladen</string>
   <string name="settings_offline_wifi_only">Downloads nur über WLAN</string>
   <string name="settings_offline_wifi_only_description">Vor neuen Downloads auf eine WLAN-Verbindung warten.</string>
   <string name="live_tv_favorite_update_error">Favorit konnte nicht aktualisiert werden</string>
