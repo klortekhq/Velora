@@ -942,7 +942,14 @@
   }
 
   function showLiveSourcePicker(group) {
+    // Keep the channel row as the return target for mouse, keyboard and TV
+    // remotes. `closeDetails` may restore an older target, so capture the
+    // opener before removing any existing details modal.
+    var opener = document.activeElement;
     closeDetails();
+    if (opener && opener !== document.body && typeof opener.focus === 'function') {
+      state.returnFocus = opener;
+    }
     root.insertAdjacentHTML('beforeend', '<div class="modal" id="liveSourcePicker" role="dialog" aria-modal="true" aria-labelledby="liveSourceTitle">' +
       '<div class="modal-card"><button type="button" class="close" id="liveSourceClose">' + esc(t('back')) + '</button>' +
       '<h2 id="liveSourceTitle">' + esc(group.primary.Name || '') + '</h2>' +
@@ -951,11 +958,16 @@
         return '<button type="button" class="source-option" data-source-index="' + index + '">' +
           esc(liveSourceLabel(channel, index + 1)) + '</button>';
       }).join('') + '</div></div></div>');
-    document.querySelector('#liveSourceClose').onclick = function () { document.querySelector('#liveSourcePicker').remove(); };
+    var closePicker = function () {
+      var picker = document.querySelector('#liveSourcePicker');
+      if (picker) picker.remove();
+      restoreFocus();
+    };
+    document.querySelector('#liveSourceClose').onclick = closePicker;
     Array.prototype.forEach.call(document.querySelectorAll('#liveSourcePicker [data-source-index]'), function (button) {
       button.onclick = function () {
         var selected = group.channels[Number(button.getAttribute('data-source-index'))];
-        document.querySelector('#liveSourcePicker').remove();
+        closePicker();
         play(selected);
       };
     });
@@ -1588,9 +1600,14 @@
     if (event.key !== 'Escape') return;
     var settings = document.querySelector('#settings');
     var details = document.querySelector('#details');
+    var liveSourcePicker = document.querySelector('#liveSourcePicker');
     var player = document.querySelector('#player');
     if (settings) {
       closeSettings();
+      event.preventDefault();
+    } else if (liveSourcePicker) {
+      liveSourcePicker.remove();
+      restoreFocus();
       event.preventDefault();
     } else if (player) {
       closePlayer();
