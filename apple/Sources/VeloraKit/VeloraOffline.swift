@@ -85,6 +85,34 @@ public struct VeloraOfflineTransferMetadata: Codable, Sendable {
     }
 }
 
+/// Progress reported by Apple's background transfer coordinator. The ETA is
+/// nil until the server exposes a meaningful content length and enough bytes
+/// have arrived to calculate a stable estimate.
+public struct VeloraOfflineTransferProgress: Sendable {
+    public let metadata: VeloraOfflineTransferMetadata
+    public let fractionCompleted: Double?
+    public let bytesWritten: Int64
+    public let totalBytesExpected: Int64?
+    public let bytesPerSecond: Int64
+    public let etaSeconds: Int64?
+
+    public init(
+        metadata: VeloraOfflineTransferMetadata,
+        fractionCompleted: Double?,
+        bytesWritten: Int64,
+        totalBytesExpected: Int64?,
+        bytesPerSecond: Int64,
+        etaSeconds: Int64?
+    ) {
+        self.metadata = metadata
+        self.fractionCompleted = fractionCompleted
+        self.bytesWritten = bytesWritten
+        self.totalBytesExpected = totalBytesExpected
+        self.bytesPerSecond = bytesPerSecond
+        self.etaSeconds = etaSeconds
+    }
+}
+
 /// Owns the iOS/iPadOS background transfer session. The same identifier is
 /// recreated after process termination so the OS can deliver completed tasks
 /// back to Velora. tvOS never creates or uses this coordinator.
@@ -104,8 +132,12 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
     }()
 
     private var completionHandler: (() -> Void)?
+    private var resumeDataByTaskID: [Int: Data] = [:]
+    private var pausedTaskIDs = Set<Int>()
+    private var transferStartTimes: [Int: Date] = [:]
     public var onFinished: (@Sendable (VeloraOfflineTransferMetadata, URL, URLResponse) -> Void)?
     public var onFailed: (@Sendable (VeloraOfflineTransferMetadata, Error?) -> Void)?
+    public var onProgress: (@Sendable (VeloraOfflineTransferProgress) -> Void)?
 
     public override init() {
         super.init()
@@ -117,6 +149,68 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
         if let data = try? JSONEncoder().encode(metadata) {
             task.taskDescription = String(data: data, encoding: .utf8)
         }
+        lock.lock()
+        transferStartTimes[task.taskIdentifier] = Date()
+        lock.unlock()
+        task.resume()
+        return task.taskIdentifier
+    }
+
+    /// Pauses a foreground transfer without deleting its partial download.
+    /// URLSession owns the resume data; it is kept in memory only so a token
+    /// or signed URL is never written to Velora's catalog.
+    public func pause(taskIdentifier: Int, completion: @escaping @Sendable (Bool) -> Void) {
+        session.getAllTasks { [weak self] tasks in
+            guard let self,
+                  let task = tasks.compactMap({ $0 as? URLSessionDownloadTask })
+                    .first(where: { $0.taskIdentifier == taskIdentifier }) else {
+                completion(false)
+                return
+            }
+            self.lock.lock()
+            self.pausedTaskIDs.insert(taskIdentifier)
+            self.lock.unlock()
+            task.cancel(byProducingResumeData: { [weak self] resumeData in
+                guard let self else {
+                    completion(false)
+                    return
+                }
+                self.lock.lock()
+                if let resumeData { self.resumeDataByTaskID[taskIdentifier] = resumeData }
+                self.transferStartTimes.removeValue(forKey: taskIdentifier)
+                self.lock.unlock()
+                // A pause is still successful when the OS cannot provide
+                // resume bytes; resume() will safely restart the request.
+                completion(true)
+            })
+        }
+    }
+
+    /// Resumes a paused task using Apple's opaque resume data when available.
+    /// A fresh request is used if the OS could not produce resume data.
+    @discardableResult
+    public func resume(
+        taskIdentifier: Int,
+        request: URLRequest,
+        metadata: VeloraOfflineTransferMetadata
+    ) -> Int {
+        lock.lock()
+        let resumeData = resumeDataByTaskID.removeValue(forKey: taskIdentifier)
+        pausedTaskIDs.remove(taskIdentifier)
+        lock.unlock()
+
+        let task: URLSessionDownloadTask
+        if let resumeData {
+            task = session.downloadTask(withResumeData: resumeData)
+        } else {
+            task = session.downloadTask(with: request)
+        }
+        if let data = try? JSONEncoder().encode(metadata) {
+            task.taskDescription = String(data: data, encoding: .utf8)
+        }
+        lock.lock()
+        transferStartTimes[task.taskIdentifier] = Date()
+        lock.unlock()
         task.resume()
         return task.taskIdentifier
     }
@@ -168,7 +262,40 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         guard let error, let downloadTask = task as? URLSessionDownloadTask,
               let metadata = metadata(for: downloadTask) else { return }
+        lock.lock()
+        let wasPaused = pausedTaskIDs.contains(downloadTask.taskIdentifier)
+        transferStartTimes.removeValue(forKey: downloadTask.taskIdentifier)
+        lock.unlock()
+        guard !wasPaused else { return }
         onFailed?(metadata, error)
+    }
+
+    public func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) {
+        guard let metadata = metadata(for: downloadTask) else { return }
+        lock.lock()
+        let startedAt = transferStartTimes[downloadTask.taskIdentifier] ?? Date()
+        lock.unlock()
+        let elapsed = max(Date().timeIntervalSince(startedAt), 0.25)
+        let speed = Int64(Double(totalBytesWritten) / elapsed)
+        let expected = totalBytesExpectedToWrite > 0 ? totalBytesExpectedToWrite : nil
+        let remaining = expected.map { max(0, $0 - totalBytesWritten) }
+        let eta = speed > 0 ? remaining.map { Int64(ceil(Double($0) / Double(speed))) } : nil
+        let fraction = expected.map { min(1, max(0, Double(totalBytesWritten) / Double($0))) }
+        onProgress?(VeloraOfflineTransferProgress(
+            metadata: metadata,
+            fractionCompleted: fraction,
+            bytesWritten: totalBytesWritten,
+            totalBytesExpected: expected,
+            bytesPerSecond: speed,
+            etaSeconds: eta
+        ))
+        _ = bytesWritten
     }
 
     public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {

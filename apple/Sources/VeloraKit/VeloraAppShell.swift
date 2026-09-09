@@ -19,6 +19,8 @@ public final class VeloraAppModel: ObservableObject {
     @Published public private(set) var liveTvPrograms: [JellyfinLiveTvProgram] = []
     @Published public private(set) var offlineDownloads: [VeloraOfflineDownload] = []
     @Published public private(set) var downloadingItemID: String?
+    @Published public private(set) var offlineTransferProgress: VeloraOfflineTransferProgress?
+    @Published public private(set) var offlineTransferPaused = false
     @Published public var errorMessage: String?
     @Published public var settings: VeloraSettings {
         didSet { settingsStore.save(settings) }
@@ -33,6 +35,8 @@ public final class VeloraAppModel: ObservableObject {
     private let serverDefaults: UserDefaults
     private var session: JellyfinSession?
     private var liveTvProgramTask: Task<Void, Never>?
+    private var activeOfflineTaskID: Int?
+    private var activeOfflineMetadata: VeloraOfflineTransferMetadata?
 
     public var jellyfinClient: JellyfinClient { client }
 
@@ -70,8 +74,17 @@ public final class VeloraAppModel: ObservableObject {
             offlineTransfer.onFailed = { [weak self] metadata, _ in
                 Task { @MainActor [weak self] in
                     self?.downloadingItemID = nil
+                    self?.activeOfflineTaskID = nil
+                    self?.activeOfflineMetadata = nil
+                    self?.offlineTransferProgress = nil
+                    self?.offlineTransferPaused = false
                     self?.errorMessage = String(localized: "Unable to download", bundle: .module)
                     _ = metadata
+                }
+            }
+            offlineTransfer.onProgress = { [weak self] progress in
+                Task { @MainActor [weak self] in
+                    self?.offlineTransferProgress = progress
                 }
             }
             Task { @MainActor [weak self] in
@@ -308,7 +321,32 @@ public final class VeloraAppModel: ObservableObject {
             userID: session.userID,
             quality: quality
         )
-        _ = offlineTransfer.enqueue(request: request, metadata: metadata)
+        activeOfflineMetadata = metadata
+        offlineTransferPaused = false
+        activeOfflineTaskID = offlineTransfer.enqueue(request: request, metadata: metadata)
+    }
+
+    /// Pause and resume are available only for the mobile Apple targets that
+    /// expose managed offline downloads. tvOS never reaches these methods.
+    public func pauseDownload() {
+        guard platform.supportsOfflineDownloads, let taskID = activeOfflineTaskID else { return }
+        offlineTransfer.pause(taskIdentifier: taskID) { [weak self] didPause in
+            guard didPause else { return }
+            Task { @MainActor [weak self] in
+                self?.offlineTransferProgress = nil
+                self?.offlineTransferPaused = true
+            }
+        }
+    }
+
+    public func resumeDownload() async {
+        guard platform.supportsOfflineDownloads,
+              let taskID = activeOfflineTaskID,
+              let metadata = activeOfflineMetadata,
+              let requestURL = await client.videoURL(itemID: metadata.itemID, quality: metadata.quality) else { return }
+        let request = await client.authorizedRequest(for: requestURL)
+        activeOfflineTaskID = offlineTransfer.resume(taskIdentifier: taskID, request: request, metadata: metadata)
+        offlineTransferPaused = false
     }
 
     private func completeBackgroundDownload(
@@ -317,6 +355,10 @@ public final class VeloraAppModel: ObservableObject {
         response: URLResponse
     ) async {
         downloadingItemID = nil
+        activeOfflineTaskID = nil
+        activeOfflineMetadata = nil
+        offlineTransferProgress = nil
+        offlineTransferPaused = false
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             errorMessage = String(localized: "Unable to download", bundle: .module)
             return
@@ -590,23 +632,47 @@ private struct VeloraItemDetailView: View {
                             }
                         }
                     } else {
-                        Picker(String(localized: "Download quality", bundle: .module), selection: $downloadQuality) {
-                            Text("Original", bundle: .module).tag(VeloraDownloadQuality.original)
-                            Text("High", bundle: .module).tag(VeloraDownloadQuality.high)
-                            Text("Medium", bundle: .module).tag(VeloraDownloadQuality.medium)
-                            Text("Low", bundle: .module).tag(VeloraDownloadQuality.low)
-                        }
-                        .pickerStyle(.menu)
-                        Button {
-                            Task { await model.download(item, quality: downloadQuality) }
-                        } label: {
-                            Label {
-                                Text("Download", bundle: .module)
-                            } icon: {
-                                Image(systemName: "arrow.down.circle")
+                        if model.downloadingItemID == item.id {
+                            if let progress = model.offlineTransferProgress {
+                                ProgressView(value: progress.fractionCompleted)
+                                if let expected = progress.totalBytesExpected {
+                                    Text("\(progress.bytesWritten) / \(expected) bytes")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
+                            Button {
+                                if model.offlineTransferPaused {
+                                    Task { await model.resumeDownload() }
+                                } else {
+                                    model.pauseDownload()
+                                }
+                            } label: {
+                                Label {
+                                    Text(model.offlineTransferPaused ? "Resume download" : "Pause download", bundle: .module)
+                                } icon: {
+                                    Image(systemName: model.offlineTransferPaused ? "play.fill" : "pause.fill")
+                                }
+                            }
+                        } else {
+                            Picker(String(localized: "Download quality", bundle: .module), selection: $downloadQuality) {
+                                Text("Original", bundle: .module).tag(VeloraDownloadQuality.original)
+                                Text("High", bundle: .module).tag(VeloraDownloadQuality.high)
+                                Text("Medium", bundle: .module).tag(VeloraDownloadQuality.medium)
+                                Text("Low", bundle: .module).tag(VeloraDownloadQuality.low)
+                            }
+                            .pickerStyle(.menu)
+                            Button {
+                                Task { await model.download(item, quality: downloadQuality) }
+                            } label: {
+                                Label {
+                                    Text("Download", bundle: .module)
+                                } icon: {
+                                    Image(systemName: "arrow.down.circle")
+                                }
+                            }
+                            .disabled(model.downloadingItemID != nil)
                         }
-                        .disabled(model.downloadingItemID != nil)
                     }
                 }
             }

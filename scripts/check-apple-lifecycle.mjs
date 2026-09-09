@@ -14,4 +14,18 @@ for (const file of roots) {
   }
 }
 
-console.log('Apple lifecycle contract passed: VeloraAppShell is created once and retained by SwiftUI state.');
+const offline = fs.readFileSync('apple/Sources/VeloraKit/VeloraOffline.swift', 'utf8');
+const shell = fs.readFileSync('apple/Sources/VeloraKit/VeloraAppShell.swift', 'utf8');
+if (!offline.includes('URLSessionConfiguration.background') ||
+    !offline.includes('didWriteData bytesWritten') ||
+    !offline.includes('cancel(byProducingResumeData:') ||
+    !offline.includes('downloadTask(withResumeData:')) {
+  throw new Error('Apple offline: falta transferencia en segundo plano con progreso y pausa/reanudación');
+}
+if (!shell.includes('offlineTransferProgress') ||
+    !shell.includes('pauseDownload()') ||
+    !shell.includes('resumeDownload()')) {
+  throw new Error('Apple offline: el shell no expone progreso y pausa/reanudación');
+}
+
+console.log('Apple lifecycle/offline contract passed: shell persistente y transferencias background con pausa/reanudación.');

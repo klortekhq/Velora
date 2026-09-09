@@ -32,6 +32,8 @@
 "Not enough storage" = "Not enough storage";
 "Preferred subtitles" = "Preferred subtitles";
 "Download" = "Download";
+"Pause download" = "Pause download";
+"Resume download" = "Resume download";
 "Remove download" = "Remove download";
 "Unable to download" = "Unable to download";
 "Unable to remove download" = "Unable to remove download";
