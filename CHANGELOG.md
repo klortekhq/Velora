@@ -120,6 +120,12 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Live TV multiplataforma: Android, web y Apple muestran el selector al elegir
   un canal con varias fuentes, conservan etiquetas como IPTV o proveedor cuando
   Jellyfin las entrega y evitan exponer rutas técnicas.
+- Live TV: la fuente elegida se conserva al abrir `PlaybackInfo` en Android y
+  Apple; se respeta `MediaSourceId` o `LiveStreamId` para que seleccionar IPTV
+  no termine reproduciendo accidentalmente la fuente principal.
+- Live TV: los proveedores que no devuelven `MediaSourceId` siguen pudiendo
+  seleccionar sus variantes mediante `LiveStreamId`, tanto en móvil/tablet
+  como en Android TV/Fire TV.
 - Web/Smart TV: los identificadores y grupos de Live TV se procesan con mapas
   sin prototipo, evitando que nombres de proveedor especiales alteren la lista.
 - CI: se validan los metadatos generados de Samsung, webOS y VIDAA después del
