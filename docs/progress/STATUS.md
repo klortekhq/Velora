@@ -51,6 +51,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   música ya consultaban `Users/{userId}/Items`, evitando los endpoints legacy
   retirados. Validado con los contratos web/release y las suites Android móvil
   y TV el 2026-09-09.
+- Revalidación del 2026-09-09: las suites Android móvil/TV terminaron en
+  `BUILD SUCCESSFUL`, la suite web pasó y los 18 verificadores de contrato
+  (`locales`, navegación, logs, playback, Apple, Jellyfin, offline, identidad,
+  releases, packaging y versiones) terminaron correctamente sobre `main`.
 - Apple SwiftUI: los entrypoints móvil y tvOS conservan ahora una única
   instancia de `VeloraAppShell` en `@State`; ya no reconstruyen el cliente,
   la sesión ni el estado de navegación durante cada recomposición. El contrato
