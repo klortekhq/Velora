@@ -8,6 +8,8 @@ const movieDetails = read('app/src/main/java/com/klortek/velora/screens/MovieDet
 const seriesDetails = read('app/src/main/java/com/klortek/velora/screens/SeriesDetailsScreen.kt');
 const mobileHome = read('app/src/main/java/com/klortek/velora/screens/MobileHomeScreen.kt');
 const tvHome = read('app/src/main/java/com/klortek/velora/screens/JellyfinHomeScreen.kt');
+const moviesLibrary = read('app/src/main/java/com/klortek/velora/screens/MoviesLibraryScreen.kt');
+const tvShowsLibrary = read('app/src/main/java/com/klortek/velora/screens/TvShowsLibraryScreen.kt');
 const api = read('app/src/main/java/com/klortek/velora/jellyfin/JellyfinApi.kt');
 const castActivity = read('app/src/main/java/com/klortek/velora/CastInfoActivity.kt');
 
@@ -65,5 +67,12 @@ assert.match(
 );
 assert.match(tvHome, /onGenreSelected\(/, 'La biblioteca TV debe conectar el filtro de género.');
 assert.match(tvHome, /onPlaybackFilterSelected\(/, 'La biblioteca TV debe conectar el filtro de reproducción.');
+for (const [name, source] of [['películas', moviesLibrary], ['series', tvShowsLibrary]]) {
+  assert.match(source, /showSortDialog\s*=\s*true/, `La vista de ${name} debe abrir el diálogo de ordenar/filtrar.`);
+  assert.match(source, /queryLibraryItems\(/, `La vista de ${name} debe aplicar la consulta filtrada.`);
+  assert.match(source, /onDescendingChanged\s*=\s*\{[\s\S]*?librarySortDescending/, `La vista de ${name} debe persistir la dirección del orden.`);
+  assert.match(source, /onGenreSelected\s*=\s*\{[\s\S]*?libraryGenreFilter/, `La vista de ${name} debe persistir el filtro de género.`);
+  assert.match(source, /onPlaybackFilterSelected\s*=\s*\{[\s\S]*?libraryPlaybackFilter/, `La vista de ${name} debe persistir el filtro de reproducción.`);
+}
 
 console.log('Android content navigation contract passed: cast cards and movie/series library filters are wired to real queries.');
