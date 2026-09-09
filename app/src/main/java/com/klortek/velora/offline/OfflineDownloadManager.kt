@@ -199,7 +199,7 @@ object OfflineDownloadManager {
                 // can disappear while the SQLite record survives. Recreate
                 // the unique work so an app/process restart never strands a
                 // queued download forever.
-                if (info == null && entry.state != OfflineDownloadState.COMPLETED) {
+                if (info == null && entry.state != OfflineDownloadState.COMPLETED && entry.state != OfflineDownloadState.PAUSED) {
                     scheduleWork(
                         context = context,
                         itemId = entry.itemId,
@@ -346,6 +346,41 @@ object OfflineDownloadManager {
         entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
         if (entry.downloadId > 0L) androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)?.remove(entry.downloadId)
         deleteEntry(context, entry)
+    }
+
+    /** Pause without deleting the partial media; the next resume uses Range. */
+    fun pause(context: Context, entry: OfflineDownload) {
+        entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
+        persist(context, entry.copy(
+            status = DownloadManager.STATUS_PAUSED,
+            reason = DownloadManager.PAUSED_WAITING_TO_RETRY,
+            speedBytesPerSecond = 0L,
+            etaSeconds = null
+        ))
+    }
+
+    /** Resume a paused transfer using its durable WorkManager identity. */
+    fun resume(context: Context, entry: OfflineDownload) {
+        val workName = entry.workName ?: return
+        val settings = AppSettings(context)
+        val requiredNetwork = if (settings.offlineWifiOnly) {
+            androidx.work.NetworkType.UNMETERED
+        } else androidx.work.NetworkType.CONNECTED
+        scheduleWork(
+            context = context,
+            itemId = entry.itemId,
+            mediaSourceId = entry.mediaSourceId,
+            quality = OfflineDownloadQuality.fromStorageKey(entry.quality),
+            workName = workName,
+            requiredNetwork = requiredNetwork,
+            requiresCharging = settings.offlineChargingOnly
+        )
+        persist(context, entry.copy(
+            status = DownloadManager.STATUS_PENDING,
+            reason = 0,
+            speedBytesPerSecond = 0L,
+            etaSeconds = null
+        ))
     }
 
     fun delete(context: Context, entry: OfflineDownload) {

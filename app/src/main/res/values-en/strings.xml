@@ -108,6 +108,7 @@
   <string name="settings_offline_charging_only">Only while charging</string>
   <string name="settings_offline_charging_only_description">Wait until the device is connected to power before downloading.</string>
   <string name="offline_transfer_stats">%1$d%% · %2$s/s · %3$s remaining</string>
+  <string name="action_pause">Pause</string>
   <string name="live_tv_favorite_update_error">Could not update the favorite</string>
   <string name="login_title">Sign in</string>
   <string name="login_connecting">Connecting to %1$s</string>

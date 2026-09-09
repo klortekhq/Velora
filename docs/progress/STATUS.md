@@ -45,6 +45,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   velocidad y tiempo estimado restante durante la transferencia; la pantalla
   de descargas muestra esos datos cuando están disponibles. La base migra a la
   versión 12 sin perder trabajos existentes y las suites móvil/TV pasan.
+- Descargas offline Android del 2026-09-09: ahora se puede pausar y reanudar
+  una transferencia conservando el archivo parcial; la recuperación automática
+  no relanza una descarga que el usuario pausó y la reanudación vuelve a usar
+  sus restricciones de red y carga.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
