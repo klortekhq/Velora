@@ -8,6 +8,18 @@ import org.junit.Test
 
 class MediaUrlSecurityTest {
     @Test
+    fun playbackUrlsStripCredentialQueryParameters() {
+        val sanitized = MediaUrlHeaderPolicy.stripCredentialQueryParameters(
+            "https://jellyfin.example/Videos/movie/master.m3u8?MediaSourceId=source&api_key=secret&token=legacy#fragment"
+        )
+
+        org.junit.Assert.assertEquals(
+            "https://jellyfin.example/Videos/movie/master.m3u8?MediaSourceId=source#fragment",
+            sanitized
+        )
+    }
+
+    @Test
     fun jellyfinHeadersAreScopedToTheConfiguredServerAndPath() {
         assertTrue(MediaUrlHeaderPolicy.isServerResource(
             "https://jellyfin.test/base",

@@ -68,6 +68,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   y TV que la cabecera completa conserva cliente, dispositivo, `deviceId`,
   versión y token, y que no reintroduce `X-Emby-*`; ambos tests terminan en
   `BUILD SUCCESSFUL`.
+- Seguridad de reproducción Jellyfin 12 del 2026-09-09: las URLs de medios
+  devueltas por `PlaybackInfo` se limpian de parámetros de credenciales antes
+  de pasar a ExoPlayer o MPV; `MediaUrlSecurityTest` lo verifica en móvil y TV.
 - Apple SwiftUI: los entrypoints móvil y tvOS conservan ahora una única
   instancia de `VeloraAppShell` en `@State`; ya no reconstruyen el cliente,
   la sesión ni el estado de navegación durante cada recomposición. El contrato

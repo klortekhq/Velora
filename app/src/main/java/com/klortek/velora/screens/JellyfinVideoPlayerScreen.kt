@@ -1213,7 +1213,9 @@ fun JellyfinVideoPlayerScreen(
                     val dataSourceFactory = DefaultDataSource.Factory(context, httpDataSourceFactory)
 
                     // Store mediaUrl in local variable for smart cast
-                    val currentMediaUrl = mediaUrl ?: return@withContext
+                    val currentMediaUrl = MediaUrlHeaderPolicy.stripCredentialQueryParameters(
+                        mediaUrl ?: return@withContext
+                    )
                     
                     // Detect if URL is HLS (ends with .m3u8 or contains master.m3u8)
                     val isHlsUrl = currentMediaUrl.contains(".m3u8", ignoreCase = true)
