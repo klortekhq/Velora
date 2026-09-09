@@ -1667,8 +1667,8 @@ fun ActionButtonsRow(
 
         // Jellyfin is the source of truth: prefer server-managed trailers.
         val serverTrailer = JellyfinTrailerResolver.select(
-            local = apiService?.getLocalTrailers(displayItem.Id).orEmpty(),
-            remote = apiService?.getRemoteTrailers(displayItem.Id).orEmpty()
+            local = apiService?.getTrailers(displayItem.Id).orEmpty(),
+            remote = emptyList()
         )
         if (serverTrailer != null) {
             jellyfinTrailer = serverTrailer

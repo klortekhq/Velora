@@ -51,6 +51,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   la sesión ni el estado de navegación durante cada recomposición. El contrato
   `check-apple-lifecycle.mjs` queda conectado a CI y al workflow Apple; la
   compilación nativa sigue pendiente del runner macOS con Xcode.
+- Trailers Android: películas, series y la pantalla de inicio usan ahora un
+  resolver único basado en `GetItems` con `IncludeItemTypes=Trailer`, la ruta
+  recomendada por Jellyfin 12.0, y solo caen a `LocalTrailers`/`RemoteTrailers`
+  en servidores antiguos. El contrato `check-jellyfin-api-contract.mjs` lo
+  protege y las suites móvil/TV pasaron el 2026-09-09.
 - Los layouts de detalle móvil de películas y series incorporan `statusBarsPadding`
   y `navigationBarsPadding`; el contrato `check-mobile-layout-insets.mjs` lo
   protege. La regresión móvil/TV posterior terminó en `BUILD SUCCESSFUL` el

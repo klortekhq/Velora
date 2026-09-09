@@ -681,7 +681,7 @@ fun JellyfinHomeScreen(
         previewReady = false
         if (isMobileLayout || apiService == null) return@LaunchedEffect
         val item = debouncedHighlightedItem ?: return@LaunchedEffect
-        val trailer = apiService.getLocalTrailers(item.Id).firstOrNull()
+        val trailer = apiService.getTrailers(item.Id).firstOrNull()
         val source = trailer?.MediaSources?.firstOrNull()
         if (trailer != null && source != null) {
             previewRequest = PreviewRequest(
