@@ -36,6 +36,8 @@
   <string name="search_voice">Recherche vocale</string>
   <string name="search_loading">Recherche…</string>
   <string name="search_empty_prompt">Saisissez un titre ou utilisez la recherche vocale</string>
+  <string name="search_no_results">Aucun résultat trouvé</string>
+  <string name="discover_view_more">Voir plus</string>
   <string name="action_play">Lire</string>
   <string name="update_install_start_failed">Impossible de démarrer l’installation.</string>
   <string name="update_title">Mise à jour disponible</string>
@@ -300,6 +302,7 @@ Vérifiez que :
   <string name="mobile_format">Format</string>
   <string name="mobile_no_similar">Aucun titre similaire disponible</string>
   <string name="player_av1_unsupported_title">Vidéo AV1 10 bits non prise en charge</string>
+  <string name="player_av1_unsupported_description">Cette vidéo utilise un encodage AV1 10 bits et nécessite une compatibilité matérielle ou logicielle indisponible sur cet appareil.</string>
   <string name="player_av1_solution_mpv">1. Activez le lecteur MPV dans Réglages → Lecture</string>
   <string name="player_av1_solution_transcode">2. Configurez Jellyfin pour transcoder les contenus AV1</string>
   <string name="player_solutions">Solutions :</string>

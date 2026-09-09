@@ -38,6 +38,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Música Android: artista, álbum, recuentos, estados vacíos, cola y reproducción
   estilo Apple usan recursos localizados; el catálogo garantizado queda en 543
   claves y `compileMobileDebugKotlin`/`compileTvDebugKotlin` pasan.
+- Interfaz principal y reproducción: búsqueda vacía, descubrimiento y descripción
+  del aviso AV1 están localizados; el catálogo garantizado queda en 546 claves y
+  ambas compilaciones Kotlin pasan.
 - Revisión Jellyfin 12 del 2026-09-09: los nombres internos heredados de
   cabeceras y comentarios de otros clientes se sustituyeron por terminología
   propia de Velora; no se alteraron namespaces ni identificadores de paquete.

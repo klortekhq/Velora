@@ -33,6 +33,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   sin resultados usan ahora el idioma activo en móvil, tablet y TV.
 - Música: las vistas principales, cola y reproducción estilo Apple ya no fijan
   etiquetas como artista, álbum, canciones, pistas o estados vacíos en inglés.
+- Interfaz principal: búsqueda sin resultados, tarjeta «Ver más» y aviso de
+  incompatibilidad AV1 usan ahora recursos localizados en lugar de texto fijo.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
