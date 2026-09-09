@@ -48,7 +48,7 @@ reproduce en el reproductor integrado; las cargas se cancelan al cambiar rápido
 de canal y al salir se notifica `Sessions/Playing/Stopped` para liberar el tuner.
 
 Las tarjetas de biblioteca cargan el artwork directamente desde Jellyfin con
-`Authorization: MediaBrowser Token=...` en la petición; el token no se incluye en la URL. Los estados de
+la cabecera completa `Authorization: MediaBrowser ...` en la petición; el token no se incluye en la URL. Los estados de
 carga y error muestran un placeholder estable para que la navegación siga
 siendo usable aunque una imagen no esté disponible.
 

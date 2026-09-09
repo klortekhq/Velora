@@ -55,6 +55,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   sigue siendo privado y verificado por SHA-256; tvOS conserva la política sin
   descargas. El contrato estático pasa, pero la compilación Swift y la prueba
   en hardware Apple siguen pendientes por falta de macOS/Xcode en este entorno.
+- Recuperación Apple del 2026-09-09: al reabrir la app se recuperan también
+  el identificador de tarea y los metadatos opacos de cada descarga activa;
+  por tanto el control de pausa/reanudación no se pierde tras matar el proceso.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
