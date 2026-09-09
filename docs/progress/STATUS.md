@@ -1239,13 +1239,14 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - Validar webOS, VIDAA y Fire TV en sus dispositivos reales.
 - Configurar firma Android y credenciales de publicación antes de crear una
   release pública.
-- Auditoría pública del 2026-09-09: la API de GitHub no devuelve ninguna
-  release publicada para `klortekhq/Velora`; por tanto no se presenta una APK
-  como descargable. El workflow tag-based queda preparado para publicar el
-  bloque común cuando existan firma y artefactos verificables.
+- Auditoría pública del 2026-09-09: GitHub sí devuelve la pre-release QA
+  `v1.4.0`, que contiene los artefactos unsigned identificados en este
+  dashboard, incluidas las APK de agrupación y zapping Live TV. No se presenta
+  como distribución de tienda ni como build firmada.
 - Reconciliar el tag/release `v1.4.0` con una build firmada del estado que se
   quiera distribuir; no se mueve ni sobrescribe el tag existente
-  automáticamente.
+  automáticamente. Hasta entonces, las descargas QA siguen separadas de una
+  release de producción.
 - Completar pruebas de rendimiento visual, memoria y FPS con bibliotecas de
   1.000, 10.000 y 50.000 elementos en dispositivos reales; el núcleo de
   ordenación/filtrado ya tiene cobertura sintética en Android móvil y TV.
