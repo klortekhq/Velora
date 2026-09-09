@@ -37,6 +37,14 @@
   <string name="search_loading">Recherche…</string>
   <string name="search_empty_prompt">Saisissez un titre ou utilisez la recherche vocale</string>
   <string name="action_play">Lire</string>
+  <string name="update_install_start_failed">Impossible de démarrer l’installation.</string>
+  <string name="update_install_failed">Impossible d’installer la mise à jour.</string>
+  <string name="update_download_failed">Impossible de télécharger la mise à jour.</string>
+  <string name="update_no_tv_apk">Aucun APK TV compatible n’est disponible pour cette version.</string>
+  <string name="update_no_mobile_apk">Aucun APK mobile compatible n’est disponible pour cette version.</string>
+  <string name="update_downloading">Téléchargement…</string>
+  <string name="update_now">Mettre à jour</string>
+  <string name="update_later">Plus tard</string>
   <string name="action_exit">Quitter</string>
   <string name="app_exit_title">Quitter l’application ?</string>
   <string name="app_exit_message">Voulez-vous vraiment quitter l’application ?</string>

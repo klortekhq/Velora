@@ -1,5 +1,6 @@
 package com.klortek.velora.screens
 
+import com.klortek.velora.R
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -163,29 +164,29 @@ fun UpdateDialog(
                                                     kotlinx.coroutines.delay(2000)
                                                     onUpdate()
                                                 } else {
-                                                    downloadError = "Failed to start installation"
+                                                    downloadError = context.getString(R.string.update_install_start_failed)
                                                     isDownloading = false
                                                 }
                                             } catch (e: Exception) {
                                                 Log.e("UpdateDialog", "Error installing APK", e)
-                                                downloadError = "Installation failed: ${e::class.simpleName}"
+                                                downloadError = context.getString(R.string.update_install_failed)
                                                 isDownloading = false
                                             }
                                         } else {
-                                            downloadError = "Download failed"
+                                            downloadError = context.getString(R.string.update_download_failed)
                                             isDownloading = false
                                         }
                                     } catch (e: Exception) {
                                         Log.e("UpdateDialog", "Error downloading APK", e)
-                                        downloadError = "Download failed: ${e::class.simpleName}"
+                                        downloadError = context.getString(R.string.update_download_failed)
                                         isDownloading = false
                                     }
                                 }
                             } else if (!isDownloading) {
                                 downloadError = if (isTv) {
-                                    "No hay un APK de TV compatible en esta release."
+                                    context.getString(R.string.update_no_tv_apk)
                                 } else {
-                                    "No hay un APK móvil compatible en esta release."
+                                    context.getString(R.string.update_no_mobile_apk)
                                 }
                             }
                         }
@@ -197,7 +198,7 @@ fun UpdateDialog(
                                 enabled = !isDownloading
                             ) {
                                 Text(
-                                    text = if (isDownloading) "Descargando..." else "Actualizar ahora",
+                                    text = context.getString(if (isDownloading) R.string.update_downloading else R.string.update_now),
                                     style = MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = FontWeight.Bold
                                     )
@@ -210,7 +211,7 @@ fun UpdateDialog(
                                 enabled = !isDownloading
                             ) {
                                 Text(
-                                    text = "Más tarde",
+                                    text = context.getString(R.string.update_later),
                                     style = MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = FontWeight.Bold
                                     )
@@ -223,7 +224,7 @@ fun UpdateDialog(
                                 enabled = !isDownloading
                             ) {
                                 androidx.compose.material3.Text(
-                                    text = if (isDownloading) "Descargando..." else "Actualizar ahora",
+                                    text = context.getString(if (isDownloading) R.string.update_downloading else R.string.update_now),
                                     style = androidx.compose.material3.MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = FontWeight.Bold
                                     )
@@ -236,7 +237,7 @@ fun UpdateDialog(
                                 enabled = !isDownloading
                             ) {
                                 androidx.compose.material3.Text(
-                                    text = "Más tarde",
+                                    text = context.getString(R.string.update_later),
                                     style = androidx.compose.material3.MaterialTheme.typography.labelLarge.copy(
                                         fontWeight = FontWeight.Bold
                                     )

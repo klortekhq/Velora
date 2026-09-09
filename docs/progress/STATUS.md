@@ -26,6 +26,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   reproducir, aleatorio, cola, transporte y estado actual), en vez de textos
   codificados en duro. El cambio está en `1719ca9`; la compilación móvil/TV y
   `check-android-locales.mjs` pasan.
+- Actualizador Android: los botones y errores visibles de descarga/instalación
+  están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
+  la compilación de ambos perfiles y sus pruebas unitarias pasan.
 - Revisión Jellyfin 12 del 2026-09-09: los nombres internos heredados de
   cabeceras y comentarios de otros clientes se sustituyeron por terminología
   propia de Velora; no se alteraron namespaces ni identificadores de paquete.

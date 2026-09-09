@@ -59,6 +59,14 @@
   <string name="search_movies_series">Buscar películas y series</string>
   <string name="search_short">Buscar</string>
   <string name="action_play">Reproducir</string>
+  <string name="update_install_start_failed">No se pudo iniciar la instalación.</string>
+  <string name="update_install_failed">No se pudo instalar la actualización.</string>
+  <string name="update_download_failed">No se pudo descargar la actualización.</string>
+  <string name="update_no_tv_apk">No hay un APK de TV compatible en esta versión.</string>
+  <string name="update_no_mobile_apk">No hay un APK móvil compatible en esta versión.</string>
+  <string name="update_downloading">Descargando…</string>
+  <string name="update_now">Actualizar ahora</string>
+  <string name="update_later">Más tarde</string>
   <string name="action_exit">Salir</string>
   <string name="app_exit_title">¿Salir de la aplicación?</string>
   <string name="app_exit_message">¿Seguro que quieres salir de la aplicación?</string>

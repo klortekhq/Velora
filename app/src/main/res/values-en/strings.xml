@@ -37,6 +37,14 @@
   <string name="search_loading">Searching…</string>
   <string name="search_empty_prompt">Type a title or use voice search</string>
   <string name="action_play">Play</string>
+  <string name="update_install_start_failed">Could not start installation.</string>
+  <string name="update_install_failed">Could not install the update.</string>
+  <string name="update_download_failed">Could not download the update.</string>
+  <string name="update_no_tv_apk">No compatible TV APK is available for this version.</string>
+  <string name="update_no_mobile_apk">No compatible mobile APK is available for this version.</string>
+  <string name="update_downloading">Downloading…</string>
+  <string name="update_now">Update now</string>
+  <string name="update_later">Later</string>
   <string name="action_exit">Exit</string>
   <string name="app_exit_title">Exit the app?</string>
   <string name="app_exit_message">Are you sure you want to exit the app?</string>
