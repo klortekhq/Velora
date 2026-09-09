@@ -159,8 +159,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `1125BFEB6B6390451D4278716E2650A4BBC5CA3108AFECD11885565DAC848CB2`, y TV
   `app-tv-debug.apk`, SHA-256
   `65FBD17F6099BCFFB27A2ABCC83D5E4D5A09744A6835BA05EBED67D3CA8A1D55`.
-  Ambas suites Android y las tareas de ensamblado terminaron correctamente;
-  todavía no sustituyen los assets antiguos de la pre-release pública.
+  Ambas suites Android y las tareas de ensamblado terminaron correctamente.
+  Se publicaron como assets adicionales en la pre-release pública `v1.4.0`
+  (`Velora-mobile-qa-8bd2777.apk` y `Velora-tv-qa-8bd2777.apk`); los assets
+  históricos se conservaron y las nuevas siguen siendo builds de QA sin firma.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
