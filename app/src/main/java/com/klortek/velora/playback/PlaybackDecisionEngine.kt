@@ -65,17 +65,17 @@ object PlaybackDecisionEngine {
         quality: PlaybackQuality = PlaybackQuality.ORIGINAL
     ): PlaybackDecision {
         val codecOk = source.videoCodec == null || capabilities.videoCodecs.isEmpty() ||
-            source.videoCodec.lowercase() in capabilities.videoCodecs.map(String::lowercase)
+            normalizedVideoCodec(source.videoCodec) in capabilities.videoCodecs.map(::normalizedVideoCodec)
         val audioOk = source.audioCodec == null || capabilities.audioCodecs.isEmpty() ||
-            source.audioCodec.lowercase() in capabilities.audioCodecs.map(String::lowercase)
+            normalizedAudioCodec(source.audioCodec) in capabilities.audioCodecs.map(::normalizedAudioCodec)
         val hdrOk = source.hdrFormat == null || !capabilities.hdrCapabilityKnown ||
-            source.hdrFormat.lowercase() in capabilities.hdrFormats.map(String::lowercase)
+            normalizedHdr(source.hdrFormat) in capabilities.hdrFormats.map(::normalizedHdr)
         val containerOk = source.container == null || capabilities.containers.isEmpty() ||
-            source.container.lowercase() in capabilities.containers.map(String::lowercase)
+            normalizedContainer(source.container) in capabilities.containers.map(::normalizedContainer)
         val channelsOk = capabilities.maxAudioChannels == null || source.audioChannels == null ||
             source.audioChannels <= capabilities.maxAudioChannels
         val passthroughAudioOk = source.audioCodec == null ||
-            source.audioCodec.lowercase() !in capabilities.audioPassthroughCodecs.map(String::lowercase) ||
+            normalizedAudioCodec(source.audioCodec) !in capabilities.audioPassthroughCodecs.map(::normalizedAudioCodec) ||
             capabilities.audioPassthrough
         val dimensionsOk = quality == PlaybackQuality.ORIGINAL || withinPreset(source, quality)
         val deviceLimitsOk = (capabilities.maxWidth == null || source.width == null || source.width <= capabilities.maxWidth) &&
@@ -129,4 +129,29 @@ object PlaybackDecisionEngine {
     private fun withinDimensions(source: PlaybackSource, maxWidth: Int, maxHeight: Int): Boolean =
         (source.width == null || source.width <= maxWidth) &&
             (source.height == null || source.height <= maxHeight)
+
+    /** Jellyfin and Android do not always spell equivalent codecs identically. */
+    private fun normalizedVideoCodec(value: String): String = when (value.trim().lowercase()) {
+        "h265", "x265" -> "hevc"
+        "av01" -> "av1"
+        "x264" -> "h264"
+        else -> value.trim().lowercase()
+    }
+
+    private fun normalizedAudioCodec(value: String): String = when (value.trim().lowercase()) {
+        "ec-3" -> "eac3"
+        "dts-hd ma", "dtshd" -> "dts-hd"
+        else -> value.trim().lowercase()
+    }
+
+    private fun normalizedHdr(value: String): String = when (value.trim().lowercase()) {
+        "dv", "dolby vision", "dolby_vision" -> "dolby-vision"
+        else -> value.trim().lowercase()
+    }
+
+    private fun normalizedContainer(value: String): String = when (value.trim().lowercase()) {
+        "matroska" -> "mkv"
+        "mpeg-ts", "mpegts", "mpeg transport stream" -> "ts"
+        else -> value.trim().lowercase()
+    }
 }
