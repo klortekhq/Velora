@@ -17,6 +17,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - CI: las releases Smart TV fijan el epoch del commit y validan que los
   paquetes WGT/IPK y bundles de las plataformas disponibles se incorporen a la
   release común sin publicar APK unsigned.
+- Android: revalidación completa de pruebas unitarias y compilación móvil/TV
+  completada correctamente tras los cambios multiplataforma.
 - Descargas offline Android: se corrige el esquema de la base SQLite para
   instalaciones nuevas; ya no declara dos claves primarias y conserva el
   índice necesario para localizar rápidamente cada contenido y calidad.

@@ -69,6 +69,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   al commit etiquetado y el contrato comprueba que la release común contempla
   WGT, IPK, bundles Samsung/webOS y bundle VIDAA, sin alterar la regla de no
   publicar APK unsigned.
+- Revalidación Android del 2026-09-09: `testMobileDebugUnitTest`,
+  `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
+  `compileTvDebugKotlin` terminaron en `BUILD SUCCESSFUL` (82 tareas; 1:18).
+  El SDK local emitió avisos de metadatos XML/Android 36, sin convertirlos en
+  errores de compilación.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
