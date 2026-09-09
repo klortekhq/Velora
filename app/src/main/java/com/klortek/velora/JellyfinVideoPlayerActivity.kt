@@ -26,6 +26,7 @@ import com.klortek.velora.player.mpv.MpvUrlBuilder
 import com.klortek.velora.playback.PlaybackBackend
 import com.klortek.velora.playback.PlaybackBackendPreferences
 import com.klortek.velora.playback.PlaybackBackendSelector
+import com.klortek.velora.playback.shouldUseLiveTvDirectSource
 import com.klortek.velora.screens.JellyfinVideoPlayerScreen
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.security.MediaUrlHeaderPolicy
@@ -419,8 +420,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 // defensive as well: an old/plugin-provided source must not
                 // bypass the allocated LiveStreamId, otherwise playback can
                 // fail or skip the server's M3U normalization.
-                val isM3uSource = liveSource?.Protocol?.equals("M3U", ignoreCase = true) == true
-                val finalUrl = if (!isM3uSource && liveSource?.SupportsDirectPlay == true &&
+                val finalUrl = if (shouldUseLiveTvDirectSource(liveSource) &&
                     !directSource.isNullOrBlank() &&
                     MediaUrlHeaderPolicy.isServerResource(serverUrl, directSource) &&
                     (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
