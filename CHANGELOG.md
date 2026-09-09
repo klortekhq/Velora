@@ -4,6 +4,16 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Live TV multiplataforma: Android, Apple y web agrupan proveedores con IDs
+  Jellyfin distintos cuando comparten el mismo número y nombre visible, sin
+  duplicar filas y manteniendo las fuentes como opciones seleccionables.
+- Descargas offline Android: cancelar o eliminar una descarga gestionada limpia
+  también sus fragmentos parciales `.part`, sin romper la pausa ni la
+  reanudación.
+- Releases: la pre-release reúne APK móvil/TV, cliente web, IPK webOS y
+  bundles Samsung/Tizen y VIDAA; los artefactos sin firma se identifican como
+  QA o bundle preparado y no como paquetes de tienda certificados.
+
 - Live TV: los filtros de favoritos y grupos conservan la interacción táctil y
   muestran ahora un realce de foco visible para mando y teclado, también cuando
   la opción todavía no está seleccionada.
