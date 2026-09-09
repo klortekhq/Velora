@@ -21,6 +21,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   FPS y HDR; el contrato `check-mobile-file-info.mjs` impide que se vuelvan a
   mostrar nombres o rutas internas. La regresión Android móvil/TV terminó en
   `BUILD SUCCESSFUL` el 2026-09-09.
+- Última mejora publicada: la superficie musical estilo Apple de Android usa
+  ahora recursos localizados para botones y etiquetas de accesibilidad (volver,
+  reproducir, aleatorio, cola, transporte y estado actual), en vez de textos
+  codificados en duro. El cambio está en `1719ca9`; la compilación móvil/TV y
+  `check-android-locales.mjs` pasan.
 - Último cambio funcional documentado anteriormente: el selector de formato de imagen del
   reproductor Android ya no puede ser sobrescrito por el bucle de actualización
   de dimensiones de Media3; el modo elegido se conserva al cambiar de stream y
