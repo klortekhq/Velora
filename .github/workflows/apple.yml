@@ -50,6 +50,9 @@ jobs:
       - name: Validar ciclo de vida SwiftUI Apple
         working-directory: ${{ github.workspace }}
         run: node scripts/check-apple-lifecycle.mjs
+      - name: Validar política de capacidades de reproducción Apple
+        working-directory: ${{ github.workspace }}
+        run: node scripts/check-apple-playback-policy.mjs
       - name: Validar preferencias de reproducción
         working-directory: ${{ github.workspace }}
         run: node scripts/check-playback-preferences-contract.mjs
