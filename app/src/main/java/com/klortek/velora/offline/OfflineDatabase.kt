@@ -10,11 +10,12 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     "velora_offline.db",
     null,
-    10
+    11
 ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """CREATE TABLE downloads (
+                entry_key TEXT NOT NULL PRIMARY KEY,
                 item_id TEXT NOT NULL,
                 name TEXT NOT NULL,
                 type TEXT NOT NULL,
@@ -119,6 +120,55 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         if (oldVersion < 10) {
             db.execSQL("ALTER TABLE downloads ADD COLUMN user_id TEXT")
         }
+        if (oldVersion < 11) {
+            db.execSQL(
+                """CREATE TABLE downloads_v11 (
+                    entry_key TEXT NOT NULL PRIMARY KEY,
+                    item_id TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    series_name TEXT,
+                    season_number INTEGER,
+                    episode_number INTEGER,
+                    download_id INTEGER NOT NULL,
+                    quality TEXT NOT NULL DEFAULT 'original',
+                    local_path TEXT,
+                    status INTEGER NOT NULL,
+                    reason INTEGER NOT NULL,
+                    bytes_downloaded INTEGER NOT NULL,
+                    total_bytes INTEGER NOT NULL,
+                    media_source_id TEXT,
+                    checksum_sha256 TEXT,
+                    work_name TEXT,
+                    created_at INTEGER NOT NULL DEFAULT 0,
+                    completed_at INTEGER,
+                    last_played_at INTEGER,
+                    is_watched INTEGER NOT NULL DEFAULT 0,
+                    keep_download INTEGER NOT NULL DEFAULT 0,
+                    server_url TEXT,
+                    user_id TEXT
+                )"""
+            )
+            db.execSQL(
+                """INSERT INTO downloads_v11 (
+                    entry_key, item_id, name, type, series_name, season_number,
+                    episode_number, download_id, quality, local_path, status,
+                    reason, bytes_downloaded, total_bytes, media_source_id,
+                    checksum_sha256, work_name, created_at, completed_at,
+                    last_played_at, is_watched, keep_download, server_url, user_id
+                ) SELECT COALESCE(server_url, '') || char(31) ||
+                    COALESCE(user_id, '') || char(31) || item_id || char(31) || quality,
+                    item_id, name, type, series_name, season_number,
+                    episode_number, download_id, quality, local_path, status,
+                    reason, bytes_downloaded, total_bytes, media_source_id,
+                    checksum_sha256, work_name, created_at, completed_at,
+                    last_played_at, is_watched, keep_download, server_url, user_id
+                    FROM downloads"""
+            )
+            db.execSQL("DROP TABLE downloads")
+            db.execSQL("ALTER TABLE downloads_v11 RENAME TO downloads")
+            db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
+        }
     }
 
     fun readAll(): List<OfflineDownload> {
@@ -169,6 +219,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     }
 
     private fun OfflineDownload.values() = ContentValues().apply {
+        put("entry_key", offlineEntryKey(this@values))
         put("item_id", itemId); put("name", name); put("type", type)
         put("series_name", seriesName); put("season_number", seasonNumber); put("episode_number", episodeNumber)
         put("download_id", downloadId); put("local_path", localPath); put("status", status); put("reason", reason)

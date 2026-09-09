@@ -151,6 +151,19 @@ class OfflineDownloadTest {
     }
 
     @Test
+    fun sameItemAndQualityOnDifferentServersRemainDistinct() {
+        val first = OfflineDownload(
+            itemId = "movie-1", name = "Película", type = "Movie",
+            downloadId = 0L, quality = OfflineDownloadQuality.ORIGINAL.storageKey,
+            workName = "offline-same-item", serverUrl = "https://one.example", userId = "user"
+        )
+        val second = first.copy(serverUrl = "https://two.example")
+
+        assertFalse(sameOfflineEntry(first, second))
+        assertTrue(offlineEntryKey(first) != offlineEntryKey(second))
+    }
+
+    @Test
     fun replacingOneQualityDoesNotRemoveOtherRepresentations() {
         val original = OfflineDownload(
             itemId = "movie-1", name = "Película", type = "Movie",

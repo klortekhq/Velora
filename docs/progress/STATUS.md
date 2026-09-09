@@ -240,10 +240,14 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   hace fallback a la primera cuando el servidor no devuelve identificadores;
   queda cubierta por prueba unitaria.
 - Mejora offline Android del 2026-09-09: el índice SQLite sube a la versión
-  10 y conserva la URL del servidor y el ID de usuario asociados a cada
-  representación descargada. La migración desde versiones anteriores y desde
-  el índice JSON mantiene los registros existentes; móvil y TV compilan y sus
-  suites unitarias pasan.
+  11 y usa una clave durable compuesta por servidor, usuario, contenido y
+  calidad. La migración desde versiones anteriores y desde el índice JSON
+  mantiene los registros existentes; móvil y TV compilan y sus suites unitarias
+  pasan.
+- Revalidación offline Android del 2026-09-09: WorkManager, el índice SQLite y
+  las comparaciones en memoria ya no pueden colisionar cuando el mismo ID de
+  Jellyfin/calidad existe en dos servidores o cuentas. `check-offline-identity.mjs`
+  queda conectado a CI junto a la política de descargas solo móvil/tablet.
 - Revalidación offline Android del 2026-09-09: la pantalla de descargas filtra
   registros asociados al servidor y usuario activos; las entradas legacy sin
   asociación siguen visibles para poder reproducirlas o migrarlas. La lógica
