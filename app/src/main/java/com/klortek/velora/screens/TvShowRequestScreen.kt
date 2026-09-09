@@ -222,7 +222,7 @@ fun TvShowRequestScreen(
                         .padding(vertical = 33.6.dp, horizontal = 24.dp)
                 ) {
                     Text(
-                        text = "Request Seasons",
+                        text = stringResource(com.klortek.velora.R.string.request_seasons),
                         style = MaterialTheme.typography.titleMedium,
                         color = Color.White,
                         modifier = Modifier.padding(bottom = 16.dp)
@@ -343,7 +343,7 @@ fun TvShowRequestScreen(
                             Spacer(modifier = Modifier.height(6.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 androidx.compose.material3.Text(
-                                    text = "TV Show",
+                                    text = stringResource(com.klortek.velora.R.string.tv_show),
                                     fontSize = 13.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = com.klortek.velora.theme.JetcasterPrimary
@@ -371,7 +371,7 @@ fun TvShowRequestScreen(
                                     .padding(horizontal = 24.dp, vertical = 16.dp)
                             ) {
                                 androidx.compose.material3.Text(
-                                    text = "Sinopsis",
+                                    text = stringResource(com.klortek.velora.R.string.details_overview),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = com.klortek.velora.theme.JetcasterOnSurface
@@ -391,7 +391,7 @@ fun TvShowRequestScreen(
                 // 3. Seasons Header
                 item {
                     androidx.compose.material3.Text(
-                        text = "Request Seasons",
+                        text = stringResource(com.klortek.velora.R.string.request_seasons),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = com.klortek.velora.theme.JetcasterOnSurface,
@@ -483,13 +483,13 @@ fun SeasonRequestItem(
             
             Column {
                 Text(
-                    text = "Season ${season.seasonNumber}",
+                    text = stringResource(com.klortek.velora.R.string.request_season, season.seasonNumber),
                     style = MaterialTheme.typography.titleSmall,
                     color = Color.White
                 )
                 season.episodeCount?.let { count ->
                     Text(
-                        text = "$count Episodes",
+                        text = stringResource(com.klortek.velora.R.string.request_episode_count, count),
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.White.copy(alpha = 0.7f)
                     )
@@ -513,7 +513,7 @@ fun SeasonRequestItem(
                             requestSuccess = true
                             Toast.makeText(
                                 context,
-                                "Season ${season.seasonNumber} requested!",
+                                context.getString(com.klortek.velora.R.string.jellyseerr_season_requested, season.seasonNumber),
                                 Toast.LENGTH_SHORT
                             ).show()
                         },
@@ -569,7 +569,7 @@ fun SeasonRequestItem(
                     if (buttonFocused) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "Requesting...",
+                            text = stringResource(com.klortek.velora.R.string.jellyseerr_requesting),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                             ),

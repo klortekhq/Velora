@@ -228,6 +228,7 @@ Vérifiez que :
   <string name="jellyseerr_available">Disponible sur Jellyfin</string>
   <string name="jellyseerr_request_pending">Demande en attente</string>
   <string name="jellyseerr_request_sent">Demande envoyée</string>
+  <string name="jellyseerr_season_requested">Saison %1$d demandée avec succès</string>
   <string name="jellyseerr_request_failed">Échec de la demande</string>
   <string name="jellyseerr_requesting">Demande en cours…</string>
   <string name="jellyseerr_request_action">Demander sur Jellyseerr</string>
@@ -279,6 +280,11 @@ Vérifiez que :
   <string name="mobile_chapters">Chapitres</string>
   <string name="mobile_cast">Diffuser</string>
   <string name="details_cast">Distribution</string>
+  <string name="details_overview">Synopsis</string>
+  <string name="tv_show">Série</string>
+  <string name="request_seasons">Demander les saisons</string>
+  <string name="request_season">Saison %1$d</string>
+  <string name="request_episode_count">%1$d épisodes</string>
   <string name="mobile_crew">Équipe</string>
   <string name="mobile_studios">Studios</string>
   <string name="mobile_audio_track">Piste audio</string>

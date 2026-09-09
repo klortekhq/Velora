@@ -228,6 +228,7 @@ Bitte überprüfe:
   <string name="jellyseerr_available">Auf Jellyfin verfügbar</string>
   <string name="jellyseerr_request_pending">Anfrage ausstehend</string>
   <string name="jellyseerr_request_sent">Anfrage erfolgreich gesendet</string>
+  <string name="jellyseerr_season_requested">Staffel %1$d erfolgreich angefordert</string>
   <string name="jellyseerr_request_failed">Anfrage fehlgeschlagen</string>
   <string name="jellyseerr_requesting">Anfrage wird gesendet…</string>
   <string name="jellyseerr_request_action">Bei Jellyseerr anfragen</string>
@@ -279,6 +280,11 @@ Bitte überprüfe:
   <string name="mobile_chapters">Kapitel</string>
   <string name="mobile_cast">Übertragen</string>
   <string name="details_cast">Besetzung</string>
+  <string name="details_overview">Übersicht</string>
+  <string name="tv_show">Serie</string>
+  <string name="request_seasons">Staffeln anfordern</string>
+  <string name="request_season">Staffel %1$d</string>
+  <string name="request_episode_count">%1$d Folgen</string>
   <string name="mobile_crew">Team</string>
   <string name="mobile_studios">Studios</string>
   <string name="mobile_audio_track">Audiospur</string>
