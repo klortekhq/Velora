@@ -5,6 +5,7 @@ const root = process.cwd();
 const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8');
 const settings = read('app/src/main/java/com/klortek/velora/jellyfin/AppSettings.kt');
 const activity = read('app/src/main/java/com/klortek/velora/JellyfinVideoPlayerActivity.kt');
+const playerScreen = read('app/src/main/java/com/klortek/velora/screens/JellyfinVideoPlayerScreen.kt');
 const policy = read('app/src/main/java/com/klortek/velora/playback/PlaybackBackend.kt');
 const tests = read('app/src/test/java/com/klortek/velora/playback/PlaybackBackendTest.kt');
 
@@ -20,6 +21,9 @@ if (!policy.includes('PlaybackBackend.MEDIA3') || !policy.includes('mpvExplicitl
 }
 if (!tests.includes('freshPreferencesUseMedia3') || !tests.includes('mpvFallbackRequiresARealDecoderFailure')) {
   failures.push('Backend default and fallback regressions are missing.');
+}
+if (!playerScreen.includes('LaunchedEffect(playerInitialized, currentAspectMode)')) {
+  failures.push('The aspect-ratio refresh loop must restart when the user changes the selected mode.');
 }
 
 if (failures.length) {
