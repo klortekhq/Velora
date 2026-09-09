@@ -58,6 +58,15 @@ internal fun veloraClientDeviceName(tvBuild: Boolean): String =
 internal fun veloraClientDeviceId(rawDeviceId: String?): String =
     rawDeviceId?.takeIf { it.isNotBlank() } ?: "velora-android"
 
+internal fun veloraMediaBrowserAuthorization(
+    accessToken: String,
+    deviceName: String,
+    deviceId: String
+): String =
+    "MediaBrowser Client=\"Velora\", Device=\"$deviceName\", " +
+        "DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\", " +
+        "Token=\"$accessToken\""
+
 @Stable
 @Serializable
 data class JellyfinItem(
@@ -351,9 +360,7 @@ class JellyfinApiService(
      * playback-session calls from silently falling back to token-only headers.
      */
     private fun mediaBrowserAuthorization(): String =
-        "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", " +
-            "DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\", " +
-            "Token=\"$accessToken\""
+        veloraMediaBrowserAuthorization(accessToken, clientDeviceName, clientDeviceId)
     
     // In-memory cache for episodes (keyed by seasonId)
     private val episodeCache = mutableMapOf<String, Pair<Long, List<JellyfinItem>>>()

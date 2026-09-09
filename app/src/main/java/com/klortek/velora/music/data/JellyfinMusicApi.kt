@@ -1,6 +1,10 @@
 package com.klortek.velora.music.data
 
 import android.util.Log
+import com.klortek.velora.BuildConfig
+import com.klortek.velora.jellyfin.veloraClientDeviceId
+import com.klortek.velora.jellyfin.veloraClientDeviceName
+import com.klortek.velora.jellyfin.veloraMediaBrowserAuthorization
 import com.klortek.velora.music.model.*
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -73,6 +77,11 @@ class JellyfinMusicApi(
     private val accessToken: String,
     private val userId: String
 ) {
+    private fun authorizationHeader(): String = veloraMediaBrowserAuthorization(
+        accessToken = accessToken,
+        deviceName = veloraClientDeviceName(BuildConfig.TV_BUILD),
+        deviceId = veloraClientDeviceId(null)
+    )
     private val client = HttpClient(Android) {
         install(ContentNegotiation) {
             json(Json {
@@ -107,7 +116,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching artists (via Items)")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             response.Items.map { item ->
@@ -143,7 +152,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching albums for artist $artistId")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             response.Items.map { item ->
@@ -183,7 +192,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching all albums")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             response.Items.map { item ->
@@ -222,7 +231,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching recently added albums")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             response.Items.map { item ->
@@ -260,7 +269,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching tracks for album $albumId")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             response.Items.map { item ->
@@ -313,7 +322,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching tracks for artist $artistId")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             response.Items.map { item ->
@@ -365,7 +374,7 @@ class JellyfinMusicApi(
             }.buildString()
 
             val artistsResponse: MusicItemsResponse = client.get(artistsUrl) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             val artists = artistsResponse.Items.map { item ->
@@ -387,7 +396,7 @@ class JellyfinMusicApi(
             }.buildString()
 
             val albumsResponse: MusicItemsResponse = client.get(albumsUrl) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             val albums = albumsResponse.Items.map { item ->
@@ -412,7 +421,7 @@ class JellyfinMusicApi(
             }.buildString()
 
             val tracksResponse: MusicItemsResponse = client.get(tracksUrl) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", authorizationHeader())
             }.body()
 
             val tracks = tracksResponse.Items.map { item ->

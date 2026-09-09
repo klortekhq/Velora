@@ -266,6 +266,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   versión y token. Antes esas rutas construían identidad de cliente pero
   terminaban enviando solo el token. Compilación Kotlin y suites unitarias
   móvil/TV pasan (`BUILD SUCCESSFUL`, 82 tareas).
+- Compatibilidad Jellyfin 12 del 2026-09-09: se extendió la cabecera
+  `MediaBrowser` completa a Live TV (incluidas imágenes), música y el trabajador
+  de descargas offline. Así esas superficies ya no dependen de la variante
+  token-only; la compilación y las suites móvil/TV vuelven a pasar.
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
