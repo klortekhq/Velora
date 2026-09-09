@@ -20,6 +20,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.klortek.velora.R
 import androidx.tv.material3.*
 
 /**
@@ -77,7 +79,7 @@ fun DiscoverViewMoreCard(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "View More",
+                    text = stringResource(R.string.discover_view_more),
                     style = MaterialTheme.typography.labelMedium,
                     color = if (isFocused) Color.White else Color.White.copy(alpha = 0.7f),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center

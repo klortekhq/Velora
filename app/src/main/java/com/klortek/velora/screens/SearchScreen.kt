@@ -338,7 +338,7 @@ fun SearchScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "No se han encontrado resultados",
+                    text = stringResource(R.string.search_no_results),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )

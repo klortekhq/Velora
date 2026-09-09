@@ -4754,7 +4754,7 @@ fun JellyfinVideoPlayerScreen(
                             Spacer(modifier = Modifier.height(12.dp))
                             
                             Text(
-                                    text = "Este vídeo usa codificación AV1 de 10 bits y necesita compatibilidad de hardware o software que no está disponible en este dispositivo.",
+                                    text = stringResource(com.klortek.velora.R.string.player_av1_unsupported_description),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Color.White.copy(alpha = 0.8f),
                                 modifier = Modifier.padding(horizontal = 8.dp)
