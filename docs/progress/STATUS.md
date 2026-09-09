@@ -22,6 +22,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   de las pantallas de películas, series y Ajustes; permanecen Recomendaciones,
   Biblioteca y la búsqueda Jellyseerr opcional. `check-no-discover-surface.mjs`
   protege que ninguna pestaña o interruptor pueda volver a exponer Discovery.
+- APKs debug regenerados después de la agrupación Live TV y la retirada de
+  Discovery (2026-09-10): móvil SHA-256
+  `7E9AFD2C3CF0AAC6C7AC42B24A62B35C0DBC3218C4D65520F2A881D219D7438D` y TV
+  SHA-256 `FB7A592AF7CA76CEC223B9DC9937C3EB5BBC989D1E2D249A2A77648B2F75CBFD`.
+  Son artefactos locales verificables; no se han sustituido los adjuntos de
+  GitHub porque la sesión `gh` de este entorno no está autenticada.
 
 ## Estado del repositorio
 
