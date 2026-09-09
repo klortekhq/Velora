@@ -12,8 +12,14 @@ struct VeloraTVApp: App {
 
 @available(tvOS 16.0, *)
 private struct VeloraTVRoot: View {
+    @State private var shell: VeloraAppShell?
+
+    init() {
+        _shell = State(initialValue: try? VeloraAppShell(platform: .tvOS))
+    }
+
     var body: some View {
-        if let shell = try? VeloraAppShell(platform: .tvOS) {
+        if let shell {
             shell
         } else {
             Text(VeloraLocalized.connectToJellyfin)
