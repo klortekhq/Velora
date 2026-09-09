@@ -667,10 +667,23 @@ private fun LiveTvProgramDialog(
 
 @Composable
 private fun LiveTvFilterPill(label: String, selected: Boolean, onClick: () -> Unit) {
+    var focused by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .background(if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
+            .background(
+                when {
+                    selected -> MaterialTheme.colorScheme.primary
+                    focused -> MaterialTheme.colorScheme.primary.copy(alpha = .28f)
+                    else -> MaterialTheme.colorScheme.surface
+                }
+            )
+            .border(
+                width = if (focused && !selected) 2.dp else 0.dp,
+                color = if (focused && !selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+                shape = RoundedCornerShape(20.dp)
+            )
+            .onFocusChanged { focused = it.isFocused }
             .clickable(onClick = onClick)
             .focusable()
             .semantics { role = Role.Button }
