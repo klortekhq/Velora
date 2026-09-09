@@ -166,6 +166,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   ni URL. Se añadió una prueba específica para Principal/IPTV; la compilación
   Swift queda pendiente de la ejecución macOS de CI porque este host no tiene
   Swift/Xcode.
+- Mejora offline Android del 2026-09-09: el índice SQLite sube a la versión
+  10 y conserva la URL del servidor y el ID de usuario asociados a cada
+  representación descargada. La migración desde versiones anteriores y desde
+  el índice JSON mantiene los registros existentes; móvil y TV compilan y sus
+  suites unitarias pasan.
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos

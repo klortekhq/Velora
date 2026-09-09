@@ -30,6 +30,21 @@ class OfflineDownloadTest {
     }
 
     @Test
+    fun offlineEntryRetainsServerAndUserAssociation() {
+        val entry = OfflineDownload(
+            itemId = "movie-1",
+            name = "Movie",
+            type = "Movie",
+            downloadId = 0L,
+            serverUrl = "http://jellyfin.local:8096",
+            userId = "user-1"
+        )
+
+        assertEquals("http://jellyfin.local:8096", entry.serverUrl)
+        assertEquals("user-1", entry.userId)
+    }
+
+    @Test
     fun successfulContentUriIsPlayableWithoutFilesystemPath() {
         val download = OfflineDownload(
             itemId = "movie-1",

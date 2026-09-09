@@ -39,7 +39,10 @@ data class OfflineDownload(
     val isWatched: Boolean = false,
     val keepDownload: Boolean = false,
     /** Jellyfin media source selected for this offline representation. */
-    val mediaSourceId: String? = null
+    val mediaSourceId: String? = null,
+    /** Server and account that own this managed representation. */
+    val serverUrl: String? = null,
+    val userId: String? = null
 ) {
     /** Provider-neutral state used by UI and future managed-transfer engines. */
     val state: OfflineDownloadState get() = offlineDownloadState(status, reason)
@@ -91,7 +94,8 @@ object OfflineDownloadManager {
         seasonNumber: Int? = null,
         episodeNumber: Int? = null,
         quality: OfflineDownloadQuality = OfflineDownloadQuality.ORIGINAL,
-        estimatedBytes: Long? = null
+        estimatedBytes: Long? = null,
+        userId: String? = null
     ): OfflineDownload {
         check(PlatformCapabilities.supportsOfflineDownloads) {
             "Offline downloads are only supported on mobile and tablet builds"
@@ -143,6 +147,8 @@ object OfflineDownloadManager {
             downloadId = 0L,
             quality = quality.storageKey,
             mediaSourceId = mediaSourceId,
+            serverUrl = serverUrl,
+            userId = userId,
             status = DownloadManager.STATUS_PENDING,
             workName = workName,
             createdAtEpochMs = System.currentTimeMillis()
@@ -468,6 +474,8 @@ internal fun offlineDownloadFromLegacyValues(values: Map<String, Any?>): Offline
         lastPlayedAtEpochMs = if (has("lastPlayedAtEpochMs") || has("last_played_at")) long(0L, "lastPlayedAtEpochMs", "last_played_at") else null,
         isWatched = values["isWatched"] as? Boolean ?: values["is_watched"] as? Boolean ?: false,
         keepDownload = values["keepDownload"] as? Boolean ?: values["keep_download"] as? Boolean ?: false,
-        mediaSourceId = string("mediaSourceId", "media_source_id")
+        mediaSourceId = string("mediaSourceId", "media_source_id"),
+        serverUrl = string("serverUrl", "server_url"),
+        userId = string("userId", "user_id")
     )
 }
