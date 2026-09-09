@@ -124,6 +124,8 @@ jobs:
         run: node scripts/check-apple-privacy-manifest.mjs
       - name: Validate Apple SwiftUI lifecycle
         run: node scripts/check-apple-lifecycle.mjs
+      - name: Validate Apple playback capability policy
+        run: node scripts/check-apple-playback-policy.mjs
       - name: Test VeloraKit
         run: swift test --package-path apple --parallel
       - name: Build native package entrypoints

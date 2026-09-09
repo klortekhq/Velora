@@ -57,6 +57,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Direct Stream o remux; la regresión cubre `H265`, `EC-3`, `matroska` y Dolby
   Vision. El test Swift queda pendiente de un runner macOS/Xcode, ausente en
   este host Windows; no se presenta como ejecutado.
+- El contrato estático `check-apple-playback-policy.mjs` queda conectado tanto
+  al CI común como al workflow Apple para conservar esta paridad aunque el
+  runner macOS esté temporalmente bloqueado.
 - Actualizador Android: los botones y errores visibles de descarga/instalación
   están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
   la compilación de ambos perfiles y sus pruebas unitarias pasan.
