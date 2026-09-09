@@ -444,34 +444,7 @@ public struct VeloraAppShell: View {
     public var body: some View {
         Group {
             if model.isAuthenticated {
-                NavigationStack {
-                    VeloraLibraryView(title: String(localized: "Library", bundle: .module), items: model.items, artworkClient: model.jellyfinClient, onReachEnd: {
-                        Task { await model.loadMoreItems() }
-                    }) { item in
-                        selectedItem = item
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .automatic) {
-                            NavigationLink {
-                                VeloraSettingsView(settings: $model.settings)
-                            } label: {
-                                Text("Settings", bundle: .module)
-                            }
-                        }
-                        if !model.liveTvChannels.isEmpty {
-                            ToolbarItem(placement: .automatic) {
-                                NavigationLink {
-                                    VeloraLiveTvView(model: model)
-                                } label: {
-                                    Text("Live TV", bundle: .module)
-                                }
-                            }
-                        }
-                    }
-                }
-                .sheet(item: $selectedItem) { item in
-                    NavigationStack { VeloraItemDetailView(item: item, model: model) }
-                }
+                VeloraAuthenticatedContent(model: model, selectedItem: $selectedItem)
             } else {
                 VeloraLoginView(
                     server: $serverText,
@@ -485,6 +458,100 @@ public struct VeloraAppShell: View {
         .environment(\.locale, model.settings.appLocale)
         .task(id: model.isAuthenticated) {
             if model.isAuthenticated { await model.refreshContent() }
+        }
+    }
+}
+
+/// Platform-adaptive top-level navigation. iPhone/iPad get the same clearly
+/// reachable library sections as the Android client, while tvOS uses the same
+/// focusable tabs without exposing mobile-only offline actions.
+@available(iOS 16.0, tvOS 16.0, *)
+private struct VeloraAuthenticatedContent: View {
+    @ObservedObject var model: VeloraAppModel
+    @Binding var selectedItem: JellyfinItem?
+    @State private var selectedSection: Section = .home
+
+    private enum Section: Hashable {
+        case home, movies, series, liveTV
+    }
+
+    private var movies: [JellyfinItem] {
+        model.items.filter { $0.type.caseInsensitiveCompare("Movie") == .orderedSame }
+    }
+
+    private var series: [JellyfinItem] {
+        model.items.filter { $0.type.caseInsensitiveCompare("Series") == .orderedSame }
+    }
+
+    var body: some View {
+        TabView(selection: $selectedSection) {
+            library(
+                title: String(localized: "Home", bundle: .module),
+                items: model.items
+            )
+            .tabItem {
+                Label("Home", systemImage: "house")
+            }
+            .tag(Section.home)
+
+            library(
+                title: String(localized: "Movies", bundle: .module),
+                items: movies
+            )
+            .tabItem {
+                Label("Movies", systemImage: "film")
+            }
+            .tag(Section.movies)
+
+            library(
+                title: String(localized: "Series", bundle: .module),
+                items: series
+            )
+            .tabItem {
+                Label("Series", systemImage: "rectangle.stack")
+            }
+            .tag(Section.series)
+
+            if !model.liveTvChannels.isEmpty {
+                NavigationStack {
+                    VeloraLiveTvView(model: model)
+                        .toolbar { settingsToolbar }
+                }
+                .tabItem {
+                    Label("Live TV", systemImage: "tv")
+                }
+                .tag(Section.liveTV)
+            }
+        }
+        .sheet(item: $selectedItem) { item in
+            NavigationStack { VeloraItemDetailView(item: item, model: model) }
+        }
+    }
+
+    @ViewBuilder
+    private func library(title: String, items: [JellyfinItem]) -> some View {
+        NavigationStack {
+            VeloraLibraryView(
+                title: title,
+                items: items,
+                artworkClient: model.jellyfinClient,
+                onReachEnd: {
+                    if selectedSection == .home { Task { await model.loadMoreItems() } }
+                },
+                onSelect: { selectedItem = $0 }
+            )
+            .toolbar { settingsToolbar }
+        }
+    }
+
+    @ToolbarContentBuilder
+    private var settingsToolbar: some ToolbarContent {
+        ToolbarItem(placement: .automatic) {
+            NavigationLink {
+                VeloraSettingsView(settings: $model.settings)
+            } label: {
+                Label("Settings", systemImage: "gearshape")
+            }
         }
     }
 }

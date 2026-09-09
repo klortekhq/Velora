@@ -1,5 +1,8 @@
 "Library" = "Biblioteca";
 "Settings" = "Ajustes";
+"Home" = "Inicio";
+"Movies" = "Películas";
+"Series" = "Series";
 "Connect to Jellyfin" = "Conectar con Jellyfin";
 "Server address" = "Dirección del servidor";
 "Username" = "Usuario";

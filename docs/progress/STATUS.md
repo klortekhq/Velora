@@ -20,6 +20,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   fuente. `web/scripts/test-platform.mjs` pasa y `node web/scripts/build-web.mjs
   all` regenera correctamente el bundle web y el IPK webOS; Samsung queda como
   bundle preparado y VIDAA como HTML5 sin afirmar firma ni certificación.
+- Apple: el shell SwiftUI incorpora navegación real por Inicio, Películas y
+  Series, con Live TV condicionado a los canales devueltos por Jellyfin y
+  Ajustes accesibles desde cada pestaña. `check-apple-navigation.mjs` y los
+  contratos Apple de localización, lifecycle, playback y privacidad pasan; la
+  compilación nativa sigue pendiente de macOS/Xcode.
 - Release Android: el workflow elimina antes los APK y checksums Android
   antiguos de la release etiquetada, evitando que una reconstrucción deje
   varios artefactos de la misma variante que puedan confundirse al instalar.
