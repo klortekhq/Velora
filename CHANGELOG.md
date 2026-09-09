@@ -8,6 +8,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   vuelve a aplicar correctamente Ajustar, Rellenar, 4:3, 16:9, Cine,
   Estirar y Original en tiempo de reproducción; el reinicio del override usa
   la orden `no` de MPV y ya no deja la imagen bloqueada en el formato anterior.
+- TV Android: las personas del reparto que aparecen en la pantalla MPV son
+  seleccionables con mando o toque y abren su ficha con películas y series.
 - Live TV multiplataforma: Android, Apple y web agrupan proveedores con IDs
   Jellyfin distintos cuando comparten el mismo número y nombre visible, sin
   duplicar filas y manteniendo las fuentes como opciones seleccionables.

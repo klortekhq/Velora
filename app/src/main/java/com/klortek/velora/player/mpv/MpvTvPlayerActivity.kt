@@ -47,6 +47,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.klortek.velora.JellyfinAppTheme
+import com.klortek.velora.CastInfoActivity
 import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinConfig
@@ -1208,7 +1209,7 @@ private fun MpvPlayerScreen(
                     item {
                         Column(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
                             Text(
-                                text = "Cast",
+                                text = stringResource(com.klortek.velora.R.string.details_cast),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
@@ -1221,6 +1222,7 @@ private fun MpvPlayerScreen(
                             ) {
                                 items(castMembers.size) { index ->
                                     val person = castMembers[index]
+                                    val context = LocalContext.current
                                     val personTag = person.PrimaryImageTag
                                     val imageUrl = if (personTag != null && person.Id != null && apiService != null) {
                                         apiService.getImageUrl(
@@ -1232,48 +1234,64 @@ private fun MpvPlayerScreen(
                                         )
                                     } else ""
                                     
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier.width(80.dp)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(60.dp)
-                                                .clip(CircleShape)
-                                                .background(Color.Gray.copy(alpha = 0.2f))
-                                        ) {
-                                            if (imageUrl.isNotEmpty()) {
-                                                AsyncImage(
-                                                    model = ImageRequest.Builder(LocalContext.current)
-                                                        .data(imageUrl)
-                                                        .crossfade(true)
-                                                        .build(),
-                                                    contentDescription = person.Name,
-                                                    modifier = Modifier.fillMaxSize(),
-                                                    contentScale = ContentScale.Crop
+                                    Card(
+                                        onClick = {
+                                            if (!person.Name.isNullOrBlank()) {
+                                                context.startActivity(
+                                                    CastInfoActivity.createIntent(context, person)
                                                 )
-                                            } else {
-                                                Box(
-                                                    modifier = Modifier.fillMaxSize(),
-                                                    contentAlignment = Alignment.Center
-                                                ) {
-                                                    Text(
-                                                        text = person.Name?.take(1) ?: "",
-                                                        color = Color.White,
-                                                        style = MaterialTheme.typography.titleMedium
+                                            }
+                                        },
+                                        modifier = Modifier
+                                            .width(80.dp)
+                                            .focusable(),
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color.Transparent
+                                        )
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier.padding(4.dp)
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(60.dp)
+                                                    .clip(CircleShape)
+                                                    .background(Color.Gray.copy(alpha = 0.2f))
+                                            ) {
+                                                if (imageUrl.isNotEmpty()) {
+                                                    AsyncImage(
+                                                        model = ImageRequest.Builder(context)
+                                                            .data(imageUrl)
+                                                            .crossfade(true)
+                                                            .build(),
+                                                        contentDescription = person.Name,
+                                                        modifier = Modifier.fillMaxSize(),
+                                                        contentScale = ContentScale.Crop
                                                     )
+                                                } else {
+                                                    Box(
+                                                        modifier = Modifier.fillMaxSize(),
+                                                        contentAlignment = Alignment.Center
+                                                    ) {
+                                                        Text(
+                                                            text = person.Name?.take(1) ?: "",
+                                                            color = Color.White,
+                                                            style = MaterialTheme.typography.titleMedium
+                                                        )
+                                                    }
                                                 }
                                             }
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Text(
+                                                text = person.Name ?: "",
+                                                color = Color.White.copy(alpha = 0.8f),
+                                                style = MaterialTheme.typography.bodySmall,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                            )
                                         }
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text(
-                                            text = person.Name ?: "",
-                                            color = Color.White.copy(alpha = 0.8f),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                                        )
                                     }
                                 }
                             }

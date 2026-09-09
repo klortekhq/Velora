@@ -25,6 +25,12 @@ assert.match(
   'La filmografía debe incluir películas y series.'
 );
 assert.match(castActivity, /CastInfoScreen\(/, 'La actividad debe renderizar la ficha de persona.');
+const mpvPlayer = read('app/src/main/java/com/klortek/velora/player/mpv/MpvTvPlayerActivity.kt');
+assert.match(
+  mpvPlayer,
+  /Card\([\s\S]*?CastInfoActivity\.createIntent\(context, person\)/,
+  'El reparto visible en la pantalla MPV debe abrir la ficha de la persona con mando o toque.'
+);
 assert.match(castActivity, /"Movie"\s*->\s*startActivity\(MovieDetailsActivity\.createIntent/, 'La filmografía debe abrir películas.');
 assert.match(castActivity, /"Series"\s*->\s*startActivity\(SeriesDetailsActivity\.createIntent/, 'La filmografía debe abrir series.');
 
