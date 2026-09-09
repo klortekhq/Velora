@@ -145,7 +145,7 @@ class AudioPlayerService : MediaSessionService() {
             session: MediaSession,
             controller: MediaSession.ControllerInfo
         ): MediaSession.ConnectionResult {
-            Log.d(TAG, "Controller connected: ${controller.packageName}")
+            Log.d(TAG, "Controller connected")
             // Accept all connections with default commands
             return MediaSession.ConnectionResult.AcceptedResultBuilder(session)
                 .setAvailableSessionCommands(
@@ -158,11 +158,11 @@ class AudioPlayerService : MediaSessionService() {
         }
 
         override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
-            Log.d(TAG, "Controller post-connected: ${controller.packageName}")
+            Log.d(TAG, "Controller post-connected")
         }
 
         override fun onDisconnected(session: MediaSession, controller: MediaSession.ControllerInfo) {
-            Log.d(TAG, "Controller disconnected: ${controller.packageName}")
+            Log.d(TAG, "Controller disconnected")
         }
 
         override fun onCustomCommand(
@@ -171,7 +171,7 @@ class AudioPlayerService : MediaSessionService() {
             customCommand: SessionCommand,
             args: Bundle
         ): ListenableFuture<SessionResult> {
-            Log.d(TAG, "Custom command received: ${customCommand.customAction}")
+            Log.d(TAG, "Custom command received")
             return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
         }
 

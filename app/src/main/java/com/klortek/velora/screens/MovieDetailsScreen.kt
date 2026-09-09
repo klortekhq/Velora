@@ -179,12 +179,12 @@ fun MovieDetailsScreen(
         if (apiService != null) {
             withContext(Dispatchers.IO) {
                 try {
-                    Log.d("MovieDetailsScreen", "Fetching item details for: ${item.Id} (${item.Name}) [refresh=$refreshTrigger]")
-                    Log.d("MovieDetailsScreen", "Initial item UserData: ${item.UserData}")
+        Log.d("MovieDetailsScreen", "Fetching item details")
+        Log.d("MovieDetailsScreen", "Initial item state loaded")
                     val details = apiService.getItemDetails(item.Id)
                     itemDetails = details
-                    Log.d("MovieDetailsScreen", "Fetched item details UserData: ${details?.UserData}")
-                    Log.d("MovieDetailsScreen", "Fetched item PositionTicks: ${details?.UserData?.PositionTicks}")
+        Log.d("MovieDetailsScreen", "Fetched item state")
+        Log.d("MovieDetailsScreen", "Fetched item playback position")
                     isLoading = false
                 } catch (e: kotlinx.coroutines.CancellationException) {
                     // Ignore cancellation exceptions - they're expected when composition changes
@@ -204,8 +204,8 @@ fun MovieDetailsScreen(
     // Log the displayItem UserData to see what's being passed to ActionButtonsRow
     LaunchedEffect(itemDetails) {
         val itemToCheck = itemDetails ?: item
-        Log.d("MovieDetailsScreen", "DisplayItem UserData updated: ${itemToCheck.UserData}")
-        Log.d("MovieDetailsScreen", "DisplayItem PositionTicks: ${itemToCheck.UserData?.PositionTicks}")
+        Log.d("MovieDetailsScreen", "Display item state updated")
+        Log.d("MovieDetailsScreen", "Display item playback position loaded")
         val isResumable = itemToCheck.UserData?.PositionTicks != null && itemToCheck.UserData?.PositionTicks!! > 0
         Log.d("MovieDetailsScreen", "DisplayItem isResumable: $isResumable")
     }
@@ -1458,12 +1458,12 @@ fun AudioSelectionDialog(
     
     // Fetch full item details to get MediaSources with audio streams
     LaunchedEffect(item.Id, apiService) {
-        Log.d("AudioDialog", "LaunchedEffect triggered for item ${item.Id}, apiService=${apiService != null}")
+        Log.d("AudioDialog", "LaunchedEffect triggered")
         if (apiService != null) {
             withContext(Dispatchers.IO) {
                 try {
                     val details = apiService.getItemDetails(item.Id)
-                    Log.d("AudioDialog", "Fetched details: ${details?.Name}, MediaSources: ${details?.MediaSources?.size ?: 0}")
+                    Log.d("AudioDialog", "Fetched item details")
                     details?.MediaSources?.firstOrNull()?.MediaStreams?.let { streams ->
                         val audioStreams = streams.filter { it.Type == "Audio" }
                         Log.d("AudioDialog", "Found ${audioStreams.size} audio streams: ${audioStreams.map { "Index=${it.Index}, Lang=${it.Language}, Codec=${it.Codec}" }}")
@@ -1678,7 +1678,7 @@ fun ActionButtonsRow(
         // Fallback to TMDB directly if key configured
         if (settings.tmdbApiKey.isNotBlank()) {
              val tmdbId = displayItem.ProviderIds?.get("Tmdb") ?: displayItem.ProviderIds?.get("tmdb") ?: displayItem.ProviderIds?.get("TMDB")
-             Log.d("ActionButtonsRow", "Checking TMDB Trailer for ${displayItem.Name}. API Key present: ${settings.tmdbApiKey.isNotBlank()}, TMDB ID: $tmdbId")
+                    Log.d("ActionButtonsRow", "Checking trailer")
              
              if (tmdbId != null) {
                  try {
@@ -1706,7 +1706,7 @@ fun ActionButtonsRow(
                              }
                          }
 
-                         Log.d("ActionButtonsRow", "Fetching videos for ID: $tmdbId (Language: $iso639Code)")
+                    Log.d("ActionButtonsRow", "Fetching trailer videos")
                          val videos = TmdbApiService.getVideos(
                              tmdbId = tmdbId.toInt(),
                              type = if (displayItem.Type == "Series" || displayItem.Type == "Season" || displayItem.Type == "Episode") "tv" else "movie",
@@ -1727,7 +1727,7 @@ fun ActionButtonsRow(
                      Log.e("ActionButtonsRow", "Error fetching TMDB trailer", e)
                  }
              } else {
-                 Log.d("ActionButtonsRow", "No TMDB ID found for item: ${displayItem.Name}")
+                        Log.d("ActionButtonsRow", "No provider trailer ID found")
              }
         }
     }
@@ -1740,7 +1740,7 @@ fun ActionButtonsRow(
     val hasMultiAudio = audioStreamCount > 1
     
     // Log UserData for debugging
-    Log.d("ActionButtonsRow", "Checking resume status for item: ${displayItem.Id} (${displayItem.Name})")
+                                Log.d("ActionButtonsRow", "Checking resume status")
     Log.d("ActionButtonsRow", "UserData: ${displayItem.UserData}")
     Log.d("ActionButtonsRow", "UserData.PositionTicks: ${displayItem.UserData?.PositionTicks}")
     Log.d("ActionButtonsRow", "UserData.PlayedPercentage: ${displayItem.UserData?.PlayedPercentage}")
@@ -2167,7 +2167,7 @@ fun ActionButtonsRow(
                             
                             if (success) {
                                 val action = if (isAlreadyWatched) "unwatched" else "watched"
-                                android.util.Log.d("MovieDetails", "Item ${displayItem.Id} marked as $action")
+                android.util.Log.d("MovieDetails", "Item playback state changed")
                                 // Add a small delay to let the server process the status change
                                 delay(800)
                                 val refreshedDetails = service.getItemDetails(displayItem.Id)
@@ -2272,7 +2272,7 @@ fun ActionButtonsRow(
                                 ?.find { it.Type == "Subtitle" && it.Index == subtitleIndex }
                             
                             if (subtitleStream != null) {
-                                android.util.Log.d("MovieDetails", "Pre-downloading selected subtitle: ${subtitleStream.DisplayTitle}")
+                android.util.Log.d("MovieDetails", "Pre-downloading selected subtitle")
                                 com.klortek.velora.player.SubtitleDownloader.downloadSubtitle(
                                     context = context,
                                     apiService = apiService,

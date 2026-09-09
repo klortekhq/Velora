@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Seguridad Android: la auditoría de Logcat se amplía a todo el código propio
+  de Velora (131 archivos) y elimina títulos, nombres de pistas, IDs, rutas de
+  servidor y posiciones de reproducción de las trazas; el contrato de CI
+  bloquea regresiones también en pantallas, subtítulos, música y descubrimiento.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.

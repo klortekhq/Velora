@@ -87,7 +87,7 @@ fun CastInfoScreen(
                     // Fetch person details
                     val details = apiService.getPersonDetails(personId)
                     personDetails = details
-                    Log.d("CastInfoScreen", "Loaded person details: ${details?.Name}, Overview: ${details?.Overview?.take(100)}")
+        Log.d("CastInfoScreen", "Loaded person details")
 
                     // Fetch filmography
                     val items = apiService.getPersonFilmography(personId)

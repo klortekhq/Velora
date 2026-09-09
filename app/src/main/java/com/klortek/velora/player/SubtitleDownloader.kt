@@ -73,7 +73,7 @@ object SubtitleDownloader {
                 path = stream.Path
             )
             
-            Log.d(TAG, "📥 Downloading subtitle: ${stream.DisplayTitle}")
+            Log.d(TAG, "📥 Downloading subtitle")
             Log.d(TAG, "   URL: ${SensitiveDataRedactor.url(subtitleUrl)}")
             Log.d(TAG, "   Index: $streamIndex, External: $isExternal, Codec: ${stream.Codec}")
             

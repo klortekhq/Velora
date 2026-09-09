@@ -167,11 +167,11 @@ object ServerDiscovery {
         val candidates = buildUrlCandidates(userInput)
         
         if (candidates.isEmpty()) {
-            Log.w(TAG, "No URL candidates generated from input: $userInput")
+        Log.w(TAG, "No URL candidates generated from input")
             return@withContext null
         }
         
-        Log.d(TAG, "Trying ${candidates.size} URL variations for: $userInput")
+        Log.d(TAG, "Trying URL variations")
         
         for (url in candidates) {
             try {
@@ -292,7 +292,7 @@ object ServerDiscovery {
                     socket.receive(receivePacket)
                     
                     val response = String(receivePacket.data, 0, receivePacket.length)
-                    Log.d(TAG, "Received response from ${receivePacket.address}: $response")
+                    Log.d(TAG, "Received local discovery response")
                     
                     // Parse the JSON response
                     try {
@@ -316,7 +316,7 @@ object ServerDiscovery {
                             )
                             
                             servers.add(server)
-                            Log.i(TAG, "✅ Found server: ${server.name} at ${server.address}")
+                            Log.i(TAG, "✅ Found server during local discovery")
                             
                             onServerFound?.invoke(server)
                         }

@@ -455,7 +455,7 @@ class JellyseerrApiService private constructor(
                 mediaId = tmdbId
             )
             
-            Log.d(TAG, "Requesting movie with TMDB ID: $tmdbId, body: $requestBody")
+            Log.d(TAG, "Requesting movie")
             
             val response = client.post("$normalizedBaseUrl/api/v1/request") {
                 addAuth()
@@ -485,7 +485,7 @@ class JellyseerrApiService private constructor(
      */
     suspend fun getTvShowDetails(tmdbId: Int): JellyseerrTvShow? {
         return try {
-            Log.d(TAG, "Fetching TV show details for TMDB ID: $tmdbId")
+            Log.d(TAG, "Fetching TV show details")
             val response = client.get("$normalizedBaseUrl/api/v1/tv/$tmdbId") {
                 addAuth()
             }
@@ -514,7 +514,7 @@ class JellyseerrApiService private constructor(
                 seasons = seasons
             )
             
-            Log.d(TAG, "Requesting TV show with TMDB ID: $tmdbId, seasons: $seasons")
+            Log.d(TAG, "Requesting TV show")
             
             val response = client.post("$normalizedBaseUrl/api/v1/request") {
                 addAuth()
