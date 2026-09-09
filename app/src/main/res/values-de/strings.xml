@@ -314,6 +314,7 @@ Bitte überprüfe:
   <string name="player_pause">Pause</string>
   <string name="player_subtitles_none">Keine (deaktiviert)</string>
   <string name="player_selected">Ausgewählt</string>
+  <string name="player_autoplay_countdown">Automatische Wiedergabe in %1$d…</string>
   <string name="settings_playback_mpv">MPV-Player verwenden</string>
   <string name="settings_playback_mpv_description">MPV für bessere AV1-, HEVC- und HDR-Kompatibilität verwenden.</string>
   <string name="settings_skip_intro">Intro überspringen</string>

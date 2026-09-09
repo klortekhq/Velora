@@ -3563,7 +3563,7 @@ fun JellyfinVideoPlayerScreen(
                         // Skip Intro Button
                         if (showSkipIntroButton && skipMarkers.introEndMs != null) {
                             SkipButton(
-                                text = "Saltar intro",
+                                text = stringResource(com.klortek.velora.R.string.settings_skip_intro),
                                 onClick = {
                                     player.seekTo(skipMarkers.introEndMs!!)
                                     showSkipIntroButton = false
@@ -3575,7 +3575,7 @@ fun JellyfinVideoPlayerScreen(
                         // Skip Credits Button
                         if (showSkipCreditsButton && !showNextUpOverlay) {
                             SkipButton(
-                                text = "Saltar créditos",
+                                text = stringResource(com.klortek.velora.R.string.settings_skip_credits),
                                 onClick = {
                                     // Seek to near the end to trigger next episode
                                     val duration = player.duration
@@ -4157,7 +4157,7 @@ fun JellyfinVideoPlayerScreen(
                     item {
                         Column(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
                             Text(
-                                text = "Reparto",
+                                    text = stringResource(com.klortek.velora.R.string.mobile_cast),
                                 style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
@@ -4247,7 +4247,7 @@ fun JellyfinVideoPlayerScreen(
                     item {
                         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
                             Text(
-                                text = "Temporadas",
+                                text = stringResource(com.klortek.velora.R.string.mobile_seasons),
                                 style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
@@ -5551,7 +5551,7 @@ fun NextUpOverlay(
             ) {
                 // Title
                 Text(
-                    text = "A continuación",
+                                    text = stringResource(com.klortek.velora.R.string.library_up_next),
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
@@ -5590,7 +5590,7 @@ fun NextUpOverlay(
                 
                 // Countdown
                 Text(
-                    text = "Reproducción automática en $countdown…",
+                    text = stringResource(com.klortek.velora.R.string.player_autoplay_countdown, countdown),
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White.copy(alpha = 0.7f),
                     modifier = Modifier.padding(top = 8.dp)

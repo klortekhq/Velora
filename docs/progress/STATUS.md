@@ -235,11 +235,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   timeout TLS sobre un puerto HTTP; HTTPS sigue disponible como fallback.
 - La pantalla de conexión usa recursos localizados para título, dirección,
   descubrimiento, detección automática, selección de servidor y errores; los
-  catálogos garantizados español, inglés, francés y alemán mantienen las 452
+  catálogos garantizados español, inglés, francés y alemán mantienen las 507
   claves sincronizadas.
 - Los avisos de trailers que aparecen en las fichas de películas y series
   también usan recursos localizados; la cobertura Android garantizada queda en
-  452 claves.
+  507 claves.
 - Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
   de reproducción persistente. El cliente web carga la biblioteca por páginas
   y permite ampliar los resultados sin bloquear el inicio.
@@ -276,6 +276,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   callbacks de Media3 ya no lo vuelven a mostrar después de cargar pistas.
   Audio y subtítulos quedan concentrados en la tuerca de ajustes. La
   compilación y las suites unitarias móvil/TV vuelven a pasar tras el cambio.
+- Los textos visibles del reproductor para saltar intro/créditos, reparto,
+  temporadas, siguiente episodio y cuenta atrás usan recursos localizados;
+  los catálogos garantizados pasan ahora a 507 claves.
 - Auditoría multiplataforma de offline: Android TV/Fire TV bloquea tanto la
   navegación como la apertura directa de descargas; Apple TV no renderiza las
   acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen

@@ -247,6 +247,7 @@
     <string name="player_pause">Pausa</string>
     <string name="player_subtitles_none">Ninguno (desactivados)</string>
     <string name="player_selected">Seleccionado</string>
+    <string name="player_autoplay_countdown">Reproducción automática en %1$d…</string>
   <string name="settings_playback_mpv">Usar reproductor MPV</string>
   <string name="settings_playback_mpv_description">Usa MPV para mejorar la compatibilidad con AV1, HEVC y HDR.</string>
   <string name="settings_skip_intro">Saltar intro</string>

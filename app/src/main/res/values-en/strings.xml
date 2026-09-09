@@ -314,6 +314,7 @@ Please verify:
   <string name="player_pause">Pause</string>
   <string name="player_subtitles_none">None (disabled)</string>
   <string name="player_selected">Selected</string>
+  <string name="player_autoplay_countdown">Autoplay in %1$d…</string>
   <string name="settings_playback_mpv">Use MPV player</string>
   <string name="settings_playback_mpv_description">Use MPV to improve AV1, HEVC and HDR compatibility.</string>
   <string name="settings_skip_intro">Skip intro</string>
