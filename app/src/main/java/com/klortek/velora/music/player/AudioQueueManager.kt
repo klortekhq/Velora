@@ -42,7 +42,7 @@ object AudioQueueManager {
      * Set a new queue and start from the specified index
      */
     fun setQueue(tracks: List<Track>, startIndex: Int = 0) {
-        Log.d(TAG, "Setting queue with ${tracks.size} tracks, starting at index $startIndex")
+        Log.d(TAG, "Setting audio queue")
         originalQueue = tracks
         _queue.value = tracks
         _currentIndex.value = startIndex.coerceIn(0, tracks.size - 1)

@@ -166,7 +166,7 @@ object PlayerConnection {
             return
         }
 
-        Log.d(TAG, "Playing ${tracks.size} tracks, starting at index $startIndex")
+        Log.d(TAG, "Playing queued audio tracks")
 
         // Set the queue
         AudioQueueManager.setQueue(tracks, startIndex)
