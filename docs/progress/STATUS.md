@@ -874,6 +874,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   variantes por la ID del canal, conserva cada `MediaSource`, abre el selector
   cuando hay varias fuentes y mantiene la reproducción directa cuando solo
   existe una.
+- Contratos transversales revalidados el 2026-09-09: política de releases,
+  superficie offline móvil/tablet, identidad pública, autenticación Jellyfin,
+  metadatos de empaquetado Smart TV y coherencia de versión `1.4.0` pasaron.
 - Empaquetado web multiplataforma en QA aislado: el bundle Samsung/Tizen y el
   bundle VIDAA se generan correctamente, pero Tizen Studio/CLI no está
   instalado y por eso no se presenta un `.wgt`; `ares-package` sí generó el
