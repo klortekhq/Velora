@@ -38,6 +38,12 @@
   <string name="search_empty_prompt">Saisissez un titre ou utilisez la recherche vocale</string>
   <string name="action_play">Lire</string>
   <string name="update_install_start_failed">Impossible de démarrer l’installation.</string>
+  <string name="update_title">Mise à jour disponible</string>
+  <string name="update_available_description">Une nouvelle version est disponible : %1$s\n\n%2$s</string>
+  <string name="update_default_notes">Corrections et améliorations.</string>
+  <string name="update_installation_started">Installation démarrée. L’installateur système apparaîtra bientôt.</string>
+  <string name="update_downloading_progress">Téléchargement de la mise à jour… %1$d%%</string>
+  <string name="update_error">Erreur : %1$s</string>
   <string name="update_install_failed">Impossible d’installer la mise à jour.</string>
   <string name="update_download_failed">Impossible de télécharger la mise à jour.</string>
   <string name="update_no_tv_apk">Aucun APK TV compatible n’est disponible pour cette version.</string>

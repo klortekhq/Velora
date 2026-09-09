@@ -90,7 +90,7 @@ fun UpdateDialog(
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
                     Text(
-                        text = "Actualización disponible",
+                        text = context.getString(R.string.update_title),
                         style = if (isTv) MaterialTheme.typography.headlineMedium else androidx.compose.material3.MaterialTheme.typography.titleLarge,
                         color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
                     )
@@ -102,7 +102,11 @@ fun UpdateDialog(
                             .verticalScroll(rememberScrollState())
                     ) {
                         Text(
-                            text = "Hay una nueva versión disponible: ${release.name}\n\n${release.body ?: "Correcciones y mejoras."}",
+                            text = context.getString(
+                                R.string.update_available_description,
+                                release.name,
+                                release.body ?: context.getString(R.string.update_default_notes)
+                            ),
                             style = if (isTv) MaterialTheme.typography.bodyLarge else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                             color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                         )
@@ -111,19 +115,19 @@ fun UpdateDialog(
                     // Download progress or error message
                     if (installationStarted) {
                         Text(
-                            text = "Instalación iniciada. El instalador del sistema aparecerá en breve.",
+                            text = context.getString(R.string.update_installation_started),
                             style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                             color = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary
                         )
                     } else if (isDownloading) {
                         Text(
-                            text = "Descargando actualización... $downloadProgress%",
+                            text = context.getString(R.string.update_downloading_progress, downloadProgress),
                             style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                             color = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary
                         )
                     } else if (downloadError != null) {
                         Text(
-                            text = "Error: $downloadError",
+                            text = context.getString(R.string.update_error, downloadError),
                             style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
                             color = if (isTv) MaterialTheme.colorScheme.error else androidx.compose.material3.MaterialTheme.colorScheme.error
                         )
