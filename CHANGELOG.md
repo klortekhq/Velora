@@ -4,6 +4,11 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android: el marco de vídeo de pantalla completa calcula ahora el tamaño
+  contenido según el espacio real disponible; los modos panorámicos ya no se
+  recortan por dimensionarse siempre desde la altura. La selección se mantiene
+  coordinada entre Media3/ExoPlayer, la superficie GL y el cambio de
+  orientación.
 - Android móvil/tablet: la ficha de información técnica queda limitada a
   formato, códec, resolución, FPS, HDR y pistas de audio; nunca presenta la
   ruta ni el nombre interno del archivo. Un contrato de CI protege esta
