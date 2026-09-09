@@ -74,6 +74,8 @@ jobs:
         run: node scripts/check-android-locales.mjs
       - name: Validate Android playback backend policy
         run: node scripts/check-android-playback-policy.mjs
+      - name: Validate Android content navigation
+        run: node scripts/check-android-content-navigation.mjs
       - name: Validate web locale catalogues
         run: node scripts/check-web-locales.mjs
       - name: Setup Gradle
