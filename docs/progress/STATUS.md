@@ -22,6 +22,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   queda pendiente reactivar la facturación o el límite de Actions y relanzar
   la validación. Las comprobaciones locales siguen siendo la referencia hasta
   que GitHub vuelva a ejecutar los runners.
+- Revalidación local del 2026-09-09: `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`; los APK debug
+  regenerados conservan los hashes publicados en la release QA v1.4.0.
+  `node web/scripts/build-web.mjs all` también terminó correctamente en una
+  salida temporal aislada: generó el IPK webOS con `ares-package`, dejó el
+  bundle Samsung listo a falta de Tizen Studio/firma y preparó el bundle HTML5
+  de VIDAA. No se presenta Tizen ni VIDAA como paquete firmado.
 - Último cambio funcional documentado: la ficha de información técnica móvil
   queda protegida para mostrar solo formato de vídeo/audio, códec, resolución,
   FPS y HDR; el contrato `check-mobile-file-info.mjs` impide que se vuelvan a
