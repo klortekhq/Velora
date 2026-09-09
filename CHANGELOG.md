@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Bibliotecas de películas y series: se añade cobertura de regresión para
+  ordenar por nombre, fecha y valoración y combinar favoritos, estado de
+  reproducción y género; los controles de ambas pantallas aplican la misma
+  consulta real.
 - Autenticación Android: la ruta `Users/AuthenticateByName` usa ahora la
   capitalización canónica de Jellyfin, evitando rechazos de proxies estrictos.
 - Apple: el reproductor nativo de iPhone, iPad y tvOS incorpora pantalla

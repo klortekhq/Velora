@@ -35,6 +35,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Apple, web y el smoke test (`Users/AuthenticateByName`) para evitar que un
   proxy sensible a mayúsculas rechace la petición antes de llegar a Jellyfin;
   `JellyfinAuthServiceTest` y las suites móvil/TV siguen pasando.
+- Bibliotecas móvil/tablet y TV: `LibraryContentQueryTest` cubre la consulta
+  compartida de películas y series (ordenación ascendente/descendente,
+  favoritos, visto/no visto, género y estabilidad); las variantes móvil y TV
+  terminaron con `BUILD SUCCESSFUL` el 2026-09-09.
 - Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
   y dejar la tuerca como punto único para audio y subtítulos: móvil
   `app-mobile-debug.apk`, SHA-256
