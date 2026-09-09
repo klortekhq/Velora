@@ -13,7 +13,8 @@ import kotlinx.coroutines.withContext
 
 /**
  * Maps Jellyfin subtitle streams to ExoPlayer subtitle track IDs
- * using a COMPOSITE KEY approach (production-safe, used by Plex/Emby/Jellyfin TV).
+ * using a stable composite-key approach that matches Jellyfin's stream metadata
+ * to Media3's rebuilt track objects.
  *
  * WHY THIS IS NEEDED:
  * ExoPlayer does NOT preserve Jellyfin subtitle indexes OR custom IDs.
@@ -29,11 +30,8 @@ import kotlinx.coroutines.withContext
  *
  * These create a COMPOSITE KEY that remains stable across ExoPlayer's internal rebuilds.
  *
- * This is the EXACT approach used by:
- * - Plex Android TV
- * - Emby Android TV
- * - Official Jellyfin Android TV
- * - VLC Android
+ * The implementation is owned by Velora and is deliberately kept independent
+ * of any other client's UI or source code.
  */
 object SubtitleMapper {
     private const val TAG = "SubtitleMapper"
@@ -152,7 +150,7 @@ object SubtitleMapper {
      * - Track position (groupIndex, trackIndex)
      * - Content attributes (mimeType, language, isForced, isExternal)
      * 
-     * This is the production-safe approach used by Plex, Emby, Jellyfin TV, and VLC.
+     * This is Velora's production-safe mapping for Media3 track rebuilds.
      * 
      * @param format The ExoPlayer Format from a selected subtitle track
      * @param groupIndex The index of the track group in Tracks.groups

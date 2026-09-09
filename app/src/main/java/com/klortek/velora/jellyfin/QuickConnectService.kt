@@ -70,7 +70,7 @@ class QuickConnectService(
             val clientName = "Velora"
             val clientVersion = BuildConfig.VERSION_NAME
             
-            val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
+            val mediaBrowserAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
             
             android.util.Log.d("QuickConnect", "Initiating QuickConnect at: ${SensitiveDataRedactor.url(url)}")
             android.util.Log.d("QuickConnect", "Device identity prepared")
@@ -79,7 +79,7 @@ class QuickConnectService(
             val response: HttpResponse = client.post(url) {
                 header(HttpHeaders.Accept, "application/json")
                 header(HttpHeaders.ContentType, "application/json")
-                header("Authorization", embyAuthHeader)
+                header("Authorization", mediaBrowserAuthHeader)
             }
             
             android.util.Log.d("QuickConnect", "Response status: ${response.status.value} (${response.status})")
@@ -132,13 +132,13 @@ class QuickConnectService(
             val clientName = "Velora"
             val clientVersion = BuildConfig.VERSION_NAME
             
-            val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
+            val mediaBrowserAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
             
             android.util.Log.d("QuickConnect", "Polling QuickConnect state")
             
             val response = client.get(url) {
                 header(HttpHeaders.Accept, "application/json")
-                header("Authorization", embyAuthHeader)
+                header("Authorization", mediaBrowserAuthHeader)
             }
             
             android.util.Log.d("QuickConnect", "Response status: ${response.status.value} (${response.status})")
@@ -184,14 +184,14 @@ class QuickConnectService(
             val clientName = "Velora"
             val clientVersion = BuildConfig.VERSION_NAME
             
-            val embyAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
+            val mediaBrowserAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
             
             android.util.Log.d("QuickConnect", "Authenticating with QuickConnect at: ${SensitiveDataRedactor.url(url)}")
             
             val response: HttpResponse = client.post(url) {
                 header(HttpHeaders.Accept, "application/json")
                 header(HttpHeaders.ContentType, "application/json")
-                header("Authorization", embyAuthHeader)
+                header("Authorization", mediaBrowserAuthHeader)
                 setBody(QuickConnectAuthenticateRequest(Secret = secret))
             }
             
