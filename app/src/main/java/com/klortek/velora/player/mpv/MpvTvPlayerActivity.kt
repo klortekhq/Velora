@@ -639,76 +639,19 @@ private fun MpvPlayerScreen(
                 // These are MPV runtime properties. setOptionString only changes
                 // startup options, so using it here made the button appear to
                 // cycle while the rendered video never changed.
-                fun setAspectOverride(value: Double) {
-                    // video-aspect-override is a numeric MPV property. Sending
-                    // "no" through the string setter made the UI cycle while
-                    // MPV silently kept the previous geometry.
-                    MPVLib.setPropertyDouble("video-aspect-override", value)
-                    MPVLib.command(arrayOf("set", "video-aspect-override", value.toString()))
-                }
-                fun setAspectMethod(value: String) {
-                    MPVLib.setPropertyString("video-aspect-method", value)
-                    MPVLib.command(arrayOf("set", "video-aspect-method", value))
-                }
-                fun setPanScan(value: Double) {
-                    MPVLib.setPropertyDouble("panscan", value)
-                    MPVLib.command(arrayOf("set", "panscan", value.toString()))
-                }
-                fun setVideoUnscaled(value: Boolean) {
-                    val setting = if (value) "yes" else "no"
-                    MPVLib.setPropertyString("video-unscaled", setting)
-                    MPVLib.command(arrayOf("set", "video-unscaled", setting))
-                }
-                fun setKeepAspect(value: Boolean) {
-                    val setting = if (value) "yes" else "no"
-                    MPVLib.setPropertyString("keepaspect", setting)
-                    MPVLib.command(arrayOf("set", "keepaspect", setting))
+                val runtime = mpvAspectRuntime(currentAspectMode)
+                fun setStringProperty(name: String, value: String) {
+                    MPVLib.setPropertyString(name, value)
+                    MPVLib.command(arrayOf("set", name, value))
                 }
 
-                when (currentAspectMode) {
-                    AspectMode.FIT -> {
-                        setAspectOverride(0.0)
-                        setAspectMethod("container")
-                        setPanScan(0.0)
-                        setVideoUnscaled(false)
-                    }
-                    AspectMode.FILL -> {
-                        setAspectOverride(0.0)
-                        setAspectMethod("container")
-                        setPanScan(1.0)
-                        setVideoUnscaled(false)
-                    }
-                    AspectMode.FOUR_THREE -> {
-                        setAspectOverride(4.0 / 3.0)
-                        setPanScan(0.0)
-                        setVideoUnscaled(false)
-                    }
-                    AspectMode.LETTERBOX -> {
-                        setAspectOverride(16.0 / 9.0)
-                        setPanScan(0.0)
-                        setVideoUnscaled(false)
-                    }
-                    AspectMode.CINEMA -> {
-                        setAspectOverride(2.39)
-                        setPanScan(0.0)
-                        setVideoUnscaled(false)
-                    }
-                    AspectMode.STRETCH -> {
-                        setAspectOverride(0.0)
-                        setKeepAspect(false)
-                        setPanScan(0.0)
-                        setVideoUnscaled(false)
-                    }
-                    AspectMode.ORIGINAL -> {
-                        setAspectOverride(0.0)
-                        setAspectMethod("container")
-                        setPanScan(0.0)
-                        setVideoUnscaled(true)
-                    }
-                }
-                if (currentAspectMode != AspectMode.STRETCH) {
-                    setKeepAspect(true)
-                }
+                // `no` is the documented MPV reset value. Do not replace it
+                // with a numeric 0: some MPV builds keep the prior override.
+                setStringProperty("video-aspect-override", runtime.aspectOverride)
+                runtime.aspectMethod?.let { setStringProperty("video-aspect-method", it) }
+                setStringProperty("panscan", runtime.panScan)
+                setStringProperty("video-unscaled", runtime.videoUnscaled)
+                setStringProperty("keepaspect", runtime.keepAspect)
             }
         }
     }

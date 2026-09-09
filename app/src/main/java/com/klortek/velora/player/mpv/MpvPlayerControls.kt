@@ -86,6 +86,32 @@ enum class AspectMode(val label: String) {
     }
 }
 
+/**
+ * Runtime values consumed by MPV when the user changes the picture mode.
+ *
+ * MPV's video-aspect-override is a string property: `no` disables an
+ * override, while an explicit positive ratio forces one. Sending 0.0 as a
+ * numeric value looks harmless but is not the documented reset operation and
+ * can leave the previous geometry active on some MPV builds.
+ */
+internal data class MpvAspectRuntime(
+    val aspectOverride: String,
+    val aspectMethod: String?,
+    val panScan: String,
+    val videoUnscaled: String,
+    val keepAspect: String
+)
+
+internal fun mpvAspectRuntime(mode: AspectMode): MpvAspectRuntime = when (mode) {
+    AspectMode.FIT -> MpvAspectRuntime("no", "container", "0", "no", "yes")
+    AspectMode.FILL -> MpvAspectRuntime("no", "container", "1", "no", "yes")
+    AspectMode.FOUR_THREE -> MpvAspectRuntime("1.3333333", null, "0", "no", "yes")
+    AspectMode.LETTERBOX -> MpvAspectRuntime("1.7777778", null, "0", "no", "yes")
+    AspectMode.CINEMA -> MpvAspectRuntime("2.39", null, "0", "no", "yes")
+    AspectMode.STRETCH -> MpvAspectRuntime("no", null, "0", "no", "no")
+    AspectMode.ORIGINAL -> MpvAspectRuntime("no", "container", "0", "yes", "yes")
+}
+
 @Composable
 private fun localizedAspectModeLabel(mode: AspectMode): String = stringResource(
     when (mode) {
