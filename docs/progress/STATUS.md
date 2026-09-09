@@ -235,6 +235,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   decorativas; ahora tienen acción `Card` con foco de mando/toque y abren
   `CastInfoActivity`, que carga la filmografía de películas y series. El
   contrato `check-android-content-navigation.mjs` protege esta ruta.
+- Reproductor móvil: el control de pantalla completa también está en la fila
+  principal de controles, alterna entrada/salida con la misma acción real de
+  orientación y está cubierto por `check-android-content-navigation.mjs`.
+  La compilación Kotlin y las pruebas `AspectPresentationTest` de móvil y TV
+  pasan; queda pendiente la validación física porque no hay un dispositivo ADB
+  conectado en este entorno.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.

@@ -3992,6 +3992,31 @@ fun JellyfinVideoPlayerScreen(
                                         )
                                         
                                         Spacer(modifier = Modifier.width(if (isMobile) 24.dp else 32.dp))
+
+                                        // Fullscreen is an explicit playback action on phones/tablets.
+                                        // Keep it in the main control row as well as the top overlay so
+                                        // touch users do not have to rotate the device or discover a
+                                        // small overlay affordance. TV keeps its focus-first layout.
+                                        if (isMobile) {
+                                            PlayerControlButton(
+                                                icon = if (isPortraitMode) {
+                                                    Icons.Filled.Fullscreen
+                                                } else {
+                                                    Icons.Filled.FullscreenExit
+                                                },
+                                                contentDescription = stringResource(
+                                                    if (isPortraitMode) {
+                                                        R.string.player_fullscreen
+                                                    } else {
+                                                        R.string.player_exit_fullscreen
+                                                    }
+                                                ),
+                                                size = 52.dp,
+                                                iconSize = 26.dp,
+                                                onClick = { toggleMobileFullscreen() }
+                                            )
+                                            Spacer(modifier = Modifier.width(24.dp))
+                                        }
                                         
                                         // Unified playback settings: audio and subtitles
                                         PlayerControlButton(
