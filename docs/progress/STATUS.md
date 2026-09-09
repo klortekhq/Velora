@@ -35,6 +35,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
+- Música Android: artista, álbum, recuentos, estados vacíos, cola y reproducción
+  estilo Apple usan recursos localizados; el catálogo garantizado queda en 543
+  claves y `compileMobileDebugKotlin`/`compileTvDebugKotlin` pasan.
 - Revisión Jellyfin 12 del 2026-09-09: los nombres internos heredados de
   cabeceras y comentarios de otros clientes se sustituyeron por terminología
   propia de Velora; no se alteraron namespaces ni identificadores de paquete.

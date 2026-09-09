@@ -583,7 +583,7 @@ private fun ArtistCard(
             overflow = TextOverflow.Ellipsis
         )
         Text(
-            text = "Artist",
+            text = stringResource(com.klortek.velora.R.string.music_artist),
             style = MaterialTheme.typography.bodySmall,
             color = Color.Gray
         )
@@ -609,7 +609,7 @@ private fun ArtistListContent(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "No artists found", color = Color.Gray)
+                Text(text = stringResource(com.klortek.velora.R.string.music_no_artists), color = Color.Gray)
             }
         } else {
             // Use a grid for better visibility on TV
@@ -650,7 +650,7 @@ private fun AlbumGridContent(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "No albums found", color = Color.Gray)
+                Text(text = stringResource(com.klortek.velora.R.string.music_no_albums), color = Color.Gray)
             }
         } else {
             LazyVerticalGrid(

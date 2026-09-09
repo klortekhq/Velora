@@ -309,7 +309,7 @@ private fun AppleArtistHeader(
 
                 Column {
                     Text(
-                        text = "ARTIST",
+                        text = stringResource(com.klortek.velora.R.string.music_artist),
                         style = MaterialTheme.typography.labelSmall,
                         color = Color(0xFF8E8E93),
                         letterSpacing = 1.5.sp
@@ -330,7 +330,7 @@ private fun AppleArtistHeader(
                     Spacer(modifier = Modifier.height(8.dp))
                     
                     Text(
-                        text = "$albumCount albums",
+                        text = stringResource(com.klortek.velora.R.string.music_albums_count, albumCount),
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color(0xFF8E8E93)
                     )
@@ -570,7 +570,7 @@ private fun AppleAlbumCard(
                 )
             }
             Text(
-                text = "${album.trackCount} songs",
+                    text = stringResource(com.klortek.velora.R.string.music_songs_count, album.trackCount),
                 style = MaterialTheme.typography.bodySmall,
                 color = Color(0xFF8E8E93)
             )

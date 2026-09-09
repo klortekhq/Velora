@@ -147,7 +147,7 @@ private fun EmptyNowPlaying(onBackPress: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Nothing Playing",
+            text = stringResource(com.klortek.velora.R.string.music_nothing_playing),
             style = MaterialTheme.typography.headlineMedium,
             color = Color.White
         )
@@ -155,7 +155,7 @@ private fun EmptyNowPlaying(onBackPress: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Select a song to start playing",
+            text = stringResource(com.klortek.velora.R.string.music_select_song),
             style = MaterialTheme.typography.bodyLarge,
             color = Color.Gray
         )
@@ -514,14 +514,14 @@ private fun QueueView(
             }
 
             Text(
-                text = "Queue",
+                text = stringResource(com.klortek.velora.R.string.music_queue),
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "${queue.size} tracks",
+                text = stringResource(com.klortek.velora.R.string.music_tracks_count, queue.size),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
             )

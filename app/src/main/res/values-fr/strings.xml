@@ -207,6 +207,15 @@ Vérifiez que :
   <string name="music_unknown_album">Album inconnu</string>
   <string name="music_unknown_artist">Artiste inconnu</string>
   <string name="music_songs_count">%1$d titres</string>
+  <string name="music_artist">Artiste</string>
+  <string name="music_no_artists">Aucun artiste trouvé</string>
+  <string name="music_no_albums">Aucun album trouvé</string>
+  <string name="music_tracks_count">%1$d pistes</string>
+  <string name="music_nothing_playing">Aucune lecture en cours</string>
+  <string name="music_select_song">Sélectionnez une chanson pour commencer</string>
+  <string name="music_up_next">À suivre</string>
+  <string name="music_album">Album</string>
+  <string name="music_songs_duration">%1$d chansons, %2$s</string>
   <string name="jellyseerr_loading_details">Chargement des détails…</string>
   <string name="jellyseerr_go_back">Retour</string>
   <string name="jellyseerr_unknown_title">Sans titre</string>
