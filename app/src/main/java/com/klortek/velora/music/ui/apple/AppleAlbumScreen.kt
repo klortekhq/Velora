@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -188,7 +189,7 @@ private fun AppleAlbumInfoPanel(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Atrás",
+                contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                 tint = Color.White.copy(alpha = 0.8f)
             )
         }
@@ -293,7 +294,7 @@ private fun AppleAlbumInfoPanel(
                     modifier = Modifier.size(22.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Play", fontWeight = FontWeight.SemiBold)
+                Text(stringResource(com.klortek.velora.R.string.music_play), fontWeight = FontWeight.SemiBold)
             }
 
             Button(
@@ -312,7 +313,7 @@ private fun AppleAlbumInfoPanel(
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Shuffle", fontWeight = FontWeight.SemiBold)
+                Text(stringResource(com.klortek.velora.R.string.music_shuffle), fontWeight = FontWeight.SemiBold)
             }
         }
 
