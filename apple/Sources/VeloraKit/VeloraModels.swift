@@ -141,43 +141,75 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
     public static func grouped(_ channels: [Self]) -> [Self] {
         var order: [String] = []
         var grouped: [String: Self] = [:]
+        var aliases: [String: String] = [:]
         for channel in channels {
-            if let existing = grouped[channel.id] {
-                let preferred = metadataScore(channel) > metadataScore(existing) ? channel : existing
-                var sources = existing.mediaSources + channel.mediaSources
-                var seen = Set<String>()
-                sources = sources.filter { source in
-                    // Some providers omit every source identifier. A random
-                    // fallback made repeated grouping unstable and could
-                    // render the same empty source more than once. Keep the
-                    // fallback deterministic so the channel row remains
-                    // stable across refreshes.
-                    let key = source.id
-                        ?? source.liveStreamID
-                        ?? source.transcodingURL?.absoluteString
-                        ?? source.directStreamURL?.absoluteString
-                        ?? [
-                            source.name?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? "",
-                            source.protocolName?.lowercased() ?? "",
-                            "empty-source"
-                        ].joined(separator: "|")
-                    return seen.insert(key).inserted
-                }
-                grouped[channel.id] = Self(
-                    id: existing.id,
-                    name: preferred.name,
-                    number: preferred.number ?? existing.number ?? channel.number,
-                    channelType: preferred.channelType ?? existing.channelType ?? channel.channelType,
-                    serviceName: preferred.serviceName ?? existing.serviceName ?? channel.serviceName,
-                    currentProgram: preferred.currentProgram ?? existing.currentProgram ?? channel.currentProgram,
-                    mediaSources: sources
-                )
-            } else {
-                order.append(channel.id)
-                grouped[channel.id] = channel
+            let normalizedName = channel.name
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+                .lowercased()
+            let normalizedNumber = channel.number?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            let visibleIdentity = normalizedName.isEmpty
+                ? nil
+                : "visible:\(normalizedNumber)|\(normalizedName)"
+            let identities = ["id:\(channel.id)", visibleIdentity].compactMap { $0 }
+            let matchedKeys = identities.compactMap { aliases[$0] }.reduce(into: [String]()) { result, key in
+                if !result.contains(key) { result.append(key) }
             }
+            let key = matchedKeys.first ?? identities.first ?? "fallback:\(order.count)"
+
+            if grouped[key] == nil {
+                order.append(key)
+                grouped[key] = channel
+            }
+
+            // A provider can reuse an ID while changing its visible metadata,
+            // or expose the same visible channel under another ID. Merge both
+            // aliases into one row and keep insertion order deterministic.
+            for otherKey in matchedKeys.dropFirst() where otherKey != key {
+                if let other = grouped[otherKey], let current = grouped[key] {
+                    grouped[key] = merge(current, other)
+                    grouped[otherKey] = nil
+                    let aliasesToUpdate = aliases.compactMap { alias, value in
+                        value == otherKey ? alias : nil
+                    }
+                    for alias in aliasesToUpdate {
+                        aliases[alias] = key
+                    }
+                }
+            }
+            for identity in identities { aliases[identity] = key }
+            if let current = grouped[key] { grouped[key] = merge(current, channel) }
         }
         return order.compactMap { grouped[$0] }
+    }
+
+    private static func merge(_ existing: Self, _ incoming: Self) -> Self {
+        let preferred = metadataScore(incoming) > metadataScore(existing) ? incoming : existing
+        var sources = existing.mediaSources + incoming.mediaSources
+        var seen = Set<String>()
+        sources = sources.filter { source in
+            // Some providers omit every source identifier. A random fallback
+            // made repeated grouping unstable; keep the key deterministic.
+            let key = source.id
+                ?? source.liveStreamID
+                ?? source.transcodingURL?.absoluteString
+                ?? source.directStreamURL?.absoluteString
+                ?? [
+                    source.name?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? "",
+                    source.protocolName?.lowercased() ?? "",
+                    "empty-source"
+                ].joined(separator: "|")
+            return seen.insert(key).inserted
+        }
+        return Self(
+            id: existing.id,
+            name: preferred.name,
+            number: preferred.number ?? existing.number ?? incoming.number,
+            channelType: preferred.channelType ?? existing.channelType ?? incoming.channelType,
+            serviceName: preferred.serviceName ?? existing.serviceName ?? incoming.serviceName,
+            currentProgram: preferred.currentProgram ?? existing.currentProgram ?? incoming.currentProgram,
+            mediaSources: sources
+        )
     }
 
     private static func metadataScore(_ channel: Self) -> Int {

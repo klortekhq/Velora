@@ -363,6 +363,23 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(grouped.first?.mediaSources.compactMap(\.id), ["source-1", "source-2"])
     }
 
+    func testLiveTvGroupingMergesDifferentProviderIDsByVisibleIdentity() {
+        let grouped = JellyfinLiveTvChannel.grouped([
+            JellyfinLiveTvChannel(
+                id: "tuner-channel", name: "DAZN F1", number: "42",
+                mediaSources: [JellyfinLiveTvMediaSource(id: "source-tuner")]
+            ),
+            JellyfinLiveTvChannel(
+                id: "iptv-channel", name: "  DAZN   F1 ", number: "42",
+                mediaSources: [JellyfinLiveTvMediaSource(id: "source-iptv")]
+            )
+        ])
+
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.id, "tuner-channel")
+        XCTAssertEqual(grouped.first?.mediaSources.compactMap(\.id), ["source-tuner", "source-iptv"])
+    }
+
     func testLiveTvGroupingIsStableWhenProviderOmitsSourceIdentifiers() {
         let emptySource = JellyfinLiveTvMediaSource(
             id: nil, liveStreamID: nil, transcodingURL: nil,
