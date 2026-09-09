@@ -189,6 +189,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `PlaybackInfo`, buscando por `MediaSourceId` o `LiveStreamId` y usando la
   primera solo como fallback de servidores incompletos. La prueba se ejecutó
   en las variantes móvil y TV.
+- Corrección Android del 2026-09-09: el selector de fuentes Live TV usa ahora
+  también `LiveStreamId` cuando un proveedor IPTV no devuelve `MediaSourceId`,
+  evitando que la opción aparezca como seleccionable pero se pierda al iniciar
+  la reproducción.
 - Regresión completa del 2026-09-09 sobre ese cambio: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` (82 tareas);
   también pasaron versión, identidad pública, contrato de autenticación,
