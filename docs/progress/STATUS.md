@@ -81,6 +81,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `compileTvDebugKotlin` terminaron en `BUILD SUCCESSFUL` (82 tareas; 1:18).
   El SDK local emitió avisos de metadatos XML/Android 36, sin convertirlos en
   errores de compilación.
+- Auditoría completa de contratos del 2026-09-09: los 21 scripts
+  `scripts/check-*.mjs` terminan correctamente, incluidos navegación, los
+  cuatro catálogos Android, ciclo de vida/localización/privacidad Apple,
+  autenticación y API Jellyfin 12, reproducción, offline, identidad,
+  releases, packaging Smart TV, versión y los 12 catálogos web.
 - Revalidación web/Smart TV del 2026-09-09: `node web/scripts/build-web.mjs all`
   terminó correctamente usando un directorio de salida aislado y
   `SOURCE_DATE_EPOCH`; se generaron bundles reproducibles para Samsung/Tizen,
