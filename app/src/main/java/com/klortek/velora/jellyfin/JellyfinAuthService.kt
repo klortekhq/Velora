@@ -106,13 +106,13 @@ class JellyfinAuthService(
                 // reject an otherwise valid request before it reaches Jellyfin.
                 val url = "$normalizedBaseUrl/Users/AuthenticateByName"
                 val deviceId = getDeviceId()
-                val embyAuthHeader = "MediaBrowser Client=\"Velora\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
+                val mediaBrowserAuthHeader = "MediaBrowser Client=\"Velora\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
                 val body = json.encodeToString(AuthenticationRequest(Username = username, Pw = password))
                     .toRequestBody("application/json; charset=utf-8".toMediaType())
                 val request = Request.Builder()
                     .url(url)
                     .header("Accept", "application/json")
-                    .header("Authorization", embyAuthHeader)
+                    .header("Authorization", mediaBrowserAuthHeader)
                     .post(body)
                     .build()
 

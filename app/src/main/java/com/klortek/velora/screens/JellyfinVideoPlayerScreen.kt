@@ -1240,7 +1240,7 @@ fun JellyfinVideoPlayerScreen(
                             com.klortek.velora.player.SubtitleMapper.reset()
                             
                             // Create SubtitleConfiguration for each subtitle using SubtitleMapper
-                            // Uses COMPOSITE KEY approach (production-safe, used by Plex/Emby/Jellyfin TV)
+                            // Uses Velora's stable composite-key mapping for Media3 tracks.
                             val subtitleConfigurations = allSubtitleStreams.map { stream ->
                                 try {
                                     val subtitleIndex = stream.Index ?: return@map null
