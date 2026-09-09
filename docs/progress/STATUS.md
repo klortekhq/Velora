@@ -29,6 +29,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Actualizador Android: los botones y errores visibles de descarga/instalación
   están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
   la compilación de ambos perfiles y sus pruebas unitarias pasan.
+- El mismo diálogo localiza también título, notas de versión, progreso y error
+  visible; `check-android-locales.mjs` valida 529 claves y las suites móvil/TV
+  terminan en `BUILD SUCCESSFUL`.
 - Revisión Jellyfin 12 del 2026-09-09: los nombres internos heredados de
   cabeceras y comentarios de otros clientes se sustituyeron por terminología
   propia de Velora; no se alteraron namespaces ni identificadores de paquete.
