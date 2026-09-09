@@ -28,6 +28,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   SHA-256 `FB7A592AF7CA76CEC223B9DC9937C3EB5BBC989D1E2D249A2A77648B2F75CBFD`.
   Son artefactos locales verificables; no se han sustituido los adjuntos de
   GitHub porque la sesión `gh` de este entorno no está autenticada.
+- Pantalla de inicio de sesión Android: el contrato
+  `check-android-login-layout.mjs` protege safe area, desplazamiento vertical,
+  tamaños adaptativos de los campos y foco de mando en el botón TV. La
+  comprobación confirma que el formulario no depende de una altura fija que
+  recorte el texto o la acción en pantallas con otra relación de aspecto.
 
 ## Estado del repositorio
 
