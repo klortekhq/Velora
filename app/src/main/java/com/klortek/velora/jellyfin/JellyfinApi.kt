@@ -894,12 +894,36 @@ class JellyfinApiService(
      * in the Jellyfin service lets the UI prefer local/remote server metadata
      * before consulting an optional external metadata provider.
      */
-    suspend fun getLocalTrailers(itemId: String): List<JellyfinItem> {
-        return getMediaItems("Items/$itemId/LocalTrailers", fields = "MediaSources")
-    }
+    /**
+     * Resolve trailers through the Jellyfin 12 GetItems contract first.
+     * Older servers may not expose trailer items in the user's catalog, so
+     * retain the local/remote relationship endpoints as a compatibility
+     * fallback without making them the primary path.
+     */
+    suspend fun getTrailers(itemId: String): List<JellyfinItem> {
+        val catalogTrailers = try {
+            val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+            val url = URLBuilder().takeFrom("${base}Users/$userId/Items").apply {
+                parameters.append("ParentId", itemId)
+                parameters.append("IncludeItemTypes", "Trailer")
+                parameters.append("Recursive", "true")
+                parameters.append("Fields", "MediaSources,Overview,ImageTags")
+                parameters.append("Limit", "20")
+            }.buildString()
+            client.get(url) {
+                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+            }.body<ItemsResponse>().Items
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            emptyList()
+        }
+        if (catalogTrailers.isNotEmpty()) return catalogTrailers
 
-    suspend fun getRemoteTrailers(itemId: String): List<JellyfinItem> {
-        return getMediaItems("Items/$itemId/RemoteTrailers", fields = "MediaSources")
+        val local = getMediaItems("Items/$itemId/LocalTrailers", fields = "MediaSources")
+        return local.ifEmpty {
+            getMediaItems("Items/$itemId/RemoteTrailers", fields = "MediaSources")
+        }
     }
 
     /** Returns theme songs resolved by Jellyfin, including inherited parent media. */

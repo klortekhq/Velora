@@ -2179,8 +2179,8 @@ fun EpisodeActionButtonsRow(
 
         // Prefer trailers curated by the user's Jellyfin server.
         val serverTrailer = JellyfinTrailerResolver.select(
-            local = apiService?.getLocalTrailers(seriesItem.Id).orEmpty(),
-            remote = apiService?.getRemoteTrailers(seriesItem.Id).orEmpty()
+            local = apiService?.getTrailers(seriesItem.Id).orEmpty(),
+            remote = emptyList()
         )
         if (serverTrailer != null) {
             jellyfinTrailer = serverTrailer

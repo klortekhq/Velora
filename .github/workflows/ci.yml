@@ -41,6 +41,8 @@ jobs:
         run: node scripts/check-version-consistency.mjs
       - name: Validate Jellyfin authentication contract
         run: node scripts/check-jellyfin-auth-contract.mjs
+      - name: Validate Jellyfin API contract
+        run: node scripts/check-jellyfin-api-contract.mjs
       - name: Validate public identity
         run: node scripts/check-public-identity.mjs
       - name: Validate release workflow policy
