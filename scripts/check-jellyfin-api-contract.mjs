@@ -29,6 +29,11 @@ if (!appleApi.includes('public func trailers(for itemID: String, userID: String)
 if (!appleApi.includes('includeTypes: ["Trailer"]')) {
   throw new Error('Jellyfin 12: Apple no consulta trailers mediante IncludeItemTypes=Trailer');
 }
+const appleLiveTv = appleApi.slice(appleApi.indexOf('public func liveTvChannels'));
+if (!appleLiveTv.includes('StartIndex') || !appleLiveTv.includes('Limit') ||
+    !appleLiveTv.includes('totalRecordCount') || !/repeat \{[\s\S]*?while totalRecordCount/.test(appleLiveTv)) {
+  throw new Error('Jellyfin Live TV: Apple debe recorrer todas las páginas de canales');
+}
 for (const [name, source] of [['películas', movie], ['series', series]]) {
   if (!source.includes('getTrailers(')) throw new Error(`Trailers: la pantalla de ${name} no usa el resolver moderno`);
   if (source.includes('getLocalTrailers(') || source.includes('getRemoteTrailers(')) {

@@ -70,6 +70,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   la sintaxis PowerShell pasan. El endpoint público LAN sigue identificando
   Jellyfin `12.0.0`; el tramo autenticado requiere credenciales disponibles en
   el entorno de ejecución.
+- Paridad Live TV del 2026-09-09: Apple y web ahora recorren también todas las
+  páginas de `/LiveTv/Channels` con `StartIndex`/`Limit` y respetan
+  `TotalRecordCount`; se añadieron una prueba de paginación Apple y contratos
+  web/API. Esto protege bibliotecas IPTV grandes sin alterar la agrupación por
+  ID ni el selector de fuentes. La compilación Swift y la prueba en dispositivos
+  Apple siguen pendientes por falta de macOS/Xcode y hardware Apple.
 - Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
   peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de

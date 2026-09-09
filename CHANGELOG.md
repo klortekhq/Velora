@@ -11,6 +11,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Live TV/Jellyfin 12.0: el smoke test recorre ahora todas las páginas de
   canales y conserva `MediaSources` y programa actual, en lugar de limitar la
   validación a los primeros 1.000 canales.
+- Live TV multiplataforma: Apple y web aplican la misma paginación de canales
+  (`StartIndex`/`Limit`/`TotalRecordCount`), de modo que las listas IPTV grandes
+  no pierden canales y siguen permitiendo agrupar fuentes bajo el mismo canal.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
