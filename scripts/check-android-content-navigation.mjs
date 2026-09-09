@@ -39,6 +39,11 @@ assert.match(
   /if \(isMobile\) \{[\s\S]*?R\.string\.player_fullscreen[\s\S]*?R\.string\.player_exit_fullscreen[\s\S]*?toggleMobileFullscreen\(\)/,
   'El reproductor móvil debe ofrecer entrada y salida de pantalla completa desde los controles táctiles.'
 );
+const liveTvActivity = read('app/src/main/java/com/klortek/velora/LiveTvActivity.kt');
+assert.match(liveTvActivity, /remember\(channels\)\s*\{\s*groupLiveTvChannels\(channels\)\s*\}/, 'Live TV Android debe construir filas agrupadas desde la respuesta real de Jellyfin.');
+assert.match(liveTvActivity, /channelGroup\.channels\.size\s*>\s*1\)\s*sourceSelection\s*=\s*channelGroup/, 'Live TV Android debe abrir el selector cuando una fila tiene varias fuentes.');
+assert.match(liveTvActivity, /onPlay\(selected,\s*liveTvPlaybackChannelList\(channelGroups, group, selected\)\)/, 'La fuente elegida debe conservarse en la lista de zapping y reproducción.');
+assert.match(liveTvActivity, /LiveTvSourceDialog\([\s\S]*?onSelect\s*=\s*\{\s*selected\s*->/, 'El selector de fuente de Live TV debe tener acciones reales de toque/mando.');
 
 assert.match(
   mobileHome,
