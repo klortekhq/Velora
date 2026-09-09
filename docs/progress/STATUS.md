@@ -729,7 +729,7 @@ relevantes.
 | Android TV / Fire TV | Compila y pasa tests unitarios; pantalla de acceso y transporte de autenticación validados en Fire TV AFTSS; sesión Jellyfin válida, reproducción y Live TV aún pendientes |
 | Web | Bundle y tests locales correctos |
 | Samsung Tizen | Bundle preparado; falta Tizen Studio, firma y dispositivo/emulador |
-| LG webOS | IPK generado con `ares-package`; falta dispositivo/emulador |
+| LG webOS | IPK generado con `ares-package` 3.2.5; el emulador configurado no está accesible |
 | Hisense VIDAA | Bundle HTML5 y metadatos preparados; falta portal/certificación |
 | iPhone/iPad/tvOS | Base Swift Package y CI macOS configuradas; no hay Xcode en este host |
 
@@ -790,6 +790,11 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   instalado y por eso no se presenta un `.wgt`; `ares-package` sí generó el
   `.ipk` webOS `com.klortek.velora_1.4.0_all.ipk`. Ninguno de estos resultados
   certifica firma, tienda ni ejecución en hardware real.
+- Comprobación adicional del 2026-09-09: `ares-package` y `ares-install` están
+  disponibles en versión 3.2.5; el perfil `emulator` apunta a
+  `127.0.0.1:6622`, pero `ares-device -i -d emulator` devuelve
+  `ECONNREFUSED`. El IPK se regeneró y `check-tv-packaging-output.mjs` confirmó
+  metadatos coherentes; la ejecución en webOS sigue sin estar certificada.
 - Apple Live TV conserva ahora `ChannelType`, `ServiceName` y `MediaSource.Name`
   para rotular el selector de variantes sin inspeccionar ni mostrar rutas de
   reproducción. Se añadió cobertura de decodificación; la ejecución Swift
