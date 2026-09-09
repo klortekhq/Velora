@@ -31,6 +31,10 @@ assert.doesNotMatch(web, /releases\/tags\/\$\{GITHUB_REF_NAME\}/, 'Web: no debe 
 assert.match(web, /outputs\/web\/samsung\/\*\.wgt/, 'Web: debe publicar el WGT de Tizen cuando el SDK lo genere');
 assert.match(web, /Velora-tizen-\$\{version\}\.wgt/, 'Web: falta el nombre estable del paquete Tizen');
 assert.match(web, /Velora-samsung-bundle-\$\{version\}\.zip/, 'Web: falta el fallback bundle de Samsung');
+assert.match(web, /Velora-webos-\$\{version\}\.ipk/, 'Web: debe publicar el IPK de webOS cuando ares-package lo genere');
+assert.match(web, /Velora-webos-bundle-\$\{version\}\.zip/, 'Web: falta el fallback bundle de webOS');
+assert.match(web, /Velora-vidaa-bundle-\$\{version\}\.zip/, 'Web: falta el bundle de VIDAA');
+assert.match(web, /SOURCE_DATE_EPOCH=\$\(git log -1 --format=%ct\)/, 'Web: la release debe fijar SOURCE_DATE_EPOCH al commit etiquetado');
 
 const apple = fs.readFileSync('.github/workflows/apple.yml', 'utf8');
 assert.match(apple, /tags:\s*\['v\*\.\*\.0'\]/, 'Apple: falta el filtro de tags de versión');
