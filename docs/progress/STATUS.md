@@ -60,6 +60,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Rendimiento de filtros Live TV: la tira de favoritos y grupos usa ahora
   `LazyRow`, evitando que una lista grande de grupos desborde la pantalla o
   fuerce a Compose a medir todos los controles como un `Row` estático.
+- Accesibilidad de filtros Live TV: cada pastilla conserva el estado táctil y
+  ahora dibuja un realce de foco visible cuando recibe el mando/teclado sin
+  estar seleccionada; esto evita que el foco de TV parezca perdido. La
+  compilación y las pruebas Android móvil/TV del cambio terminan correctamente.
 - Las APK generadas desde `0ce17b7` incorporan esta mejora y quedaron
   publicadas en `v1.4.0` como [`Velora-mobile-qa-live-tv-filters.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-filters.apk),
   SHA-256 `E2CC05760E3C1539FEA29321A6F93A4522FB36F956EE947620F839111EA84BF8`,
