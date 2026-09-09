@@ -411,14 +411,10 @@ class JellyfinApiService(
                 header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\"")
             }.body()
             
-            // Log raw order from server
-            android.util.Log.d("JellyfinAPI", "Continue Watching RAW order: ${response.Items.mapIndexed { i, it -> "$i: ${it.Name} (LastPlayed: ${it.UserData?.LastPlayedDate})" }}")
-            
             // Sort client-side by LastPlayedDate (most recently played first)
             val sorted = response.Items.sortedByDescending { item ->
                 item.getLastPlayedDateForSort()
             }
-            android.util.Log.d("JellyfinAPI", "Continue Watching SORTED order: ${sorted.mapIndexed { i, it -> "$i: ${it.Name} (LastPlayed: ${it.UserData?.LastPlayedDate})" }}")
             sorted
         } catch (e: Exception) {
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
@@ -475,7 +471,7 @@ class JellyfinApiService(
             
             val nextUpEpisode = response.Items.firstOrNull()
             if (nextUpEpisode != null) {
-                android.util.Log.d("JellyfinAPI", "✅ Found NextUp for series $seriesId: ${nextUpEpisode.Name} (S${nextUpEpisode.ParentIndexNumber}E${nextUpEpisode.IndexNumber})")
+                android.util.Log.d("JellyfinAPI", "NextUp episode found")
             } else {
                 android.util.Log.d("JellyfinAPI", "No NextUp episode found for series $seriesId (series may be fully watched or not started)")
             }
@@ -521,7 +517,7 @@ class JellyfinApiService(
             // Return the first episode (sorted by IndexNumber)
             val firstEpisode = episodes.sortedBy { it.IndexNumber ?: 0 }.firstOrNull()
             if (firstEpisode != null) {
-                android.util.Log.d("JellyfinAPI", "✅ Found first episode: ${firstEpisode.Name} (S${firstEpisode.ParentIndexNumber}E${firstEpisode.IndexNumber})")
+                android.util.Log.d("JellyfinAPI", "First episode found")
             } else {
                 android.util.Log.d("JellyfinAPI", "No episodes found in first season for series $seriesId")
             }
@@ -568,7 +564,7 @@ class JellyfinApiService(
                     
                     // Return this episode if it's unwatched or in-progress
                     if (!isWatched || isInProgress) {
-                        android.util.Log.d("JellyfinAPI", "✅ Found first unwatched episode: ${episode.Name} (S${episode.ParentIndexNumber}E${episode.IndexNumber}, watched=${isWatched}, inProgress=$isInProgress)")
+                        android.util.Log.d("JellyfinAPI", "First unwatched episode found")
                         return episode
                     }
                 }
@@ -583,7 +579,7 @@ class JellyfinApiService(
                                        (episode.UserData?.PlayedPercentage ?: 0.0) < 90
                     
                     if (!isWatched || isInProgress) {
-                        android.util.Log.d("JellyfinAPI", "✅ Found first unwatched Specials episode: ${episode.Name} (S${episode.ParentIndexNumber}E${episode.IndexNumber}, watched=${isWatched}, inProgress=$isInProgress)")
+                        android.util.Log.d("JellyfinAPI", "First unwatched special found")
                         return episode
                     }
                 }
@@ -839,27 +835,11 @@ class JellyfinApiService(
                 // Also request Chapters for chapter markers
                 parameters.append("Fields", "MediaSources,Genres,Overview,People,ProviderIds,UserData,ImageTags,IndexNumber,ParentIndexNumber,NextEpisodeId,Chapters")
             }.buildString()
-            android.util.Log.d("JellyfinAPI", "Fetching item details")
-            
             val response = client.get(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
                 header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\"")
             }
             val item: JellyfinItem = response.body()
-            android.util.Log.d("JellyfinAPI", "Item details fetched: ${item.Name}, Type: ${item.Type}, MediaSources: ${item.MediaSources?.size ?: 0}")
-            android.util.Log.d("JellyfinAPI", "Genres: ${item.Genres}, CommunityRating: ${item.CommunityRating}, CriticRating: ${item.CriticRating}")
-            android.util.Log.d("JellyfinAPI", "ProviderIds: ${item.ProviderIds}")
-            android.util.Log.d("JellyfinAPI", "ProductionYear: ${item.ProductionYear}, OfficialRating: ${item.OfficialRating}, RunTimeTicks: ${item.RunTimeTicks}")
-            // Log UserData for debugging resume functionality
-            android.util.Log.d("JellyfinAPI", "UserData: PlayedPercentage=${item.UserData?.PlayedPercentage}, PositionTicks=${item.UserData?.PositionTicks}")
-            if (item.UserData == null) {
-                android.util.Log.w("JellyfinAPI", "WARNING: UserData is null for item ${item.Id}. Resume functionality may not work.")
-            } else if (item.UserData?.PositionTicks == null || item.UserData?.PositionTicks == 0L) {
-                android.util.Log.d("JellyfinAPI", "Item ${item.Id} has no resume position (PositionTicks is null or 0)")
-            } else {
-                val seconds = (item.UserData?.PositionTicks ?: 0L) / 10_000_000L
-                android.util.Log.d("JellyfinAPI", "Item ${item.Id} is resumable at position ${item.UserData?.PositionTicks} ticks (${seconds} seconds)")
-            }
             item
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
@@ -884,7 +864,7 @@ class JellyfinApiService(
                 header("X-Emby-Authorization", "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\"")
             }
             val person: PersonDetails = response.body()
-            android.util.Log.d("JellyfinAPI", "Person details fetched: ${person.Name}, Overview length: ${person.Overview?.length ?: 0}, Type: ${person.Type}")
+            android.util.Log.d("JellyfinAPI", "Person details fetched")
             android.util.Log.d("JellyfinAPI", "Person birth: ${person.birthDateValue}, death: ${person.deathDateValue}, locations: ${person.ProductionLocations}")
             person
         } catch (e: Exception) {
@@ -1397,7 +1377,6 @@ class JellyfinApiService(
             
             // Convert JellyfinItems to JellyfinLibraries
             response.Items.map { item ->
-                android.util.Log.d("JellyfinApi", "📚 Library from API: Name=${item.Name}, Type=${item.Type}, CollectionType=${item.CollectionType}")
                 JellyfinLibrary(
                     Id = item.Id,
                     Name = item.Name,
@@ -1634,7 +1613,7 @@ class JellyfinApiService(
             val nextEpisode = response.Items.firstOrNull { it.IndexNumber == nextEpisodeNumber }
             
             if (nextEpisode != null) {
-                android.util.Log.d("JellyfinAPI", "✅ Found next episode in S${currentSeasonNumber}: E${nextEpisode.IndexNumber} - ${nextEpisode.Name}")
+                android.util.Log.d("JellyfinAPI", "Next episode in season found")
             } else {
                 android.util.Log.d("JellyfinAPI", "No next episode in S${currentSeasonNumber} after E${currentEpisodeIndex} (last episode of season)")
             }
@@ -1676,7 +1655,7 @@ class JellyfinApiService(
             
             val nextEpisode = response.Items.firstOrNull()
             if (nextEpisode != null) {
-                android.util.Log.d("JellyfinAPI", "✅ Found next episode: S${nextEpisode.ParentIndexNumber}E${nextEpisode.IndexNumber} - ${nextEpisode.Name}")
+                android.util.Log.d("JellyfinAPI", "Next episode found")
             } else {
                 android.util.Log.d("JellyfinAPI", "No next episode found (this might be the last episode)")
             }
@@ -2559,7 +2538,7 @@ class JellyfinApiService(
                 "${base}Library/Refresh"
             }
             
-            android.util.Log.d("JellyfinAPI", "Triggering library refresh${if (libraryId != null) " for library $libraryId" else ""}")
+            android.util.Log.d("JellyfinAPI", "Triggering library refresh")
             
             client.post(url) {
                 header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
@@ -2635,7 +2614,7 @@ class JellyfinApiService(
             }
             
             if (matchingItem != null) {
-                android.util.Log.d("JellyfinAPI", "Found $itemType with TMDB ID $tmdbId: ${matchingItem.Name}")
+                android.util.Log.d("JellyfinAPI", "Matching item found by provider ID")
             } else {
                 android.util.Log.d("JellyfinAPI", "No $itemType found with TMDB ID $tmdbId")
             }
@@ -2688,7 +2667,7 @@ class JellyfinApiService(
             }
             
             if (matchingItem != null) {
-                android.util.Log.d("JellyfinAPI", "Found $itemType by title '$title': ${matchingItem.Name}")
+                android.util.Log.d("JellyfinAPI", "Matching item found by title")
             } else {
                 android.util.Log.d("JellyfinAPI", "No $itemType found with title '$title'")
             }
