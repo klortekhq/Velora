@@ -271,6 +271,7 @@ fun MovieDetailsScreen(
                         com.klortek.velora.offline.OfflineDownloadManager.enqueue(
                             context, config.serverUrl, config.accessToken, displayItem.Id, displayItem.Name, displayItem.Type ?: "Movie",
                             mediaSourceId = displayItem.MediaSources?.firstOrNull()?.Id,
+                            userId = config.userId,
                             quality = quality,
                             estimatedBytes = displayItem.MediaSources?.firstOrNull()?.Size
                         )

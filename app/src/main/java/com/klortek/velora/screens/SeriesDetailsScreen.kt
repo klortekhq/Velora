@@ -473,6 +473,7 @@ fun SeriesDetailsScreen(
                         com.klortek.velora.offline.OfflineDownloadManager.enqueue(
                             context, config.serverUrl, config.accessToken, episode.Id, episode.Name, "Episode",
                             mediaSourceId = episode.MediaSources?.firstOrNull()?.Id,
+                            userId = config.userId,
                             seriesName = displayItem.Name,
                             seasonNumber = episode.ParentIndexNumber,
                             episodeNumber = episode.IndexNumber,
@@ -496,6 +497,7 @@ fun SeriesDetailsScreen(
                                 com.klortek.velora.offline.OfflineDownloadManager.enqueue(
                                     context, config.serverUrl, config.accessToken, episode.Id, episode.Name, "Episode",
                                     mediaSourceId = episode.MediaSources?.firstOrNull()?.Id,
+                                    userId = config.userId,
                                     seriesName = displayItem.Name,
                                     seasonNumber = episode.ParentIndexNumber,
                                     episodeNumber = episode.IndexNumber,

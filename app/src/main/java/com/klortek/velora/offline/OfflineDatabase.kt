@@ -10,7 +10,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     "velora_offline.db",
     null,
-    8
+    10
 ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -36,6 +36,8 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                 last_played_at INTEGER,
                 is_watched INTEGER NOT NULL DEFAULT 0,
                 keep_download INTEGER NOT NULL DEFAULT 0,
+                server_url TEXT,
+                user_id TEXT,
                 PRIMARY KEY (item_id, quality)
             )"""
         )
@@ -111,6 +113,12 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
             db.execSQL("ALTER TABLE downloads_v8 RENAME TO downloads")
             db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
         }
+        if (oldVersion < 9) {
+            db.execSQL("ALTER TABLE downloads ADD COLUMN server_url TEXT")
+        }
+        if (oldVersion < 10) {
+            db.execSQL("ALTER TABLE downloads ADD COLUMN user_id TEXT")
+        }
     }
 
     fun readAll(): List<OfflineDownload> {
@@ -140,7 +148,9 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                     completedAtEpochMs = cursor.getLongOrNull("completed_at"),
                     lastPlayedAtEpochMs = cursor.getLongOrNull("last_played_at"),
                     isWatched = cursor.getInt(cursor.getColumnIndexOrThrow("is_watched")) != 0,
-                    keepDownload = cursor.getInt(cursor.getColumnIndexOrThrow("keep_download")) != 0
+                    keepDownload = cursor.getInt(cursor.getColumnIndexOrThrow("keep_download")) != 0,
+                    serverUrl = cursor.getStringOrNull("server_url"),
+                    userId = cursor.getStringOrNull("user_id")
                 )
             }
         }
@@ -168,6 +178,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         put("checksum_sha256", checksumSha256); put("work_name", workName)
         put("created_at", createdAtEpochMs); put("completed_at", completedAtEpochMs); put("last_played_at", lastPlayedAtEpochMs)
         put("is_watched", if (isWatched) 1 else 0); put("keep_download", if (keepDownload) 1 else 0)
+        put("server_url", serverUrl); put("user_id", userId)
     }
 
     private fun android.database.Cursor.getStringOrNull(column: String): String? =
