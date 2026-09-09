@@ -52,6 +52,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   evitando transcodificaciones falsas cuando Jellyfin y Android usan nombres
   distintos. La regresión está cubierta en `PlaybackDecisionEngineTest` y las
   pruebas unitarias móvil/TV terminan en `BUILD SUCCESSFUL`.
+- Paridad Apple del motor original-first: `VeloraKit` aplica ahora la misma
+  canonicalización a capacidades y fuentes antes de decidir Direct Play,
+  Direct Stream o remux; la regresión cubre `H265`, `EC-3`, `matroska` y Dolby
+  Vision. El test Swift queda pendiente de un runner macOS/Xcode, ausente en
+  este host Windows; no se presenta como ejecutado.
 - Actualizador Android: los botones y errores visibles de descarga/instalación
   están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
   la compilación de ambos perfiles y sus pruebas unitarias pasan.

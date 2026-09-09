@@ -292,14 +292,14 @@ public struct PlaybackCapabilities: Sendable {
     public var maxFrameRate: Double?
 
     public init(videoCodecs: Set<String> = [], audioCodecs: Set<String> = [], containers: Set<String> = [], hdrFormats: Set<String> = [], directPlay: Bool = true, directStream: Bool = true, remux: Bool = true, audioPassthroughCodecs: Set<String> = [], audioPassthrough: Bool = false, maxAudioChannels: Int? = nil, maxWidth: Int? = nil, maxHeight: Int? = nil, maxFrameRate: Double? = nil) {
-        self.videoCodecs = Set(videoCodecs.map { $0.lowercased() })
-        self.audioCodecs = Set(audioCodecs.map { $0.lowercased() })
-        self.containers = Set(containers.map { $0.lowercased() })
-        self.hdrFormats = Set(hdrFormats.map { $0.lowercased() })
+        self.videoCodecs = Set(videoCodecs.map { PlaybackDecisionEngine.canonicalCapability($0) })
+        self.audioCodecs = Set(audioCodecs.map { PlaybackDecisionEngine.canonicalCapability($0) })
+        self.containers = Set(containers.map { PlaybackDecisionEngine.canonicalCapability($0) })
+        self.hdrFormats = Set(hdrFormats.map { PlaybackDecisionEngine.canonicalCapability($0) })
         self.directPlay = directPlay
         self.directStream = directStream
         self.remux = remux
-        self.audioPassthroughCodecs = Set(audioPassthroughCodecs.map { $0.lowercased() })
+        self.audioPassthroughCodecs = Set(audioPassthroughCodecs.map { PlaybackDecisionEngine.canonicalCapability($0) })
         self.audioPassthrough = audioPassthrough
         self.maxAudioChannels = maxAudioChannels
         self.maxWidth = maxWidth
@@ -339,6 +339,29 @@ public struct PlaybackSource: Sendable {
 }
 
 public enum PlaybackDecisionEngine {
+    /// Jellyfin and platform decoders use equivalent but different spellings
+    /// for the same capability. Keep this canonicalization in the shared
+    /// engine so Apple does not request a transcode merely because a server
+    /// returned `H265`, `EC-3`, `matroska`, or `Dolby Vision`.
+    public static func canonicalCapability(_ value: String) -> String {
+        let normalized = value
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+            .replacingOccurrences(of: "_", with: "-")
+            .replacingOccurrences(of: " ", with: "-")
+        switch normalized {
+        case "h265", "x265": return "hevc"
+        case "x264": return "h264"
+        case "av01": return "av1"
+        case "ec3", "ec-3", "dolby-digital-plus": return "eac3"
+        case "dtshd", "dts-hd-ma", "dts-hd-master-audio": return "dts-hd"
+        case "matroska": return "mkv"
+        case "mpegts", "mpeg-ts", "mpeg-transport-stream": return "ts"
+        case "dv", "dolby-vision": return "dolby-vision"
+        default: return normalized
+        }
+    }
+
     public static func decide(source: PlaybackSource, capabilities: PlaybackCapabilities, quality: PlaybackQuality = .original) -> PlaybackPath {
         let directCompatible = supported(source.videoCodec, by: capabilities.videoCodecs)
             && supported(source.audioCodec, by: capabilities.audioCodecs)
@@ -358,7 +381,7 @@ public enum PlaybackDecisionEngine {
 
     private static func supported(_ value: String?, by values: Set<String>) -> Bool {
         guard let value else { return true }
-        return values.isEmpty || values.contains(value.lowercased())
+        return values.isEmpty || values.contains(canonicalCapability(value))
     }
 
     private static func directStreamCompatible(source: PlaybackSource, capabilities: PlaybackCapabilities, quality: PlaybackQuality) -> Bool {
@@ -377,7 +400,7 @@ public enum PlaybackDecisionEngine {
     }
 
     private static func passthroughFits(_ source: PlaybackSource, _ capabilities: PlaybackCapabilities) -> Bool {
-        guard let codec = source.audioCodec?.lowercased(), capabilities.audioPassthroughCodecs.contains(codec) else { return true }
+        guard let codec = source.audioCodec.map(canonicalCapability), capabilities.audioPassthroughCodecs.contains(codec) else { return true }
         return capabilities.audioPassthrough
     }
 
