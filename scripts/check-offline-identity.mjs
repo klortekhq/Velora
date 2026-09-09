@@ -9,6 +9,12 @@ assert.match(database, /\n    11\n\)\s*\{/,
   'offline database must have a migration version for account-scoped identity');
 assert.match(database, /entry_key TEXT NOT NULL PRIMARY KEY/,
   'offline database must key rows by a durable identity, not item ID alone');
+const createTable = database.match(/override fun onCreate\(db: SQLiteDatabase\) \{([\s\S]*?)\n    \}/)?.[1] ?? '';
+assert.ok(createTable, 'offline database must expose a readable onCreate schema');
+assert.equal((createTable.match(/PRIMARY KEY/g) ?? []).length, 1,
+  'fresh offline database schema must declare exactly one primary key');
+assert.match(createTable, /CREATE INDEX downloads_item_quality/,
+  'fresh offline database schema must index item and quality lookups');
 assert.match(database, /downloads_v11/,
   'offline database must rebuild legacy rows when introducing the identity key');
 assert.match(database, /offlineEntryKey\(this@values\)/,

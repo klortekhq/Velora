@@ -32,6 +32,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - El mismo diálogo localiza también título, notas de versión, progreso y error
   visible; `check-android-locales.mjs` valida 534 claves y las suites móvil/TV
   terminan en `BUILD SUCCESSFUL`.
+- Corrección offline Android del 2026-09-09: una instalación nueva ya no
+  intenta crear una tabla SQLite con dos claves primarias, lo que podía dejar
+  inutilizable la base de descargas antes de la primera migración. El esquema
+  limpio ahora coincide con la migración v11 y conserva el índice por elemento
+  y calidad; el contrato `check-offline-identity.mjs` bloquea la regresión.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.

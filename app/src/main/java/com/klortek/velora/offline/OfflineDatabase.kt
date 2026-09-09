@@ -38,11 +38,11 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                 is_watched INTEGER NOT NULL DEFAULT 0,
                 keep_download INTEGER NOT NULL DEFAULT 0,
                 server_url TEXT,
-                user_id TEXT,
-                PRIMARY KEY (item_id, quality)
+                user_id TEXT
             )"""
         )
         db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
+        db.execSQL("CREATE INDEX downloads_item_quality ON downloads(item_id, quality)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -168,6 +168,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
             db.execSQL("DROP TABLE downloads")
             db.execSQL("ALTER TABLE downloads_v11 RENAME TO downloads")
             db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
+            db.execSQL("CREATE INDEX downloads_item_quality ON downloads(item_id, quality)")
         }
     }
 
