@@ -163,6 +163,14 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Se publicaron como assets adicionales en la pre-release pública `v1.4.0`
   (`Velora-mobile-qa-8bd2777.apk` y `Velora-tv-qa-8bd2777.apk`); los assets
   históricos se conservaron y las nuevas siguen siendo builds de QA sin firma.
+- Verificación reproducida el 2026-09-09: las APK recién ensambladas desde
+  `main` se publicaron además con nombres inequívocos para esta corrección:
+  [`Velora-mobile-qa-live-tv-grouping.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-grouping.apk)
+  (SHA-256 `1125BFEB6B6390451D4278716E2650A4BBC5CA3108AFECD11885565DAC848CB2`)
+  y [`Velora-tv-qa-live-tv-grouping.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-grouping.apk)
+  (SHA-256 `65FBD17F6099BCFFB27A2ABCC83D5E4D5A09744A6835BA05EBED67D3CA8A1D55`).
+  La suite `LiveTvChannelQueryTest` pasa en móvil y TV. Estas son builds QA sin
+  firma para comprobar el comportamiento, no releases de tienda.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
