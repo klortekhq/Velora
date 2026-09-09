@@ -37,6 +37,9 @@
   <string name="search_loading">Searching…</string>
   <string name="search_empty_prompt">Type a title or use voice search</string>
   <string name="action_play">Play</string>
+  <string name="action_exit">Exit</string>
+  <string name="app_exit_title">Exit the app?</string>
+  <string name="app_exit_message">Are you sure you want to exit the app?</string>
   <string name="action_mark_watched">Mark as watched</string>
   <string name="action_mark_unwatched">Mark as unwatched</string>
   <string name="similar_movies_with">More movies with %1$s</string>

@@ -53,6 +53,9 @@
     <string name="search_loading">Buscando…</string>
     <string name="search_empty_prompt">Escribe un título o usa la búsqueda por voz</string>
     <string name="action_play">Reproducir</string>
+    <string name="action_exit">Salir</string>
+    <string name="app_exit_title">¿Salir de la aplicación?</string>
+    <string name="app_exit_message">¿Seguro que quieres salir de la aplicación?</string>
     <string name="action_mark_watched">Marcar como visto</string>
     <string name="action_mark_unwatched">Marcar como no visto</string>
     <string name="similar_movies_with">Más películas con %1$s</string>
