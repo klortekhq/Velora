@@ -36,6 +36,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   plataforma y no forman parte de la identidad visible del producto.
 - CI comprueba que README, atribuciones, documentación y código público no
   reintroduzcan referencias heredadas a otros clientes o identidades antiguas.
+- La auditoría de seguridad del 2026-09-09 no encontró credenciales ni tokens
+  del servidor de QA en el código/documentación; los fixtures de descubrimiento
+  usan ahora una dirección LAN genérica de laboratorio y la suite móvil pasa.
 - Autenticación Android: la ruta de `AuthenticateByName` quedó alineada con
   Apple, web y el smoke test (`Users/AuthenticateByName`) para evitar que un
   proxy sensible a mayúsculas rechace la petición antes de llegar a Jellyfin;
@@ -844,8 +847,8 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
   pero la petición de autenticación volvió a agotar el tiempo de espera desde
   el host de QA. Por ello siguen sin certificarse catálogo, Live TV,
   `PlaybackInfo` o reproducción real.
-- Smoke test autenticado repetido el 2026-09-09 contra `192.168.100.201:8096`:
-  `/System/Info/Public` respondió como Jellyfin, pero
+- Smoke test autenticado repetido el 2026-09-09 contra el endpoint LAN
+  configurado por el usuario: `/System/Info/Public` respondió como Jellyfin, pero
   `Users/AuthenticateByName` devolvió `HTTP 400`. No se guardaron credenciales
   ni tokens y no se certifican catálogo, agrupación de canales, Live TV,
   `PlaybackInfo` ni reproducción real. El host de QA tampoco dispone de `adb`
