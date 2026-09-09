@@ -6,6 +6,7 @@ const movie = fs.readFileSync('app/src/main/java/com/klortek/velora/screens/Movi
 const series = fs.readFileSync('app/src/main/java/com/klortek/velora/screens/SeriesDetailsScreen.kt', 'utf8');
 const quickConnect = fs.readFileSync('app/src/main/java/com/klortek/velora/jellyfin/QuickConnectService.kt', 'utf8');
 const androidLiveTv = fs.readFileSync('app/src/main/java/com/klortek/velora/JellyfinVideoPlayerActivity.kt', 'utf8');
+const androidLiveTvPolicy = fs.readFileSync('app/src/main/java/com/klortek/velora/playback/LiveTvPlaybackPolicy.kt', 'utf8');
 const smoke = fs.readFileSync('scripts/qa/jellyfin-smoke.ps1', 'utf8');
 
 if (!api.includes('IncludeItemTypes", "Trailer"')) {
@@ -20,8 +21,9 @@ if (/getMediaItems\("Items\/\$itemId\/(?:Local|Remote)Trailers"/.test(api)) {
 if (!/suspend fun initiateQuickConnect[\s\S]*?client\.post\(url\)/.test(quickConnect)) {
   throw new Error('Jellyfin 12: Quick Connect debe iniciarse mediante POST');
 }
-if (!androidLiveTv.includes('Protocol?.equals("M3U", ignoreCase = true)') ||
-    !androidLiveTv.includes('!isM3uSource && liveSource?.SupportsDirectPlay == true')) {
+if (!androidLiveTvPolicy.includes('source.Protocol?.equals("M3U", ignoreCase = true)') ||
+    !androidLiveTvPolicy.includes('source?.SupportsDirectPlay == true') ||
+    !androidLiveTv.includes('shouldUseLiveTvDirectSource(liveSource)')) {
   throw new Error('Jellyfin 12: los canales M3U no deben saltarse el LiveStreamId/remux del servidor');
 }
 if (!smoke.includes('StartIndex=$startIndex') || !smoke.includes('TotalRecordCount') ||
