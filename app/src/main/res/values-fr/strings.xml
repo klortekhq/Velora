@@ -228,6 +228,11 @@ Vérifiez que :
   <string name="request_no_seasons">Aucune saison trouvée</string>
   <string name="jellyseerr_requesting_short">Demande en cours…</string>
   <string name="subtitle_downloading">Téléchargement…</string>
+  <string name="subtitle_select_language">Sélectionner la langue</string>
+  <string name="subtitle_searching">Recherche…</string>
+  <string name="subtitle_select">Sélectionner le sous-titre</string>
+  <string name="subtitle_searching_provider">Recherche sur OpenSubtitles…</string>
+  <string name="subtitle_none_found">Aucun sous-titre trouvé</string>
   <string name="subtitle_download_failed">Impossible de télécharger le sous-titre</string>
   <string name="subtitle_downloaded_title">Sous-titres téléchargés</string>
   <string name="subtitle_none_downloaded">Aucun sous-titre téléchargé</string>

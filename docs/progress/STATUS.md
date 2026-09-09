@@ -30,8 +30,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
   la compilación de ambos perfiles y sus pruebas unitarias pasan.
 - El mismo diálogo localiza también título, notas de versión, progreso y error
-  visible; `check-android-locales.mjs` valida 529 claves y las suites móvil/TV
+  visible; `check-android-locales.mjs` valida 534 claves y las suites móvil/TV
   terminan en `BUILD SUCCESSFUL`.
+- Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
+  sin resultados usan recursos localizados; el catálogo garantizado queda en
+  534 claves y las suites móvil/TV pasan.
 - Revisión Jellyfin 12 del 2026-09-09: los nombres internos heredados de
   cabeceras y comentarios de otros clientes se sustituyeron por terminología
   propia de Velora; no se alteraron namespaces ni identificadores de paquete.

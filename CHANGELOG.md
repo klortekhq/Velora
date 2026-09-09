@@ -29,6 +29,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Actualizaciones Android: el título, las notas de versión, el progreso y los
   errores visibles del diálogo también están localizados; ya no queda texto
   fijo en español en ese flujo.
+- Subtítulos: los diálogos de selección de idioma, búsqueda, proveedor y estado
+  sin resultados usan ahora el idioma activo en móvil, tablet y TV.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
