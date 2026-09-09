@@ -8,6 +8,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
   formato, códec, resolución, FPS, HDR y pistas de audio; nunca presenta la
   ruta ni el nombre interno del archivo. Un contrato de CI protege esta
   separación.
+- Seguridad de documentación: las pruebas y el dashboard ya no contienen la
+  dirección LAN real usada durante QA; los fixtures de red usan una IP de
+  laboratorio.
 - Seguridad Android: se retiraron de Logcat títulos, IDs, posiciones de
   reproducción y metadatos de proveedores en las rutas de autenticación y
   catálogo; CI impide que vuelvan a introducirse.
