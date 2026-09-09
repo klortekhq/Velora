@@ -10,6 +10,11 @@ una comprobación no se interpreta como soporte certificado.
 Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
 de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
+- Revalidación completa del 2026-09-10: los 22 contratos `scripts/check-*.mjs`
+  terminan correctamente y las suites unitarias Android móvil/TV terminan en
+  `BUILD SUCCESSFUL` (`:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest`). Se mantienen únicamente avisos de APIs
+  obsoletas ya conocidos; no hay fallos de prueba.
 - Revalidación posterior al cambio de reparto TV (2026-09-09): los 20
   contratos `scripts/check-*.mjs` terminan correctamente, incluidos
   `check-android-content-navigation.mjs`, seguridad, reproducción, offline,
