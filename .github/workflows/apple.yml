@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - 'apple/**'
+      - 'scripts/**'
       - '.github/workflows/apple.yml'
   workflow_dispatch:
     inputs:
@@ -49,6 +50,9 @@ jobs:
       - name: Validar ciclo de vida SwiftUI Apple
         working-directory: ${{ github.workspace }}
         run: node scripts/check-apple-lifecycle.mjs
+      - name: Validar preferencias de reproducción
+        working-directory: ${{ github.workspace }}
+        run: node scripts/check-playback-preferences-contract.mjs
       - name: Mostrar toolchain Swift
         run: swift --version
       - name: Validar etiqueta de release
