@@ -51,6 +51,15 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `8A8CEED8AD48BF683747B5619F699DF4581383147F356C8EC596848D7E8A0B24`.
   Ambas compilaciones terminaron correctamente y siguen siendo artefactos de
   QA sin firma; no se publican como release.
+- Regresión completa reproducida tras el guardia de filtros (2026-09-09):
+  `node web/scripts/test-platform.mjs` pasó en capacidades, seguridad,
+  interacción de biblioteca y subtítulos; las suites
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest` terminaron en
+  `BUILD SUCCESSFUL` (82 tareas). Los APK debug actuales también se generaron
+  correctamente: móvil SHA-256
+  `F0B739610E9D9D5B7D3F3414AC09E9BA1EE77868966036083374AB01DEAFF969` y TV
+  `FBA3388B6215A0A1421FC2C01C9C560E9F95F0DC9F676B678630ACD38A01C2AD`;
+  siguen siendo artefactos locales de QA sin firma.
 - Build QA regenerada el 2026-09-08 tras la protección de espacio en descargas:
   móvil `velora-release-unsigned.apk`, SHA-256
   `493E6D634B5F1798767637B2052395CF111ABE57242E8B66825EBC87A80D3780`; TV
