@@ -97,6 +97,32 @@ final class VeloraKitTests: XCTestCase {
         MockURLProtocol.handler = nil
     }
 
+    func testLiveTvChannelsFollowJellyfinPagination() async throws {
+        MockURLProtocol.handler = { request in
+            let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)
+            let startIndex = Int(components?.queryItems?.first(where: { $0.name == "StartIndex" })?.value ?? "-1")!
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "Limit" })?.value, "100")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "AddCurrentProgram" })?.value, "true")
+            let body: String
+            if startIndex == 0 {
+                body = #"{"Items":[{"Id":"channel-1","Name":"Canal 1"}],"TotalRecordCount":2}"#
+            } else {
+                XCTAssertEqual(startIndex, 1)
+                body = #"{"Items":[{"Id":"channel-2","Name":"Canal 2"}],"TotalRecordCount":2}"#
+            }
+            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+            return (response, Data(body.utf8))
+        }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.example.test:8096")!, session: URLSession(configuration: configuration))
+        await client.setAccessToken("session-secret")
+
+        let channels = try await client.liveTvChannels(userID: "user-1")
+        XCTAssertEqual(channels.map(\.id), ["channel-1", "channel-2"])
+        MockURLProtocol.handler = nil
+    }
+
     func testPlaybackPrefersDirectPlay() {
         let caps = PlaybackCapabilities(videoCodecs: ["H264"], audioCodecs: ["AAC"], containers: ["MP4"])
         let source = PlaybackSource(container: "MP4", videoCodec: "H264", audioCodec: "AAC")

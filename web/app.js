@@ -724,10 +724,20 @@
   }
 
   function loadLiveTvChannels() {
-    var channelPath = '/LiveTv/Channels?UserId=' + encodeURIComponent(state.userId) +
-      '&AddCurrentProgram=true&EnableUserData=true&EnableImages=true&Fields=Overview%2CMediaSources';
-    return api(channelPath).then(function (response) {
-      var channels = response.Items || [];
+    var pageSize = 100;
+    function loadChannelPage(startIndex, channels, totalCount) {
+      var channelPath = '/LiveTv/Channels?UserId=' + encodeURIComponent(state.userId) +
+        '&StartIndex=' + encodeURIComponent(startIndex) + '&Limit=' + pageSize +
+        '&AddCurrentProgram=true&EnableUserData=true&EnableImages=true&Fields=Overview%2CMediaSources';
+      return api(channelPath).then(function (response) {
+        var pageItems = response.Items || [];
+        var combined = channels.concat(pageItems);
+        var reportedTotal = Number.isFinite(Number(response.TotalRecordCount)) ? Number(response.TotalRecordCount) : totalCount;
+        if (!pageItems.length || pageItems.length < pageSize || (reportedTotal && combined.length >= reportedTotal)) return combined;
+        return loadChannelPage(startIndex + pageItems.length, combined, reportedTotal);
+      });
+    }
+    return loadChannelPage(0, [], 0).then(function (channels) {
       if (!channels.length) return channels;
       var now = new Date();
       var until = new Date(now.getTime() + 6 * 60 * 60 * 1000);

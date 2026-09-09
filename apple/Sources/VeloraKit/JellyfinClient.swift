@@ -316,15 +316,34 @@ public actor JellyfinClient {
     }
 
     public func liveTvChannels(userID: String) async throws -> [JellyfinLiveTvChannel] {
-        var components = URLComponents(url: baseURL.appendingPathComponent("LiveTv/Channels"), resolvingAgainstBaseURL: false)
-        components?.queryItems = [
-            URLQueryItem(name: "UserId", value: userID),
-            URLQueryItem(name: "AddCurrentProgram", value: "true"),
-            URLQueryItem(name: "EnableImages", value: "true"),
-            URLQueryItem(name: "Fields", value: "Overview,MediaSources")
-        ]
-        guard let url = components?.url else { throw ClientError.invalidServerURL }
-        return try await request(url, as: JellyfinResult<JellyfinLiveTvChannel>.self).items
+        guard !userID.isEmpty else { return [] }
+        let pageSize = 100
+        var startIndex = 0
+        var totalRecordCount: Int?
+        var channels: [JellyfinLiveTvChannel] = []
+
+        // Jellyfin can expose thousands of channels when IPTV sources are
+        // present. Keep requesting pages until the server's advertised total
+        // is reached (or a short/empty page proves there is no more data).
+        repeat {
+            var components = URLComponents(url: baseURL.appendingPathComponent("LiveTv/Channels"), resolvingAgainstBaseURL: false)
+            components?.queryItems = [
+                URLQueryItem(name: "UserId", value: userID),
+                URLQueryItem(name: "StartIndex", value: String(startIndex)),
+                URLQueryItem(name: "Limit", value: String(pageSize)),
+                URLQueryItem(name: "AddCurrentProgram", value: "true"),
+                URLQueryItem(name: "EnableImages", value: "true"),
+                URLQueryItem(name: "Fields", value: "Overview,MediaSources")
+            ]
+            guard let url = components?.url else { throw ClientError.invalidServerURL }
+            let page = try await request(url, as: JellyfinResult<JellyfinLiveTvChannel>.self)
+            channels.append(contentsOf: page.items)
+            totalRecordCount = page.totalRecordCount ?? totalRecordCount
+            startIndex += page.items.count
+            if page.items.isEmpty || page.items.count < pageSize { break }
+        } while totalRecordCount.map({ startIndex < $0 }) ?? true
+
+        return channels
     }
 
     public func liveTvPrograms(userID: String, channelIDs: [String], from start: Date, until end: Date) async throws -> [JellyfinLiveTvProgram] {
