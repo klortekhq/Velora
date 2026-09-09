@@ -65,6 +65,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   al control que abrió el diálogo y enfocan de forma determinista el botón de
   volver al abrirlo; el contrato web protege esta navegación con teclado y
   mando.
+- Releases web/Smart TV del 2026-09-09: el workflow fija `SOURCE_DATE_EPOCH`
+  al commit etiquetado y el contrato comprueba que la release común contempla
+  WGT, IPK, bundles Samsung/webOS y bundle VIDAA, sin alterar la regla de no
+  publicar APK unsigned.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
