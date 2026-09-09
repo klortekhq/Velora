@@ -168,9 +168,9 @@ assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // pattern checks. This protects the one-row/multiple-source Live TV contract.
 const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
   '  renderApp();\n}());',
-  '  window.__veloraTest = { groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode, image };\n}());'
+  '  window.__veloraTest = { groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectLiveTvPlaybackSource, liveTvSourceIdentifier, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode, image };\n}());'
 );
-assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode, image \}/, 'web app test hook was not injected');
+assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectLiveTvPlaybackSource, liveTvSourceIdentifier, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode, image \}/, 'web app test hook was not injected');
 const preferenceValues = Object.create(null);
 const testLocalStorage = {
   getItem(key) { return preferenceValues[key] || null; },
@@ -247,6 +247,17 @@ assert.deepEqual(
 assert.equal(
   testWindow.__veloraTest.liveSourceLabel({ MediaSources: [{ Name: 'Fuente IPTV' }] }, 2),
   'Fuente IPTV'
+);
+assert.equal(
+  testWindow.__veloraTest.liveTvSourceIdentifier({ MediaSources: [{ LiveStreamId: 'stream-iptv' }] }),
+  'stream-iptv'
+);
+assert.equal(
+  testWindow.__veloraTest.selectLiveTvPlaybackSource([
+    { Id: 'source-main', DirectStreamUrl: '/main.m3u8' },
+    { LiveStreamId: 'stream-iptv', DirectStreamUrl: '/iptv.m3u8' }
+  ], 'stream-iptv').DirectStreamUrl,
+  '/iptv.m3u8'
 );
 const duplicateGroup = testWindow.__veloraTest.groupLiveTvChannels([
   { Id: 'duplicate-channel', Name: 'Noticias' },

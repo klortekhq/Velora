@@ -193,6 +193,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   también `LiveStreamId` cuando un proveedor IPTV no devuelve `MediaSourceId`,
   evitando que la opción aparezca como seleccionable pero se pierda al iniciar
   la reproducción.
+- Corrección web/Smart TV del 2026-09-09: la resolución Live TV conserva la
+  fuente seleccionada por `Id` o `LiveStreamId`, también cuando el proveedor
+  no entrega un `MediaSourceId`; queda cubierta por `test-platform.mjs`.
 - Regresión completa del 2026-09-09 sobre ese cambio: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` (82 tareas);
   también pasaron versión, identidad pública, contrato de autenticación,

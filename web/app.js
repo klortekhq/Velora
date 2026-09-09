@@ -567,7 +567,7 @@
   }
 
   function liveTvStreamTarget(channel) {
-    var sourceId = channel.MediaSources && channel.MediaSources[0] && channel.MediaSources[0].Id;
+    var sourceId = liveTvSourceIdentifier(channel);
     var sourceParam = sourceId ? '&MediaSourceId=' + encodeURIComponent(sourceId) : '';
     return api('/Items/' + encodeURIComponent(channel.Id) + '/PlaybackInfo?UserId=' +
       encodeURIComponent(state.userId) + '&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true' + sourceParam, {
@@ -577,7 +577,7 @@
         method: 'POST',
         body: JSON.stringify({})
       }).then(function (data) {
-        var source = data && data.MediaSources && data.MediaSources[0];
+        var source = selectLiveTvPlaybackSource(data && data.MediaSources, sourceId);
         if (!source) return '';
         state.liveTvPlaySessionId = source.PlaySessionId || data.PlaySessionId || '';
         // PlaybackInfo returns a playable server URL for Live TV. A source
@@ -585,6 +585,19 @@
         // must never be promoted into a URL fallback.
         return sanitizeMediaTarget(source.TranscodingUrl || source.DirectStreamUrl || '');
       });
+  }
+
+  function liveTvSourceIdentifier(channel) {
+    var source = channel && Array.isArray(channel.MediaSources) ? channel.MediaSources[0] : null;
+    return source && (source.Id || source.LiveStreamId) || '';
+  }
+
+  function selectLiveTvPlaybackSource(sources, requestedId) {
+    if (!Array.isArray(sources) || !sources.length) return null;
+    if (!requestedId) return sources[0];
+    return sources.find(function (source) {
+      return source && (source.Id === requestedId || source.LiveStreamId === requestedId);
+    }) || sources[0];
   }
 
   function waitForMediaProxy() {
