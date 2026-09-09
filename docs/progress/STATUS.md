@@ -97,6 +97,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `51B543AC43F85F14C2B0898278319E64AB8747BF83409C62C4788B3260C4FDF7`.
   La tarea conjunta `assembleMobileDebug assembleTvDebug` terminó en
   `BUILD SUCCESSFUL`; son builds instalables de QA, no una release firmada.
+- Variantes `release-unsigned` regeneradas por separado el 2026-09-09 desde
+  el mismo `main`, con `GRADLE_OPTS=-Xmx4096m`: móvil
+  `velora-release-unsigned.apk`, SHA-256
+  `437DA37AD3B869C42C12CBCD77A3EB45D6CC97218AFE68C87F5FA3C17847A208`, y TV
+  `255AF83167910785BEA7931A415341B9F743BB2D6B70CFC01DE711501CFE4ECD`.
+  Ambas tareas terminaron en `BUILD SUCCESSFUL`; siguen sin firma y no se
+  publican como releases.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
