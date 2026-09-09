@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- CI: el contrato de navegación Android verifica también que las pestañas de
+  recomendaciones y biblioteca, la ordenación y los filtros de películas y
+  series sigan conectados a la consulta real y a sus preferencias persistentes.
 - Bibliotecas de películas y series: se añade cobertura de regresión para
   ordenar por nombre, fecha y valoración y combinar favoritos, estado de
   reproducción y género; los controles de ambas pantallas aplican la misma

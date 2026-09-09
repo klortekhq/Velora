@@ -39,6 +39,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   compartida de películas y series (ordenación ascendente/descendente,
   favoritos, visto/no visto, género y estabilidad); las variantes móvil y TV
   terminaron con `BUILD SUCCESSFUL` el 2026-09-09.
+- Contrato de navegación Android: además de la filmografía de actores, CI
+  comprueba que recomendaciones y biblioteca de películas/series aplican la
+  consulta real, que TV conecta ordenación/género/estado de reproducción y que
+  móvil persiste las preferencias de esos filtros; verificado el 2026-09-09.
 - Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
   y dejar la tuerca como punto único para audio y subtítulos: móvil
   `app-mobile-debug.apk`, SHA-256
