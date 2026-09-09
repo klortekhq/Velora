@@ -1,6 +1,6 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-09
+Updated: 2026-09-10
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
@@ -18,6 +18,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   integración de agrupación Live TV de Android: construcción de grupos,
   apertura del selector multifuente y conservación de la variante elegida en
   el zapping.
+- Revalidación Android del 2026-09-10: la superficie Discovery se ha retirado
+  de las pantallas de películas, series y Ajustes; permanecen Recomendaciones,
+  Biblioteca y la búsqueda Jellyseerr opcional. `check-no-discover-surface.mjs`
+  protege que ninguna pestaña o interruptor pueda volver a exponer Discovery.
 
 ## Estado del repositorio
 

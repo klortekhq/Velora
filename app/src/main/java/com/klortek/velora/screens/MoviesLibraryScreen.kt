@@ -880,8 +880,8 @@ fun MoviesLibraryScreen(
                         }
                     }
                     
-                    // Recommendations, Library, and Discover tabs
-                    val hasJellyseerr = settings.isJellyseerrConfigured
+                    // Recommendations and Library tabs. Discovery is deliberately
+                    // not part of the Velora navigation surface.
                     val tabs = buildList {
                                 add(stringResource(com.klortek.velora.R.string.library_recommendations) to "recommendations")
                                 add(stringResource(com.klortek.velora.R.string.library_tab_library, libraryName) to "library")
