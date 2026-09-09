@@ -123,10 +123,10 @@ public struct VeloraSettingsView: View {
             Section {
                 Picker(selection: $settings.languageIdentifier) {
                     Text("Automatic", bundle: .module).tag(nil as String?)
-                    Text("Español").tag(VeloraLanguage.spanish.rawValue as String?)
-                    Text("English").tag(VeloraLanguage.english.rawValue as String?)
-                    Text("Français").tag(VeloraLanguage.french.rawValue as String?)
-                    Text("Deutsch").tag(VeloraLanguage.german.rawValue as String?)
+                    Text("Spanish", bundle: .module).tag(VeloraLanguage.spanish.rawValue as String?)
+                    Text("English", bundle: .module).tag(VeloraLanguage.english.rawValue as String?)
+                    Text("French", bundle: .module).tag(VeloraLanguage.french.rawValue as String?)
+                    Text("German", bundle: .module).tag(VeloraLanguage.german.rawValue as String?)
                 } label: {
                     Text("App language", bundle: .module)
                 }
