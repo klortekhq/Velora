@@ -129,6 +129,25 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directPlay)
     }
 
+    func testPlaybackNormalizesJellyfinCapabilityAliases() {
+        let caps = PlaybackCapabilities(
+            videoCodecs: ["HEVC"],
+            audioCodecs: ["EAC3"],
+            containers: ["MKV"],
+            hdrFormats: ["dolby-vision"]
+        )
+        let source = PlaybackSource(
+            container: "matroska",
+            videoCodec: "H265",
+            audioCodec: "EC-3",
+            hdrFormat: "Dolby Vision"
+        )
+
+        XCTAssertEqual(PlaybackDecisionEngine.canonicalCapability("x265"), "hevc")
+        XCTAssertEqual(PlaybackDecisionEngine.canonicalCapability("mpeg transport stream"), "ts")
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directPlay)
+    }
+
     func testPlaybackFallsBackWhenActualDeviceLimitsAreExceeded() {
         let caps = PlaybackCapabilities(videoCodecs: ["h264"], audioCodecs: ["aac"], containers: ["mp4"], maxAudioChannels: 2, maxWidth: 1920)
         let source = PlaybackSource(container: "mp4", videoCodec: "h264", audioCodec: "aac", audioChannels: 6, width: 3840, height: 2160)
