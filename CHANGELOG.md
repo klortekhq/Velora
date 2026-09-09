@@ -4,6 +4,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Autenticación Android: la ruta `Users/AuthenticateByName` usa ahora la
+  capitalización canónica de Jellyfin, evitando rechazos de proxies estrictos.
 - Apple: el reproductor nativo de iPhone, iPad y tvOS incorpora pantalla
   completa explícita con entrada y salida accesibles, sin depender de girar el
   dispositivo; los textos están localizados en español, inglés, francés y

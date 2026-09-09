@@ -17,6 +17,13 @@ const required = {
   smoke: 'Username = $Username; Pw = $Password'
 };
 
+const canonicalRoutes = {
+  android: 'Users/AuthenticateByName',
+  apple: 'Users/AuthenticateByName',
+  web: '/Users/AuthenticateByName',
+  smoke: '/Users/AuthenticateByName'
+};
+
 const forbidden = {
   apple: '["Username": username, "Password": password]',
   web: 'JSON.stringify({ Username: username, Password:'
@@ -26,6 +33,9 @@ for (const [name, file] of Object.entries(files)) {
   const source = fs.readFileSync(file, 'utf8');
   if (!source.includes(required[name])) {
     throw new Error(`${name}: falta el campo Jellyfin Pw en ${path.relative(root, file)}`);
+  }
+  if (!source.includes(canonicalRoutes[name])) {
+    throw new Error(`${name}: falta la ruta canónica Users/AuthenticateByName`);
   }
   if (forbidden[name] && source.includes(forbidden[name])) {
     throw new Error(`${name}: todavía usa Password en el payload de AuthenticateByName`);

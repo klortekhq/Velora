@@ -101,7 +101,10 @@ class JellyfinAuthService(
                     lastFailure = AuthenticationFailure.INVALID_SERVER
                     return@withContext null
                 }
-                val url = "$normalizedBaseUrl/Users/authenticatebyname"
+                // Keep the canonical Jellyfin route casing used by Apple, web
+                // and the QA smoke test. Strict reverse proxies can otherwise
+                // reject an otherwise valid request before it reaches Jellyfin.
+                val url = "$normalizedBaseUrl/Users/AuthenticateByName"
                 val deviceId = getDeviceId()
                 val embyAuthHeader = "MediaBrowser Client=\"Velora\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
                 val body = json.encodeToString(AuthenticationRequest(Username = username, Pw = password))
