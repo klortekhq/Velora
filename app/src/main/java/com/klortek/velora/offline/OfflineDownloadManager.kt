@@ -68,9 +68,9 @@ internal fun sameOfflineEntry(first: OfflineDownload, second: OfflineDownload): 
     if (first.downloadId > 0L && second.downloadId > 0L) {
         first.downloadId == second.downloadId
     } else if (!first.workName.isNullOrBlank() && !second.workName.isNullOrBlank()) {
-        first.workName == second.workName
+        first.workName == second.workName && offlineAccountMatches(first, second)
     } else {
-        first.itemId == second.itemId && first.quality == second.quality
+        first.itemId == second.itemId && first.quality == second.quality && offlineAccountMatches(first, second)
     }
 
 object OfflineDownloadManager {
@@ -101,7 +101,9 @@ object OfflineDownloadManager {
             "Offline downloads are only supported on mobile and tablet builds"
         }
         val existing = load(context).firstOrNull {
-            it.itemId == itemId && it.quality == quality.storageKey
+            it.itemId == itemId && it.quality == quality.storageKey &&
+                it.serverUrl.orEmpty().removeSuffix("/") == serverUrl.removeSuffix("/") &&
+                it.userId.orEmpty() == userId.orEmpty()
         }
         if (existing != null) {
             if (existing.isComplete || existing.status == DownloadManager.STATUS_PENDING ||
@@ -115,7 +117,9 @@ object OfflineDownloadManager {
         val recordedManagedBytes = load(context)
             // Only the representation being replaced is excluded. Other
             // qualities of the same item are valid, independent downloads.
-            .filterNot { it.itemId == itemId && it.quality == quality.storageKey }
+            .filterNot { it.itemId == itemId && it.quality == quality.storageKey &&
+                it.serverUrl.orEmpty().removeSuffix("/") == serverUrl.removeSuffix("/") &&
+                it.userId.orEmpty() == userId.orEmpty() }
             .sumOf { entry ->
                 if (entry.totalBytes > 0L) entry.totalBytes else entry.bytesDownloaded.coerceAtLeast(0L)
             }
@@ -136,7 +140,7 @@ object OfflineDownloadManager {
         if (!decision.allowed) throw StorageRejectedException(decision)
         if (existing != null) delete(context, existing)
 
-        val workName = workNameFor(itemId, quality)
+        val workName = workNameFor(itemId, quality, serverUrl, userId)
         val entry = OfflineDownload(
             itemId = itemId,
             name = name,
@@ -167,7 +171,9 @@ object OfflineDownloadManager {
             requiredNetwork = requiredNetwork
         )
         save(context, load(context).filterNot {
-            it.itemId == itemId && it.quality == quality.storageKey
+            it.itemId == itemId && it.quality == quality.storageKey &&
+                it.serverUrl.orEmpty().removeSuffix("/") == serverUrl.removeSuffix("/") &&
+                it.userId.orEmpty() == userId.orEmpty()
         } + entry)
         return entry
 
@@ -277,9 +283,9 @@ object OfflineDownloadManager {
         }
     }
 
-    private fun workNameFor(itemId: String, quality: OfflineDownloadQuality): String {
+    private fun workNameFor(itemId: String, quality: OfflineDownloadQuality, serverUrl: String, userId: String?): String {
         val digest = MessageDigest.getInstance("SHA-256")
-            .digest(itemId.toByteArray(Charsets.UTF_8))
+            .digest("${serverUrl.removeSuffix("/")}\u001f${userId.orEmpty()}\u001f$itemId".toByteArray(Charsets.UTF_8))
             .joinToString("") { byte -> "%02x".format(byte) }
             .take(24)
         return "offline-$digest-${quality.storageKey}"
