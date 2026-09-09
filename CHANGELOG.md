@@ -37,6 +37,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   incompatibilidad AV1 usan ahora recursos localizados en lugar de texto fijo.
 - Jellyseerr: las fichas de películas y series localizan solicitudes, reparto,
   sinopsis, temporadas, episodios y confirmaciones de solicitud.
+- Series y reproducción: la etiqueta de sinopsis y la opción de desactivar
+  subtítulos usan ahora recursos localizados también en la ficha de series.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
