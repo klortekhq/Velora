@@ -89,6 +89,32 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun selectedAlternateSourceReplacesPrimaryForChannelNavigation() {
+        val primary = LiveTvChannel(
+            "provider-main",
+            "Noticias",
+            ChannelNumber = "1",
+            MediaSources = listOf(MediaSource(Id = "source-main"))
+        )
+        val alternate = primary.copy(
+            Id = "provider-iptv",
+            MediaSources = listOf(MediaSource(Id = "source-iptv", Name = "IPTV"))
+        )
+        val other = LiveTvChannel(
+            "other",
+            "Deportes",
+            ChannelNumber = "2",
+            MediaSources = listOf(MediaSource(Id = "source-other"))
+        )
+        val groups = groupLiveTvChannels(listOf(primary, alternate, other))
+
+        val playbackRows = liveTvPlaybackChannelList(groups, groups.first(), alternate)
+
+        assertEquals("provider-iptv", playbackRows.first().Id)
+        assertEquals("other", playbackRows[1].Id)
+    }
+
+    @Test
     fun groupedChannelCountRepresentsVisibleRows() {
         val duplicate = LiveTvChannel("same-id", "DAZN F1")
         val groups = groupLiveTvChannels(listOf(duplicate, duplicate))

@@ -86,6 +86,7 @@ import com.klortek.velora.livetv.liveTvGroups
 import com.klortek.velora.livetv.groupLiveTvChannels
 import com.klortek.velora.livetv.LiveTvChannelGroup
 import com.klortek.velora.livetv.liveTvSourceLabel
+import com.klortek.velora.livetv.liveTvPlaybackChannelList
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.livetv.liveTvMediaSourceId
 import kotlinx.coroutines.launch
@@ -387,7 +388,7 @@ private fun LiveTvScreen(
             onDismiss = { sourceSelection = null },
             onSelect = { selected ->
                 sourceSelection = null
-                onPlay(selected, channelGroups.map { it.primary })
+                onPlay(selected, liveTvPlaybackChannelList(channelGroups, group, selected))
             }
         )
     }
