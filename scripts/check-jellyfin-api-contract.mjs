@@ -24,4 +24,4 @@ for (const [name, source] of [['películas', movie], ['series', series]]) {
   }
 }
 
-console.log('Jellyfin API contract passed: trailers use GetItems/IncludeItemTypes=Trailer with legacy fallback.');
+console.log('Jellyfin API contract passed: trailers use GetItems/IncludeItemTypes=Trailer without removed legacy routes.');
