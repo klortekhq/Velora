@@ -83,6 +83,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Accesibilidad/localización Android del 2026-09-09: la etiqueta visible de
   subtítulos descargados dejó de estar fija en español y usa el catálogo activo
   en móvil y TV; contratos, compilación y tests de ambas variantes pasan.
+- Accesibilidad/localización Android del 2026-09-09: las acciones visibles de
+  películas y series para continuar, reproducir desde el principio, marcar
+  como visto/no visto y recomendaciones de reparto usan ya recursos localizados
+  y etiquetas accesibles en las cuatro variantes garantizadas.
 - Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
   peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de

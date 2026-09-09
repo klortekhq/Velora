@@ -37,6 +37,9 @@
   <string name="search_loading">Suche…</string>
   <string name="search_empty_prompt">Gib einen Titel ein oder nutze die Sprachsuche</string>
   <string name="action_play">Wiedergeben</string>
+  <string name="action_mark_watched">Als gesehen markieren</string>
+  <string name="action_mark_unwatched">Als ungesehen markieren</string>
+  <string name="similar_movies_with">Weitere Filme mit %1$s</string>
   <string name="action_back">Zurück</string>
   <string name="action_resume">Fortsetzen</string>
   <string name="action_play_from_start">Von Anfang an abspielen</string>

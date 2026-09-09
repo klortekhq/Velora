@@ -30,6 +30,7 @@ import androidx.compose.foundation.focusable
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyColumn
@@ -2266,7 +2267,7 @@ fun EpisodeActionButtonsRow(
                             )
                             context.startActivity(intent)
                         },
-                        label = "Continuar",
+                        label = stringResource(R.string.continue_label),
                         containerColor = androidx.compose.ui.graphics.Color.White,
                         contentColor = androidx.compose.ui.graphics.Color.Black
                     )
@@ -2621,13 +2622,13 @@ fun EpisodeActionButtonsRow(
             ) {
                 Icon(
                     imageVector = Icons.Default.Check,
-                    contentDescription = if (isAlreadyWatched) "Marcar como no visto" else "Marcar como visto",
+                        contentDescription = stringResource(if (isAlreadyWatched) R.string.action_mark_unwatched else R.string.action_mark_watched),
                     modifier = Modifier.size(14.3.dp)
                 )
                 if (watchedFocused) {
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = if (isAlreadyWatched) "Marcar como no visto" else "Marcar como visto",
+                        text = stringResource(if (isAlreadyWatched) R.string.action_mark_unwatched else R.string.action_mark_watched),
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                         )

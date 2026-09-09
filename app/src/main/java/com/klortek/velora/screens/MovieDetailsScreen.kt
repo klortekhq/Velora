@@ -744,7 +744,7 @@ fun BottomContainer(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Más películas con ${firstCastMember?.Name.orEmpty()}",
+                        text = stringResource(R.string.similar_movies_with, firstCastMember?.Name.orEmpty()),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -1772,7 +1772,7 @@ fun ActionButtonsRow(
         }
     }
     
-    val playButtonLabel = if (isResumable) "Reproducir desde el principio" else "Reproducir"
+    val playButtonLabel = if (isResumable) stringResource(R.string.action_play_from_start) else stringResource(R.string.action_play)
     
     Row(
         modifier = modifier
@@ -1817,7 +1817,7 @@ fun ActionButtonsRow(
                         context.startActivity(intent)
                         // Don't finish - let back button return to movie details screen
                     },
-                    label = "Continuar",
+                    label = stringResource(R.string.continue_label),
                     containerColor = androidx.compose.ui.graphics.Color.White,
                     contentColor = androidx.compose.ui.graphics.Color.Black,
                     modifier = Modifier.focusRequester(resumeFocusRequester)
@@ -2217,13 +2217,13 @@ fun ActionButtonsRow(
         ) {
             Icon(
                 imageVector = Icons.Default.Check,
-                contentDescription = if (isAlreadyWatched) "Marcar como no visto" else "Marcar como visto",
+                contentDescription = stringResource(if (isAlreadyWatched) R.string.action_mark_unwatched else R.string.action_mark_watched),
                 modifier = Modifier.size(14.3.dp)
             )
             if (watchedFocused) {
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = if (isAlreadyWatched) "Marcar como no visto" else "Marcar como visto",
+                        text = stringResource(if (isAlreadyWatched) R.string.action_mark_unwatched else R.string.action_mark_watched),
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontSize = MaterialTheme.typography.labelLarge.fontSize * 0.7f
                     )
