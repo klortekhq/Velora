@@ -37,6 +37,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   inutilizable la base de descargas antes de la primera migración. El esquema
   limpio ahora coincide con la migración v11 y conserva el índice por elemento
   y calidad; el contrato `check-offline-identity.mjs` bloquea la regresión.
+- Descargas offline Android del 2026-09-09: se añade la política opcional
+  «solo mientras carga». La preferencia queda persistida por dispositivo y
+  WorkManager la aplica al encolar y recuperar trabajos tras reinicio; solo se
+  muestra en móvil/tablet y la compilación y las suites móvil/TV pasan.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.

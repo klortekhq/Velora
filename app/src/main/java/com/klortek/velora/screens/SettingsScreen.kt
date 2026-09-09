@@ -304,6 +304,7 @@ fun SettingsScreen(
     var rowCardCount by remember { mutableStateOf(settings.rowCardCount) }
     var offlineMaxStorageBytes by remember { mutableStateOf(settings.offlineMaxStorageBytes) }
     var offlineWifiOnly by remember { mutableStateOf(settings.offlineWifiOnly) }
+    var offlineChargingOnly by remember { mutableStateOf(settings.offlineChargingOnly) }
     var smartDownloadsEnabled by remember { mutableStateOf(settings.smartDownloadsEnabled) }
     var smartDownloadsRemoveWatched by remember { mutableStateOf(settings.smartDownloadsRemoveWatched) }
     var smartDownloadsKeepUnwatchedEpisodes by remember { mutableStateOf(settings.smartDownloadsKeepUnwatchedEpisodes) }
@@ -2221,6 +2222,15 @@ Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_t
                                     onToggle = {
                                         offlineWifiOnly = !offlineWifiOnly
                                         settings.offlineWifiOnly = offlineWifiOnly
+                                    }
+                                )
+                                SettingToggle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_offline_charging_only),
+                                    description = context.getString(com.klortek.velora.R.string.settings_offline_charging_only_description),
+                                    isEnabled = offlineChargingOnly,
+                                    onToggle = {
+                                        offlineChargingOnly = !offlineChargingOnly
+                                        settings.offlineChargingOnly = offlineChargingOnly
                                     }
                                 )
                                 SettingToggle(

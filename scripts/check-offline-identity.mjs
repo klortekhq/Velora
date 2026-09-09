@@ -3,6 +3,7 @@ import fs from 'node:fs';
 
 const database = fs.readFileSync('app/src/main/java/com/klortek/velora/offline/OfflineDatabase.kt', 'utf8');
 const manager = fs.readFileSync('app/src/main/java/com/klortek/velora/offline/OfflineDownloadManager.kt', 'utf8');
+const settings = fs.readFileSync('app/src/main/java/com/klortek/velora/jellyfin/AppSettings.kt', 'utf8');
 const identity = fs.readFileSync('app/src/main/java/com/klortek/velora/offline/OfflineIdentity.kt', 'utf8');
 
 assert.match(database, /\n    11\n\)\s*\{/,
@@ -25,5 +26,9 @@ assert.match(manager, /workNameFor\(itemId, quality, serverUrl, userId\)/,
   'WorkManager names must be scoped to the account as well');
 assert.match(manager, /offlineAccountMatches\(first, second\)/,
   'in-memory identity comparisons must include account ownership');
+assert.match(settings, /offlineChargingOnly/,
+  'offline settings must expose an optional charging-only policy');
+assert.match(manager, /setRequiresCharging\(requiresCharging\)/,
+  'offline WorkManager requests must enforce the charging-only policy');
 
 console.log('Offline identity contract passed: server/user scoped SQLite and WorkManager keys are protected.');
