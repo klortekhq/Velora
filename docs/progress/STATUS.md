@@ -182,6 +182,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Revalidación del 2026-09-08: las pantallas Android de música ya usan recursos
   localizados para navegación, cola, transporte, álbumes y artistas; la
   compilación Kotlin de móvil y TV pasó con estas claves nuevas.
+- Revalidación del 2026-09-09: los controles de transporte de las superficies
+  musicales Android (reproducir/pausar y siguiente) ya exponen etiquetas
+  accesibles localizadas también en la vista compacta y en reproducción; la
+  compilación móvil/TV terminó correctamente y el catálogo conserva 508 claves.
 - Revalidación del 2026-09-08: los controles de detalle Android que aún tenían
   etiquetas directas para volver y descargar ahora usan el catálogo localizado;
   `:app:compileMobileDebugKotlin :app:compileTvDebugKotlin` terminó correctamente.

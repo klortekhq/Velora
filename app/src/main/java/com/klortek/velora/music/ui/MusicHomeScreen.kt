@@ -740,7 +740,7 @@ private fun MiniPlayer(
                 IconButton(onClick = onPlayPause) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        contentDescription = stringResource(if (isPlaying) com.klortek.velora.R.string.player_pause else com.klortek.velora.R.string.music_play),
                         tint = Color.White,
                         modifier = Modifier.size(32.dp)
                     )
