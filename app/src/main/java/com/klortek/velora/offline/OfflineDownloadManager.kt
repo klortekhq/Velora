@@ -345,6 +345,7 @@ object OfflineDownloadManager {
     fun cancel(context: Context, entry: OfflineDownload) {
         entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
         if (entry.downloadId > 0L) androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)?.remove(entry.downloadId)
+        OfflineStorageEngine.deletePartial(context, entry.stableKey)
         deleteEntry(context, entry)
     }
 
@@ -387,6 +388,7 @@ object OfflineDownloadManager {
         entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
         if (entry.downloadId > 0L) androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)?.remove(entry.downloadId)
         entry.localPath?.let { deleteLocalUri(context, it) }
+        OfflineStorageEngine.deletePartial(context, entry.stableKey)
         deleteEntry(context, entry)
     }
 
