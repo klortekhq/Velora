@@ -40,6 +40,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `OfflineStoragePolicyTest` cubre los nombres de limpieza y las suites
   unitarias móvil/TV más la compilación Kotlin de ambos perfiles terminan en
   `BUILD SUCCESSFUL` el 2026-09-09.
+- Las APK QA de esta corrección quedaron adjuntas a la pre-release `v1.4.0`:
+  [`Velora-mobile-qa-offline-cleanup.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-offline-cleanup.apk), SHA-256
+  `59015EB79594B20CD0CEAA18861992A4969D00BCED53789686EE88A29D49F7FE`, y
+  [`Velora-tv-qa-offline-cleanup.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-offline-cleanup.apk), SHA-256
+  `0B4EDF9224F6FBDA83DA04F2825F91E05B6297249A926D9872B04D27FC51F9C6`.
 - Última mejora publicada: la superficie musical estilo Apple de Android usa
   ahora recursos localizados para botones y etiquetas de accesibilidad (volver,
   reproducir, aleatorio, cola, transporte y estado actual), en vez de textos
