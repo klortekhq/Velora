@@ -14,6 +14,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   contratos `scripts/check-*.mjs` terminan correctamente, incluidos
   `check-android-content-navigation.mjs`, seguridad, reproducción, offline,
   Apple, web y packaging.
+- El contrato `check-android-content-navigation.mjs` también verifica ahora la
+  integración de agrupación Live TV de Android: construcción de grupos,
+  apertura del selector multifuente y conservación de la variante elegida en
+  el zapping.
 
 ## Estado del repositorio
 
