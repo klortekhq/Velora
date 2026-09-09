@@ -241,6 +241,14 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   La compilación Kotlin y las pruebas `AspectPresentationTest` de móvil y TV
   pasan; queda pendiente la validación física porque no hay un dispositivo ADB
   conectado en este entorno.
+- APKs QA regeneradas desde `4326f03` el 2026-09-09: móvil
+  `app-mobile-debug.apk`, SHA-256
+  `0F64FE5E628D9C027621704B3FA165EC9C58BFC68FCDAA1A1F97C0D6A13035A4`, y TV
+  `app-tv-debug.apk`, SHA-256
+  `62F15E4B7B118B25C2358252DAD094D5E0EB9116353962E1F8FA3D06C1845B4D`.
+  La compilación terminó correctamente. La sustitución de los assets en
+  GitHub queda pendiente de una sesión `gh` autenticada en este entorno; no se
+  marca como publicada hasta verificar `state=uploaded`.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
