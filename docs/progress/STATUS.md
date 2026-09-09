@@ -216,11 +216,16 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Verificación reproducida el 2026-09-09: las APK recién ensambladas desde
   `main` se publicaron además con nombres inequívocos para esta corrección:
   [`Velora-mobile-qa-live-tv-grouping.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-grouping.apk)
-  (SHA-256 `1125BFEB6B6390451D4278716E2650A4BBC5CA3108AFECD11885565DAC848CB2`)
+  (SHA-256 `59015EB79594B20CD0CEAA18861992A4969D00BCED53789686EE88A29D49F7FE`)
   y [`Velora-tv-qa-live-tv-grouping.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-grouping.apk)
-  (SHA-256 `65FBD17F6099BCFFB27A2ABCC83D5E4D5A09744A6835BA05EBED67D3CA8A1D55`).
+  (SHA-256 `0B4EDF9224F6FBDA83DA04F2825F91E05B6297249A926D9872B04D27FC51F9C6`).
   La suite `LiveTvChannelQueryTest` pasa en móvil y TV. Estas son builds QA sin
   firma para comprobar el comportamiento, no releases de tienda.
+- Corrección de aspecto MPV: el selector usa ahora el valor de reinicio
+  documentado `video-aspect-override=no` en lugar de `0.0`, y envía todos los
+  cambios como propiedades de runtime de MPV. Esto evita que la interfaz cambie
+  de etiqueta mientras el vídeo conserva el formato anterior; la regresión
+  queda cubierta por `MpvAspectContainerTest`.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
