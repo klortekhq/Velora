@@ -208,6 +208,11 @@ public final class VeloraAppModel: ObservableObject {
         return try await client.items(userID: session.userID, forPerson: personID)
     }
 
+    public func trailers(for item: JellyfinItem) async -> [JellyfinItem] {
+        guard let session else { return [] }
+        return (try? await client.trailers(for: item.id, userID: session.userID)) ?? []
+    }
+
     public func play(_ item: JellyfinItem) async -> AVPlayer? {
         let configuredServer = (await client.serverURL()).absoluteString
         if let offline = offlineDownloads.first(where: { $0.itemID == item.id && $0.serverURL == configuredServer }),
@@ -481,6 +486,7 @@ private struct VeloraItemDetailView: View {
     @State private var themePlayer: AVPlayer?
     @State private var resumePositionSeconds: Double?
     @State private var showResumePrompt = false
+    @State private var trailers: [JellyfinItem] = []
 
     var body: some View {
         ScrollView {
@@ -504,6 +510,20 @@ private struct VeloraItemDetailView: View {
                     }
                 } label: {
                     Text("Play", bundle: .module)
+                }
+                if let trailer = trailers.first {
+                    Button {
+                        Task {
+                            player = await model.play(trailer)
+                            player?.play()
+                        }
+                    } label: {
+                        Label {
+                            Text("Trailer", bundle: .module)
+                        } icon: {
+                            Image(systemName: "play.rectangle")
+                        }
+                    }
                 }
                 if let player {
                     ZStack(alignment: .topTrailing) {
@@ -634,6 +654,9 @@ private struct VeloraItemDetailView: View {
                 }
                 nextPlayer.volume = Float(step) / 8
             }
+        }
+        .task {
+            trailers = await model.trailers(for: item)
         }
         .onDisappear {
             if let player {

@@ -297,6 +297,20 @@ public actor JellyfinClient {
         return try await request(url, as: JellyfinResult<JellyfinItem>.self).items
     }
 
+    /// Resolve server-managed trailers through the Jellyfin 12 catalog API.
+    /// Trailer items are scoped to the parent media item so the UI never has
+    /// to depend on the removed GetTrailers route or scrape external sources.
+    public func trailers(for itemID: String, userID: String) async throws -> [JellyfinItem] {
+        guard !itemID.isEmpty, !itemID.contains("/"), !itemID.contains("\\"), !userID.isEmpty else { return [] }
+        return try await itemsPage(
+            userID: userID,
+            parentID: itemID,
+            includeTypes: ["Trailer"],
+            startIndex: 0,
+            limit: 20
+        ).items
+    }
+
     public func liveTvChannels(userID: String) async throws -> [JellyfinLiveTvChannel] {
         var components = URLComponents(url: baseURL.appendingPathComponent("LiveTv/Channels"), resolvingAgainstBaseURL: false)
         components?.queryItems = [

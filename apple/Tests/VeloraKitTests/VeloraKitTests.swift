@@ -74,6 +74,29 @@ final class VeloraKitTests: XCTestCase {
         MockURLProtocol.handler = nil
     }
 
+    func testTrailersUseJellyfin12ItemsCatalogContract() async throws {
+        MockURLProtocol.handler = { request in
+            guard let requestURL = request.url else {
+                XCTFail("Expected a trailer catalog URL")
+                fatalError("Missing trailer catalog URL")
+            }
+            let components = URLComponents(url: requestURL, resolvingAgainstBaseURL: false)
+            XCTAssertEqual(request.url?.path, "/Items")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "ParentId" })?.value, "movie-1")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "IncludeItemTypes" })?.value, "Trailer")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Token=\"session-secret\"")
+            let response = HTTPURLResponse(url: requestURL, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+            return (response, Data(#"{"Items":[{"Id":"trailer-1","Name":"Trailer","Type":"Trailer"}],"TotalRecordCount":1}"#.utf8))
+        }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.example.test:8096")!, session: URLSession(configuration: configuration))
+        await client.setAccessToken("session-secret")
+        let trailers = try await client.trailers(for: "movie-1", userID: "user-1")
+        XCTAssertEqual(trailers.map(\.id), ["trailer-1"])
+        MockURLProtocol.handler = nil
+    }
+
     func testPlaybackPrefersDirectPlay() {
         let caps = PlaybackCapabilities(videoCodecs: ["H264"], audioCodecs: ["AAC"], containers: ["MP4"])
         let source = PlaybackSource(container: "MP4", videoCodec: "H264", audioCodec: "AAC")
