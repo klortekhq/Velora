@@ -531,4 +531,6 @@ Podrás descargarlos de nuevo cuando quieras.</string>
     <string name="settings_logout_confirm_message">¿Seguro que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tus contenidos.</string>
     <string name="settings_version">Versión %1$s</string>
     <string name="settings_by_klortek">Por Klørtek</string>
+    <string name="download_started">Descarga iniciada</string>
+    <string name="download_insufficient_space">No hay espacio suficiente para esta descarga</string>
 </resources>

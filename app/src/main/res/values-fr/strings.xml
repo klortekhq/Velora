@@ -494,4 +494,6 @@ Vous pourrez les télécharger à nouveau quand vous le souhaitez.</string>
   <string name="settings_logout_confirm_message">Voulez-vous vraiment vous déconnecter ? Vous devrez vous reconnecter pour accéder à vos contenus.</string>
   <string name="settings_version">Version %1$s</string>
   <string name="settings_by_klortek">Par Klørtek</string>
+  <string name="download_started">Téléchargement démarré</string>
+  <string name="download_insufficient_space">Espace insuffisant pour ce téléchargement</string>
 </resources>

@@ -492,4 +492,6 @@ Du kannst sie jederzeit erneut herunterladen.</string>
   <string name="settings_logout_confirm_message">Möchtest du dich wirklich abmelden? Für den Zugriff auf deine Inhalte musst du dich erneut anmelden.</string>
   <string name="settings_version">Version %1$s</string>
   <string name="settings_by_klortek">Von Klørtek</string>
+  <string name="download_started">Download gestartet</string>
+  <string name="download_insufficient_space">Nicht genügend Speicherplatz für diesen Download</string>
 </resources>

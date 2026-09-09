@@ -276,9 +276,17 @@ fun MovieDetailsScreen(
                             estimatedBytes = displayItem.MediaSources?.firstOrNull()?.Size
                         )
                     }.onSuccess {
-                        android.widget.Toast.makeText(context, "Descarga iniciada", android.widget.Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(
+                            context,
+                            context.getString(com.klortek.velora.R.string.download_started),
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
                     }.onFailure {
-                        android.widget.Toast.makeText(context, "No hay espacio suficiente para esta descarga", android.widget.Toast.LENGTH_LONG).show()
+                        android.widget.Toast.makeText(
+                            context,
+                            context.getString(com.klortek.velora.R.string.download_insufficient_space),
+                            android.widget.Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
