@@ -62,6 +62,33 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun equivalentVisibleChannelsWithDifferentProviderIdsBecomeOneRow() {
+        val principal = LiveTvChannel(
+            "provider-main-id",
+            "DAZN F1",
+            ChannelNumber = "201",
+            Type = "Principal",
+            MediaSources = listOf(MediaSource(Id = "source-main"))
+        )
+        val iptv = LiveTvChannel(
+            "provider-iptv-id",
+            "  DAZN   F1 ",
+            ChannelNumber = "201",
+            Type = "IPTV",
+            MediaSources = listOf(MediaSource(Id = "source-iptv"))
+        )
+
+        val groups = groupLiveTvChannels(listOf(principal, iptv))
+
+        assertEquals(1, groups.size)
+        assertEquals(2, groups.single().channels.size)
+        assertEquals(
+            listOf("source-main", "source-iptv"),
+            groups.single().channels.map(::liveTvMediaSourceId)
+        )
+    }
+
+    @Test
     fun groupedChannelCountRepresentsVisibleRows() {
         val duplicate = LiveTvChannel("same-id", "DAZN F1")
         val groups = groupLiveTvChannels(listOf(duplicate, duplicate))

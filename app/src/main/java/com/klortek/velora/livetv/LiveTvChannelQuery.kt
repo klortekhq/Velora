@@ -59,16 +59,41 @@ private fun liveTvChannelPrimaryScore(channel: LiveTvChannel): Int =
         (if (!channel.ChannelNumber.isNullOrBlank()) 1 else 0)
 
 /**
- * Collapses duplicate provider entries into one channel row. Jellyfin's Id is
- * the authoritative identity; the fallback only protects malformed provider
- * data where Id is empty, without merging unrelated numbered channels.
+ * Collapses duplicate provider entries into one channel row.
+ *
+ * Jellyfin normally gives every provider row a stable Id, but IPTV/tuner
+ * integrations can emit different Ids for the same visible channel. In that
+ * case the user-facing identity is the channel number plus normalized name;
+ * the provider/source metadata remains inside the selectable options. When
+ * that metadata is missing, the Jellyfin Id remains the safe fallback.
  */
 fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup> {
     val groups = linkedMapOf<String, MutableList<LiveTvChannel>>()
+    val aliases = mutableMapOf<String, String>()
     channels.forEach { channel ->
-        val key = channel.Id.ifBlank {
-            "fallback:${channel.ChannelNumber.orEmpty()}|${channel.Name.trim().lowercase()}"
+        val identityName = channel.Name.trim().lowercase().replace(Regex("\\s+"), " ")
+        val identityNumber = channel.ChannelNumber?.trim().orEmpty()
+        val visibleIdentity = when {
+            identityName.isNotBlank() && identityNumber.isNotBlank() ->
+                "visible:$identityNumber|$identityName"
+            identityName.isNotBlank() -> "visible:$identityName"
+            else -> null
         }
+        val idIdentity = channel.Id.takeIf { it.isNotBlank() }
+        val identities = listOfNotNull(idIdentity, visibleIdentity)
+        val matchedGroups = identities.mapNotNull { aliases[it] }.distinct()
+        val key = matchedGroups.firstOrNull() ?: identities.firstOrNull() ?: "fallback:${groups.size}"
+
+        // A source may arrive with an ID already seen through another visible
+        // identity. Merge those aliases so both the ID and name/number keep
+        // pointing to the same user-facing row.
+        matchedGroups.drop(1).forEach { otherKey ->
+            if (otherKey != key) {
+                groups.remove(otherKey)?.let { groups.getOrPut(key) { mutableListOf() }.addAll(it) }
+                aliases.entries.filter { it.value == otherKey }.forEach { aliases[it.key] = key }
+            }
+        }
+        identities.forEach { aliases[it] = key }
         val sources = channel.MediaSources.orEmpty()
         if (sources.size <= 1) {
             groups.getOrPut(key) { mutableListOf() }.add(channel)
