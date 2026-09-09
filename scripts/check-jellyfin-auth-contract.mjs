@@ -60,7 +60,7 @@ for (const directory of jellyfin12Files) {
   for (const file of walk(directory)) {
     if (!/\.(kt|swift|js|ps1)$/.test(file)) continue;
     const source = fs.readFileSync(file, 'utf8');
-    if (/X-Emby-(?:Authorization|Token)/.test(source)) {
+    if (/X-Emby-(?:Authorization|Token|Client)/.test(source)) {
       throw new Error(`Jellyfin 12: cabecera legacy encontrada en ${path.relative(root, file)}`);
     }
   }

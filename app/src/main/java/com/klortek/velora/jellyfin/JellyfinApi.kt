@@ -1054,7 +1054,7 @@ class JellyfinApiService(
         // IMPORTANT: MPV/FFmpeg requires correct parameter casing
         // - mediaSourceId (camelCase, not MediaSourceId)
         // - static (lowercase, not Static)
-        // Authentication is sent by the MediaBrowser/X-Emby headers configured
+        // Authentication is sent by the standard MediaBrowser header configured
         // on the native player. Keep the access token out of the playback URL.
         val url = URLBuilder().takeFrom("${base}Videos/$itemId/stream").apply {
             subtitleStreamIndex?.let { 

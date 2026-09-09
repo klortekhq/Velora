@@ -205,7 +205,6 @@ public actor JellyfinClient {
     public func authorizedRequest(for url: URL) -> URLRequest {
         let safeURL = sanitizedServerMediaURL(url) ?? url
         var request = URLRequest(url: safeURL)
-        request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
         if isServerURL(safeURL), let accessToken {
             request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
         }
@@ -382,7 +381,6 @@ public actor JellyfinClient {
         var request = URLRequest(url: baseURL.appendingPathComponent("Sessions/Playing/Stopped"))
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken {
             request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
         }
@@ -394,7 +392,6 @@ public actor JellyfinClient {
 
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
-        request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
         if let accessToken {
             request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
         }
