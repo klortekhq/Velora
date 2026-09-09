@@ -89,6 +89,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   de ejecución en macOS/Xcode, que no está disponible en este host Windows.
 - Release multiplataforma v1.4.0: se añadieron los paquetes web y Smart TV a
   la misma pre-release que las APK: [Web ZIP](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-Web-all.zip), [Web tar.gz](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-Web-all.tar.gz), [webOS IPK](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-webos-1.4.0.ipk), [Samsung/Tizen bundle](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-samsung-bundle-1.4.0.zip) y [VIDAA bundle](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-vidaa-bundle-1.4.0.zip). Los hashes reproducibles están en [SHA256SUMS-web.txt](https://github.com/klortekhq/Velora/releases/download/v1.4.0/SHA256SUMS-web.txt). El bundle Samsung no se presenta como WGT firmado al faltar Tizen Studio/perfil.
+- Los paquetes web de `v1.4.0` se regeneraron después de `666bddc` para que
+  incluyan la corrección de alias Live TV: Samsung
+  `1A4D5E69723C8C6EF64C1C74014C1EC6E947E7607350C74FDC1E85A0F42A2CF0`, VIDAA
+  `76C3E8A6DADEFDB9C510248EEC86BB1E7E17A5EC8445ABADB4522AEE4BE1E597`, Web
+  ZIP `7C2923DB0E3328B1B346362C76BBDA5EE697BAE812DA958B0EC5DF014F393E8F`,
+  Web tar.gz `0A8E0875639C6F7878C8A048AA1D857A732E8C77B636D1D413BA5F8BDBB9F0F0`
+  e IPK webOS `E5044558742D3836208F3CFF4EA444AF0985568C304E01E686367AAB5E6F5603`.
 - Las APK QA del cambio `362b939` quedaron adjuntas a `v1.4.0`: [`Velora-mobile-qa-live-tv-focus.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-focus.apk), SHA-256 `C8EE5996303F0E33D6744F20F3FA91DF419BBC99D3F9D6BE135F87CF5700097F`, y [`Velora-tv-qa-live-tv-focus.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-focus.apk), SHA-256 `3CB9EF0F9B5BFCBD9114D798A2F010C0DAD70B28099CE4CF883CEF1CA338DF6A`.
 - Las APK generadas desde `0ce17b7` incorporan esta mejora y quedaron
   publicadas en `v1.4.0` como [`Velora-mobile-qa-live-tv-filters.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-filters.apk),
