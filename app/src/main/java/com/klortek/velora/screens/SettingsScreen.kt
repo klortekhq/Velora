@@ -288,7 +288,6 @@ fun SettingsScreen(
     var showJellyseerrLoginDialog by remember { mutableStateOf(false) }
     var isLoggingIn by remember { mutableStateOf(false) }
     var loginError by remember { mutableStateOf<String?>(null) }
-    var jellyseerrEnabled by remember { mutableStateOf(settings.jellyseerrEnabled) }
     var jellyseerrSearchEnabled by remember { mutableStateOf(settings.jellyseerrSearchEnabled) }
     
     // MPV Shader Profile
@@ -1592,7 +1591,9 @@ fun SettingsScreen(
                                 }
                             }
                             
-                            // Enable Jellyseerr Discover Tab toggle (only show if configured)
+                            // Discovery is deliberately not part of Velora's product
+                            // surface. Keep the optional search integration separate,
+                            // but never expose a toggle that can resurrect a Discover tab.
                             val isJellyseerrConfigured = jellyseerrUrl.isNotBlank() && (
                                 (jellyseerrAuthType == "api_key" && jellyseerrApiKey.isNotBlank()) ||
                                 (jellyseerrAuthType == "credentials" && jellyseerrSessionCookie.isNotBlank())
@@ -1600,16 +1601,6 @@ fun SettingsScreen(
                             
                             if (isJellyseerrConfigured) {
                                 Spacer(modifier = Modifier.height(8.dp))
-                                
-                                SettingToggle(
-                                    title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_discover),
-                                    description = stringResource(com.klortek.velora.R.string.settings_jellyseerr_discover_description),
-                                    isEnabled = jellyseerrEnabled,
-                                    onToggle = {
-                                        jellyseerrEnabled = !jellyseerrEnabled
-                                        settings.jellyseerrEnabled = jellyseerrEnabled
-                                    }
-                                )
                                 
                                 SettingToggle(
                                     title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_search),

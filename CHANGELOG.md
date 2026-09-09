@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- **Navegación Android:** Discovery ya no se muestra en películas, series ni
+  Ajustes; la experiencia queda centrada en Recomendaciones, Biblioteca y
+  búsqueda opcional.
+
 - **Reproducción móvil:** el control de pantalla completa está disponible en
   la fila principal del reproductor, con entrada y salida explícitas mediante
   toque y etiquetas accesibles; no es necesario girar el teléfono.
