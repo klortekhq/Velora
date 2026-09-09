@@ -146,6 +146,9 @@ assert.match(appSource, /liveSourceLabel/);
 assert.match(appSource, /Array\.isArray\(channel\.MediaSources\)/);
 assert.match(appSource, /MediaSources: \[source\]/);
 assert.match(appSource, /data-source-index/);
+assert.match(appSource, /state\.returnFocus\s*=\s*opener/);
+assert.match(appSource, /var closePicker\s*=\s*function/);
+assert.match(appSource, /document\.querySelector\('#liveSourcePicker'\)/);
 assert.match(appSource, /function filteredLiveChannels/);
 assert.match(appSource, /StartIndex=' \+ encodeURIComponent\(startIndex\)/);
 assert.match(appSource, /function loadMoreItems/);
@@ -159,6 +162,7 @@ assert.match(appSource, /role="tab" aria-selected="true" aria-controls="results"
 assert.match(appSource, /role="tabpanel" tabindex="0"/);
 assert.match(appSource, /setAttribute\('aria-selected', candidate === tab \? 'true' : 'false'\)/);
 assert.match(appSource, /event\.key !== 'Escape'/);
+assert.match(appSource, /var liveSourcePicker = document\.querySelector\('#liveSourcePicker'\)/);
 assert.doesNotMatch(appSource, /data-velora-image-id[^>]+src=/);
 const proxySource = fs.readFileSync(new URL('../media-proxy-sw.js', import.meta.url), 'utf8');
 assert.match(proxySource, /function normalizeServer/);

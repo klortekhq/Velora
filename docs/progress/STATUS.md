@@ -15,6 +15,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `BUILD SUCCESSFUL` (`:app:testMobileDebugUnitTest` y
   `:app:testTvDebugUnitTest`). Se mantienen únicamente avisos de APIs
   obsoletas ya conocidos; no hay fallos de prueba.
+- Live TV web: el selector de fuentes conserva el foco del canal que lo abrió,
+  puede cerrarse con Atrás/Escape y devuelve el foco al cerrar o elegir una
+  fuente. `web/scripts/test-platform.mjs` pasa y `node web/scripts/build-web.mjs
+  all` regenera correctamente el bundle web y el IPK webOS; Samsung queda como
+  bundle preparado y VIDAA como HTML5 sin afirmar firma ni certificación.
 - Revalidación posterior al cambio de reparto TV (2026-09-09): los 20
   contratos `scripts/check-*.mjs` terminan correctamente, incluidos
   `check-android-content-navigation.mjs`, seguridad, reproducción, offline,
