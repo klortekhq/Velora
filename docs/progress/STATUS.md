@@ -16,9 +16,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   rama pública.
 - La consulta independiente a `origin` confirma únicamente `refs/heads/main`
   en GitHub. No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: los menús de audio y subtítulos del
-  reproductor Android usan ahora el catálogo localizado también durante la
-  carga, selección de pista y estados de pista. El cambio está en `f8c9e89`.
+- Último cambio funcional documentado: el selector de formato de imagen del
+  reproductor Android ya no puede ser sobrescrito por el bucle de actualización
+  de dimensiones de Media3; el modo elegido se conserva al cambiar de stream y
+  al entrar en pantalla completa. El cambio está en `123eef9`.
+- Los menús de audio y subtítulos del reproductor Android usan el catálogo
+  localizado también durante la carga, selección de pista y estados de pista;
+  quedó en `f8c9e89`.
 - `PlaybackInfo` usa la identidad real de la variante Android (móvil o TV) y
   el `deviceId` persistido, en lugar de identificarse siempre como Android TV
   con un identificador vacío.
@@ -132,6 +136,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   incluido el menú de pulsación prolongada en TV, quedaron sin textos
   hardcodeados en español; el catálogo, la compilación móvil/TV y las suites
   unitarias de ambas variantes pasan.
+- Revalidación del 2026-09-09: el guardia de política de reproducción exige
+  que el efecto de refresco de dimensiones incluya el modo de aspecto como
+  dependencia; las suites unitarias móvil/TV terminan correctamente tras el
+  arreglo del selector.
 - Revalidación web/Smart TV del 2026-09-09 en salida QA aislada:
   `node web/scripts/test-platform.mjs` y los contratos de versión, identidad,
   releases y superficies offline pasaron. `node web/scripts/build-web.mjs all`
