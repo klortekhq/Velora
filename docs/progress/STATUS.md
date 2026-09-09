@@ -46,6 +46,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   música ya consultaban `Users/{userId}/Items`, evitando los endpoints legacy
   retirados. Validado con los contratos web/release y las suites Android móvil
   y TV el 2026-09-09.
+- Apple SwiftUI: los entrypoints móvil y tvOS conservan ahora una única
+  instancia de `VeloraAppShell` en `@State`; ya no reconstruyen el cliente,
+  la sesión ni el estado de navegación durante cada recomposición. El contrato
+  `check-apple-lifecycle.mjs` queda conectado a CI y al workflow Apple; la
+  compilación nativa sigue pendiente del runner macOS con Xcode.
 - Los layouts de detalle móvil de películas y series incorporan `statusBarsPadding`
   y `navigationBarsPadding`; el contrato `check-mobile-layout-insets.mjs` lo
   protege. La regresión móvil/TV posterior terminó en `BUILD SUCCESSFUL` el
