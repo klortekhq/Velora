@@ -173,6 +173,7 @@
   <string name="settings_offline_charging_only">Solo mientras carga</string>
   <string name="settings_offline_charging_only_description">Espera a que el dispositivo esté conectado a la corriente antes de descargar.</string>
   <string name="offline_transfer_stats">%1$d%% · %2$s/s · quedan %3$s</string>
+  <string name="action_pause">Pausar</string>
   <string name="quick_connect_step_one">Paso 1: Abre Jellyfin en tu móvil o navegador</string>
   <string name="quick_connect_step_two">Paso 2: Ve a Quick Connect en los ajustes de usuario</string>
   <string name="quick_connect_step_three">Paso 3: Introduce el código siguiente</string>

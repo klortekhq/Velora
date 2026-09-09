@@ -132,6 +132,7 @@
     <string name="settings_offline_charging_only">Solo mientras carga</string>
     <string name="settings_offline_charging_only_description">Espera a que el dispositivo esté conectado a la corriente antes de descargar.</string>
     <string name="offline_transfer_stats">%1$d%% · %2$s/s · quedan %3$s</string>
+    <string name="action_pause">Pausar</string>
     <string name="login_title">Iniciar sesión</string>
     <string name="login_connecting">Conectando con %1$s</string>
     <string name="login_other_options">Otras opciones:</string>

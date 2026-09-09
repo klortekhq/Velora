@@ -30,6 +30,12 @@ assert.match(settings, /offlineChargingOnly/,
   'offline settings must expose an optional charging-only policy');
 assert.match(manager, /setRequiresCharging\(requiresCharging\)/,
   'offline WorkManager requests must enforce the charging-only policy');
+assert.match(manager, /fun pause\(context: Context, entry: OfflineDownload\)/,
+  'offline downloads must support reversible pause');
+assert.match(manager, /fun resume\(context: Context, entry: OfflineDownload\)/,
+  'offline downloads must support durable resume');
+assert.match(manager, /entry.state != OfflineDownloadState.PAUSED/,
+  'paused downloads must not be silently re-enqueued during refresh');
 assert.match(database, /speed_bps INTEGER NOT NULL DEFAULT 0/,
   'offline database must persist transfer speed');
 assert.match(database, /eta_seconds INTEGER/,

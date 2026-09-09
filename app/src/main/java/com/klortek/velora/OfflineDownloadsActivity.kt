@@ -74,7 +74,9 @@ class OfflineDownloadsActivity : ComponentActivity() {
                             }
                         }
                     },
-                    onDelete = { entry -> OfflineDownloadManager.delete(this, entry); refresh++ }
+                    onDelete = { entry -> OfflineDownloadManager.delete(this, entry); refresh++ },
+                    onPause = { entry -> OfflineDownloadManager.pause(this, entry); refresh++ },
+                    onResume = { entry -> OfflineDownloadManager.resume(this, entry); refresh++ }
                 )
             }
         }
@@ -83,7 +85,13 @@ class OfflineDownloadsActivity : ComponentActivity() {
     private var refresh by mutableStateOf(0)
 
     @androidx.compose.runtime.Composable
-    private fun OfflineDownloadsScreen(onBack: () -> Unit, onPlay: (OfflineDownload) -> Unit, onDelete: (OfflineDownload) -> Unit) {
+    private fun OfflineDownloadsScreen(
+        onBack: () -> Unit,
+        onPlay: (OfflineDownload) -> Unit,
+        onDelete: (OfflineDownload) -> Unit,
+        onPause: (OfflineDownload) -> Unit,
+        onResume: (OfflineDownload) -> Unit
+    ) {
         refresh
         val config = remember { JellyfinConfig(this@OfflineDownloadsActivity) }
         var entries by remember { mutableStateOf(emptyList<OfflineDownload>()) }
@@ -132,7 +140,13 @@ class OfflineDownloadsActivity : ComponentActivity() {
                                     style = MaterialTheme.typography.labelMedium
                                 )
                             }
-                            if (entry.isComplete) IconButton(onClick = { onPlay(entry) }) { Icon(Icons.Default.PlayArrow, stringResource(R.string.action_play)) }
+                            if (entry.isComplete) {
+                                IconButton(onClick = { onPlay(entry) }) { Icon(Icons.Default.PlayArrow, stringResource(R.string.action_play)) }
+                            } else if (entry.state == com.klortek.velora.offline.OfflineDownloadState.PAUSED) {
+                                Button(onClick = { onResume(entry) }) { Text(stringResource(R.string.action_resume)) }
+                            } else {
+                                Button(onClick = { onPause(entry) }) { Text(stringResource(R.string.action_pause)) }
+                            }
                             Button(onClick = { onDelete(entry) }) { Icon(Icons.Default.Delete, stringResource(R.string.action_delete)) }
                         }
                     }
