@@ -76,6 +76,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   web/API. Esto protege bibliotecas IPTV grandes sin alterar la agrupación por
   ID ni el selector de fuentes. La compilación Swift y la prueba en dispositivos
   Apple siguen pendientes por falta de macOS/Xcode y hardware Apple.
+- Internacionalización Android del 2026-09-09: el catálogo español ya contiene
+  las 508 claves base y queda incluido en el verificador de catálogos completos;
+  los idiomas adicionales siguen usando fallback seguro mientras se completa
+  su traducción.
 - Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
   peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de

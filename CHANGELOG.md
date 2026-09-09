@@ -14,6 +14,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Live TV multiplataforma: Apple y web aplican la misma paginación de canales
   (`StartIndex`/`Limit`/`TotalRecordCount`), de modo que las listas IPTV grandes
   no pierden canales y siguen permitiendo agrupar fuentes bajo el mismo canal.
+- Android: el catálogo español se completa con todas las claves de producto y
+  queda protegido por CI junto con inglés, francés y alemán.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
