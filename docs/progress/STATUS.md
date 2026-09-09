@@ -166,6 +166,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   ni URL. Se añadió una prueba específica para Principal/IPTV; la compilación
   Swift queda pendiente de la ejecución macOS de CI porque este host no tiene
   Swift/Xcode.
+- Corrección Apple del 2026-09-09: al elegir una fuente alternativa de Live TV,
+  `PlaybackInfo` ya no usa siempre la primera fuente devuelta por Jellyfin.
+  Velora conserva la opción elegida por `MediaSourceId` o `LiveStreamId` y solo
+  hace fallback a la primera cuando el servidor no devuelve identificadores;
+  queda cubierta por prueba unitaria.
 - Mejora offline Android del 2026-09-09: el índice SQLite sube a la versión
   10 y conserva la URL del servidor y el ID de usuario asociados a cada
   representación descargada. La migración desde versiones anteriores y desde

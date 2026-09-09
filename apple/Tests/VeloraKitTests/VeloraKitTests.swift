@@ -336,6 +336,32 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(info.mediaSources.first?.transcodingURL?.path, "/Videos/channel-1/stream.m3u8")
     }
 
+    func testLiveTvPlaybackSelectsRequestedSourceInsteadOfAlwaysUsingFirst() {
+        let primary = JellyfinLiveTvMediaSource(
+            id: "source-primary",
+            liveStreamID: "live-primary",
+            directStreamURL: URL(string: "http://jellyfin.local/primary.m3u8")
+        )
+        let iptv = JellyfinLiveTvMediaSource(
+            id: "source-iptv",
+            liveStreamID: "live-iptv",
+            directStreamURL: URL(string: "http://jellyfin.local/iptv.m3u8")
+        )
+
+        XCTAssertEqual(
+            JellyfinClient.selectLiveTvMediaSource([primary, iptv], requestedID: "source-iptv")?.id,
+            "source-iptv"
+        )
+        XCTAssertEqual(
+            JellyfinClient.selectLiveTvMediaSource([primary, iptv], requestedID: "live-iptv")?.id,
+            "source-iptv"
+        )
+        XCTAssertEqual(
+            JellyfinClient.selectLiveTvMediaSource([primary, iptv], requestedID: "unknown")?.id,
+            "source-primary"
+        )
+    }
+
     func testPlaybackStoppedRequestUsesJellyfinFieldNamesAndClampsPosition() throws {
         let request = JellyfinPlaybackStoppedRequest(itemID: "channel-1", positionTicks: 0)
         let json = try JSONSerialization.jsonObject(with: JSONEncoder().encode(request)) as? [String: Any]
