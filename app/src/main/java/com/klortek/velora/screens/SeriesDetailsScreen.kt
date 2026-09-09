@@ -874,7 +874,7 @@ fun SeriesTopContainer(
                                                 .verticalScroll(rememberScrollState())
                                         ) {
                                             Text(
-                                text = "Sinopsis",
+                                text = stringResource(R.string.details_overview),
                                                 style = MaterialTheme.typography.headlineMedium,
                                                 color = MaterialTheme.colorScheme.onSurface,
                                                 modifier = Modifier.padding(bottom = 16.dp)
@@ -3207,7 +3207,7 @@ fun EpisodeSubtitleSelectionDialog(
                                     colors = listItemColors,
                                     headlineContent = {
                                         Text(
-                                            text = "Ninguno (desactivados)",
+                                            text = stringResource(R.string.player_subtitles_none),
                                             style = MaterialTheme.typography.bodyMedium.copy(
                                                 fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.7f
                                             )
