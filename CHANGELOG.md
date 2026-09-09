@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Android móvil/tablet: la ficha de información técnica queda limitada a
+  formato, códec, resolución, FPS, HDR y pistas de audio; nunca presenta la
+  ruta ni el nombre interno del archivo. Un contrato de CI protege esta
+  separación.
 - Seguridad Android: se retiraron de Logcat títulos, IDs, posiciones de
   reproducción y metadatos de proveedores en las rutas de autenticación y
   catálogo; CI impide que vuelvan a introducirse.

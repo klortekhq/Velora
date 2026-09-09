@@ -16,7 +16,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   rama pública.
 - La consulta independiente a `origin` confirma únicamente `refs/heads/main`
   en GitHub. No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: el selector de formato de imagen del
+- Último cambio funcional documentado: la ficha de información técnica móvil
+  queda protegida para mostrar solo formato de vídeo/audio, códec, resolución,
+  FPS y HDR; el contrato `check-mobile-file-info.mjs` impide que se vuelvan a
+  mostrar nombres o rutas internas. La regresión Android móvil/TV terminó en
+  `BUILD SUCCESSFUL` el 2026-09-09.
+- Último cambio funcional documentado anteriormente: el selector de formato de imagen del
   reproductor Android ya no puede ser sobrescrito por el bucle de actualización
   de dimensiones de Media3; el modo elegido se conserva al cambiar de stream y
   al entrar en pantalla completa. El cambio está en `123eef9`.
