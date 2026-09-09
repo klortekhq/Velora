@@ -352,9 +352,27 @@ public actor JellyfinClient {
             throw http.statusCode == 401 ? ClientError.unauthorized : ClientError.invalidResponse
         }
         let info = try JSONDecoder().decode(JellyfinLiveTvPlaybackInfo.self, from: data)
-        let selected = info.mediaSources.first?.transcodingURL ?? info.mediaSources.first?.directStreamURL
+        // Jellyfin may return more than one playable source even after a
+        // MediaSourceId was supplied. Keep the source selected in Velora's
+        // picker when the server echoes its ID (or LiveStreamId); only fall
+        // back to the first source for servers that omit those identifiers.
+        let selectedSource = Self.selectLiveTvMediaSource(
+            info.mediaSources,
+            requestedID: mediaSourceID
+        )
+        let selected = selectedSource?.transcodingURL ?? selectedSource?.directStreamURL
         guard let selected else { return nil }
         return sanitizedServerMediaURL(selected)
+    }
+
+    static func selectLiveTvMediaSource(
+        _ sources: [JellyfinLiveTvMediaSource],
+        requestedID: String?
+    ) -> JellyfinLiveTvMediaSource? {
+        guard let requestedID, !requestedID.isEmpty else { return sources.first }
+        return sources.first {
+            $0.id == requestedID || $0.liveStreamID == requestedID
+        } ?? sources.first
     }
 
     /// Releases a Live TV session and updates Jellyfin's playback state.
