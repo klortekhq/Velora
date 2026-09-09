@@ -50,7 +50,7 @@ final class VeloraKitTests: XCTestCase {
     func testThemeSongURLUsesAuthenticatedServerPathWithoutTokenQuery() async throws {
         MockURLProtocol.handler = { request in
             XCTAssertEqual(request.url?.path, "/Items/title-1/ThemeSongs")
-            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Token=\"session-secret\"")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"1.4.0\", Token=\"session-secret\"")
             let response = HTTPURLResponse(
                 url: request.url!, statusCode: 200, httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
@@ -84,7 +84,7 @@ final class VeloraKitTests: XCTestCase {
             XCTAssertEqual(request.url?.path, "/Items")
             XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "ParentId" })?.value, "movie-1")
             XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "IncludeItemTypes" })?.value, "Trailer")
-            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Token=\"session-secret\"")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"1.4.0\", Token=\"session-secret\"")
             let response = HTTPURLResponse(url: requestURL, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
             return (response, Data(#"{"Items":[{"Id":"trailer-1","Name":"Trailer","Type":"Trailer"}],"TotalRecordCount":1}"#.utf8))
         }
@@ -423,7 +423,7 @@ final class VeloraKitTests: XCTestCase {
         let credentialed = URL(string: "http://jellyfin.local:8096/Videos/movie-one/stream?api_key=secret&quality=original")!
         let request = await client.authorizedRequest(for: credentialed)
         XCTAssertEqual(request.url?.query, "quality=original")
-        XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Token=\"session-secret\"")
+        XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"1.4.0\", Token=\"session-secret\"")
     }
 
     func testAuthorizedRequestDoesNotSendTokenToAnotherHost() async throws {

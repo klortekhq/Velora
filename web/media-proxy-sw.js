@@ -7,6 +7,10 @@
 
 var credentials = { server: '', token: '' };
 
+function mediaBrowserAuthorization() {
+  return 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="1.4.0", Token="' + credentials.token + '"';
+}
+
 function normalizeServer(value) {
   try {
     var parsed = new URL(String(value || '').trim());
@@ -76,7 +80,7 @@ self.addEventListener('fetch', function (event) {
         if (sensitiveNames.indexOf(String(name).toLowerCase()) !== -1) target.searchParams.delete(name);
       });
     var headers = new Headers(event.request.headers);
-      headers.set('Authorization', 'MediaBrowser Token="' + credentials.token + '"');
+      headers.set('Authorization', mediaBrowserAuthorization());
     headers.delete('Cookie');
     return fetch(new Request(target.href, {
       method: event.request.method,

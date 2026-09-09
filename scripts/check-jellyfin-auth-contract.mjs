@@ -42,6 +42,9 @@ for (const [name, file] of Object.entries(files)) {
   if (name === 'androidCatalog' && /MediaBrowser Token=\\"\$accessToken\\"/.test(source)) {
     throw new Error('androidCatalog: quedan cabeceras MediaBrowser token-only en JellyfinApi.kt');
   }
+  if (name === 'apple' && source.includes('MediaBrowser Token=\\"\\(accessToken)\\"')) {
+    throw new Error('apple: quedan cabeceras MediaBrowser token-only en JellyfinClient.swift');
+  }
   if (name === 'androidCatalog') continue;
   if (!source.includes(required[name])) {
     throw new Error(`${name}: falta el campo Jellyfin Pw en ${path.relative(root, file)}`);
