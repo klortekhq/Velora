@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Live TV: los filtros de favoritos y grupos conservan la interacción táctil y
+  muestran ahora un realce de foco visible para mando y teclado, también cuando
+  la opción todavía no está seleccionada.
 - Jellyfin 12.0/Live TV: los canales M3U ya no intentan reproducirse como
   direct-play aunque un proveedor antiguo anuncie una ruta directa; Velora
   usa la sesión `LiveStreamId` y el remux negociado por Jellyfin para evitar
