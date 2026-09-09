@@ -10,7 +10,7 @@ una comprobación no se interpreta como soporte certificado.
 Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
 de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
-- Revalidación completa del 2026-09-10: los 22 contratos `scripts/check-*.mjs`
+- Revalidación completa del 2026-09-10: los 23 contratos `scripts/check-*.mjs`
   terminan correctamente y las suites unitarias Android móvil/TV terminan en
   `BUILD SUCCESSFUL` (`:app:testMobileDebugUnitTest` y
   `:app:testTvDebugUnitTest`). Se mantienen únicamente avisos de APIs
@@ -53,6 +53,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   ya no cae al inglés en árabe, italiano, japonés, coreano, portugués, ruso,
   turco ni chino. El contrato de catálogos valida que estas acciones tengan
   traducción propia; la suite móvil/TV termina en `BUILD SUCCESSFUL`.
+- APKs QA de internacionalización regeneradas el 2026-09-10 desde `main`:
+  móvil SHA-256
+  `A7194207C132AA4AD4AD6EB4CD1172FCD89EBA2081C6DC11C2930ABB072E9721` y TV
+  SHA-256 `93ED50BFA7744AD6350AD73A3CC3D9FE96F8313DDF591BCEC0DFA9FFFC11F973`.
+  Ambos están visibles en la pre-release pública `v1.4.0`: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-i18n-20260910.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-i18n-20260910.apk).
+  Son APK debug de QA, no builds release firmadas para tienda.
 - Pantalla de inicio de sesión Android: el contrato
   `check-android-login-layout.mjs` protege safe area, desplazamiento vertical,
   tamaños adaptativos de los campos y foco de mando en el botón TV. La
