@@ -116,7 +116,7 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Ambas tareas terminaron en `BUILD SUCCESSFUL`; siguen sin firma y no se
   publican como releases.
 - APK móvil de QA subida el 2026-09-09 a la pre-release `v1.4.0` de GitHub:
-  [app-mobile-debug.apk](https://github.com/klortekhq/Velora/releases/tag/v1.4.0),
+  [Velora-mobile-qa-v1.4.0.apk](https://github.com/klortekhq/Velora/releases/tag/v1.4.0),
   SHA-256 `e51b392d545164faafafa72fd6de9d048609870f22228cd6581a3c758174c432`.
   Está marcada como pre-release y QA; no se presenta como distribución firmada.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
