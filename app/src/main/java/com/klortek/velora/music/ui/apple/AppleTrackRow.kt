@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -85,7 +86,7 @@ fun AppleTrackRow(
                     isCurrentTrack && isPlaying -> {
                         Icon(
                             imageVector = Icons.Default.GraphicEq,
-                            contentDescription = "Playing",
+                            contentDescription = stringResource(com.klortek.velora.R.string.music_playing),
                             tint = Color(0xFFFA2D55),
                             modifier = Modifier.size(22.dp)
                         )
@@ -93,7 +94,7 @@ fun AppleTrackRow(
                     isFocused -> {
                         Icon(
                             imageVector = Icons.Default.PlayArrow,
-                            contentDescription = "Reproducir",
+                            contentDescription = stringResource(com.klortek.velora.R.string.music_play),
                             tint = Color.White,
                             modifier = Modifier.size(22.dp)
                         )

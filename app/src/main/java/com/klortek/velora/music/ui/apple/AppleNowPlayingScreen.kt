@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -147,7 +148,7 @@ private fun AppleEmptyNowPlaying(onBackPress: () -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Atrás",
+                contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                 tint = Color.White
             )
         }
@@ -235,7 +236,7 @@ private fun AppleMainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Atrás",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                         tint = Color.White.copy(alpha = 0.8f)
                     )
                 }
@@ -246,7 +247,7 @@ private fun AppleMainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.QueueMusic,
-                        contentDescription = "Queue",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_queue),
                         tint = Color.White.copy(alpha = 0.8f)
                     )
                 }
@@ -380,7 +381,7 @@ private fun AppleMainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Shuffle,
-                        contentDescription = "Shuffle",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_shuffle),
                         tint = if (shuffleEnabled) AppleMusicRed else Color(0xFF8E8E93),
                         modifier = Modifier.size(26.dp)
                     )
@@ -393,7 +394,7 @@ private fun AppleMainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.Default.SkipPrevious,
-                        contentDescription = "Previous",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_previous),
                         tint = Color.White,
                         modifier = Modifier.size(44.dp)
                     )
@@ -413,7 +414,7 @@ private fun AppleMainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        contentDescription = stringResource(if (isPlaying) com.klortek.velora.R.string.player_pause else com.klortek.velora.R.string.music_play),
                         modifier = Modifier.size(44.dp)
                     )
                 }
@@ -425,7 +426,7 @@ private fun AppleMainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = Icons.Default.SkipNext,
-                        contentDescription = "Next",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_next),
                         tint = Color.White,
                         modifier = Modifier.size(44.dp)
                     )
@@ -441,7 +442,7 @@ private fun AppleMainNowPlayingView(
                             AudioQueueManager.RepeatMode.ONE -> Icons.Default.RepeatOne
                             else -> Icons.Default.Repeat
                         },
-                        contentDescription = "Repeat",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_repeat),
                         tint = when (repeatMode) {
                             AudioQueueManager.RepeatMode.OFF -> Color(0xFF8E8E93)
                             else -> AppleMusicRed
@@ -510,7 +511,7 @@ private fun AppleQueueView(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Atrás",
+                    contentDescription = stringResource(com.klortek.velora.R.string.music_back),
                     tint = Color.White
                 )
             }
@@ -589,7 +590,7 @@ private fun AppleQueueTrackRow(
                 if (isCurrentTrack) {
                     Icon(
                         imageVector = Icons.Default.GraphicEq,
-                        contentDescription = "Playing",
+                        contentDescription = stringResource(com.klortek.velora.R.string.music_playing),
                         tint = AppleMusicRed,
                         modifier = Modifier.size(22.dp)
                     )
