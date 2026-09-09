@@ -11,6 +11,9 @@ if (!api.includes('IncludeItemTypes", "Trailer"')) {
 if (!api.includes('suspend fun getTrailers(itemId: String)')) {
   throw new Error('Jellyfin 12: falta el resolver único de trailers');
 }
+if (/getMediaItems\("Items\/\$itemId\/(?:Local|Remote)Trailers"/.test(api)) {
+  throw new Error('Jellyfin 12: el cliente Android conserva una llamada a una ruta legacy de trailers');
+}
 if (!appleApi.includes('public func trailers(for itemID: String, userID: String)')) {
   throw new Error('Jellyfin 12: falta el resolver de trailers Apple');
 }
