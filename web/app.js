@@ -827,6 +827,7 @@
 
   function groupLiveTvChannels(channels) {
     var groups = Object.create(null);
+    var aliases = Object.create(null);
     var order = [];
     var normalized = [];
     channels.forEach(function (channel) {
@@ -840,12 +841,57 @@
       }
     });
     normalized.forEach(function (channel) {
-      var key = String(channel.Id || '').trim() ||
-        ('fallback:' + String(channel.ChannelNumber || '') + '|' + String(channel.Name || '').trim().toLocaleLowerCase(languageCode()));
+      var identityName = String(channel.Name || '').trim().replace(/\s+/g, ' ').toLocaleLowerCase(languageCode());
+      var identityNumber = String(channel.ChannelNumber || '').trim();
+      var visibleIdentity = identityName && identityNumber
+        ? 'visible:' + identityNumber + '|' + identityName
+        : (identityName ? 'visible:' + identityName : '');
+      var idIdentity = String(channel.Id || '').trim();
+      var identities = [];
+      if (idIdentity) identities.push('id:' + idIdentity);
+      if (visibleIdentity) identities.push(visibleIdentity);
+      var matchedKeys = identities.map(function (identity) { return aliases[identity]; })
+        .filter(Boolean).filter(function (key, index, values) { return values.indexOf(key) === index; });
+      var key = matchedKeys[0] || identities[0] || ('fallback:' + order.length);
       if (!groups[key]) {
-        groups[key] = { channelId: key, primary: channel, channels: [], sourceKeys: Object.create(null) };
+        groups[key] = { channelId: idIdentity || key, primary: channel, channels: [], sourceKeys: Object.create(null) };
         order.push(groups[key]);
       }
+      // A provider can expose the same visible channel under a new Jellyfin
+      // ID. Merge the old alias into the first visible row instead of showing
+      // two entries in the web client.
+      matchedKeys.slice(1).forEach(function (otherKey) {
+        if (otherKey === key || !groups[otherKey]) return;
+        var target = groups[key];
+        var sourceGroup = groups[otherKey];
+        if (liveChannelPrimaryScore(sourceGroup.primary) > liveChannelPrimaryScore(target.primary)) {
+          target.primary = sourceGroup.primary;
+        }
+        sourceGroup.channels.forEach(function (sourceChannel) {
+          var source = Array.isArray(sourceChannel.MediaSources) ? sourceChannel.MediaSources[0] : null;
+          var sourceKey = source && String(source.Id || '').trim();
+          if (!sourceKey) {
+            sourceKey = [
+              source && String(source.Name || '').trim().toLocaleLowerCase(languageCode()) || '',
+              source && String(source.LiveStreamId || '').trim() || '',
+              source && String(source.Protocol || '').trim().toLocaleLowerCase(languageCode()) || '',
+              sourceChannel.ChannelType || '', sourceChannel.ServiceName || '',
+              sourceChannel.ChannelNumber || '',
+              String(sourceChannel.Name || '').trim().toLocaleLowerCase(languageCode()),
+              (Array.isArray(sourceChannel.Tags) ? sourceChannel.Tags : []).slice().sort().join('|')
+            ].join('|');
+          }
+          if (typeof target.sourceKeys[sourceKey] !== 'number') {
+            target.sourceKeys[sourceKey] = target.channels.length;
+            target.channels.push(sourceChannel);
+          }
+        });
+        delete groups[otherKey];
+        Object.keys(aliases).forEach(function (identity) {
+          if (aliases[identity] === otherKey) aliases[identity] = key;
+        });
+      });
+      identities.forEach(function (identity) { aliases[identity] = key; });
       if (liveChannelPrimaryScore(channel) > liveChannelPrimaryScore(groups[key].primary)) {
         groups[key].primary = channel;
       }
@@ -856,9 +902,7 @@
           source && String(source.Name || '').trim().toLocaleLowerCase(languageCode()) || '',
           source && String(source.LiveStreamId || '').trim() || '',
           source && String(source.Protocol || '').trim().toLocaleLowerCase(languageCode()) || '',
-          channel.ChannelType || '',
-          channel.ServiceName || '',
-          channel.ChannelNumber || '',
+          channel.ChannelType || '', channel.ServiceName || '', channel.ChannelNumber || '',
           String(channel.Name || '').trim().toLocaleLowerCase(languageCode()),
           (Array.isArray(channel.Tags) ? channel.Tags : []).slice().sort().join('|')
         ].join('|');
@@ -875,7 +919,7 @@
       }
     });
     order.forEach(function (group) { delete group.sourceKeys; });
-    return order;
+    return order.filter(function (group) { return group.channels.length > 0; });
   }
 
   function liveChannelPrimaryScore(channel) {

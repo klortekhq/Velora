@@ -255,6 +255,13 @@ assert.deepEqual(
   Array.from(groupedLiveTv[0].channels, channel => channel.MediaSources[0].Id),
   ['source-main', 'source-iptv']
 );
+const aliasedSourceGroup = testWindow.__veloraTest.groupLiveTvChannels([
+  { Id: 'tuner-channel', ChannelNumber: '42', Name: 'DAZN F1', MediaSources: [{ Id: 'source-tuner' }] },
+  { Id: 'iptv-channel', ChannelNumber: '42', Name: '  DAZN   F1 ', MediaSources: [{ Id: 'source-iptv' }] }
+]);
+assert.equal(aliasedSourceGroup.length, 1);
+assert.equal(aliasedSourceGroup[0].channels.length, 2);
+assert.equal(testWindow.__veloraTest.liveRowAction(aliasedSourceGroup[0]), 'source-picker');
 assert.equal(
   testWindow.__veloraTest.liveSourceLabel({ MediaSources: [{ Name: 'Fuente IPTV' }] }, 2),
   'Fuente IPTV'
