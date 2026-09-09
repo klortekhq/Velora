@@ -87,6 +87,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   películas y series para continuar, reproducir desde el principio, marcar
   como visto/no visto y recomendaciones de reparto usan ya recursos localizados
   y etiquetas accesibles en las cuatro variantes garantizadas.
+- Accesibilidad/localización Android del 2026-09-09: el diálogo de salida del
+  inicio también usa recursos localizados en móvil y TV; contratos, compilación
+  y suites unitarias vuelven a pasar.
 - Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
   peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de

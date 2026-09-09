@@ -2832,13 +2832,13 @@ fun ExitConfirmationDialog(
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 Text(
-                    text = "¿Salir de la aplicación?",
+                    text = stringResource(com.klortek.velora.R.string.app_exit_title),
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 
                 Text(
-                    text = "¿Seguro que quieres salir de la aplicación?",
+                    text = stringResource(com.klortek.velora.R.string.app_exit_message),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                 )
@@ -2853,7 +2853,7 @@ fun ExitConfirmationDialog(
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(
-                            text = "Cancelar",
+                            text = stringResource(com.klortek.velora.R.string.player_cancel),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontWeight = FontWeight.Bold
                             )
@@ -2865,7 +2865,7 @@ fun ExitConfirmationDialog(
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(
-                            text = "Salir",
+                            text = stringResource(com.klortek.velora.R.string.action_exit),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontWeight = FontWeight.Bold
                             )

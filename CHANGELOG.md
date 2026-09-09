@@ -21,6 +21,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Películas y series: las acciones de reproducción, estado visto/no visto y
   recomendaciones de reparto ya no dependen de textos fijos en español y
   respetan el idioma configurado.
+- Navegación: el diálogo para salir de la aplicación respeta ahora el idioma
+  configurado también en la interfaz de TV.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
