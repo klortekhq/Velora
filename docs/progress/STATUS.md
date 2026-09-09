@@ -33,6 +33,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   reproducción reutilizable y `LiveTvPlaybackPolicyTest` la cubre en móvil y
   TV. Apple y web priorizan también la URL de remux/transcodificación; el
   contrato API protege el comportamiento en las tres superficies.
+- Motor de decisión original-first del 2026-09-09: la comparación de
+  capacidades normaliza alias equivalentes de códec, HDR y contenedor (por
+  ejemplo `H265`/`HEVC`, `EC-3`/`EAC3`, `matroska`/`MKV` y Dolby Vision),
+  evitando transcodificaciones falsas cuando Jellyfin y Android usan nombres
+  distintos. La regresión está cubierta en `PlaybackDecisionEngineTest` y las
+  pruebas unitarias móvil/TV terminan en `BUILD SUCCESSFUL`.
 - Actualizador Android: los botones y errores visibles de descarga/instalación
   están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
   la compilación de ambos perfiles y sus pruebas unitarias pasan.

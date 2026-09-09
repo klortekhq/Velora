@@ -138,4 +138,24 @@ class PlaybackDecisionEngineTest {
             )
         )
     }
+
+    @Test
+    fun equivalentJellyfinAndAndroidCodecNamesRemainDirectPlayable() {
+        val source = PlaybackSource(
+            container = "matroska",
+            videoCodec = "H265",
+            audioCodec = "EC-3",
+            hdrFormat = "Dolby Vision",
+            width = 1920,
+            height = 1080
+        )
+        val capabilities = PlaybackCapabilities(
+            videoCodecs = setOf("hevc"),
+            audioCodecs = setOf("eac3"),
+            hdrFormats = setOf("dolby-vision"),
+            containers = setOf("mkv")
+        )
+
+        assertEquals(PlaybackPath.DIRECT_PLAY, PlaybackDecisionEngine.decide(source, capabilities))
+    }
 }
