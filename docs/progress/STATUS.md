@@ -171,6 +171,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   representación descargada. La migración desde versiones anteriores y desde
   el índice JSON mantiene los registros existentes; móvil y TV compilan y sus
   suites unitarias pasan.
+- Revalidación offline Android del 2026-09-09: la pantalla de descargas filtra
+  registros asociados al servidor y usuario activos; las entradas legacy sin
+  asociación siguen visibles para poder reproducirlas o migrarlas. La lógica
+  comparte el refresco durable y las suites móvil/TV terminan correctamente.
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
