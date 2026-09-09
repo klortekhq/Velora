@@ -31,6 +31,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   plataforma y no forman parte de la identidad visible del producto.
 - CI comprueba que README, atribuciones, documentación y código público no
   reintroduzcan referencias heredadas a otros clientes o identidades antiguas.
+- Autenticación Android: la ruta de `AuthenticateByName` quedó alineada con
+  Apple, web y el smoke test (`Users/AuthenticateByName`) para evitar que un
+  proxy sensible a mayúsculas rechace la petición antes de llegar a Jellyfin;
+  `JellyfinAuthServiceTest` y las suites móvil/TV siguen pasando.
 - Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
   y dejar la tuerca como punto único para audio y subtítulos: móvil
   `app-mobile-debug.apk`, SHA-256
