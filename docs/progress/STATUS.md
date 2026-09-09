@@ -139,6 +139,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Revalidación del 2026-09-09: las secciones de reparto de las fichas de
   películas, series y episodios dejan de reutilizar la etiqueta de transmisión
   y muestran el recurso localizado de reparto; móvil y TV compilan correctamente.
+- Revalidación del 2026-09-09: el contrato CI de navegación de contenido
+  confirma que las tarjetas móviles de actores abren su filmografía y que la
+  consulta incluye películas y series, con navegación posterior a ambas fichas.
 - Revalidación del 2026-09-09: el guardia de política de reproducción exige
   que el efecto de refresco de dimensiones incluya el modo de aspecto como
   dependencia; las suites unitarias móvil/TV terminan correctamente tras el
