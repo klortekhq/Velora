@@ -16,6 +16,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   rama pública.
 - La consulta independiente a `origin` confirma únicamente `refs/heads/main`
   en GitHub. No se presenta ninguna otra rama pública.
+- GitHub Actions (2026-09-09): los workflows `branch-policy`, `ci` y `apple`
+  aparecen como no iniciados con el mismo mensaje de GitHub sobre pagos de la
+  cuenta/límite de gasto. No es un fallo de código reproducido por los jobs;
+  queda pendiente reactivar la facturación o el límite de Actions y relanzar
+  la validación. Las comprobaciones locales siguen siendo la referencia hasta
+  que GitHub vuelva a ejecutar los runners.
 - Último cambio funcional documentado: la ficha de información técnica móvil
   queda protegida para mostrar solo formato de vídeo/audio, códec, resolución,
   FPS y HDR; el contrato `check-mobile-file-info.mjs` impide que se vuelvan a
