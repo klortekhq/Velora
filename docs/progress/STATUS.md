@@ -81,6 +81,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `compileTvDebugKotlin` terminaron en `BUILD SUCCESSFUL` (82 tareas; 1:18).
   El SDK local emitió avisos de metadatos XML/Android 36, sin convertirlos en
   errores de compilación.
+- Revalidación web/Smart TV del 2026-09-09: `node web/scripts/build-web.mjs all`
+  terminó correctamente usando un directorio de salida aislado y
+  `SOURCE_DATE_EPOCH`; se generaron bundles reproducibles para Samsung/Tizen,
+  webOS y VIDAA. Tizen sigue sin WGT porque este entorno no tiene Tizen Studio
+  ni perfil de firma; webOS y VIDAA conservan la misma limitación de certificado
+  o portal oficial.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
