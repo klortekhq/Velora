@@ -10,7 +10,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
     context.applicationContext,
     "velora_offline.db",
     null,
-    11
+    12
 ) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -29,6 +29,8 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                 reason INTEGER NOT NULL,
                 bytes_downloaded INTEGER NOT NULL,
                 total_bytes INTEGER NOT NULL,
+                speed_bps INTEGER NOT NULL DEFAULT 0,
+                eta_seconds INTEGER,
                 media_source_id TEXT,
                 checksum_sha256 TEXT,
                 work_name TEXT,
@@ -170,6 +172,10 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
             db.execSQL("CREATE INDEX downloads_download_id ON downloads(download_id)")
             db.execSQL("CREATE INDEX downloads_item_quality ON downloads(item_id, quality)")
         }
+        if (oldVersion < 12) {
+            db.execSQL("ALTER TABLE downloads ADD COLUMN speed_bps INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("ALTER TABLE downloads ADD COLUMN eta_seconds INTEGER")
+        }
     }
 
     fun readAll(): List<OfflineDownload> {
@@ -192,6 +198,8 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
                     reason = cursor.getInt(cursor.getColumnIndexOrThrow("reason")),
                     bytesDownloaded = cursor.getLong(cursor.getColumnIndexOrThrow("bytes_downloaded")),
                     totalBytes = cursor.getLong(cursor.getColumnIndexOrThrow("total_bytes")),
+                    speedBytesPerSecond = cursor.getLong(cursor.getColumnIndexOrThrow("speed_bps")),
+                    etaSeconds = cursor.getLongOrNull("eta_seconds"),
                     mediaSourceId = cursor.getStringOrNull("media_source_id"),
                     checksumSha256 = cursor.getStringOrNull("checksum_sha256"),
                     workName = cursor.getStringOrNull("work_name"),
@@ -226,6 +234,7 @@ internal class OfflineDatabase(context: Context) : SQLiteOpenHelper(
         put("download_id", downloadId); put("local_path", localPath); put("status", status); put("reason", reason)
         put("quality", quality)
         put("bytes_downloaded", bytesDownloaded); put("total_bytes", totalBytes)
+        put("speed_bps", speedBytesPerSecond); put("eta_seconds", etaSeconds)
         put("media_source_id", mediaSourceId)
         put("checksum_sha256", checksumSha256); put("work_name", workName)
         put("created_at", createdAtEpochMs); put("completed_at", completedAtEpochMs); put("last_played_at", lastPlayedAtEpochMs)

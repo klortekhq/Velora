@@ -116,7 +116,14 @@ class OfflineDownloadsActivity : ComponentActivity() {
                                 Text(entry.name, style = MaterialTheme.typography.titleMedium)
                                 Text(
                                     if (entry.isComplete) stringResource(R.string.offline_available)
-                                    else stringResource(R.string.downloading_progress, entry.progress),
+                                    else if (entry.speedBytesPerSecond > 0L && entry.etaSeconds != null) {
+                                        stringResource(
+                                            R.string.offline_transfer_stats,
+                                            entry.progress,
+                                            formatTransferRate(entry.speedBytesPerSecond),
+                                            formatDuration(entry.etaSeconds)
+                                        )
+                                    } else stringResource(R.string.downloading_progress, entry.progress),
                                     color = Color.Gray
                                 )
                                 Text(
@@ -132,5 +139,17 @@ class OfflineDownloadsActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun formatTransferRate(bytesPerSecond: Long): String = when {
+        bytesPerSecond >= 1024L * 1024L -> "%.1f MB".format(bytesPerSecond / (1024.0 * 1024.0))
+        bytesPerSecond >= 1024L -> "%.0f KB".format(bytesPerSecond / 1024.0)
+        else -> "$bytesPerSecond B"
+    }
+
+    private fun formatDuration(seconds: Long): String {
+        val minutes = seconds / 60L
+        val remaining = seconds % 60L
+        return if (minutes > 0L) "${minutes}m ${remaining}s" else "${remaining}s"
     }
 }

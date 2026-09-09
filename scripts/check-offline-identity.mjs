@@ -6,8 +6,8 @@ const manager = fs.readFileSync('app/src/main/java/com/klortek/velora/offline/Of
 const settings = fs.readFileSync('app/src/main/java/com/klortek/velora/jellyfin/AppSettings.kt', 'utf8');
 const identity = fs.readFileSync('app/src/main/java/com/klortek/velora/offline/OfflineIdentity.kt', 'utf8');
 
-assert.match(database, /\n    11\n\)\s*\{/,
-  'offline database must have a migration version for account-scoped identity');
+assert.match(database, /\n    12\n\)\s*\{/,
+  'offline database must have a migration version for account-scoped identity and transfer telemetry');
 assert.match(database, /entry_key TEXT NOT NULL PRIMARY KEY/,
   'offline database must key rows by a durable identity, not item ID alone');
 const createTable = database.match(/override fun onCreate\(db: SQLiteDatabase\) \{([\s\S]*?)\n    \}/)?.[1] ?? '';
@@ -30,5 +30,9 @@ assert.match(settings, /offlineChargingOnly/,
   'offline settings must expose an optional charging-only policy');
 assert.match(manager, /setRequiresCharging\(requiresCharging\)/,
   'offline WorkManager requests must enforce the charging-only policy');
+assert.match(database, /speed_bps INTEGER NOT NULL DEFAULT 0/,
+  'offline database must persist transfer speed');
+assert.match(database, /eta_seconds INTEGER/,
+  'offline database must persist transfer ETA');
 
 console.log('Offline identity contract passed: server/user scoped SQLite and WorkManager keys are protected.');

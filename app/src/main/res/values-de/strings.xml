@@ -107,6 +107,7 @@
   <string name="settings_offline_wifi_only_description">Vor neuen Downloads auf eine WLAN-Verbindung warten.</string>
   <string name="settings_offline_charging_only">Nur beim Laden</string>
   <string name="settings_offline_charging_only_description">Vor dem Download warten, bis das Gerät am Strom angeschlossen ist.</string>
+  <string name="offline_transfer_stats">%1$d%% · %2$s/s · noch %3$s</string>
   <string name="live_tv_favorite_update_error">Favorit konnte nicht aktualisiert werden</string>
   <string name="login_title">Anmelden</string>
   <string name="login_connecting">Verbindung mit %1$s</string>

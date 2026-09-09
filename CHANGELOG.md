@@ -9,6 +9,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
   índice necesario para localizar rápidamente cada contenido y calidad.
 - Descargas offline Android: se añade la opción «solo mientras carga»; la cola
   respeta la preferencia incluso al recuperar trabajos tras reiniciar la app.
+- Descargas offline Android: la pantalla muestra velocidad y tiempo estimado
+  restante cuando la transferencia aporta datos suficientes; el estado se
+  conserva en la base local mediante una migración compatible.
 - Seguridad Android: la auditoría de Logcat se amplía a todo el código propio
   de Velora (131 archivos) y elimina títulos, nombres de pistas, IDs, rutas de
   servidor y posiciones de reproducción de las trazas; el contrato de CI
