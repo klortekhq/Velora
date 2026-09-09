@@ -309,6 +309,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   calcula si debe ajustarse por ancho o por altura según la relación real de la
   pantalla. Esto evita que `Cinema` y otros formatos anchos desborden el marco
   y parezcan no cambiar. La suite móvil/TV y el contrato de insets pasan.
+- Auditoría de continuidad del 2026-09-09: el remoto contiene únicamente
+  `main`; identidad pública, política de releases, límite offline,
+  consistencia de versiones, metadatos Smart TV y suite web vuelven a pasar.
+  No se declara validación de hardware TV ni release firmada por la ausencia
+  de ADB/Tizen Studio y secretos de firma en este entorno.
 - Live TV usa exclusivamente fuentes devueltas por Jellyfin. No hay ingestión
   M3U arbitraria en Velora.
 - Live TV solicita `MediaSources`, agrupa filas con el mismo ID de Jellyfin y
