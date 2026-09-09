@@ -66,6 +66,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - El mismo diálogo localiza también título, notas de versión, progreso y error
   visible; `check-android-locales.mjs` valida 534 claves y las suites móvil/TV
   terminan en `BUILD SUCCESSFUL`.
+- Localización Android del 2026-09-09: los avisos al iniciar una descarga de
+  película o episodio, incluido el error de espacio insuficiente, usan ahora
+  recursos localizados en español, inglés, francés y alemán; no quedan esos
+  textos hardcodeados en las fichas móvil/tablet.
 - Corrección offline Android del 2026-09-09: una instalación nueva ya no
   intenta crear una tabla SQLite con dos claves primarias, lo que podía dejar
   inutilizable la base de descargas antes de la primera migración. El esquema

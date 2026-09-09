@@ -561,4 +561,6 @@ Podrás descargarlos de nuevo cuando quieras.</string>
   <string name="settings_subtitles_clear_button">Borrar subtítulos</string>
   <string name="settings_subtitles_clear_confirm">¿Quieres borrar todos los subtítulos descargados?</string>
   <string name="settings_subtitles_clear_done">Subtítulos descargados borrados.</string>
+  <string name="download_started">Descarga iniciada</string>
+  <string name="download_insufficient_space">No hay espacio suficiente para esta descarga</string>
 </resources>
