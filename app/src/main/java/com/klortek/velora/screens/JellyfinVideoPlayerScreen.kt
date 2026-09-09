@@ -4414,17 +4414,33 @@ fun JellyfinVideoPlayerScreen(
         // only the portrait container used the selected aspect ratio, while
         // landscape fullscreen always constrained the player to the display.
         val fullscreenAspect = containerAspectRatio(currentAspectMode, videoAspectRatio, fillContainer = true)
-        Box(
+        androidx.compose.foundation.layout.BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
             if (fullscreenAspect != null) {
-                playerContent(
+                // Fit the selected presentation frame inside the actual
+                // fullscreen bounds. Always sizing from height made wide
+                // modes (especially CINEMA) overflow horizontally, so the
+                // visible result could look identical to the previous mode.
+                val availableAspect = if (maxHeight > 0.dp) {
+                    maxWidth / maxHeight
+                } else {
+                    fullscreenAspect
+                }
+                val frameModifier = if (fullscreenAspect > availableAspect) {
+                    Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(fullscreenAspect)
+                } else {
                     Modifier
                         .fillMaxHeight()
                         .aspectRatio(fullscreenAspect)
+                }
+                playerContent(
+                    frameModifier
                 )
             } else {
                 playerContent(Modifier.fillMaxSize())

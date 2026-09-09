@@ -305,6 +305,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   modo seleccionado después de cambios de tamaño, orientación y fullscreen;
   las reaplicaciones retrasadas obsoletas ya no pueden sobrescribir una
   selección nueva.
+- Corrección adicional del 2026-09-09: el contenedor de vídeo en fullscreen
+  calcula si debe ajustarse por ancho o por altura según la relación real de la
+  pantalla. Esto evita que `Cinema` y otros formatos anchos desborden el marco
+  y parezcan no cambiar. La suite móvil/TV y el contrato de insets pasan.
 - Live TV usa exclusivamente fuentes devueltas por Jellyfin. No hay ingestión
   M3U arbitraria en Velora.
 - Live TV solicita `MediaSources`, agrupa filas con el mismo ID de Jellyfin y
