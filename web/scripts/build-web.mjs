@@ -14,6 +14,10 @@ const target = process.argv[2] || 'all';
 const requireInstallable = process.env.VELORA_REQUIRE_INSTALLABLE_PACKAGES === '1';
 const packageMetadata = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
 const version = packageMetadata.version;
+const sourceDateEpoch = Number.parseInt(process.env.SOURCE_DATE_EPOCH || '', 10);
+const generatedAt = Number.isFinite(sourceDateEpoch) && sourceDateEpoch >= 0
+  ? new Date(sourceDateEpoch * 1000).toISOString()
+  : undefined;
 
 function commandAvailable(name) {
   const lookup = process.platform === 'win32'
@@ -55,7 +59,8 @@ async function makeLegacyBrowserCompatible(destination) {
 }
 
 async function writeBuildMetadata(destination, metadata) {
-  await writeFile(join(destination, 'velora-build.json'), JSON.stringify(metadata, null, 2) + '\n', 'utf8');
+  const reproducibleMetadata = generatedAt ? { ...metadata, generatedAt } : metadata;
+  await writeFile(join(destination, 'velora-build.json'), JSON.stringify(reproducibleMetadata, null, 2) + '\n', 'utf8');
 }
 
 await rm(out, { recursive: true, force: true });
@@ -82,7 +87,6 @@ if (target === 'samsung' || target === 'tizen' || target === 'all') {
     platform: 'Samsung Tizen',
     kind: 'web',
     entry: 'index.html',
-    generatedAt: new Date().toISOString(),
     installablePackage: packaged,
     packaging: packaged ? 'wgt' : 'bundle',
     requiresTizenStudio: true,
@@ -111,7 +115,6 @@ if (target === 'webos' || target === 'all') {
     platform: 'LG webOS',
     kind: 'web',
     entry: 'index.html',
-    generatedAt: new Date().toISOString(),
     installablePackage: packaged,
     packaging: packaged ? 'ipk' : 'bundle',
     requiresAres: true,
@@ -136,7 +139,6 @@ if (target === 'vidaa' || target === 'all') {
     platform: 'Hisense VIDAA',
     kind: 'hosted-html5',
     entry: 'index.html',
-    generatedAt: new Date().toISOString(),
     installablePackage: false,
     packaging: 'hosted-html5',
     note: 'La publicación oficial se tramita en el portal VIDAA y depende del modelo, región y certificado del fabricante.'

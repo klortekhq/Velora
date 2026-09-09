@@ -103,6 +103,10 @@ Para generar los APK release unsigned de móvil/tablet y TV:
 ./gradlew :app:assembleMobileRelease :app:assembleTvRelease
 ```
 
+Los paquetes web/Smart TV aceptan `SOURCE_DATE_EPOCH` para producir metadatos
+de empaquetado deterministas durante una build reproducible; sin esa variable
+se omite la marca temporal del bundle en vez de inventar una fecha de release.
+
 Las variantes debug son instalables para pruebas. Las variantes release
 generadas aquí no están firmadas; deben firmarse con una clave propia antes de
 distribuirse. El flujo de GitHub Actions conserva los debug como artefactos
