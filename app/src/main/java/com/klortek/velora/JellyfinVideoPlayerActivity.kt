@@ -414,7 +414,13 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 val liveMediaSourceId = liveSource?.Id
                 val liveStreamId = liveSource?.LiveStreamId
                 val directSource = liveSource?.Path
-                val finalUrl = if (liveSource?.SupportsDirectPlay == true &&
+                // Jellyfin 12 deliberately remuxes M3U tuner sources instead
+                // of advertising them as direct-play. Keep the client
+                // defensive as well: an old/plugin-provided source must not
+                // bypass the allocated LiveStreamId, otherwise playback can
+                // fail or skip the server's M3U normalization.
+                val isM3uSource = liveSource?.Protocol?.equals("M3U", ignoreCase = true) == true
+                val finalUrl = if (!isM3uSource && liveSource?.SupportsDirectPlay == true &&
                     !directSource.isNullOrBlank() &&
                     MediaUrlHeaderPolicy.isServerResource(serverUrl, directSource) &&
                     (directSource.startsWith("http://") || directSource.startsWith("https://"))) {

@@ -26,6 +26,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   reproducir, aleatorio, cola, transporte y estado actual), en vez de textos
   codificados en duro. El cambio está en `1719ca9`; la compilación móvil/TV y
   `check-android-locales.mjs` pasan.
+- Jellyfin 12.0/Live TV: el reproductor Android identifica explícitamente las
+  fuentes M3U y evita el atajo direct-play aunque llegue una ruta directa de
+  un plugin antiguo; se conserva la apertura automática del `LiveStreamId` y
+  el remux negociado por Jellyfin. `check-jellyfin-api-contract.mjs` protege
+  esta regresión.
 - Actualizador Android: los botones y errores visibles de descarga/instalación
   están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
   la compilación de ambos perfiles y sus pruebas unitarias pasan.
