@@ -536,7 +536,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
 @Composable private fun MobilePeople(item: JellyfinItem, apiService: JellyfinApiService?) {
     val people = item.People?.filter { it.Type == "Actor" }?.take(12).orEmpty()
     if (people.isNotEmpty()) {
-        Text(stringResource(com.klortek.velora.R.string.mobile_cast), color = Color.White, style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(com.klortek.velora.R.string.details_cast), color = Color.White, style = MaterialTheme.typography.titleMedium)
         LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             items(people.size, key = { index -> "cast-${people[index].Id ?: people[index].Name}-$index" }) { index ->
                 MobileCastMemberCard(person = people[index], apiService = apiService)
@@ -548,7 +548,7 @@ private fun MobileRemotePlaybackDialog(item: JellyfinItem, apiService: JellyfinA
 @Composable
 private fun MobileDetailTabs(selectedSection: MobileDetailSection, onSelected: (MobileDetailSection) -> Unit) {
     val tabs = listOf(
-        MobileDetailSection.CAST to stringResource(com.klortek.velora.R.string.mobile_cast),
+        MobileDetailSection.CAST to stringResource(com.klortek.velora.R.string.details_cast),
         MobileDetailSection.CREW to stringResource(com.klortek.velora.R.string.mobile_crew),
         MobileDetailSection.STUDIOS to stringResource(com.klortek.velora.R.string.mobile_studios),
         MobileDetailSection.DETAILS to stringResource(com.klortek.velora.R.string.mobile_details),
