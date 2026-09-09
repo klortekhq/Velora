@@ -162,13 +162,15 @@ object OfflineDownloadManager {
         } else {
             androidx.work.NetworkType.CONNECTED
         }
+        val requiresCharging = AppSettings(context).offlineChargingOnly
         scheduleWork(
             context = context,
             itemId = itemId,
             mediaSourceId = mediaSourceId,
             quality = quality,
             workName = workName,
-            requiredNetwork = requiredNetwork
+            requiredNetwork = requiredNetwork,
+            requiresCharging = requiresCharging
         )
         save(context, load(context).filterNot {
             it.itemId == itemId && it.quality == quality.storageKey &&
@@ -204,7 +206,8 @@ object OfflineDownloadManager {
                         workName = entry.workName,
                         requiredNetwork = if (AppSettings(context).offlineWifiOnly) {
                             androidx.work.NetworkType.UNMETERED
-                        } else androidx.work.NetworkType.CONNECTED
+                        } else androidx.work.NetworkType.CONNECTED,
+                        requiresCharging = AppSettings(context).offlineChargingOnly
                     )
                 }
                 return@mapNotNull entry.copy(
@@ -297,10 +300,15 @@ object OfflineDownloadManager {
         mediaSourceId: String?,
         quality: OfflineDownloadQuality,
         workName: String,
-        requiredNetwork: androidx.work.NetworkType
+        requiredNetwork: androidx.work.NetworkType,
+        requiresCharging: Boolean
     ) {
+        val constraints = androidx.work.Constraints.Builder()
+            .setRequiredNetworkType(requiredNetwork)
+            .setRequiresCharging(requiresCharging)
+            .build()
         val work = androidx.work.OneTimeWorkRequestBuilder<OfflineDownloadWorker>()
-            .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(requiredNetwork).build())
+            .setConstraints(constraints)
             .setBackoffCriteria(
                 androidx.work.BackoffPolicy.EXPONENTIAL,
                 30,
