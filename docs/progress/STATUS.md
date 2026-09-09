@@ -58,6 +58,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Recuperación Apple del 2026-09-09: al reabrir la app se recuperan también
   el identificador de tarea y los metadatos opacos de cada descarga activa;
   por tanto el control de pausa/reanudación no se pierde tras matar el proceso.
+- Packaging web/Smart TV del 2026-09-09: el metadato `velora-build.json` acepta
+  `SOURCE_DATE_EPOCH` y deja fuera fechas variables cuando no se proporciona;
+  dos builds consecutivas con el mismo epoch produjeron metadatos idénticos.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
