@@ -46,6 +46,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   reproducción reutilizable y `LiveTvPlaybackPolicyTest` la cubre en móvil y
   TV. Apple y web priorizan también la URL de remux/transcodificación; el
   contrato API protege el comportamiento en las tres superficies.
+- Agrupación Live TV Android del 2026-09-09: el selector de fuentes ya no
+  depende únicamente de que Jellyfin repita la misma ID literal; si dos
+  proveedores entregan IDs distintas pero comparten número y nombre visible,
+  se muestran en una sola fila y sus fuentes siguen siendo seleccionables.
+  `LiveTvChannelQueryTest` cubre ambos formatos y las suites Android móvil/TV
+  terminan en `BUILD SUCCESSFUL`.
 - Motor de decisión original-first del 2026-09-09: la comparación de
   capacidades normaliza alias equivalentes de códec, HDR y contenedor (por
   ejemplo `H265`/`HEVC`, `EC-3`/`EAC3`, `matroska`/`MKV` y Dolby Vision),
