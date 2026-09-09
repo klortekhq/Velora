@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Descargas offline Android: se corrige el esquema de la base SQLite para
+  instalaciones nuevas; ya no declara dos claves primarias y conserva el
+  índice necesario para localizar rápidamente cada contenido y calidad.
 - Seguridad Android: la auditoría de Logcat se amplía a todo el código propio
   de Velora (131 archivos) y elimina títulos, nombres de pistas, IDs, rutas de
   servidor y posiciones de reproducción de las trazas; el contrato de CI
