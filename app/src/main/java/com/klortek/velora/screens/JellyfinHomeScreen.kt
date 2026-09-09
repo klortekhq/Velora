@@ -1103,7 +1103,7 @@ fun JellyfinHomeScreen(
                 val allTabs = remember(libraries, collections, showLiveTv) {
                     // Debug: Log all libraries and their CollectionType
                     libraries.forEach { lib ->
-                        android.util.Log.d("JellyfinHomeScreen", "📚 Library loaded: ${lib.Name}, Type: ${lib.Type}, CollectionType: ${lib.CollectionType}, Id: ${lib.Id}")
+                        android.util.Log.d("JellyfinHomeScreen", "📚 Library loaded")
                     }
                     
                     buildList<Pair<String?, String>> {
@@ -1178,7 +1178,7 @@ fun JellyfinHomeScreen(
                             val isTvShowsLibrary = !isCollectionsTab && library?.CollectionType == "tvshows"
                             
                             // Debug log for library detection
-                            android.util.Log.d("JellyfinHomeScreen", "Library: ${library?.Name}, CollectionType: ${library?.CollectionType}, isMusicLibrary: $isMusicLibrary, isMoviesLibrary: $isMoviesLibrary, isTvShowsLibrary: $isTvShowsLibrary")
+                            android.util.Log.d("JellyfinHomeScreen", "Library type resolved")
                             
                             Tab(
                                 selected = isSelected,

@@ -412,7 +412,7 @@ fun JellyfinVideoPlayerScreen(
     val storedAudioPreference = remember(item.Id) {
         if (audioStreamIndex == null) {
             val pref = settings.getAudioPreference(item.Id)
-            Log.d("JellyfinPlayer", "Loaded stored audio preference for ${item.Id}: $pref")
+        Log.d("JellyfinPlayer", "Loaded stored audio preference")
             pref
         } else {
             Log.d("JellyfinPlayer", "Using provided audioStreamIndex: $audioStreamIndex")
@@ -545,7 +545,7 @@ fun JellyfinVideoPlayerScreen(
             .setId("VeloraVideoSession_${item.Id}")
             .build()
             
-        Log.d("JellyfinPlayer", "MediaSession created for item ${item.Id}")
+        Log.d("JellyfinPlayer", "MediaSession created")
         
         onDispose {
             Log.d("JellyfinPlayer", "Releasing MediaSession")
@@ -745,7 +745,7 @@ fun JellyfinVideoPlayerScreen(
     val startNextEpisode: () -> Unit = startNextEpisode@{
         val nextEp = nextEpisodeDetails
         if (isAutoPlayingNext || nextEp == null) {
-            Log.d("JellyfinPlayer", "🎬 Ignoring autoplay trigger (already playing=$isAutoPlayingNext, nextEp=${nextEp?.Name})")
+            Log.d("JellyfinPlayer", "🎬 Ignoring autoplay trigger")
             return@startNextEpisode
         }
         
@@ -761,7 +761,7 @@ fun JellyfinVideoPlayerScreen(
         countdownJob = null
         
         Log.d("JellyfinPlayer", "🎬 ===== STARTING NEXT EPISODE (Jellyfin TV approach) =====")
-        Log.d("JellyfinPlayer", "🎬 Next: ${nextEp.Name} (ID: ${nextEp.Id})")
+            Log.d("JellyfinPlayer", "🎬 Next episode resolved")
         
         // Step 1: Cancel progress reporting
         progressReportingJob?.cancel()
@@ -861,7 +861,7 @@ fun JellyfinVideoPlayerScreen(
     LaunchedEffect(item.Id) {
         if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) {
             downloadedSubtitles = com.klortek.velora.subtitles.OpenSubtitlesApi.getDownloadedSubtitles(context, item.Id)
-            Log.d("JellyfinPlayer", "📁 Loaded ${downloadedSubtitles.size} downloaded subtitle(s) for item ${item.Id}")
+        Log.d("JellyfinPlayer", "📁 Loaded downloaded subtitles")
         } else {
             // TV/browser-like Android surfaces must never expose or consume the
             // mobile offline subtitle store, even through an internal playback
@@ -997,7 +997,7 @@ fun JellyfinVideoPlayerScreen(
                     
                     if (userSelectedExternalSubtitle) {
                         Log.d("JellyfinPlayer", "📌 USER SELECTED EXTERNAL SUBTITLE")
-                        Log.d("JellyfinPlayer", "   Selected: ${selectedSubtitleStream?.DisplayTitle ?: selectedSubtitleStream?.Language}")
+        Log.d("JellyfinPlayer", "   Subtitle selected")
                         Log.d("JellyfinPlayer", "   Index: ${selectedSubtitleStream?.Index}, IsExternal: ${selectedSubtitleStream?.IsExternal}")
                         
                         if (needsAudioTranscoding) {
@@ -1098,7 +1098,7 @@ fun JellyfinVideoPlayerScreen(
                             val nextDetails = apiService.getItemDetails(details.NextEpisodeId)
                             if (nextDetails != null) {
                                 foundNextEpisode = nextDetails
-                                Log.d("JellyfinPlayer", "✅ Found next episode via NextEpisodeId: ${nextDetails.Name}")
+            Log.d("JellyfinPlayer", "✅ Found next episode via NextEpisodeId")
                             }
                         }
                         
@@ -1112,7 +1112,7 @@ fun JellyfinVideoPlayerScreen(
                                     val currentSeason = seasons.firstOrNull { it.IndexNumber == details.ParentIndexNumber }
                                 
                                 if (currentSeason != null) {
-                                    Log.d("JellyfinPlayer", "Found current season: ${currentSeason.Name} (ID: ${currentSeason.Id})")
+            Log.d("JellyfinPlayer", "Found current season")
                                     
                                     // Try to get next episode in the SAME season
                                     foundNextEpisode = apiService.getNextEpisodeInSeason(
@@ -1123,7 +1123,7 @@ fun JellyfinVideoPlayerScreen(
                                     )
                                     
                                     if (foundNextEpisode != null) {
-                                        Log.d("JellyfinPlayer", "✅ Found next episode in same season: S${foundNextEpisode.ParentIndexNumber}E${foundNextEpisode.IndexNumber} - ${foundNextEpisode.Name}")
+            Log.d("JellyfinPlayer", "✅ Found next episode in same season")
                                     } else {
                                         // No more episodes in current season, try next season's first episode
                                         Log.d("JellyfinPlayer", "No more episodes in S${details.ParentIndexNumber}, checking next season...")
@@ -1132,7 +1132,7 @@ fun JellyfinVideoPlayerScreen(
                                     }
                                     
                                     if (nextSeason != null) {
-                                            Log.d("JellyfinPlayer", "Found next season: ${nextSeason.Name} (ID: ${nextSeason.Id})")
+            Log.d("JellyfinPlayer", "Found next season")
                                             // Get first episode of next season (episode index 0, looking for episode 1)
                                             foundNextEpisode = apiService.getNextEpisodeInSeason(
                                                 seriesId = details.SeriesId,
@@ -1148,7 +1148,7 @@ fun JellyfinVideoPlayerScreen(
                                         }
                                         
                                         if (foundNextEpisode != null) {
-                                                Log.d("JellyfinPlayer", "✅ Found first episode of next season: S${foundNextEpisode.ParentIndexNumber}E${foundNextEpisode.IndexNumber} - ${foundNextEpisode.Name}")
+            Log.d("JellyfinPlayer", "✅ Found first episode of next season")
                                         }
                                         } else {
                                             Log.d("JellyfinPlayer", "No next season found (this is the last episode of the series)")
@@ -1166,7 +1166,7 @@ fun JellyfinVideoPlayerScreen(
                         if (foundNextEpisode != null) {
                             nextEpisodeId = foundNextEpisode.Id
                             nextEpisodeDetails = foundNextEpisode
-                            Log.d("JellyfinPlayer", "✅✅✅ Next episode resolved: ${foundNextEpisode.Name}, ID: ${foundNextEpisode.Id}")
+            Log.d("JellyfinPlayer", "✅✅✅ Next episode resolved")
                             Log.d("JellyfinPlayer", "✅ Next episode IndexNumber: ${foundNextEpisode.IndexNumber}, Season: ${foundNextEpisode.ParentIndexNumber}")
                         } else {
                             Log.d("JellyfinPlayer", "No next episode found (this might be the last episode)")
@@ -1253,7 +1253,7 @@ fun JellyfinVideoPlayerScreen(
                                         path = stream.Path
                                     )
                                     
-                                    Log.d("JellyfinPlayer", "Adding subtitle ${stream.Index}: ${stream.DisplayTitle ?: stream.Language} (${stream.Codec}) - IsExternal=${stream.IsExternal}")
+        Log.d("JellyfinPlayer", "Adding subtitle track")
                                     
                                     // Use SubtitleMapper to create configuration with position tracking
                                     // ⚠️ CRITICAL: Use actual Jellyfin index, NOT sequential position!
@@ -1687,7 +1687,7 @@ fun JellyfinVideoPlayerScreen(
                                                     ?.find { it.Type == "Subtitle" && it.Index == subtitleStreamIndex }
                                                 
                                                 val subtitleConfig = if (subtitleStream != null) {
-                                                    Log.d("JellyfinPlayer", "🔄 Fallback: Adding subtitle ${subtitleStream.DisplayTitle}")
+            Log.d("JellyfinPlayer", "🔄 Fallback: Adding subtitle")
                                                     com.klortek.velora.player.SubtitleMapper.buildSubtitleConfiguration(
                                                         context = context,
                                                         apiService = apiService,
@@ -1876,7 +1876,7 @@ fun JellyfinVideoPlayerScreen(
                                         val externalMatch = (stream.IsExternal == true) == isExternal
                                         
                                         if (langMatch && forcedMatch && ccMatch && externalMatch) {
-                                            Log.d("JellyfinPlayer", "      Exact match: JF index=${stream.Index} (${stream.Language}/${stream.DisplayTitle})")
+            Log.d("JellyfinPlayer", "      Exact subtitle match")
                                             true
                                         } else {
                                             false
@@ -1891,7 +1891,7 @@ fun JellyfinVideoPlayerScreen(
                                                            normalizeLanguageCode(stream.Language) == normalizeLanguageCode(format.language)
                                             
                                             if (langMatch) {
-                                                Log.d("JellyfinPlayer", "      Language-only match: JF index=${stream.Index} (${stream.Language}/${stream.DisplayTitle})")
+            Log.d("JellyfinPlayer", "      Language-only subtitle match")
                                             }
                                             langMatch
                                         }
@@ -1986,7 +1986,7 @@ fun JellyfinVideoPlayerScreen(
                                 
                                 if (jellyfinIndex != null) {
                                     Log.d("JellyfinPlayer", "🔥 Composite key resolved: Jellyfin index=$jellyfinIndex")
-                                    Log.d("JellyfinPlayer", "   Metadata: ${metadata?.DisplayTitle ?: metadata?.Language}, IsExternal=${metadata?.IsExternal}, IsForced=${metadata?.IsForced}")
+        Log.d("JellyfinPlayer", "   Subtitle metadata loaded")
                                     
                                     // Save the selection (including forced subtitles - don't clear anything)
                                     if (jellyfinIndex != lastSelectedSubtitleIndex) {
@@ -2528,7 +2528,7 @@ fun JellyfinVideoPlayerScreen(
                         val freshPositionMs = itemDetails?.UserData?.PositionTicks?.let { it / 10_000 } ?: 0L
                         val actualStartPosition = if (freshPositionMs > 0) freshPositionMs else resumePositionMs
                         val startPositionTicks = actualStartPosition * 10_000L
-                        Log.d("JellyfinPlayer", "🎬 Reporting playback START for item ${item.Id} at ${actualStartPosition}ms (fresh: ${freshPositionMs}ms)")
+            Log.d("JellyfinPlayer", "🎬 Reporting playback START")
                         val success = apiService.reportPlaybackStart(
                             itemId = item.Id, 
                             positionTicks = startPositionTicks,
@@ -2600,7 +2600,7 @@ fun JellyfinVideoPlayerScreen(
         }
         
         Log.d("JellyfinPlayer", "🎬 ===== AUTOPLAY MONITORING STARTED =====")
-        Log.d("JellyfinPlayer", "🎬 Next episode: ${nextEpisodeDetails?.Name} (ID: $nextEpisodeId)")
+            Log.d("JellyfinPlayer", "🎬 Next episode details loaded")
         
         // Testing mode disabled - countdown triggers at end of episode or when credits start
         val testingMode = false
@@ -4640,7 +4640,7 @@ fun JellyfinVideoPlayerScreen(
                                 Log.d("JellyfinPlayer", "🔍 Attempting to select subtitle: Jellyfin index=$subtitleIndex")
                                 Log.d("JellyfinPlayer", "   Available Jellyfin subtitle streams: ${jellyfinSubtitleStreams.size}")
                                 jellyfinSubtitleStreams.forEach { stream ->
-                                    Log.d("JellyfinPlayer", "     JF Index=${stream.Index}, Lang=${stream.Language}, DisplayTitle=${stream.DisplayTitle}")
+                Log.d("JellyfinPlayer", "     Jellyfin subtitle track available")
                                 }
                                 
                                 val exoTrackInfo = SubtitleMapper.getExoPlayerTrackInfo(subtitleIndex)

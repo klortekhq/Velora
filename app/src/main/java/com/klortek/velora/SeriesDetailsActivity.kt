@@ -57,7 +57,7 @@ class SeriesDetailsActivity : ComponentActivity() {
         val explicitEpisodeId = intent.getStringExtra(EXTRA_EPISODE_ID)
         val autoFocusNextUp = intent.getBooleanExtra(EXTRA_AUTO_FOCUS_NEXT_UP, false)
         
-        android.util.Log.d("SeriesDetailsActivity", "onCreate: seriesId=$itemId, explicitEpisodeId=$explicitEpisodeId, autoFocusNextUp=$autoFocusNextUp, fromLibrary=$fromLibrary")
+        android.util.Log.d("SeriesDetailsActivity", "onCreate series details")
 
         // Get Jellyfin configuration and API service
         val config = JellyfinConfig(this)
@@ -98,21 +98,21 @@ class SeriesDetailsActivity : ComponentActivity() {
                                 var nextUpEpisode = apiService.getNextUpForSeries(itemId)
                                 
                                 if (nextUpEpisode != null) {
-                                    android.util.Log.d("SeriesDetailsActivity", "✅ Auto-focusing on NextUp episode: ${nextUpEpisode.Name} (ID: ${nextUpEpisode.Id})")
+                    android.util.Log.d("SeriesDetailsActivity", "✅ Auto-focusing on NextUp episode")
                                     resolvedEpisodeId = nextUpEpisode.Id
                                 } else {
                                     // Fallback: find the first unwatched episode (for series not started yet)
                                     android.util.Log.d("SeriesDetailsActivity", "No NextUp found, searching for first unwatched episode...")
                                     val firstUnwatched = apiService.getFirstUnwatchedEpisode(itemId)
                                     if (firstUnwatched != null) {
-                                        android.util.Log.d("SeriesDetailsActivity", "✅ Auto-focusing on first unwatched episode: ${firstUnwatched.Name} (ID: ${firstUnwatched.Id})")
+                        android.util.Log.d("SeriesDetailsActivity", "✅ Auto-focusing on first unwatched episode")
                                         resolvedEpisodeId = firstUnwatched.Id
                                     } else {
                                         // All episodes watched or error - fallback to Season 1 Episode 1
                                         android.util.Log.d("SeriesDetailsActivity", "No unwatched episodes found, getting S1E1...")
                                         val firstEpisode = apiService.getFirstEpisode(itemId)
                                         if (firstEpisode != null) {
-                                            android.util.Log.d("SeriesDetailsActivity", "✅ Auto-focusing on S1E1: ${firstEpisode.Name} (ID: ${firstEpisode.Id})")
+                        android.util.Log.d("SeriesDetailsActivity", "✅ Auto-focusing on S1E1")
                                             resolvedEpisodeId = firstEpisode.Id
                                         } else {
                                             android.util.Log.d("SeriesDetailsActivity", "Could not find any episodes, will focus on Season 1 button")

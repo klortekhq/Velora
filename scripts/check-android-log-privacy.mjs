@@ -3,8 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const roots = [
-  'app/src/main/java/com/klortek/velora/jellyfin',
-  'app/src/main/java/com/klortek/velora/music',
+  'app/src/main/java/com/klortek/velora',
   'app/src/main/java/com/klortek/velora/MainActivity.kt'
 ];
 
@@ -27,8 +26,8 @@ function visit(relative) {
 // user/item identifiers, playback positions and provider metadata out of it.
 const privateLogPatterns = [
   /Log\.[diwe]\([^\n]*\$(?:\{)?(?:UserId|SeriesId|PositionTicks|LastPlayedDate|ProviderIds|Genres|MediaSources|libraryId|seriesId|itemId|tmdbId|genre|title|artistId|albumId|seasonId|currentEpisodeIndex|startIndex)(?:\}|\b)/,
-  /Log\.[diwe]\([^\n]*\$\{[^\n]*(?:\.Name|\.Id)\b/,
-  /Log\.[diwe]\([^\n]*(?:Episode clicked|Library from API|UserId:)/
+  /Log\.[diwe]\([^\n]*\$\{[^\n]*(?:\.Name|\.Id|\.DisplayTitle|\.address|\.customAction|\.packageName)\b/,
+  /Log\.[diwe]\([^\n]*(?:Episode clicked|Library from API|UserId:|Requesting .*TMDB ID|server with input|Trying .*for:)/i
 ];
 
 const violations = [];
@@ -42,4 +41,4 @@ for (const file of files) {
 }
 
 assert.deepEqual(violations, [], `Android log privacy violations: ${violations.join(', ')}`);
-console.log(`Android log privacy contract passed: ${files.length} network/auth files checked.`);
+console.log(`Android log privacy contract passed: ${files.length} Velora Android source files checked.`);

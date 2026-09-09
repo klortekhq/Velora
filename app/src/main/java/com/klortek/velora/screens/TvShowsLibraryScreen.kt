@@ -287,7 +287,7 @@ fun TvShowsLibraryScreen(
             isLoading = true
             withContext(Dispatchers.IO) {
                 try {
-                    Log.d("TvShowsLibraryScreen", "Fetching TV shows for library: $libraryName (ID: $libraryId)")
+                    Log.d("TvShowsLibraryScreen", "Fetching TV shows for library")
                     
                     // First fetch available genres from this library
                     val genres = apiService.getGenresFromLibrary(libraryId)
@@ -371,7 +371,7 @@ fun TvShowsLibraryScreen(
                         instantHighlightedItem = firstItem
                     }
                 } catch (e: Exception) {
-                    Log.e("TvShowsLibraryScreen", "Error loading TV shows for library $libraryId", e)
+                    Log.e("TvShowsLibraryScreen", "Error loading TV shows for library", e)
                 }
             }
             isLoading = false
@@ -2065,7 +2065,7 @@ fun TvShowsLibraryScreen(
                                                 onShowClick = { show ->
                                                     // Search for this TV show in Jellyfin library and navigate to details
                                                     scope.launch {
-                                                        Log.d("TvShowsLibraryScreen", "Searching for TV show: ${show.name} (ID: ${show.id})")
+                    Log.d("TvShowsLibraryScreen", "Searching for TV show")
                                                         
                                                         // Check if Jellyseerr knows it's in the library
                                                         val jellyfinId = show.mediaInfo?.jellyfinId
@@ -2073,7 +2073,7 @@ fun TvShowsLibraryScreen(
                                                             // Directly fetch from Jellyfin using the known ID
                                                             val jellyfinItem = apiService?.getItemDetails(jellyfinId)
                                                             if (jellyfinItem != null) {
-                                                                Log.d("TvShowsLibraryScreen", "Found TV show in library via Jellyseerr: ${jellyfinItem.Name}")
+                                    Log.d("TvShowsLibraryScreen", "Found TV show in library via Jellyseerr")
                                                                 onItemClick(jellyfinItem, 0L)
                                                                 return@launch
                                                             }
@@ -2089,7 +2089,7 @@ fun TvShowsLibraryScreen(
                                                         }
                                                         
                                                         if (jellyfinItem != null) {
-                                                            Log.d("TvShowsLibraryScreen", "Found TV show in library: ${jellyfinItem.Name} (ID: ${jellyfinItem.Id})")
+                                    Log.d("TvShowsLibraryScreen", "Found TV show in library")
                                                             onItemClick(jellyfinItem, 0L)
                                                         } else {
                                                             Log.d("TvShowsLibraryScreen", "TV show not found in library: ${show.name}")

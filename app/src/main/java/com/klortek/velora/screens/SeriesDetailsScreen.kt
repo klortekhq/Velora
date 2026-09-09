@@ -281,7 +281,7 @@ fun SeriesDetailsScreen(
             val targetEpisode = episodes.find { it.Id == initialEpisodeId }
             if (targetEpisode != null) {
                 // Episode is in current season - SeriesBottomContainer will handle focus
-                Log.d("SeriesDetailsScreen", "✅ Episode found in current season: ${targetEpisode.Name} (S${targetEpisode.ParentIndexNumber}E${targetEpisode.IndexNumber})")
+                    Log.d("SeriesDetailsScreen", "✅ Episode found in current season")
                 focusedEpisode = targetEpisode
                 hasPerformedInitialFocus = true
             } else {
@@ -291,13 +291,13 @@ fun SeriesDetailsScreen(
                     try {
                         var found = false
                         for ((index, season) in seasons.withIndex()) {
-                            Log.d("SeriesDetailsScreen", "Searching season ${season.IndexNumber ?: index} (index $index, ID: ${season.Id})...")
+                    Log.d("SeriesDetailsScreen", "Searching season")
                             val seasonEpisodes = apiService.getEpisodes(item.Id, season.Id)
                             Log.d("SeriesDetailsScreen", "  - Found ${seasonEpisodes.size} episodes in this season")
                             val episodeInSeason = seasonEpisodes.find { it.Id == initialEpisodeId }
                             if (episodeInSeason != null) {
                                 // Found the episode in this season - switch to it
-                                Log.d("SeriesDetailsScreen", "✅ Found episode in season ${season.IndexNumber ?: index}: ${episodeInSeason.Name}")
+                    Log.d("SeriesDetailsScreen", "✅ Found episode in season")
                                 withContext(Dispatchers.Main) {
                                     selectedSeasonIndex = index
                                     episodes = seasonEpisodes
@@ -361,7 +361,7 @@ fun SeriesDetailsScreen(
                     Log.d("SeriesDetails", "Refreshed ${refreshedEpisodes.size} episodes after marking as watched")
                     // Log the watched status of episodes
                     refreshedEpisodes.forEach { ep ->
-                        Log.d("SeriesDetails", "Episode ${ep.Name}: PlayedPercentage=${ep.UserData?.PlayedPercentage}")
+                        Log.d("SeriesDetails", "Episode playback state loaded")
                     }
                     withContext(Dispatchers.Main) {
                         // Store the currently focused episode ID before refreshing
@@ -373,7 +373,7 @@ fun SeriesDetailsScreen(
                         
                         // Log watched status of episodes for debugging
                         refreshedEpisodes.forEach { ep ->
-                            Log.d("SeriesDetails", "Episode ${ep.Name} (${ep.Id}): PlayedPercentage=${ep.UserData?.PlayedPercentage}")
+                        Log.d("SeriesDetails", "Episode playback state loaded")
                         }
                         
                         // Update focusedEpisode to point to the refreshed episode if it exists
@@ -1154,7 +1154,7 @@ fun SeriesBottomContainer(
             if (targetEpisode != null) {
                 // Find the index of the target episode
                 val targetIndex = episodes.indexOfFirst { it.Id == initialEpisodeId }
-                Log.d("SeriesBottomContainer", "Found target episode at index $targetIndex: ${targetEpisode.Name} (S${targetEpisode.ParentIndexNumber}E${targetEpisode.IndexNumber})")
+                    Log.d("SeriesBottomContainer", "Found target episode")
                 
                 focusedEpisode = targetEpisode
                 lastFocusedEpisode = targetEpisode
@@ -1181,7 +1181,7 @@ fun SeriesBottomContainer(
                 while (retries < maxRetries && !success) {
                     try {
                         focusRequester.requestFocus()
-                        Log.d("SeriesBottomContainer", "✅ Successfully focused on initial episode: ${targetEpisode.Name}")
+                    Log.d("SeriesBottomContainer", "✅ Successfully focused on initial episode")
                         success = true
                     } catch (e: IllegalStateException) {
                         retries++
@@ -1968,7 +1968,7 @@ fun EpisodeMetadataRow(
                     } else {
                         episodeDetails = fetchedDetails ?: episode
                     }
-                    Log.d("EpisodeMetadataRow", "Fetched episode details for ${episode.Name}, using UserData PlayedPercentage=${episode.UserData?.PlayedPercentage}")
+                    Log.d("EpisodeMetadataRow", "Fetched episode details")
                 } catch (e: kotlinx.coroutines.CancellationException) {
                     // Normal cancellation when composable leaves composition - don't log as error
                     throw e // Re-throw to respect cancellation
@@ -2564,7 +2564,7 @@ fun EpisodeActionButtonsRow(
                                 
                                 if (success) {
                                     val action = if (isAlreadyWatched) "unwatched" else "watched"
-                                    Log.d("SeriesDetails", "Episode ${displayEpisode.Id} marked as $action")
+                Log.d("SeriesDetails", "Episode playback state changed")
                                     // Add a small delay to let the server process the status change
                                     delay(800) // Wait 800ms for server to update
                                     
@@ -2677,7 +2677,7 @@ fun EpisodeActionButtonsRow(
                                 ?.find { it.Type == "Subtitle" && it.Index == subtitleIndex }
                             
                             if (subtitleStream != null) {
-                                android.util.Log.d("SeriesDetails", "Pre-downloading selected subtitle: ${subtitleStream.DisplayTitle}")
+                                android.util.Log.d("SeriesDetails", "Pre-downloading selected subtitle")
                                 com.klortek.velora.player.SubtitleDownloader.downloadSubtitle(
                                     context = context,
                                     apiService = apiService,
@@ -2702,7 +2702,7 @@ fun EpisodeActionButtonsRow(
             apiService = apiService,
             onDismiss = { showAudioDialog = false },
             onAudioSelected = { audioIndex ->
-                Log.d("EpisodeAudioDialog", "onAudioSelected callback: saving audioIndex=$audioIndex for episode=${episode.Id}")
+                            Log.d("EpisodeAudioDialog", "Audio selection saved")
                 settings.setAudioPreference(episode.Id, audioIndex)
                 storedAudioIndex = audioIndex
                 showAudioDialog = false
@@ -3495,12 +3495,12 @@ fun EpisodeAudioSelectionDialog(
     
     // Fetch full item details to get MediaSources with audio streams
     LaunchedEffect(item.Id, apiService) {
-        Log.d("EpisodeAudioDialog", "LaunchedEffect triggered for item ${item.Id}, apiService=${apiService != null}")
+                    Log.d("EpisodeAudioDialog", "LaunchedEffect triggered")
         if (apiService != null) {
             withContext(Dispatchers.IO) {
                 try {
                     val details = apiService.getItemDetails(item.Id)
-                    Log.d("EpisodeAudioDialog", "Fetched details: ${details?.Name}, MediaSources: ${details?.MediaSources?.size ?: 0}")
+                                Log.d("EpisodeAudioDialog", "Fetched episode details")
                     details?.MediaSources?.firstOrNull()?.MediaStreams?.let { streams ->
                         val audioStreams = streams.filter { it.Type == "Audio" }
                         Log.d("EpisodeAudioDialog", "Found ${audioStreams.size} audio streams: ${audioStreams.map { "Index=${it.Index}, Lang=${it.Language}, Codec=${it.Codec}" }}")

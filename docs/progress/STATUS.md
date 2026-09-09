@@ -118,8 +118,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   móvil persiste las preferencias de esos filtros; verificado el 2026-09-09.
 - Privacidad de logs Android: se eliminaron títulos, IDs, posiciones de
   reproducción y metadatos de proveedores de las trazas de autenticación y
-  catálogo; `check-android-log-privacy.mjs` recorre 31 archivos de red,
-  autenticación y música, y la suite móvil/TV terminó en `BUILD SUCCESSFUL` el
+  catálogo y pantallas; `check-android-log-privacy.mjs` recorre 131 archivos
+  fuente Android de Velora, y la suite móvil/TV terminó en `BUILD SUCCESSFUL` el
   2026-09-09.
 - Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
   y dejar la tuerca como punto único para audio y subtítulos: móvil

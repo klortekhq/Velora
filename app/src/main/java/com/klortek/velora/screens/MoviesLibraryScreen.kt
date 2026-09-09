@@ -287,7 +287,7 @@ fun MoviesLibraryScreen(
             isLoading = true
             withContext(Dispatchers.IO) {
                 try {
-                    Log.d("MoviesLibraryScreen", "Fetching movies for library: $libraryName (ID: $libraryId)")
+                    Log.d("MoviesLibraryScreen", "Fetching movies for library")
                     
                     // First fetch available genres from this library
                     val genres = apiService.getMovieGenresFromLibrary(libraryId)
@@ -367,7 +367,7 @@ fun MoviesLibraryScreen(
                         instantHighlightedItem = firstItem
                     }
                 } catch (e: Exception) {
-                    Log.e("MoviesLibraryScreen", "Error loading movies for library $libraryId", e)
+                    Log.e("MoviesLibraryScreen", "Error loading movies for library", e)
                 }
             }
             isLoading = false
@@ -1968,7 +1968,7 @@ fun MoviesLibraryScreen(
                                         onMovieClick = { movie ->
                                             // Search for this movie in Jellyfin library and navigate to details
                                             scope.launch {
-                                                Log.d("MoviesLibraryScreen", "Searching for movie: ${movie.title} (ID: ${movie.id})")
+                    Log.d("MoviesLibraryScreen", "Searching for movie")
                                                 
                                                 // Check if Jellyseerr knows it's in the library
                                                 val jellyfinId = movie.mediaInfo?.jellyfinId
@@ -1976,7 +1976,7 @@ fun MoviesLibraryScreen(
                                                     // Directly fetch from Jellyfin using the known ID
                                                     val jellyfinItem = apiService?.getItemDetails(jellyfinId)
                                                     if (jellyfinItem != null) {
-                                                        Log.d("MoviesLibraryScreen", "Found movie in library via Jellyseerr: ${jellyfinItem.Name}")
+                            Log.d("MoviesLibraryScreen", "Found movie in library via Jellyseerr")
                                                         onItemClick(jellyfinItem, 0L)
                                                         return@launch
                                                     }
@@ -1992,7 +1992,7 @@ fun MoviesLibraryScreen(
                                                 }
                                                 
                                                 if (jellyfinItem != null) {
-                                                    Log.d("MoviesLibraryScreen", "Found movie in library: ${jellyfinItem.Name} (ID: ${jellyfinItem.Id})")
+                            Log.d("MoviesLibraryScreen", "Found movie in library")
                                                     onItemClick(jellyfinItem, 0L)
                                                 } else {
                                                     Log.d("MoviesLibraryScreen", "Movie not found in library, showing request screen: ${movie.title}")
