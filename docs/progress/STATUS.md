@@ -20,6 +20,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   fuente. `web/scripts/test-platform.mjs` pasa y `node web/scripts/build-web.mjs
   all` regenera correctamente el bundle web y el IPK webOS; Samsung queda como
   bundle preparado y VIDAA como HTML5 sin afirmar firma ni certificación.
+- Release Android: el workflow elimina antes los APK y checksums Android
+  antiguos de la release etiquetada, evitando que una reconstrucción deje
+  varios artefactos de la misma variante que puedan confundirse al instalar.
 - Revalidación posterior al cambio de reparto TV (2026-09-09): los 20
   contratos `scripts/check-*.mjs` terminan correctamente, incluidos
   `check-android-content-navigation.mjs`, seguridad, reproducción, offline,
