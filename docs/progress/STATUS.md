@@ -49,6 +49,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-20260910.apk).
   Son APK debug de QA, no paquetes firmados de tienda; la publicación está
   verificada en la lista pública de assets de GitHub.
+- Android i18n: el flujo de descargas de temporadas y selección de episodios
+  ya no cae al inglés en árabe, italiano, japonés, coreano, portugués, ruso,
+  turco ni chino. El contrato de catálogos valida que estas acciones tengan
+  traducción propia; la suite móvil/TV termina en `BUILD SUCCESSFUL`.
 - Pantalla de inicio de sesión Android: el contrato
   `check-android-login-layout.mjs` protege safe area, desplazamiento vertical,
   tamaños adaptativos de los campos y foco de mando en el botón TV. La
