@@ -16,6 +16,7 @@ import com.klortek.velora.BuildConfig
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.jellyfin.veloraClientDeviceId
 import com.klortek.velora.jellyfin.veloraClientDeviceName
+import com.klortek.velora.jellyfin.veloraMediaBrowserAuthorization
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -50,7 +51,10 @@ class ThemeLoader(
                 android.util.Log.d("ThemeLoader", "Fetching CSS from: ${SensitiveDataRedactor.url(cssUrl)}")
                 
                 val cssResponse: HttpResponse = client.get(cssUrl) {
-                    header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                    header(
+                        HttpHeaders.Authorization,
+                        veloraMediaBrowserAuthorization(accessToken, clientDeviceName, clientDeviceId)
+                    )
                 }
                 
                 val cssStatus = cssResponse.status
