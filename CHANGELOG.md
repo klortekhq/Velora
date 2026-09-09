@@ -9,7 +9,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   usa la sesión `LiveStreamId` y el remux negociado por Jellyfin para evitar
   fallos con listas IPTV normalizadas por el servidor. La decisión quedó
   extraída a una política de reproducción reutilizable con regresiones en
-  móvil y TV.
+  móvil y TV; Apple y web quedan protegidos para priorizar igualmente la URL
+  de remux/transcodificación cuando Jellyfin la ofrece.
 - Apple móvil: las descargas usan `URLSession` en segundo plano con progreso,
   velocidad, ETA y pausa/reanudación; el almacenamiento privado y la
   verificación SHA-256 se mantienen antes de reproducir sin conexión.

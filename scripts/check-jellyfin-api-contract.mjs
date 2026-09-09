@@ -7,6 +7,7 @@ const series = fs.readFileSync('app/src/main/java/com/klortek/velora/screens/Ser
 const quickConnect = fs.readFileSync('app/src/main/java/com/klortek/velora/jellyfin/QuickConnectService.kt', 'utf8');
 const androidLiveTv = fs.readFileSync('app/src/main/java/com/klortek/velora/JellyfinVideoPlayerActivity.kt', 'utf8');
 const androidLiveTvPolicy = fs.readFileSync('app/src/main/java/com/klortek/velora/playback/LiveTvPlaybackPolicy.kt', 'utf8');
+const webApp = fs.readFileSync('web/app.js', 'utf8');
 const smoke = fs.readFileSync('scripts/qa/jellyfin-smoke.ps1', 'utf8');
 
 if (!api.includes('IncludeItemTypes", "Trailer"')) {
@@ -25,6 +26,12 @@ if (!androidLiveTvPolicy.includes('source.Protocol?.equals("M3U", ignoreCase = t
     !androidLiveTvPolicy.includes('source?.SupportsDirectPlay == true') ||
     !androidLiveTv.includes('shouldUseLiveTvDirectSource(liveSource)')) {
   throw new Error('Jellyfin 12: los canales M3U no deben saltarse el LiveStreamId/remux del servidor');
+}
+if (!webApp.includes('source.TranscodingUrl || source.DirectStreamUrl')) {
+  throw new Error('Jellyfin 12: la web debe preferir la URL de remux/transcodificación de Live TV');
+}
+if (!appleApi.includes('selectedSource?.transcodingURL ?? selectedSource?.directStreamURL')) {
+  throw new Error('Jellyfin 12: Apple debe preferir la URL de remux/transcodificación de Live TV');
 }
 if (!smoke.includes('StartIndex=$startIndex') || !smoke.includes('TotalRecordCount') ||
     !/do \{[\s\S]*?\} while \(\$pageItems\.Count -gt 0/.test(smoke)) {
