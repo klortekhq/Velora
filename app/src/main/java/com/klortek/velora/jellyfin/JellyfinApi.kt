@@ -397,7 +397,7 @@ class JellyfinApiService(
         client.get(URLBuilder().takeFrom("${base}Sessions").apply {
             parameters.append("ControllableByUserId", userId)
         }.buildString()) {
-            header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+            header(HttpHeaders.Authorization, mediaBrowserAuthorization())
         }.body<List<RemoteSessionInfo>>()
             .filter { !it.Id.isNullOrBlank() && !it.DeviceName.isNullOrBlank() }
     }.getOrDefault(emptyList())
@@ -864,7 +864,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Fetching person details")
             
             val response = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }
             val person: PersonDetails = response.body()
             android.util.Log.d("JellyfinAPI", "Person details fetched")
