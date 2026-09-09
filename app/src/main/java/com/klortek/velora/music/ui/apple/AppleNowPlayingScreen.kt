@@ -173,7 +173,7 @@ private fun AppleEmptyNowPlaying(onBackPress: () -> Unit) {
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "Not Playing",
+            text = stringResource(com.klortek.velora.R.string.music_nothing_playing),
             style = MaterialTheme.typography.headlineLarge,
             color = Color.White,
             fontWeight = FontWeight.Bold
@@ -182,7 +182,7 @@ private fun AppleEmptyNowPlaying(onBackPress: () -> Unit) {
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Select something to play",
+            text = stringResource(com.klortek.velora.R.string.music_select_song),
             style = MaterialTheme.typography.bodyLarge,
             color = Color(0xFF8E8E93)
         )
@@ -517,14 +517,14 @@ private fun AppleQueueView(
             }
 
             Text(
-                text = "Up Next",
+                text = stringResource(com.klortek.velora.R.string.music_up_next),
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "${queue.size} songs",
+                text = stringResource(com.klortek.velora.R.string.music_songs_count, queue.size),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color(0xFF8E8E93)
             )

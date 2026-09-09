@@ -297,7 +297,7 @@ private fun ArtistHeader(
 
                 Column {
                     Text(
-                        text = "ARTIST",
+                        text = stringResource(com.klortek.velora.R.string.music_artist),
                         style = MaterialTheme.typography.labelSmall,
                         color = Color.Gray
                     )
@@ -310,7 +310,7 @@ private fun ArtistHeader(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "$albumCount albums",
+                        text = stringResource(com.klortek.velora.R.string.music_albums_count, albumCount),
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.Gray
                     )
@@ -527,7 +527,7 @@ private fun ArtistAlbumCard(
                 )
             }
             Text(
-                text = "${album.trackCount} tracks",
+                text = stringResource(com.klortek.velora.R.string.music_tracks_count, album.trackCount),
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray
             )

@@ -246,7 +246,7 @@ private fun AppleAlbumInfoPanel(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "ALBUM",
+                text = stringResource(com.klortek.velora.R.string.music_album),
                 style = MaterialTheme.typography.labelSmall,
                 color = Color(0xFF8E8E93)
             )
@@ -268,7 +268,11 @@ private fun AppleAlbumInfoPanel(
                 color = Color(0xFF8E8E93)
             )
             Text(
-                text = "${tracks.size} songs, ${formatTotalDuration(totalDuration)}",
+                text = stringResource(
+                    com.klortek.velora.R.string.music_songs_duration,
+                    tracks.size,
+                    formatTotalDuration(totalDuration)
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 color = Color(0xFF8E8E93)
             )

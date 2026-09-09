@@ -207,6 +207,15 @@ Please verify:
   <string name="music_unknown_album">Unknown album</string>
   <string name="music_unknown_artist">Unknown artist</string>
   <string name="music_songs_count">%1$d songs</string>
+  <string name="music_artist">Artist</string>
+  <string name="music_no_artists">No artists found</string>
+  <string name="music_no_albums">No albums found</string>
+  <string name="music_tracks_count">%1$d tracks</string>
+  <string name="music_nothing_playing">Nothing playing</string>
+  <string name="music_select_song">Select a song to start playing</string>
+  <string name="music_up_next">Up next</string>
+  <string name="music_album">Album</string>
+  <string name="music_songs_duration">%1$d songs, %2$s</string>
   <string name="jellyseerr_loading_details">Loading details…</string>
   <string name="jellyseerr_go_back">Go back</string>
   <string name="jellyseerr_unknown_title">Untitled</string>

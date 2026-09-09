@@ -433,6 +433,15 @@ Podrás descargarlos de nuevo cuando quieras.</string>
   <string name="music_unknown_album">Álbum desconocido</string>
   <string name="music_unknown_artist">Artista desconocido</string>
   <string name="music_songs_count">%1$d canciones</string>
+  <string name="music_artist">Artista</string>
+  <string name="music_no_artists">No se han encontrado artistas</string>
+  <string name="music_no_albums">No se han encontrado álbumes</string>
+  <string name="music_tracks_count">%1$d pistas</string>
+  <string name="music_nothing_playing">Nada reproduciéndose</string>
+  <string name="music_select_song">Selecciona una canción para empezar</string>
+  <string name="music_up_next">A continuación</string>
+  <string name="music_album">Álbum</string>
+  <string name="music_songs_duration">%1$d canciones, %2$s</string>
   <string name="jellyseerr_status_available_short">Disponible</string>
   <string name="jellyseerr_status_requested_short">Solicitado</string>
   <string name="jellyseerr_status_pending_short">Pendiente</string>
