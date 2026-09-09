@@ -5302,7 +5302,7 @@ fun ExoPlayerSettingsMenu(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "Cargando subtítulos…",
+                                    text = stringResource(R.string.subtitle_downloading),
                                     style = MaterialTheme.typography.bodyMedium.copy(
                                         fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.8f
                                     ),
@@ -5751,7 +5751,7 @@ fun SubtitleSelectionDialog(
         ) {
             // Title
             androidx.compose.material3.Text(
-                text = "Seleccionar subtítulos",
+                text = stringResource(R.string.player_subtitles),
                 style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -5908,7 +5908,7 @@ fun AudioSelectionDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             androidx.compose.material3.Text(
-                text = "Seleccionar pista de audio",
+                text = stringResource(R.string.player_audio_tracks),
                 style = androidx.compose.material3.MaterialTheme.typography.headlineSmall,
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp)

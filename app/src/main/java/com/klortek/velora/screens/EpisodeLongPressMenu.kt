@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -34,6 +35,7 @@ import androidx.tv.material3.Text
 import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.jellyfin.JellyfinApiService
 import com.klortek.velora.jellyfin.JellyfinItem
+import com.klortek.velora.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -145,7 +147,7 @@ fun SubtitleSelectorContentVertical(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Cargando subtítulos...",
+                text = stringResource(R.string.subtitle_downloading),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
@@ -166,7 +168,7 @@ fun SubtitleSelectorContentVertical(
                     },
                     headlineContent = {
                         Text(
-                            text = "Ninguno (desactivados)",
+                            text = stringResource(R.string.player_subtitles_none),
                             style = MaterialTheme.typography.bodyMedium
                         )
                     },
@@ -178,16 +180,16 @@ fun SubtitleSelectorContentVertical(
             items(subtitleStreams) { stream ->
                 val subtitleTitle = stream.DisplayTitle
                     ?: stream.Language
-                    ?: "Unknown"
+                    ?: stringResource(R.string.player_unknown)
                 val subtitleInfo = buildString {
-                    if (stream.IsDefault == true) append("Default")
+                    if (stream.IsDefault == true) append(stringResource(R.string.player_default))
                     if (stream.IsForced == true) {
                         if (isNotEmpty()) append(", ")
-                        append("Forced")
+                        append(stringResource(R.string.player_forced))
                     }
                     if (stream.IsExternal == true) {
                         if (isNotEmpty()) append(", ")
-                        append("External")
+                        append(stringResource(R.string.player_external))
                     }
                 }
                 val isSelected = stream.Index != null && stream.Index == storedSubtitleIndex
@@ -229,7 +231,7 @@ fun SubtitleSelectorContentVertical(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No hay subtítulos disponibles",
+                            text = stringResource(R.string.player_subtitles_unavailable),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
