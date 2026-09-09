@@ -11,10 +11,9 @@ function keys(file) {
 
 const base = keys(path.join(resources, 'values', 'strings.xml'));
 // These are the product's guaranteed complete catalogues. The additional
-// locales are intentionally allowed to fall back to the Spanish base until
-// their translation coverage is complete; they are never allowed to introduce
-// an unknown resource key.
-const localeDirectories = ['values-en', 'values-de', 'values-fr'];
+// locales may still fall back to the Spanish base until their translation
+// coverage is complete; they are never allowed to introduce an unknown key.
+const localeDirectories = ['values-en', 'values-es', 'values-de', 'values-fr'];
 
 const failures = [];
 for (const directory of localeDirectories) {
