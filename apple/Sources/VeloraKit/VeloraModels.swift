@@ -156,7 +156,11 @@ public struct JellyfinLiveTvChannel: Codable, Identifiable, Sendable {
                         ?? source.liveStreamID
                         ?? source.transcodingURL?.absoluteString
                         ?? source.directStreamURL?.absoluteString
-                        ?? [source.protocolName ?? "", "empty-source"].joined(separator: "|")
+                        ?? [
+                            source.name?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? "",
+                            source.protocolName?.lowercased() ?? "",
+                            "empty-source"
+                        ].joined(separator: "|")
                     return seen.insert(key).inserted
                 }
                 grouped[channel.id] = Self(

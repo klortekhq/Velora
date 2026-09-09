@@ -161,6 +161,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Se evita reconstruir todas las opciones de fuente durante cada movimiento
   de foco o recomposición, sin cambiar el orden, el filtrado ni el zapping.
   La compilación y las suites unitarias móvil/TV terminan correctamente.
+- Corrección Apple del 2026-09-09: el agrupado de Live TV conserva ahora
+  fuentes con nombres distintos aunque Jellyfin no proporcione ID, stream ID
+  ni URL. Se añadió una prueba específica para Principal/IPTV; la compilación
+  Swift queda pendiente de la ejecución macOS de CI porque este host no tiene
+  Swift/Xcode.
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos

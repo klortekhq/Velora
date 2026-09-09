@@ -292,6 +292,22 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(grouped.first?.mediaSources.count, 1)
     }
 
+    func testLiveTvGroupingKeepsNamedSourcesWithoutIdentifiers() {
+        let grouped = JellyfinLiveTvChannel.grouped([
+            JellyfinLiveTvChannel(
+                id: "channel-1",
+                name: "Noticias",
+                mediaSources: [
+                    JellyfinLiveTvMediaSource(name: "Principal", protocolName: "hls"),
+                    JellyfinLiveTvMediaSource(name: "IPTV", protocolName: "hls")
+                ]
+            )
+        ])
+
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.mediaSources.compactMap(\.name), ["Principal", "IPTV"])
+    }
+
     func testLiveTvGroupingPrefersRicherMetadataForRepeatedSource() {
         let source = JellyfinLiveTvMediaSource(
             id: "source-1", liveStreamID: "live-1", transcodingURL: nil,
