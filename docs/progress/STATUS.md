@@ -53,6 +53,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   ya no cae al inglés en árabe, italiano, japonés, coreano, portugués, ruso,
   turco ni chino. El contrato de catálogos valida que estas acciones tengan
   traducción propia; la suite móvil/TV termina en `BUILD SUCCESSFUL`.
+- Android i18n: también se eliminaron restos visibles en inglés de los controles
+  de Series, reparto y errores del reproductor en esos ocho catálogos extra; el
+  contrato de locales los protege junto con el flujo de descargas.
 - APKs QA de internacionalización regeneradas el 2026-09-10 desde `main`:
   móvil SHA-256
   `A7194207C132AA4AD4AD6EB4CD1172FCD89EBA2081C6DC11C2930ABB072E9721` y TV
@@ -60,6 +63,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Ambos están visibles en la pre-release pública `v1.4.0`: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-i18n-20260910.apk)
   y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-i18n-20260910.apk).
   Son APK debug de QA, no builds release firmadas para tienda.
+- APKs QA más recientes, recompiladas tras esa corrección y subidas a la misma
+  pre-release pública `v1.4.0`: móvil SHA-256
+  `604E92EEF1C0169B9755D2BDF26648F1828559FF673A05C5A8099FF825A53438` y TV
+  SHA-256 `0615ABA13490E424776353DD7DED91A2D0514CD519022346266B40DCA499E4D7`.
+  [Móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-i18n-20260910-r2.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-i18n-20260910-r2.apk).
 - Pantalla de inicio de sesión Android: el contrato
   `check-android-login-layout.mjs` protege safe area, desplazamiento vertical,
   tamaños adaptativos de los campos y foco de mando en el botón TV. La
