@@ -88,7 +88,7 @@ public actor JellyfinClient {
             .first.map(String.init) ?? "en"
         request.setValue(
             "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"\(Self.clientVersion)\", Language=\"\(language)\"",
-            forHTTPHeaderField: "X-Emby-Authorization"
+            forHTTPHeaderField: "Authorization"
         )
         // Jellyfin's AuthenticateByName contract calls the password field
         // `Pw`; keep this identical to Android and the QA smoke test.
@@ -207,7 +207,7 @@ public actor JellyfinClient {
         var request = URLRequest(url: safeURL)
         request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
         if isServerURL(safeURL), let accessToken {
-            request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token")
+            request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
         }
         return request
     }
@@ -383,7 +383,9 @@ public actor JellyfinClient {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
-        if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
+        if let accessToken {
+            request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
+        }
         request.httpBody = try? JSONEncoder().encode(
             JellyfinPlaybackStoppedRequest(itemID: itemID, positionTicks: max(0, positionTicks))
         )
@@ -393,7 +395,9 @@ public actor JellyfinClient {
     private func request<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         var request = URLRequest(url: url)
         request.setValue("Velora/\(Self.clientVersion)", forHTTPHeaderField: "X-Emby-Client")
-        if let accessToken { request.setValue(accessToken, forHTTPHeaderField: "X-Emby-Token") }
+        if let accessToken {
+            request.setValue("MediaBrowser Token=\"\(accessToken)\"", forHTTPHeaderField: "Authorization")
+        }
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw ClientError.invalidResponse }
         guard http.statusCode != 401 else { throw ClientError.unauthorized }

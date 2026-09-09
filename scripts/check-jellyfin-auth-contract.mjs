@@ -29,6 +29,13 @@ const forbidden = {
   web: 'JSON.stringify({ Username: username, Password:'
 };
 
+const jellyfin12Files = [
+  path.join(root, 'app/src/main/java'),
+  path.join(root, 'apple/Sources'),
+  path.join(root, 'web'),
+  path.join(root, 'scripts/qa')
+];
+
 for (const [name, file] of Object.entries(files)) {
   const source = fs.readFileSync(file, 'utf8');
   if (!source.includes(required[name])) {
@@ -42,4 +49,21 @@ for (const [name, file] of Object.entries(files)) {
   }
 }
 
-console.log('Jellyfin authentication contract consistent: Pw');
+function walk(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const file = path.join(dir, entry.name);
+    return entry.isDirectory() ? walk(file) : [file];
+  });
+}
+
+for (const directory of jellyfin12Files) {
+  for (const file of walk(directory)) {
+    if (!/\.(kt|swift|js|ps1)$/.test(file)) continue;
+    const source = fs.readFileSync(file, 'utf8');
+    if (/X-Emby-(?:Authorization|Token)/.test(source)) {
+      throw new Error(`Jellyfin 12: cabecera legacy encontrada en ${path.relative(root, file)}`);
+    }
+  }
+}
+
+console.log('Jellyfin authentication contract consistent: Pw + Authorization MediaBrowser; no legacy X-Emby headers');

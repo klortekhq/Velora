@@ -81,7 +81,8 @@ class MediaUrlSecurityTest {
             accessToken = "secret-token"
         )
 
-        assertTrue(headers.contains("X-Emby-Authorization"))
+        assertTrue(headers.contains("Authorization: MediaBrowser"))
+        assertFalse(headers.contains("X-Emby-Authorization"))
         assertTrue(headers.contains("Token=\"secret-token\""))
         assertFalse(url.contains("secret-token"))
         assertFalse(url.contains("token=", ignoreCase = true))

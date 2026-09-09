@@ -70,7 +70,7 @@ La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de q
 
 ## Descargar
 
-Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases) cuando incorporan un bloque funcional o una mejora relevante. No se publica una release por cada ajuste menor; las correcciones pequeñas se agrupan en la siguiente versión significativa, salvo que sean de seguridad o críticas. Cada release etiquetada reúne los APK de Android firmados, el cliente web y los paquetes web disponibles, junto con sus sumas SHA-256. Los APK debug y release unsigned se reservan para QA y no se publican como release de distribución.
+Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases) cuando incorporan un bloque funcional o una mejora relevante. No se publica una release por cada ajuste menor; las correcciones pequeñas se agrupan en la siguiente versión significativa, salvo que sean de seguridad o críticas. Cada release etiquetada reúne los APK de Android firmados, el cliente web, los paquetes Smart TV disponibles y el paquete fuente Apple validado, junto con sus sumas SHA-256. Las IPA/APP de Apple requieren firma y distribución desde Xcode/App Store Connect; Velora no publica una IPA ficticia ni presenta el paquete fuente como instalable. Los APK debug y release unsigned se reservan para QA y no se publican como release de distribución.
 
 ## Cliente web y Smart TV
 

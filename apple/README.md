@@ -9,8 +9,8 @@ finales. `VeloraPlatform` mantiene la decisión de producto: las descargas sin
 conexión solo están disponibles en iPhone y iPad; tvOS es streaming.
 
 `VeloraKit` no mete tokens en URLs: las peticiones autenticadas usan
-`X-Emby-Token` y la autenticación inicial usa el contrato estándar de Jellyfin
-(`Pw` y `X-Emby-Authorization`). Incluye autenticación Jellyfin, sesión tipada, preferencias
+`Authorization: MediaBrowser ...` y la autenticación inicial usa el contrato estándar de Jellyfin
+(`Pw` y el esquema estándar `Authorization`). Incluye autenticación Jellyfin, sesión tipada, preferencias
 locales de idioma/audio/subtítulos/rendimiento, requests autenticadas para
 artwork o AVPlayer y componentes SwiftUI adaptativos para bibliotecas y ajustes.
 También incluye `VeloraAppShell`, una superficie SwiftUI nativa que conecta
@@ -48,7 +48,7 @@ reproduce en el reproductor integrado; las cargas se cancelan al cambiar rápido
 de canal y al salir se notifica `Sessions/Playing/Stopped` para liberar el tuner.
 
 Las tarjetas de biblioteca cargan el artwork directamente desde Jellyfin con
-`X-Emby-Token` en la petición; el token no se incluye en la URL. Los estados de
+`Authorization: MediaBrowser Token=...` en la petición; el token no se incluye en la URL. Los estados de
 carga y error muestran un placeholder estable para que la navegación siga
 siendo usable aunque una imagen no esté disponible.
 

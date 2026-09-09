@@ -112,7 +112,7 @@ class JellyfinAuthService(
                 val request = Request.Builder()
                     .url(url)
                     .header("Accept", "application/json")
-                    .header("X-Emby-Authorization", embyAuthHeader)
+                    .header("Authorization", embyAuthHeader)
                     .post(body)
                     .build()
 

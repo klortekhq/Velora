@@ -384,7 +384,7 @@
     var headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-Emby-Token': state.token,
+      'Authorization': 'MediaBrowser Token="' + state.token + '"',
       'Accept-Language': languageCode()
     };
     Object.keys(request.headers || {}).forEach(function (key) {
@@ -413,7 +413,7 @@
       fetch(image(id), {
         headers: {
           Accept: 'image/*',
-          'X-Emby-Token': state.token
+          'Authorization': 'MediaBrowser Token="' + state.token + '"'
         }
       }).then(function (response) {
         if (!response.ok) throw Error('No se pudo cargar la imagen');
@@ -546,7 +546,8 @@
 
   function protectedMediaUrl(target) {
     // A native <video> element cannot attach Authorization headers. The
-    // same-origin service worker proxies this request and adds X-Emby-Token,
+    // same-origin service worker proxies this request and adds the standard
+    // MediaBrowser Authorization header,
     // keeping the token out of the address bar, history and referrers.
     return '/__velora_media?url=' + encodeURIComponent(target);
   }
@@ -660,7 +661,7 @@
       headers: {
         'Content-Type': 'application/json',
         'Accept-Language': languageCode(),
-      'X-Emby-Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="' + APP_VERSION + '", Language="' + languageCode() + '"'
+      'Authorization': 'MediaBrowser Client="Velora Web", Device="Browser", DeviceId="velora-web", Version="' + APP_VERSION + '", Language="' + languageCode() + '"'
       },
       body: JSON.stringify({ Username: username, Pw: document.querySelector('#password').value })
     }).then(function (response) {
@@ -1247,7 +1248,7 @@
           video.src = sourceUrl;
         } else {
           fetch(sourceUrl, {
-          headers: { 'X-Emby-Token': state.token, Accept: 'video/*' },
+          headers: { 'Authorization': 'MediaBrowser Token="' + state.token + '"', Accept: 'video/*' },
           cache: 'no-store',
           signal: player._veloraAbortController.signal
           }).then(function (response) {
