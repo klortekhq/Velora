@@ -4,6 +4,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Seguridad Android: se retiraron de Logcat títulos, IDs, posiciones de
+  reproducción y metadatos de proveedores en las rutas de autenticación y
+  catálogo; CI impide que vuelvan a introducirse.
 - CI: el contrato de navegación Android verifica también que las pestañas de
   recomendaciones y biblioteca, la ordenación y los filtros de películas y
   series sigan conectados a la consulta real y a sus preferencias persistentes.

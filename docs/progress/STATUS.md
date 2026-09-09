@@ -43,6 +43,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   comprueba que recomendaciones y biblioteca de películas/series aplican la
   consulta real, que TV conecta ordenación/género/estado de reproducción y que
   móvil persiste las preferencias de esos filtros; verificado el 2026-09-09.
+- Privacidad de logs Android: se eliminaron títulos, IDs, posiciones de
+  reproducción y metadatos de proveedores de las trazas de autenticación y
+  catálogo; `check-android-log-privacy.mjs` cubre 12 archivos de red/auth y la
+  suite móvil/TV terminó en `BUILD SUCCESSFUL` el 2026-09-09.
 - Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
   y dejar la tuerca como punto único para audio y subtítulos: móvil
   `app-mobile-debug.apk`, SHA-256

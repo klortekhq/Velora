@@ -104,14 +104,12 @@ class MainActivity : ComponentActivity() {
                                 }
                                 "Episode" -> {
                                     // Episodes navigate to series details screen, focused on that episode
-                                    android.util.Log.d("MainActivity", "Episode clicked: ${item.Name}, ID: ${item.Id}, SeriesId: ${item.SeriesId}")
                                     if (item.SeriesId != null) {
                                         // Fetch series details first to get the series item
                                         val seriesItem = JellyfinItem(
                                             Id = item.SeriesId,
                                             Name = item.SeriesName ?: ""
                                         )
-                                        android.util.Log.d("MainActivity", "Navigating to SeriesDetailsActivity with episodeId: ${item.Id}")
                                         SeriesDetailsActivity.createIntent(
                                             context = this@MainActivity,
                                             item = seriesItem,

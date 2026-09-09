@@ -148,7 +148,7 @@ class QuickConnectService(
                     val state = response.body<QuickConnectStateResponse>()
                     android.util.Log.d("QuickConnect", "State response: Authenticated=${state.Authenticated}, HasAuth=${state.Authentication != null}")
                     if (state.Authenticated && state.Authentication != null) {
-                        android.util.Log.d("QuickConnect", "QuickConnect authentication successful. UserId: ${state.Authentication.User.Id}")
+                         android.util.Log.d("QuickConnect", "QuickConnect authentication successful")
                     }
                     state
                 }
@@ -200,7 +200,7 @@ class QuickConnectService(
             when (response.status) {
                 HttpStatusCode.OK -> {
                     val result = response.body<QuickConnectAuthenticationResponse>()
-                    android.util.Log.d("QuickConnect", "QuickConnect authentication successful. UserId: ${result.User.Id}")
+                     android.util.Log.d("QuickConnect", "QuickConnect authentication successful")
                     result
                 }
                 HttpStatusCode.Unauthorized -> {

@@ -130,7 +130,7 @@ class JellyfinRepository(
                     }
                 } catch (e: Exception) {
                     // Log but continue with other libraries
-                    android.util.Log.w("JellyfinRepository", "Error fetching movies from library ${library.Name}: ${e::class.simpleName}")
+                    android.util.Log.w("JellyfinRepository", "Error fetching movies from a library (${e::class.simpleName})")
                 }
             }
             
@@ -196,7 +196,7 @@ class JellyfinRepository(
                     }
                 } catch (e: Exception) {
                     // Log but continue with other libraries
-                    android.util.Log.w("JellyfinRepository", "Error fetching released movies from library ${library.Name}: ${e::class.simpleName}")
+                    android.util.Log.w("JellyfinRepository", "Error fetching released movies from a library (${e::class.simpleName})")
                 }
             }
             
@@ -254,7 +254,7 @@ class JellyfinRepository(
                     }
                 } catch (e: Exception) {
                     // Log but continue with other libraries
-                    android.util.Log.w("JellyfinRepository", "Error fetching shows from library ${library.Name}: ${e::class.simpleName}")
+                    android.util.Log.w("JellyfinRepository", "Error fetching shows from a library (${e::class.simpleName})")
                 }
             }
             
@@ -314,7 +314,7 @@ class JellyfinRepository(
                     }
                 } catch (e: Exception) {
                     // Log but continue with other libraries
-                    android.util.Log.w("JellyfinRepository", "Error fetching episodes from library ${library.Name}: ${e::class.simpleName}")
+                    android.util.Log.w("JellyfinRepository", "Error fetching episodes from a library (${e::class.simpleName})")
                 }
             }
             
