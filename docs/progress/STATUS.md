@@ -60,6 +60,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de
   cliente/dispositivo. Las pruebas web y los contratos estáticos pasan; la
   compilación Swift sigue pendiente del runner macOS/Xcode.
+- Regresión Android del 2026-09-09: `JellyfinAuthServiceTest` verifica en móvil
+  y TV que la cabecera completa conserva cliente, dispositivo, `deviceId`,
+  versión y token, y que no reintroduce `X-Emby-*`; ambos tests terminan en
+  `BUILD SUCCESSFUL`.
 - Apple SwiftUI: los entrypoints móvil y tvOS conservan ahora una única
   instancia de `VeloraAppShell` en `@State`; ya no reconstruyen el cliente,
   la sesión ni el estado de navegación durante cada recomposición. El contrato
