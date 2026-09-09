@@ -33,14 +33,18 @@ for (const directory of localeDirectories) {
 // Downloading a season is a complete user journey, so the extra catalogues
 // must not silently fall back to English for its primary actions.
 const extraLocaleDirectories = ['values-ar', 'values-it', 'values-ja', 'values-ko', 'values-pt', 'values-ru', 'values-tr', 'values-zh'];
-const translatedDownloadKeys = ['download_season', 'download_season_queued', 'select_episodes', 'continue_label', 'download_quality_title', 'download_quality_description'];
+const translatedExtraKeys = [
+  'download_season', 'download_season_queued', 'select_episodes', 'continue_label',
+  'download_quality_title', 'download_quality_description', 'nav_series',
+  'person_series', 'error_fragment'
+];
 const englishSource = fs.readFileSync(path.join(resources, 'values-en', 'strings.xml'), 'utf8');
 const englishValues = new Map([...englishSource.matchAll(/<string name="([^"]+)">([^<]*)<\/string>/g)].map((match) => [match[1], match[2]]));
 for (const directory of extraLocaleDirectories) {
   const file = path.join(resources, directory, 'strings.xml');
   if (!fs.existsSync(file)) continue;
   const source = fs.readFileSync(file, 'utf8');
-  for (const key of translatedDownloadKeys) {
+  for (const key of translatedExtraKeys) {
     const match = source.match(new RegExp(`<string name="${key}">([^<]*)</string>`));
     if (match && match[1] === englishValues.get(key)) {
       failures.push(`${directory}: ${key} todavía usa el texto inglés`);
