@@ -90,6 +90,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Localización Apple del 2026-09-09: el selector de idioma ya usa claves del
   catálogo en lugar de nombres codificados; los cuatro catálogos mantienen
   ahora 70 claves coherentes y `check-apple-locales.mjs` pasa.
+- APK de QA regeneradas el 2026-09-09 desde `main` tras la validación Apple:
+  `app-mobile-debug.apk` terminó con SHA-256
+  `B5364EA8541AE39FD3727F23159912795AB2BD5888BC55B79CC830AA21C492BF` y
+  `app-tv-debug.apk` con SHA-256
+  `51B543AC43F85F14C2B0898278319E64AB8747BF83409C62C4788B3260C4FDF7`.
+  La tarea conjunta `assembleMobileDebug assembleTvDebug` terminó en
+  `BUILD SUCCESSFUL`; son builds instalables de QA, no una release firmada.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
