@@ -85,9 +85,14 @@ class OfflineDownloadsActivity : ComponentActivity() {
     @androidx.compose.runtime.Composable
     private fun OfflineDownloadsScreen(onBack: () -> Unit, onPlay: (OfflineDownload) -> Unit, onDelete: (OfflineDownload) -> Unit) {
         refresh
+        val config = remember { JellyfinConfig(this@OfflineDownloadsActivity) }
         var entries by remember { mutableStateOf(emptyList<OfflineDownload>()) }
         LaunchedEffect(refresh) {
-            entries = OfflineDownloadManager.refresh(this@OfflineDownloadsActivity)
+            entries = OfflineDownloadManager.refresh(
+                context = this@OfflineDownloadsActivity,
+                accountServerUrl = config.serverUrl,
+                accountUserId = config.userId
+            )
         }
         LaunchedEffect(entries.any { !it.isComplete }) {
             while (entries.any { !it.isComplete }) {

@@ -173,7 +173,11 @@ object OfflineDownloadManager {
 
     }
 
-    suspend fun refresh(context: Context): List<OfflineDownload> = withContext(Dispatchers.IO) {
+    suspend fun refresh(
+        context: Context,
+        accountServerUrl: String? = null,
+        accountUserId: String? = null
+    ): List<OfflineDownload> = withContext(Dispatchers.IO) {
         val manager = androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)
         val updated = load(context).mapNotNull { entry ->
             if (!entry.workName.isNullOrBlank()) {
@@ -259,7 +263,18 @@ object OfflineDownloadManager {
                 keepUnwatchedEpisodes = settings.smartDownloadsKeepUnwatchedEpisodes
             ).forEach { delete(context, it) }
         }
-        load(context)
+        val allEntries = load(context)
+        if (accountServerUrl.isNullOrBlank() || accountUserId.isNullOrBlank()) {
+            allEntries
+        } else {
+            val normalizedServer = accountServerUrl.removeSuffix("/")
+            allEntries.filter { entry ->
+                // Legacy entries have no ownership metadata. Keep them visible
+                // so the user can play or replace them and complete migration.
+                entry.serverUrl.isNullOrBlank() || entry.userId.isNullOrBlank() ||
+                    (entry.serverUrl?.removeSuffix("/") == normalizedServer && entry.userId == accountUserId)
+            }
+        }
     }
 
     private fun workNameFor(itemId: String, quality: OfflineDownloadQuality): String {
