@@ -46,6 +46,9 @@ jobs:
       - name: Validar manifiesto de privacidad Apple
         working-directory: ${{ github.workspace }}
         run: node scripts/check-apple-privacy-manifest.mjs
+      - name: Validar ciclo de vida SwiftUI Apple
+        working-directory: ${{ github.workspace }}
+        run: node scripts/check-apple-lifecycle.mjs
       - name: Mostrar toolchain Swift
         run: swift --version
       - name: Validar etiqueta de release

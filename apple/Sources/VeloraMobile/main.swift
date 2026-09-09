@@ -30,10 +30,16 @@ private final class VeloraMobileDelegate: NSObject, UIApplicationDelegate {
 
 @available(iOS 16.0, *)
 private struct VeloraMobileRoot: View {
-    var body: some View {
-        if let shell = try? VeloraAppShell(
+    @State private var shell: VeloraAppShell?
+
+    init() {
+        _shell = State(initialValue: try? VeloraAppShell(
             platform: UIDevice.current.userInterfaceIdiom == .pad ? .iPad : .iPhone
-        ) {
+        ))
+    }
+
+    var body: some View {
+        if let shell {
             shell
         } else {
             Text(VeloraLocalized.connectToJellyfin)

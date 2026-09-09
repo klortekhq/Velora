@@ -116,6 +116,8 @@ jobs:
         run: node scripts/check-apple-locales.mjs
       - name: Validate Apple privacy manifest
         run: node scripts/check-apple-privacy-manifest.mjs
+      - name: Validate Apple SwiftUI lifecycle
+        run: node scripts/check-apple-lifecycle.mjs
       - name: Test VeloraKit
         run: swift test --package-path apple --parallel
       - name: Build native package entrypoints
