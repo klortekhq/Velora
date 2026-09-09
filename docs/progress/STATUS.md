@@ -119,6 +119,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   [Velora-mobile-qa-v1.4.0.apk](https://github.com/klortekhq/Velora/releases/tag/v1.4.0),
   SHA-256 `e51b392d545164faafafa72fd6de9d048609870f22228cd6581a3c758174c432`.
   Está marcada como pre-release y QA; no se presenta como distribución firmada.
+- APK Android TV/Fire TV de QA añadida a la misma pre-release:
+  `Velora-tv-qa-v1.4.0.apk`, SHA-256
+  `d5328d498c6d4cadf5ca891b3df15395af8092b0b354db05dd1fac65d6ea4aad`.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
