@@ -30,6 +30,24 @@ object OfflineStorageEngine {
         return total
     }
 
+    /**
+     * Remove an interrupted managed transfer without touching a completed
+     * media file. Cancellation is allowed to discard the partial prefix;
+     * retry/resume paths never call this method.
+     */
+    internal fun deletePartial(context: Context, stableKey: String) {
+        val root = File(context.filesDir, MEDIA_DIRECTORY)
+        if (!root.exists()) return
+        partialFileNames(stableKey).forEach { root.resolve(it).delete() }
+    }
+
+    /** Kept pure so cleanup naming remains covered without an Android device. */
+    internal fun partialFileNames(stableKey: String): List<String> {
+        val stable = stableFileKey(stableKey)
+        val legacy = stableKey.hashCode().toString()
+        return listOf("$stable.part", "$legacy.part").distinct()
+    }
+
     suspend fun materialize(context: Context, entry: OfflineDownload): OfflineDownload? = withContext(Dispatchers.IO) {
         if (!PlatformCapabilities.supportsOfflineDownloads || !entry.isComplete) return@withContext null
         val source = entry.localPath ?: return@withContext null

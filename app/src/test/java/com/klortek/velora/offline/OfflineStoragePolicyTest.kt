@@ -7,6 +7,15 @@ import org.junit.Test
 
 class OfflineStoragePolicyTest {
     @Test
+    fun partialCleanupIncludesStableAndLegacyNamesWithoutDuplicates() {
+        val names = OfflineStorageEngine.partialFileNames("offline-example")
+
+        assertEquals(2, names.size)
+        assertTrue(names.all { it.endsWith(".part") })
+        assertTrue(names.distinct().size == names.size)
+    }
+
+    @Test
     fun reservesMinimumFreeSpaceAndTemporaryBytes() {
         val limits = OfflineStorageLimits(
             maximumBytes = null,

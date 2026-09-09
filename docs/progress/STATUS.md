@@ -34,6 +34,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   FPS y HDR; el contrato `check-mobile-file-info.mjs` impide que se vuelvan a
   mostrar nombres o rutas internas. La regresión Android móvil/TV terminó en
   `BUILD SUCCESSFUL` el 2026-09-09.
+- Integridad de descargas offline: cancelar o borrar una descarga gestionada
+  elimina también cualquier fragmento `.part` estable o heredado, mientras que
+  las rutas de pausa/reintento conservan el fragmento para poder reanudarlo.
+  `OfflineStoragePolicyTest` cubre los nombres de limpieza y las suites
+  unitarias móvil/TV más la compilación Kotlin de ambos perfiles terminan en
+  `BUILD SUCCESSFUL` el 2026-09-09.
 - Última mejora publicada: la superficie musical estilo Apple de Android usa
   ahora recursos localizados para botones y etiquetas de accesibilidad (volver,
   reproducir, aleatorio, cola, transporte y estado actual), en vez de textos
