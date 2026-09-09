@@ -209,6 +209,23 @@ final class VeloraKitTests: XCTestCase {
         try? FileManager.default.removeItem(at: root)
     }
 
+    func testOfflineStoreScopesSameItemByAccountAndQuality() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let store = VeloraOfflineStore(rootURL: root)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        for (name, contents) in [("one.bin", "one"), ("two.bin", "two"), ("three.bin", "three")] {
+            try Data(contents.utf8).write(to: root.appendingPathComponent(name))
+        }
+
+        let first = try store.add(mediaAt: root.appendingPathComponent("one.bin"), itemID: "same", title: "Example", serverURL: "https://jellyfin.example/", userID: "user-a")
+        let second = try store.add(mediaAt: root.appendingPathComponent("two.bin"), itemID: "same", title: "Example", serverURL: "https://jellyfin.example", userID: "user-b")
+        let third = try store.add(mediaAt: root.appendingPathComponent("three.bin"), itemID: "same", title: "Example", serverURL: "https://jellyfin.example", userID: "user-a", quality: .medium)
+
+        XCTAssertEqual(Set(store.load().map(\.id)), Set([first.id, second.id, third.id]))
+        XCTAssertEqual(store.load().count, 3)
+        try? FileManager.default.removeItem(at: root)
+    }
+
     func testOfflineCatalogDefaultsLegacyEntriesToOriginalQuality() throws {
         let legacy = """
         {"id":"legacy","itemID":"item-legacy","title":"Legacy","serverURL":"https://jellyfin.example","fileName":"media.bin","createdAt":0,"byteCount":4,"checksumSha256":null}
