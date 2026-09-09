@@ -90,7 +90,10 @@ public final class VeloraAppModel: ObservableObject {
             Task { @MainActor [weak self] in
                 guard let self,
                       let active = await self.offlineTransfer.activeTransfers().first else { return }
-                self.downloadingItemID = active.itemID
+                self.downloadingItemID = active.metadata.itemID
+                self.activeOfflineTaskID = active.taskIdentifier
+                self.activeOfflineMetadata = active.metadata
+                self.offlineTransferPaused = false
             }
         }
     }

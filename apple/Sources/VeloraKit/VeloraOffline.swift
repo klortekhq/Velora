@@ -113,6 +113,16 @@ public struct VeloraOfflineTransferProgress: Sendable {
     }
 }
 
+public struct VeloraOfflineActiveTransfer: Sendable {
+    public let taskIdentifier: Int
+    public let metadata: VeloraOfflineTransferMetadata
+
+    public init(taskIdentifier: Int, metadata: VeloraOfflineTransferMetadata) {
+        self.taskIdentifier = taskIdentifier
+        self.metadata = metadata
+    }
+}
+
 /// Owns the iOS/iPadOS background transfer session. The same identifier is
 /// recreated after process termination so the OS can deliver completed tasks
 /// back to Velora. tvOS never creates or uses this coordinator.
@@ -231,14 +241,15 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
     /// Returns metadata for transfers that survived a process restart. The
     /// task descriptions contain only catalog identifiers and quality, never
     /// credentials or signed media URLs.
-    public func activeTransfers() async -> [VeloraOfflineTransferMetadata] {
+    public func activeTransfers() async -> [VeloraOfflineActiveTransfer] {
         await withCheckedContinuation { continuation in
             session.getAllTasks { [weak self] tasks in
-                let metadata = tasks.compactMap { task -> VeloraOfflineTransferMetadata? in
+                let transfers = tasks.compactMap { task -> VeloraOfflineActiveTransfer? in
                     guard let self, let downloadTask = task as? URLSessionDownloadTask else { return nil }
-                    return self.metadata(for: downloadTask)
+                    guard let metadata = self.metadata(for: downloadTask) else { return nil }
+                    return VeloraOfflineActiveTransfer(taskIdentifier: downloadTask.taskIdentifier, metadata: metadata)
                 }
-                continuation.resume(returning: metadata)
+                continuation.resume(returning: transfers)
             }
         }
     }

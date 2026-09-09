@@ -19,12 +19,14 @@ const shell = fs.readFileSync('apple/Sources/VeloraKit/VeloraAppShell.swift', 'u
 if (!offline.includes('URLSessionConfiguration.background') ||
     !offline.includes('didWriteData bytesWritten') ||
     !offline.includes('cancel(byProducingResumeData:') ||
-    !offline.includes('downloadTask(withResumeData:')) {
+    !offline.includes('downloadTask(withResumeData:') ||
+    !offline.includes('VeloraOfflineActiveTransfer')) {
   throw new Error('Apple offline: falta transferencia en segundo plano con progreso y pausa/reanudación');
 }
 if (!shell.includes('offlineTransferProgress') ||
     !shell.includes('pauseDownload()') ||
-    !shell.includes('resumeDownload()')) {
+    !shell.includes('resumeDownload()') ||
+    !shell.includes('activeOfflineTaskID = active.taskIdentifier')) {
   throw new Error('Apple offline: el shell no expone progreso y pausa/reanudación');
 }
 

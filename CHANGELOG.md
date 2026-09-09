@@ -7,6 +7,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Apple móvil: las descargas usan `URLSession` en segundo plano con progreso,
   velocidad, ETA y pausa/reanudación; el almacenamiento privado y la
   verificación SHA-256 se mantienen antes de reproducir sin conexión.
+- Apple móvil: la recuperación tras reiniciar la app conserva la tarea de
+  `URLSession` necesaria para volver a pausar o reanudar una descarga activa.
 - Descargas offline Android: se corrige el esquema de la base SQLite para
   instalaciones nuevas; ya no declara dos claves primarias y conserva el
   índice necesario para localizar rápidamente cada contenido y calidad.
