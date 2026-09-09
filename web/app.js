@@ -886,6 +886,10 @@
             target.channels.push(sourceChannel);
           }
         });
+        // `order` keeps stable insertion order for rendering. Empty the
+        // absorbed object as well as removing its lookup key so it cannot be
+        // rendered a second time after an alias merge.
+        sourceGroup.channels = [];
         delete groups[otherKey];
         Object.keys(aliases).forEach(function (identity) {
           if (aliases[identity] === otherKey) aliases[identity] = key;
