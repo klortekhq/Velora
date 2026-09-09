@@ -5,6 +5,7 @@ import process from 'node:process';
 const root = process.cwd();
 const files = {
   android: path.join(root, 'app/src/main/java/com/klortek/velora/jellyfin/JellyfinAuthService.kt'),
+  androidCatalog: path.join(root, 'app/src/main/java/com/klortek/velora/jellyfin/JellyfinApi.kt'),
   apple: path.join(root, 'apple/Sources/VeloraKit/JellyfinClient.swift'),
   web: path.join(root, 'web/app.js'),
   smoke: path.join(root, 'scripts/qa/jellyfin-smoke.ps1')
@@ -38,6 +39,10 @@ const jellyfin12Files = [
 
 for (const [name, file] of Object.entries(files)) {
   const source = fs.readFileSync(file, 'utf8');
+  if (name === 'androidCatalog' && /MediaBrowser Token=\\"\$accessToken\\"/.test(source)) {
+    throw new Error('androidCatalog: quedan cabeceras MediaBrowser token-only en JellyfinApi.kt');
+  }
+  if (name === 'androidCatalog') continue;
   if (!source.includes(required[name])) {
     throw new Error(`${name}: falta el campo Jellyfin Pw en ${path.relative(root, file)}`);
   }

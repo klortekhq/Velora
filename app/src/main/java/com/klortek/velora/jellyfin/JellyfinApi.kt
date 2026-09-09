@@ -424,7 +424,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             // Sort client-side by LastPlayedDate (most recently played first)
@@ -450,7 +450,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -480,7 +480,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Fetching NextUp for series: $seriesId")
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             val nextUpEpisode = response.Items.firstOrNull()
@@ -621,7 +621,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -643,7 +643,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -666,7 +666,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -689,7 +689,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -711,7 +711,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             // Return all items - filtering based on settings will be done in UI layer
             response.Items
@@ -735,7 +735,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -758,7 +758,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -782,7 +782,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -826,7 +826,7 @@ class JellyfinApiService(
     
     fun getImageRequestHeaders(): Headers {
         return Headers.Builder()
-            .add("Authorization", "MediaBrowser Token=\"$accessToken\"")
+            .add("Authorization", mediaBrowserAuthorization())
             .build()
     }
 
@@ -841,7 +841,7 @@ class JellyfinApiService(
                 parameters.append("Fields", "MediaSources,Genres,Overview,People,ProviderIds,UserData,ImageTags,IndexNumber,ParentIndexNumber,NextEpisodeId,Chapters")
             }.buildString()
             val response = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }
             val item: JellyfinItem = response.body()
             item
@@ -894,7 +894,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Fetching person filmography")
             
             val response = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }
             val itemsResponse: ItemsResponse = response.body()
             android.util.Log.d("JellyfinAPI", "Person filmography fetched: ${itemsResponse.Items.size} items")
@@ -928,7 +928,7 @@ class JellyfinApiService(
                 parameters.append("Limit", "20")
             }.buildString()
             client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body<ItemsResponse>().Items
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
@@ -972,7 +972,7 @@ class JellyfinApiService(
                 fields?.let { parameters.append("Fields", it) }
             }.buildString()
             client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body<List<JellyfinItem>>()
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
@@ -994,7 +994,7 @@ class JellyfinApiService(
                 parameters.append("Limit", "10")
             }.buildString()
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items.firstOrNull { it.Name.equals(query, ignoreCase = true) }?.Id
                 ?: response.Items.firstOrNull()?.Id
@@ -1296,7 +1296,7 @@ class JellyfinApiService(
             
             // Allow POST as well, but GET is sufficient and easier for this
             val response: JellyfinPlaybackInfo = client.post(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
                 // Empty body for POST
                 setBody("{}")
                 contentType(ContentType.Application.Json)
@@ -1349,7 +1349,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Fetching MediaSegments for item: $itemId")
             
             val response: MediaSegmentsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             val segments = response.Items ?: emptyList()
@@ -1392,7 +1392,7 @@ class JellyfinApiService(
             }
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             // Convert JellyfinItems to JellyfinLibraries
@@ -1424,7 +1424,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             // Return all items - filtering based on settings will be done in UI layer
             response
@@ -1444,7 +1444,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             response.Items
@@ -1495,7 +1495,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             val seasons = response.Items.sortedBy { it.IndexNumber ?: 0 }
             
@@ -1531,7 +1531,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             val episodes = response.Items.sortedBy { it.IndexNumber ?: 0 }
             
@@ -1582,7 +1582,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Fetching next episodes: seasonId=$seasonId, startIndex=$startIndex (API: $apiStartIndex)")
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             android.util.Log.d("JellyfinAPI", "Found ${response.Items.size} episodes starting from index $startIndex")
@@ -1619,7 +1619,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Fetching episodes in season: seriesId=$seriesId, seasonId=$seasonId, currentEpisode=$currentEpisodeIndex, season=$currentSeasonNumber")
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             // Find the episode with IndexNumber = currentEpisodeIndex + 1
@@ -1663,7 +1663,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Fetching next episode (all seasons): seriesId=$seriesId, StartIndex=$startIndex (current episode index=$currentEpisodeIndex)")
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             val nextEpisode = response.Items.firstOrNull()
@@ -1715,7 +1715,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -1737,7 +1737,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -1759,7 +1759,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -1784,7 +1784,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             // Sort client-side by LastPlayedDate (most recently played first)
@@ -1814,7 +1814,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -1840,7 +1840,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -1866,7 +1866,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -1895,7 +1895,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             // Sort client-side by LastPlayedDate (most recently played first)
@@ -1926,7 +1926,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -1953,7 +1953,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -1980,7 +1980,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -2010,7 +2010,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             // Sort client-side by LastPlayedDate (most recently played first)
@@ -2039,7 +2039,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -2066,7 +2066,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -2093,7 +2093,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -2119,7 +2119,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -2146,7 +2146,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -2169,7 +2169,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items.mapNotNull { it.Name }
         } catch (e: Exception) {
@@ -2192,7 +2192,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items.mapNotNull { it.Name }
         } catch (e: Exception) {
@@ -2219,7 +2219,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             response.Items
         } catch (e: Exception) {
@@ -2239,7 +2239,7 @@ class JellyfinApiService(
             val url = "${base}Users/$userId/PlayedItems/$itemId"
             
             val response = client.post(url) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", mediaBrowserAuthorization())
                 // Jellyfin API for PlayedItems POST expects an empty body or a specific PlaybackReportingPostRequest
                 // For simply marking as played, an empty POST body is sufficient.
             }
@@ -2285,7 +2285,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Marking item as unwatched")
             
             val response = client.delete(url) {
-                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
+                header("Authorization", mediaBrowserAuthorization())
             }
 
             val isSuccessful = response.status.value in 200..299
@@ -2474,7 +2474,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Refreshing item metadata for $itemId")
             
             client.post(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }
             android.util.Log.d("JellyfinAPI", "Item metadata refresh triggered successfully for $itemId")
             true
@@ -2505,7 +2505,7 @@ class JellyfinApiService(
             android.util.Log.d("JellyfinAPI", "Triggering library refresh")
             
             client.post(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }
             android.util.Log.d("JellyfinAPI", "Library refresh triggered successfully")
             true
@@ -2535,7 +2535,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             response.Items
@@ -2566,7 +2566,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             // Find the item with matching TMDB ID
@@ -2608,7 +2608,7 @@ class JellyfinApiService(
             }.buildString()
             
             val response: ItemsResponse = client.get(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             }.body()
             
             // Find the best matching item
