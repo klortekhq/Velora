@@ -31,7 +31,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   un plugin antiguo; se conserva la apertura automática del `LiveStreamId` y
   el remux negociado por Jellyfin. La decisión vive en una política de
   reproducción reutilizable y `LiveTvPlaybackPolicyTest` la cubre en móvil y
-  TV; `check-jellyfin-api-contract.mjs` protege el cableado.
+  TV. Apple y web priorizan también la URL de remux/transcodificación; el
+  contrato API protege el comportamiento en las tres superficies.
 - Actualizador Android: los botones y errores visibles de descarga/instalación
   están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
   la compilación de ambos perfiles y sus pruebas unitarias pasan.
