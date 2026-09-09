@@ -10,6 +10,11 @@ una comprobación no se interpreta como soporte certificado.
 Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
 de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
+- Revalidación posterior al cambio de reparto TV (2026-09-09): los 20
+  contratos `scripts/check-*.mjs` terminan correctamente, incluidos
+  `check-android-content-navigation.mjs`, seguridad, reproducción, offline,
+  Apple, web y packaging.
+
 ## Estado del repositorio
 
 - Rama de trabajo: `main`; la política del repositorio exige que sea la única
