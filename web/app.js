@@ -826,6 +826,9 @@
       var sourceKey = source && String(source.Id || '').trim();
       if (!sourceKey) {
         sourceKey = [
+          source && String(source.Name || '').trim().toLocaleLowerCase(languageCode()) || '',
+          source && String(source.LiveStreamId || '').trim() || '',
+          source && String(source.Protocol || '').trim().toLocaleLowerCase(languageCode()) || '',
           channel.ChannelType || '',
           channel.ServiceName || '',
           channel.ChannelNumber || '',

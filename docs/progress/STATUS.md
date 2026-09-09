@@ -196,6 +196,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Corrección web/Smart TV del 2026-09-09: la resolución Live TV conserva la
   fuente seleccionada por `Id` o `LiveStreamId`, también cuando el proveedor
   no entrega un `MediaSourceId`; queda cubierta por `test-platform.mjs`.
+- Corrección web/Smart TV del 2026-09-09: la agrupación conserva como opciones
+  separadas las fuentes sin `Id` pero con nombre, protocolo o `LiveStreamId`
+  diferentes, evitando colapsar Principal e IPTV en una sola entrada.
 - Regresión completa del 2026-09-09 sobre ese cambio: `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` (82 tareas);
   también pasaron versión, identidad pública, contrato de autenticación,

@@ -278,6 +278,20 @@ const enrichedDuplicateGroup = testWindow.__veloraTest.groupLiveTvChannels([
 assert.equal(enrichedDuplicateGroup[0].channels.length, 1);
 assert.equal(enrichedDuplicateGroup[0].channels[0].CurrentProgram.Name, 'Ahora');
 assert.equal(testWindow.__veloraTest.liveRowAction(duplicateGroup[0]), 'open-item');
+const unnamedSourceGroup = testWindow.__veloraTest.groupLiveTvChannels([
+  {
+    Id: 'unnamed-source-channel',
+    Name: 'DAZN F1',
+    MediaSources: [{ Name: 'Principal', LiveStreamId: 'stream-main', Protocol: 'hls' }]
+  },
+  {
+    Id: 'unnamed-source-channel',
+    Name: 'DAZN F1',
+    MediaSources: [{ Name: 'IPTV', LiveStreamId: 'stream-iptv', Protocol: 'hls' }]
+  }
+]);
+assert.equal(unnamedSourceGroup.length, 1);
+assert.equal(unnamedSourceGroup[0].channels.length, 2);
 const metadataGroup = testWindow.__veloraTest.groupLiveTvChannels([
   { Id: 'metadata-channel', Name: 'Canal antiguo', MediaSources: [{ Id: 'source-a' }] },
   { Id: 'metadata-channel', Name: 'Canal actual', CurrentProgram: { Name: 'Ahora' }, UserData: { IsFavorite: true }, MediaSources: [{ Id: 'source-b' }] }
