@@ -294,7 +294,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     if (liveSource?.SupportsDirectPlay == true && !directSource.isNullOrBlank() &&
                         MediaUrlHeaderPolicy.isServerResource(serverUrl, directSource) &&
                         (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
-                        finalUrl = MpvUrlBuilder.buildLiveTvDirectSourceUrl(directSource)
+                        finalUrl = MediaUrlHeaderPolicy.stripCredentialQueryParameters(directSource)
                         android.util.Log.d("VideoPlayer", "Live TV Direct Play source selected from Jellyfin PlaybackInfo")
                     } else if (!liveMediaSourceId.isNullOrBlank() && !liveStreamId.isNullOrBlank()) {
                         finalUrl = MpvUrlBuilder.buildLiveTvStreamUrl(
@@ -322,7 +322,9 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     // Use the TranscodingUrl from PlaybackInfo (includes burned subs if requested)
                     val transcodeUrl = mediaSource?.TranscodingUrl
                     if (transcodeUrl != null) {
-                         finalUrl = if (transcodeUrl.startsWith("http")) transcodeUrl else "$serverUrl$transcodeUrl"
+                         finalUrl = MediaUrlHeaderPolicy.stripCredentialQueryParameters(
+                             if (transcodeUrl.startsWith("http")) transcodeUrl else "$serverUrl$transcodeUrl"
+                         )
                          android.util.Log.d("VideoPlayer", "🔥 Using Transcoding URL (Burn-in active): ${SensitiveDataRedactor.url(finalUrl)}")
                     } else {
                          android.util.Log.w("VideoPlayer", "⚠️ Transcoding enforced but no URL. Fallback to Direct.")
@@ -416,7 +418,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                     !directSource.isNullOrBlank() &&
                     MediaUrlHeaderPolicy.isServerResource(serverUrl, directSource) &&
                     (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
-                    MpvUrlBuilder.buildLiveTvDirectSourceUrl(directSource)
+                    MediaUrlHeaderPolicy.stripCredentialQueryParameters(directSource)
                 } else if (!liveMediaSourceId.isNullOrBlank() && !liveStreamId.isNullOrBlank()) {
                     MpvUrlBuilder.buildLiveTvStreamUrlForExoPlayer(
                         serverUrl = serverUrl,
