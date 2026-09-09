@@ -94,6 +94,7 @@
   <string name="player_subtitles_unavailable">Aucun sous-titre disponible</string>
   <string name="player_playback_speed">Vitesse de lecture</string>
   <string name="player_quality">Qualité</string>
+  <string name="player_runtime_minutes">%1$d min</string>
   <string name="player_unknown">Inconnu</string>
   <string name="player_default">Par défaut</string>
   <string name="player_forced">Forcé</string>

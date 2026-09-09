@@ -47,6 +47,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Ficha de series/reproductor: sinopsis y opción de subtítulos desactivados usan
   recursos localizados; `compileMobileDebugKotlin` y `compileTvDebugKotlin`
   terminan en `BUILD SUCCESSFUL`.
+- Reproductor: la duración de episodios mostrada en la cola usa recursos
+  localizados; el catálogo garantizado queda en 553 claves y ambas compilaciones
+  Kotlin pasan.
 - Revisión Jellyfin 12 del 2026-09-09: los nombres internos heredados de
   cabeceras y comentarios de otros clientes se sustituyeron por terminología
   propia de Velora; no se alteraron namespaces ni identificadores de paquete.

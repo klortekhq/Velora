@@ -4395,7 +4395,7 @@ fun JellyfinVideoPlayerScreen(
                                             val minutes = ticks / 10_000L / 1000 / 60
                                             if (minutes > 0) {
                                                 Text(
-                                                    text = "${minutes} min",
+                                                    text = stringResource(com.klortek.velora.R.string.player_runtime_minutes, minutes),
                                                     style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                                                     color = Color.White.copy(alpha = 0.5f),
                                                     modifier = Modifier.padding(top = 2.dp)
