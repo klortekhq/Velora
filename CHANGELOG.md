@@ -39,6 +39,8 @@ Los cambios relevantes de Velora se documentan en este archivo.
   sinopsis, temporadas, episodios y confirmaciones de solicitud.
 - Series y reproducción: la etiqueta de sinopsis y la opción de desactivar
   subtítulos usan ahora recursos localizados también en la ficha de series.
+- Reproducción: la duración de los episodios en la cola usa ahora el idioma
+  activo en lugar de fijar la abreviatura inglesa.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
