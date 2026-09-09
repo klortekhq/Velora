@@ -2860,7 +2860,10 @@ fun JellyfinVideoPlayerScreen(
     }
     
     // Update playback position periodically for the progress bar
-    LaunchedEffect(playerInitialized, showControls) {
+    // Include the selected mode in the effect keys. Without it, this loop
+    // keeps the mode captured when playback started and can silently restore
+    // FIT after the user selects another presentation.
+    LaunchedEffect(playerInitialized, currentAspectMode) {
         if (playerInitialized) {
             while (true) {
                 currentPosition = player.currentPosition
