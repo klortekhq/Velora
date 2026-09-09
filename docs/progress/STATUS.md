@@ -39,6 +39,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La auditoría de seguridad del 2026-09-09 no encontró credenciales ni tokens
   del servidor de QA en el código/documentación; los fixtures de descubrimiento
   usan ahora una dirección LAN genérica de laboratorio y la suite móvil pasa.
+- Los layouts de detalle móvil de películas y series incorporan `statusBarsPadding`
+  y `navigationBarsPadding`; el contrato `check-mobile-layout-insets.mjs` lo
+  protege. La regresión móvil/TV posterior terminó en `BUILD SUCCESSFUL` el
+  2026-09-09.
 - Autenticación Android: la ruta de `AuthenticateByName` quedó alineada con
   Apple, web y el smoke test (`Users/AuthenticateByName`) para evitar que un
   proxy sensible a mayúsculas rechace la petición antes de llegar a Jellyfin;
