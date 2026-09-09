@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Jellyfin 12.0/Live TV: los canales M3U ya no intentan reproducirse como
+  direct-play aunque un proveedor antiguo anuncie una ruta directa; Velora
+  usa la sesión `LiveStreamId` y el remux negociado por Jellyfin para evitar
+  fallos con listas IPTV normalizadas por el servidor.
 - Apple móvil: las descargas usan `URLSession` en segundo plano con progreso,
   velocidad, ETA y pausa/reanudación; el almacenamiento privado y la
   verificación SHA-256 se mantienen antes de reproducir sin conexión.
