@@ -57,6 +57,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   el proveedor use otra ID Jellyfin. Así los botones de canal anterior/siguiente
   conservan la variante seleccionada; `selectedAlternateSourceReplacesPrimaryForChannelNavigation`
   cubre la regresión en móvil y TV.
+- Rendimiento de filtros Live TV: la tira de favoritos y grupos usa ahora
+  `LazyRow`, evitando que una lista grande de grupos desborde la pantalla o
+  fuerce a Compose a medir todos los controles como un `Row` estático.
 - Motor de decisión original-first del 2026-09-09: la comparación de
   capacidades normaliza alias equivalentes de códec, HDR y contenedor (por
   ejemplo `H265`/`HEVC`, `EC-3`/`EAC3`, `matroska`/`MKV` y Dolby Vision),

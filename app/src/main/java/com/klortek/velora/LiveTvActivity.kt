@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -267,19 +268,23 @@ private fun LiveTvScreen(
         Spacer(modifier = Modifier.height(if (isMobile) 12.dp else 14.dp))
 
         if (channels.isNotEmpty()) {
-            Row(
+            LazyRow(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                LiveTvFilterPill(stringResource(R.string.live_tv_all_channels), !favoritesOnly && selectedGroup == null) {
-                    favoritesOnly = false
-                    selectedGroup = null
+                item {
+                    LiveTvFilterPill(stringResource(R.string.live_tv_all_channels), !favoritesOnly && selectedGroup == null) {
+                        favoritesOnly = false
+                        selectedGroup = null
+                    }
                 }
-                LiveTvFilterPill(stringResource(R.string.live_tv_favorites), favoritesOnly) {
-                    favoritesOnly = !favoritesOnly
-                    if (favoritesOnly) selectedGroup = null
+                item {
+                    LiveTvFilterPill(stringResource(R.string.live_tv_favorites), favoritesOnly) {
+                        favoritesOnly = !favoritesOnly
+                        if (favoritesOnly) selectedGroup = null
+                    }
                 }
-                availableGroups.forEach { group ->
+                items(availableGroups, key = { it.lowercase() }) { group ->
                     LiveTvFilterPill(group, selectedGroup.equals(group, ignoreCase = true)) {
                         selectedGroup = if (selectedGroup.equals(group, ignoreCase = true)) null else group
                         favoritesOnly = false
