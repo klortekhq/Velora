@@ -16,9 +16,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   rama pública.
 - La consulta independiente a `origin` confirma únicamente `refs/heads/main`
   en GitHub. No se presenta ninguna otra rama pública.
-- Último cambio funcional documentado: `PlaybackInfo` usa la identidad real de
-  la variante Android (móvil o TV) y el `deviceId` persistido, en lugar de
-  identificarse siempre como Android TV con un identificador vacío.
+- Último cambio funcional documentado: los menús de audio y subtítulos del
+  reproductor Android usan ahora el catálogo localizado también durante la
+  carga, selección de pista y estados de pista. El cambio está en `f8c9e89`.
+- `PlaybackInfo` usa la identidad real de la variante Android (móvil o TV) y
+  el `deviceId` persistido, en lugar de identificarse siempre como Android TV
+  con un identificador vacío.
 - Identidad pública: Velora por Klørtek. Los identificadores de paquete se
   conservan únicamente donde los exige el sistema de distribución de cada
   plataforma y no forman parte de la identidad visible del producto.
@@ -125,6 +128,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   ruso, turco y chino. `node scripts/check-android-locales.mjs`, las dos
   suites unitarias Android y la compilación Kotlin móvil/TV terminaron en
   `BUILD SUCCESSFUL` (82 tareas).
+- Revalidación del 2026-09-09: los menús de selección de audio y subtítulos,
+  incluido el menú de pulsación prolongada en TV, quedaron sin textos
+  hardcodeados en español; el catálogo, la compilación móvil/TV y las suites
+  unitarias de ambas variantes pasan.
 - Revalidación web/Smart TV del 2026-09-09 en salida QA aislada:
   `node web/scripts/test-platform.mjs` y los contratos de versión, identidad,
   releases y superficies offline pasaron. `node web/scripts/build-web.mjs all`
