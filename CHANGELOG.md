@@ -14,6 +14,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Web/TV: los diálogos de ficha y ajustes restauran el foco al cerrarse y
   empiezan en un control navegable, mejorando mando, teclado y lectores de
   pantalla.
+- CI: las releases Smart TV fijan el epoch del commit y validan que los
+  paquetes WGT/IPK y bundles de las plataformas disponibles se incorporen a la
+  release común sin publicar APK unsigned.
 - Descargas offline Android: se corrige el esquema de la base SQLite para
   instalaciones nuevas; ya no declara dos claves primarias y conserva el
   índice necesario para localizar rápidamente cada contenido y calidad.
