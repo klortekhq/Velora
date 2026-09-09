@@ -4,6 +4,7 @@ const api = fs.readFileSync('app/src/main/java/com/klortek/velora/jellyfin/Jelly
 const appleApi = fs.readFileSync('apple/Sources/VeloraKit/JellyfinClient.swift', 'utf8');
 const movie = fs.readFileSync('app/src/main/java/com/klortek/velora/screens/MovieDetailsScreen.kt', 'utf8');
 const series = fs.readFileSync('app/src/main/java/com/klortek/velora/screens/SeriesDetailsScreen.kt', 'utf8');
+const quickConnect = fs.readFileSync('app/src/main/java/com/klortek/velora/jellyfin/QuickConnectService.kt', 'utf8');
 
 if (!api.includes('IncludeItemTypes", "Trailer"')) {
   throw new Error('Jellyfin 12: el resolver Android no usa IncludeItemTypes=Trailer');
@@ -13,6 +14,9 @@ if (!api.includes('suspend fun getTrailers(itemId: String)')) {
 }
 if (/getMediaItems\("Items\/\$itemId\/(?:Local|Remote)Trailers"/.test(api)) {
   throw new Error('Jellyfin 12: el cliente Android conserva una llamada a una ruta legacy de trailers');
+}
+if (!/suspend fun initiateQuickConnect[\s\S]*?client\.post\(url\)/.test(quickConnect)) {
+  throw new Error('Jellyfin 12: Quick Connect debe iniciarse mediante POST');
 }
 if (!appleApi.includes('public func trailers(for itemID: String, userID: String)')) {
   throw new Error('Jellyfin 12: falta el resolver de trailers Apple');
