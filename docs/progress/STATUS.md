@@ -153,6 +153,14 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - APK Android TV/Fire TV de QA añadida a la misma pre-release:
   `Velora-tv-qa-v1.4.0.apk`, SHA-256
   `d5328d498c6d4cadf5ca891b3df15395af8092b0b354db05dd1fac65d6ea4aad`.
+- APKs QA locales regeneradas desde `8bd2777` el 2026-09-09 después de
+  corregir la agrupación de fuentes Live TV: móvil
+  `app-mobile-debug.apk`, SHA-256
+  `1125BFEB6B6390451D4278716E2650A4BBC5CA3108AFECD11885565DAC848CB2`, y TV
+  `app-tv-debug.apk`, SHA-256
+  `65FBD17F6099BCFFB27A2ABCC83D5E4D5A09744A6835BA05EBED67D3CA8A1D55`.
+  Ambas suites Android y las tareas de ensamblado terminaron correctamente;
+  todavía no sustituyen los assets antiguos de la pre-release pública.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
