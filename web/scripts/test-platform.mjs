@@ -262,6 +262,13 @@ const aliasedSourceGroup = testWindow.__veloraTest.groupLiveTvChannels([
 assert.equal(aliasedSourceGroup.length, 1);
 assert.equal(aliasedSourceGroup[0].channels.length, 2);
 assert.equal(testWindow.__veloraTest.liveRowAction(aliasedSourceGroup[0]), 'source-picker');
+const mergedAliasGroups = testWindow.__veloraTest.groupLiveTvChannels([
+  { Id: 'shared-id', ChannelNumber: '10', Name: 'Canal A', MediaSources: [{ Id: 'source-a' }] },
+  { Id: 'other-id', ChannelNumber: '20', Name: 'Canal B', MediaSources: [{ Id: 'source-b' }] },
+  { Id: 'shared-id', ChannelNumber: '20', Name: 'Canal B', MediaSources: [{ Id: 'source-c' }] }
+]);
+assert.equal(mergedAliasGroups.length, 1);
+assert.equal(mergedAliasGroups[0].channels.length, 3);
 assert.equal(
   testWindow.__veloraTest.liveSourceLabel({ MediaSources: [{ Name: 'Fuente IPTV' }] }, 2),
   'Fuente IPTV'

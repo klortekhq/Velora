@@ -79,8 +79,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   también filas de proveedores con IDs Jellyfin distintos cuando comparten
   número y nombre visible normalizados; las fuentes siguen apareciendo como
   opciones seleccionables y no se fusionan canales sin identidad suficiente.
-  `test-platform.mjs` ejecuta el caso real y `build-web.mjs all` genera el
-  bundle web, el IPK webOS y los bundles Samsung/VIDAA correctamente.
+  También queda cubierta la colisión de alias sin duplicar una fila absorbida.
+  `test-platform.mjs` ejecuta ambos casos reales y `build-web.mjs all` genera
+  el bundle web, el IPK webOS y los bundles Samsung/VIDAA correctamente.
 - Release multiplataforma v1.4.0: se añadieron los paquetes web y Smart TV a
   la misma pre-release que las APK: [Web ZIP](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-Web-all.zip), [Web tar.gz](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-Web-all.tar.gz), [webOS IPK](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-webos-1.4.0.ipk), [Samsung/Tizen bundle](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-samsung-bundle-1.4.0.zip) y [VIDAA bundle](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-vidaa-bundle-1.4.0.zip). Los hashes reproducibles están en [SHA256SUMS-web.txt](https://github.com/klortekhq/Velora/releases/download/v1.4.0/SHA256SUMS-web.txt). El bundle Samsung no se presenta como WGT firmado al faltar Tizen Studio/perfil.
 - Las APK QA del cambio `362b939` quedaron adjuntas a `v1.4.0`: [`Velora-mobile-qa-live-tv-focus.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-focus.apk), SHA-256 `C8EE5996303F0E33D6744F20F3FA91DF419BBC99D3F9D6BE135F87CF5700097F`, y [`Velora-tv-qa-live-tv-focus.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-focus.apk), SHA-256 `3CB9EF0F9B5BFCBD9114D798A2F010C0DAD70B28099CE4CF883CEF1CA338DF6A`.
