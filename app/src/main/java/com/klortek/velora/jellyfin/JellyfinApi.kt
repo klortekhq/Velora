@@ -344,6 +344,16 @@ class JellyfinApiService(
     val apiKey: String get() = accessToken
     fun getUserId(): String = userId
     fun getJellyfinConfig(): JellyfinConfig? = config
+
+    /**
+     * Jellyfin 12 expects the authenticated client identity to travel in the
+     * standard Authorization header. Keeping this in one place prevents
+     * playback-session calls from silently falling back to token-only headers.
+     */
+    private fun mediaBrowserAuthorization(): String =
+        "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", " +
+            "DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\", " +
+            "Token=\"$accessToken\""
     
     // In-memory cache for episodes (keyed by seasonId)
     private val episodeCache = mutableMapOf<String, Pair<Long, List<JellyfinItem>>>()
@@ -388,7 +398,7 @@ class JellyfinApiService(
     suspend fun playOnRemoteSession(sessionId: String, itemId: String, positionMs: Long = 0L): Boolean = runCatching {
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         client.post("${base}Sessions/$sessionId/Playing") {
-            header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+            header(HttpHeaders.Authorization, mediaBrowserAuthorization())
             contentType(ContentType.Application.Json)
             setBody("{\"ItemIds\":[\"$itemId\"],\"PlayCommand\":\"PlayNow\",\"StartPositionTicks\":${positionMs * 10000}}")
         }
@@ -2306,13 +2316,6 @@ class JellyfinApiService(
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = "${base}Sessions/Playing"
             
-            val deviceId = config?.deviceId ?: ""
-            val authHeader = if (deviceId.isNotEmpty()) {
-                "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$deviceId\", Token=\"$accessToken\", Version=\"${BuildConfig.VERSION_NAME}\""
-            } else {
-                "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
-            }
-            
             // Build request body as JSON string
             val requestBody = buildString {
                 append("{")
@@ -2326,7 +2329,7 @@ class JellyfinApiService(
             }
             
             val response = client.post(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
                 contentType(ContentType.Application.Json)
                 setBody(requestBody)
             }
@@ -2365,13 +2368,6 @@ class JellyfinApiService(
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = "${base}Sessions/Playing/Progress"
             
-            val deviceId = config?.deviceId ?: ""
-            val authHeader = if (deviceId.isNotEmpty()) {
-                "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$deviceId\", Token=\"$accessToken\", Version=\"${BuildConfig.VERSION_NAME}\""
-            } else {
-                "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
-            }
-            
             // Build request body as JSON string
             val requestBody = buildString {
                 append("{")
@@ -2388,7 +2384,7 @@ class JellyfinApiService(
             }
             
             val response = client.post(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
                 contentType(ContentType.Application.Json)
                 setBody(requestBody)
             }
@@ -2416,13 +2412,6 @@ class JellyfinApiService(
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = "${base}Sessions/Playing/Stopped"
             
-            val deviceId = config?.deviceId ?: ""
-            val authHeader = if (deviceId.isNotEmpty()) {
-                "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$deviceId\", Token=\"$accessToken\", Version=\"${BuildConfig.VERSION_NAME}\""
-            } else {
-                "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"$clientDeviceId\", Version=\"${BuildConfig.VERSION_NAME}\""
-            }
-            
             // Build request body as JSON string
             val requestBody = buildString {
                 append("{")
@@ -2434,7 +2423,7 @@ class JellyfinApiService(
             }
             
             val response = client.post(url) {
-                header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
                 contentType(ContentType.Application.Json)
                 setBody(requestBody)
             }

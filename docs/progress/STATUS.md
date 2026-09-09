@@ -260,6 +260,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   añadió prueba de aislamiento entre cuentas/calidades; las validaciones
   estáticas pasan. La compilación Swift queda pendiente de macOS/Xcode, que no
   están instalados en este entorno.
+- Compatibilidad Jellyfin 12 del 2026-09-09: las llamadas Android de inicio,
+  progreso, parada y reproducción remota usan ahora una única cabecera
+  `Authorization: MediaBrowser` con cliente, dispositivo, dispositivo estable,
+  versión y token. Antes esas rutas construían identidad de cliente pero
+  terminaban enviando solo el token. Compilación Kotlin y suites unitarias
+  móvil/TV pasan (`BUILD SUCCESSFUL`, 82 tareas).
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
