@@ -156,6 +156,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   variante móvil. Confirma que los canales con la misma identidad Jellyfin se
   muestran como una sola tarjeta y que sus MediaSources quedan disponibles
   como opciones seleccionables; la misma lógica se comparte con TV.
+- Revalidación Android del 2026-09-09: el agrupado de Live TV y la lista de
+  filtros ahora se derivan con `remember` a partir del snapshot de canales.
+  Se evita reconstruir todas las opciones de fuente durante cada movimiento
+  de foco o recomposición, sin cambiar el orden, el filtrado ni el zapping.
+  La compilación y las suites unitarias móvil/TV terminan correctamente.
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos

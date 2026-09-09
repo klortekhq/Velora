@@ -152,6 +152,19 @@ private fun LiveTvScreen(
     var sourceSelection by remember { mutableStateOf<LiveTvChannelGroup?>(null) }
     val scope = rememberCoroutineScope()
     val firstChannelFocusRequester = remember { FocusRequester() }
+    // Grouping is intentionally derived from the loaded snapshot. Live TV can
+    // contain hundreds of rows and this screen recomposes frequently while
+    // focus moves, filters change, or a favourite is updated. Reusing the
+    // snapshot avoids rebuilding every source option on each frame.
+    val channelGroups = remember(channels) { groupLiveTvChannels(channels) }
+    val availableGroups = remember(channels) { liveTvGroups(channels) }
+    val visibleGroups = remember(channelGroups, favoritesOnly, selectedGroup) {
+        filterLiveTvChannelGroups(
+            channelGroups,
+            favoritesOnly = favoritesOnly,
+            group = selectedGroup
+        )
+    }
 
     LaunchedEffect(client, refreshKey) {
         isLoading = true
@@ -222,7 +235,7 @@ private fun LiveTvScreen(
                 )
                 if (!isLoading && loadError == null) {
                     Text(
-                        text = stringResource(R.string.live_tv_channel_count, groupLiveTvChannels(channels).size),
+                        text = stringResource(R.string.live_tv_channel_count, channelGroups.size),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.62f)
                     )
@@ -265,7 +278,7 @@ private fun LiveTvScreen(
                     favoritesOnly = !favoritesOnly
                     if (favoritesOnly) selectedGroup = null
                 }
-                liveTvGroups(channels).forEach { group ->
+                availableGroups.forEach { group ->
                     LiveTvFilterPill(group, selectedGroup.equals(group, ignoreCase = true)) {
                         selectedGroup = if (selectedGroup.equals(group, ignoreCase = true)) null else group
                         favoritesOnly = false
@@ -317,11 +330,6 @@ private fun LiveTvScreen(
             }
 
             else -> {
-                val visibleGroups = filterLiveTvChannelGroups(
-                    groupLiveTvChannels(channels),
-                    favoritesOnly = favoritesOnly,
-                    group = selectedGroup
-                )
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier.fillMaxSize()
@@ -379,7 +387,7 @@ private fun LiveTvScreen(
             onDismiss = { sourceSelection = null },
             onSelect = { selected ->
                 sourceSelection = null
-                onPlay(selected, groupLiveTvChannels(channels).map { it.primary })
+                onPlay(selected, channelGroups.map { it.primary })
             }
         )
     }
