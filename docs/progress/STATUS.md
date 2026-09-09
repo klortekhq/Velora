@@ -108,7 +108,7 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `compileTvDebugKotlin` terminaron en `BUILD SUCCESSFUL` (82 tareas; 1:18).
   El SDK local emitió avisos de metadatos XML/Android 36, sin convertirlos en
   errores de compilación.
-- Auditoría completa de contratos del 2026-09-09: los 21 scripts
+- Auditoría completa de contratos del 2026-09-09: los 22 scripts
   `scripts/check-*.mjs` terminan correctamente, incluidos navegación, los
   cuatro catálogos Android, ciclo de vida/localización/privacidad Apple,
   autenticación y API Jellyfin 12, reproducción, offline, identidad,
