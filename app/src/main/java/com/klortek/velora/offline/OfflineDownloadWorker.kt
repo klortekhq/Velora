@@ -7,6 +7,9 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.klortek.velora.jellyfin.AppSettings
 import com.klortek.velora.jellyfin.JellyfinConfig
+import com.klortek.velora.jellyfin.veloraClientDeviceId
+import com.klortek.velora.jellyfin.veloraClientDeviceName
+import com.klortek.velora.jellyfin.veloraMediaBrowserAuthorization
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -46,7 +49,14 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         val requestUrl = OfflineDownloadRequest.url(config.serverUrl, itemId, sourceId, quality)
         val connection = (URL(requestUrl).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
-            setRequestProperty("Authorization", "MediaBrowser Token=\"${config.accessToken}\"")
+            setRequestProperty(
+                "Authorization",
+                veloraMediaBrowserAuthorization(
+                    accessToken = config.accessToken,
+                    deviceName = veloraClientDeviceName(tvBuild = false),
+                    deviceId = veloraClientDeviceId(config.deviceId)
+                )
+            )
             if (existingBytes > 0L) setRequestProperty("Range", "bytes=$existingBytes-")
             connectTimeout = 20_000
             readTimeout = 60_000

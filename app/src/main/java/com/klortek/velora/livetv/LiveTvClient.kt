@@ -3,6 +3,8 @@ package com.klortek.velora.livetv
 import com.klortek.velora.BuildConfig
 import com.klortek.velora.jellyfin.JellyfinConfig
 import com.klortek.velora.jellyfin.MediaSource
+import com.klortek.velora.jellyfin.veloraClientDeviceId
+import com.klortek.velora.jellyfin.veloraMediaBrowserAuthorization
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -105,7 +107,7 @@ class LiveTvClient(private val config: JellyfinConfig) {
 
     val imageHeaders: Headers
         get() = Headers.Builder()
-            .add("Authorization", "MediaBrowser Token=\"$accessToken\"")
+            .add("Authorization", authorizationHeader())
             .build()
 
     suspend fun getChannels(): List<LiveTvChannel> {
@@ -192,8 +194,14 @@ class LiveTvClient(private val config: JellyfinConfig) {
     }
 
     private fun io.ktor.client.request.HttpRequestBuilder.jellyfinHeaders() {
-        header(HttpHeaders.Authorization, "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"${config.deviceId}\", Version=\"${BuildConfig.VERSION_NAME}\", Token=\"$accessToken\"")
+        header(HttpHeaders.Authorization, authorizationHeader())
     }
+
+    private fun authorizationHeader(): String = veloraMediaBrowserAuthorization(
+        accessToken = accessToken,
+        deviceName = clientDeviceName,
+        deviceId = veloraClientDeviceId(config.deviceId)
+    )
 }
 
 fun programProgress(program: LiveTvProgram?, nowMillis: Long = System.currentTimeMillis()): Float? {
