@@ -64,6 +64,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   50.000 elementos sintéticos en las variantes móvil y TV; ambas suites
   terminaron en `BUILD SUCCESSFUL`. Es una regresión del núcleo de consulta,
   no una certificación de memoria/FPS en hardware.
+- Smoke Live TV del 2026-09-09: la validación de Jellyfin se alineó con el
+  cliente Android y pagina `/LiveTv/Channels` mediante `StartIndex`,
+  `TotalRecordCount`, `MediaSources` y `AddCurrentProgram`; el contrato API y
+  la sintaxis PowerShell pasan. El endpoint público LAN sigue identificando
+  Jellyfin `12.0.0`; el tramo autenticado requiere credenciales disponibles en
+  el entorno de ejecución.
 - Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
   peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de

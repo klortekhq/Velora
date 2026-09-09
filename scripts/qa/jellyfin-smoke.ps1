@@ -37,10 +37,24 @@ try {
     $token = $auth.AccessToken
     $authHeader = $clientHeader + ', Token="' + $token + '"'
     $stage = 'listado de canales Live TV'
-    $channels = Invoke-RestMethod -Uri "$base/LiveTv/Channels?UserId=$userId&Fields=Overview%2CMediaSources&EnableUserData=true&Limit=1000" `
-        -Headers @{ 'Authorization' = $authHeader } -TimeoutSec 30
+    # Jellyfin can cap large channel responses. Mirror the Android client and
+    # walk every page so the smoke test cannot silently omit M3U/provider rows.
+    $pageSize = 100
+    $startIndex = 0
+    $totalRecordCount = $null
+    $items = [System.Collections.Generic.List[object]]::new()
+    do {
+        $channels = Invoke-RestMethod -Uri "$base/LiveTv/Channels?UserId=$userId&StartIndex=$startIndex&Fields=Overview%2CMediaSources&EnableUserData=true&AddCurrentProgram=true&Limit=$pageSize" `
+            -Headers @{ 'Authorization' = $authHeader } -TimeoutSec 30
+        $pageItems = @($channels.Items)
+        foreach ($item in $pageItems) { [void]$items.Add($item) }
+        if ([int]$channels.TotalRecordCount -gt 0) {
+            $totalRecordCount = [int]$channels.TotalRecordCount
+        }
+        $startIndex += $pageItems.Count
+    } while ($pageItems.Count -gt 0 -and ($null -eq $totalRecordCount -or $startIndex -lt $totalRecordCount))
 
-    $items = @($channels.Items)
+    $items = @($items)
     $multiSourceRows = @($items | Where-Object { $_.MediaSources -and $_.MediaSources.Count -gt 1 }).Count
     $duplicateIds = @($items | Group-Object Id | Where-Object { $_.Count -gt 1 }).Count
 

@@ -5,6 +5,7 @@ const appleApi = fs.readFileSync('apple/Sources/VeloraKit/JellyfinClient.swift',
 const movie = fs.readFileSync('app/src/main/java/com/klortek/velora/screens/MovieDetailsScreen.kt', 'utf8');
 const series = fs.readFileSync('app/src/main/java/com/klortek/velora/screens/SeriesDetailsScreen.kt', 'utf8');
 const quickConnect = fs.readFileSync('app/src/main/java/com/klortek/velora/jellyfin/QuickConnectService.kt', 'utf8');
+const smoke = fs.readFileSync('scripts/qa/jellyfin-smoke.ps1', 'utf8');
 
 if (!api.includes('IncludeItemTypes", "Trailer"')) {
   throw new Error('Jellyfin 12: el resolver Android no usa IncludeItemTypes=Trailer');
@@ -17,6 +18,10 @@ if (/getMediaItems\("Items\/\$itemId\/(?:Local|Remote)Trailers"/.test(api)) {
 }
 if (!/suspend fun initiateQuickConnect[\s\S]*?client\.post\(url\)/.test(quickConnect)) {
   throw new Error('Jellyfin 12: Quick Connect debe iniciarse mediante POST');
+}
+if (!smoke.includes('StartIndex=$startIndex') || !smoke.includes('TotalRecordCount') ||
+    !/do \{[\s\S]*?\} while \(\$pageItems\.Count -gt 0/.test(smoke)) {
+  throw new Error('Jellyfin Live TV: el smoke test debe recorrer todas las páginas de canales');
 }
 if (!appleApi.includes('public func trailers(for itemID: String, userID: String)')) {
   throw new Error('Jellyfin 12: falta el resolver de trailers Apple');

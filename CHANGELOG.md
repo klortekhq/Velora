@@ -8,6 +8,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
   de Velora (131 archivos) y elimina títulos, nombres de pistas, IDs, rutas de
   servidor y posiciones de reproducción de las trazas; el contrato de CI
   bloquea regresiones también en pantallas, subtítulos, música y descubrimiento.
+- Live TV/Jellyfin 12.0: el smoke test recorre ahora todas las páginas de
+  canales y conserva `MediaSources` y programa actual, en lugar de limitar la
+  validación a los primeros 1.000 canales.
 - Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
   `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
   de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
