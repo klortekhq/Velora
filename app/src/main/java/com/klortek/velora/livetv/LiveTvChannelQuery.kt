@@ -124,7 +124,10 @@ fun liveTvSourceLabel(
         ?: fallbackLabel
 
 fun liveTvMediaSourceId(channel: LiveTvChannel): String? =
-    channel.MediaSources.orEmpty().firstOrNull()?.Id?.takeIf { it.isNotBlank() }
+    channel.MediaSources.orEmpty().firstOrNull()?.let { source ->
+        source.Id?.takeIf { it.isNotBlank() }
+            ?: source.LiveStreamId?.takeIf { it.isNotBlank() }
+    }
 
 /** Keep the source selected in the Live TV picker after PlaybackInfo returns. */
 fun selectLiveTvPlaybackSource(

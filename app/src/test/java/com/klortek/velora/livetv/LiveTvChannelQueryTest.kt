@@ -126,6 +126,17 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun liveStreamIdIsUsedWhenProviderOmitsMediaSourceId() {
+        val channel = LiveTvChannel(
+            "stream-only",
+            "Canal IPTV",
+            MediaSources = listOf(MediaSource(Name = "IPTV", LiveStreamId = "stream-iptv"))
+        )
+
+        assertEquals("stream-iptv", liveTvMediaSourceId(channel))
+    }
+
+    @Test
     fun sourceLabelAcceptsLocalizedFallbackWhenProviderHasNoLabel() {
         val channel = LiveTvChannel(
             "unlabelled",
