@@ -32,6 +32,8 @@
 "Not enough storage" = "Espace de stockage insuffisant";
 "Preferred subtitles" = "Sous-titres préférés";
 "Download" = "Télécharger";
+"Pause download" = "Mettre en pause le téléchargement";
+"Resume download" = "Reprendre le téléchargement";
 "Remove download" = "Supprimer le téléchargement";
 "Unable to download" = "Téléchargement impossible";
 "Unable to remove download" = "Suppression du téléchargement impossible";

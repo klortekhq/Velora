@@ -49,6 +49,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   una transferencia conservando el archivo parcial; la recuperación automática
   no relanza una descarga que el usuario pausó y la reanudación vuelve a usar
   sus restricciones de red y carga.
+- Offline Apple del 2026-09-09: iPhone/iPad usan la transferencia de
+  `URLSession` en segundo plano con progreso, velocidad y ETA, y exponen pausa
+  y reanudación mediante los datos opacos de `URLSession`. El almacenamiento
+  sigue siendo privado y verificado por SHA-256; tvOS conserva la política sin
+  descargas. El contrato estático pasa, pero la compilación Swift y la prueba
+  en hardware Apple siguen pendientes por falta de macOS/Xcode en este entorno.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
