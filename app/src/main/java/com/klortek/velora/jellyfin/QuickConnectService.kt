@@ -79,7 +79,7 @@ class QuickConnectService(
             val response: HttpResponse = client.post(url) {
                 header(HttpHeaders.Accept, "application/json")
                 header(HttpHeaders.ContentType, "application/json")
-                header("X-Emby-Authorization", embyAuthHeader)
+                header("Authorization", embyAuthHeader)
             }
             
             android.util.Log.d("QuickConnect", "Response status: ${response.status.value} (${response.status})")
@@ -138,7 +138,7 @@ class QuickConnectService(
             
             val response = client.get(url) {
                 header(HttpHeaders.Accept, "application/json")
-                header("X-Emby-Authorization", embyAuthHeader)
+                header("Authorization", embyAuthHeader)
             }
             
             android.util.Log.d("QuickConnect", "Response status: ${response.status.value} (${response.status})")
@@ -191,7 +191,7 @@ class QuickConnectService(
             val response: HttpResponse = client.post(url) {
                 header(HttpHeaders.Accept, "application/json")
                 header(HttpHeaders.ContentType, "application/json")
-                header("X-Emby-Authorization", embyAuthHeader)
+                header("Authorization", embyAuthHeader)
                 setBody(QuickConnectAuthenticateRequest(Secret = secret))
             }
             

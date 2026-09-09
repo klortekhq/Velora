@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
+  `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
+  de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
+  El contrato de CI bloquea su reintroducción.
 - Android: el marco de vídeo de pantalla completa calcula ahora el tamaño
   contenido según el espacio real disponible; los modos panorámicos ya no se
   recortan por dimensionarse siempre desde la altura. La selección se mantiene

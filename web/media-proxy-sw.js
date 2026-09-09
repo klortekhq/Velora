@@ -76,7 +76,7 @@ self.addEventListener('fetch', function (event) {
         if (sensitiveNames.indexOf(String(name).toLowerCase()) !== -1) target.searchParams.delete(name);
       });
     var headers = new Headers(event.request.headers);
-    headers.set('X-Emby-Token', credentials.token);
+      headers.set('Authorization', 'MediaBrowser Token="' + credentials.token + '"');
     headers.delete('Cookie');
     return fetch(new Request(target.href, {
       method: event.request.method,

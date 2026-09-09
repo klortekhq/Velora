@@ -57,8 +57,7 @@ class AudioPlayerService : MediaSessionService() {
         val httpDataSourceFactory = DefaultHttpDataSource.Factory()
             .setDefaultRequestProperties(
                 mapOf(
-                    "X-Emby-Token" to jellyfinConfig.accessToken,
-                    "X-Emby-Authorization" to "MediaBrowser Client=\"Velora\", Device=\"${veloraClientDeviceName(BuildConfig.TV_BUILD)}\", DeviceId=\"${veloraClientDeviceId(jellyfinConfig.deviceId)}\", Version=\"${BuildConfig.VERSION_NAME}\""
+                    "Authorization" to "MediaBrowser Client=\"Velora\", Device=\"${veloraClientDeviceName(BuildConfig.TV_BUILD)}\", DeviceId=\"${veloraClientDeviceId(jellyfinConfig.deviceId)}\", Version=\"${BuildConfig.VERSION_NAME}\", Token=\"${jellyfinConfig.accessToken}\""
                 )
             )
 

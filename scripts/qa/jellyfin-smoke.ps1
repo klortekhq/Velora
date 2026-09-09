@@ -20,7 +20,7 @@ try {
     $stage = 'información pública'
     $publicEndpointInvalid = $false
     $public = Invoke-RestMethod -Uri "$base/System/Info/Public" -Headers @{
-        'X-Emby-Authorization' = $clientHeader
+        'Authorization' = $clientHeader
     } -TimeoutSec 15
     if ($null -eq $public -or [string]::IsNullOrWhiteSpace([string]$public.Version)) {
         $publicEndpointInvalid = $true
@@ -30,7 +30,7 @@ try {
     $stage = 'autenticación'
     $authBody = @{ Username = $Username; Pw = $Password } | ConvertTo-Json
     $auth = Invoke-RestMethod -Method Post -Uri "$base/Users/AuthenticateByName" `
-        -Headers @{ 'X-Emby-Authorization' = $clientHeader } `
+        -Headers @{ 'Authorization' = $clientHeader } `
         -ContentType 'application/json' -Body $authBody -TimeoutSec 15
 
     $userId = $auth.User.Id
@@ -38,7 +38,7 @@ try {
     $authHeader = $clientHeader + ', Token="' + $token + '"'
     $stage = 'listado de canales Live TV'
     $channels = Invoke-RestMethod -Uri "$base/LiveTv/Channels?UserId=$userId&Fields=Overview%2CMediaSources&EnableUserData=true&Limit=1000" `
-        -Headers @{ 'X-Emby-Authorization' = $authHeader } -TimeoutSec 30
+        -Headers @{ 'Authorization' = $authHeader } -TimeoutSec 30
 
     $items = @($channels.Items)
     $multiSourceRows = @($items | Where-Object { $_.MediaSources -and $_.MediaSources.Count -gt 1 }).Count
@@ -50,7 +50,7 @@ try {
         $sourceQuery = if ([string]::IsNullOrWhiteSpace($sourceId)) { '' } else { '&MediaSourceId=' + [uri]::EscapeDataString($sourceId) }
         $stage = 'PlaybackInfo Live TV'
         $playbackInfo = Invoke-RestMethod -Uri "$base/Items/$([uri]::EscapeDataString($first.Id))/PlaybackInfo?UserId=$userId&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true$sourceQuery" `
-            -Headers @{ 'X-Emby-Authorization' = $authHeader } -TimeoutSec 30
+            -Headers @{ 'Authorization' = $authHeader } -TimeoutSec 30
         if (-not @($playbackInfo.MediaSources).Count) {
             throw 'PlaybackInfo no devolvió ninguna fuente.'
         }

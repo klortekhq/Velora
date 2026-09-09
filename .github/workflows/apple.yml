@@ -9,19 +9,33 @@ on:
       - 'apple/**'
       - '.github/workflows/apple.yml'
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Etiqueta existente que se quiere reconstruir y publicar (por ejemplo, v1.4.0). Vacío = validación QA.'
+        required: false
+        type: string
+        default: ''
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: velora-release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   swift-package:
     runs-on: macos-14
     timeout-minutes: 20
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
     defaults:
       run:
         working-directory: apple
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_tag || github.ref }}
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
@@ -34,7 +48,56 @@ jobs:
         run: node scripts/check-apple-privacy-manifest.mjs
       - name: Mostrar toolchain Swift
         run: swift --version
+      - name: Validar etiqueta de release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.0$ ]] || {
+            echo "Las releases públicas solo pueden usar etiquetas vX.Y.0; se recibió $RELEASE_TAG."
+            exit 1
+          }
       - name: Compilar paquete Apple
         run: swift build
       - name: Ejecutar tests del paquete Apple
         run: swift test
+      - name: Preparar paquete fuente Apple para QA/release
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${{ github.workspace }}/dist"
+          version="$(node -p "require('./web/package.json').version")"
+          tar --exclude='./.build' --exclude='./dist' -czf \
+            "${{ github.workspace }}/dist/Velora-Apple-source-${version}.tar.gz" .
+          shasum -a 256 "${{ github.workspace }}"/dist/* > "${{ github.workspace }}/dist/SHA256SUMS-apple.txt"
+      - name: Guardar paquete Apple para QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Velora-apple-source-${{ github.run_id }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preparar changelog de la release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        working-directory: ${{ github.workspace }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          awk -v section="## ${version}" '
+            $0 == section { found=1; print; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md || { echo "Falta una sección ## ${version} en CHANGELOG.md"; exit 1; }
+      - name: Publicar paquete fuente Apple en la release común
+        if: startsWith(env.RELEASE_TAG, 'v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Velora ${{ env.RELEASE_TAG }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          generate_release_notes: false
+          body_path: release-notes.md
+          files: |
+            dist/Velora-Apple-source-*.tar.gz
+            dist/SHA256SUMS-apple.txt

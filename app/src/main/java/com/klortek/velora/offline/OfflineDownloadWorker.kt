@@ -46,7 +46,7 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         val requestUrl = OfflineDownloadRequest.url(config.serverUrl, itemId, sourceId, quality)
         val connection = (URL(requestUrl).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
-            setRequestProperty("X-Emby-Token", config.accessToken)
+            setRequestProperty("Authorization", "MediaBrowser Token=\"${config.accessToken}\"")
             if (existingBytes > 0L) setRequestProperty("Range", "bytes=$existingBytes-")
             connectTimeout = 20_000
             readTimeout = 60_000

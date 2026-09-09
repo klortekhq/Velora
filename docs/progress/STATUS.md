@@ -39,6 +39,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - La auditoría de seguridad del 2026-09-09 no encontró credenciales ni tokens
   del servidor de QA en el código/documentación; los fixtures de descubrimiento
   usan ahora una dirección LAN genérica de laboratorio y la suite móvil pasa.
+- Compatibilidad Jellyfin 12.0: Android, Apple, web, Live TV, música, MPV,
+  descargas y smoke test usan ya la cabecera estándar `Authorization:
+  MediaBrowser ...`; el contrato `check-jellyfin-auth-contract.mjs` falla si
+  reaparece cualquier `X-Emby-Authorization` o `X-Emby-Token`. Las rutas de
+  música ya consultaban `Users/{userId}/Items`, evitando los endpoints legacy
+  retirados. Validado con los contratos web/release y las suites Android móvil
+  y TV el 2026-09-09.
 - Los layouts de detalle móvil de películas y series incorporan `statusBarsPadding`
   y `navigationBarsPadding`; el contrato `check-mobile-layout-insets.mjs` lo
   protege. La regresión móvil/TV posterior terminó en `BUILD SUCCESSFUL` el

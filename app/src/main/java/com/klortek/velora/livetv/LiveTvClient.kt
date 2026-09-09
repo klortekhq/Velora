@@ -105,7 +105,7 @@ class LiveTvClient(private val config: JellyfinConfig) {
 
     val imageHeaders: Headers
         get() = Headers.Builder()
-            .add("X-Emby-Token", accessToken)
+            .add("Authorization", "MediaBrowser Token=\"$accessToken\"")
             .build()
 
     suspend fun getChannels(): List<LiveTvChannel> {
@@ -192,12 +192,7 @@ class LiveTvClient(private val config: JellyfinConfig) {
     }
 
     private fun io.ktor.client.request.HttpRequestBuilder.jellyfinHeaders() {
-        header(HttpHeaders.Authorization, "MediaBrowser Token=\"$accessToken\"")
-        header("X-Emby-Token", accessToken)
-        header(
-            "X-Emby-Authorization",
-            "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"${config.deviceId}\", Version=\"${BuildConfig.VERSION_NAME}\""
-        )
+        header(HttpHeaders.Authorization, "MediaBrowser Client=\"Velora\", Device=\"$clientDeviceName\", DeviceId=\"${config.deviceId}\", Version=\"${BuildConfig.VERSION_NAME}\", Token=\"$accessToken\"")
     }
 }
 

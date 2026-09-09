@@ -107,7 +107,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching artists (via Items)")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             response.Items.map { item ->
@@ -143,7 +143,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching albums for artist $artistId")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             response.Items.map { item ->
@@ -183,7 +183,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching all albums")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             response.Items.map { item ->
@@ -222,7 +222,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching recently added albums")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             response.Items.map { item ->
@@ -260,7 +260,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching tracks for album $albumId")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             response.Items.map { item ->
@@ -313,7 +313,7 @@ class JellyfinMusicApi(
             Log.d(TAG, "Fetching tracks for artist $artistId")
 
             val response: MusicItemsResponse = client.get(url) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             response.Items.map { item ->
@@ -365,7 +365,7 @@ class JellyfinMusicApi(
             }.buildString()
 
             val artistsResponse: MusicItemsResponse = client.get(artistsUrl) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             val artists = artistsResponse.Items.map { item ->
@@ -387,7 +387,7 @@ class JellyfinMusicApi(
             }.buildString()
 
             val albumsResponse: MusicItemsResponse = client.get(albumsUrl) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             val albums = albumsResponse.Items.map { item ->
@@ -412,7 +412,7 @@ class JellyfinMusicApi(
             }.buildString()
 
             val tracksResponse: MusicItemsResponse = client.get(tracksUrl) {
-                header("X-Emby-Token", accessToken)
+                header("Authorization", "MediaBrowser Token=\"$accessToken\"")
             }.body()
 
             val tracks = tracksResponse.Items.map { item ->

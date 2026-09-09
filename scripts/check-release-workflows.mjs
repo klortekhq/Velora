@@ -32,4 +32,14 @@ assert.match(web, /outputs\/web\/samsung\/\*\.wgt/, 'Web: debe publicar el WGT d
 assert.match(web, /Velora-tizen-\$\{version\}\.wgt/, 'Web: falta el nombre estable del paquete Tizen');
 assert.match(web, /Velora-samsung-bundle-\$\{version\}\.zip/, 'Web: falta el fallback bundle de Samsung');
 
-console.log('Release workflow policy passed: manual/version tag only, signed APK names, no pull requests or APK wildcard.');
+const apple = fs.readFileSync('.github/workflows/apple.yml', 'utf8');
+assert.match(apple, /tags:\s*\['v\*\.\*\.0'\]/, 'Apple: falta el filtro de tags de versión');
+assert.match(apple, /workflow_dispatch:/, 'Apple: falta ejecución manual');
+assert.match(apple, /RELEASE_TAG.*\^v\[0-9\]\+\\\.\[0-9\]\+\\\.0\$/, 'Apple: la ejecución manual debe aceptar solo etiquetas vX.Y.0');
+assert.match(apple, /permissions:\s*\n\s*contents:\s*write/, 'Apple: falta permiso de publicación explícito');
+assert.match(apple, /swift test/, 'Apple: falta la suite Swift');
+assert.match(apple, /softprops\/action-gh-release@v2/, 'Apple: falta la publicación en la release común');
+assert.match(apple, /Velora-Apple-source-\$\{version\}\.tar\.gz/, 'Apple: falta el paquete fuente verificable');
+assert.match(apple, /SHA256SUMS-apple\.txt/, 'Apple: falta el checksum del paquete');
+
+console.log('Release workflow policy passed: Android, Apple y web publican en una release versionada común; sin APK unsigned ni comodines peligrosos.');
