@@ -59,6 +59,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `BUILD SUCCESSFUL`, la suite web pasó y los 19 verificadores de contrato
   (`locales`, navegación, logs, playback, Apple, Jellyfin, offline, identidad,
   releases, packaging y versiones) terminaron correctamente sobre `main`.
+- Estrés de bibliotecas del 2026-09-09: `LibraryContentQueryTest` ejecuta
+  ordenación, filtros combinados y desempates estables con 1.000, 10.000 y
+  50.000 elementos sintéticos en las variantes móvil y TV; ambas suites
+  terminaron en `BUILD SUCCESSFUL`. Es una regresión del núcleo de consulta,
+  no una certificación de memoria/FPS en hardware.
 - Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
   peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de
@@ -1045,8 +1050,9 @@ declara certificación de tienda ni de hardware sin esa ejecución o dispositivo
 - Reconciliar el tag/release `v1.4.0` con una build firmada del estado que se
   quiera distribuir; no se mueve ni sobrescribe el tag existente
   automáticamente.
-- Completar pruebas de rendimiento con bibliotecas sintéticas de 1.000,
-  10.000 y 50.000 elementos.
+- Completar pruebas de rendimiento visual, memoria y FPS con bibliotecas de
+  1.000, 10.000 y 50.000 elementos en dispositivos reales; el núcleo de
+  ordenación/filtrado ya tiene cobertura sintética en Android móvil y TV.
 
 ## Regla de publicación
 
