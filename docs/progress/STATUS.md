@@ -274,6 +274,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   cabecera `MediaBrowser` completa al cargar `Branding/CustomCss.css`, por lo
   que la identidad cliente/dispositivo se conserva en la personalización de
   tema. Las variantes Kotlin móvil/TV compilan correctamente.
+- Compatibilidad Jellyfin 12 del 2026-09-09: las 54 rutas token-only que aún
+  quedaban en `JellyfinApi` (catálogo, búsqueda, imágenes, personas, estados y
+  mantenimiento) usan ahora la misma cabecera completa. El contrato estático
+  impide que vuelvan a introducirse y la compilación móvil/TV pasa.
 - Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
   fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
   confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
