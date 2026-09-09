@@ -422,7 +422,7 @@ private fun MainNowPlayingView(
                 ) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        contentDescription = stringResource(if (isPlaying) com.klortek.velora.R.string.player_pause else com.klortek.velora.R.string.music_play),
                         modifier = Modifier.size(40.dp)
                     )
                 }
