@@ -65,6 +65,7 @@ jobs:
 
       - name: Prepare common web client
         run: |
+          echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
           node web/scripts/test-platform.mjs
           node web/scripts/build-web.mjs "${{ inputs.platform || 'all' }}"
           node scripts/check-tv-packaging-output.mjs
