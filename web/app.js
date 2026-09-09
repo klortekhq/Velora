@@ -331,8 +331,20 @@
     settingsOpen: false,
     playingItem: null,
     liveTvPlaySessionId: '',
+    returnFocus: null,
     themeMusic: { audio: null, itemId: '', timer: null, fadeTimer: null, request: 0 }
   };
+
+  function rememberFocus() {
+    var active = document.activeElement;
+    state.returnFocus = active && active !== document.body ? active : null;
+  }
+
+  function restoreFocus() {
+    var target = state.returnFocus;
+    state.returnFocus = null;
+    if (target && document.contains(target) && typeof target.focus === 'function') target.focus();
+  }
 
   function syncMediaProxyCredentials() {
     if (!navigator.serviceWorker || !state.token || !state.server) return;
@@ -992,6 +1004,7 @@
   function closeDetails() {
     var details = document.querySelector('#details');
     if (details) details.remove();
+    restoreFocus();
   }
 
   function sortedLibraryItems(items) {
@@ -1053,6 +1066,7 @@
       }
     }
     closeDetails();
+    rememberFocus();
     root.insertAdjacentHTML('beforeend', '<div class="modal" id="details" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">' +
       '<div class="modal-card">' +
       '<button type="button" class="close" id="detailsClose">' + esc(t('back')) + '</button>' +
@@ -1079,6 +1093,7 @@
       closeDetails();
       play(item);
     };
+    document.querySelector('#detailsClose').focus();
   }
 
   function updateFullscreenButton(player) {
@@ -1397,6 +1412,7 @@
 
   function showSettings() {
     if (document.querySelector('#settings')) return;
+    rememberFocus();
     var selectedLanguage = preference('veloraLanguage', 'auto');
     var audioLanguage = preference('veloraAudioLanguage', 'auto');
     var subtitleMode = preference('veloraSubtitleMode', 'off');
@@ -1465,12 +1481,14 @@
         renderApp();
       }
     };
+    document.querySelector('#settingsClose').focus();
   }
 
   function closeSettings() {
     var settings = document.querySelector('#settings');
     if (settings) settings.remove();
     state.settingsOpen = false;
+    restoreFocus();
   }
 
   function renderApp() {

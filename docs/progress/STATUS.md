@@ -61,6 +61,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Packaging web/Smart TV del 2026-09-09: el metadato `velora-build.json` acepta
   `SOURCE_DATE_EPOCH` y deja fuera fechas variables cuando no se proporciona;
   dos builds consecutivas con el mismo epoch produjeron metadatos idénticos.
+- Accesibilidad web/TV del 2026-09-09: las fichas y ajustes devuelven el foco
+  al control que abrió el diálogo y enfocan de forma determinista el botón de
+  volver al abrirlo; el contrato web protege esta navegación con teclado y
+  mando.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.

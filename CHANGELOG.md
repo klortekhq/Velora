@@ -11,6 +11,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
   `URLSession` necesaria para volver a pausar o reanudar una descarga activa.
 - Packaging web/Smart TV: los metadatos de build admiten `SOURCE_DATE_EPOCH`
   para mantener artefactos reproducibles sin fechas variables.
+- Web/TV: los diálogos de ficha y ajustes restauran el foco al cerrarse y
+  empiezan en un control navegable, mejorando mando, teclado y lectores de
+  pantalla.
 - Descargas offline Android: se corrige el esquema de la base SQLite para
   instalaciones nuevas; ya no declara dos claves primarias y conserva el
   índice necesario para localizar rápidamente cada contenido y calidad.
