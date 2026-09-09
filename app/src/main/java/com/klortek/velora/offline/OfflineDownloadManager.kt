@@ -28,6 +28,8 @@ data class OfflineDownload(
     val reason: Int = 0,
     val bytesDownloaded: Long = 0L,
     val totalBytes: Long = -1L,
+    val speedBytesPerSecond: Long = 0L,
+    val etaSeconds: Long? = null,
     /** SHA-256 of the managed media, calculated on first offline playback. */
     val checksumSha256: String? = null,
     /** Unique WorkManager name for app-managed transfers; null means legacy provider. */
@@ -219,6 +221,8 @@ object OfflineDownloadManager {
                     },
                     bytesDownloaded = info?.progress?.getLong(OfflineDownloadWorker.KEY_BYTES, entry.bytesDownloaded) ?: entry.bytesDownloaded,
                     totalBytes = info?.progress?.getLong(OfflineDownloadWorker.KEY_TOTAL_BYTES, entry.totalBytes) ?: entry.totalBytes,
+                    speedBytesPerSecond = info?.progress?.getLong(OfflineDownloadWorker.KEY_SPEED_BPS, entry.speedBytesPerSecond) ?: entry.speedBytesPerSecond,
+                    etaSeconds = info?.progress?.getLong(OfflineDownloadWorker.KEY_ETA_SECONDS, entry.etaSeconds ?: -1L)?.takeIf { it >= 0L } ?: entry.etaSeconds,
                     localPath = info?.outputData?.getString(OfflineDownloadWorker.KEY_LOCAL_PATH) ?: entry.localPath,
                     completedAtEpochMs = if (info?.state == androidx.work.WorkInfo.State.SUCCEEDED && entry.completedAtEpochMs == null) {
                         System.currentTimeMillis()

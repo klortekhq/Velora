@@ -107,6 +107,7 @@
   <string name="settings_offline_wifi_only_description">Attendre le Wi‑Fi avant de commencer de nouveaux téléchargements.</string>
   <string name="settings_offline_charging_only">Uniquement pendant la charge</string>
   <string name="settings_offline_charging_only_description">Attendre que l’appareil soit branché avant de télécharger.</string>
+  <string name="offline_transfer_stats">%1$d%% · %2$s/s · reste %3$s</string>
   <string name="live_tv_favorite_update_error">Impossible de mettre à jour le favori</string>
   <string name="login_title">Se connecter</string>
   <string name="login_connecting">Connexion à %1$s</string>

@@ -89,6 +89,7 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
                 contentLength.takeIf { it >= 0L }?.plus(startingBytes) ?: -1L
             } else contentLength
             var copied = startingBytes
+            val startedAtNanos = System.nanoTime()
             setProgress(androidx.work.workDataOf(KEY_TOTAL_BYTES to total))
             connection.inputStream.use { input ->
                 FileOutputStream(temporary, resumed).use { output ->
@@ -129,7 +130,15 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
                         }
                         output.write(buffer, 0, count)
                         copied += count
-                        setProgress(androidx.work.workDataOf(KEY_BYTES to copied, KEY_TOTAL_BYTES to total))
+                        val elapsedSeconds = ((System.nanoTime() - startedAtNanos) / 1_000_000_000L).coerceAtLeast(1L)
+                        val speed = (copied - startingBytes).coerceAtLeast(0L) / elapsedSeconds
+                        val eta = if (speed > 0L && total > copied) (total - copied + speed - 1L) / speed else -1L
+                        setProgress(androidx.work.workDataOf(
+                            KEY_BYTES to copied,
+                            KEY_TOTAL_BYTES to total,
+                            KEY_SPEED_BPS to speed,
+                            KEY_ETA_SECONDS to eta
+                        ))
                     }
                     output.fd.sync()
                 }
@@ -143,6 +152,8 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
                     status = DownloadManager.STATUS_SUCCESSFUL,
                     bytesDownloaded = copied,
                     totalBytes = total,
+                    speedBytesPerSecond = 0L,
+                    etaSeconds = null,
                     localPath = android.net.Uri.fromFile(destination).toString(),
                     checksumSha256 = digest,
                     completedAtEpochMs = System.currentTimeMillis()
@@ -170,6 +181,8 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         const val KEY_LOCAL_PATH = "local_path"
         const val KEY_BYTES = "bytes"
         const val KEY_TOTAL_BYTES = "total_bytes"
+        const val KEY_SPEED_BPS = "speed_bps"
+        const val KEY_ETA_SECONDS = "eta_seconds"
         const val KEY_ERROR = "error"
         internal fun isRetryableResponse(code: Int): Boolean = code == 408 || code == 429 || code >= 500
     }

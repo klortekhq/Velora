@@ -41,6 +41,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   «solo mientras carga». La preferencia queda persistida por dispositivo y
   WorkManager la aplica al encolar y recuperar trabajos tras reinicio; solo se
   muestra en móvil/tablet y la compilación y las suites móvil/TV pasan.
+- Descargas offline Android del 2026-09-09: el estado durable incorpora
+  velocidad y tiempo estimado restante durante la transferencia; la pantalla
+  de descargas muestra esos datos cuando están disponibles. La base migra a la
+  versión 12 sin perder trabajos existentes y las suites móvil/TV pasan.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
