@@ -80,6 +80,8 @@ jobs:
         run: node scripts/check-android-log-privacy.mjs
       - name: Validate mobile technical media information
         run: node scripts/check-mobile-file-info.mjs
+      - name: Validate mobile system-bar insets
+        run: node scripts/check-mobile-layout-insets.mjs
       - name: Validate web locale catalogues
         run: node scripts/check-web-locales.mjs
       - name: Setup Gradle

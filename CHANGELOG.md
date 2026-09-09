@@ -11,6 +11,9 @@ Los cambios relevantes de Velora se documentan en este archivo.
 - Seguridad de documentación: las pruebas y el dashboard ya no contienen la
   dirección LAN real usada durante QA; los fixtures de red usan una IP de
   laboratorio.
+- Android móvil/tablet: las fichas de películas y series respetan ahora las
+  barras de estado y navegación del sistema, evitando que el contenido y los
+  botones táctiles queden ocultos bajo la navegación de Android.
 - Seguridad Android: se retiraron de Logcat títulos, IDs, posiciones de
   reproducción y metadatos de proveedores en las rutas de autenticación y
   catálogo; CI impide que vuelvan a introducirse.
