@@ -90,6 +90,25 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun playbackInfoKeepsTheSelectedSourceInsteadOfAlwaysUsingTheFirst() {
+        val primary = MediaSource(Id = "source-main", LiveStreamId = "stream-main")
+        val iptv = MediaSource(Id = "source-iptv", LiveStreamId = "stream-iptv")
+
+        assertEquals(
+            "source-iptv",
+            selectLiveTvPlaybackSource(listOf(primary, iptv), "source-iptv")?.Id
+        )
+        assertEquals(
+            "source-iptv",
+            selectLiveTvPlaybackSource(listOf(primary, iptv), "stream-iptv")?.Id
+        )
+        assertEquals(
+            "source-main",
+            selectLiveTvPlaybackSource(listOf(primary, iptv), "missing")?.Id
+        )
+    }
+
+    @Test
     fun unnamedSourceIdsStillRemainDistinctWhenProviderSuppliesDescriptors() {
         val channel = LiveTvChannel(
             "descriptor-only",

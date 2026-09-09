@@ -1,5 +1,7 @@
 package com.klortek.velora.livetv
 
+import com.klortek.velora.jellyfin.MediaSource
+
 /** Pure, deterministic filtering used by both touch and remote Live TV UIs. */
 fun filterLiveTvChannels(
     channels: List<LiveTvChannel>,
@@ -123,3 +125,14 @@ fun liveTvSourceLabel(
 
 fun liveTvMediaSourceId(channel: LiveTvChannel): String? =
     channel.MediaSources.orEmpty().firstOrNull()?.Id?.takeIf { it.isNotBlank() }
+
+/** Keep the source selected in the Live TV picker after PlaybackInfo returns. */
+fun selectLiveTvPlaybackSource(
+    sources: List<MediaSource>,
+    requestedId: String?
+): MediaSource? {
+    if (requestedId.isNullOrBlank()) return sources.firstOrNull()
+    return sources.firstOrNull { source ->
+        source.Id == requestedId || source.LiveStreamId == requestedId
+    } ?: sources.firstOrNull()
+}
