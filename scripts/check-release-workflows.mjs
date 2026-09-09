@@ -19,6 +19,9 @@ for (const file of workflows) {
 const android = fs.readFileSync(workflows[0], 'utf8');
 assert.match(android, /dist\/Velora-\$\{\{ matrix\.target \}\}-release\.apk/, 'Android: la release debe seleccionar solo APK release firmado');
 assert.doesNotMatch(android, /files:\s*\n\s+dist\/\*\.apk/, 'Android: no debe publicar APKs por comodín');
+assert.match(android, /Limpiar APK Android obsoletos de la release/, 'Android: debe limpiar APKs antiguos al reconstruir una release');
+assert.match(android, /\^Velora-\(mobile\|tv\)-\.\*\\\\\.apk\$/, 'Android: la limpieza debe limitarse a assets APK de Velora');
+assert.match(android, /releases\/assets\/\$\{asset_id\}/, 'Android: la limpieza debe borrar assets por ID');
 
 const updater = fs.readFileSync('app/src/main/java/com/klortek/velora/updater/UpdateService.kt', 'utf8');
 assert.match(updater, /Velora-tv-release\.apk/, 'Actualizador: falta el nombre del APK firmado de TV');

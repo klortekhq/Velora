@@ -8,6 +8,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
   Ajustes; la experiencia queda centrada en Recomendaciones, Biblioteca y
   búsqueda opcional.
 
+- **Releases:** al reconstruir una versión, el pipeline limpia los APK y
+  checksums Android antiguos antes de publicar los nuevos, evitando confundir
+  builds QA con los artefactos finales.
+
 - **Reproducción móvil:** el control de pantalla completa está disponible en
   la fila principal del reproductor, con entrada y salida explícitas mediante
   toque y etiquetas accesibles; no es necesario girar el teléfono.
