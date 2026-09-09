@@ -36,6 +36,7 @@
 "Unable to download" = "Téléchargement impossible";
 "Unable to remove download" = "Suppression du téléchargement impossible";
 "Play" = "Lire";
+"Trailer" = "Bande-annonce";
 "Fullscreen" = "Plein écran";
 "Exit fullscreen" = "Quitter le plein écran";
 "Aspect ratio" = "Format d’image";

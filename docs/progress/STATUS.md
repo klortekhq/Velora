@@ -61,6 +61,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   recomendada por Jellyfin 12.0, y solo caen a `LocalTrailers`/`RemoteTrailers`
   en servidores antiguos. El contrato `check-jellyfin-api-contract.mjs` lo
   protege y las suites móvil/TV pasaron el 2026-09-09.
+- Trailers Apple: iPhone, iPad y tvOS resuelven el tráiler de la ficha mediante
+  el mismo catálogo `GetItems`/`IncludeItemTypes=Trailer` y lo exponen como
+  acción reproducible localizada; el contrato de API y los cuatro catálogos
+  Apple pasan. La compilación nativa queda pendiente del runner macOS con
+  Xcode, no se presenta como validada en hardware Apple.
 - Los layouts de detalle móvil de películas y series incorporan `statusBarsPadding`
   y `navigationBarsPadding`; el contrato `check-mobile-layout-insets.mjs` lo
   protege. La regresión móvil/TV posterior terminó en `BUILD SUCCESSFUL` el
