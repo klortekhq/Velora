@@ -52,7 +52,7 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   retirados. Validado con los contratos web/release y las suites Android móvil
   y TV el 2026-09-09.
 - Revalidación del 2026-09-09: las suites Android móvil/TV terminaron en
-  `BUILD SUCCESSFUL`, la suite web pasó y los 18 verificadores de contrato
+  `BUILD SUCCESSFUL`, la suite web pasó y los 19 verificadores de contrato
   (`locales`, navegación, logs, playback, Apple, Jellyfin, offline, identidad,
   releases, packaging y versiones) terminaron correctamente sobre `main`.
 - Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
@@ -60,6 +60,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   proxy del navegador y peticiones de vídeo usan ahora identidad completa de
   cliente/dispositivo. Las pruebas web y los contratos estáticos pasan; la
   compilación Swift sigue pendiente del runner macOS/Xcode.
+- Preferencias de reproducción del 2026-09-09: idioma de audio y política/idioma
+  de subtítulos ya no son solo controles de ajustes; Android los aplica al
+  selector de pistas de Media3, Apple a las selecciones nativas de AVPlayer y
+  web a los índices de stream enviados a Jellyfin. El contrato
+  `check-playback-preferences-contract.mjs` y las pruebas web pasan.
 - Jellyfin 12.0: el resolver de trailers Android ya no intenta las rutas
   retiradas `LocalTrailers`/`RemoteTrailers` después de consultar `GetItems`;
   así se evita una segunda petición 404 en servidores 12.0. El contrato de
