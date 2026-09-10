@@ -7,6 +7,12 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
+- Comprobación de entorno del 2026-09-10: Jellyfin responde en
+  `192.168.100.201:8096`, pero el entorno de desarrollo no tiene `adb` en PATH
+  ni en las rutas estándar inspeccionadas; por tanto no se afirma una prueba
+  física en Fire TV o móvil en esta sesión. La prueba de dispositivo queda
+  pendiente de un SDK/platform-tools accesible.
+
 - GitHub Actions sigue fallando antes de ejecutar pasos: en las ejecuciones
   `34425484079` (política de ramas), `34425484061` (Apple) y `34425484029`
   (validación continua), los jobs terminan en `failure` con `steps: null` y
