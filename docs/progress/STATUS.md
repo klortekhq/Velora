@@ -7,6 +7,13 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
+- GitHub Actions sigue fallando antes de ejecutar pasos: en las ejecuciones
+  `34425484079` (política de ramas), `34425484061` (Apple) y `34425484029`
+  (validación continua), los jobs terminan en `failure` con `steps: null` y
+  entre 2 y 8 segundos de duración. La causa observada es de infraestructura
+  de Actions; las pruebas locales reproducibles siguen siendo la evidencia
+  válida hasta que GitHub vuelva a proporcionar runners ejecutables.
+
 Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
 de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
