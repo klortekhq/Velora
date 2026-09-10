@@ -4,6 +4,12 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Internacionalización Android: el flujo de descargas offline incluye ahora
+  disponibilidad, límite de almacenamiento, Wi‑Fi, solo durante la carga,
+  progreso, integridad y estadísticas de transferencia en árabe, italiano,
+  japonés, coreano, portugués, ruso, turco y chino. La compilación móvil/TV
+  también queda protegida contra escapes XML inválidos en esos catálogos.
+
 - **Navegación Android:** Discovery ya no se muestra en películas, series ni
   Ajustes; la experiencia queda centrada en Recomendaciones, Biblioteca y
   búsqueda opcional.
