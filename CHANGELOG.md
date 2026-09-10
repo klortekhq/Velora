@@ -4,6 +4,11 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- **Internacionalización Android:** el estado de solicitudes de Jellyseerr ya no
+  cae a “Request pending” en árabe, italiano, japonés, coreano, portugués,
+  ruso, turco ni chino; el contrato de locales exige ahora esta traducción en
+  los ocho catálogos.
+
 - Empaquetado web en Windows: el runner prioriza los shims ejecutables de npm
   y ejecuta los shims PowerShell de forma explícita y sin shell implícito;
   `ares-package` vuelve a generar el IPK webOS cuando está instalado.
