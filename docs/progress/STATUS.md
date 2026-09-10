@@ -41,11 +41,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   [SHA256SUMS-android-v1.4.0.txt](https://github.com/klortekhq/Velora/releases/download/v1.4.0/SHA256SUMS-android-v1.4.0.txt)
   y conserva únicamente la rama remota `main`.
 
-- Higiene de release verificada el 2026-09-10: la pre-release pública `v1.4.0`
-  conserva únicamente 10 assets de referencia (APK móvil/TV r3, checksums,
-  paquetes web/Smart TV y fuentes). Se retiraron 20 APKs QA intermedias para
-  evitar que se instalen builds obsoletas; la rama remota sigue siendo solo
-  `main`.
+- Higiene de release verificada el 2026-09-10 mediante la API autenticada de
+  GitHub: la pre-release pública `v1.4.0` conserva únicamente 9 assets de
+  referencia (APK móvil/TV agrupadas, checksums, paquetes web/Smart TV y
+  fuentes). Se retiraron las APKs QA intermedias para evitar que se instalen
+  builds obsoletas; la rama remota sigue siendo solo `main`.
 
 - Revalidación completa del 2026-09-10: los 23 contratos `scripts/check-*.mjs`
   terminan correctamente y las suites unitarias Android móvil/TV terminan en
