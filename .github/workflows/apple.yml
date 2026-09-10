@@ -76,7 +76,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "${{ github.workspace }}/dist"
-          version="$(node -p "require('./web/package.json').version")"
+          version="$(node -p "require('../web/package.json').version")"
           tar --exclude='./.build' --exclude='./dist' -czf \
             "${{ github.workspace }}/dist/Velora-Apple-source-${version}.tar.gz" .
           shasum -a 256 "${{ github.workspace }}"/dist/* > "${{ github.workspace }}/dist/SHA256SUMS-apple.txt"
