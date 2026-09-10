@@ -17,8 +17,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Ambos se publicaron en la pre-release `v1.4.0` sustituyendo los APK r3
   obsoletos: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-grouped-live-tv-20260910.apk)
   y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-grouped-live-tv-20260910.apk).
-  La lista pública queda en 8 assets y conserva únicamente la rama remota
-  `main`.
+  La release incluye además
+  [SHA256SUMS-android-v1.4.0.txt](https://github.com/klortekhq/Velora/releases/download/v1.4.0/SHA256SUMS-android-v1.4.0.txt)
+  y conserva únicamente la rama remota `main`.
 
 - Higiene de release verificada el 2026-09-10: la pre-release pública `v1.4.0`
   conserva únicamente 10 assets de referencia (APK móvil/TV r3, checksums,
