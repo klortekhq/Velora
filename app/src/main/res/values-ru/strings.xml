@@ -46,7 +46,7 @@
   <string name="action_play">Play</string>
   <string name="action_back">Back</string>
   <string name="downloads_empty">No downloaded content</string>
-  <string name="offline_available">Available offline</string>
+  <string name="offline_available">Доступно офлайн</string>
   <string name="downloading_progress">Downloading… %1$d%%</string>
   <string name="action_delete">Delete</string>
   <string name="download_season">Скачать сезон</string>
@@ -78,8 +78,11 @@
   <string name="player_stream_index">Index %1$d</string>
   <string name="player_cancel">Cancel</string>
   <string name="player_downloaded_subtitles">Downloaded subtitles</string>
-  <string name="settings_offline_wifi_only">Wi‑Fi only downloads</string>
-  <string name="settings_offline_wifi_only_description">Wait for Wi‑Fi before starting new downloads.</string>
+  <string name="settings_offline_wifi_only">Загрузка только по Wi‑Fi</string>
+  <string name="settings_offline_wifi_only_description">Дождитесь Wi‑Fi перед началом новых загрузок.</string>
+  <string name="settings_offline_charging_only">Только во время зарядки</string>
+  <string name="settings_offline_charging_only_description">Перед загрузкой дождитесь подключения устройства к питанию.</string>
+  <string name="offline_transfer_stats">%1$d%% · %2$s/с · осталось %3$s</string>
   <string name="live_tv_favorite_update_error">Could not update the favorite</string>
   <string name="login_title">Sign in</string>
   <string name="login_connecting">Connecting to %1$s</string>
@@ -216,10 +219,10 @@
   <string name="movie">Movie</string>
   <string name="error_fragment_message">An error occurred</string>
   <string name="dismiss_error">Close</string>
-  <string name="offline_integrity_failed">The downloaded content is damaged. Download it again.</string>
-  <string name="settings_offline_storage_limit">Offline storage limit</string>
-  <string name="settings_offline_storage_limit_description">Maximum space Velora can manage for downloads on this device.</string>
-  <string name="settings_offline_storage_unlimited">Unlimited</string>
+  <string name="offline_integrity_failed">Загруженный контент повреждён. Загрузите его снова.</string>
+  <string name="settings_offline_storage_limit">Лимит офлайн-хранилища</string>
+  <string name="settings_offline_storage_limit_description">Максимальное место, которым Velora может управлять для загрузок на этом устройстве.</string>
+  <string name="settings_offline_storage_unlimited">Без ограничений</string>
   <string name="live_tv_cancel">Отмена</string>
   <string name="live_tv_source_count">%1$d источника</string>
   <string name="player_back">Назад</string>
