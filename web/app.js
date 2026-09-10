@@ -718,7 +718,7 @@
     var params = 'Recursive=true&IncludeItemTypes=Movie%2CSeries%2CLiveTvChannel&' +
       'SortBy=DateCreated&SortOrder=Descending&StartIndex=' + encodeURIComponent(startIndex) + '&Limit=' + encodeURIComponent(pageSize) + '&' +
       'Fields=Overview%2CProductionYear%2CDateCreated%2CPremiereDate%2CRunTimeTicks%2CCommunityRating%2CCriticRating%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData%2CPeople%2CSeriesName%2CSeriesId%2CIndexNumber%2CParentIndexNumber';
-    return api('/Users/' + state.userId + '/Items?' + params).then(function (response) {
+    return api('/Users/' + encodeURIComponent(state.userId) + '/Items?' + params).then(function (response) {
       var page = response.Items || [];
       state.items = startIndex === 0 ? page : state.items.concat(page);
       state.itemsStartIndex = startIndex + page.length;
