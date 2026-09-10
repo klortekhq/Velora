@@ -340,7 +340,8 @@ public actor JellyfinClient {
             channels.append(contentsOf: page.items)
             totalRecordCount = page.totalRecordCount ?? totalRecordCount
             startIndex += page.items.count
-            if page.items.isEmpty || page.items.count < pageSize { break }
+            if page.items.isEmpty { break }
+            if totalRecordCount == nil && page.items.count < pageSize { break }
         } while totalRecordCount.map({ startIndex < $0 }) ?? true
 
         return channels

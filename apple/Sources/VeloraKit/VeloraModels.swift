@@ -407,7 +407,12 @@ public enum PlaybackDecisionEngine {
         if capabilities.directPlay && directCompatible { return .directPlay }
         if capabilities.directStream && directCompatible { return .directStream }
         if capabilities.directStream && directStreamCompatible(source: source, capabilities: capabilities, quality: quality) { return .directStream }
-        if capabilities.remux && supported(source.videoCodec, by: capabilities.videoCodecs) && channelsFit(source, capabilities) { return .remux }
+        if capabilities.remux
+            && supported(source.videoCodec, by: capabilities.videoCodecs)
+            && channelsFit(source, capabilities)
+            && dimensionsFit(source, capabilities)
+            && presetFits(source, quality)
+        { return .remux }
         return capabilities.directStream || capabilities.directPlay ? .transcode : .fallback
     }
 
