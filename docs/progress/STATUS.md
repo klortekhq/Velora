@@ -8,10 +8,12 @@ Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
 - Comprobación de entorno del 2026-09-10: Jellyfin responde en
-  `192.168.100.201:8096`, pero el entorno de desarrollo no tiene `adb` en PATH
-  ni en las rutas estándar inspeccionadas; por tanto no se afirma una prueba
-  física en Fire TV o móvil en esta sesión. La prueba de dispositivo queda
-  pendiente de un SDK/platform-tools accesible.
+  `192.168.100.201:8096`. Se instaló Android SDK Platform-Tools 37.0.1, pero
+  `adb devices` no muestra ningún dispositivo; el intento de emparejamiento
+  autorizado en `192.168.31.251:38139` con el puerto de conexión
+  `192.168.31.251:40655` terminó con fallo de protocolo/rechazo. Por tanto no
+  se afirma una prueba física en Fire TV o móvil en esta sesión; queda
+  pendiente que el dispositivo exponga de nuevo ADB o aparezca por USB.
 
 - GitHub Actions sigue fallando antes de ejecutar pasos: en las ejecuciones
   `34425484079` (política de ramas), `34425484061` (Apple) y `34425484029`
