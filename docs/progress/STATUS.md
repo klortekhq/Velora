@@ -49,12 +49,11 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   posteriores, como `7.1.4 (Dolby Atmos)`, conservan sus 12 canales; los tests
   móvil y TV pasan tras el cambio (`BUILD SUCCESSFUL`).
 
-- Último cambio de código: `9c08d13` endurece la construcción de rutas del
-  cliente Apple. Los IDs Jellyfin y componentes de imagen se validan como
-  segmentos únicos antes de construir URLs; los tests cubren delimitadores y
-  segmentos de punto. La política de ramas y la validación Apple de GitHub
-  terminaron correctamente para este commit; la validación continua quedó
-  pendiente de consulta final por límite temporal de la API pública.
+- Último cambio de código: `7e4a420` endurece el parser de layouts de audio
+  Jellyfin. La línea de seguridad Apple que comenzó en `9c08d13` permanece
+  integrada en `main`; las validaciones de rutas, reproducción y contratos se
+  conservan en el historial. La CI pública del último commit queda pendiente
+  de consulta cuando GitHub vuelva a estar accesible desde este entorno.
 
 - Regresión local posterior (2026-09-10): todos los contratos `scripts/check-*.mjs`
   y `web/scripts/test-platform.mjs` pasan. `node web/scripts/build-web.mjs all`
