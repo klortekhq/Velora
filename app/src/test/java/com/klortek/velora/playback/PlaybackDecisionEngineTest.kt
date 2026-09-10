@@ -158,4 +158,30 @@ class PlaybackDecisionEngineTest {
 
         assertEquals(PlaybackPath.DIRECT_PLAY, PlaybackDecisionEngine.decide(source, capabilities))
     }
+
+    @Test
+    fun commonJellyfinCodecAliasesRemainDirectPlayable() {
+        val source = PlaybackSource(
+            videoCodec = "AVC",
+            audioCodec = "AC-3",
+            hdrFormat = "HDR10Plus",
+            container = "mpegts"
+        )
+        val capabilities = PlaybackCapabilities(
+            videoCodecs = setOf("h264"),
+            audioCodecs = setOf("ac3"),
+            hdrFormats = setOf("hdr10+"),
+            containers = setOf("ts")
+        )
+
+        assertEquals(PlaybackPath.DIRECT_PLAY, PlaybackDecisionEngine.decide(source, capabilities))
+    }
+
+    @Test
+    fun disabledDirectPlayStillUsesDirectStreamBeforeRemuxOrTranscode() {
+        val source = PlaybackSource(videoCodec = "h264", audioCodec = "aac")
+        val capabilities = capable.copy(directPlay = false)
+
+        assertEquals(PlaybackPath.DIRECT_STREAM, PlaybackDecisionEngine.decide(source, capabilities))
+    }
 }
