@@ -39,6 +39,12 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   de esa verificación. La instalación física queda sin certificar porque ADB
   no está disponible en este entorno.
 
+- Live TV web (2026-09-10): se eliminó una carrera de arranque en la que la
+  carga de canales podía ejecutarse antes de resolver `/Users/Me` cuando el
+  identificador de usuario aún no estaba en sesión. `loadItemsPage` y
+  `loadLiveTvChannels` comparten ahora `ensureUserId`; el test de plataforma y
+  la generación de los bundles web, webOS, Samsung y VIDAA pasan.
+
 - Artefactos QA Android recompilados desde el estado actual de `main`
   (2026-09-10): `:app:testMobileDebugUnitTest`,
   `:app:testTvDebugUnitTest`, `assembleMobileDebug` y `assembleTvDebug` pasan.
