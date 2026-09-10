@@ -161,6 +161,24 @@ fun liveTvSourceLabel(
         ?: channel.ChannelNumber?.takeIf { it.isNotBlank() }?.let { "Canal $it" }
         ?: fallbackLabel
 
+/**
+ * Labels for the source picker. Provider metadata is preferred, but duplicate
+ * metadata must not leave two touch/remote targets visually indistinguishable.
+ */
+fun liveTvSourceLabels(channels: List<LiveTvChannel>): List<String> {
+    val baseLabels = channels.mapIndexed { index, channel ->
+        liveTvSourceLabel(channel, index + 1)
+    }
+    val counts = baseLabels.groupingBy { it.lowercase() }.eachCount()
+    return baseLabels.mapIndexed { index, label ->
+        if ((counts[label.lowercase()] ?: 0) > 1) {
+            "$label · Opción ${index + 1}"
+        } else {
+            label
+        }
+    }
+}
+
 fun liveTvMediaSourceId(channel: LiveTvChannel): String? =
     channel.MediaSources.orEmpty().firstOrNull()?.let { source ->
         source.Id?.takeIf { it.isNotBlank() }
