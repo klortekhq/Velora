@@ -964,7 +964,7 @@ class JellyfinApiService(
      * getVideoRequestHeaders() when creating the media data source.
      */
     fun getThemeSongUrl(itemId: String): String {
-        if (!isSafePathSegment(itemId)) return ""
+        if (!isSafePathSegment(userId) || !isSafePathSegment(itemId)) return ""
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         return URLBuilder().takeFrom("${base}Audio/$itemId/universal").apply {
             parameters.append("UserId", userId)
@@ -976,7 +976,7 @@ class JellyfinApiService(
     }
 
     private suspend fun getMediaItems(path: String, fields: String? = null): List<JellyfinItem> {
-        if (path.split('/').any { !isSafePathSegment(it) }) return emptyList()
+        if (!isSafePathSegment(userId) || path.split('/').any { !isSafePathSegment(it) }) return emptyList()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("$base$path").apply {
@@ -1237,6 +1237,10 @@ class JellyfinApiService(
         codec: String?,
         path: String? = null
     ): String {
+        if (!isSafePathSegment(itemId) ||
+            (mediaSourceId != null && !isSafePathSegment(mediaSourceId)) ||
+            streamIndex < 0
+        ) return ""
         val server = if (baseUrl.endsWith("/")) baseUrl.removeSuffix("/") else baseUrl
         
         // Determine file extension from codec or path
@@ -2269,6 +2273,7 @@ class JellyfinApiService(
      * Reference: https://api.jellyfin.org/
      */
     suspend fun markAsWatched(itemId: String): Boolean {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(itemId)) return false
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = "${base}Users/$userId/PlayedItems/$itemId"
@@ -2313,6 +2318,7 @@ class JellyfinApiService(
      * Reference: https://api.jellyfin.org/
      */
     suspend fun markAsUnwatched(itemId: String): Boolean {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(itemId)) return false
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = "${base}Users/$userId/PlayedItems/$itemId"
@@ -2497,6 +2503,7 @@ class JellyfinApiService(
         replaceAllMetadata: Boolean = false,
         replaceAllImages: Boolean = false
     ): Boolean {
+        if (!isSafePathSegment(itemId)) return false
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Items/$itemId/Refresh").apply {
