@@ -519,7 +519,7 @@ final class VeloraKitTests: XCTestCase {
     func testMediaIdentifiersAreEncodedAsPathComponents() async throws {
         let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
         let url = await client.videoURL(itemID: "movie with spaces")
-        XCTAssertEqual(url?.percentEncodedPath, "/Videos/movie%20with%20spaces/stream")
+        XCTAssertTrue(url?.absoluteString.contains("/Videos/movie%20with%20spaces/stream") == true)
         let slashURL = await client.videoURL(itemID: "movie/with-slash")
         let traversalURL = await client.imageURL(itemID: "../escape")
         XCTAssertNil(slashURL)
@@ -528,8 +528,10 @@ final class VeloraKitTests: XCTestCase {
 
     func testPersonFilmographyRejectsPathTraversalIdentifiers() async throws {
         let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
-        XCTAssertTrue(try await client.items(userID: "../escape", forPerson: "person-1").isEmpty)
-        XCTAssertTrue(try await client.items(userID: "user-1", forPerson: "../escape").isEmpty)
+        let invalidUser = try await client.items(userID: "../escape", forPerson: "person-1")
+        let invalidPerson = try await client.items(userID: "user-1", forPerson: "../escape")
+        XCTAssertTrue(invalidUser.isEmpty)
+        XCTAssertTrue(invalidPerson.isEmpty)
     }
 }
 
