@@ -9,19 +9,18 @@ incluidos los APK agrupados. Las URLs sin autenticación devuelven `404` en
 este entorno, por lo que no se presenta como descarga pública anónima hasta
 que el repositorio/release tenga esa visibilidad. Los APK locales coinciden en
 tamaño con los assets publicados: 86.029.315 bytes (móvil) y 86.029.543 bytes
-(TV). La verificación criptográfica del contenido remoto queda pendiente de
-descargar los assets con una sesión autenticada.
+(TV). La descarga autenticada y la comparación SHA-256 se completaron; ambos
+hashes coinciden con las APK locales (`6E2F2A…673B52` y `028BF2…AAC3C`).
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
-- Comprobación de entorno del 2026-09-10: Jellyfin responde en
-  `192.168.100.201:8096`. Se instaló Android SDK Platform-Tools 37.0.1, pero
-  `adb devices` no muestra ningún dispositivo; el intento de emparejamiento
-  autorizado en `192.168.31.251:38139` con el puerto de conexión
-  `192.168.31.251:40655` terminó con fallo de protocolo/rechazo. Por tanto no
+- Comprobación de entorno del 2026-09-10: el endpoint LAN de Jellyfin responde.
+  Se instaló Android SDK Platform-Tools 37.0.1, pero `adb devices` no muestra
+  ningún dispositivo; el intento de emparejamiento autorizado terminó con
+  fallo de protocolo/rechazo. Por tanto no
   se afirma una prueba física en Fire TV o móvil en esta sesión; queda
   pendiente que el dispositivo exponga de nuevo ADB o aparezca por USB.
 
@@ -55,6 +54,11 @@ una comprobación no se interpreta como soporte certificado.
 
 Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
 de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
+
+- Tizen Studio 6.0 Web CLI: el instalador oficial descargado coincide con el
+  MD5 publicado, pero en este Windows no llega a iniciar y devuelve
+  `0xc0000142`. No se afirma instalación, firma `.wgt` ni validación Tizen;
+  el bundle HTML5 de Samsung sigue siendo el único artefacto reproducible.
 
 - APK Android actual recompilado desde `main` (2026-09-10) tras verificar la
   agrupación de Live TV: móvil SHA-256
