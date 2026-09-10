@@ -14,11 +14,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   agrupación de Live TV: móvil SHA-256
   `6E2F2AB551DC19424F4CB56ADB3F40FE2DC790E7B7FF8185062E07F6DD673B52` y TV
   SHA-256 `028BF2D7A82C64F02FACDD7D60108B0B332DD867DD7DF0DA7C696E78850AAC3C`.
-  Estos APK locales sí contienen los commits de agrupación posteriores a la
-  etiqueta `v1.4.0`; los APK r3 que siguen publicados en GitHub son anteriores
-  a esos commits y no deben presentarse como la compilación actual. La carga
-  automática de los nuevos binarios queda pendiente de una sesión `gh` con
-  permisos de publicación.
+  Ambos se publicaron en la pre-release `v1.4.0` sustituyendo los APK r3
+  obsoletos: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-grouped-live-tv-20260910.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-grouped-live-tv-20260910.apk).
+  La lista pública queda en 8 assets y conserva únicamente la rama remota
+  `main`.
 
 - Higiene de release verificada el 2026-09-10: la pre-release pública `v1.4.0`
   conserva únicamente 10 assets de referencia (APK móvil/TV r3, checksums,
