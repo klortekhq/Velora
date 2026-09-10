@@ -668,6 +668,15 @@ private struct VeloraItemDetailView: View {
                         .accessibilityLabel(Text("Fullscreen", bundle: .module))
                         .padding(10)
                     }
+                    #if os(macOS)
+                    .sheet(isPresented: $isPlayerFullscreen) {
+                        VeloraFullscreenPlayer(
+                            player: player,
+                            isPresented: $isPlayerFullscreen,
+                            aspectMode: $aspectMode
+                        )
+                    }
+                    #else
                     .fullScreenCover(isPresented: $isPlayerFullscreen) {
                         VeloraFullscreenPlayer(
                             player: player,
@@ -675,6 +684,7 @@ private struct VeloraItemDetailView: View {
                             aspectMode: $aspectMode
                         )
                     }
+                    #endif
                     HStack {
                         VeloraAspectMenu(selection: $aspectMode)
                         VeloraMediaSelectionMenu(player: player)
