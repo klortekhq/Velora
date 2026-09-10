@@ -28,6 +28,8 @@ local.properties
 /timeago-parser/build/
 /app/release/
 /outputs/
+/tools/
+/.tools/
 /release-*/
 /release-assets-*/
 /SHA256SUMS-*.txt
