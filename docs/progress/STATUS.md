@@ -31,13 +31,15 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   ruta directa cuando el receptor/dispositivo no soporta la configuración real;
   ambos tests Android vuelven a terminar en `BUILD SUCCESSFUL`.
 
-- Artefactos QA del commit `d99b599` (2026-09-10): `assembleMobileDebug` y
-  `assembleTvDebug` pasan. APK móvil: 86.029.315 bytes,
-  SHA-256 `00223F5EC928323C22B8B3A23A96AFDD902A3C556460FA971D284577F82F5290`.
-  APK TV: 86.029.543 bytes,
-  SHA-256 `E014A8F99239ED5D6EEEB280E6A218C781DB86D7D5CC966AAF2ED0CF2CDFF863`.
-  Son builds debug sin firma de distribución y no se han presentado como una
-  release pública.
+- Artefactos QA Android recompilados desde el estado actual de `main`
+  (2026-09-10): `:app:testMobileDebugUnitTest`,
+  `:app:testTvDebugUnitTest`, `assembleMobileDebug` y `assembleTvDebug` pasan.
+  APK móvil: SHA-256
+  `E2423C49E136610213D3E4CB2B0A161912EA55AF34FF1BE69190D8B8FD573A96`.
+  APK TV: SHA-256
+  `68612F600C29834AD156C463C72898DDD49F11CBCA09A79DBEAE7B07AFDB7E1C`.
+  Son builds debug sin firma de distribución; no se presentan como release
+  pública ni como prueba de instalación física.
 
 - Regresión web/Smart TV revalidada tras la compilación Android: `node
   web/scripts/test-platform.mjs`, `node web/scripts/build-web.mjs all` y
