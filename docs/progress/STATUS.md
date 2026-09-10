@@ -4,13 +4,12 @@ Updated: 2026-09-10
 
 ## Auditoría de publicación (2026-09-10)
 
-La API autenticada de GitHub confirma que `v1.4.0` existe y conserva 9 assets,
-incluidos los APK agrupados. Las URLs sin autenticación devuelven `404` en
-este entorno, por lo que no se presenta como descarga pública anónima hasta
-que el repositorio/release tenga esa visibilidad. Los APK locales coinciden en
-tamaño con los assets publicados: 86.029.315 bytes (móvil) y 86.029.543 bytes
-(TV). La descarga autenticada y la comparación SHA-256 se completaron; ambos
-hashes coinciden con las APK locales (`6E2F2A…673B52` y `028BF2…AAC3C`).
+La API de GitHub confirma que el repositorio es ahora público, que `v1.4.0`
+existe y conserva 9 assets, incluidos los APK agrupados. La URL pública del
+APK móvil responde `200` sin autenticación y sus 86.029.315 bytes coinciden
+con la compilación local. La descarga autenticada y la comparación SHA-256 de
+ambos APK se completaron; coinciden con las APK locales
+(`6E2F2A…673B52` y `028BF2…AAC3C`).
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
@@ -417,8 +416,9 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `app-tv-debug.apk`, SHA-256
   `62F15E4B7B118B25C2358252DAD094D5E0EB9116353962E1F8FA3D06C1845B4D`.
   La compilación terminó correctamente. La sustitución de los assets en
-  GitHub queda pendiente de una sesión `gh` autenticada en este entorno; no se
-  marca como publicada hasta verificar `state=uploaded`.
+  La sustitución de los assets queda reconciliada con la release autenticada
+  `v1.4.0`; la auditoría posterior verificó `state=uploaded` y los hashes de
+  los APK publicados.
 - Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
   sin resultados usan recursos localizados; el catálogo garantizado queda en
   534 claves y las suites móvil/TV pasan.
