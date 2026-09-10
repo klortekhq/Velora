@@ -88,6 +88,17 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Ambos se publicaron en la pre-release `v1.4.0` sustituyendo los APK r3
   obsoletos: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-grouped-live-tv-20260910.apk)
   y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-grouped-live-tv-20260910.apk).
+
+- Validación CI del commit `781bf69` (2026-09-10): política de ramas
+  `34436122110`, Apple `34436122123` y validación continua `34436122131`
+  terminaron en `success`. La validación continua incluyó Android móvil/TV,
+  Apple compartido y Web.
+
+- Endurecimiento de navegación de personas: los IDs de persona y el tipo de
+  imagen se validan como segmentos únicos antes de interpolarse en rutas o
+  URLs de Jellyfin; el contrato Android correspondiente queda cubierto por
+  `check-android-content-navigation.mjs`. Esto evita rutas manipuladas sin
+  alterar IDs normales de Jellyfin.
   La release incluye además
   [SHA256SUMS-android-v1.4.0.txt](https://github.com/klortekhq/Velora/releases/download/v1.4.0/SHA256SUMS-android-v1.4.0.txt)
   y conserva únicamente la rama remota `main`.
