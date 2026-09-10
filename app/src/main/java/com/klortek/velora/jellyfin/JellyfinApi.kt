@@ -345,6 +345,11 @@ class JellyfinApiService(
     private val config: JellyfinConfig? = null,
     private val languageTag: String = java.util.Locale.getDefault().toLanguageTag()
 ) {
+    /** Jellyfin IDs are single URL path segments; never let caller data alter the route. */
+    private fun isSafePathSegment(value: String): Boolean =
+        value.isNotBlank() && value != "." && value != ".." &&
+            value.none { it == '/' || it == '\\' || it == '?' || it == '#' || it == '%' }
+
     private val clientDeviceName = veloraClientDeviceName(BuildConfig.TV_BUILD)
     private val clientDeviceId = veloraClientDeviceId(config?.deviceId)
 
@@ -857,6 +862,7 @@ class JellyfinApiService(
     // Get person details (biography, birthdate, etc.)
     // Uses /Users/{userId}/Items/{personId} endpoint which returns full item details
     suspend fun getPersonDetails(personId: String): PersonDetails? {
+        if (!isSafePathSegment(personId)) return null
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             // Use the Items endpoint with userId for full details including Overview
@@ -879,6 +885,7 @@ class JellyfinApiService(
 
     // Get all items (movies, series) that a person appears in (filmography)
     suspend fun getPersonFilmography(personId: String, limit: Int = 50): List<JellyfinItem> {
+        if (!isSafePathSegment(personId)) return emptyList()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Items").apply {
@@ -1001,6 +1008,7 @@ class JellyfinApiService(
 
     // Get person image URL
     fun getPersonImageUrl(personId: String, imageType: String = "Primary", tag: String? = null, maxWidth: Int? = null, maxHeight: Int? = null): String {
+        if (!isSafePathSegment(personId) || !isSafePathSegment(imageType)) return ""
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         return URLBuilder().takeFrom("${base}Items/$personId/Images/$imageType").apply {
             tag?.let { parameters.append("tag", it) }
