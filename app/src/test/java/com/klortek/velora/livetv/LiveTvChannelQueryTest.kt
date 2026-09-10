@@ -143,6 +143,19 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun duplicateProviderLabelsRemainDistinctInSourcePicker() {
+        val channels = listOf(
+            LiveTvChannel("main", "Canal", MediaSources = listOf(MediaSource(Name = "IPTV"))),
+            LiveTvChannel("alt", "Canal", MediaSources = listOf(MediaSource(Name = "IPTV")))
+        )
+
+        assertEquals(
+            listOf("IPTV · Opción 1", "IPTV · Opción 2"),
+            liveTvSourceLabels(channels)
+        )
+    }
+
+    @Test
     fun playbackInfoKeepsTheSelectedSourceInsteadOfAlwaysUsingTheFirst() {
         val primary = MediaSource(Id = "source-main", LiveStreamId = "stream-main")
         val iptv = MediaSource(Id = "source-iptv", LiveStreamId = "stream-iptv")

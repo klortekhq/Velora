@@ -86,7 +86,7 @@ import com.klortek.velora.livetv.filterLiveTvChannelGroups
 import com.klortek.velora.livetv.liveTvGroups
 import com.klortek.velora.livetv.groupLiveTvChannels
 import com.klortek.velora.livetv.LiveTvChannelGroup
-import com.klortek.velora.livetv.liveTvSourceLabel
+import com.klortek.velora.livetv.liveTvSourceLabels
 import com.klortek.velora.livetv.liveTvPlaybackChannelList
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.livetv.liveTvMediaSourceId
@@ -419,17 +419,16 @@ private fun LiveTvSourceDialog(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = .7f)
             )
             Spacer(modifier = Modifier.height(16.dp))
+            val sourceLabels = liveTvSourceLabels(group.channels)
             group.channels.forEachIndexed { index, channel ->
                 Button(
                     onClick = { onSelect(channel) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                 ) {
                     Text(
-                        liveTvSourceLabel(
-                            channel = channel,
-                            optionNumber = index + 1,
-                            fallbackLabel = stringResource(R.string.live_tv_source_option, index + 1)
-                        ),
+                        sourceLabels.getOrElse(index) {
+                            stringResource(R.string.live_tv_source_option, index + 1)
+                        },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

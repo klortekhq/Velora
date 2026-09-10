@@ -9,8 +9,8 @@ existe y conserva 9 assets, incluidos los APK agrupados. También confirma que
 solo existe la rama `main`. Los assets publicados responden sin autenticación,
 pero la comparación actual detecta que los APK remotos no son los mismos que
 los APK QA locales recién compilados: remoto móvil
-`6E2F2A…673B52` frente a local `5D8CF3…09A41F90`, y remoto TV
-`028BF2…AAC3C` frente a local `775E43…D66B1A361`. La sustitución queda
+`6E2F2A…673B52` frente a local `87EB3C…7849B0CF`, y remoto TV
+`028BF2…AAC3C` frente a local `3B0390…69E27CC`. La sustitución queda
 pendiente de disponer de una credencial de publicación GitHub; no se afirma
 que ambos binarios sean idénticos.
 
@@ -58,13 +58,18 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   de esa verificación. La instalación física queda sin certificar porque ADB
   no está disponible en este entorno.
 
+- Selector de fuentes Live TV (2026-09-10): si varios proveedores exponen la
+  misma etiqueta, el selector añade un sufijo estable (`Opción 1`, `Opción 2`)
+  para que ninguna fuente parezca un botón duplicado. La prueba unitaria y
+  las suites móvil/TV pasan.
+
 - Verificación de binarios Android (2026-09-10):
   `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
   `assembleMobileDebug` y `assembleTvDebug` terminan correctamente. Las APK
   QA actuales que contienen el agrupado son `app-mobile-debug.apk`
-  (SHA-256 `5D8CF3FB8E3D9E86E980CCCC6A0134342EF9C4F7A0C25B060359C2A809A41F90`)
+  (SHA-256 `87EB3C8748390C5B58EFB5E121B40CC5FD82E2AB06BF207A19448F117849B0CF`)
   y `app-tv-debug.apk`
-  (SHA-256 `775E43C5E6989526AE0E8D9D86ECC99E242DDEF875CBAF9E5185889D66B1A361`).
+  (SHA-256 `3B0390C1B3083CB625A4ABF756A0E560DB7CF13C710A3AB14E9F7C0AE69E27CC`).
   La compilación fue limpia; son builds debug locales, no una release firmada.
 
 - Live TV web (2026-09-10): se eliminó una carrera de arranque en la que la
