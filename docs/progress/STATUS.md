@@ -11,6 +11,12 @@ con la compilación local. La descarga autenticada y la comparación SHA-256 de
 ambos APK se completaron; coinciden con las APK locales
 (`6E2F2A…673B52` y `028BF2…AAC3C`).
 
+- Higiene de releases revisada el 2026-09-10: se retiraron las publicaciones
+  antiguas y quedaron únicamente `v1.2.85` y `v1.4.0`, ambas con artefactos
+  publicados. Existe un tag histórico `v1.3.0`, pero no se crea una release
+  vacía ni se inventan APKs para él; se publicará cuando exista un conjunto de
+  artefactos reproducibles y verificables.
+
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
