@@ -25,6 +25,12 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   prioridad Direct Stream → Remux → Transcode. `:app:testMobileDebugUnitTest`
   y `:app:testTvDebugUnitTest` pasan.
 
+- Audio multicanal (2026-09-10): el mapper Jellyfin conserva ahora todos los
+  canales de distribuciones inmersivas como `7.1.4` (12 canales), además de
+  mantener el cálculo tradicional de `5.1`. Esto evita declarar por error una
+  ruta directa cuando el receptor/dispositivo no soporta la configuración real;
+  ambos tests Android vuelven a terminar en `BUILD SUCCESSFUL`.
+
 - Último cambio de código: `9c08d13` endurece la construcción de rutas del
   cliente Apple. Los IDs Jellyfin y componentes de imagen se validan como
   segmentos únicos antes de construir URLs; los tests cubren delimitadores y
