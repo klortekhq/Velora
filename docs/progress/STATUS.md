@@ -14,6 +14,12 @@ una comprobación no se interpreta como soporte certificado.
   de Actions; las pruebas locales reproducibles siguen siendo la evidencia
   válida hasta que GitHub vuelva a proporcionar runners ejecutables.
 
+- Reintento remoto verificado el 2026-09-10: `34425888911` (ramas),
+  `34425888890` (validación continua) y `34425888871` (Apple) vuelven a
+  terminar en 2–6 segundos con `runner` vacío y `stepsCount: 0`. Esto confirma
+  que el bloqueo persiste antes de reservar un runner y no corresponde a un
+  fallo de código o de una prueba concreta.
+
 - Revalidación local posterior al último estado de `main` (2026-09-10): los 23
   contratos `scripts/check-*.mjs`, `web/scripts/test-platform.mjs` y el
   empaquetado `node web/scripts/build-web.mjs all` terminan correctamente. Se
