@@ -25,6 +25,14 @@ una comprobación no se interpreta como soporte certificado.
   se afirma una prueba física en Fire TV o móvil en esta sesión; queda
   pendiente que el dispositivo exponga de nuevo ADB o aparezca por USB.
 
+- Smoke autenticado repetido el 2026-09-10 contra el endpoint LAN de QA:
+  `/System/Info/Public` respondió correctamente e identificó Jellyfin
+  `12.0.0`, pero `Users/AuthenticateByName` rechazó tanto el contrato
+  estándar `{Username,Pw}` como el alternativo `{Username,Password}` con
+  `HTTP 400`. No se guardaron credenciales ni tokens; siguen sin certificarse
+  catálogo, Live TV, `PlaybackInfo` o reproducción real hasta que el servidor
+  acepte las credenciales.
+
 - GitHub Actions sigue fallando antes de ejecutar pasos: en las ejecuciones
   `34425484079` (política de ramas), `34425484061` (Apple) y `34425484029`
   (validación continua), los jobs terminan en `failure` con `steps: null` y
