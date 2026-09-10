@@ -2,6 +2,9 @@
 import AVKit
 import CoreMedia
 import SwiftUI
+#if os(macOS)
+import AppKit
+#endif
 
 /// Shared native application shell. iOS/iPadOS and tvOS apps can embed this
 /// shell while supplying their own entry point, focus policy and navigation
@@ -652,7 +655,7 @@ private struct VeloraItemDetailView: View {
                 }
                 if let player {
                     ZStack(alignment: .topTrailing) {
-                        VideoPlayer(player: player)
+                        VeloraVideoSurface(player: player)
                             .veloraVideoAspect(aspectMode)
                         Button {
                             isPlayerFullscreen = true
@@ -869,6 +872,35 @@ private enum VeloraAspectMode: String, CaseIterable, Identifiable {
 
 }
 
+private struct VeloraVideoSurface: View {
+    let player: AVPlayer
+
+    var body: some View {
+#if os(macOS)
+        VeloraMacVideoSurface(player: player)
+#else
+        VideoPlayer(player: player)
+#endif
+    }
+}
+
+#if os(macOS)
+private struct VeloraMacVideoSurface: NSViewRepresentable {
+    let player: AVPlayer
+
+    func makeNSView(context: Context) -> AVPlayerView {
+        let view = AVPlayerView()
+        view.controlsStyle = .none
+        view.player = player
+        return view
+    }
+
+    func updateNSView(_ nsView: AVPlayerView, context: Context) {
+        nsView.player = player
+    }
+}
+#endif
+
 private extension View {
     @ViewBuilder
     func veloraVideoAspect(_ mode: VeloraAspectMode) -> some View {
@@ -965,7 +997,7 @@ private struct VeloraFullscreenPlayer: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color.black.ignoresSafeArea()
-            VideoPlayer(player: player)
+            VeloraVideoSurface(player: player)
                 .veloraVideoAspect(aspectMode)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
@@ -1171,7 +1203,7 @@ private struct VeloraLiveTvView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(selectedChannel.name).font(.headline)
                     ZStack(alignment: .topTrailing) {
-                        VideoPlayer(player: player)
+                        VeloraVideoSurface(player: player)
                             .veloraVideoAspect(liveAspectMode)
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                         Button {
