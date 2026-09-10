@@ -22,7 +22,8 @@ que ambos binarios sean idénticos.
 - Automatización de APK QA (2026-09-10): se añadió el workflow manual
   `android-qa-reconcile.yml`. Compila y prueba las variantes móvil/TV y puede
   reemplazar los APK QA y sus checksums en una pre-release existente usando el
-  token integrado de GitHub; no publica APK unsigned como distribución estable.
+  token integrado de GitHub; ahora también se activa automáticamente en cambios
+  Android relevantes de `main`. No publica APK unsigned como distribución estable.
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
