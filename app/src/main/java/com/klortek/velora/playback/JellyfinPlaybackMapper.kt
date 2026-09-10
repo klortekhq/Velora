@@ -51,12 +51,22 @@ object JellyfinPlaybackMapper {
         else -> null
     }
 
-    private fun audioChannelCount(layout: String): Int? = when {
-        layout.contains("7.1", true) -> 8
-        layout.contains("5.1", true) -> 6
-        layout.contains("stereo", true) -> 2
-        layout.contains("mono", true) -> 1
-        else -> layout.substringBefore('.').toIntOrNull()
+    private fun audioChannelCount(layout: String): Int? {
+        val normalized = layout.trim().lowercase()
+        when {
+            normalized.contains("stereo") -> return 2
+            normalized.contains("mono") -> return 1
+        }
+
+        // Jellyfin may expose immersive layouts such as 7.1.4. Counting only
+        // the bed (7.1 = 8) under-reports the stream and can incorrectly make
+        // a receiver appear capable of direct playback. Sum the numeric layout
+        // components while keeping the familiar 5.1/7.1 behavior intact.
+        val components = normalized
+            .split('.')
+            .mapNotNull { it.trim().toIntOrNull() }
+        if (components.size >= 2) return components.sum()
+        return components.firstOrNull()
     }
 
     private fun requiresSubtitleTranscode(stream: MediaStream): Boolean =
