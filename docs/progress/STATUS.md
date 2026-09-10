@@ -45,6 +45,12 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   `loadLiveTvChannels` comparten ahora `ensureUserId`; el test de plataforma y
   la generación de los bundles web, webOS, Samsung y VIDAA pasan.
 
+- Verificación de Apple (2026-09-10): en este Windows no está instalado Swift,
+  por lo que no se presenta una compilación Apple falsa. El código actual sí
+  contiene AVPlayer/AVFoundation, URLSession de fondo para iOS/iPadOS y la
+  superficie de reproducción streaming-only de tvOS; la prueba ejecutable
+  queda pendiente de un runner macOS/Xcode.
+
 - Artefactos QA Android recompilados desde el estado actual de `main`
   (2026-09-10): `:app:testMobileDebugUnitTest`,
   `:app:testTvDebugUnitTest`, `assembleMobileDebug` y `assembleTvDebug` pasan.
