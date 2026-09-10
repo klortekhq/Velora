@@ -31,4 +31,17 @@ class JellyfinPlaybackMapperTest {
 
         assertEquals(6, source.audioChannels)
     }
+
+    @Test
+    fun layoutLabelsAfterNumericChannelsDoNotChangeTheCount() {
+        val source = JellyfinPlaybackMapper.source(
+            MediaSource(
+                MediaStreams = listOf(
+                    MediaStream(Type = "Audio", ChannelLayout = "7.1.4 (Dolby Atmos)")
+                )
+            )
+        )
+
+        assertEquals(12, source.audioChannels)
+    }
 }
