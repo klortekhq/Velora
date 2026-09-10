@@ -35,6 +35,7 @@ assert.match(indexSource, /referrer.*no-referrer/);
 assert.doesNotMatch(buildSource, /shell:\s*true/, 'el empaquetador no debe activar un shell implícito');
 assert.match(buildSource, /shell:\s*false/, 'las herramientas del empaquetador deben ejecutarse sin shell implícito');
 assert.match(buildSource, /quoteWindowsArg/, 'los CLIs .cmd deben invocarse con argumentos escapados');
+assert.match(buildSource, /powershell\.exe/, 'los shims PowerShell deben invocarse explícitamente');
 
 function detect(userAgent) {
   const listeners = {};

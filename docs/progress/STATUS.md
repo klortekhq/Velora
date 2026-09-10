@@ -120,6 +120,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   Esto confirma un bloqueo de infraestructura/cuenta, no un fallo reproducido
   por el código. No se certifica aquí ninguna compilación nativa Apple hasta
   que GitHub reactive los runners.
+- Empaquetado local Windows revalidado el 2026-09-10 con permisos completos:
+  `esbuild` transpila los bundles y `ares-package` genera correctamente el
+  IPK webOS. El runner ahora prioriza `.cmd/.exe` sobre shims `.ps1` y, si
+  solo existe un shim PowerShell, lo invoca explícitamente sin `shell:true`.
+  Samsung continúa honestamente como bundle sin Tizen Studio/firma y VIDAA
+  como HTML5 para su portal oficial.
 - Revalidación local del 2026-09-09: `:app:testMobileDebugUnitTest` y
   `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`; los APK debug
   regenerados conservan los hashes publicados en la release QA v1.4.0.

@@ -33,7 +33,13 @@ function resolveCommand(name) {
   // PowerShell/npm installations can expose only a .cmd or .ps1 shim, while
   // `where.exe` may ignore it depending on PATHEXT. Resolve those shims
   // explicitly so the secure shell-free runner does not lose available CLIs.
-  const extensions = [...(process.env.PATHEXT || '.COM;.EXE;.BAT;.CMD').split(';'), ''];
+  // Prefer real executables and npm's .cmd shims. PowerShell may put a .ps1
+  // shim first in PATH; it is not a native executable for spawnSync.
+  const preferredExtensions = ['.COM', '.EXE', '.BAT', '.CMD'];
+  const pathext = (process.env.PATHEXT || '').split(';')
+    .map((extension) => extension.toUpperCase())
+    .filter((extension) => extension && !preferredExtensions.includes(extension));
+  const extensions = [...preferredExtensions, ...pathext, ''];
   const searchDirectories = [
     ...(process.env.PATH || '').split(';'),
     process.env.APPDATA ? join(process.env.APPDATA, 'npm') : '',
@@ -55,6 +61,19 @@ function quoteWindowsArg(value) {
 }
 
 function runCommand(executable, args, cwd) {
+  if (process.platform === 'win32' && /\.ps1$/i.test(executable)) {
+    const powershell = process.env.SystemRoot
+      ? join(process.env.SystemRoot, 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe')
+      : 'powershell.exe';
+    return spawnSync(powershell, [
+      '-NoLogo', '-NoProfile', '-NonInteractive',
+      '-ExecutionPolicy', 'Bypass', '-File', executable, ...args
+    ], {
+      stdio: 'inherit',
+      cwd,
+      shell: false
+    });
+  }
   if (process.platform === 'win32' && /\.(?:cmd|bat)$/i.test(executable)) {
     const commandLine = [executable, ...args].map(quoteWindowsArg).join(' ');
     return spawnSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', commandLine], {
