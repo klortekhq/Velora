@@ -31,6 +31,12 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   ruta directa cuando el receptor/dispositivo no soporta la configuración real;
   ambos tests Android vuelven a terminar en `BUILD SUCCESSFUL`.
 
+- Seguridad de rutas Android (2026-09-10): las rutas de imágenes, detalles,
+  reproducción, subtítulos y control remoto validan ahora sus segmentos antes
+  de construir URLs o cuerpos de petición Jellyfin; también se rechazan
+  índices y posiciones negativos. El contrato de API y los tests unitarios de
+  móvil y TV pasan. No se presenta esto como certificación de hardware.
+
 - Agrupado Live TV Android (2026-09-10): la compilación móvil y la de TV
   incluyen la reducción de duplicados por identidad visible/ID Jellyfin, las
   opciones `MediaSources` de un mismo canal y el selector de fuente antes de

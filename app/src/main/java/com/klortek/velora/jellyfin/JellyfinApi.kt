@@ -407,15 +407,18 @@ class JellyfinApiService(
             .filter { !it.Id.isNullOrBlank() && !it.DeviceName.isNullOrBlank() }
     }.getOrDefault(emptyList())
 
-    suspend fun playOnRemoteSession(sessionId: String, itemId: String, positionMs: Long = 0L): Boolean = runCatching {
-        val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
-        client.post("${base}Sessions/$sessionId/Playing") {
-            header(HttpHeaders.Authorization, mediaBrowserAuthorization())
-            contentType(ContentType.Application.Json)
-            setBody("{\"ItemIds\":[\"$itemId\"],\"PlayCommand\":\"PlayNow\",\"StartPositionTicks\":${positionMs * 10000}}")
-        }
-        true
-    }.getOrDefault(false)
+    suspend fun playOnRemoteSession(sessionId: String, itemId: String, positionMs: Long = 0L): Boolean {
+        if (!isSafePathSegment(sessionId) || !isSafePathSegment(itemId) || positionMs < 0L) return false
+        return runCatching {
+            val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+            client.post("${base}Sessions/$sessionId/Playing") {
+                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
+                contentType(ContentType.Application.Json)
+                setBody("{\"ItemIds\":[\"$itemId\"],\"PlayCommand\":\"PlayNow\",\"StartPositionTicks\":${positionMs * 10000}}")
+            }
+            true
+        }.getOrDefault(false)
+    }
 
     suspend fun getContinueWatching(limit: Int = 20): List<JellyfinItem> {
         return try {
@@ -797,6 +800,7 @@ class JellyfinApiService(
     }
 
     fun getImageUrl(itemId: String, imageType: String = "Primary", imageTag: String? = null, maxWidth: Int? = null, maxHeight: Int? = null, quality: Int? = null): String {
+        if (!isSafePathSegment(itemId) || !isSafePathSegment(imageType)) return ""
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         // Default to highest resolution for detail views, but allow smaller sizes for thumbnails
         val defaultMaxWidth = maxWidth ?: 7680
@@ -817,6 +821,7 @@ class JellyfinApiService(
     // Get chapter image URL
     // API endpoint: /Items/{itemId}/Images/Chapter/{chapterIndex}
     fun getChapterImageUrl(itemId: String, chapterIndex: Int, imageTag: String? = null, maxWidth: Int = 320, maxHeight: Int = 180): String {
+        if (!isSafePathSegment(itemId) || chapterIndex < 0) return ""
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         val urlBuilder = URLBuilder().takeFrom("${base}Items/$itemId/Images/Chapter/$chapterIndex").apply {
             parameters.append("maxWidth", maxWidth.toString())
@@ -836,6 +841,7 @@ class JellyfinApiService(
     }
 
     suspend fun getItemDetails(itemId: String): JellyfinItem? {
+        if (!isSafePathSegment(itemId)) return null
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             // Request full item details including MediaSources for video playback and UserData for resume functionality
@@ -1041,6 +1047,8 @@ class JellyfinApiService(
         maxBitrateMbps: Int = 40,
         audioCodec: String = "aac"
     ): String {
+        if (!isSafePathSegment(itemId) ||
+            (mediaSourceId != null && !isSafePathSegment(mediaSourceId))) return ""
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         val sourceId = mediaSourceId ?: itemId
         val maxBitrate = maxBitrateMbps * 1_000_000 // Convert Mbps to bps
@@ -1094,6 +1102,8 @@ class JellyfinApiService(
         audioCodec: String? = null, // Target audio codec for transcoding (e.g., "ac3", "aac")
         quality: PlaybackQuality = PlaybackQuality.ORIGINAL
     ): String {
+        if (!isSafePathSegment(itemId) ||
+            (mediaSourceId != null && !isSafePathSegment(mediaSourceId))) return ""
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         // Jellyfin video playback URL format: /Videos/{itemId}/stream
         // Use MediaSourceId if provided, otherwise use itemId
@@ -1386,6 +1396,7 @@ class JellyfinApiService(
      * Authentication is supplied through the Jellyfin request headers.
      */
     fun buildSubtitleUrl(itemId: String, mediaSourceId: String, index: Int): String {
+        if (!isSafePathSegment(itemId) || !isSafePathSegment(mediaSourceId) || index < 0) return ""
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         return "${base}Videos/$itemId/$mediaSourceId/Subtitles/$index/Stream"
     }
