@@ -46,7 +46,7 @@
   <string name="action_play">Play</string>
   <string name="action_back">Back</string>
   <string name="downloads_empty">No downloaded content</string>
-  <string name="offline_available">Available offline</string>
+  <string name="offline_available">오프라인에서 이용 가능</string>
   <string name="downloading_progress">Downloading… %1$d%%</string>
   <string name="action_delete">Delete</string>
   <string name="download_season">시즌 다운로드</string>
@@ -78,8 +78,11 @@
   <string name="player_stream_index">Index %1$d</string>
   <string name="player_cancel">Cancel</string>
   <string name="player_downloaded_subtitles">Downloaded subtitles</string>
-  <string name="settings_offline_wifi_only">Wi‑Fi only downloads</string>
-  <string name="settings_offline_wifi_only_description">Wait for Wi‑Fi before starting new downloads.</string>
+  <string name="settings_offline_wifi_only">Wi‑Fi에서만 다운로드</string>
+  <string name="settings_offline_wifi_only_description">새 다운로드를 시작하기 전에 Wi‑Fi 연결을 기다립니다.</string>
+  <string name="settings_offline_charging_only">충전 중에만</string>
+  <string name="settings_offline_charging_only_description">다운로드 전에 기기가 전원에 연결될 때까지 기다립니다.</string>
+  <string name="offline_transfer_stats">%1$d%% · %2$s/초 · %3$s 남음</string>
   <string name="live_tv_favorite_update_error">Could not update the favorite</string>
   <string name="login_title">Sign in</string>
   <string name="login_connecting">Connecting to %1$s</string>
@@ -216,10 +219,10 @@
   <string name="movie">Movie</string>
   <string name="error_fragment_message">An error occurred</string>
   <string name="dismiss_error">Close</string>
-  <string name="offline_integrity_failed">The downloaded content is damaged. Download it again.</string>
-  <string name="settings_offline_storage_limit">Offline storage limit</string>
-  <string name="settings_offline_storage_limit_description">Maximum space Velora can manage for downloads on this device.</string>
-  <string name="settings_offline_storage_unlimited">Unlimited</string>
+  <string name="offline_integrity_failed">다운로드한 콘텐츠가 손상되었습니다. 다시 다운로드하세요.</string>
+  <string name="settings_offline_storage_limit">오프라인 저장공간 한도</string>
+  <string name="settings_offline_storage_limit_description">이 기기에서 Velora가 다운로드에 관리할 수 있는 최대 공간입니다.</string>
+  <string name="settings_offline_storage_unlimited">제한 없음</string>
   <string name="live_tv_cancel">취소</string>
   <string name="live_tv_source_count">%1$d개 소스</string>
   <string name="player_back">뒤로</string>

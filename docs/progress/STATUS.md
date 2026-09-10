@@ -67,6 +67,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 - Android i18n: también se eliminaron restos visibles en inglés de los controles
   de Series, reparto y errores del reproductor en esos ocho catálogos extra; el
   contrato de locales los protege junto con el flujo de descargas.
+- Android i18n offline del 2026-09-10: los catálogos extra ya incluyen también
+  disponibilidad sin conexión, límite de almacenamiento, Wi‑Fi, solo durante
+  la carga, progreso, integridad y estado de transferencia en árabe, italiano,
+  japonés, coreano, portugués, ruso, turco y chino. Se corrigió además el
+  escape XML del turco y la compilación AAPT quedó verificada en móvil y TV.
 - APKs QA de internacionalización regeneradas el 2026-09-10 desde `main`:
   móvil SHA-256
   `A7194207C132AA4AD4AD6EB4CD1172FCD89EBA2081C6DC11C2930ABB072E9721` y TV
@@ -80,6 +85,12 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   SHA-256 `0615ABA13490E424776353DD7DED91A2D0514CD519022346266B40DCA499E4D7`.
   [Móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-i18n-20260910-r2.apk)
   y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-i18n-20260910-r2.apk).
+- APKs QA regeneradas tras completar las cadenas offline (2026-09-10): móvil
+  SHA-256 `BD3B1CFD27346E191C984BCE44F332274268094B29D35913FB1655EB4297B2D2`
+  y TV SHA-256
+  `1CE33C0D96752633E6967C9C234B245D92A90178B7F432CBA66809DCF545FC30`.
+  Se subirán como la revisión r3 de la misma pre-release tras confirmar la
+  lista pública de assets.
 - Pantalla de inicio de sesión Android: el contrato
   `check-android-login-layout.mjs` protege safe area, desplazamiento vertical,
   tamaños adaptativos de los campos y foco de mando en el botón TV. La

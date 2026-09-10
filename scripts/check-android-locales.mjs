@@ -36,7 +36,11 @@ const extraLocaleDirectories = ['values-ar', 'values-it', 'values-ja', 'values-k
 const translatedExtraKeys = [
   'download_season', 'download_season_queued', 'select_episodes', 'continue_label',
   'download_quality_title', 'download_quality_description', 'nav_series',
-  'person_series', 'error_fragment'
+  'person_series', 'error_fragment', 'offline_available', 'offline_integrity_failed',
+  'offline_transfer_stats', 'settings_offline_storage_limit',
+  'settings_offline_storage_limit_description', 'settings_offline_storage_unlimited',
+  'settings_offline_wifi_only', 'settings_offline_wifi_only_description',
+  'settings_offline_charging_only', 'settings_offline_charging_only_description'
 ];
 const englishSource = fs.readFileSync(path.join(resources, 'values-en', 'strings.xml'), 'utf8');
 const englishValues = new Map([...englishSource.matchAll(/<string name="([^"]+)">([^<]*)<\/string>/g)].map((match) => [match[1], match[2]]));
