@@ -9,8 +9,8 @@ existe y conserva 9 assets, incluidos los APK agrupados. También confirma que
 solo existe la rama `main`. Los assets publicados responden sin autenticación,
 pero la comparación actual detecta que los APK remotos no son los mismos que
 los APK QA locales recién compilados: remoto móvil
-`6E2F2A…673B52` frente a local `87EB3C…7849B0CF`, y remoto TV
-`028BF2…AAC3C` frente a local `3B0390…69E27CC`. La sustitución queda
+`6E2F2A…673B52` frente a local `851086…6EEA1F`, y remoto TV
+`028BF2…AAC3C` frente a local `65F6DD…02E4D2`. La sustitución queda
 pendiente de disponer de una credencial de publicación GitHub; no se afirma
 que ambos binarios sean idénticos.
 
