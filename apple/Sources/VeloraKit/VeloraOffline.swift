@@ -363,7 +363,7 @@ public final class VeloraOfflineStore: @unchecked Sendable {
               let checksum = sha256(url: url) else { return nil }
         if let expectedSize = entry.byteCount, expectedSize != size { return nil }
         if let expectedChecksum = entry.checksumSha256,
-           !expectedChecksum.caseInsensitiveCompare(checksum).isOrderedSame { return nil }
+           expectedChecksum.caseInsensitiveCompare(checksum) != .orderedSame { return nil }
         return VeloraOfflineDownload(
             id: entry.id,
             itemID: entry.itemID,

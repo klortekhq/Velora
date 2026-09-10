@@ -1,33 +1,46 @@
 #if canImport(SwiftUI)
 import Foundation
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 @available(iOS 16.0, tvOS 16.0, *)
 private struct VeloraArtwork: View {
     let client: JellyfinClient
     let itemID: String
     let width: Int
-    @State private var request: URLRequest?
+    @State private var image: Image?
 
     var body: some View {
         Group {
-            if let request {
-                AsyncImage(urlRequest: request, transaction: Transaction(animation: .easeInOut(duration: 0.2))) { phase in
-                    switch phase {
-                    case .success(let image): image.resizable().scaledToFill()
-                    case .failure: placeholder
-                    case .empty: placeholder.redacted(reason: .placeholder)
-                    @unknown default: placeholder
-                    }
-                }
+            if let image {
+                image.resizable().scaledToFill()
             } else {
                 placeholder.redacted(reason: .placeholder)
             }
         }
         .task(id: itemID) {
             guard let url = await client.imageURL(itemID: itemID, maxWidth: width) else { return }
-            request = await client.authorizedRequest(for: url)
+            let request = await client.authorizedRequest(for: url)
+            guard let (data, _) = try? await URLSession.shared.data(for: request) else { return }
+            guard let decoded = Self.decodeImage(data: data) else { return }
+            withAnimation(.easeInOut(duration: 0.2)) { image = decoded }
         }
+    }
+
+    private static func decodeImage(data: Data) -> Image? {
+        #if canImport(UIKit)
+        guard let native = UIImage(data: data) else { return nil }
+        return Image(uiImage: native)
+        #elseif canImport(AppKit)
+        guard let native = NSImage(data: data) else { return nil }
+        return Image(nsImage: native)
+        #else
+        return nil
+        #endif
     }
 
     private var placeholder: some View {

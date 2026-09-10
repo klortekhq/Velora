@@ -144,8 +144,11 @@ public final class VeloraAppModel: ObservableObject {
             let loadedChannels = JellyfinLiveTvChannel.grouped((try? await channels) ?? [])
             items = libraryPage.items
             totalItemCount = libraryPage.totalRecordCount
-            hasMoreItems = libraryPage.totalRecordCount.map { libraryPage.items.count < $0 }
-                ?? libraryPage.items.count >= 100
+            if let total = libraryPage.totalRecordCount {
+                hasMoreItems = libraryPage.items.count < total
+            } else {
+                hasMoreItems = libraryPage.items.count >= 100
+            }
             liveTvChannels = loadedChannels
             liveTvProgramTask?.cancel()
             liveTvProgramTask = nil
@@ -195,8 +198,11 @@ public final class VeloraAppModel: ObservableObject {
             let newItems = page.items.filter { !existingIDs.contains($0.id) }
             items.append(contentsOf: newItems)
             if let total = page.totalRecordCount { self.totalItemCount = total }
-            hasMoreItems = !page.items.isEmpty && !newItems.isEmpty &&
-                (page.totalRecordCount.map { items.count < $0 } ?? page.items.count >= 100)
+            if let total = page.totalRecordCount {
+                hasMoreItems = !page.items.isEmpty && !newItems.isEmpty && items.count < total
+            } else {
+                hasMoreItems = !page.items.isEmpty && !newItems.isEmpty && page.items.count >= 100
+            }
         } catch {
             errorMessage = String(localized: "Unable to load library", bundle: .module)
         }
@@ -241,10 +247,15 @@ public final class VeloraAppModel: ObservableObject {
             }
             return player
         }
-        let requestURL = await client.playbackURL(
+        let requestURL: URL?
+        if let playbackURL = await client.playbackURL(
             itemID: item.id,
             userID: session?.userID ?? ""
-        ) ?? await client.videoURL(itemID: item.id)
+        ) {
+            requestURL = playbackURL
+        } else {
+            requestURL = await client.videoURL(itemID: item.id)
+        }
         guard let requestURL else { return nil }
         let request = await client.authorizedRequest(for: requestURL)
         guard let url = request.url else { return nil }
@@ -476,11 +487,11 @@ private struct VeloraAuthenticatedContent: View {
     }
 
     private var movies: [JellyfinItem] {
-        model.items.filter { $0.type.caseInsensitiveCompare("Movie") == .orderedSame }
+        model.items.filter { $0.type?.caseInsensitiveCompare("Movie") == .orderedSame }
     }
 
     private var series: [JellyfinItem] {
-        model.items.filter { $0.type.caseInsensitiveCompare("Series") == .orderedSame }
+        model.items.filter { $0.type?.caseInsensitiveCompare("Series") == .orderedSame }
     }
 
     var body: some View {
@@ -750,16 +761,22 @@ private struct VeloraItemDetailView: View {
         }
         .navigationTitle(item.name)
         .alert(Text("Resume playback?", bundle: .module), isPresented: $showResumePrompt) {
-            Button(Text("Resume", bundle: .module)) {
+            Button(action: {
                 seekAndPlay(to: resumePositionSeconds ?? 0)
+            }) {
+                Text("Resume", bundle: .module)
             }
-            Button(Text("Start over", bundle: .module)) {
+            Button(action: {
                 seekAndPlay(to: 0)
+            }) {
+                Text("Start over", bundle: .module)
             }
-            Button(Text("Cancel", bundle: .module), role: .cancel) {
+            Button(role: .cancel, action: {
                 player?.pause()
                 player = nil
                 resumePositionSeconds = nil
+            }) {
+                Text("Cancel", bundle: .module)
             }
         } message: {
             Text("Continue where you left off?", bundle: .module)
@@ -1163,6 +1180,15 @@ private struct VeloraLiveTvView: View {
                 }
                 .padding()
                 .background(.regularMaterial)
+                #if os(macOS)
+                .sheet(isPresented: $isLiveFullscreen) {
+                    VeloraFullscreenPlayer(
+                        player: player,
+                        isPresented: $isLiveFullscreen,
+                        aspectMode: $liveAspectMode
+                    )
+                }
+                #else
                 .fullScreenCover(isPresented: $isLiveFullscreen) {
                     VeloraFullscreenPlayer(
                         player: player,
@@ -1170,6 +1196,7 @@ private struct VeloraLiveTvView: View {
                         aspectMode: $liveAspectMode
                     )
                 }
+                #endif
             }
         }
     }
