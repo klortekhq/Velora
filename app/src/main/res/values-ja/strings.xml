@@ -133,7 +133,7 @@
   <string name="jellyseerr_movie_details_failed">Could not load movie details</string>
   <string name="jellyseerr_tv_details_failed">Could not load TV show details</string>
   <string name="jellyseerr_available">Available on Jellyfin</string>
-  <string name="jellyseerr_request_pending">Request pending</string>
+  <string name="jellyseerr_request_pending">リクエスト保留中</string>
   <string name="jellyseerr_request_sent">Request sent successfully</string>
   <string name="jellyseerr_request_failed">Request failed</string>
   <string name="jellyseerr_requesting">Requesting…</string>

@@ -15,6 +15,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   `BUILD SUCCESSFUL` (`:app:testMobileDebugUnitTest` y
   `:app:testTvDebugUnitTest`). Se mantienen únicamente avisos de APIs
   obsoletas ya conocidos; no hay fallos de prueba.
+- Corrección i18n del 2026-09-10: `jellyseerr_request_pending` ya no muestra
+  texto inglés en los catálogos árabe, italiano, japonés, coreano, portugués,
+  ruso, turco y chino. `check-android-locales.mjs` lo exige como cadena
+  traducida y la compilación móvil/TV vuelve a terminar correctamente.
 - Live TV web: el selector de fuentes conserva el foco del canal que lo abrió,
   puede cerrarse con Atrás/Escape y devuelve el foco al cerrar o elegir una
   fuente. `web/scripts/test-platform.mjs` pasa y `node web/scripts/build-web.mjs
