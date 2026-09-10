@@ -133,19 +133,24 @@ object PlaybackDecisionEngine {
     /** Jellyfin and Android do not always spell equivalent codecs identically. */
     private fun normalizedVideoCodec(value: String): String = when (value.trim().lowercase()) {
         "h265", "x265" -> "hevc"
+        "avc" -> "h264"
         "av01" -> "av1"
         "x264" -> "h264"
+        "mpeg-2", "mpeg2" -> "mpeg2video"
+        "vc-1", "wmv3" -> "vc1"
         else -> value.trim().lowercase()
     }
 
     private fun normalizedAudioCodec(value: String): String = when (value.trim().lowercase()) {
         "ec-3" -> "eac3"
+        "ac-3" -> "ac3"
         "dts-hd ma", "dtshd" -> "dts-hd"
         else -> value.trim().lowercase()
     }
 
     private fun normalizedHdr(value: String): String = when (value.trim().lowercase()) {
         "dv", "dolby vision", "dolby_vision" -> "dolby-vision"
+        "hdr10plus", "hdr10 plus" -> "hdr10+"
         else -> value.trim().lowercase()
     }
 

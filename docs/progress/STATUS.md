@@ -18,6 +18,13 @@ ambos APK se completaron; coinciden con las APK locales
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
+- Playback Original-First (2026-09-10): se ampliaron las equivalencias del
+  normalizador para alias habituales de Jellyfin (`AVC`, `AC-3`, `MPEG-2`,
+  `VC-1` y `HDR10Plus`). Se añadieron pruebas para confirmar que esos metadatos
+  siguen la ruta Direct Play y que, al desactivar Direct Play, se conserva la
+  prioridad Direct Stream → Remux → Transcode. `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` pasan.
+
 - Último cambio de código: `9c08d13` endurece la construcción de rutas del
   cliente Apple. Los IDs Jellyfin y componentes de imagen se validan como
   segmentos únicos antes de construir URLs; los tests cubren delimitadores y
