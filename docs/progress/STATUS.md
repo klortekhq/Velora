@@ -31,6 +31,14 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   ruta directa cuando el receptor/dispositivo no soporta la configuración real;
   ambos tests Android vuelven a terminar en `BUILD SUCCESSFUL`.
 
+- Artefactos QA del commit `d99b599` (2026-09-10): `assembleMobileDebug` y
+  `assembleTvDebug` pasan. APK móvil: 86.029.315 bytes,
+  SHA-256 `00223F5EC928323C22B8B3A23A96AFDD902A3C556460FA971D284577F82F5290`.
+  APK TV: 86.029.543 bytes,
+  SHA-256 `E014A8F99239ED5D6EEEB280E6A218C781DB86D7D5CC966AAF2ED0CF2CDFF863`.
+  Son builds debug sin firma de distribución y no se han presentado como una
+  release pública.
+
 - Último cambio de código: `9c08d13` endurece la construcción de rutas del
   cliente Apple. Los IDs Jellyfin y componentes de imagen se validan como
   segmentos únicos antes de construir URLs; los tests cubren delimitadores y
