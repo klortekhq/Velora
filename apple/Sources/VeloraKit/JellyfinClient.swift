@@ -219,13 +219,22 @@ public actor JellyfinClient {
     /// separators here prevents malformed or untrusted IDs from escaping the
     /// intended resource endpoint.
     private func itemURL(root: String, itemID: String, suffix: [String]) -> URL? {
-        guard !itemID.isEmpty,
-              !itemID.contains("/"),
-              !itemID.contains("\\") else { return nil }
         let parts = [root, itemID] + suffix
+        guard parts.allSatisfy(Self.isSafePathSegment) else { return nil }
         return parts.enumerated().reduce(baseURL) { url, entry in
             url.appendingPathComponent(entry.element, isDirectory: entry.offset < parts.count - 1)
         }
+    }
+
+    /// Jellyfin identifiers and fixed endpoint components are single URL
+    /// path segments. Reject delimiters before URL construction so caller or
+    /// server-provided data cannot alter the route.
+    private static func isSafePathSegment(_ value: String) -> Bool {
+        !value.isEmpty && value != "." && value != ".." &&
+            value.allSatisfy { character in
+                character != "/" && character != "\\" && character != "?" &&
+                    character != "#" && character != "%"
+            }
     }
 
     /// Jellyfin may return a playable URL containing a server-side credential
@@ -281,8 +290,7 @@ public actor JellyfinClient {
     }
 
     public func items(userID: String, forPerson personID: String) async throws -> [JellyfinItem] {
-        guard !userID.isEmpty, !userID.contains("/"), !userID.contains("\\"),
-              !personID.isEmpty, !personID.contains("/"), !personID.contains("\\") else { return [] }
+        guard Self.isSafePathSegment(userID), Self.isSafePathSegment(personID) else { return [] }
         let itemsPath = baseURL
             .appendingPathComponent("Users", isDirectory: true)
             .appendingPathComponent(userID, isDirectory: true)
@@ -305,7 +313,7 @@ public actor JellyfinClient {
     /// Trailer items are scoped to the parent media item so the UI never has
     /// to depend on the removed GetTrailers route or scrape external sources.
     public func trailers(for itemID: String, userID: String) async throws -> [JellyfinItem] {
-        guard !itemID.isEmpty, !itemID.contains("/"), !itemID.contains("\\"), !userID.isEmpty else { return [] }
+        guard Self.isSafePathSegment(itemID), !userID.isEmpty else { return [] }
         return try await itemsPage(
             userID: userID,
             parentID: itemID,
@@ -365,8 +373,8 @@ public actor JellyfinClient {
     /// Opens a Jellyfin Live TV tuner and returns the server-selected stream.
     /// The returned URL is checked against the configured server before AVPlayer uses it.
     public func liveTvPlaybackURL(userID: String, channelID: String, mediaSourceID: String? = nil) async throws -> URL? {
-        guard !channelID.isEmpty, !channelID.contains("/"), !channelID.contains("\\") else { return nil }
-        var components = URLComponents(url: baseURL.appendingPathComponent("Items/\(channelID)/PlaybackInfo"), resolvingAgainstBaseURL: false)
+        guard let playbackPath = itemURL(root: "Items", itemID: channelID, suffix: ["PlaybackInfo"]) else { return nil }
+        var components = URLComponents(url: playbackPath, resolvingAgainstBaseURL: false)
         components?.queryItems = [
             URLQueryItem(name: "UserId", value: userID),
             URLQueryItem(name: "StartTimeTicks", value: "0"),

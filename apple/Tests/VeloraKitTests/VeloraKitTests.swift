@@ -47,6 +47,22 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertThrowsError(try JellyfinClient(serverURL: URL(string: "ftp://jellyfin.example.test")!))
     }
 
+    func testJellyfinPathSegmentsRejectRouteDelimitersAndDotSegments() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.example.test:8096")!)
+
+        let invalidVideoURL = await client.videoURL(itemID: "movie?escape")
+        let invalidImageURL = await client.imageURL(itemID: "movie-1", kind: "Primary/../System")
+        let invalidDotSegment = try await client.liveTvPlaybackURL(userID: "user-1", channelID: "../escape")
+        let invalidFragment = try await client.liveTvPlaybackURL(userID: "user-1", channelID: "channel#1")
+        let invalidPersonItems = try await client.items(userID: "user%2F1", forPerson: "person-1")
+
+        XCTAssertNil(invalidVideoURL)
+        XCTAssertNil(invalidImageURL)
+        XCTAssertNil(invalidDotSegment)
+        XCTAssertNil(invalidFragment)
+        XCTAssertTrue(invalidPersonItems.isEmpty)
+    }
+
     func testThemeSongURLUsesAuthenticatedServerPathWithoutTokenQuery() async throws {
         MockURLProtocol.handler = { request in
             XCTAssertEqual(request.url?.path, "/Items/title-1/ThemeSongs")
