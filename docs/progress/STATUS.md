@@ -4,12 +4,15 @@ Updated: 2026-09-10
 
 ## Auditoría de publicación (2026-09-10)
 
-La API de GitHub confirma que el repositorio es ahora público, que `v1.4.0`
-existe y conserva 9 assets, incluidos los APK agrupados. La URL pública del
-APK móvil responde `200` sin autenticación y sus 86.029.315 bytes coinciden
-con la compilación local. La descarga autenticada y la comparación SHA-256 de
-ambos APK se completaron; coinciden con las APK locales
-(`6E2F2A…673B52` y `028BF2…AAC3C`).
+La API pública de GitHub confirma que el repositorio es público, que `v1.4.0`
+existe y conserva 9 assets, incluidos los APK agrupados. También confirma que
+solo existe la rama `main`. Los assets publicados responden sin autenticación,
+pero la comparación actual detecta que los APK remotos no son los mismos que
+los APK QA locales recién compilados: remoto móvil
+`6E2F2A…673B52` frente a local `4523FB…92C6913`, y remoto TV
+`028BF2…AAC3C` frente a local `12F837…D3CAD9DB`. La sustitución queda
+pendiente de disponer de una credencial de publicación GitHub; no se afirma
+que ambos binarios sean idénticos.
 
 - Higiene de releases revisada el 2026-09-10: se retiraron las publicaciones
   antiguas y quedaron únicamente `v1.2.85`, `v1.3.0` y `v1.4.0`. La release
