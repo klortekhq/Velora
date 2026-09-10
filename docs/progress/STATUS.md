@@ -14,6 +14,13 @@ una comprobación no se interpreta como soporte certificado.
   de Actions; las pruebas locales reproducibles siguen siendo la evidencia
   válida hasta que GitHub vuelva a proporcionar runners ejecutables.
 
+- Revalidación local posterior al último estado de `main` (2026-09-10): los 23
+  contratos `scripts/check-*.mjs`, `web/scripts/test-platform.mjs` y el
+  empaquetado `node web/scripts/build-web.mjs all` terminan correctamente. Se
+  regeneró el IPK webOS; Samsung/Tizen queda como bundle pendiente de Tizen
+  Studio/firma y VIDAA como bundle HTML5 para su portal, sin afirmar una
+  certificación inexistente.
+
 Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
 de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
