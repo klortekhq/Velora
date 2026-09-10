@@ -63,7 +63,7 @@ jobs:
   android:
     name: Android unit tests and Kotlin compilation
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -103,7 +103,7 @@ jobs:
           :app:testTvDebugUnitTest
           :app:compileMobileDebugKotlin
           :app:compileTvDebugKotlin
-          --no-daemon --max-workers=2 --console=plain
+          --no-daemon --max-workers=1 --console=plain
 
   apple:
     name: Apple shared package tests and builds
