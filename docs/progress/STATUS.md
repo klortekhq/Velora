@@ -31,6 +31,14 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   ruta directa cuando el receptor/dispositivo no soporta la configuración real;
   ambos tests Android vuelven a terminar en `BUILD SUCCESSFUL`.
 
+- Agrupado Live TV Android (2026-09-10): la compilación móvil y la de TV
+  incluyen la reducción de duplicados por identidad visible/ID Jellyfin, las
+  opciones `MediaSources` de un mismo canal y el selector de fuente antes de
+  reproducir. Los tests cubren filas repetidas, fuentes principal/IPTV,
+  selección para zapping y deduplicación; los dos APK se recompilaron después
+  de esa verificación. La instalación física queda sin certificar porque ADB
+  no está disponible en este entorno.
+
 - Artefactos QA Android recompilados desde el estado actual de `main`
   (2026-09-10): `:app:testMobileDebugUnitTest`,
   `:app:testTvDebugUnitTest`, `assembleMobileDebug` y `assembleTvDebug` pasan.
