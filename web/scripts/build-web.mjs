@@ -3,6 +3,7 @@ import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = resolve(root, '..');
@@ -19,22 +20,62 @@ const generatedAt = Number.isFinite(sourceDateEpoch) && sourceDateEpoch >= 0
   ? new Date(sourceDateEpoch * 1000).toISOString()
   : undefined;
 
-function commandAvailable(name) {
-  const lookup = process.platform === 'win32'
-    ? spawnSync('where.exe', [name], { stdio: 'ignore' })
-    : spawnSync('sh', ['-lc', `command -v ${name}`], { stdio: 'ignore' });
-  return lookup.status === 0;
+function resolveCommand(name) {
+  if (process.platform !== 'win32') {
+    const lookup = spawnSync('which', [name], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+    if (lookup.status === 0) {
+      const resolved = lookup.stdout.trim().split(/\r?\n/)[0];
+      if (resolved) return resolved;
+    }
+    return null;
+  }
+
+  // PowerShell/npm installations can expose only a .cmd or .ps1 shim, while
+  // `where.exe` may ignore it depending on PATHEXT. Resolve those shims
+  // explicitly so the secure shell-free runner does not lose available CLIs.
+  const extensions = [...(process.env.PATHEXT || '.COM;.EXE;.BAT;.CMD').split(';'), ''];
+  const searchDirectories = [
+    ...(process.env.PATH || '').split(';'),
+    process.env.APPDATA ? join(process.env.APPDATA, 'npm') : '',
+    process.env.LOCALAPPDATA ? join(process.env.LOCALAPPDATA, 'npm') : ''
+  ].filter(Boolean);
+  for (const directory of searchDirectories) {
+    for (const extension of extensions) {
+      const candidate = join(directory, `${name}${extension.toLowerCase()}`);
+      if (existsSync(candidate)) return candidate;
+    }
+  }
+  return null;
+}
+
+function quoteWindowsArg(value) {
+  const text = String(value);
+  if (!/[\s"]/.test(text)) return text;
+  return `"${text.replace(/(\\*)"/g, '$1$1\\"').replace(/(\\*)$/g, '$1$1')}"`;
+}
+
+function runCommand(executable, args, cwd) {
+  if (process.platform === 'win32' && /\.(?:cmd|bat)$/i.test(executable)) {
+    const commandLine = [executable, ...args].map(quoteWindowsArg).join(' ');
+    return spawnSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', commandLine], {
+      stdio: 'inherit',
+      cwd,
+      shell: false
+    });
+  }
+  return spawnSync(executable, args, {
+    stdio: 'inherit',
+    cwd,
+    shell: false
+  });
 }
 
 function command(name, args, cwd) {
   // Missing optional vendor CLIs are a supported QA state: the build should
   // leave a truthful bundle and metadata instead of printing a shell error.
-  if (!commandAvailable(name)) return false;
-  const result = spawnSync(name, args, {
-    stdio: 'inherit',
-    cwd,
-    shell: process.platform === 'win32'
-  });
+  const executable = resolveCommand(name);
+  if (!executable) return false;
+  const result = runCommand(executable, args, cwd);
   return result.status === 0;
 }
 
