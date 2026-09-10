@@ -59,9 +59,10 @@ También están disponibles los controles de aspecto, audio, subtítulos y ajust
 | Hisense VIDAA | Bundle HTML5 para publicación en la tienda/portal VIDAA |
 
 La base nativa compartida de Apple está en [`apple/`](apple/) y se valida como
-Swift Package en macOS mediante el workflow `apple.yml`. En este entorno no hay macOS/Xcode,
-por lo que esa compilación no se presenta como verificada. Las aplicaciones
-SwiftUI completas de iPhone, iPad y Apple TV todavía no están terminadas; se
+Swift Package en macOS mediante `apple.yml` y la validación continua. Esta
+validación confirma el paquete compartido y sus tests, pero todavía no equivale
+a una IPA/APP firmada ni a certificación en hardware Apple. Las aplicaciones
+SwiftUI completas de iPhone, iPad y Apple TV todavía están en desarrollo; se
 desarrollan como clientes Apple nativos,
 no como una versión Android estirada. Los paquetes Tizen, webOS y VIDAA requieren validación en sus
 SDK, emuladores o dispositivos reales antes de considerarse certificados.
@@ -70,7 +71,7 @@ La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de q
 
 ## Descargar
 
-Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases) cuando incorporan un bloque funcional o una mejora relevante. No se publica una release por cada ajuste menor; las correcciones pequeñas se agrupan en la siguiente versión significativa, salvo que sean de seguridad o críticas. Cada release etiquetada reúne los APK de Android firmados, el cliente web, los paquetes Smart TV disponibles y el paquete fuente Apple validado, junto con sus sumas SHA-256. Las IPA/APP de Apple requieren firma y distribución desde Xcode/App Store Connect; Velora no publica una IPA ficticia ni presenta el paquete fuente como instalable. Los APK debug y release unsigned se reservan para QA y no se publican como release de distribución.
+Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases) cuando incorporan un bloque funcional o una mejora relevante. No se publica una release por cada ajuste menor; las correcciones pequeñas se agrupan en la siguiente versión significativa, salvo que sean de seguridad o críticas. Una release de distribución reúne los APK de Android firmados, el cliente web, los paquetes Smart TV disponibles y el paquete fuente Apple validado, junto con sus sumas SHA-256. Si faltan secretos de firma, la ejecución queda explícitamente como QA y no se presenta como distribución instalable. Las IPA/APP de Apple requieren firma y distribución desde Xcode/App Store Connect; Velora no publica una IPA ficticia ni presenta el paquete fuente como instalable. Los APK debug y release unsigned se reservan para QA.
 
 ## Cliente web y Smart TV
 
