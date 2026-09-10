@@ -20,10 +20,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          # Use the GitHub API instead of an authenticated git transport.
+          # The latter prompts for a username on some hosted runners even
+          # though GH_TOKEN is present, which made the policy report an empty
+          # branch list and fail before checking the repository.
           mapfile -t branches < <(
-            git -c "http.extraheader=AUTHORIZATION: bearer ${GH_TOKEN}" \
-              ls-remote --heads "https://github.com/${GITHUB_REPOSITORY}.git" |
-              awk '{sub("refs/heads/", "", $2); print $2}' |
+            gh api --paginate "repos/${GITHUB_REPOSITORY}/branches?per_page=100" \
+              --jq '.[].name' |
               sort
           )
           if [ "${#branches[@]}" -ne 1 ] || [ "${branches[0]}" != "main" ]; then
