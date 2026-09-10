@@ -31,8 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.res.stringResource
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.klortek.velora.R
 
 /**
  * Input color scheme matching Jellyfin AndroidTV
@@ -201,9 +203,10 @@ fun TvSearchTextField(
     onQueryChange: (String) -> Unit,
     onQuerySubmit: () -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "Buscar…",
+    placeholder: String? = null,
     focusRequester: FocusRequester? = null
 ) {
+    val resolvedPlaceholder = placeholder ?: stringResource(R.string.search_movies_series)
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
     
@@ -254,7 +257,7 @@ fun TvSearchTextField(
                 Box(modifier = Modifier.weight(1f)) {
                     if (query.isEmpty()) {
                         Text(
-                            text = placeholder,
+                            text = resolvedPlaceholder,
                             style = TextStyle(
                                 color = textColor.copy(alpha = 0.6f),
                                 fontSize = 18.sp
