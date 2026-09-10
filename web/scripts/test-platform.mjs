@@ -15,6 +15,7 @@ assert.match(appSource, /data-velora-image-id/);
 assert.match(appSource, /function mediaBrowserAuthorization\(\)/);
 assert.match(appSource, /function ensureUserId\(\)/, 'web debe resolver el usuario antes de consultar catálogos dependientes');
 assert.match(appSource, /function loadLiveTvChannels\(\)\s*\{[\s\S]*?return ensureUserId\(\)\.then/, 'Live TV no debe competir con la resolución inicial del usuario');
+assert.match(appSource, /api\('\/Users\/\' \+ encodeURIComponent\(state\.userId\) \+ '\/Items\?'/, 'las rutas de biblioteca web deben codificar el usuario');
 assert.doesNotMatch(appSource, /X-Emby-(?:Authorization|Token)/, 'web no debe usar cabeceras legacy de Jellyfin');
 assert.match(appSource, /URL\.createObjectURL\(blob\)/);
 assert.match(appSource, /function applyAspectMode\(player, mode\)/);
