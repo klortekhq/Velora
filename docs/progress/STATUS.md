@@ -60,16 +60,17 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
 - Selector de fuentes Live TV (2026-09-10): si varios proveedores exponen la
   misma etiqueta, el selector añade un sufijo estable (`Opción 1`, `Opción 2`)
-  para que ninguna fuente parezca un botón duplicado. La prueba unitaria y
-  las suites móvil/TV pasan.
+  para que ninguna fuente parezca un botón duplicado. El texto procede ahora
+  del recurso de idioma activo en Android; la prueba unitaria y las suites
+  móvil/TV pasan.
 
 - Verificación de binarios Android (2026-09-10):
   `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
   `assembleMobileDebug` y `assembleTvDebug` terminan correctamente. Las APK
   QA actuales que contienen el agrupado son `app-mobile-debug.apk`
-  (SHA-256 `87EB3C8748390C5B58EFB5E121B40CC5FD82E2AB06BF207A19448F117849B0CF`)
+  (SHA-256 `85108603328D0800EB7702F276823442E7F75E8376E2AE96C2CE5D22336EEA1F`)
   y `app-tv-debug.apk`
-  (SHA-256 `3B0390C1B3083CB625A4ABF756A0E560DB7CF13C710A3AB14E9F7C0AE69E27CC`).
+  (SHA-256 `65F6DDD0905FAEEF75AACBB8519648317834A324877F0D3198F105227902E4D2`).
   La compilación fue limpia; son builds debug locales, no una release firmada.
 
 - Live TV web (2026-09-10): se eliminó una carrera de arranque en la que la

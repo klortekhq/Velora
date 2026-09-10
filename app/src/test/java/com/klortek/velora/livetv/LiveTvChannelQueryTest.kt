@@ -151,7 +151,7 @@ class LiveTvChannelQueryTest {
 
         assertEquals(
             listOf("IPTV · Opción 1", "IPTV · Opción 2"),
-            liveTvSourceLabels(channels)
+            liveTvSourceLabels(channels) { "Opción $it" }
         )
     }
 

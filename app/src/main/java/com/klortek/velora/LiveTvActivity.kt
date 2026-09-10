@@ -419,7 +419,10 @@ private fun LiveTvSourceDialog(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = .7f)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            val sourceLabels = liveTvSourceLabels(group.channels)
+            val context = LocalContext.current
+            val sourceLabels = liveTvSourceLabels(group.channels) { optionNumber ->
+                context.getString(R.string.live_tv_source_option, optionNumber)
+            }
             group.channels.forEachIndexed { index, channel ->
                 Button(
                     onClick = { onSelect(channel) },
