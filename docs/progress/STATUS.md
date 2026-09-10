@@ -78,6 +78,11 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   `loadLiveTvChannels` comparten ahora `ensureUserId`; el test de plataforma y
   la generación de los bundles web, webOS, Samsung y VIDAA pasan.
 
+- Selector de fuentes Live TV web (2026-09-10): si dos fuentes tienen la misma
+  etiqueta, el selector añade sufijos traducibles de opción para diferenciarlas,
+  igual que Android. Los tests web y la generación de webOS, Samsung y VIDAA
+  pasan; Samsung/VIDAA siguen sin certificación física en este entorno.
+
 - Seguridad web (2026-09-10): la ruta de biblioteca ahora codifica también el
   identificador de usuario antes de construir la URL Jellyfin. El test web de
   seguridad/interacción y la comprobación Jellyfin pasan; la corrección queda

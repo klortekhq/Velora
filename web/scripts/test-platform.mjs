@@ -191,9 +191,9 @@ assert.doesNotMatch(proxySource, /server\.replace\(\\\/$/);
 // pattern checks. This protects the one-row/multiple-source Live TV contract.
 const testableAppSource = appSource.replace(/\r\n/g, '\n').replace(
   '  renderApp();\n}());',
-  '  window.__veloraTest = { groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectLiveTvPlaybackSource, liveTvSourceIdentifier, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode, image };\n}());'
+  '  window.__veloraTest = { groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, liveSourceLabels, selectLiveTvPlaybackSource, liveTvSourceIdentifier, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode, image };\n}());'
 );
-assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, selectLiveTvPlaybackSource, liveTvSourceIdentifier, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode, image \}/, 'web app test hook was not injected');
+assert.match(testableAppSource, /window\.__veloraTest = \{ groupLiveTvChannels, filteredLiveChannelGroups, liveRowAction, liveSourceLabel, liveSourceLabels, selectLiveTvPlaybackSource, liveTvSourceIdentifier, selectSubtitleStream, durableStorageValue, saveDurableStorageValue, applyPerformanceMode, image \}/, 'web app test hook was not injected');
 const preferenceValues = Object.create(null);
 const testLocalStorage = {
   getItem(key) { return preferenceValues[key] || null; },
@@ -284,6 +284,13 @@ assert.equal(mergedAliasGroups[0].channels.length, 3);
 assert.equal(
   testWindow.__veloraTest.liveSourceLabel({ MediaSources: [{ Name: 'Fuente IPTV' }] }, 2),
   'Fuente IPTV'
+);
+assert.deepEqual(
+  testWindow.__veloraTest.liveSourceLabels([
+    { MediaSources: [{ Name: 'IPTV' }] },
+    { MediaSources: [{ Name: 'IPTV' }] }
+  ]),
+  ['IPTV · Opción 1', 'IPTV · Opción 2']
 );
 assert.equal(
   testWindow.__veloraTest.liveTvSourceIdentifier({ MediaSources: [{ LiveStreamId: 'stream-iptv' }] }),

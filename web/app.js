@@ -946,6 +946,23 @@
       (t('liveSourceOption') + ' ' + index));
   }
 
+  function liveSourceLabels(channels) {
+    var baseLabels = (Array.isArray(channels) ? channels : []).map(function (channel, index) {
+      return liveSourceLabel(channel, index + 1);
+    });
+    var counts = Object.create(null);
+    baseLabels.forEach(function (label) {
+      var key = label.toLocaleLowerCase(languageCode());
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    return baseLabels.map(function (label, index) {
+      var key = label.toLocaleLowerCase(languageCode());
+      return counts[key] > 1
+        ? label + ' · ' + t('liveSourceOption') + ' ' + (index + 1)
+        : label;
+    });
+  }
+
   function showLiveSourcePicker(group) {
     // Keep the channel row as the return target for mouse, keyboard and TV
     // remotes. `closeDetails` may restore an older target, so capture the
@@ -959,9 +976,9 @@
       '<div class="modal-card"><button type="button" class="close" id="liveSourceClose">' + esc(t('back')) + '</button>' +
       '<h2 id="liveSourceTitle">' + esc(group.primary.Name || '') + '</h2>' +
       '<p class="muted">' + group.channels.length + ' ' + esc(t('liveSources')) + '</p>' +
-      '<div class="source-options">' + group.channels.map(function (channel, index) {
+      '<div class="source-options">' + liveSourceLabels(group.channels).map(function (label, index) {
         return '<button type="button" class="source-option" data-source-index="' + index + '">' +
-          esc(liveSourceLabel(channel, index + 1)) + '</button>';
+          esc(label) + '</button>';
       }).join('') + '</div></div></div>');
     var closePicker = function () {
       var picker = document.querySelector('#liveSourcePicker');
