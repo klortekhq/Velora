@@ -131,6 +131,12 @@ desde GitHub Actions introduciendo esa misma etiqueta en el campo
 etiqueta coincide con la versión del código antes de añadir artefactos; dejar
 el campo vacío ejecuta solo una validación de QA y no publica ninguna release.
 
+Para reconciliar manualmente los APK QA agrupados de `v1.4.0`, proporciona una
+credencial explícita y de alcance limitado en `GH_TOKEN` o `GITHUB_TOKEN` y
+ejecuta `node scripts/reconcile-android-qa.mjs` después de compilar los APK.
+El script no lee el gestor de credenciales de Git, valida que la etiqueta sea
+una pre-release y solo sustituye los dos APK agrupados y su checksum.
+
 Para ejecutar el smoke test contra un servidor Jellyfin sin guardar secretos
 en el repositorio, define `VELORA_JELLYFIN_URL`, `VELORA_JELLYFIN_USER` y
 `VELORA_JELLYFIN_PASSWORD` solo en el entorno local y ejecuta:
