@@ -44,6 +44,13 @@ una comprobación no se interpreta como soporte certificado.
   que el bloqueo persiste antes de reservar un runner y no corresponde a un
   fallo de código o de una prueba concreta.
 
+- Estado CI actualizado tras los últimos fixes: la política de ramas pasó en
+  `34432447186`; la validación Apple pasó en `34432447185`, incluyendo build y
+  42 tests de `VeloraKit`. La validación continua `34432447149` seguía en curso
+  al actualizar este documento; Android y Web ya habían pasado sus jobs en el
+  ciclo anterior, y el fallo Apple restante era únicamente el empaquetado macOS,
+  corregido en `main` mediante la superficie nativa `AVPlayerView`.
+
 - Revalidación local posterior al último estado de `main` (2026-09-10): los 23
   contratos `scripts/check-*.mjs`, `web/scripts/test-platform.mjs` y el
   empaquetado `node web/scripts/build-web.mjs all` terminan correctamente. Se
