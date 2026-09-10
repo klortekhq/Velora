@@ -61,6 +61,11 @@ una comprobación no se interpreta como soporte certificado.
   verde. La batería local posterior también terminó correctamente: 23 contratos
   `check-*.mjs`, tests Web y empaquetado `web/scripts/build-web.mjs all`.
 
+- Cierre posterior verificado para el commit `af4c037`: política de ramas
+  `34434779361`, Apple `34434779337` y validación continua
+  `34434779440` terminaron correctamente. La validación continua incluyó los
+  jobs Android móvil/TV, Apple compartido y Web.
+
 - Revalidación local posterior al último estado de `main` (2026-09-10): los 23
   contratos `scripts/check-*.mjs`, `web/scripts/test-platform.mjs` y el
   empaquetado `node web/scripts/build-web.mjs all` terminan correctamente. Se
