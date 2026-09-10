@@ -113,6 +113,13 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   queda pendiente reactivar la facturación o el límite de Actions y relanzar
   la validación. Las comprobaciones locales siguen siendo la referencia hasta
   que GitHub vuelva a ejecutar los runners.
+- Comprobación directa de GitHub Actions del 2026-09-10: los runs
+  `34421855536` (CI), `34421855522` (ramas) y `34421855482` (Apple) fallan
+  entre 1 y 7 segundos antes de ejecutar pasos; sus jobs aparecen como
+  `failure` sin pasos iniciados y el endpoint de logs devuelve un ZIP vacío.
+  Esto confirma un bloqueo de infraestructura/cuenta, no un fallo reproducido
+  por el código. No se certifica aquí ninguna compilación nativa Apple hasta
+  que GitHub reactive los runners.
 - Revalidación local del 2026-09-09: `:app:testMobileDebugUnitTest` y
   `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`; los APK debug
   regenerados conservan los hashes publicados en la release QA v1.4.0.
