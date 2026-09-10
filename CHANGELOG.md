@@ -4,6 +4,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- Empaquetado web en Windows: el runner prioriza los shims ejecutables de npm
+  y ejecuta los shims PowerShell de forma explícita y sin shell implícito;
+  `ares-package` vuelve a generar el IPK webOS cuando está instalado.
+
 - Internacionalización Android: el flujo de descargas offline incluye ahora
   disponibilidad, límite de almacenamiento, Wi‑Fi, solo durante la carga,
   progreso, integridad y estadísticas de transferencia en árabe, italiano,
