@@ -10,6 +10,16 @@ una comprobación no se interpreta como soporte certificado.
 Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
 de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
+- APK Android actual recompilado desde `main` (2026-09-10) tras verificar la
+  agrupación de Live TV: móvil SHA-256
+  `6E2F2AB551DC19424F4CB56ADB3F40FE2DC790E7B7FF8185062E07F6DD673B52` y TV
+  SHA-256 `028BF2D7A82C64F02FACDD7D60108B0B332DD867DD7DF0DA7C696E78850AAC3C`.
+  Estos APK locales sí contienen los commits de agrupación posteriores a la
+  etiqueta `v1.4.0`; los APK r3 que siguen publicados en GitHub son anteriores
+  a esos commits y no deben presentarse como la compilación actual. La carga
+  automática de los nuevos binarios queda pendiente de una sesión `gh` con
+  permisos de publicación.
+
 - Higiene de release verificada el 2026-09-10: la pre-release pública `v1.4.0`
   conserva únicamente 10 assets de referencia (APK móvil/TV r3, checksums,
   paquetes web/Smart TV y fuentes). Se retiraron 20 APKs QA intermedias para
