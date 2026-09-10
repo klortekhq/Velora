@@ -61,9 +61,9 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   (2026-09-10): `:app:testMobileDebugUnitTest`,
   `:app:testTvDebugUnitTest`, `assembleMobileDebug` y `assembleTvDebug` pasan.
   APK móvil: SHA-256
-  `E2423C49E136610213D3E4CB2B0A161912EA55AF34FF1BE69190D8B8FD573A96`.
+  `19FE09FCF4E27233A3F46C295420752155351E8895E426AE3F73DDB052ABD819`.
   APK TV: SHA-256
-  `68612F600C29834AD156C463C72898DDD49F11CBCA09A79DBEAE7B07AFDB7E1C`.
+  `00D6E0704BC144E2B9D0041C09EB19E2D3F38FA5324EF687EA0E8941B120628F`.
   Son builds debug sin firma de distribución; no se presentan como release
   pública ni como prueba de instalación física.
 
