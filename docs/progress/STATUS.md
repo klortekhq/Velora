@@ -45,6 +45,10 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   webOS y los bundles HTML5 de Samsung/Tizen y VIDAA; Tizen/VIDAA siguen sin
   firma ni certificación de fabricante.
 
+- Parser de audio endurecido (2026-09-10): layouts numéricos con etiquetas
+  posteriores, como `7.1.4 (Dolby Atmos)`, conservan sus 12 canales; los tests
+  móvil y TV pasan tras el cambio (`BUILD SUCCESSFUL`).
+
 - Último cambio de código: `9c08d13` endurece la construcción de rutas del
   cliente Apple. Los IDs Jellyfin y componentes de imagen se validan como
   segmentos únicos antes de construir URLs; los tests cubren delimitadores y

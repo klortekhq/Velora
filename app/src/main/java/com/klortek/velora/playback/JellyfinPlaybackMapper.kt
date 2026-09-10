@@ -62,11 +62,16 @@ object JellyfinPlaybackMapper {
         // the bed (7.1 = 8) under-reports the stream and can incorrectly make
         // a receiver appear capable of direct playback. Sum the numeric layout
         // components while keeping the familiar 5.1/7.1 behavior intact.
-        val components = normalized
-            .split('.')
-            .mapNotNull { it.trim().toIntOrNull() }
-        if (components.size >= 2) return components.sum()
-        return components.firstOrNull()
+        val layoutMatch = Regex("^(\\d+)\\s*\\.\\s*(\\d+)(?:\\s*\\.\\s*(\\d+))?")
+            .find(normalized)
+        if (layoutMatch != null) {
+            return layoutMatch.groupValues
+                .drop(1)
+                .filter(String::isNotBlank)
+                .sumOf(String::toInt)
+        }
+
+        return normalized.takeWhile(Char::isDigit).toIntOrNull()
     }
 
     private fun requiresSubtitleTranscode(stream: MediaStream): Boolean =
