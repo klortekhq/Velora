@@ -61,6 +61,11 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   `loadLiveTvChannels` comparten ahora `ensureUserId`; el test de plataforma y
   la generación de los bundles web, webOS, Samsung y VIDAA pasan.
 
+- Seguridad web (2026-09-10): la ruta de biblioteca ahora codifica también el
+  identificador de usuario antes de construir la URL Jellyfin. El test web de
+  seguridad/interacción y la comprobación Jellyfin pasan; la corrección queda
+  publicada en `main`.
+
 - Verificación de Apple (2026-09-10): en este Windows no está instalado Swift,
   por lo que no se presenta una compilación Apple falsa. El código actual sí
   contiene AVPlayer/AVFoundation, URLSession de fondo para iOS/iPadOS y la
