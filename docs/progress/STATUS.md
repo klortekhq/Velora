@@ -13,6 +13,14 @@ fueran el mismo binario. Los hashes publicados son móvil
 esta revisión aparecen más abajo. No se afirma equivalencia binaria entre
 ambas variantes sin reproducir la build de release con la misma configuración.
 
+## Smoke autenticado Jellyfin (2026-09-10)
+
+El servidor configurado respondió en red, pero el smoke test real fue rechazado
+durante la autenticación con HTTP 401. Por ello no se presenta como validada la
+consulta Live TV ni `PlaybackInfo` contra esa instancia concreta; los contratos
+locales y los tests sintéticos siguen pasando. No se almacenan ni se escriben
+credenciales en este dashboard.
+
 - Higiene de releases revisada el 2026-09-10: se retiraron las publicaciones
   antiguas y quedaron únicamente `v1.2.85`, `v1.3.0` y `v1.4.0`. La release
   `v1.3.0` se publicó como QA/prerelease con dos APK debug reproducibles y sus
