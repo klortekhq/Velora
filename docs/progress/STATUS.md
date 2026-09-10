@@ -39,6 +39,12 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   Son builds debug sin firma de distribución y no se han presentado como una
   release pública.
 
+- Regresión web/Smart TV revalidada tras la compilación Android: `node
+  web/scripts/test-platform.mjs`, `node web/scripts/build-web.mjs all` y
+  `check-tv-packaging-output.mjs` pasan. Se regeneraron el bundle web, el IPK
+  webOS y los bundles HTML5 de Samsung/Tizen y VIDAA; Tizen/VIDAA siguen sin
+  firma ni certificación de fabricante.
+
 - Último cambio de código: `9c08d13` endurece la construcción de rutas del
   cliente Apple. Los IDs Jellyfin y componentes de imagen se validan como
   segmentos únicos antes de construir URLs; los tests cubren delimitadores y
