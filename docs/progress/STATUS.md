@@ -55,6 +55,15 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   de esa verificación. La instalación física queda sin certificar porque ADB
   no está disponible en este entorno.
 
+- Verificación de binarios Android (2026-09-10):
+  `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
+  `assembleMobileDebug` y `assembleTvDebug` terminan correctamente. Las APK
+  QA actuales que contienen el agrupado son `app-mobile-debug.apk`
+  (SHA-256 `4523FBD49F6AEA3FE9400C4DBC86DB160CB9CA30B8BEC9994171465A392C6913`)
+  y `app-tv-debug.apk`
+  (SHA-256 `12F837A72C728D9CA4009C7EB990947458BE1D6F6D15E5A86F78FF64D3CAD9DB`).
+  Son builds debug locales, no una release firmada.
+
 - Live TV web (2026-09-10): se eliminó una carrera de arranque en la que la
   carga de canales podía ejecutarse antes de resolver `/Users/Me` cuando el
   identificador de usuario aún no estaba en sesión. `loadItemsPage` y
