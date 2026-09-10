@@ -862,7 +862,7 @@ class JellyfinApiService(
     // Get person details (biography, birthdate, etc.)
     // Uses /Users/{userId}/Items/{personId} endpoint which returns full item details
     suspend fun getPersonDetails(personId: String): PersonDetails? {
-        if (!isSafePathSegment(personId)) return null
+        if (!isSafePathSegment(userId) || !isSafePathSegment(personId)) return null
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             // Use the Items endpoint with userId for full details including Overview
@@ -885,7 +885,7 @@ class JellyfinApiService(
 
     // Get all items (movies, series) that a person appears in (filmography)
     suspend fun getPersonFilmography(personId: String, limit: Int = 50): List<JellyfinItem> {
-        if (!isSafePathSegment(personId)) return emptyList()
+        if (!isSafePathSegment(userId) || !isSafePathSegment(personId)) return emptyList()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Items").apply {
@@ -925,6 +925,7 @@ class JellyfinApiService(
      * after the catalog query returns no results.
      */
     suspend fun getTrailers(itemId: String): List<JellyfinItem> {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(itemId)) return emptyList()
         val catalogTrailers = try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Users/$userId/Items").apply {
@@ -947,6 +948,7 @@ class JellyfinApiService(
 
     /** Returns theme songs resolved by Jellyfin, including inherited parent media. */
     suspend fun getThemeSongs(itemId: String): List<JellyfinItem> {
+        if (!isSafePathSegment(itemId)) return emptyList()
         return getMediaItems("Items/$itemId/ThemeSongs")
     }
 
@@ -956,6 +958,7 @@ class JellyfinApiService(
      * getVideoRequestHeaders() when creating the media data source.
      */
     fun getThemeSongUrl(itemId: String): String {
+        if (!isSafePathSegment(itemId)) return ""
         val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
         return URLBuilder().takeFrom("${base}Audio/$itemId/universal").apply {
             parameters.append("UserId", userId)
@@ -967,6 +970,7 @@ class JellyfinApiService(
     }
 
     private suspend fun getMediaItems(path: String, fields: String? = null): List<JellyfinItem> {
+        if (path.split('/').any { !isSafePathSegment(it) }) return emptyList()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("$base$path").apply {
@@ -1751,6 +1755,8 @@ class JellyfinApiService(
     }
     
     suspend fun getMoviesByPerson(personId: String, excludeItemId: String? = null, limit: Int = 20): List<JellyfinItem> {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(personId) ||
+            (excludeItemId != null && !isSafePathSegment(excludeItemId))) return emptyList()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Users/$userId/Items").apply {
