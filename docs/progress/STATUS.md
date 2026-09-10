@@ -2,6 +2,16 @@
 
 Updated: 2026-09-10
 
+## Auditoría de publicación (2026-09-10)
+
+La API autenticada de GitHub confirma que `v1.4.0` existe y conserva 9 assets,
+incluidos los APK agrupados. Las URLs sin autenticación devuelven `404` en
+este entorno, por lo que no se presenta como descarga pública anónima hasta
+que el repositorio/release tenga esa visibilidad. Los APK locales coinciden en
+tamaño con los assets publicados: 86.029.315 bytes (móvil) y 86.029.543 bytes
+(TV). La verificación criptográfica del contenido remoto queda pendiente de
+descargar los assets con una sesión autenticada.
+
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
