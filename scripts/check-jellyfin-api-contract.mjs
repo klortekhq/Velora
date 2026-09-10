@@ -50,8 +50,11 @@ if (!/fun getImageUrl\([\s\S]*?if \(!isSafePathSegment\(itemId\) \|\| !isSafePat
     !/suspend fun getPlaybackInfo\([\s\S]*?if \(!isSafePathSegment\(userId\) \|\| !isSafePathSegment\(itemId\)/.test(api) ||
     !/suspend fun getMediaSegments\(itemId: String\)[\s\S]*?if \(!isSafePathSegment\(itemId\)/.test(api) ||
     !/suspend fun getLibraryItems\([\s\S]*?if \(!isSafePathSegment\(userId\) \|\| !isSafePathSegment\(libraryId\)/.test(api) ||
-    !/suspend fun getEpisodes\([\s\S]*?if \(!isSafePathSegment\(userId\) \|\| !isSafePathSegment\(seriesId\) \|\| !isSafePathSegment\(seasonId\)/.test(api)) {
-  throw new Error('Jellyfin Android: las rutas de imágenes, reproducción, biblioteca y episodios deben validar sus segmentos');
+    !/suspend fun getEpisodes\([\s\S]*?if \(!isSafePathSegment\(userId\) \|\| !isSafePathSegment\(seriesId\) \|\| !isSafePathSegment\(seasonId\)/.test(api) ||
+    !/fun buildJellyfinSubtitleUrl\([\s\S]*?if \(!isSafePathSegment\(itemId\)/.test(api) ||
+    !/suspend fun markAsWatched\(itemId: String\): Boolean[\s\S]*?if \(!isSafePathSegment\(userId\) \|\| !isSafePathSegment\(itemId\)/.test(api) ||
+    !/suspend fun refreshItemMetadata\([\s\S]*?if \(!isSafePathSegment\(itemId\)/.test(api)) {
+  throw new Error('Jellyfin Android: las rutas Jellyfin deben validar todos los IDs usados en URL');
 }
 const appleLiveTv = appleApi.slice(appleApi.indexOf('public func liveTvChannels'));
 if (!appleLiveTv.includes('StartIndex') || !appleLiveTv.includes('Limit') ||

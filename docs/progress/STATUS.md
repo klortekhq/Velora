@@ -42,6 +42,11 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   incluyendo límites e índices negativos. El contrato Jellyfin y las suites
   unitarias móvil/TV pasan después del cambio.
 
+- Seguridad de rutas Android finalizada en esta tanda (2026-09-10): se cubren
+  además URLs de música temática, subtítulos externos, marcar visto/no visto y
+  refresco de metadatos. Los APK QA se regeneraron después de la compilación y
+  sus hashes se actualizan abajo.
+
 - Agrupado Live TV Android (2026-09-10): la compilación móvil y la de TV
   incluyen la reducción de duplicados por identidad visible/ID Jellyfin, las
   opciones `MediaSources` de un mismo canal y el selector de fuente antes de
@@ -66,9 +71,9 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   (2026-09-10): `:app:testMobileDebugUnitTest`,
   `:app:testTvDebugUnitTest`, `assembleMobileDebug` y `assembleTvDebug` pasan.
   APK móvil: SHA-256
-  `981AA6F64C61DE8A4EF9B4F46DA4D2235916BAF28550D48417830F9E061A3A67`.
+  `4523FBD49F6AEA3FE9400C4DBC86DB160CB9CA30B8BEC9994171465A392C6913`.
   APK TV: SHA-256
-  `E5383BD383DECB55C49D063394E580A4B0EB128EE654604388CFAD1C3D49F684`.
+  `12F837A72C728D9CA4009C7EB990947458BE1D6F6D15E5A86F78FF64D3CAD9DB`.
   Son builds debug sin firma de distribución; no se presentan como release
   pública ni como prueba de instalación física.
 
