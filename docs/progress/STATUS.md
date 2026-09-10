@@ -25,6 +25,12 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   terminaron correctamente para este commit; la validación continua quedó
   pendiente de consulta final por límite temporal de la API pública.
 
+- Regresión local posterior (2026-09-10): todos los contratos `scripts/check-*.mjs`
+  y `web/scripts/test-platform.mjs` pasan. `node web/scripts/build-web.mjs all`
+  vuelve a generar el bundle web, el IPK webOS y los bundles HTML5 de
+  Samsung/Tizen y VIDAA; estos últimos siguen marcados como artefactos sin
+  firma/certificación de fabricante.
+
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
