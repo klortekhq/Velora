@@ -43,6 +43,12 @@ if (!appleApi.includes('public func trailers(for itemID: String, userID: String)
 if (!appleApi.includes('includeTypes: ["Trailer"]')) {
   throw new Error('Jellyfin 12: Apple no consulta trailers mediante IncludeItemTypes=Trailer');
 }
+if (!/fun getImageUrl\([\s\S]*?if \(!isSafePathSegment\(itemId\) \|\| !isSafePathSegment\(imageType\)\)/.test(api) ||
+    !/suspend fun getItemDetails\(itemId: String\)[\s\S]*?if \(!isSafePathSegment\(itemId\)\)/.test(api) ||
+    !/fun getVideoPlaybackUrl\([\s\S]*?if \(!isSafePathSegment\(itemId\)/.test(api) ||
+    !/fun buildSubtitleUrl\([\s\S]*?if \(!isSafePathSegment\(itemId\) \|\| !isSafePathSegment\(mediaSourceId\)/.test(api)) {
+  throw new Error('Jellyfin Android: las rutas de imágenes, reproducción y subtítulos deben validar sus segmentos');
+}
 const appleLiveTv = appleApi.slice(appleApi.indexOf('public func liveTvChannels'));
 if (!appleLiveTv.includes('StartIndex') || !appleLiveTv.includes('Limit') ||
     !appleLiveTv.includes('totalRecordCount') || !/repeat \{[\s\S]*?while totalRecordCount/.test(appleLiveTv)) {
