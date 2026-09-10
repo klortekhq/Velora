@@ -19,6 +19,11 @@ que ambos binarios sean idénticos.
   `v1.3.0` se publicó como QA/prerelease con dos APK debug reproducibles y sus
   hashes; no se presenta como distribución firmada.
 
+- Automatización de APK QA (2026-09-10): se añadió el workflow manual
+  `android-qa-reconcile.yml`. Compila y prueba las variantes móvil/TV y puede
+  reemplazar los APK QA y sus checksums en una pre-release existente usando el
+  token integrado de GitHub; no publica APK unsigned como distribución estable.
+
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
 - Localización Android adicional (2026-09-10): el componente de búsqueda para
