@@ -27,6 +27,8 @@ assert.match(
   'La filmografía debe incluir películas y series.'
 );
 assert.match(castActivity, /CastInfoScreen\(/, 'La actividad debe renderizar la ficha de persona.');
+assert.match(api, /isSafePathSegment\(personId\)/, 'La filmografía de persona debe validar el identificador antes de construir rutas Jellyfin.');
+assert.match(api, /getPersonImageUrl[\s\S]*isSafePathSegment\(imageType\)/, 'La imagen de persona no debe aceptar segmentos de ruta manipulados.');
 const mpvPlayer = read('app/src/main/java/com/klortek/velora/player/mpv/MpvTvPlayerActivity.kt');
 assert.match(
   mpvPlayer,
