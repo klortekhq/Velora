@@ -703,13 +703,17 @@
     });
   }
 
+  function ensureUserId() {
+    if (state.userId) return Promise.resolve(state.userId);
+    return api('/Users/Me').then(function (me) {
+      state.userId = me.Id;
+      saveSessionValue('veloraUserId', state.userId);
+      return state.userId;
+    });
+  }
+
   function loadItemsPage(startIndex) {
-    if (!state.userId) {
-      return api('/Users/Me').then(function (me) {
-        state.userId = me.Id;
-        saveSessionValue('veloraUserId', state.userId);
-      }).then(function () { return loadItemsPage(startIndex); });
-    }
+    return ensureUserId().then(function () {
     var pageSize = state.itemsPageSize;
     var params = 'Recursive=true&IncludeItemTypes=Movie%2CSeries%2CLiveTvChannel&' +
       'SortBy=DateCreated&SortOrder=Descending&StartIndex=' + encodeURIComponent(startIndex) + '&Limit=' + encodeURIComponent(pageSize) + '&' +
@@ -719,6 +723,7 @@
       state.items = startIndex === 0 ? page : state.items.concat(page);
       state.itemsStartIndex = startIndex + page.length;
       state.itemsTotalCount = Number(response.TotalRecordCount || state.itemsStartIndex);
+    });
     });
   }
 
@@ -749,7 +754,7 @@
         return loadChannelPage(startIndex + pageItems.length, combined, reportedTotal);
       });
     }
-    return loadChannelPage(0, [], 0).then(function (channels) {
+    return ensureUserId().then(function () { return loadChannelPage(0, [], 0); }).then(function (channels) {
       if (!channels.length) return channels;
       var now = new Date();
       var until = new Date(now.getTime() + 6 * 60 * 60 * 1000);
