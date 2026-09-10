@@ -50,7 +50,9 @@ for (const directory of extraLocaleDirectories) {
   const source = fs.readFileSync(file, 'utf8');
   for (const key of translatedExtraKeys) {
     const match = source.match(new RegExp(`<string name="${key}">([^<]*)</string>`));
-    if (match && match[1] === englishValues.get(key)) {
+    if (!match) {
+      failures.push(`${directory}: falta la cadena obligatoria ${key}`);
+    } else if (match[1] === englishValues.get(key)) {
       failures.push(`${directory}: ${key} todavía usa el texto inglés`);
     }
   }

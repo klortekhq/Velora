@@ -72,6 +72,10 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   la carga, progreso, integridad y estado de transferencia en árabe, italiano,
   japonés, coreano, portugués, ruso, turco y chino. Se corrigió además el
   escape XML del turco y la compilación AAPT quedó verificada en móvil y TV.
+- El contrato `check-android-locales.mjs` ahora exige que cada una de esas
+  cadenas offline exista en los ocho catálogos extra y no permita una caída
+  silenciosa al texto inglés; la comprobación de workflows, empaquetado Smart
+  TV y plataforma web también vuelve a pasar.
 - APKs QA de internacionalización regeneradas el 2026-09-10 desde `main`:
   móvil SHA-256
   `A7194207C132AA4AD4AD6EB4CD1172FCD89EBA2081C6DC11C2930ABB072E9721` y TV
