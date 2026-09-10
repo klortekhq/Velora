@@ -66,6 +66,13 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   seguridad/interacción y la comprobación Jellyfin pasan; la corrección queda
   publicada en `main`.
 
+- Smoke Live TV (2026-09-10): `scripts/qa/jellyfin-smoke.ps1` conserva la
+  autenticación sin secretos en el repositorio y ahora informa también de
+  grupos visibles, alternativas por identidad y fuentes `MediaSources`, además
+  de recorrer todas las páginas y validar `PlaybackInfo`. El parser PowerShell
+  y el contrato de autenticación pasan; la ejecución autenticada depende de
+  credenciales QA suministradas en el entorno.
+
 - Verificación de Apple (2026-09-10): en este Windows no está instalado Swift,
   por lo que no se presenta una compilación Apple falsa. El código actual sí
   contiene AVPlayer/AVFoundation, URLSession de fondo para iOS/iPadOS y la

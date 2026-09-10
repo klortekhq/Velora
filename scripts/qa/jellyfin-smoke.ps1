@@ -35,6 +35,7 @@ try {
 
     $userId = $auth.User.Id
     $token = $auth.AccessToken
+    $escapedUserId = [uri]::EscapeDataString([string]$userId)
     $authHeader = $clientHeader + ', Token="' + $token + '"'
     $stage = 'listado de canales Live TV'
     # Jellyfin can cap large channel responses. Mirror the Android client and
@@ -44,7 +45,7 @@ try {
     $totalRecordCount = $null
     $items = [System.Collections.Generic.List[object]]::new()
     do {
-        $channels = Invoke-RestMethod -Uri "$base/LiveTv/Channels?UserId=$userId&StartIndex=$startIndex&Fields=Overview%2CMediaSources&EnableUserData=true&AddCurrentProgram=true&Limit=$pageSize" `
+        $channels = Invoke-RestMethod -Uri "$base/LiveTv/Channels?UserId=$escapedUserId&StartIndex=$startIndex&Fields=Overview%2CMediaSources&EnableUserData=true&AddCurrentProgram=true&Limit=$pageSize" `
             -Headers @{ 'Authorization' = $authHeader } -TimeoutSec 30
         $pageItems = @($channels.Items)
         foreach ($item in $pageItems) { [void]$items.Add($item) }
@@ -57,13 +58,25 @@ try {
     $items = @($items)
     $multiSourceRows = @($items | Where-Object { $_.MediaSources -and $_.MediaSources.Count -gt 1 }).Count
     $duplicateIds = @($items | Group-Object Id | Where-Object { $_.Count -gt 1 }).Count
+    $visibleGroups = @($items | Group-Object {
+        $name = ([string]$_.Name).Trim().ToLowerInvariant() -replace '\s+', ' '
+        $number = ([string]$_.ChannelNumber).Trim()
+        if ($name -and $number) { "visible:$number|$name" }
+        elseif ($name) { "visible:$name" }
+        elseif ($_.Id) { "id:$($_.Id)" }
+        else { "fallback:$([guid]::NewGuid())" }
+    })
+    $alternateVisibleGroups = @($visibleGroups | Where-Object { $_.Count -gt 1 }).Count
+    $sourceOptions = @($items | ForEach-Object {
+        if ($_.MediaSources) { @($_.MediaSources).Count } else { 0 }
+    } | Measure-Object -Sum).Sum
 
     if ($items.Count -gt 0) {
         $first = $items[0]
         $sourceId = $first.MediaSources | Select-Object -First 1 | Select-Object -ExpandProperty Id
         $sourceQuery = if ([string]::IsNullOrWhiteSpace($sourceId)) { '' } else { '&MediaSourceId=' + [uri]::EscapeDataString($sourceId) }
         $stage = 'PlaybackInfo Live TV'
-        $playbackInfo = Invoke-RestMethod -Uri "$base/Items/$([uri]::EscapeDataString($first.Id))/PlaybackInfo?UserId=$userId&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true$sourceQuery" `
+        $playbackInfo = Invoke-RestMethod -Uri "$base/Items/$([uri]::EscapeDataString($first.Id))/PlaybackInfo?UserId=$escapedUserId&StartTimeTicks=0&IsPlayback=true&AutoOpenLiveStream=true$sourceQuery" `
             -Headers @{ 'Authorization' = $authHeader } -TimeoutSec 30
         if (-not @($playbackInfo.MediaSources).Count) {
             throw 'PlaybackInfo no devolvió ninguna fuente.'
@@ -74,7 +87,7 @@ try {
     }
 
     Write-Output "Jellyfin $($public.Version) OK"
-    Write-Output "Live TV: $($items.Count) canales; $multiSourceRows filas con varias fuentes; $duplicateIds IDs duplicadas"
+    Write-Output "Live TV: $($items.Count) filas; $($visibleGroups.Count) grupos visibles; $alternateVisibleGroups grupos con alternativas por identidad; $sourceOptions fuentes; $multiSourceRows filas con varias fuentes; $duplicateIds IDs duplicadas"
 }
 catch {
     $status = $null
