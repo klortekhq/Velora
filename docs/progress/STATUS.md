@@ -21,6 +21,11 @@ que ambos binarios sean idénticos.
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
+- Localización Android adicional (2026-09-10): el componente de búsqueda para
+  TV ya no incrusta un placeholder fijo; usa el catálogo activo cuando no se
+  proporciona uno explícitamente. Las variantes móvil y TV compilan después
+  del cambio.
+
 - Playback Original-First (2026-09-10): se ampliaron las equivalencias del
   normalizador para alias habituales de Jellyfin (`AVC`, `AC-3`, `MPEG-2`,
   `VC-1` y `HDR10Plus`). Se añadieron pruebas para confirmar que esos metadatos
