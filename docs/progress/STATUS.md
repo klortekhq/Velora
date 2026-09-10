@@ -26,6 +26,11 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   webOS y los bundles HTML5 de Samsung/Tizen y VIDAA. Samsung sigue necesitando
   Tizen Studio/perfil de firma y VIDAA su portal/SDK: no se presentan como
   paquetes certificados.
+- Seguridad del empaquetador web del 2026-09-10: los CLIs externos ya no se
+  ejecutan con `shell: true`; los shims Windows `.cmd` se resuelven y escapan
+  explícitamente. La regresión está cubierta por `test-platform.mjs`, y el
+  empaquetado estricto vuelve a generar el IPK webOS cuando `ares-package` está
+  disponible.
 - Apple: el shell SwiftUI incorpora navegación real por Inicio, Películas y
   Series, con Live TV condicionado a los canales devueltos por Jellyfin y
   Ajustes accesibles desde cada pestaña. `check-apple-navigation.mjs` y los

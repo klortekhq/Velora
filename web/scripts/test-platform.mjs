@@ -5,6 +5,7 @@ import vm from 'node:vm';
 const source = fs.readFileSync(new URL('../platform.js', import.meta.url), 'utf8');
 const appSource = fs.readFileSync(new URL('../app.js', import.meta.url), 'utf8');
 const indexSource = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const buildSource = fs.readFileSync(new URL('./build-web.mjs', import.meta.url), 'utf8');
 const packageJson = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
 assert.doesNotMatch(appSource, /\/Images\/Primary\?api_key=/);
@@ -31,6 +32,9 @@ assert.match(indexSource, /default-src 'self'/);
 assert.match(indexSource, /frame-ancestors 'none'/);
 assert.match(indexSource, /object-src 'none'/);
 assert.match(indexSource, /referrer.*no-referrer/);
+assert.doesNotMatch(buildSource, /shell:\s*true/, 'el empaquetador no debe activar un shell implícito');
+assert.match(buildSource, /shell:\s*false/, 'las herramientas del empaquetador deben ejecutarse sin shell implícito');
+assert.match(buildSource, /quoteWindowsArg/, 'los CLIs .cmd deben invocarse con argumentos escapados');
 
 function detect(userAgent) {
   const listeners = {};
