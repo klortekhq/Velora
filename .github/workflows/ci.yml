@@ -98,7 +98,7 @@ jobs:
         run: chmod +x ./gradlew
       - name: Test and compile mobile and TV variants
         run: >-
-          ./gradlew
+          timeout --foreground --signal=TERM --kill-after=30s 35m ./gradlew
           :app:testMobileDebugUnitTest
           :app:testTvDebugUnitTest
           :app:compileMobileDebugKotlin
