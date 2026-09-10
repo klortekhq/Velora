@@ -63,7 +63,11 @@ jobs:
   android:
     name: Android unit tests and Kotlin compilation
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # The AV1 native module can make a cold runner substantially slower than
+    # an incremental local build. Keep the job limit above the guarded Gradle
+    # timeout so failures are reported by the command instead of GitHub
+    # terminating the runner without its diagnostic output.
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v4
