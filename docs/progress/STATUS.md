@@ -18,6 +18,13 @@ ambos APK se completaron; coinciden con las APK locales
 
 Revisión funcional actual: el estado de `main` que contiene este dashboard.
 
+- Último cambio de código: `9c08d13` endurece la construcción de rutas del
+  cliente Apple. Los IDs Jellyfin y componentes de imagen se validan como
+  segmentos únicos antes de construir URLs; los tests cubren delimitadores y
+  segmentos de punto. La política de ramas y la validación Apple de GitHub
+  terminaron correctamente para este commit; la validación continua quedó
+  pendiente de consulta final por límite temporal de la API pública.
+
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
