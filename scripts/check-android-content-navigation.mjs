@@ -29,6 +29,9 @@ assert.match(
 assert.match(castActivity, /CastInfoScreen\(/, 'La actividad debe renderizar la ficha de persona.');
 assert.match(api, /isSafePathSegment\(personId\)/, 'La filmografía de persona debe validar el identificador antes de construir rutas Jellyfin.');
 assert.match(api, /getPersonImageUrl[\s\S]*isSafePathSegment\(imageType\)/, 'La imagen de persona no debe aceptar segmentos de ruta manipulados.');
+assert.match(api, /getTrailers\(itemId: String\): List<JellyfinItem> \{[\s\S]*isSafePathSegment\(itemId\)/, 'Los tráilers deben validar el ID del elemento antes de construir su ruta.');
+assert.match(api, /getThemeSongUrl\(itemId: String\): String \{[\s\S]*isSafePathSegment\(itemId\)/, 'La música temática debe validar el ID antes de construir la URL.');
+assert.match(api, /getMoviesByPerson\(personId: String[\s\S]*isSafePathSegment\(personId\)/, 'La filmografía de películas debe validar el ID de persona.');
 const mpvPlayer = read('app/src/main/java/com/klortek/velora/player/mpv/MpvTvPlayerActivity.kt');
 assert.match(
   mpvPlayer,

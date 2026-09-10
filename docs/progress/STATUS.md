@@ -31,6 +31,12 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   Samsung/Tizen y VIDAA; estos últimos siguen marcados como artefactos sin
   firma/certificación de fabricante.
 
+- Endurecimiento Android posterior (2026-09-10): las rutas secundarias de
+  personas, tráilers y música temática validan ahora los IDs antes de crear
+  URLs Jellyfin. El contrato de navegación se amplió para cubrir estas
+  entradas y `:app:testMobileDebugUnitTest` junto con
+  `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`.
+
 Este documento registra únicamente comprobaciones reproducibles. La ausencia de
 una comprobación no se interpreta como soporte certificado.
 
