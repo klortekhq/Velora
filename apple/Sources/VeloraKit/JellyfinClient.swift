@@ -150,14 +150,14 @@ public actor JellyfinClient {
     /// audio request through `authorizedRequest(for:)`.
     public func themeSongURL(itemID: String, userID: String) async -> URL? {
         guard !userID.isEmpty,
-              let itemURL = itemURL(root: "Items", itemID: itemID, suffix: ["ThemeSongs"])
+              let themeURL = itemURL(root: "Items", itemID: itemID, suffix: ["ThemeSongs"])
         else { return nil }
-        var components = URLComponents(url: itemURL, resolvingAgainstBaseURL: false)
+        var components = URLComponents(url: themeURL, resolvingAgainstBaseURL: false)
         components?.queryItems = [URLQueryItem(name: "UserId", value: userID)]
         guard let url = components?.url,
               let result = try? await request(url, as: ThemeSongResult.self),
               let songID = result.items.first?.id,
-              let audioURL = itemURL(root: "Audio", itemID: songID, suffix: ["universal"]) else { return nil }
+              let audioURL = self.itemURL(root: "Audio", itemID: songID, suffix: ["universal"]) else { return nil }
         var audioComponents = URLComponents(url: audioURL, resolvingAgainstBaseURL: false)
         audioComponents?.queryItems = [
             URLQueryItem(name: "UserId", value: userID),
