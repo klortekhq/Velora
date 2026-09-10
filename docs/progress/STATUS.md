@@ -89,8 +89,8 @@ de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
   SHA-256 `BD3B1CFD27346E191C984BCE44F332274268094B29D35913FB1655EB4297B2D2`
   y TV SHA-256
   `1CE33C0D96752633E6967C9C234B245D92A90178B7F432CBA66809DCF545FC30`.
-  Se subirán como la revisión r3 de la misma pre-release tras confirmar la
-  lista pública de assets.
+  La revisión r3 ya está publicada en la misma pre-release pública: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-i18n-20260910-r3.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-i18n-20260910-r3.apk). Son APK debug de QA, no builds firmadas de tienda.
 - Pantalla de inicio de sesión Android: el contrato
   `check-android-login-layout.mjs` protege safe area, desplazamiento vertical,
   tamaños adaptativos de los campos y foco de mando en el botón TV. La
