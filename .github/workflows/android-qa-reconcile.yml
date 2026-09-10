@@ -1,6 +1,18 @@
 name: Sincronizar APK QA Android
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'gradle/**'
+      - 'gradle.properties'
+      - 'settings.gradle.kts'
+      - 'build.gradle.kts'
+      - 'gradlew'
+      - 'scripts/check-android-*.mjs'
+      - 'scripts/check-release-workflows.mjs'
+      - 'scripts/reconcile-android-qa.mjs'
   workflow_dispatch:
     inputs:
       release_tag:
