@@ -997,7 +997,7 @@ class JellyfinApiService(
     /** Resolve a person returned without an id in a lightweight item response. */
     suspend fun findPersonIdByName(name: String): String? {
         val query = name.trim()
-        if (query.isEmpty()) return null
+        if (query.isEmpty() || !isSafePathSegment(userId)) return null
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Persons").apply {
@@ -1291,6 +1291,10 @@ class JellyfinApiService(
         subtitleStreamIndex: Int? = null,
         autoOpenLiveStream: Boolean = true
     ): JellyfinPlaybackInfo? {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(itemId) ||
+            (mediaSourceId != null && !isSafePathSegment(mediaSourceId)) ||
+            (subtitleStreamIndex != null && subtitleStreamIndex < 0)
+        ) return null
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Items/$itemId/PlaybackInfo").apply {
@@ -1357,6 +1361,7 @@ class JellyfinApiService(
      * Returns skip markers for intro and credits if available
      */
     suspend fun getMediaSegments(itemId: String): SkipMarkers {
+        if (!isSafePathSegment(itemId)) return SkipMarkers()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}MediaSegments/$itemId").apply {
@@ -1402,6 +1407,7 @@ class JellyfinApiService(
     }
 
     suspend fun getLibraries(): List<JellyfinLibrary> {
+        if (!isSafePathSegment(userId)) return emptyList()
         return try {
             val url = if (baseUrl.endsWith("/")) {
                 "${baseUrl}Users/$userId/Views"
@@ -1430,6 +1436,9 @@ class JellyfinApiService(
     }
 
     suspend fun getLibraryItems(libraryId: String, limit: Int = 100, startIndex: Int = 0): ItemsResponse {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(libraryId) || limit <= 0 || startIndex < 0) {
+            return ItemsResponse(Items = emptyList(), TotalRecordCount = 0)
+        }
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Users/$userId/Items").apply {
@@ -1453,6 +1462,7 @@ class JellyfinApiService(
     }
     
     suspend fun getCollections(): List<JellyfinItem> {
+        if (!isSafePathSegment(userId)) return emptyList()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             val url = URLBuilder().takeFrom("${base}Users/$userId/Items").apply {
@@ -1495,6 +1505,7 @@ class JellyfinApiService(
     }
     
     suspend fun getSeasons(seriesId: String, forceRefresh: Boolean = false): List<JellyfinItem> {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(seriesId)) return emptyList()
         // Check cache first
         if (!forceRefresh) {
             seasonCache[seriesId]?.let { (timestamp, seasons) ->
@@ -1530,6 +1541,7 @@ class JellyfinApiService(
     }
     
     suspend fun getEpisodes(seriesId: String, seasonId: String, forceRefresh: Boolean = false): List<JellyfinItem> {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(seriesId) || !isSafePathSegment(seasonId)) return emptyList()
         // Check cache first
         if (!forceRefresh) {
             episodeCache[seasonId]?.let { (timestamp, episodes) ->
@@ -1582,6 +1594,7 @@ class JellyfinApiService(
      * @param limit Maximum number of episodes to return
      */
     suspend fun getNextEpisodes(seasonId: String, startIndex: Int, limit: Int = 20): List<JellyfinItem> {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(seasonId) || startIndex < 0 || limit <= 0) return emptyList()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             // Use Users/{userId}/Items endpoint with parentId=seasonId and startIndex
@@ -1622,6 +1635,7 @@ class JellyfinApiService(
      * @return The next episode in the same season, or null if this is the last episode of the season
      */
     suspend fun getNextEpisodeInSeason(seriesId: String, seasonId: String, currentEpisodeIndex: Int, currentSeasonNumber: Int): JellyfinItem? {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(seriesId) || !isSafePathSegment(seasonId) || currentEpisodeIndex < 0) return null
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             
@@ -1665,6 +1679,7 @@ class JellyfinApiService(
      * @return The next episode, or null if not found
      */
     suspend fun getNextEpisode(seriesId: String, currentEpisodeIndex: Int): JellyfinItem? {
+        if (!isSafePathSegment(userId) || !isSafePathSegment(seriesId) || currentEpisodeIndex < 0) return null
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             // Use StartIndex = currentIndex + 1 (API uses 0-based, but IndexNumber is 1-based)

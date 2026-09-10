@@ -37,6 +37,11 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   índices y posiciones negativos. El contrato de API y los tests unitarios de
   móvil y TV pasan. No se presenta esto como certificación de hardware.
 
+- Seguridad de rutas Android ampliada (2026-09-10): también se validan
+  `PlaybackInfo`, segmentos, bibliotecas, temporadas, episodios y paginación,
+  incluyendo límites e índices negativos. El contrato Jellyfin y las suites
+  unitarias móvil/TV pasan después del cambio.
+
 - Agrupado Live TV Android (2026-09-10): la compilación móvil y la de TV
   incluyen la reducción de duplicados por identidad visible/ID Jellyfin, las
   opciones `MediaSources` de un mismo canal y el selector de fuente antes de
@@ -61,9 +66,9 @@ Revisión funcional actual: el estado de `main` que contiene este dashboard.
   (2026-09-10): `:app:testMobileDebugUnitTest`,
   `:app:testTvDebugUnitTest`, `assembleMobileDebug` y `assembleTvDebug` pasan.
   APK móvil: SHA-256
-  `19FE09FCF4E27233A3F46C295420752155351E8895E426AE3F73DDB052ABD819`.
+  `981AA6F64C61DE8A4EF9B4F46DA4D2235916BAF28550D48417830F9E061A3A67`.
   APK TV: SHA-256
-  `00D6E0704BC144E2B9D0041C09EB19E2D3F38FA5324EF687EA0E8941B120628F`.
+  `E5383BD383DECB55C49D063394E580A4B0EB128EE654604388CFAD1C3D49F684`.
   Son builds debug sin firma de distribución; no se presentan como release
   pública ni como prueba de instalación física.
 
