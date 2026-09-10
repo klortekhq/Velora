@@ -10,6 +10,12 @@ una comprobación no se interpreta como soporte certificado.
 Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
 de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
 
+- Higiene de release verificada el 2026-09-10: la pre-release pública `v1.4.0`
+  conserva únicamente 10 assets de referencia (APK móvil/TV r3, checksums,
+  paquetes web/Smart TV y fuentes). Se retiraron 20 APKs QA intermedias para
+  evitar que se instalen builds obsoletas; la rama remota sigue siendo solo
+  `main`.
+
 - Revalidación completa del 2026-09-10: los 23 contratos `scripts/check-*.mjs`
   terminan correctamente y las suites unitarias Android móvil/TV terminan en
   `BUILD SUCCESSFUL` (`:app:testMobileDebugUnitTest` y
