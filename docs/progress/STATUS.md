@@ -1,6 +1,18 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-10
+Updated: 2026-09-14
+
+## Live TV agrupada — selector verificable (2026-09-14)
+
+El commit `b2a2d1bd` mantiene el agrupado de canales en las variantes Android
+móvil/tablet y TV/Fire TV, y convierte el contador de fuentes de cada fila en
+un control real de toque y mando. Al pulsar `N fuentes` se abre el selector de
+`Opción 1`, `Opción 2`, etc.; la fuente elegida se conserva también para la
+navegación entre canales. El contrato `check-android-content-navigation.mjs`,
+los tests `LiveTvChannelQueryTest` y las compilaciones `assembleMobileDebug` y
+`assembleTvDebug` han pasado. La publicación de QA queda delegada al workflow
+automático de `main`; no se afirma instalación física mientras ADB no detecte
+un dispositivo.
 
 ## Auditoría de publicación (2026-09-10)
 
