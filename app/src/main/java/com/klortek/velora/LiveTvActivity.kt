@@ -356,6 +356,9 @@ private fun LiveTvScreen(
                                 if (channelGroup.channels.size > 1) sourceSelection = channelGroup
                                 else onPlay(channel, visibleGroups.map { it.primary })
                             },
+                            onShowSources = {
+                                if (channelGroup.channels.size > 1) sourceSelection = channelGroup
+                            },
                             onShowProgram = { program -> programDetails = channel.Name to program },
                             onToggleFavorite = {
                                 val favorite = channel.UserData?.IsFavorite != true
@@ -452,6 +455,7 @@ private fun LiveTvChannelRow(
     compact: Boolean = false,
     focusRequester: FocusRequester? = null,
     onClick: () -> Unit,
+    onShowSources: () -> Unit,
     onShowProgram: (LiveTvProgram) -> Unit,
     onToggleFavorite: () -> Unit
 ) {
@@ -550,11 +554,23 @@ private fun LiveTvChannelRow(
                 }
 
                 if (channelGroupCount > 1) {
+                    val sourceLabel = stringResource(
+                        R.string.live_tv_source_count,
+                        channelGroupCount
+                    )
                     Text(
-                        text = stringResource(R.string.live_tv_source_count, channelGroupCount),
+                        text = sourceLabel,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .clickable(onClick = onShowSources)
+                            .semantics {
+                                role = Role.Button
+                                contentDescription = sourceLabel
+                            }
+                            .padding(horizontal = 4.dp, vertical = 2.dp)
                     )
                 }
 
