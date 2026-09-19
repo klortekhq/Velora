@@ -13,6 +13,8 @@ on:
       - 'scripts/check-android-*.mjs'
       - 'scripts/check-release-workflows.mjs'
       - 'scripts/reconcile-android-qa.mjs'
+      - 'scripts/tests/android-qa*.test.mjs'
+      - '.github/workflows/android-qa-reconcile.yml'
   workflow_dispatch:
     inputs:
       release_tag:
@@ -35,7 +37,6 @@ jobs:
     timeout-minutes: 30
     env:
       VELORA_RELEASE_TAG: ${{ inputs.release_tag || 'v1.4.0' }}
-      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Descargar código
         uses: actions/checkout@v4
@@ -48,6 +49,14 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Configurar Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Probar publicador QA con GitHub simulado
+        run: node --test scripts/tests/android-qa*.test.mjs
+
       - name: Configurar Android SDK
         uses: android-actions/setup-android@v3
 
@@ -57,9 +66,6 @@ jobs:
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Dar permisos al wrapper
-        run: chmod +x ./gradlew
-
       - name: Validar contratos Android
         run: |
           node scripts/check-android-locales.mjs
@@ -68,12 +74,14 @@ jobs:
 
       - name: Compilar y probar variantes QA
         run: >-
-          timeout --foreground --signal=TERM --kill-after=30s 20m ./gradlew
+          timeout --foreground --signal=TERM --kill-after=30s 20m bash ./gradlew
           :app:testMobileDebugUnitTest
           :app:testTvDebugUnitTest
           :app:assembleMobileDebug
           :app:assembleTvDebug
           --no-daemon --max-workers=1 --console=plain
 
-      - name: Reconciliar APK y checksums en la pre-release
+      - name: Reconciliar APK, checksums y manifest QA en la pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: node scripts/reconcile-android-qa.mjs
