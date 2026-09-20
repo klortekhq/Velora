@@ -14,6 +14,7 @@ android {
         applicationId = "com.klortek.velora"
         minSdk = 21
         targetSdk = 36
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep the Play-compatible code monotonic; the public release is semantic.
         versionCode = 10400
@@ -129,6 +130,11 @@ android {
 dependencies {
 
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // -------------------------------------------------------------
     // AndroidX Core + Leanback

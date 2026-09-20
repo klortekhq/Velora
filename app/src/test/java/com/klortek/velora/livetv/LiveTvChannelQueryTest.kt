@@ -123,6 +123,54 @@ class LiveTvChannelQueryTest {
     }
 
     @Test
+    fun differentJellyfinIdsWithoutMediaSourcesRemainSelectable() {
+        // /LiveTv/Channels can omit MediaSources until PlaybackInfo is requested.
+        val response = com.google.gson.Gson().fromJson("""
+            {"Items":[
+                {"Id":"tuner-main","Name":"DAZN F1","ChannelNumber":"201","Type":"TvChannel"},
+                {"Id":"tuner-iptv","Name":"DAZN F1","ChannelNumber":"201","Type":"TvChannel"}
+            ]}
+        """.trimIndent(), LiveTvChannelsResponse::class.java)
+        val group = groupLiveTvChannels(response.Items).single()
+
+        assertEquals(listOf("tuner-main", "tuner-iptv"), group.channels.map { it.Id })
+        assertEquals("tuner-iptv", liveTvPlaybackChannelList(listOf(group), group, group.channels[1]).single().Id)
+    }
+
+    @Test
+    fun mediaSourceIdentityIsScopedToJellyfinItem() {
+        val first = LiveTvChannel("tuner-main", "Canal", MediaSources = listOf(MediaSource(Id = "source-1")))
+        val second = first.copy(Id = "tuner-iptv")
+        val group = groupLiveTvChannels(listOf(first, second, second)).single()
+
+        assertEquals(listOf("tuner-main", "tuner-iptv"), group.channels.map { it.Id })
+    }
+
+    @Test
+    fun metadataOnlySourcesOfOneItemDoNotOfferIndistinguishablePlaybackRoutes() {
+        val first = LiveTvChannel("tuner-main", "Canal", MediaSources = listOf(
+            MediaSource(Name = "Principal"), MediaSource(Name = "IPTV")
+        ))
+        val other = first.copy(Id = "tuner-other")
+        val group = groupLiveTvChannels(listOf(first, other)).single()
+
+        // Different endpoints remain selectable, even without MediaSource IDs.
+        // Two names pointing at the SAME default endpoint cannot be selected.
+        assertEquals(listOf("tuner-main", "tuner-other"), group.channels.map { it.Id })
+        assertEquals(listOf(null, null), group.channels.map(::liveTvMediaSourceId))
+    }
+
+    @Test
+    fun duplicateRowsWithoutSourcesKeepTheRichestMetadata() {
+        val row = LiveTvChannel("tuner", "Canal")
+        val enriched = row.copy(CurrentProgram = LiveTvProgram(Name = "Ahora"))
+        val group = groupLiveTvChannels(listOf(row, enriched)).single()
+
+        assertEquals(1, group.channels.size)
+        assertEquals("Ahora", group.primary.CurrentProgram?.Name)
+    }
+
+    @Test
     fun oneChannelWithSeveralMediaSourcesAlsoBecomesSelectableOptions() {
         val channel = LiveTvChannel(
             "single-row",
@@ -211,6 +259,13 @@ class LiveTvChannelQueryTest {
         )
 
         assertEquals("Option 2", liveTvSourceLabel(channel, 2, "Option 2"))
+    }
+
+    @Test
+    fun pickerLocalizesUnlabelledSourcesEvenWithAChannelNumber() {
+        val first = LiveTvChannel("main", "Canal", ChannelNumber = "201")
+        assertEquals(listOf("Option 1", "Option 2"),
+            liveTvSourceLabels(listOf(first, first.copy(Id = "iptv"))) { "Option $it" })
     }
 
     @Test

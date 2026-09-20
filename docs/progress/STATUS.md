@@ -1,6 +1,55 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-14
+Updated: 2026-09-19
+
+## En curso — agrupado y controles Android (2026-09-16)
+
+La revisión independiente encontró una pérdida real de alternativas: dos
+filas con distinto ID Jellyfin, pero el mismo nombre/número y sin
+`MediaSources`, se deduplicaban como si fueran la misma fuente. También
+ocurría si dos canales reutilizaban un ID de fuente. La corrección conserva
+la identidad `(ID de canal, fuente)` dentro de una única fila visible.
+
+Se están verificando además controles táctiles específicos para móvil/tablet,
+un selector de fuentes largo con desplazamiento y cancelación visible, y foco
+de mando sin solicitar nodos fuera de composición. El emulador Android 15
+arrancó y respondió `sys.boot_completed=1`; no equivale a probar un Fire TV o
+un teléfono físico. Las pruebas instrumentadas y la publicación de esta
+revisión siguen pendientes hasta registrar sus resultados aquí.
+
+Compilación revalidada el 19 de septiembre: `assembleMobileDebug`,
+`assembleTvDebug` y ambos APK de instrumentación terminan correctamente;
+138 pruebas unitarias por variante, sin fallos. El publicador QA pasa 43
+pruebas de staging, hashes y recuperación ante fallos. Se rechazó la primera
+captura visual porque estaba tapada por un ANR de Android System UI; las
+después el runner `scripts/qa/android-live-tv.ps1` se ejecutó correctamente en
+perfiles móvil, tablet y TV. Móvil/tablet ejecutaron las interacciones de toque
+(abrir fila, abrir contador, desplazarse hasta la fuente 30 y cancelar); TV
+ejecutó la navegación DPAD y selección de la segunda fuente. Los casos que no
+corresponden a cada modalidad aparecen como omitidos intencionadamente.
+
+La APK publicada previamente fue generada por el workflow de `b2a2d1bd`; no
+contiene estas nuevas correcciones todavía. En remoto solo existe `main`.
+Se añade trazabilidad de las siguientes APK QA por commit, variante, tamaño
+y SHA-256, sin presentarlas como versiones estables certificadas.
+
+Motivo principal de falta de pulido en esta revisión: controles de TV usados
+en pantallas táctiles y alternativas descartadas antes de mostrar el selector.
+Riesgo técnico prioritario: que la reproducción no conserve la fuente elegida.
+Ambos requieren pruebas de comportamiento, no únicamente contratos por texto.
+
+La validación completa de reproducción contra Jellyfin real, tiendas y el
+resto de plataformas sigue pendiente; el historial de abajo no es una
+certificación de todas las funciones ni de los APK actuales.
+
+El 16 de septiembre el endpoint proporcionado devolvió versión `12.1.0`;
+se validaron token y usuario de la sesión, con permiso Live TV, pero
+`/LiveTv/Channels` devolvió `Items=[]`, `TotalRecordCount=0`. Se cerraron las
+sesiones QA. Por ello no se certifica una emisión real ni PlaybackInfo con
+alternativas en ese servidor. La revisión también evita ofrecer varias
+opciones indistinguibles cuando Jellyfin da solo nombres de fuente para un
+mismo ID de canal, sin ID de fuente/stream seleccionable. Los IDs de canal
+distintos se conservan aunque no tengan MediaSources.
 
 ## Live TV agrupada — selector verificable (2026-09-14)
 

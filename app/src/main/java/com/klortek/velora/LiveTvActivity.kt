@@ -17,10 +17,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,6 +50,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,9 +74,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
-import androidx.tv.material3.Button
+import androidx.tv.material3.Button as TvButton
 import androidx.tv.material3.Icon
-import androidx.tv.material3.IconButton
+import androidx.tv.material3.IconButton as TvIconButton
 import androidx.tv.material3.IconButtonDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
@@ -91,6 +98,7 @@ import com.klortek.velora.livetv.liveTvPlaybackChannelList
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.livetv.liveTvMediaSourceId
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 import androidx.media3.common.util.UnstableApi
 
 @OptIn(UnstableApi::class)
@@ -117,7 +125,8 @@ class LiveTvActivity : ComponentActivity() {
                                 isLiveTv = true,
                                 liveTvMediaSourceId = liveTvMediaSourceId(channel),
                                 liveTvChannelIds = channelList.map { it.Id },
-                                liveTvChannelNames = channelList.map { it.Name }
+                                liveTvChannelNames = channelList.map { it.Name },
+                                liveTvChannelMediaSourceIds = channelList.map { liveTvMediaSourceId(it) }
                             )
                         )
                     }
@@ -137,6 +146,7 @@ private fun LiveTvScreen(
 
     val context = LocalContext.current
     val isMobile = LocalConfiguration.current.screenWidthDp < 600
+    val isTouch = !BuildConfig.TV_BUILD
     val client = remember(config.serverUrl, config.accessToken, config.userId) {
         LiveTvClient(config)
     }
@@ -187,8 +197,16 @@ private fun LiveTvScreen(
         }
     }
 
-    LaunchedEffect(channels) {
-        if (channels.isNotEmpty()) {
+    val channelListState = androidx.compose.foundation.lazy.rememberLazyListState()
+    LaunchedEffect(isLoading, favoritesOnly, selectedGroup, loadError) {
+        if (!isTouch && !isLoading && loadError == null && visibleGroups.isNotEmpty()) {
+            // Reset focus only on load/filter changes, not on favourite or EPG
+            // metadata updates. The first lazy row must be composed first.
+            channelListState.scrollToItem(0)
+            androidx.compose.runtime.snapshotFlow {
+                channelListState.layoutInfo.visibleItemsInfo.any { it.key == visibleGroups.first().channelId }
+            }.first { it }
+            withFrameNanos { }
             firstChannelFocusRequester.requestFocus()
         }
     }
@@ -197,16 +215,17 @@ private fun LiveTvScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .then(if (isTouch) Modifier.windowInsetsPadding(WindowInsets.safeDrawing) else Modifier)
             .padding(horizontal = if (isMobile) 16.dp else 34.dp, vertical = if (isMobile) 12.dp else 18.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (isMobile) {
+            if (isTouch) {
                 LiveTvTouchButton(Icons.Default.ArrowBack, stringResource(R.string.back), onBack)
             } else {
-                IconButton(
+                TvIconButton(
                     onClick = onBack,
                     colors = IconButtonDefaults.colors(
                         containerColor = MaterialTheme.colorScheme.surface,
@@ -244,7 +263,7 @@ private fun LiveTvScreen(
                 }
             }
 
-            if (isMobile) {
+            if (isTouch) {
                 LiveTvTouchButton(
                     Icons.Default.Refresh,
                     stringResource(R.string.live_tv_refresh),
@@ -252,7 +271,7 @@ private fun LiveTvScreen(
                     enabled = !isLoading
                 )
             } else {
-                IconButton(
+                TvIconButton(
                     onClick = { refreshKey++ },
                     enabled = !isLoading,
                     colors = IconButtonDefaults.colors(
@@ -337,6 +356,7 @@ private fun LiveTvScreen(
 
             else -> {
                 LazyColumn(
+                    state = channelListState,
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -347,7 +367,7 @@ private fun LiveTvScreen(
                             client = client,
                             channelGroupCount = channelGroup.channels.size,
                             compact = isMobile,
-                            focusRequester = if (channel.Id == channels.firstOrNull()?.Id) {
+                            focusRequester = if (!isTouch && channelGroup.channelId == visibleGroups.firstOrNull()?.channelId) {
                                 firstChannelFocusRequester
                             } else {
                                 null
@@ -396,26 +416,37 @@ private fun LiveTvScreen(
             onDismiss = { sourceSelection = null },
             onSelect = { selected ->
                 sourceSelection = null
-                onPlay(selected, liveTvPlaybackChannelList(channelGroups, group, selected))
+                onPlay(selected, liveTvPlaybackChannelList(visibleGroups, group, selected))
             }
         )
     }
 }
 
 @Composable
-private fun LiveTvSourceDialog(
+internal fun LiveTvSourceDialog(
     group: LiveTvChannelGroup,
     onDismiss: () -> Unit,
     onSelect: (LiveTvChannel) -> Unit
 ) {
+    val firstOption = remember(group.channelId) { FocusRequester() }
+    val maxHeight = LocalConfiguration.current.screenHeightDp.dp * .85f
+    LaunchedEffect(group.channelId) {
+        if (BuildConfig.TV_BUILD && group.channels.isNotEmpty()) {
+            withFrameNanos { }
+            firstOption.requestFocus()
+        }
+    }
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Column(
             modifier = Modifier
+                .widthIn(max = 600.dp)
                 .fillMaxWidth(0.92f)
+                .heightIn(max = maxHeight)
                 .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
                 .padding(24.dp)
         ) {
-            Text(group.primary.Name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(group.primary.Name, style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.live_tv_source_count, group.channels.size),
@@ -426,21 +457,19 @@ private fun LiveTvSourceDialog(
             val sourceLabels = liveTvSourceLabels(group.channels) { optionNumber ->
                 context.getString(R.string.live_tv_source_option, optionNumber)
             }
-            group.channels.forEachIndexed { index, channel ->
-                Button(
-                    onClick = { onSelect(channel) },
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                ) {
-                    Text(
-                        sourceLabels.getOrElse(index) {
-                            stringResource(R.string.live_tv_source_option, index + 1)
-                        },
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+            LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(group.channels.size) { index ->
+                    val channel = group.channels[index]
+                    LiveTvActionButton(
+                        onClick = { onSelect(channel) },
+                        modifier = Modifier.fillMaxWidth()
+                            .then(if (index == 0 && BuildConfig.TV_BUILD) Modifier.focusRequester(firstOption) else Modifier)
+                    ) {
+                        Text(sourceLabels[index], maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    }
                 }
             }
-            Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+            LiveTvActionButton(onClick = onDismiss, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                 Text(stringResource(R.string.live_tv_cancel))
             }
         }
@@ -448,7 +477,7 @@ private fun LiveTvSourceDialog(
 }
 
 @Composable
-private fun LiveTvChannelRow(
+internal fun LiveTvChannelRow(
     channel: LiveTvChannel,
     client: LiveTvClient,
     channelGroupCount: Int = 1,
@@ -466,18 +495,10 @@ private fun LiveTvChannelRow(
     val progress = programProgress(program)
     val timeRange = formatProgramTimeRange(program)
 
-    Card(
+    LiveTvChannelSurface(
         onClick = onClick,
         interactionSource = interactionSource,
-        scale = CardDefaults.scale(focusedScale = 1.01f),
-        colors = CardDefaults.colors(
-            containerColor = if (focused) {
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
-            } else {
-                MaterialTheme.colorScheme.surface
-            }
-        ),
-        shape = CardDefaults.shape(RoundedCornerShape(12.dp)),
+        focused = focused,
         modifier = Modifier
             .fillMaxWidth()
             .then(
@@ -535,7 +556,7 @@ private fun LiveTvChannelRow(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
                     )
-                    IconButton(onClick = onToggleFavorite) {
+                    LiveTvIconButton(onClick = onToggleFavorite) {
                         Icon(
                             imageVector = if (channel.UserData?.IsFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                             contentDescription = stringResource(if (channel.UserData?.IsFavorite == true) R.string.live_tv_remove_favorite else R.string.live_tv_add_favorite),
@@ -543,7 +564,7 @@ private fun LiveTvChannelRow(
                         )
                     }
                     if (program != null) {
-                        IconButton(onClick = { onShowProgram(program) }) {
+                        LiveTvIconButton(onClick = { onShowProgram(program) }) {
                             Icon(
                                 imageVector = Icons.Default.Info,
                                 contentDescription = stringResource(R.string.live_tv_program_details),
@@ -558,20 +579,9 @@ private fun LiveTvChannelRow(
                         R.string.live_tv_source_count,
                         channelGroupCount
                     )
-                    Text(
-                        text = sourceLabel,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(6.dp))
-                            .clickable(onClick = onShowSources)
-                            .semantics {
-                                role = Role.Button
-                                contentDescription = sourceLabel
-                            }
-                            .padding(horizontal = 4.dp, vertical = 2.dp)
-                    )
+                    LiveTvActionButton(onClick = onShowSources, modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text(sourceLabel, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(2.dp))
@@ -676,10 +686,67 @@ private fun LiveTvProgramDialog(
                 Text(text = overview, color = MaterialTheme.colorScheme.onSurface.copy(alpha = .9f))
             }
             Spacer(modifier = Modifier.height(20.dp))
-            Button(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
+            LiveTvActionButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
                 Text(stringResource(R.string.live_tv_close_details))
             }
         }
+    }
+}
+
+/** Input mode follows the installed flavor, including tablets and landscape phones. */
+@Composable
+private fun LiveTvActionButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit
+) {
+    if (BuildConfig.TV_BUILD) {
+        TvButton(onClick = onClick, modifier = modifier, content = content)
+    } else {
+        androidx.compose.material3.Button(
+            onClick = onClick,
+            modifier = modifier.heightIn(min = 48.dp),
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            )
+        ) {
+            androidx.compose.runtime.CompositionLocalProvider(
+                androidx.tv.material3.LocalContentColor provides MaterialTheme.colorScheme.onSurface
+            ) { content() }
+        }
+    }
+}
+
+@Composable
+private fun LiveTvIconButton(onClick: () -> Unit, content: @Composable () -> Unit) {
+    if (BuildConfig.TV_BUILD) TvIconButton(onClick = onClick) { content() }
+    else androidx.compose.material3.IconButton(onClick = onClick) { content() }
+}
+
+@Composable
+private fun LiveTvChannelSurface(
+    onClick: () -> Unit,
+    interactionSource: MutableInteractionSource,
+    focused: Boolean,
+    modifier: Modifier,
+    content: @Composable () -> Unit
+) {
+    val containerColor = if (focused) MaterialTheme.colorScheme.primary.copy(alpha = .14f)
+        else MaterialTheme.colorScheme.surface
+    if (BuildConfig.TV_BUILD) {
+        Card(
+            onClick = onClick,
+            interactionSource = interactionSource,
+            scale = CardDefaults.scale(focusedScale = 1.01f),
+            colors = CardDefaults.colors(containerColor = containerColor),
+            shape = CardDefaults.shape(RoundedCornerShape(12.dp)),
+            modifier = modifier
+        ) { content() }
+    } else {
+        Box(modifier.clip(RoundedCornerShape(12.dp)).background(containerColor)
+            .clickable(interactionSource = interactionSource, indication = androidx.compose.foundation.LocalIndication.current,
+                role = Role.Button, onClick = onClick)) { content() }
     }
 }
 
