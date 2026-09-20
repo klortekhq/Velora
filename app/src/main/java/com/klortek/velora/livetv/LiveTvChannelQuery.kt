@@ -71,6 +71,11 @@ private fun liveTvChannelPrimaryScore(channel: LiveTvChannel): Int =
         (if (!channel.ImageTags.isNullOrEmpty()) 1 else 0) +
         (if (!channel.ChannelNumber.isNullOrBlank()) 1 else 0)
 
+private data class SourceOptionKey(
+    val channelId: String,
+    val sourceId: String?
+)
+
 /**
  * Collapses duplicate provider entries into one channel row.
  *
@@ -125,18 +130,15 @@ fun groupLiveTvChannels(channels: List<LiveTvChannel>): List<LiveTvChannelGroup>
         // MediaSource. Do not turn that transport duplicate into a fake
         // selectable option. Distinct source IDs (for example principal and
         // IPTV) remain separate and therefore selectable.
-        val uniqueEntries = entries.fold(linkedMapOf<String, LiveTvChannel>()) { unique, channel ->
+        val uniqueEntries = entries.fold(linkedMapOf<SourceOptionKey, LiveTvChannel>()) { unique, channel ->
             val sourceId = liveTvMediaSourceId(channel)
-            val source = channel.MediaSources.orEmpty().firstOrNull()
-            val sourceKey = sourceId ?: listOf(
-                channel.Type.orEmpty(),
-                channel.ChannelNumber.orEmpty(),
-                channel.Name.trim().lowercase(),
-                channel.Tags.orEmpty().sorted().joinToString("|"),
-                source?.Name.orEmpty().trim().lowercase(),
-                source?.LiveStreamId.orEmpty(),
-                source?.Protocol.orEmpty().lowercase()
-            ).joinToString("|")
+            // A source is scoped to its Jellyfin item. Equal display metadata
+            // (or a provider-local source ID) must never discard another item
+            // whose PlaybackInfo endpoint represents an alternate tuner.
+            // Names/classifications alone cannot address a source in
+            // PlaybackInfo. Multiple such descriptors of the same item are
+            // one default route, not several buttons that all play the first.
+            val sourceKey = SourceOptionKey(channel.Id, sourceId)
             val existing = unique[sourceKey]
             if (existing == null || liveTvChannelPrimaryScore(channel) > liveTvChannelPrimaryScore(existing)) {
                 unique[sourceKey] = channel
@@ -158,7 +160,6 @@ fun liveTvSourceLabel(
         ?: channel.ServiceName?.takeIf { it.isNotBlank() }
         ?: channel.MediaSources.orEmpty().firstOrNull()?.Name?.takeIf { it.isNotBlank() }
         ?: channel.Type?.takeIf { it.isNotBlank() && !it.equals("TvChannel", ignoreCase = true) }
-        ?: channel.ChannelNumber?.takeIf { it.isNotBlank() }?.let { "Canal $it" }
         ?: fallbackLabel
 
 /**
@@ -167,10 +168,10 @@ fun liveTvSourceLabel(
  */
 fun liveTvSourceLabels(
     channels: List<LiveTvChannel>,
-    duplicateSuffix: (Int) -> String = { it.toString() }
+    duplicateSuffix: (Int) -> String = { "Opción $it" }
 ): List<String> {
     val baseLabels = channels.mapIndexed { index, channel ->
-        liveTvSourceLabel(channel, index + 1)
+        liveTvSourceLabel(channel, index + 1, duplicateSuffix(index + 1))
     }
     val counts = baseLabels.groupingBy { it.lowercase() }.eachCount()
     return baseLabels.mapIndexed { index, label ->

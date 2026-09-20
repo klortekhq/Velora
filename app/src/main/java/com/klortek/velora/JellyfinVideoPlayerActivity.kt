@@ -30,6 +30,7 @@ import com.klortek.velora.playback.shouldUseLiveTvDirectSource
 import com.klortek.velora.screens.JellyfinVideoPlayerScreen
 import com.klortek.velora.security.SensitiveDataRedactor
 import com.klortek.velora.security.MediaUrlHeaderPolicy
+import com.klortek.velora.livetv.LiveTvChannelSourceState
 import com.klortek.velora.livetv.adjacentLiveTvChannelId
 import com.klortek.velora.livetv.selectLiveTvPlaybackSource
 import com.klortek.velora.platform.PlatformCapabilities
@@ -57,6 +58,7 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         private const val EXTRA_LOCAL_PATH = "local_path"
         private const val EXTRA_EXTERNAL_MEDIA_URL = "external_media_url"
         private const val EXTRA_LIVE_TV_MEDIA_SOURCE_ID = "live_tv_media_source_id"
+        private const val EXTRA_LIVE_TV_CHANNEL_MEDIA_SOURCE_IDS = "live_tv_channel_media_source_ids"
 
         fun createIntent(
             context: Context,
@@ -70,7 +72,8 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
             externalMediaUrl: String? = null,
             liveTvMediaSourceId: String? = null,
             liveTvChannelIds: List<String> = emptyList(),
-            liveTvChannelNames: List<String> = emptyList()
+            liveTvChannelNames: List<String> = emptyList(),
+            liveTvChannelMediaSourceIds: List<String?> = emptyList()
         ): Intent {
             return Intent(context, JellyfinVideoPlayerActivity::class.java).apply {
                 putExtra(EXTRA_ITEM_ID, itemId)
@@ -83,6 +86,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 if (liveTvChannelIds.isNotEmpty()) {
                     putStringArrayListExtra("live_tv_channel_ids", ArrayList(liveTvChannelIds))
                     putStringArrayListExtra("live_tv_channel_names", ArrayList(liveTvChannelNames))
+                    putStringArrayListExtra(
+                        EXTRA_LIVE_TV_CHANNEL_MEDIA_SOURCE_IDS,
+                        ArrayList(liveTvChannelMediaSourceIds)
+                    )
                 }
                 localPath?.let { putExtra(EXTRA_LOCAL_PATH, it) }
                 externalMediaUrl?.let { putExtra(EXTRA_EXTERNAL_MEDIA_URL, it) }
@@ -146,9 +153,17 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
         val localPath = intent.getStringExtra(EXTRA_LOCAL_PATH)
         val externalMediaUrl = intent.getStringExtra(EXTRA_EXTERNAL_MEDIA_URL)
         val isLiveTv = intent.getBooleanExtra(EXTRA_IS_LIVE_TV, false)
-        val liveTvMediaSourceId = intent.getStringExtra(EXTRA_LIVE_TV_MEDIA_SOURCE_ID)
         val liveTvChannelIds = intent.getStringArrayListExtra("live_tv_channel_ids").orEmpty()
         val liveTvChannelNames = intent.getStringArrayListExtra("live_tv_channel_names").orEmpty()
+        val liveTvSources = LiveTvChannelSourceState(
+            channelIds = liveTvChannelIds,
+            mediaSourceIds = intent.getStringArrayListExtra(EXTRA_LIVE_TV_CHANNEL_MEDIA_SOURCE_IDS).orEmpty()
+        ).apply {
+            intent.getStringExtra(EXTRA_LIVE_TV_MEDIA_SOURCE_ID)?.let { sourceId ->
+                rememberSource(itemId, sourceId)
+            }
+        }
+        val liveTvMediaSourceId = liveTvSources.mediaSourceIdFor(itemId)
         val liveTvChannelIndex = liveTvChannelIds.indexOf(itemId)
         val resumePositionMs = intent.getLongExtra(EXTRA_RESUME_POSITION_MS, 0L)
         val subtitleStreamIndex = if (intent.hasExtra(EXTRA_SUBTITLE_STREAM_INDEX)) {
@@ -471,12 +486,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                                                 itemId = nextId,
                                                 itemName = liveTvChannelNames.getOrNull(nextIndex),
                                                 isLiveTv = true,
-                                                // A media source belongs to the current channel. Let
-                                                // Jellyfin resolve the next channel's preferred source
-                                                // instead of reusing the previous channel's source ID.
-                                                liveTvMediaSourceId = null,
+                                                liveTvMediaSourceId = liveTvSources.mediaSourceIdFor(nextId),
                                                 liveTvChannelIds = liveTvChannelIds,
-                                                liveTvChannelNames = liveTvChannelNames
+                                                liveTvChannelNames = liveTvChannelNames,
+                                                liveTvChannelMediaSourceIds = liveTvSources.mediaSourceIdsFor(liveTvChannelIds)
                                             )
                                         )
                                         finish()
