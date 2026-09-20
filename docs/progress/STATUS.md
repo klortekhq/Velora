@@ -1,8 +1,32 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-19
+Updated: 2026-09-21
 
-## En curso — agrupado y controles Android (2026-09-16)
+## Última verificación reproducible — commit `4e84dab1` (2026-09-21)
+
+La única rama remota es `main`, apuntando a `4e84dab1fc4f0175282de60a29a940d3f24bfecd`.
+Las cuatro ejecuciones de GitHub Actions de este commit terminaron correctamente:
+política de ramas, validación continua, Apple y sincronización de APK Android.
+
+La pre-release pública `v1.4.0` fue reconciliada por el workflow Android y contiene
+los APK generados desde ese commit. El manifiesto publicado confirma:
+
+- móvil `mobileDebug`: 80,012,781 bytes, SHA-256
+  `9db8a9b61383c2069037cbba8f1fa0cda5e5ea521ec52b4fb0887004365c8dae`;
+- TV `tvDebug`: 80,012,885 bytes, SHA-256
+  `b2d40f1adaf3f5810bb9c27457a2d92082fd73ba5a6ec6b7970a264ae6510af1`.
+
+El checksum descargado de GitHub coincide con el manifiesto. En el emulador
+Android 15, la suite instrumentada de Live TV móvil terminó en `OK (6 tests)`;
+el caso DPAD se omite intencionadamente en la variante táctil. Esto valida el
+agrupado y selector de fuentes sintético, no una emisión real contra un servidor
+con canales disponibles.
+
+Siguen abiertas las certificaciones que requieren hardware o servicios no
+disponibles en este entorno: reproducción real con Jellyfin y canales, Fire TV
+físico, Tizen firmado, webOS/VIDAA físicos, y validación nativa Apple en hardware.
+
+## Histórico — agrupado y controles Android (2026-09-16)
 
 La revisión independiente encontró una pérdida real de alternativas: dos
 filas con distinto ID Jellyfin, pero el mismo nombre/número y sin
@@ -28,10 +52,11 @@ perfiles móvil, tablet y TV. Móvil/tablet ejecutaron las interacciones de toqu
 ejecutó la navegación DPAD y selección de la segunda fuente. Los casos que no
 corresponden a cada modalidad aparecen como omitidos intencionadamente.
 
-La APK publicada previamente fue generada por el workflow de `b2a2d1bd`; no
-contiene estas nuevas correcciones todavía. En remoto solo existe `main`.
-Se añade trazabilidad de las siguientes APK QA por commit, variante, tamaño
-y SHA-256, sin presentarlas como versiones estables certificadas.
+La APK publicada en ese momento fue generada por el workflow de `b2a2d1bd`;
+la verificación posterior de `4e84dab1` la reemplazó en la pre-release QA.
+En remoto solo existe `main`. Se conserva trazabilidad de cada APK QA por
+commit, variante, tamaño y SHA-256, sin presentarlas como builds firmadas de
+tienda.
 
 Motivo principal de falta de pulido en esta revisión: controles de TV usados
 en pantallas táctiles y alternativas descartadas antes de mostrar el selector.
