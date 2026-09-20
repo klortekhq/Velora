@@ -2,9 +2,16 @@
 
 Updated: 2026-09-21
 
-## Última verificación reproducible — commit `4e84dab1` (2026-09-21)
+## Última verificación reproducible — commit `fb848db6` (2026-09-21)
 
-La única rama remota es `main`, apuntando a `4e84dab1fc4f0175282de60a29a940d3f24bfecd`.
+La ficha de personas ahora pagina la filmografía mediante `StartIndex` y
+`TotalRecordCount` de Jellyfin, con páginas de 1–100 elementos y un máximo de
+500 resultados por apertura. Así, tocar un actor/director muestra sus películas
+y series disponibles sin cargar una respuesta ilimitada en memoria. Las
+variantes Android móvil y TV terminan `BUILD SUCCESSFUL` con las pruebas
+`PersonFilmographyPaginationTest` incluidas.
+
+La única rama remota es `main`, apuntando a `fb848db652ceae440ce4d435873dfbb76dc37cfa`.
 Las cuatro ejecuciones de GitHub Actions de este commit terminaron correctamente:
 política de ramas, validación continua, Apple y sincronización de APK Android.
 
