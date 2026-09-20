@@ -15,6 +15,11 @@ y `node web/scripts/build-web.mjs all` (salida aislada de QA) pasan. El paquete
 webOS se generó correctamente; Tizen queda como bundle sin firmar y VIDAA como
 HTML5 para su portal oficial.
 
+El 21 de septiembre se volvió a ejecutar la batería completa `scripts/check-*.mjs`:
+todos los contratos pasan, incluidos locales Android/Apple/web, Media3 por
+defecto, AVPlayer, autenticación Jellyfin, privacidad de logs, navegación de
+contenido, política de descargas solo móvil/tablet y metadatos Smart TV.
+
 La ficha de personas ahora pagina la filmografía mediante `StartIndex` y
 `TotalRecordCount` de Jellyfin, con páginas de 1–100 elementos y un máximo de
 500 resultados por apertura. Así, tocar un actor/director muestra sus películas
