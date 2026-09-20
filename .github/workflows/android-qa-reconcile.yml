@@ -58,7 +58,22 @@ jobs:
         run: node --test scripts/tests/android-qa*.test.mjs
 
       - name: Configurar Android SDK
-        uses: android-actions/setup-android@v3
+        shell: bash
+        run: |
+          sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          test -x "$sdk_root/cmdline-tools/latest/bin/sdkmanager" || {
+            echo "No se encontró sdkmanager en $sdk_root" >&2
+            exit 1
+          }
+          {
+            echo "ANDROID_HOME=$sdk_root"
+            echo "ANDROID_SDK_ROOT=$sdk_root"
+          } >> "$GITHUB_ENV"
+          {
+            echo "$sdk_root/cmdline-tools/latest/bin"
+            echo "$sdk_root/platform-tools"
+          } >> "$GITHUB_PATH"
+          yes | "$sdk_root/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
 
       - name: Instalar plataforma Android
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
