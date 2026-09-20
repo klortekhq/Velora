@@ -1,7 +1,5 @@
 package com.klortek.velora.jellyfin
 
-import java.util.Locale
-
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -26,6 +24,11 @@ import androidx.compose.runtime.Stable
 import com.klortek.velora.BuildConfig
 import com.klortek.velora.player.PlaybackQuality
 import com.klortek.velora.security.SensitiveDataRedactor
+import java.util.Locale
+
+internal const val PERSON_FILMOGRAPHY_MAX_ITEMS = 500
+
+internal fun personFilmographyPageSize(limit: Int): Int = limit.coerceIn(1, 100)
 
 // Chapter info for movies/episodes
 @Stable
@@ -889,29 +892,44 @@ class JellyfinApiService(
         }
     }
 
-    // Get all items (movies, series) that a person appears in (filmography)
+    // Get all items (movies, series) that a person appears in (filmography).
+    // Jellyfin paginates this endpoint; a single 50-item request made actor
+    // pages appear incomplete for large filmographies.
     suspend fun getPersonFilmography(personId: String, limit: Int = 50): List<JellyfinItem> {
         if (!isSafePathSegment(userId) || !isSafePathSegment(personId)) return emptyList()
         return try {
             val base = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
-            val url = URLBuilder().takeFrom("${base}Items").apply {
-                parameters.append("UserId", userId)
-                parameters.append("PersonIds", personId)
-                parameters.append("Recursive", "true")
-                parameters.append("IncludeItemTypes", "Movie,Series")
-                parameters.append("SortBy", "PremiereDate,ProductionYear,SortName")
-                parameters.append("SortOrder", "Descending")
-                parameters.append("Fields", "PrimaryImageAspectRatio,MediaSourceCount,Overview,Genres,ProductionYear")
-                parameters.append("Limit", limit.toString())
-            }.buildString()
             android.util.Log.d("JellyfinAPI", "Fetching person filmography")
-            
-            val response = client.get(url) {
-                header(HttpHeaders.Authorization, mediaBrowserAuthorization())
+            val pageSize = personFilmographyPageSize(limit)
+            val maxItems = PERSON_FILMOGRAPHY_MAX_ITEMS
+            val items = mutableListOf<JellyfinItem>()
+            var startIndex = 0
+            var totalCount = Int.MAX_VALUE
+
+            while (startIndex < totalCount && items.size < maxItems) {
+                val url = URLBuilder().takeFrom("${base}Items").apply {
+                    parameters.append("UserId", userId)
+                    parameters.append("PersonIds", personId)
+                    parameters.append("Recursive", "true")
+                    parameters.append("IncludeItemTypes", "Movie,Series")
+                    parameters.append("SortBy", "PremiereDate,ProductionYear,SortName")
+                    parameters.append("SortOrder", "Descending")
+                    parameters.append("Fields", "PrimaryImageAspectRatio,MediaSourceCount,Overview,Genres,ProductionYear")
+                    parameters.append("StartIndex", startIndex.toString())
+                    parameters.append("Limit", pageSize.toString())
+                }.buildString()
+                val response = client.get(url) {
+                    header(HttpHeaders.Authorization, mediaBrowserAuthorization())
+                }
+                val page: ItemsResponse = response.body()
+                items += page.Items
+                totalCount = page.TotalRecordCount
+                if (page.Items.isEmpty()) break
+                startIndex += page.Items.size
             }
-            val itemsResponse: ItemsResponse = response.body()
-            android.util.Log.d("JellyfinAPI", "Person filmography fetched: ${itemsResponse.Items.size} items")
-            itemsResponse.Items
+
+            android.util.Log.d("JellyfinAPI", "Person filmography fetched: ${items.size} items")
+            items.take(maxItems)
         } catch (e: Exception) {
             android.util.Log.e("JellyfinAPI", "Error fetching person filmography: ${SensitiveDataRedactor.message(e)}")
             android.util.Log.e("VeloraNetwork", "Request failed (${e::class.simpleName})")
