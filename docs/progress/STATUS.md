@@ -2,7 +2,18 @@
 
 Updated: 2026-09-21
 
-## Última verificación reproducible — commit `fb848db6` (2026-09-21)
+## Última verificación reproducible — commit `483e7676` (2026-09-21)
+
+El cliente web ya pagina también la filmografía de personas usando `StartIndex`
+y `TotalRecordCount`, con el mismo límite de 500 resultados que Android. La
+prueba de plataforma confirma la ruta de paginación y la compilación web
+reproducible genera el bundle VIDAA, el paquete webOS `.ipk` y el bundle Tizen
+cuando no están disponibles Tizen Studio o el certificado de firma.
+
+`node web/scripts/test-platform.mjs`, `node scripts/check-release-workflows.mjs`
+y `node web/scripts/build-web.mjs all` (salida aislada de QA) pasan. El paquete
+webOS se generó correctamente; Tizen queda como bundle sin firmar y VIDAA como
+HTML5 para su portal oficial.
 
 La ficha de personas ahora pagina la filmografía mediante `StartIndex` y
 `TotalRecordCount` de Jellyfin, con páginas de 1–100 elementos y un máximo de
@@ -11,12 +22,14 @@ y series disponibles sin cargar una respuesta ilimitada en memoria. Las
 variantes Android móvil y TV terminan `BUILD SUCCESSFUL` con las pruebas
 `PersonFilmographyPaginationTest` incluidas.
 
-La única rama remota es `main`, apuntando a `fb848db652ceae440ce4d435873dfbb76dc37cfa`.
-Las cuatro ejecuciones de GitHub Actions de este commit terminaron correctamente:
+La revisión local apunta a `483e7676`. La sincronización remota de este commit
+queda pendiente de completar por la conectividad de GitHub del entorno.
+Las cuatro ejecuciones de GitHub Actions del commit Android anterior terminaron correctamente:
 política de ramas, validación continua, Apple y sincronización de APK Android.
 
 La pre-release pública `v1.4.0` fue reconciliada por el workflow Android y contiene
-los APK generados desde ese commit. El manifiesto publicado confirma:
+los APK generados desde el commit Android anterior; todavía no debe presentarse
+como una APK que incluya el cambio web de esta revisión. El manifiesto publicado confirma:
 
 - móvil `mobileDebug`: 80,012,781 bytes, SHA-256
   `9db8a9b61383c2069037cbba8f1fa0cda5e5ea521ec52b4fb0887004365c8dae`;
