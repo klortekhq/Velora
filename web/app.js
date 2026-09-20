@@ -1113,14 +1113,29 @@
     });
   }
 
+  function loadPersonFilmography(personId, startIndex, works, totalCount) {
+    var pageSize = 100;
+    var maxItems = 500;
+    return api('/Users/' + encodeURIComponent(state.userId) + '/Items?Recursive=true&PersonIds=' + encodeURIComponent(personId) +
+      '&IncludeItemTypes=Movie%2CSeries&Fields=Overview%2CProductionYear%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData&StartIndex=' + encodeURIComponent(startIndex) +
+      '&Limit=' + pageSize + '&SortBy=DateCreated&SortOrder=Descending')
+      .then(function (data) {
+        var page = data.Items || [];
+        var combined = works.concat(page).slice(0, maxItems);
+        var reportedTotal = Number(data.TotalRecordCount || 0);
+        var nextStart = startIndex + page.length;
+        var reachedEnd = reportedTotal > 0 ? nextStart >= reportedTotal : page.length < pageSize;
+        if (!page.length || combined.length >= maxItems || reachedEnd) return combined;
+        return loadPersonFilmography(personId, nextStart, combined, reportedTotal);
+      });
+  }
+
   function showPersonFilmography(personId, personName) {
     var details = document.querySelector('#details');
     if (!details) return;
     details.querySelector('.person-results').innerHTML = '<p class="muted">' + esc(t('loading')) + '</p>';
-    api('/Users/' + encodeURIComponent(state.userId) + '/Items?Recursive=true&PersonIds=' + encodeURIComponent(personId) +
-      '&IncludeItemTypes=Movie%2CSeries&Fields=Overview%2CProductionYear%2CPrimaryImageAspectRatio%2CMediaSources%2CUserData&Limit=100&SortBy=DateCreated&SortOrder=Descending')
-      .then(function (data) {
-        var works = data.Items || [];
+    loadPersonFilmography(personId, 0, [], 0)
+      .then(function (works) {
         var html = '<h2>' + esc(t('actorWorks')) + '</h2>';
         if (!works.length) html += '<p class="muted">' + esc(t('noActorWorks')) + '</p>';
         else html += '<div class="grid">' + works.map(function (work) {
