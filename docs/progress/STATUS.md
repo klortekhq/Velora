@@ -2,7 +2,7 @@
 
 Updated: 2026-09-21
 
-## Última verificación reproducible — commit `483e7676` (2026-09-21)
+## Última verificación reproducible — commit `0dd21a6f` (2026-09-21)
 
 El cliente web ya pagina también la filmografía de personas usando `StartIndex`
 y `TotalRecordCount`, con el mismo límite de 500 resultados que Android. La
@@ -22,8 +22,8 @@ y series disponibles sin cargar una respuesta ilimitada en memoria. Las
 variantes Android móvil y TV terminan `BUILD SUCCESSFUL` con las pruebas
 `PersonFilmographyPaginationTest` incluidas.
 
-La revisión local apunta a `483e7676`. La sincronización remota de este commit
-queda pendiente de completar por la conectividad de GitHub del entorno.
+La única rama remota sigue siendo `main`, y GitHub confirma `0dd21a6f` como su
+punta actual. No se han creado ramas adicionales.
 Las cuatro ejecuciones de GitHub Actions del commit Android anterior terminaron correctamente:
 política de ramas, validación continua, Apple y sincronización de APK Android.
 
