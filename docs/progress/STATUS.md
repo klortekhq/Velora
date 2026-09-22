@@ -2,7 +2,13 @@
 
 Updated: 2026-09-21
 
-## Última verificación reproducible — commit `0dd21a6f` (2026-09-21)
+## Última verificación reproducible — commit `66bcf66c` (2026-09-22)
+
+La filmografía de personas queda alineada en Android, web y Apple: el cliente
+Apple pagina `Items` por `StartIndex`/`TotalRecordCount`, limita la respuesta a
+500 obras y conserva la navegación a películas y series. Se añadió una prueba
+XCTest con dos páginas; la ejecución nativa queda pendiente del runner
+macOS/Xcode, que no está disponible en este host.
 
 El cliente web ya pagina también la filmografía de personas usando `StartIndex`
 y `TotalRecordCount`, con el mismo límite de 500 resultados que Android. La
