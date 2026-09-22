@@ -7,7 +7,8 @@ Updated: 2026-09-21
 La filmografía de personas queda alineada en Android, web y Apple: el cliente
 Apple pagina `Items` por `StartIndex`/`TotalRecordCount`, limita la respuesta a
 500 obras y conserva la navegación a películas y series. Se añadió una prueba
-XCTest con dos páginas; la ejecución nativa queda pendiente del runner
+XCTest con dos páginas y el contrato `check-apple-filmography.mjs` protege la
+regresión; la ejecución nativa queda pendiente del runner
 macOS/Xcode, que no está disponible en este host.
 
 El cliente web ya pagina también la filmografía de personas usando `StartIndex`
