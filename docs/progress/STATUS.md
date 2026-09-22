@@ -20,6 +20,12 @@ todos los contratos pasan, incluidos locales Android/Apple/web, Media3 por
 defecto, AVPlayer, autenticación Jellyfin, privacidad de logs, navegación de
 contenido, política de descargas solo móvil/tablet y metadatos Smart TV.
 
+La prueba instrumentada se repitió en el emulador Android 15 el 22 de
+septiembre: perfil móvil `OK (6 tests)` y perfil TV `OK (6 tests)`, incluyendo
+la apertura táctil del selector de fuentes en móvil y la navegación por mando
+en TV. Las modalidades que no corresponden a cada perfil se omiten
+explícitamente por diseño.
+
 La ficha de personas ahora pagina la filmografía mediante `StartIndex` y
 `TotalRecordCount` de Jellyfin, con páginas de 1–100 elementos y un máximo de
 500 resultados por apertura. Así, tocar un actor/director muestra sus películas
