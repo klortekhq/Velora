@@ -139,6 +139,34 @@ final class VeloraKitTests: XCTestCase {
         MockURLProtocol.handler = nil
     }
 
+    func testPersonFilmographyFollowsJellyfinPagination() async throws {
+        MockURLProtocol.handler = { request in
+            let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)
+            XCTAssertEqual(request.url?.path, "/Users/user-1/Items")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "PersonIds" })?.value, "person-1")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "IncludeItemTypes" })?.value, "Movie,Series")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "Limit" })?.value, "100")
+            let startIndex = Int(components?.queryItems?.first(where: { $0.name == "StartIndex" })?.value ?? "-1")!
+            let body: String
+            if startIndex == 0 {
+                body = #"{"Items":[{"Id":"movie-1","Name":"Primera","Type":"Movie"}],"TotalRecordCount":2}"#
+            } else {
+                XCTAssertEqual(startIndex, 1)
+                body = #"{"Items":[{"Id":"series-1","Name":"Segunda","Type":"Series"}],"TotalRecordCount":2}"#
+            }
+            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+            return (response, Data(body.utf8))
+        }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.example.test:8096")!, session: URLSession(configuration: configuration))
+        await client.setAccessToken("session-secret")
+
+        let works = try await client.items(userID: "user-1", forPerson: "person-1")
+        XCTAssertEqual(works.map(\.id), ["movie-1", "series-1"])
+        MockURLProtocol.handler = nil
+    }
+
     func testPlaybackPrefersDirectPlay() {
         let caps = PlaybackCapabilities(videoCodecs: ["H264"], audioCodecs: ["AAC"], containers: ["MP4"])
         let source = PlaybackSource(container: "MP4", videoCodec: "H264", audioCodec: "AAC")

@@ -295,18 +295,36 @@ public actor JellyfinClient {
             .appendingPathComponent("Users", isDirectory: true)
             .appendingPathComponent(userID, isDirectory: true)
             .appendingPathComponent("Items")
-        var components = URLComponents(url: itemsPath, resolvingAgainstBaseURL: false)
-        components?.queryItems = [
-            URLQueryItem(name: "Recursive", value: "true"),
-            URLQueryItem(name: "PersonIds", value: personID),
-            URLQueryItem(name: "IncludeItemTypes", value: "Movie,Series"),
-            URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,UserData"),
-            URLQueryItem(name: "SortBy", value: "DateCreated"),
-            URLQueryItem(name: "SortOrder", value: "Descending"),
-            URLQueryItem(name: "Limit", value: "100")
-        ]
-        guard let url = components?.url else { throw ClientError.invalidServerURL }
-        return try await request(url, as: JellyfinResult<JellyfinItem>.self).items
+        let pageSize = 100
+        let maximumItems = 500
+        var startIndex = 0
+        var totalRecordCount: Int?
+        var filmography: [JellyfinItem] = []
+
+        repeat {
+            var components = URLComponents(url: itemsPath, resolvingAgainstBaseURL: false)
+            components?.queryItems = [
+                URLQueryItem(name: "Recursive", value: "true"),
+                URLQueryItem(name: "PersonIds", value: personID),
+                URLQueryItem(name: "IncludeItemTypes", value: "Movie,Series"),
+                URLQueryItem(name: "Fields", value: "Overview,ProductionYear,ImageTags,People,UserData"),
+                URLQueryItem(name: "SortBy", value: "DateCreated"),
+                URLQueryItem(name: "SortOrder", value: "Descending"),
+                URLQueryItem(name: "StartIndex", value: String(startIndex)),
+                URLQueryItem(name: "Limit", value: String(pageSize))
+            ]
+            guard let url = components?.url else { throw ClientError.invalidServerURL }
+            let page = try await request(url, as: JellyfinResult<JellyfinItem>.self)
+            filmography.append(contentsOf: page.items.prefix(maximumItems - filmography.count))
+            totalRecordCount = page.totalRecordCount
+            startIndex += page.items.count
+
+            if page.items.isEmpty || filmography.count >= maximumItems { break }
+            if let totalRecordCount, startIndex >= totalRecordCount { break }
+            if page.items.count < pageSize && totalRecordCount == nil { break }
+        } while true
+
+        return filmography
     }
 
     /// Resolve server-managed trailers through the Jellyfin 12 catalog API.
