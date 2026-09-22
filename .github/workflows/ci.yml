@@ -149,6 +149,8 @@ jobs:
         run: node scripts/check-apple-navigation.mjs
       - name: Validate Apple playback capability policy
         run: node scripts/check-apple-playback-policy.mjs
+      - name: Validate Apple filmography pagination
+        run: node scripts/check-apple-filmography.mjs
       - name: Test VeloraKit
         run: swift test --package-path apple --parallel
       - name: Build native package entrypoints

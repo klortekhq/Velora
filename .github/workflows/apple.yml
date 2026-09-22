@@ -53,6 +53,9 @@ jobs:
       - name: Validar política de capacidades de reproducción Apple
         working-directory: ${{ github.workspace }}
         run: node scripts/check-apple-playback-policy.mjs
+      - name: Validar paginación de filmografías Apple
+        working-directory: ${{ github.workspace }}
+        run: node scripts/check-apple-filmography.mjs
       - name: Validar preferencias de reproducción
         working-directory: ${{ github.workspace }}
         run: node scripts/check-playback-preferences-contract.mjs
