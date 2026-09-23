@@ -51,6 +51,13 @@ la apertura táctil del selector de fuentes en móvil y la navegación por mando
 en TV. Las modalidades que no corresponden a cada perfil se omiten
 explícitamente por diseño.
 
+En la recompilación del 23 de septiembre, la variante móvil volvió a ejecutar
+`OK (6 tests)` desde los APK recién generados; el perfil TV no queda certificado
+en esta pasada porque el emulador produjo un ANR de arranque de
+`com.klortek.velora.tv` antes de instrumentar. La ejecución anterior de TV
+continúa siendo válida como evidencia histórica, pero se mantiene esta
+regresión de entorno abierta y no se presenta como prueba nueva superada.
+
 La ficha de personas ahora pagina la filmografía mediante `StartIndex` y
 `TotalRecordCount` de Jellyfin, con páginas de 1–100 elementos y un máximo de
 500 resultados por apertura. Así, tocar un actor/director muestra sus películas
