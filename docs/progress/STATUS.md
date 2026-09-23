@@ -1,8 +1,25 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-21
+Updated: 2026-09-23
 
-## Última verificación reproducible — commit `4ce19226` (2026-09-22)
+## Última verificación reproducible — build Android del `main` (2026-09-23)
+
+El agrupado de Live TV está incluido en el `main` actual: los canales con la
+misma identidad se muestran como una sola fila y el selector conserva las
+fuentes disponibles (principal, IPTV u otras). Se verificó que el commit que
+lo introdujo (`19a324f2`) es antecesor del `main` remoto (`81553c2a`).
+
+Se generaron desde ese `main` las dos variantes Android con `BUILD SUCCESSFUL`:
+`app-mobile-debug.apk` y `app-tv-debug.apk`. Los tests unitarios móvil y TV
+también terminaron correctamente; la APK móvil se instaló en el emulador
+Android 15 después de retirar una instalación local firmada con otra clave.
+
+El intento de smoke contra el Jellyfin LAN configurado para QA expiró por
+`TaskCanceledException` a los 15 segundos. Por tanto, no se certifican en esta
+ejecución autenticación, catálogo ni reproducción de Live TV; no se guardaron
+credenciales, tokens ni cabeceras en el repositorio.
+
+## Verificación de producto y contratos
 
 La filmografía de personas queda alineada en Android, web y Apple: el cliente
 Apple pagina `Items` por `StartIndex`/`TotalRecordCount`, limita la respuesta a
@@ -41,7 +58,7 @@ y series disponibles sin cargar una respuesta ilimitada en memoria. Las
 variantes Android móvil y TV terminan `BUILD SUCCESSFUL` con las pruebas
 `PersonFilmographyPaginationTest` incluidas.
 
-La única rama remota sigue siendo `main`, y GitHub confirma `0dd21a6f` como su
+La única rama remota sigue siendo `main`, y GitHub confirma `81553c2a` como su
 punta actual. No se han creado ramas adicionales.
 Las cuatro ejecuciones de GitHub Actions del commit Android anterior terminaron correctamente:
 política de ramas, validación continua, Apple y sincronización de APK Android.
