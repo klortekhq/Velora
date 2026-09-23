@@ -58,7 +58,7 @@ y series disponibles sin cargar una respuesta ilimitada en memoria. Las
 variantes Android móvil y TV terminan `BUILD SUCCESSFUL` con las pruebas
 `PersonFilmographyPaginationTest` incluidas.
 
-La única rama remota sigue siendo `main`, y GitHub confirma `81553c2a` como su
+La única rama remota sigue siendo `main`, y GitHub confirma `c471dec4` como su
 punta actual. No se han creado ramas adicionales.
 Las cuatro ejecuciones de GitHub Actions del commit Android anterior terminaron correctamente:
 política de ramas, validación continua, Apple y sincronización de APK Android.
