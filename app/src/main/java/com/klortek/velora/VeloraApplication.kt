@@ -12,13 +12,32 @@ import com.klortek.velora.networking.VeloraDownloader
 import com.klortek.velora.i18n.VeloraLocale
 
 class VeloraApplication : Application(), ImageLoaderFactory {
+    companion object {
+        @Volatile
+        private var trailerExtractorInitialized = false
+
+        /**
+         * NewPipe is only needed for external trailer resolution. Keeping it
+         * out of Application.onCreate prevents the TV/mobile home screen from
+         * paying its initialization cost during the critical first frame.
+         */
+        fun ensureTrailerExtractorInitialized() {
+            if (trailerExtractorInitialized) return
+            synchronized(this) {
+                if (!trailerExtractorInitialized) {
+                    NewPipe.init(VeloraDownloader())
+                    trailerExtractorInitialized = true
+                }
+            }
+        }
+    }
+
     override fun attachBaseContext(base: android.content.Context) {
         super.attachBaseContext(VeloraLocale.wrap(base))
     }
 
     override fun onCreate() {
         super.onCreate()
-        NewPipe.init(VeloraDownloader())
     }
 
     override fun newImageLoader(): ImageLoader {

@@ -35,6 +35,7 @@ class TrailerLauncher {
             
             CoroutineScope(Dispatchers.IO).launch {
                 try {
+                    VeloraApplication.ensureTrailerExtractorInitialized()
                     // Use ServiceList.YouTube (id 0)
                     val streamingService = ServiceList.YouTube
                     val extractor = streamingService.getStreamExtractor(youtubeUrl)

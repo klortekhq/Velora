@@ -14,6 +14,12 @@ Se generaron desde ese `main` las dos variantes Android con `BUILD SUCCESSFUL`:
 también terminaron correctamente; la APK móvil se instaló en el emulador
 Android 15 después de retirar una instalación local firmada con otra clave.
 
+Se optimizó el arranque Android: el extractor NewPipe para tráileres ya no se
+inicializa en `Application.onCreate`; se prepara una sola vez y de forma
+segura únicamente cuando se solicita un tráiler externo. Las dos variantes
+vuelven a compilar con `BUILD SUCCESSFUL` después del cambio y la batería de
+contratos estáticos/web permanece en verde.
+
 El intento de smoke contra el Jellyfin LAN configurado para QA expiró por
 `TaskCanceledException` a los 15 segundos. Por tanto, no se certifican en esta
 ejecución autenticación, catálogo ni reproducción de Live TV; no se guardaron
