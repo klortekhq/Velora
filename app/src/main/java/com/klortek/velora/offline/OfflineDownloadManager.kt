@@ -79,6 +79,35 @@ object OfflineDownloadManager {
     private const val PREFS = "velora_offline_downloads"
     private const val KEY_ENTRIES = "entries"
 
+    @Volatile
+    private var workManagerInitialized = false
+
+    /**
+     * WorkManager is deliberately initialized only when an offline transfer
+     * is needed. Its default AndroidX Startup provider opens its database on
+     * every process launch, which is disproportionately expensive on TV
+     * runtimes and can block the first frame long enough to trigger an ANR.
+     */
+    private fun workManager(context: Context): androidx.work.WorkManager {
+        if (!workManagerInitialized) {
+            synchronized(this) {
+                if (!workManagerInitialized) {
+                    runCatching {
+                        androidx.work.WorkManager.initialize(
+                            context.applicationContext,
+                            androidx.work.Configuration.Builder().build()
+                        )
+                    }.onFailure { error ->
+                        // Another caller may have won the initialization race.
+                        if (error !is IllegalStateException) throw error
+                    }
+                    workManagerInitialized = true
+                }
+            }
+        }
+        return androidx.work.WorkManager.getInstance(context.applicationContext)
+    }
+
     private fun database(context: Context) = OfflineDatabase(context)
 
     class StorageRejectedException(val decision: OfflineStorageDecision) :
@@ -192,7 +221,7 @@ object OfflineDownloadManager {
         val updated = load(context).mapNotNull { entry ->
             if (!entry.workName.isNullOrBlank()) {
                 val info = runCatching {
-                    androidx.work.WorkManager.getInstance(context)
+                    workManager(context)
                         .getWorkInfosForUniqueWork(entry.workName).get().firstOrNull()
                 }.getOrNull()
                 // WorkManager is durable, but a cancelled/cleaned-up work row
@@ -326,7 +355,7 @@ object OfflineDownloadManager {
             ))
             .addTag(OfflineDownloadWorker.TAG)
             .build()
-        androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(
+        workManager(context).enqueueUniqueWork(
             workName,
             androidx.work.ExistingWorkPolicy.KEEP,
             work
@@ -343,7 +372,7 @@ object OfflineDownloadManager {
     }
 
     fun cancel(context: Context, entry: OfflineDownload) {
-        entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
+        entry.workName?.let { workManager(context).cancelUniqueWork(it) }
         if (entry.downloadId > 0L) androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)?.remove(entry.downloadId)
         OfflineStorageEngine.deletePartial(context, entry.stableKey)
         deleteEntry(context, entry)
@@ -351,7 +380,7 @@ object OfflineDownloadManager {
 
     /** Pause without deleting the partial media; the next resume uses Range. */
     fun pause(context: Context, entry: OfflineDownload) {
-        entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
+        entry.workName?.let { workManager(context).cancelUniqueWork(it) }
         persist(context, entry.copy(
             status = DownloadManager.STATUS_PAUSED,
             reason = DownloadManager.PAUSED_WAITING_TO_RETRY,
@@ -385,7 +414,7 @@ object OfflineDownloadManager {
     }
 
     fun delete(context: Context, entry: OfflineDownload) {
-        entry.workName?.let { androidx.work.WorkManager.getInstance(context).cancelUniqueWork(it) }
+        entry.workName?.let { workManager(context).cancelUniqueWork(it) }
         if (entry.downloadId > 0L) androidx.core.content.ContextCompat.getSystemService(context, DownloadManager::class.java)?.remove(entry.downloadId)
         entry.localPath?.let { deleteLocalUri(context, it) }
         OfflineStorageEngine.deletePartial(context, entry.stableKey)

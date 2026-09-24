@@ -1,6 +1,6 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-23
+Updated: 2026-09-24
 
 ## Última verificación reproducible — build Android del `main` (2026-09-23)
 
@@ -19,6 +19,15 @@ inicializa en `Application.onCreate`; se prepara una sola vez y de forma
 segura únicamente cuando se solicita un tráiler externo. Las dos variantes
 vuelven a compilar con `BUILD SUCCESSFUL` después del cambio y la batería de
 contratos estáticos/web permanece en verde.
+
+La inicialización automática de WorkManager también se retiró del proveedor de
+arranque de AndroidX. El gestor de descargas lo inicializa bajo demanda solo en
+el primer uso de una descarga; así la variante TV no abre su base de datos en la
+ruta crítica de lanzamiento. La APK TV limpia se instaló en el emulador y la
+actividad quedó enfocada sin `ANR in` ni `WM-WrkMgrInitializer`; la primera
+composición del emulador sigue tardando aproximadamente 51 segundos, por lo
+que el tiempo de arranque de ese entorno permanece como regresión de rendimiento
+abierta. La suite instrumentada TV lanzada después no terminó y no se certifica.
 
 El intento de smoke contra el Jellyfin LAN configurado para QA expiró por
 `TaskCanceledException` a los 15 segundos. Por tanto, no se certifican en esta
@@ -71,8 +80,7 @@ y series disponibles sin cargar una respuesta ilimitada en memoria. Las
 variantes Android móvil y TV terminan `BUILD SUCCESSFUL` con las pruebas
 `PersonFilmographyPaginationTest` incluidas.
 
-La única rama remota sigue siendo `main`, y GitHub confirma `c471dec4` como su
-punta actual. No se han creado ramas adicionales.
+La única rama remota sigue siendo `main`; no se han creado ramas adicionales.
 Las cuatro ejecuciones de GitHub Actions del commit Android anterior terminaron correctamente:
 política de ramas, validación continua, Apple y sincronización de APK Android.
 
