@@ -15,6 +15,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -181,8 +187,12 @@ fun ServerEntryScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth(widthFraction)
-                .fillMaxSize()
-                .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+                .then(if (isTv) Modifier.fillMaxSize() else Modifier.wrapContentHeight())
+                .padding(horizontal = horizontalPadding, vertical = verticalPadding)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .imePadding()
+                .then(if (isTv) Modifier else Modifier.verticalScroll(rememberScrollState())),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Title
