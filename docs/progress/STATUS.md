@@ -2,17 +2,30 @@
 
 Updated: 2026-09-24
 
-## Última verificación reproducible — build Android del `main` (2026-09-23)
+## Última verificación reproducible — build Android del `main` (2026-09-24)
 
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
 misma identidad se muestran como una sola fila y el selector conserva las
 fuentes disponibles (principal, IPTV u otras). Se verificó que el commit que
-lo introdujo (`19a324f2`) es antecesor del `main` remoto (`81553c2a`).
+lo introdujo (`19a324f2`) es antecesor del `main` remoto actual (`b300c342`).
+En GitHub solo existe la rama `main`.
 
 Se generaron desde ese `main` las dos variantes Android con `BUILD SUCCESSFUL`:
 `app-mobile-debug.apk` y `app-tv-debug.apk`. Los tests unitarios móvil y TV
-también terminaron correctamente; la APK móvil se instaló en el emulador
-Android 15 después de retirar una instalación local firmada con otra clave.
+también terminaron correctamente. La APK móvil actual se instaló después de
+reiniciar ADB y quedó ejecutándose en el emulador Android 15 con
+`com.klortek.velora.mobile/com.klortek.velora.MainActivity`; no aparecieron
+`ANR in`, excepciones fatales ni errores de WorkManager en el arranque.
+
+Artefactos locales verificables de esta compilación:
+
+- móvil: `351265035F1360785E72045CF7CE548E5854DB9BE12C2A415B814C35DBBC226E`
+- TV: `FCB42838199AD24FDBC9DFA07928BF6FC267D1B90EC191C4A0CB8C5C5FBA6366`
+
+La prueba visual confirma la pantalla real de entrada de servidor. La sesión
+de Jellyfin no se configuró en el emulador en esta comprobación, por lo que el
+selector de fuentes agrupadas requiere todavía un servidor accesible y una
+sesión autenticada para su validación E2E.
 
 Se optimizó el arranque Android: el extractor NewPipe para tráileres ya no se
 inicializa en `Application.onCreate`; se prepara una sola vez y de forma
