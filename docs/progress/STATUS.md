@@ -29,6 +29,12 @@ composición del emulador sigue tardando aproximadamente 51 segundos, por lo
 que el tiempo de arranque de ese entorno permanece como regresión de rendimiento
 abierta. La suite instrumentada TV lanzada después no terminó y no se certifica.
 
+El 24 de septiembre se lanzó también la suite instrumentada móvil contra los
+APK actuales. El runner quedó esperando después de que el proceso de aplicación
+saliera del primer plano, sin resultado JUnit concluyente; esta ejecución no se
+marca como aprobada. La evidencia móvil anterior de `OK (6 tests)` sigue siendo
+la referencia válida para el selector agrupado de fuentes.
+
 El intento de smoke contra el Jellyfin LAN configurado para QA expiró por
 `TaskCanceledException` a los 15 segundos. Por tanto, no se certifican en esta
 ejecución autenticación, catálogo ni reproducción de Live TV; no se guardaron
