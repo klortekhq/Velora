@@ -22,6 +22,12 @@ Artefactos locales verificables de esta compilación:
 - móvil: `351265035F1360785E72045CF7CE548E5854DB9BE12C2A415B814C35DBBC226E`
 - TV: `FCB42838199AD24FDBC9DFA07928BF6FC267D1B90EC191C4A0CB8C5C5FBA6366`
 
+Después se corrigió la pantalla móvil de entrada del servidor: el contenido
+respeta las barras del sistema, deja de quedar bajo el estado y permite
+desplazamiento cuando el teclado ocupa la parte inferior. El contrato
+`scripts/check-server-entry-layout.mjs` pasa y la APK móvil recompilada se
+instaló y mostró el formulario completo en el emulador sin ANR.
+
 La prueba visual confirma la pantalla real de entrada de servidor. La sesión
 de Jellyfin no se configuró en el emulador en esta comprobación, por lo que el
 selector de fuentes agrupadas requiere todavía un servidor accesible y una
