@@ -33,14 +33,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Check if this is the first launch - if not, remove splash screen background
+        // Keep the system splash for the hand-off into the activity, but never
+        // leave its drawable behind the first Compose frame. On a fresh install
+        // the old conditional kept the splash visible while the server-entry
+        // screen was already being composed, which looked like a frozen launch.
         val settings = AppSettings(this)
         val isFirstLaunch = settings.isFirstLaunch
-        if (!isFirstLaunch) {
-            // Remove splash screen background for subsequent launches
-            window.setBackgroundDrawableResource(android.R.color.transparent)
-        } else {
-            // Mark that we've launched at least once
+        window.setBackgroundDrawableResource(android.R.color.transparent)
+        if (isFirstLaunch) {
             settings.isFirstLaunch = false
         }
         

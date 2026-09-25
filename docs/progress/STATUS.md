@@ -54,6 +54,13 @@ saliera del primer plano, sin resultado JUnit concluyente; esta ejecución no se
 marca como aprobada. La evidencia móvil anterior de `OK (6 tests)` sigue siendo
 la referencia válida para el selector agrupado de fuentes.
 
+El 25 de septiembre se protegió además el handoff del splash en `MainActivity`
+y se validó con `scripts/check-android-splash-handoff.mjs`. En una instalación
+móvil limpia el emulador sigue registrando `Displayed ... +51s460ms` y hasta
+1515 frames omitidos antes del primer frame; el proceso permanece vivo y no
+registra ANR ni excepción fatal. Esto queda como regresión de rendimiento del
+APK debug/emulador, no como una certificación de fluidez de producción.
+
 El intento de smoke contra el Jellyfin LAN configurado para QA expiró por
 `TaskCanceledException` a los 15 segundos. Por tanto, no se certifican en esta
 ejecución autenticación, catálogo ni reproducción de Live TV; no se guardaron
