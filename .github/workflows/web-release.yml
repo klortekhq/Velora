@@ -132,6 +132,7 @@ jobs:
         if: startsWith(env.RELEASE_TAG, 'v')
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ github.sha }}
         run: bash scripts/ci/wait-for-android-release-assets.sh
       - name: Publicar paquetes web en la release
         if: startsWith(env.RELEASE_TAG, 'v')
