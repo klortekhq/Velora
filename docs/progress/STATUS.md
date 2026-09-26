@@ -2,6 +2,24 @@
 
 Updated: 2026-09-26
 
+## Resumen operativo actual
+
+| Área | Estado verificable |
+| --- | --- |
+| Ola actual | 27 — QA de release candidata y cierre de contratos; el producto no se declara terminado |
+| Android móvil/tablet | Compila, tests unitarios y contratos estáticos pasan; falta repetir E2E con dispositivo y Jellyfin real |
+| Android TV / Fire TV | Compila y tiene navegación por mando; falta certificación física y smoke autenticado completo |
+| Web | Cliente responsive, i18n, reproducción HTML5 y Live TV verificadas por tests y build |
+| Samsung/Tizen | Bundle generado; firma y validación en Tizen Studio/dispositivo pendientes |
+| LG/webOS | IPK generado; validación en dispositivo y publicación pendientes |
+| Hisense/VIDAA | Bundle HTML5 generado; validación/publicación mediante portal VIDAA pendientes |
+| Apple iOS/iPadOS/tvOS | Swift Package, shell y tests/contratos preparados; faltan build Xcode, apps firmadas y hardware |
+| Releases | Workflow preparado para una release común; firma pública y credenciales de publicación no disponibles en este entorno |
+| Ramas | Solo `main` en el remoto |
+
+La tabla distingue compilación de certificación: ningún paquete sin prueba de
+hardware o firma se presenta como listo para una tienda.
+
 ## Última verificación reproducible — build Android del `main` (2026-09-26)
 
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
