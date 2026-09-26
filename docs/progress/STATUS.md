@@ -115,6 +115,13 @@ fallos (`ALL_STATIC_CONTRACTS_PASSED`), incluyendo el nuevo contrato explícito
 `check-android-live-tv-grouping.mjs`. Este contrato comprueba la fila agrupada,
 el diálogo de fuentes y la reproducción de la fuente seleccionada.
 
+También se adelantó la puerta de servidor/login en `JellyfinHomeScreen`: en
+una instalación sin sesión ya no se crean repositorios, cliente Live TV ni el
+resto del grafo de inicio antes de mostrar el formulario. Las variantes
+`compileMobileDebugKotlin` y `compileTvDebugKotlin` pasan después del cambio;
+la mejora de tiempo debe volver a medirse cuando haya un emulador o dispositivo
+conectado.
+
 La prueba instrumentada se repitió en el emulador Android 15 el 22 de
 septiembre: perfil móvil `OK (6 tests)` y perfil TV `OK (6 tests)`, incluyendo
 la apertura táctil del selector de fuentes en móvil y la navegación por mando
