@@ -101,6 +101,8 @@ jobs:
         run: node scripts/check-android-playback-policy.mjs
       - name: Validate Android content navigation
         run: node scripts/check-android-content-navigation.mjs
+      - name: Validate Android Live TV grouping
+        run: node scripts/check-android-live-tv-grouping.mjs
       - name: Validate Android login layout
         run: node scripts/check-android-login-layout.mjs
       - name: Validate Android log privacy
