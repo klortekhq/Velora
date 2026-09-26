@@ -78,6 +78,9 @@ jobs:
       - name: Validar diseño del inicio de sesión Android
         run: node scripts/check-android-login-layout.mjs
 
+      - name: Validar agrupado Live TV Android
+        run: node scripts/check-android-live-tv-grouping.mjs
+
       - name: Validar catálogos Android
         run: node scripts/check-android-locales.mjs
 
