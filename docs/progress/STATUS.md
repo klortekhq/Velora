@@ -7,7 +7,7 @@ Updated: 2026-09-25
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
 misma identidad se muestran como una sola fila y el selector conserva las
 fuentes disponibles (principal, IPTV u otras). Se verificó que el commit que
-lo introdujo (`19a324f2`) es antecesor del `main` remoto actual (`fe55b29a`).
+lo introdujo (`19a324f2`) es antecesor del `main` remoto actual (`38f80d3e`).
 En GitHub solo existe la rama `main`.
 
 Se generaron desde ese `main` las dos variantes Android con `BUILD SUCCESSFUL`:
@@ -70,11 +70,14 @@ debug, pero sigue siendo demasiado lenta para certificar la fluidez objetivo;
 la optimización del arranque permanece abierta. La huella de esa build de QA
 es `67F7EBF4D33F6EC1A6D18C316E31F3CF70FED36AAB0BFBF5639E806E5081BF85`.
 
-La prueba unitaria específica `*LiveTvChannelQueryTest` volvió a pasar: el
+La prueba unitaria específica `*LiveTvChannelQueryTest` volvió a pasar y el
 agrupado de fuentes por identidad (principal/IPTV/alternativas) está incluido
 en la compilación Android actual y conserva la selección de fuente desde la
 fila agrupada. Falta únicamente validarlo contra un Jellyfin accesible con
-datos reales; no se presenta la build como validación E2E del servidor.
+datos reales; no se presenta la build como validación E2E del servidor. Desde
+este commit, `scripts/check-android-live-tv-grouping.mjs` también se ejecuta en
+CI y protege explícitamente la fila agrupada, el selector y la reproducción de
+la fuente seleccionada.
 
 El intento de smoke contra el Jellyfin LAN configurado para QA expiró por
 `TaskCanceledException` a los 15 segundos. Por tanto, no se certifican en esta
