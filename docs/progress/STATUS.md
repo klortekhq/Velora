@@ -121,6 +121,14 @@ fallos (`ALL_STATIC_CONTRACTS_PASSED`), incluyendo el nuevo contrato explícito
 `check-android-live-tv-grouping.mjs`. Este contrato comprueba la fila agrupada,
 el diálogo de fuentes y la reproducción de la fuente seleccionada.
 
+También se añadió `check-android-player-controls.mjs` a CI y al workflow de
+release. Comprueba que el selector de aspecto escribe el modo elegido y lo
+aplica al `PlayerView`, que los botones móvil de entrar/salir de pantalla
+completa cambian la orientación y que la tuerca abre el menú unificado de
+audio y subtítulos. El contrato y `*AspectPresentationTest` pasan en la
+compilación móvil actual; la prueba física en un teléfono/TV sigue pendiente
+porque ADB no expone ningún dispositivo en este entorno.
+
 También se adelantó la puerta de servidor/login en `JellyfinHomeScreen`: en
 una instalación sin sesión ya no se crean repositorios, cliente Live TV ni el
 resto del grafo de inicio antes de mostrar el formulario. Las variantes

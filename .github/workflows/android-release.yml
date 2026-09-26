@@ -80,6 +80,8 @@ jobs:
 
       - name: Validar agrupado Live TV Android
         run: node scripts/check-android-live-tv-grouping.mjs
+      - name: Validar controles reales del reproductor Android
+        run: node scripts/check-android-player-controls.mjs
 
       - name: Validar catálogos Android
         run: node scripts/check-android-locales.mjs
