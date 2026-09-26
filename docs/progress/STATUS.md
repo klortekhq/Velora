@@ -27,6 +27,14 @@ antes de publicar y terminan con error si la ejecución Android falla o agota el
 tiempo de espera. `node scripts/check-release-workflows.mjs` pasa con esta
 política.
 
+La comprobación Android del 26 de septiembre volvió a ejecutar `testMobileDebugUnitTest`,
+`testTvDebugUnitTest`, `assembleMobileRelease` y `assembleTvRelease`: todos
+terminaron con `BUILD SUCCESSFUL`. Las APK de QA generadas sin credenciales de
+firma pública son `velora-release-unsigned.apk` móvil (`066D32A9838283893A4D4BE6AB03DF76413F4AF0A3821E2E338BAE48D7330BBA`)
+y TV (`E73CFA1E195BA8715A1115110E8CFC19ABAA2FB4F1EEE2543CF0546542EEA9A9`).
+No se presentan como artefactos de release: la firma pública sigue siendo un
+requisito del workflow.
+
 ## Última verificación reproducible — build Android del `main` (2026-09-26)
 
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
