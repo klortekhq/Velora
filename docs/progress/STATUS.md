@@ -52,6 +52,11 @@ también permanece como prerelease QA y `v1.2.85` es la única release estable
 anterior. El pipeline actual solo puede publicar una release versionada cuando
 dispone de `Velora-mobile-release.apk` y `Velora-tv-release.apk` firmados.
 
+CI remoto del commit `49c17233` (26 de septiembre) terminó en verde: política
+de ramas, `Android unit tests and Kotlin compilation`, `Web platform checks`,
+`Apple shared package tests and builds` y la validación continua. La ejecución
+continua verificable es [GitHub Actions run 36218786297](https://github.com/klortekhq/Velora/actions/runs/36218786297).
+
 ## Última verificación reproducible — build Android del `main` (2026-09-26)
 
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
