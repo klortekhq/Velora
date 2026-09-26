@@ -44,6 +44,14 @@ bundle Samsung y VIDAA quedaron preparados, y se generó el IPK de webOS.
 La firma Tizen y la validación física de Smart TV siguen siendo pendientes
 reales, no se presentan como certificadas.
 
+Auditoría pública de GitHub (26 de septiembre): el repositorio expone una sola
+rama (`main`). La release `v1.4.0` existe como prerelease y contiene los
+paquetes web/Smart TV y los APK agrupados de Live TV, pero su descripción los
+identifica como builds debug de QA; no es una release final firmada. `v1.3.0`
+también permanece como prerelease QA y `v1.2.85` es la única release estable
+anterior. El pipeline actual solo puede publicar una release versionada cuando
+dispone de `Velora-mobile-release.apk` y `Velora-tv-release.apk` firmados.
+
 ## Última verificación reproducible — build Android del `main` (2026-09-26)
 
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
