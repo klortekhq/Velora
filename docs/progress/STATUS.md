@@ -70,6 +70,11 @@ debug, pero sigue siendo demasiado lenta para certificar la fluidez objetivo;
 la optimización del arranque permanece abierta. La build móvil release de QA
 del commit `5c813bd0` tiene la huella
 `63CF99836BA1D99B2616AE01836343D434419E3781A7A7DA18F8168AA94FC037`.
+La variante TV release del mismo estado también compila correctamente; su
+artefacto QA tiene la huella
+`9A7BBF723558C3AF90CF987C8A1ABB5A9D5A6C05D82FE6127EE025A16C22A02F`.
+Ambas APK se firmaron localmente con el keystore de depuración únicamente para
+QA; no se presentan como firma de distribución ni como release pública.
 
 La prueba unitaria específica `*LiveTvChannelQueryTest` volvió a pasar y el
 agrupado de fuentes por identidad (principal/IPTV/alternativas) está incluido
