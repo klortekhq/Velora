@@ -1,6 +1,6 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-25
+Updated: 2026-09-26
 
 ## Última verificación reproducible — build Android del `main` (2026-09-25)
 
@@ -109,6 +109,11 @@ El 21 de septiembre se volvió a ejecutar la batería completa `scripts/check-*.
 todos los contratos pasan, incluidos locales Android/Apple/web, Media3 por
 defecto, AVPlayer, autenticación Jellyfin, privacidad de logs, navegación de
 contenido, política de descargas solo móvil/tablet y metadatos Smart TV.
+
+El 26 de septiembre se repitió esa batería completa contra `main` y pasó sin
+fallos (`ALL_STATIC_CONTRACTS_PASSED`), incluyendo el nuevo contrato explícito
+`check-android-live-tv-grouping.mjs`. Este contrato comprueba la fila agrupada,
+el diálogo de fuentes y la reproducción de la fuente seleccionada.
 
 La prueba instrumentada se repitió en el emulador Android 15 el 22 de
 septiembre: perfil móvil `OK (6 tests)` y perfil TV `OK (6 tests)`, incluyendo
