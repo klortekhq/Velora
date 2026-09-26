@@ -35,6 +35,15 @@ y TV (`E73CFA1E195BA8715A1115110E8CFC19ABAA2FB4F1EEE2543CF0546542EEA9A9`).
 No se presentan como artefactos de release: la firma pública sigue siendo un
 requisito del workflow.
 
+En la misma auditoría se ejecutaron todos los contratos `scripts/check-*.mjs`
+sin fallos, incluidos `check-android-live-tv-grouping.mjs`, `check-android-player-controls.mjs`,
+`check-offline-surface-policy.mjs`, `check-release-workflows.mjs` y los contratos
+de identidad, seguridad, API Jellyfin y locales. `node web/scripts/test-platform.mjs`
+y `node web/scripts/build-web.mjs all` también terminaron correctamente: web,
+bundle Samsung y VIDAA quedaron preparados, y se generó el IPK de webOS.
+La firma Tizen y la validación física de Smart TV siguen siendo pendientes
+reales, no se presentan como certificadas.
+
 ## Última verificación reproducible — build Android del `main` (2026-09-26)
 
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
