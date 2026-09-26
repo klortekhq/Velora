@@ -1,13 +1,13 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-24
+Updated: 2026-09-25
 
-## Última verificación reproducible — build Android del `main` (2026-09-24)
+## Última verificación reproducible — build Android del `main` (2026-09-25)
 
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
 misma identidad se muestran como una sola fila y el selector conserva las
 fuentes disponibles (principal, IPTV u otras). Se verificó que el commit que
-lo introdujo (`19a324f2`) es antecesor del `main` remoto actual (`b300c342`).
+lo introdujo (`19a324f2`) es antecesor del `main` remoto actual (`fe55b29a`).
 En GitHub solo existe la rama `main`.
 
 Se generaron desde ese `main` las dos variantes Android con `BUILD SUCCESSFUL`:
@@ -59,7 +59,22 @@ y se validó con `scripts/check-android-splash-handoff.mjs`. En una instalación
 móvil limpia el emulador sigue registrando `Displayed ... +51s460ms` y hasta
 1515 frames omitidos antes del primer frame; el proceso permanece vivo y no
 registra ANR ni excepción fatal. Esto queda como regresión de rendimiento del
-APK debug/emulador, no como una certificación de fluidez de producción.
+entorno emulado, no como una certificación de fluidez de producción.
+
+También se compiló `app:assembleMobileRelease` con `BUILD SUCCESSFUL` y se
+instaló una copia release firmada localmente para separar el comportamiento del
+APK distribuible del debug. En el emulador la actividad llegó a primer plano en
+`+20s661ms`, con 32–128 frames omitidos durante la composición y sin `ANR in`,
+`FATAL EXCEPTION` ni error de WorkManager. Es una mejora frente a la medición
+debug, pero sigue siendo demasiado lenta para certificar la fluidez objetivo;
+la optimización del arranque permanece abierta. La huella de esa build de QA
+es `67F7EBF4D33F6EC1A6D18C316E31F3CF70FED36AAB0BFBF5639E806E5081BF85`.
+
+La prueba unitaria específica `*LiveTvChannelQueryTest` volvió a pasar: el
+agrupado de fuentes por identidad (principal/IPTV/alternativas) está incluido
+en la compilación Android actual y conserva la selección de fuente desde la
+fila agrupada. Falta únicamente validarlo contra un Jellyfin accesible con
+datos reales; no se presenta la build como validación E2E del servidor.
 
 El intento de smoke contra el Jellyfin LAN configurado para QA expiró por
 `TaskCanceledException` a los 15 segundos. Por tanto, no se certifican en esta
