@@ -99,6 +99,8 @@ jobs:
         run: node scripts/check-android-locales.mjs
       - name: Validate Android playback backend policy
         run: node scripts/check-android-playback-policy.mjs
+      - name: Validate Android player controls
+        run: node scripts/check-android-player-controls.mjs
       - name: Validate Android content navigation
         run: node scripts/check-android-content-navigation.mjs
       - name: Validate Android Live TV grouping
