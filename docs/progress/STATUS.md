@@ -136,6 +136,12 @@ resto del grafo de inicio antes de mostrar el formulario. Las variantes
 la mejora de tiempo debe volver a medirse cuando haya un emulador o dispositivo
 conectado.
 
+En esta continuación, `node web/scripts/test-platform.mjs` y
+`node web/scripts/build-web.mjs all` volvieron a pasar. El empaquetado produjo
+el IPK webOS `com.klortek.velora_1.4.0_all.ipk` y los bundles Samsung/Tizen y
+VIDAA; Tizen sigue siendo un bundle sin firma por falta de Tizen Studio y
+certificado, y VIDAA sigue requiriendo la publicación en su portal oficial.
+
 La prueba instrumentada se repitió en el emulador Android 15 el 22 de
 septiembre: perfil móvil `OK (6 tests)` y perfil TV `OK (6 tests)`, incluyendo
 la apertura táctil del selector de fuentes en móvil y la navegación por mando
