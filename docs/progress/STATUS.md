@@ -67,8 +67,9 @@ APK distribuible del debug. En el emulador la actividad llegó a primer plano en
 `+20s661ms`, con 32–128 frames omitidos durante la composición y sin `ANR in`,
 `FATAL EXCEPTION` ni error de WorkManager. Es una mejora frente a la medición
 debug, pero sigue siendo demasiado lenta para certificar la fluidez objetivo;
-la optimización del arranque permanece abierta. La huella de esa build de QA
-es `67F7EBF4D33F6EC1A6D18C316E31F3CF70FED36AAB0BFBF5639E806E5081BF85`.
+la optimización del arranque permanece abierta. La build móvil release de QA
+del commit `5c813bd0` tiene la huella
+`63CF99836BA1D99B2616AE01836343D434419E3781A7A7DA18F8168AA94FC037`.
 
 La prueba unitaria específica `*LiveTvChannelQueryTest` volvió a pasar y el
 agrupado de fuentes por identidad (principal/IPTV/alternativas) está incluido
