@@ -2,7 +2,7 @@
 
 Updated: 2026-09-26
 
-## Última verificación reproducible — build Android del `main` (2026-09-25)
+## Última verificación reproducible — build Android del `main` (2026-09-26)
 
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
 misma identidad se muestran como una sola fila y el selector conserva las
@@ -69,7 +69,7 @@ APK distribuible del debug. En el emulador la actividad llegó a primer plano en
 debug, pero sigue siendo demasiado lenta para certificar la fluidez objetivo;
 la optimización del arranque permanece abierta. La build móvil release de QA
 del commit `5c813bd0` tiene la huella
-`63CF99836BA1D99B2616AE01836343D434419E3781A7A7DA18F8168AA94FC037`.
+`394F74C1C736DBB92B89985D4BDE8B0F6AEB3F4AA69E65AB80D090F16FFD2D92`.
 La variante TV release del mismo estado también compila correctamente; su
 artefacto QA tiene la huella
 `9A7BBF723558C3AF90CF987C8A1ABB5A9D5A6C05D82FE6127EE025A16C22A02F`.
