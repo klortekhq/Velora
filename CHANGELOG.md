@@ -4,6 +4,20 @@ Los cambios relevantes de Velora se documentan en este archivo.
 
 ## 1.4.0
 
+- **Live TV:** los canales que comparten identidad visible o ID Jellyfin se
+  presentan como una sola fila y permiten escoger la fuente principal, IPTV u
+  otras alternativas antes de reproducir; la selección también se conserva
+  durante el cambio de canal.
+
+- **Reproductor Android:** los controles de relación de aspecto, pantalla
+  completa y ajustes unificados de audio/subtítulos quedan protegidos por
+  contratos de CI para evitar que vuelvan a convertirse en botones decorativos.
+
+- **Smart TV y web:** se verifican los tests y el empaquetado reproducible de
+  webOS, Samsung/Tizen y VIDAA; los artefactos que requieren SDK o firma se
+  identifican honestamente como bundles de preparación, no como paquetes de
+  tienda certificados.
+
 - **Internacionalización Android:** el estado de solicitudes de Jellyseerr ya no
   cae a “Request pending” en árabe, italiano, japonés, coreano, portugués,
   ruso, turco ni chino; el contrato de locales exige ahora esta traducción en
