@@ -192,13 +192,37 @@ fun JellyfinHomeScreen(
     val settings = remember { AppSettings(context) }
     var showServerEntry by remember { mutableStateOf(config.serverUrl.isBlank()) }
     var showLoginScreen by remember { mutableStateOf(!config.isConfigured() && !config.serverUrl.isBlank()) }
-    val scope = rememberCoroutineScope()
-    
-    // GL Pipeline warmup for NVIDIA Shield - prevents initial frame stutter and ANR
-    // Allows the GPU to warm up and UI to render before loading heavy data
-    LaunchedEffect(Unit) {
-        delay(100) // 100ms delay to prevent ANR and warm up GL pipeline
+
+    // Keep the unauthenticated gate before the home graph. The home screen
+    // owns a large number of repository, Live TV and artwork states; none of
+    // them are needed while the user is entering a server or signing in.
+    // Returning here avoids doing that work on the first frame and resumes the
+    // same composition once the gate succeeds.
+    if (showServerEntry) {
+        ServerEntryScreen(
+            onServerConnected = { serverUrl ->
+                config.serverUrl = serverUrl
+                showServerEntry = false
+                showLoginScreen = true
+            }
+        )
+        return
     }
+
+    if (showLoginScreen) {
+        JellyfinLoginScreen(
+            serverUrl = config.serverUrl,
+            onLoginSuccess = { showLoginScreen = false },
+            onCancel = {
+                config.serverUrl = ""
+                showLoginScreen = false
+                showServerEntry = true
+            }
+        )
+        return
+    }
+
+    val scope = rememberCoroutineScope()
     
     // Dark mode setting - read from settings and update when screen resumes
     var darkModeEnabled by remember { mutableStateOf(settings.darkModeEnabled) }
@@ -274,35 +298,6 @@ fun JellyfinHomeScreen(
             showLiveTv = runCatching { liveTvClient.getChannels().isNotEmpty() }.getOrDefault(false)
         }
     }
-    // Show server entry screen if server URL is not configured
-    if (showServerEntry) {
-        ServerEntryScreen(
-            onServerConnected = { serverUrl ->
-                config.serverUrl = serverUrl
-                showServerEntry = false
-                showLoginScreen = true
-            }
-        )
-        return
-    }
-    
-    // Show login screen if not authenticated but server is configured
-    if (showLoginScreen) {
-        JellyfinLoginScreen(
-            serverUrl = config.serverUrl,
-            onLoginSuccess = {
-                showLoginScreen = false
-            },
-            onCancel = {
-                // Clear server URL and go back to server entry screen
-                config.serverUrl = ""
-                showLoginScreen = false
-                showServerEntry = true
-            }
-        )
-        return
-    }
-    
     var continueWatchingDismissRevision by remember { mutableStateOf(0) }
     var continueWatchingActionItem by remember { mutableStateOf<JellyfinItem?>(null) }
     val continueWatchingItemsState = repository?.continueWatchingItems?.collectAsState(initial = emptyList())
