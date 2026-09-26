@@ -110,6 +110,7 @@ jobs:
         working-directory: ${{ github.workspace }}
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ github.sha }}
         run: bash scripts/ci/wait-for-android-release-assets.sh
       - name: Publicar paquete fuente Apple en la release común
         if: startsWith(env.RELEASE_TAG, 'v')

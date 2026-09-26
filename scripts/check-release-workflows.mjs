@@ -54,6 +54,8 @@ assert.match(apple, /wait-for-android-release-assets\.sh/, 'Apple: debe esperar 
 const releaseGate = fs.readFileSync('scripts/ci/wait-for-android-release-assets.sh', 'utf8');
 assert.match(releaseGate, /Velora-mobile-release\.apk/, 'Release gate: falta el APK móvil firmado');
 assert.match(releaseGate, /Velora-tv-release\.apk/, 'Release gate: falta el APK TV firmado');
+assert.match(releaseGate, /RELEASE_SHA/, 'Release gate: debe fijar el commit que produjo los APK');
+assert.match(releaseGate, /headSha/, 'Release gate: debe comprobar la ejecución Android del mismo commit');
 assert.match(releaseGate, /refusing a partial release/i, 'Release gate: debe rechazar releases parciales');
 
 console.log('Release workflow policy passed: Android, Apple y web publican en una release versionada común; sin APK unsigned ni comodines peligrosos.');
