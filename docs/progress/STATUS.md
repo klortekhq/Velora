@@ -14,11 +14,18 @@ Updated: 2026-09-26
 | LG/webOS | IPK generado; validación en dispositivo y publicación pendientes |
 | Hisense/VIDAA | Bundle HTML5 generado; validación/publicación mediante portal VIDAA pendientes |
 | Apple iOS/iPadOS/tvOS | Swift Package, shell y tests/contratos preparados; faltan build Xcode, apps firmadas y hardware |
-| Releases | Workflow preparado para una release común; firma pública y credenciales de publicación no disponibles en este entorno |
+| Releases | Workflow preparado para una release común; web y Apple esperan los dos APK Android firmados y rechazan releases parciales; firma pública y credenciales de publicación no disponibles en este entorno |
 | Ramas | Solo `main` en el remoto |
 
 La tabla distingue compilación de certificación: ningún paquete sin prueba de
 hardware o firma se presenta como listo para una tienda.
+
+El pipeline de publicación quedó protegido contra releases incompletas: Android
+es la puerta de publicación de los APK firmados (`Velora-mobile-release.apk` y
+`Velora-tv-release.apk`). Los workflows de web y Apple esperan esos artefactos
+antes de publicar y terminan con error si la ejecución Android falla o agota el
+tiempo de espera. `node scripts/check-release-workflows.mjs` pasa con esta
+política.
 
 ## Última verificación reproducible — build Android del `main` (2026-09-26)
 

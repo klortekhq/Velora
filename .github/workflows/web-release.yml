@@ -22,10 +22,12 @@ on:
 permissions:
   contents: write
 
-# Keep web validation independent from Android, but serialize publication
-# because both workflows add artifacts to the same tag release.
+# Keep web validation independent from Android. Android runs concurrently and
+# is the publication gate for the signed APKs used by the common release.
 concurrency:
-  group: velora-release-${{ github.ref }}
+  # Android must be able to run concurrently; publication waits for its signed
+  # APKs before this workflow touches the common release.
+  group: velora-release-web-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -126,6 +128,11 @@ jobs:
           for asset_id in $stale_ids; do
             gh api --method DELETE "repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"
           done
+      - name: Esperar a los APK Android firmados
+        if: startsWith(env.RELEASE_TAG, 'v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/ci/wait-for-android-release-assets.sh
       - name: Publicar paquetes web en la release
         if: startsWith(env.RELEASE_TAG, 'v')
         uses: softprops/action-gh-release@v2

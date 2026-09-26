@@ -21,7 +21,9 @@ permissions:
   contents: write
 
 concurrency:
-  group: velora-release-${{ github.ref }}
+  # Android must be able to run concurrently; publication waits for its signed
+  # APKs before this workflow touches the common release.
+  group: velora-release-apple-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -103,6 +105,12 @@ jobs:
             found { print }
           ' CHANGELOG.md > release-notes.md
           test -s release-notes.md || { echo "Falta una sección ## ${version} en CHANGELOG.md"; exit 1; }
+      - name: Esperar a los APK Android firmados
+        if: startsWith(env.RELEASE_TAG, 'v')
+        working-directory: ${{ github.workspace }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/ci/wait-for-android-release-assets.sh
       - name: Publicar paquete fuente Apple en la release común
         if: startsWith(env.RELEASE_TAG, 'v')
         uses: softprops/action-gh-release@v2

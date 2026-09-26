@@ -38,6 +38,7 @@ assert.match(web, /Velora-webos-\$\{version\}\.ipk/, 'Web: debe publicar el IPK 
 assert.match(web, /Velora-webos-bundle-\$\{version\}\.zip/, 'Web: falta el fallback bundle de webOS');
 assert.match(web, /Velora-vidaa-bundle-\$\{version\}\.zip/, 'Web: falta el bundle de VIDAA');
 assert.match(web, /SOURCE_DATE_EPOCH=\$\(git log -1 --format=%ct\)/, 'Web: la release debe fijar SOURCE_DATE_EPOCH al commit etiquetado');
+assert.match(web, /wait-for-android-release-assets\.sh/, 'Web: debe esperar a los APK Android firmados antes de publicar');
 
 const apple = fs.readFileSync('.github/workflows/apple.yml', 'utf8');
 assert.match(apple, /tags:\s*\['v\*\.\*\.0'\]/, 'Apple: falta el filtro de tags de versión');
@@ -48,5 +49,11 @@ assert.match(apple, /swift test/, 'Apple: falta la suite Swift');
 assert.match(apple, /softprops\/action-gh-release@v2/, 'Apple: falta la publicación en la release común');
 assert.match(apple, /Velora-Apple-source-\$\{version\}\.tar\.gz/, 'Apple: falta el paquete fuente verificable');
 assert.match(apple, /SHA256SUMS-apple\.txt/, 'Apple: falta el checksum del paquete');
+assert.match(apple, /wait-for-android-release-assets\.sh/, 'Apple: debe esperar a los APK Android firmados antes de publicar');
+
+const releaseGate = fs.readFileSync('scripts/ci/wait-for-android-release-assets.sh', 'utf8');
+assert.match(releaseGate, /Velora-mobile-release\.apk/, 'Release gate: falta el APK móvil firmado');
+assert.match(releaseGate, /Velora-tv-release\.apk/, 'Release gate: falta el APK TV firmado');
+assert.match(releaseGate, /refusing a partial release/i, 'Release gate: debe rechazar releases parciales');
 
 console.log('Release workflow policy passed: Android, Apple y web publican en una release versionada común; sin APK unsigned ni comodines peligrosos.');
