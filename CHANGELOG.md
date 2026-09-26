@@ -18,6 +18,10 @@ Los cambios relevantes de Velora se documentan en este archivo.
   identifican honestamente como bundles de preparación, no como paquetes de
   tienda certificados.
 
+- **Pipeline de releases:** web y Apple esperan a que Android publique los dos
+  APK firmados antes de tocar la release común; si Android falla o no termina,
+  se rechaza la publicación parcial.
+
 - **Internacionalización Android:** el estado de solicitudes de Jellyseerr ya no
   cae a “Request pending” en árabe, italiano, japonés, coreano, portugués,
   ruso, turco ni chino; el contrato de locales exige ahora esta traducción en
