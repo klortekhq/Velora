@@ -7,7 +7,7 @@ Updated: 2026-09-26
 El agrupado de Live TV está incluido en el `main` actual: los canales con la
 misma identidad se muestran como una sola fila y el selector conserva las
 fuentes disponibles (principal, IPTV u otras). Se verificó que el commit que
-lo introdujo (`19a324f2`) es antecesor del `main` remoto actual (`38f80d3e`).
+lo introdujo (`19a324f2`) es antecesor del `main` remoto actual (`9c999faf`).
 En GitHub solo existe la rama `main`.
 
 Se generaron desde ese `main` las dos variantes Android con `BUILD SUCCESSFUL`:
@@ -68,7 +68,7 @@ APK distribuible del debug. En el emulador la actividad llegó a primer plano en
 `FATAL EXCEPTION` ni error de WorkManager. Es una mejora frente a la medición
 debug, pero sigue siendo demasiado lenta para certificar la fluidez objetivo;
 la optimización del arranque permanece abierta. La build móvil release de QA
-del commit `5c813bd0` tiene la huella
+recién regenerada desde el `main` actual (`9c999faf`) tiene la huella
 `394F74C1C736DBB92B89985D4BDE8B0F6AEB3F4AA69E65AB80D090F16FFD2D92`.
 La variante TV release del mismo estado también compila correctamente; su
 artefacto QA tiene la huella
