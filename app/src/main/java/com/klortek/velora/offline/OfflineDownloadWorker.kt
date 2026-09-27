@@ -47,43 +47,59 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
             .coerceAtLeast(0L)
         val maxOfflineBytes = AppSettings(applicationContext).offlineMaxStorageBytes.takeIf { it > 0L }
         val requestUrl = OfflineDownloadRequest.url(config.serverUrl, itemId, sourceId, quality)
-        val connection = (URL(requestUrl).openConnection() as HttpURLConnection).apply {
-            requestMethod = "GET"
-            setRequestProperty(
-                "Authorization",
-                veloraMediaBrowserAuthorization(
-                    accessToken = config.accessToken,
-                    deviceName = veloraClientDeviceName(tvBuild = false),
-                    deviceId = veloraClientDeviceId(config.deviceId)
-                )
-            )
-            if (existingBytes > 0L) setRequestProperty("Range", "bytes=$existingBytes-")
-            connectTimeout = 20_000
-            readTimeout = 60_000
-            instanceFollowRedirects = true
-        }
+        var connection: HttpURLConnection? = null
         try {
-            connection.connect()
-            if (connection.responseCode == 401 || connection.responseCode == 403) return@withContext Result.failure()
-            if (connection.responseCode == 416) {
+            var currentUrl = URL(requestUrl)
+            var redirects = 0
+            while (true) {
+                connection?.disconnect()
+                connection = (currentUrl.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "GET"
+                    setRequestProperty(
+                        "Authorization",
+                        veloraMediaBrowserAuthorization(
+                            accessToken = config.accessToken,
+                            deviceName = veloraClientDeviceName(tvBuild = false),
+                            deviceId = veloraClientDeviceId(config.deviceId)
+                        )
+                    )
+                    if (existingBytes > 0L) setRequestProperty("Range", "bytes=$existingBytes-")
+                    connectTimeout = 20_000
+                    readTimeout = 60_000
+                    // Never forward Jellyfin credentials to an arbitrary redirect target.
+                    instanceFollowRedirects = false
+                }
+                connection!!.connect()
+                val responseCode = connection!!.responseCode
+                if (responseCode !in REDIRECT_CODES) break
+                val location = connection!!.getHeaderField("Location") ?: break
+                val nextUrl = runCatching { URL(currentUrl, location) }.getOrNull() ?: break
+                if (!isSafeRedirect(currentUrl, nextUrl) || redirects++ >= MAX_REDIRECTS) {
+                    return@withContext Result.failure(androidx.work.workDataOf(KEY_ERROR to KEY_UNSAFE_REDIRECT))
+                }
+                currentUrl = nextUrl
+            }
+            val activeConnection = connection ?: return@withContext Result.failure()
+            if (activeConnection.responseCode == 401 || activeConnection.responseCode == 403) return@withContext Result.failure()
+            if (activeConnection.responseCode == 416) {
                 temporary.delete()
                 return@withContext Result.retry()
             }
-            if (connection.responseCode !in 200..299) {
-                return@withContext if (isRetryableResponse(connection.responseCode)) {
+            if (activeConnection.responseCode !in 200..299) {
+                return@withContext if (isRetryableResponse(activeConnection.responseCode)) {
                     Result.retry()
                 } else {
                     Result.failure()
                 }
             }
-            val resumed = existingBytes > 0L && connection.responseCode == HttpURLConnection.HTTP_PARTIAL
+            val resumed = existingBytes > 0L && activeConnection.responseCode == HttpURLConnection.HTTP_PARTIAL
             if (!resumed && existingBytes > 0L) temporary.delete()
             val startingBytes = if (resumed) existingBytes else 0L
             val contentLength = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                connection.contentLengthLong
+                activeConnection.contentLengthLong
             } else {
                 @Suppress("DEPRECATION")
-                connection.contentLength.toLong()
+                activeConnection.contentLength.toLong()
             }
             val total = if (resumed) {
                 contentLength.takeIf { it >= 0L }?.plus(startingBytes) ?: -1L
@@ -91,7 +107,7 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
             var copied = startingBytes
             val startedAtNanos = System.nanoTime()
             setProgress(androidx.work.workDataOf(KEY_TOTAL_BYTES to total))
-            connection.inputStream.use { input ->
+            activeConnection.inputStream.use { input ->
                 FileOutputStream(temporary, resumed).use { output ->
                     val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
                     while (true) {
@@ -168,7 +184,7 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
             temporary.delete()
             Result.failure()
         } finally {
-            connection.disconnect()
+            connection?.disconnect()
         }
     }
 
@@ -184,7 +200,17 @@ class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : Cor
         const val KEY_SPEED_BPS = "speed_bps"
         const val KEY_ETA_SECONDS = "eta_seconds"
         const val KEY_ERROR = "error"
+        const val KEY_UNSAFE_REDIRECT = "unsafe_redirect"
+        private const val MAX_REDIRECTS = 3
+        private val REDIRECT_CODES = setOf(301, 302, 303, 307, 308)
         internal fun isRetryableResponse(code: Int): Boolean = code == 408 || code == 429 || code >= 500
+
+        internal fun isSafeRedirect(first: URL, second: URL): Boolean =
+            first.protocol.equals(second.protocol, ignoreCase = true) &&
+                first.host.equals(second.host, ignoreCase = true) &&
+                first.portOrDefault() == second.portOrDefault()
+
+        private fun URL.portOrDefault(): Int = if (port != -1) port else defaultPort
     }
 
     private fun stableFileKey(value: String): String = MessageDigest.getInstance("SHA-256")
