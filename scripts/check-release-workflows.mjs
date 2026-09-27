@@ -39,6 +39,7 @@ assert.match(web, /Velora-webos-bundle-\$\{version\}\.zip/, 'Web: falta el fallb
 assert.match(web, /Velora-vidaa-bundle-\$\{version\}\.zip/, 'Web: falta el bundle de VIDAA');
 assert.match(web, /SOURCE_DATE_EPOCH=\$\(git log -1 --format=%ct\)/, 'Web: la release debe fijar SOURCE_DATE_EPOCH al commit etiquetado');
 assert.match(web, /wait-for-android-release-assets\.sh/, 'Web: debe esperar a los APK Android firmados antes de publicar');
+assert.match(web, /RELEASE_SHA:\s*\$\{\{\s*github\.sha\s*\}\}/, 'Web: debe pasar el commit al gate Android');
 
 const apple = fs.readFileSync('.github/workflows/apple.yml', 'utf8');
 assert.match(apple, /tags:\s*\['v\*\.\*\.0'\]/, 'Apple: falta el filtro de tags de versión');
@@ -50,6 +51,7 @@ assert.match(apple, /softprops\/action-gh-release@v2/, 'Apple: falta la publicac
 assert.match(apple, /Velora-Apple-source-\$\{version\}\.tar\.gz/, 'Apple: falta el paquete fuente verificable');
 assert.match(apple, /SHA256SUMS-apple\.txt/, 'Apple: falta el checksum del paquete');
 assert.match(apple, /wait-for-android-release-assets\.sh/, 'Apple: debe esperar a los APK Android firmados antes de publicar');
+assert.match(apple, /RELEASE_SHA:\s*\$\{\{\s*github\.sha\s*\}\}/, 'Apple: debe pasar el commit al gate Android');
 
 const releaseGate = fs.readFileSync('scripts/ci/wait-for-android-release-assets.sh', 'utf8');
 assert.match(releaseGate, /Velora-mobile-release\.apk/, 'Release gate: falta el APK móvil firmado');
