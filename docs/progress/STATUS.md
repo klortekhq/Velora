@@ -21,6 +21,9 @@ Updated: 2026-09-27
 - El commit `8b9e8e9f` elimina el último placeholder hardcodeado detectado en
   Ajustes Android (`settings_url_placeholder`); el catálogo Android vuelve a
   pasar con 560 claves y la suite de contratos/web permanece en verde.
+- La ejecución local posterior generó 62 informes JUnit Android (móvil y TV),
+  con 280 tests y 0 fallos/errores. El SDK local mostró avisos de compatibilidad
+  XML/ruta; no se interpreta esa ejecución como certificación de hardware.
 
 ## Resumen operativo actual
 
