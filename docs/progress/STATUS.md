@@ -32,6 +32,10 @@ Updated: 2026-09-27
   dispositivos enumerados por USB y el endpoint Wi‑Fi histórico
   `192.168.31.251:40655` rechazó la conexión. No se presenta, por tanto, una
   prueba física del Fire TV ni una instalación automática en este entorno.
+- Seguridad offline (commit `a97e1c24`): el worker ya no sigue redirecciones
+  autenticadas automáticamente; limita los saltos y exige mismo protocolo,
+  host y puerto. `OfflineDownloadRedirectTest` pasa en las variantes móvil y
+  TV; también se revalidó el contrato de privacidad de logs.
 
 ## Resumen operativo actual
 
