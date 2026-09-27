@@ -28,7 +28,9 @@ permissions:
 
 concurrency:
   group: velora-android-qa-${{ inputs.release_tag || 'v1.4.0' }}
-  cancel-in-progress: false
+  # A QA run is reproducible from the commit that triggered it. Never let a
+  # stale Android SDK/Gradle runner block the next main commit indefinitely.
+  cancel-in-progress: true
 
 jobs:
   reconcile:
@@ -73,10 +75,15 @@ jobs:
             echo "$sdk_root/cmdline-tools/latest/bin"
             echo "$sdk_root/platform-tools"
           } >> "$GITHUB_PATH"
-          yes | "$sdk_root/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          timeout --foreground --signal=TERM --kill-after=30s 5m \
+            bash -c "yes | '$sdk_root/cmdline-tools/latest/bin/sdkmanager' --licenses >/dev/null" || {
+              echo "La aceptación de licencias Android agotó el tiempo; se continúa porque el runner puede tenerlas aceptadas." >&2
+            }
 
       - name: Instalar plataforma Android
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+        run: >-
+          timeout --foreground --signal=TERM --kill-after=30s 5m
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4

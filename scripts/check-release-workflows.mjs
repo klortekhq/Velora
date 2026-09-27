@@ -6,6 +6,11 @@ const workflows = [
   '.github/workflows/web-release.yml'
 ];
 
+const androidQa = fs.readFileSync('.github/workflows/android-qa-reconcile.yml', 'utf8');
+assert.match(androidQa, /cancel-in-progress:\s*true/, 'Android QA: una ejecución obsoleta no debe bloquear main');
+assert.match(androidQa, /timeout[^\n]*5m[\s\S]*sdkmanager.*--licenses/, 'Android QA: las licencias SDK deben tener timeout');
+assert.match(androidQa, /timeout[^\n]*5m\s+sdkmanager/, 'Android QA: la instalación del SDK debe tener timeout');
+
 for (const file of workflows) {
   const source = fs.readFileSync(file, 'utf8');
   assert.doesNotMatch(source, /^\s*pull_request\s*:/m, `${file}: no debe publicar desde pull requests`);
