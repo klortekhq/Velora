@@ -424,6 +424,7 @@ Bitte überprüfe:
   <string name="settings_jellyseerr_url_description">Gib die URL deines Jellyseerr-/Overseerr-Servers ein</string>
   <string name="settings_jellyseerr_url_dialog_description">Gib die vollständige URL deiner Jellyseerr-Instanz ein (zum Beispiel https://jellyseerr.example.test:5055)</string>
   <string name="settings_url">URL</string>
+  <string name="settings_url_placeholder">https://server:port</string>
   <string name="settings_set_url">URL festlegen</string>
   <string name="settings_local_email">Lokal/E-Mail</string>
   <string name="settings_jellyfin_username">Jellyfin-Benutzername</string>

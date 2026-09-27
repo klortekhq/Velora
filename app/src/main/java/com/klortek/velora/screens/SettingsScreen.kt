@@ -989,7 +989,7 @@ fun SettingsScreen(
                                                          value = urlInput,
                                                          onValueChange = { urlInput = it },
                                                          label = { Text(stringResource(com.klortek.velora.R.string.settings_url)) },
-                                                         placeholder = { Text("http://ip:port") },
+                                                         placeholder = { Text(stringResource(com.klortek.velora.R.string.settings_url_placeholder)) },
                                                          singleLine = true,
                                                          modifier = Modifier.fillMaxWidth(),
                                                          colors = TextFieldDefaults.colors(

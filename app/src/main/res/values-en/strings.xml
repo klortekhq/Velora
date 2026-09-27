@@ -450,6 +450,7 @@ Please verify:
   <string name="settings_jellyseerr_url_description">Enter the URL of your Jellyseerr/Overseerr server</string>
   <string name="settings_jellyseerr_url_dialog_description">Enter the full URL of your Jellyseerr instance (for example, https://jellyseerr.example.test:5055)</string>
   <string name="settings_url">URL</string>
+<string name="settings_url_placeholder">https://server:port</string>
   <string name="settings_set_url">Set URL</string>
   <string name="settings_local_email">Local/Email</string>
   <string name="settings_jellyfin_username">Jellyfin username</string>
