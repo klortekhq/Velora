@@ -1,6 +1,23 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-26
+Updated: 2026-09-27
+
+## Verificación más reciente — agrupado Live TV y CI (2026-09-27)
+
+- El workflow Android QA del commit `971f8346` terminó correctamente en
+  [GitHub Actions run 36318723047](https://github.com/klortekhq/Velora/actions/runs/36318723047)
+  en 8m 33s. La manifest pública de `v1.4.0` identifica ese commit y contiene
+  los APK móvil y TV con agrupado Live TV y sus SHA-256.
+- La pre-release `v1.4.0` fue reconciliada con los assets QA actuales:
+  [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-grouped-live-tv-20260910.apk),
+  [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-grouped-live-tv-20260910.apk) y
+  [manifest](https://github.com/klortekhq/Velora/releases/download/v1.4.0/android-qa-manifest-v1.4.0.json).
+  Siguen siendo APK debug de QA, no paquetes firmados de tienda.
+- El commit `46175dfe` moderniza las acciones de CI (`checkout` v6,
+  `setup-node` v5, `setup-java` v5 y `setup-gradle` v6) y registra `gradlew`
+  como ejecutable. Los contratos estáticos pasan; su workflow remoto queda
+  pendiente de completar en este commit.
+- La auditoría remota sigue confirmando exactamente una rama: `main`.
 
 ## Resumen operativo actual
 
