@@ -4,10 +4,10 @@ Updated: 2026-09-27
 
 ## Verificación más reciente — agrupado Live TV y CI (2026-09-27)
 
-- El workflow Android QA del commit `971f8346` terminó correctamente en
-  [GitHub Actions run 36318723047](https://github.com/klortekhq/Velora/actions/runs/36318723047)
-  en 8m 33s. La manifest pública de `v1.4.0` identifica ese commit y contiene
-  los APK móvil y TV con agrupado Live TV y sus SHA-256.
+- El workflow Android QA del commit `8b9e8e9f` terminó correctamente en
+  [GitHub Actions run 36319933530](https://github.com/klortekhq/Velora/actions/runs/36319933530)
+  en 13m 58s. Esa ejecución compiló y sincronizó la pre-release pública
+  `v1.4.0` desde un commit que ya contiene el agrupado Live TV.
 - La pre-release `v1.4.0` fue reconciliada con los assets QA actuales:
   [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-grouped-live-tv-20260910.apk),
   [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-grouped-live-tv-20260910.apk) y
@@ -22,8 +22,12 @@ Updated: 2026-09-27
   Ajustes Android (`settings_url_placeholder`); el catálogo Android vuelve a
   pasar con 560 claves y la suite de contratos/web permanece en verde.
 - La ejecución local posterior generó 62 informes JUnit Android (móvil y TV),
-  con 280 tests y 0 fallos/errores. El SDK local mostró avisos de compatibilidad
-  XML/ruta; no se interpreta esa ejecución como certificación de hardware.
+  con 280 tests y 0 fallos/errores. La compilación actual de `main` también
+  terminó correctamente con `assembleMobileDebug` y `assembleTvDebug`; las
+  APK locales resultantes tienen SHA-256 `6B2594C9867A4EC28F6DF3DFBCB6F528350662E2C2CC72DCF60AB7FA9FCD0A0B`
+  (móvil) y `0F83A7E1B47088DF65F88AB2DCC262AEC1622B572639D24AC8D1F314B5AE9E96`
+  (TV). El SDK local mostró avisos de compatibilidad XML/ruta; no se interpreta
+  esa ejecución como certificación de hardware.
 
 ## Resumen operativo actual
 
