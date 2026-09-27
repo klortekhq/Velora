@@ -2,6 +2,26 @@ import XCTest
 @testable import VeloraKit
 
 final class VeloraKitTests: XCTestCase {
+
+    func testOfflineRedirectRequiresSameOrigin() {
+        let original = URL(string: "https://jellyfin.example/Items/a/Download")!
+        XCTAssertTrue(VeloraOfflineTransferCoordinator.isSafeOfflineRedirect(
+            from: original,
+            to: URL(string: "https://JELLYFIN.example/Items/a/Download?redirected=1")!
+        ))
+        XCTAssertFalse(VeloraOfflineTransferCoordinator.isSafeOfflineRedirect(
+            from: original,
+            to: URL(string: "https://attacker.example/file")!
+        ))
+        XCTAssertFalse(VeloraOfflineTransferCoordinator.isSafeOfflineRedirect(
+            from: original,
+            to: URL(string: "http://jellyfin.example/file")!
+        ))
+        XCTAssertFalse(VeloraOfflineTransferCoordinator.isSafeOfflineRedirect(
+            from: original,
+            to: URL(string: "https://jellyfin.example:8443/file")!
+        ))
+    }
     func testExecutableFallbackUsesSharedKitLocalization() {
         XCTAssertFalse(VeloraLocalized.connectToJellyfin.isEmpty)
     }

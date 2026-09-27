@@ -145,6 +145,7 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
     private var resumeDataByTaskID: [Int: Data] = [:]
     private var pausedTaskIDs = Set<Int>()
     private var transferStartTimes: [Int: Date] = [:]
+    private var redirectCountsByTaskID: [Int: Int] = [:]
     public var onFinished: (@Sendable (VeloraOfflineTransferMetadata, URL, URLResponse) -> Void)?
     public var onFailed: (@Sendable (VeloraOfflineTransferMetadata, Error?) -> Void)?
     public var onProgress: (@Sendable (VeloraOfflineTransferProgress) -> Void)?
@@ -161,6 +162,7 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
         }
         lock.lock()
         transferStartTimes[task.taskIdentifier] = Date()
+        redirectCountsByTaskID[task.taskIdentifier] = 0
         lock.unlock()
         task.resume()
         return task.taskIdentifier
@@ -220,6 +222,7 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
         }
         lock.lock()
         transferStartTimes[task.taskIdentifier] = Date()
+        redirectCountsByTaskID[task.taskIdentifier] = 0
         lock.unlock()
         task.resume()
         return task.taskIdentifier
@@ -235,6 +238,58 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
     public func cancelAll() {
         session.getAllTasks { tasks in
             tasks.compactMap { $0 as? URLSessionDownloadTask }.forEach { $0.cancel() }
+        }
+    }
+
+    /// Keep Jellyfin credentials on the configured origin. URLSession's
+    /// default redirect behavior can otherwise carry the Authorization header
+    /// to a different host, scheme or port.
+    public func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        willPerformHTTPRedirection response: HTTPURLResponse,
+        newRequest request: URLRequest,
+        completionHandler: @escaping (URLRequest?) -> Void
+    ) {
+        guard let fromURL = task.currentRequest?.url ?? response.url,
+              let toURL = request.url,
+              Self.isSafeOfflineRedirect(from: fromURL, to: toURL) else {
+            completionHandler(nil)
+            return
+        }
+
+        lock.lock()
+        let nextCount = (redirectCountsByTaskID[task.taskIdentifier] ?? 0) + 1
+        redirectCountsByTaskID[task.taskIdentifier] = nextCount
+        lock.unlock()
+        guard nextCount <= Self.maxOfflineRedirects else {
+            completionHandler(nil)
+            return
+        }
+
+        var safeRequest = request
+        // Keep the original authenticated header only after same-origin
+        // validation; never synthesize credentials for a new origin.
+        if let authorization = task.currentRequest?.value(forHTTPHeaderField: "Authorization") {
+            safeRequest.setValue(authorization, forHTTPHeaderField: "Authorization")
+        }
+        completionHandler(safeRequest)
+    }
+
+    internal static let maxOfflineRedirects = 3
+
+    internal static func isSafeOfflineRedirect(from: URL, to: URL) -> Bool {
+        from.scheme?.caseInsensitiveCompare(to.scheme ?? "") == .orderedSame &&
+            from.host?.caseInsensitiveCompare(to.host ?? "") == .orderedSame &&
+            effectivePort(for: from) == effectivePort(for: to)
+    }
+
+    private static func effectivePort(for url: URL) -> Int? {
+        if let port = url.port { return port }
+        switch url.scheme?.lowercased() {
+        case "http": return 80
+        case "https": return 443
+        default: return nil
         }
     }
 
@@ -264,6 +319,10 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
             .appendingPathComponent("velora-offline-\(UUID().uuidString).download")
         do {
             try FileManager.default.moveItem(at: location, to: stagedURL)
+            lock.lock()
+            redirectCountsByTaskID.removeValue(forKey: downloadTask.taskIdentifier)
+            transferStartTimes.removeValue(forKey: downloadTask.taskIdentifier)
+            lock.unlock()
             onFinished?(metadata, stagedURL, response)
         } catch {
             onFailed?(metadata, error)
@@ -276,6 +335,7 @@ public final class VeloraOfflineTransferCoordinator: NSObject, URLSessionDownloa
         lock.lock()
         let wasPaused = pausedTaskIDs.contains(downloadTask.taskIdentifier)
         transferStartTimes.removeValue(forKey: downloadTask.taskIdentifier)
+        redirectCountsByTaskID.removeValue(forKey: downloadTask.taskIdentifier)
         lock.unlock()
         guard !wasPaused else { return }
         onFailed?(metadata, error)
