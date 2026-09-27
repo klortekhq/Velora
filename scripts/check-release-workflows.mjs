@@ -6,6 +6,28 @@ const workflows = [
   '.github/workflows/web-release.yml'
 ];
 
+const ciSources = [
+  '.github/workflows/android-qa-reconcile.yml',
+  '.github/workflows/android-release.yml',
+  '.github/workflows/apple.yml',
+  '.github/workflows/ci.yml',
+  '.github/workflows/web-release.yml'
+].map((file) => [file, fs.readFileSync(file, 'utf8')]);
+
+for (const [file, source] of ciSources) {
+  assert.match(source, /actions\/checkout@v6/, `${file}: debe usar checkout v6`);
+  assert.match(source, /actions\/setup-node@v5/, `${file}: debe usar setup-node v5`);
+}
+
+for (const file of ['.github/workflows/android-qa-reconcile.yml', '.github/workflows/android-release.yml', '.github/workflows/ci.yml']) {
+  const source = fs.readFileSync(file, 'utf8');
+  assert.match(source, /actions\/setup-java@v5/, `${file}: debe usar setup-java v5`);
+  assert.match(source, /gradle\/actions\/setup-gradle@v6/, `${file}: debe usar setup-gradle v6`);
+}
+
+// The executable bit is verified by Git in CI (Windows worktrees expose the
+// wrapper as 0644 even when the index correctly stores 100755).
+
 const androidQa = fs.readFileSync('.github/workflows/android-qa-reconcile.yml', 'utf8');
 assert.match(androidQa, /cancel-in-progress:\s*true/, 'Android QA: una ejecución obsoleta no debe bloquear main');
 assert.match(androidQa, /timeout[^\n]*5m[\s\S]*sdkmanager.*--licenses/, 'Android QA: las licencias SDK deben tener timeout');
