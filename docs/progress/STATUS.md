@@ -28,6 +28,10 @@ Updated: 2026-09-27
   (móvil) y `0F83A7E1B47088DF65F88AB2DCC262AEC1622B572639D24AC8D1F314B5AE9E96`
   (TV). El SDK local mostró avisos de compatibilidad XML/ruta; no se interpreta
   esa ejecución como certificación de hardware.
+- Revisión ADB posterior: se encontró `adb.exe` en el SDK local, pero no hay
+  dispositivos enumerados por USB y el endpoint Wi‑Fi histórico
+  `192.168.31.251:40655` rechazó la conexión. No se presenta, por tanto, una
+  prueba física del Fire TV ni una instalación automática en este entorno.
 
 ## Resumen operativo actual
 
