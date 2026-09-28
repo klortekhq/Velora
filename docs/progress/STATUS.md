@@ -2,20 +2,18 @@
 
 Updated: 2026-09-28
 
-## Verificación más reciente — CI remoto del último commit (2026-09-28)
+## Verificación más reciente — APK Android QA reconciliada (2026-09-28)
 
-- El commit actual de `main` es `6deedd3f` (`docs: record Jellyfin QA
-  authentication limitation`); la última modificación funcional auditada es `8202bd56` (`fix:
-  redact Android playback and discovery logs`). El APK publicado se compiló desde
-  `198f4c23`, el commit funcional/documental anterior a estas actualizaciones del
-  dashboard.
-- La reconciliación Android QA del commit funcional `198f4c23` terminó correctamente en
-  [GitHub Actions run 36390522361](https://github.com/klortekhq/Velora/actions/runs/36390522361)
-  en 8m 23s. Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y
-  publicó los APK/checksums/manifest actualizados en la pre-release `v1.4.0`.
-- Hashes publicados y verificados desde GitHub: móvil
-  `74A23E93DC67771CAF7EF53DFE9264CC6FBB1F064F0EF4DD4B9D9E1A9B28D1BE`; TV/Fire TV
-  `2ECBC2C72329D75BAD4AFAA8358FACA3C0A673014AEBAAD6A79AF8360A65BF21`.
+- El commit actual de `main` es `3848498f` (`docs: align dashboard with latest integration result`).
+- La reconciliación Android QA terminó correctamente en
+  [GitHub Actions run 36393036265](https://github.com/klortekhq/Velora/actions/runs/36393036265).
+  Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y actualizó la
+  pre-release `v1.4.0` desde el commit actual de `main`.
+- El manifiesto publicado confirma el agrupado Live TV en el APK actual:
+  [manifest](https://github.com/klortekhq/Velora/releases/download/v1.4.0/android-qa-manifest-v1.4.0.json).
+  Hashes verificados desde GitHub: móvil
+  `462945F813BA08CCA958971423957DB72E34AAB5993CEFB0FF871A541156157`; TV/Fire TV
+  `F19A1B43F5C267FA7564C466A86A079A84CC035BECDCAED7B4F36A73D58BAA00`.
 - La validación continua terminó correctamente en
   [GitHub Actions run 36322626276](https://github.com/klortekhq/Velora/actions/runs/36322626276).
 - La validación Apple terminó correctamente en
@@ -32,7 +30,7 @@ Updated: 2026-09-28
   `swift test` y sus entrypoints, y web terminó sus contratos y empaquetado
   responsive/Smart TV. No se registraron fallos en esta ejecución.
 - La última APK Android publicada en `v1.4.0` es la build QA agrupada de Live TV
-  del commit `198f4c23`; sigue siendo una build debug de QA, no un paquete firmado
+  del commit `3848498f`; sigue siendo una build debug de QA, no un paquete firmado
   para tienda.
 - Se ha recompilado localmente el estado actual con `assembleMobileDebug`,
   `assembleTvDebug`, `testMobileDebugUnitTest` y `testTvDebugUnitTest`; terminó
