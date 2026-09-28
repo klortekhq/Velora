@@ -19,6 +19,13 @@ class PlaybackDecisionEngineTest {
     }
 
     @Test
+    fun networkCapacityProbeKeepsUnknownValuesUnknownAndAddsSafetyMargin() {
+        assertEquals(null, AndroidPlaybackCapabilities.sustainableNetworkBitrateKbps(0))
+        assertEquals(null, AndroidPlaybackCapabilities.sustainableNetworkBitrateKbps(-1))
+        assertEquals(7_000, AndroidPlaybackCapabilities.sustainableNetworkBitrateKbps(10_000))
+    }
+
+    @Test
     fun originalKeepsCompatibleSourceOnDirectPlay() {
         assertEquals(
             PlaybackPath.DIRECT_PLAY,

@@ -1,6 +1,7 @@
 package com.klortek.velora.playback
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.hardware.display.DisplayManager
 import android.media.MediaCodecInfo
 import android.media.MediaCodecList
@@ -39,9 +40,26 @@ object AndroidPlaybackCapabilities {
             // codec list does not prove container or HDMI-path compatibility.
             containers = emptySet(),
             audioPassthrough = false,
-            audioPassthroughCodecs = emptySet()
+            audioPassthroughCodecs = emptySet(),
+            networkMaxBitrateKbps = detectNetworkMaxBitrateKbps(context)
         )
     }
+
+    /**
+     * Converts the platform's advertised downstream capacity into a deliberately
+     * conservative media budget. A missing/zero estimate remains unknown so the
+     * Original First policy is not replaced by a guess.
+     */
+    private fun detectNetworkMaxBitrateKbps(context: Context): Int? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return null
+        val connectivity = context.getSystemService(ConnectivityManager::class.java) ?: return null
+        val capabilities = connectivity.activeNetwork?.let(connectivity::getNetworkCapabilities) ?: return null
+        val advertised = capabilities.linkDownstreamBandwidthKbps
+        return sustainableNetworkBitrateKbps(advertised)
+    }
+
+    internal fun sustainableNetworkBitrateKbps(advertisedKbps: Int): Int? =
+        advertisedKbps.takeIf { it > 0 }?.let { (it * 0.7).toInt().coerceAtLeast(1) }
 
     private fun videoCodecForMime(mime: String): String? = when (mime.lowercase()) {
         "video/avc" -> "h264"
