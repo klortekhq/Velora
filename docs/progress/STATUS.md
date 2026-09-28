@@ -30,6 +30,11 @@ Updated: 2026-09-28
   incluido en esa compilación agrupa canales y abre el selector de fuentes.
 - La batería completa `scripts/check-*.mjs` y `node web/scripts/test-platform.mjs`
   volvió a terminar sin fallos después de la corrección Apple.
+- Se corrigieron dos logs Android que aún podían imprimir una URL de subtítulos
+  o una dirección de descubrimiento sin pasar por `SensitiveDataRedactor`.
+  `check-android-log-privacy.mjs`, `testMobileDebugUnitTest` y
+  `testTvDebugUnitTest` vuelven a pasar tras ese cambio. La compilación mostró
+  solo avisos de SDK/deprecaciones ya conocidos, no errores.
 
 ## Verificación más reciente — agrupado Live TV y CI (2026-09-27)
 

@@ -438,13 +438,19 @@ private fun connectToServer(
             }
             
             onStatusUpdate?.invoke(context.getString(com.klortek.velora.R.string.server_entry_discovering))
-            android.util.Log.d("ServerEntry", "Starting server discovery for: $address")
+            android.util.Log.d(
+                "ServerEntry",
+                "Starting server discovery for: ${com.klortek.velora.security.SensitiveDataRedactor.url(address)}"
+            )
             
             // Use smart discovery to find the server
             val discoveredUrl = ServerDiscovery.discoverServer(address)
             
             if (discoveredUrl != null) {
-                android.util.Log.i("ServerEntry", "✅ Found server at: $discoveredUrl")
+                android.util.Log.i(
+                    "ServerEntry",
+                    "✅ Found server at: ${com.klortek.velora.security.SensitiveDataRedactor.url(discoveredUrl)}"
+                )
                 
                 // Save the discovered URL (this is the working URL)
                 config.serverUrl = discoveredUrl
@@ -452,7 +458,10 @@ private fun connectToServer(
                 onStatusUpdate?.invoke(context.getString(com.klortek.velora.R.string.server_entry_connected))
                 onResult(true, "")
             } else {
-                android.util.Log.w("ServerEntry", "❌ Server discovery failed for: $address")
+                android.util.Log.w(
+                    "ServerEntry",
+                    "❌ Server discovery failed for: ${com.klortek.velora.security.SensitiveDataRedactor.url(address)}"
+                )
                 
                 onResult(false, context.getString(com.klortek.velora.R.string.server_entry_connect_error))
             }

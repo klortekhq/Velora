@@ -381,7 +381,10 @@ class JellyfinVideoPlayerActivity : ComponentActivity() {
                 // Final subtitle source: Cached Local > Remote Soft Sub > None
                 val subtitleSource = cachedSubtitlePath ?: extraSubtitleUrl
                 if (subtitleSource != null) {
-                    android.util.Log.d("VideoPlayer", "Using Subtitle Source: $subtitleSource")
+                    android.util.Log.d(
+                        "VideoPlayer",
+                        "Using Subtitle Source: ${if (cachedSubtitlePath != null) "cached" else SensitiveDataRedactor.url(subtitleSource)}"
+                    )
                 }
                 
                 val intent = MpvTvPlayerActivity.createIntent(
