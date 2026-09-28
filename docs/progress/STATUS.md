@@ -24,8 +24,8 @@ Updated: 2026-09-28
 - Se ha recompilado localmente el estado actual con `assembleMobileDebug`,
   `assembleTvDebug`, `testMobileDebugUnitTest` y `testTvDebugUnitTest`; terminó
   en `BUILD SUCCESSFUL`. Los APK debug resultantes son móvil
-  `A3A4649C7E121EC88BF855A0BE1360DC94ADD721F868B75225C64D7C25949694` y TV
-  `9F32C6381AA47E281E17274F3999FA5D405D53237AE3BBAAF4297F004553D769`.
+  `0E410BB968C1D89E7B7FF91B17E2391AA8F36DCFAEEFF6D2918239DB93B88280` y TV
+  `BEC7F1357575C98E98A760325799C11368DFB2F989391B7319B035DEBF16B210`.
   El contrato `check-android-live-tv-grouping.mjs` confirma que el código
   incluido en esa compilación agrupa canales y abre el selector de fuentes.
 - La batería completa `scripts/check-*.mjs` y `node web/scripts/test-platform.mjs`
