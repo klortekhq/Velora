@@ -4,9 +4,11 @@ Updated: 2026-09-28
 
 ## Verificación más reciente — CI remoto del último commit (2026-09-28)
 
-- El commit actual de `main` es `198f4c23` (`docs: record redacted Android QA APK
-  hashes`); la última modificación funcional auditada es `8202bd56` (`fix: redact
-  Android playback and discovery logs`).
+- El commit actual de `main` es `fa4afe5f` (`docs: record published Android QA
+  reconciliation`); la última modificación funcional auditada es `8202bd56` (`fix:
+  redact Android playback and discovery logs`). El APK publicado se compiló desde
+  `198f4c23`, el commit funcional/documental anterior a esta actualización del
+  dashboard.
 - La reconciliación Android QA de este commit terminó correctamente en
   [GitHub Actions run 36390522361](https://github.com/klortekhq/Velora/actions/runs/36390522361)
   en 8m 23s. Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y
