@@ -4,8 +4,8 @@ Updated: 2026-09-28
 
 ## Verificación más reciente — CI remoto del último commit (2026-09-28)
 
-- El commit actual de `main` es `6700a3eb` (`docs: clarify Android QA source
-  commit`); la última modificación funcional auditada es `8202bd56` (`fix:
+- El commit actual de `main` es `6deedd3f` (`docs: record Jellyfin QA
+  authentication limitation`); la última modificación funcional auditada es `8202bd56` (`fix:
   redact Android playback and discovery logs`). El APK publicado se compiló desde
   `198f4c23`, el commit funcional/documental anterior a estas actualizaciones del
   dashboard.
