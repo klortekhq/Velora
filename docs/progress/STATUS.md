@@ -4,9 +4,16 @@ Updated: 2026-09-28
 
 ## Verificación más reciente — CI remoto del último commit (2026-09-28)
 
-- El commit actual de `main` es `5ad0a30c` (`docs: record current Android QA build`); la
-  última modificación funcional auditada es `9222f02f` (`fix: protect Apple offline
-  redirect credentials`).
+- El commit actual de `main` es `198f4c23` (`docs: record redacted Android QA APK
+  hashes`); la última modificación funcional auditada es `8202bd56` (`fix: redact
+  Android playback and discovery logs`).
+- La reconciliación Android QA de este commit terminó correctamente en
+  [GitHub Actions run 36390522361](https://github.com/klortekhq/Velora/actions/runs/36390522361)
+  en 8m 23s. Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y
+  publicó los APK/checksums/manifest actualizados en la pre-release `v1.4.0`.
+- Hashes publicados y verificados desde GitHub: móvil
+  `74A23E93DC67771CAF7EF53DFE9264CC6FBB1F064F0EF4DD4B9D9E1A9B28D1BE`; TV/Fire TV
+  `2ECBC2C72329D75BAD4AFAA8358FACA3C0A673014AEBAAD6A79AF8360A65BF21`.
 - La validación continua terminó correctamente en
   [GitHub Actions run 36322626276](https://github.com/klortekhq/Velora/actions/runs/36322626276).
 - La validación Apple terminó correctamente en
@@ -17,10 +24,9 @@ Updated: 2026-09-28
 - La política de ramas terminó correctamente en
   [GitHub Actions run 36322626113](https://github.com/klortekhq/Velora/actions/runs/36322626113).
   La comprobación pública sigue mostrando exactamente una rama remota: `main`.
-- La última APK Android publicada en `v1.4.0` sigue siendo la build QA agrupada
-  de Live TV del commit `8b9e8e9f`; el commit `9222f02f` solo modifica Apple y
-  documentación/seguridad Apple, por lo que no se ha presentado como una nueva
-  APK Android sin una nueva compilación Android.
+- La última APK Android publicada en `v1.4.0` es la build QA agrupada de Live TV
+  del commit `198f4c23`; sigue siendo una build debug de QA, no un paquete firmado
+  para tienda.
 - Se ha recompilado localmente el estado actual con `assembleMobileDebug`,
   `assembleTvDebug`, `testMobileDebugUnitTest` y `testTvDebugUnitTest`; terminó
   en `BUILD SUCCESSFUL`. Los APK debug resultantes son móvil
