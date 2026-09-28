@@ -19,6 +19,15 @@ Updated: 2026-09-28
   de Live TV del commit `8b9e8e9f`; el commit `9222f02f` solo modifica Apple y
   documentación/seguridad Apple, por lo que no se ha presentado como una nueva
   APK Android sin una nueva compilación Android.
+- Se ha recompilado localmente el estado actual con `assembleMobileDebug`,
+  `assembleTvDebug`, `testMobileDebugUnitTest` y `testTvDebugUnitTest`; terminó
+  en `BUILD SUCCESSFUL`. Los APK debug resultantes son móvil
+  `A3A4649C7E121EC88BF855A0BE1360DC94ADD721F868B75225C64D7C25949694` y TV
+  `9F32C6381AA47E281E17274F3999FA5D405D53237AE3BBAAF4297F004553D769`.
+  El contrato `check-android-live-tv-grouping.mjs` confirma que el código
+  incluido en esa compilación agrupa canales y abre el selector de fuentes.
+- La batería completa `scripts/check-*.mjs` y `node web/scripts/test-platform.mjs`
+  volvió a terminar sin fallos después de la corrección Apple.
 
 ## Verificación más reciente — agrupado Live TV y CI (2026-09-27)
 
