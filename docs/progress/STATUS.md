@@ -4,7 +4,9 @@ Updated: 2026-09-28
 
 ## Verificación más reciente — CI remoto del último commit (2026-09-28)
 
-- El commit actual de `main` es `9222f02f` (`fix: protect Apple offline redirect credentials`).
+- El commit actual de `main` es `5ad0a30c` (`docs: record current Android QA build`); la
+  última modificación funcional auditada es `9222f02f` (`fix: protect Apple offline
+  redirect credentials`).
 - La validación continua terminó correctamente en
   [GitHub Actions run 36322626276](https://github.com/klortekhq/Velora/actions/runs/36322626276).
 - La validación Apple terminó correctamente en
