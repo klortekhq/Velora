@@ -2,20 +2,21 @@
 
 Updated: 2026-09-28
 
-## Verificación más reciente — APK Android QA reconciliada (2026-09-28)
+## Verificación más reciente — APK Android QA y motor de red (2026-09-28)
 
-- El commit actual de `main` es `5daa01a4` (`docs: record latest grouped Android QA release`); la
-  APK de `v1.4.0` se compiló deliberadamente desde su commit padre `3848498f`, que ya contenía
-  la implementación funcional del agrupado Live TV.
+- El commit actual de `main` es `2b3b8f71` (`fix: avoid remux when network needs a lower bitrate`).
+- El motor común Android/Apple acepta ahora un límite de bitrate de red opcional: cuando la
+  fuente original supera ese límite, no se elige Direct Play ni remux; se solicita una ruta que
+  pueda reducir el bitrate. Sin medición disponible, se conserva Original First.
 - La reconciliación Android QA terminó correctamente en
-  [GitHub Actions run 36393036265](https://github.com/klortekhq/Velora/actions/runs/36393036265).
+  [GitHub Actions run 36395720396](https://github.com/klortekhq/Velora/actions/runs/36395720396).
   Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y actualizó la
-  pre-release `v1.4.0` desde el commit actual de `main`.
+  pre-release `v1.4.0` desde `2b3b8f71`.
 - El manifiesto publicado confirma el agrupado Live TV en el APK actual:
   [manifest](https://github.com/klortekhq/Velora/releases/download/v1.4.0/android-qa-manifest-v1.4.0.json).
   Hashes verificados desde GitHub: móvil
-  `462945F813BA08CCA958971423957DB72E34AAB5993CEFB0FF871A541156157`; TV/Fire TV
-  `F19A1B43F5C267FA7564C466A86A079A84CC035BECDCAED7B4F36A73D58BAA00`.
+  `E3077CEC35B9B3BEACB6027B3B5ED6FD508F3D16CB9C787B4947C185825CC89C`; TV/Fire TV
+  `BCB55F9D42BA5616F8151D1537EAC2CEC5A4841E9DF3CEB6D9CBA66DD2B04CF8`.
 - La validación continua terminó correctamente en
   [GitHub Actions run 36322626276](https://github.com/klortekhq/Velora/actions/runs/36322626276).
 - La validación Apple terminó correctamente en
@@ -32,7 +33,7 @@ Updated: 2026-09-28
   `swift test` y sus entrypoints, y web terminó sus contratos y empaquetado
   responsive/Smart TV. No se registraron fallos en esta ejecución.
 - La última APK Android publicada en `v1.4.0` es la build QA agrupada de Live TV
-  del commit `3848498f`; sigue siendo una build debug de QA, no un paquete firmado
+  del commit `2b3b8f71`; sigue siendo una build debug de QA, no un paquete firmado
   para tienda.
 - Se ha recompilado localmente el estado actual con `assembleMobileDebug`,
   `assembleTvDebug`, `testMobileDebugUnitTest` y `testTvDebugUnitTest`; terminó
