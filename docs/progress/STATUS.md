@@ -4,19 +4,19 @@ Updated: 2026-09-28
 
 ## Verificación más reciente — APK Android QA y motor de red (2026-09-28)
 
-- El commit actual de `main` es `2b3b8f71` (`fix: avoid remux when network needs a lower bitrate`).
+- El commit actual de `main` es `f0cfb098` (`feat: feed Android network capacity into playback`).
 - El motor común Android/Apple acepta ahora un límite de bitrate de red opcional: cuando la
   fuente original supera ese límite, no se elige Direct Play ni remux; se solicita una ruta que
   pueda reducir el bitrate. Sin medición disponible, se conserva Original First.
 - La reconciliación Android QA terminó correctamente en
-  [GitHub Actions run 36395720396](https://github.com/klortekhq/Velora/actions/runs/36395720396).
+  [GitHub Actions run 36397646074](https://github.com/klortekhq/Velora/actions/runs/36397646074).
   Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y actualizó la
-  pre-release `v1.4.0` desde `2b3b8f71`.
+  pre-release `v1.4.0` desde `f0cfb098`.
 - El manifiesto publicado confirma el agrupado Live TV en el APK actual:
   [manifest](https://github.com/klortekhq/Velora/releases/download/v1.4.0/android-qa-manifest-v1.4.0.json).
   Hashes verificados desde GitHub: móvil
-  `E3077CEC35B9B3BEACB6027B3B5ED6FD508F3D16CB9C787B4947C185825CC89C`; TV/Fire TV
-  `BCB55F9D42BA5616F8151D1537EAC2CEC5A4841E9DF3CEB6D9CBA66DD2B04CF8`.
+  `BCA6683FF0640CB50CC6830542AD1E79595464FF6B8125306FE40688A1AD1452`; TV/Fire TV
+  `20CB6E09BE4E1F71F98286E41D3EE3D9E79C729A38D014BB536BFA54F60983AA`.
 - La validación continua terminó correctamente en
   [GitHub Actions run 36322626276](https://github.com/klortekhq/Velora/actions/runs/36322626276).
 - La validación Apple terminó correctamente en
@@ -33,7 +33,7 @@ Updated: 2026-09-28
   `swift test` y sus entrypoints, y web terminó sus contratos y empaquetado
   responsive/Smart TV. No se registraron fallos en esta ejecución.
 - La última APK Android publicada en `v1.4.0` es la build QA agrupada de Live TV
-  del commit `2b3b8f71`; sigue siendo una build debug de QA, no un paquete firmado
+  del commit `f0cfb098`; sigue siendo una build debug de QA, no un paquete firmado
   para tienda.
 - Se ha recompilado localmente el estado actual con `assembleMobileDebug`,
   `assembleTvDebug`, `testMobileDebugUnitTest` y `testTvDebugUnitTest`; terminó
