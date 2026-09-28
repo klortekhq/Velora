@@ -84,7 +84,7 @@ class PlaybackDecisionEngineTest {
         )
 
         assertEquals(PlaybackPath.TRANSCODE, decision.path)
-        assertEquals("source exceeds device or selected-quality capabilities", decision.reason)
+        assertEquals("source exceeds device, network or selected-quality capabilities", decision.reason)
     }
 
     @Test
@@ -183,5 +183,17 @@ class PlaybackDecisionEngineTest {
         val capabilities = capable.copy(directPlay = false)
 
         assertEquals(PlaybackPath.DIRECT_STREAM, PlaybackDecisionEngine.decide(source, capabilities))
+    }
+
+    @Test
+    fun measuredNetworkLimitDoesNotForceOriginalSourceThroughDirectPlay() {
+        val networkLimited = capable.copy(networkMaxBitrateKbps = 20_000)
+        val decision = PlaybackDecisionEngine.decideDetailed(
+            PlaybackSource(videoCodec = "hevc", audioCodec = "eac3", bitrateKbps = 40_000),
+            networkLimited
+        )
+
+        assertEquals(PlaybackPath.TRANSCODE, decision.path)
+        assertEquals("source exceeds device, network or selected-quality capabilities", decision.reason)
     }
 }

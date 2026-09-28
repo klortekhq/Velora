@@ -322,8 +322,10 @@ public struct PlaybackCapabilities: Sendable {
     public var maxWidth: Int?
     public var maxHeight: Int?
     public var maxFrameRate: Double?
+    /// Optional measured/estimated sustainable network bitrate in Kbps.
+    public var networkMaxBitrateKbps: Int?
 
-    public init(videoCodecs: Set<String> = [], audioCodecs: Set<String> = [], containers: Set<String> = [], hdrFormats: Set<String> = [], directPlay: Bool = true, directStream: Bool = true, remux: Bool = true, audioPassthroughCodecs: Set<String> = [], audioPassthrough: Bool = false, maxAudioChannels: Int? = nil, maxWidth: Int? = nil, maxHeight: Int? = nil, maxFrameRate: Double? = nil) {
+    public init(videoCodecs: Set<String> = [], audioCodecs: Set<String> = [], containers: Set<String> = [], hdrFormats: Set<String> = [], directPlay: Bool = true, directStream: Bool = true, remux: Bool = true, audioPassthroughCodecs: Set<String> = [], audioPassthrough: Bool = false, maxAudioChannels: Int? = nil, maxWidth: Int? = nil, maxHeight: Int? = nil, maxFrameRate: Double? = nil, networkMaxBitrateKbps: Int? = nil) {
         self.videoCodecs = Set(videoCodecs.map { PlaybackDecisionEngine.canonicalCapability($0) })
         self.audioCodecs = Set(audioCodecs.map { PlaybackDecisionEngine.canonicalCapability($0) })
         self.containers = Set(containers.map { PlaybackDecisionEngine.canonicalCapability($0) })
@@ -337,6 +339,7 @@ public struct PlaybackCapabilities: Sendable {
         self.maxWidth = maxWidth
         self.maxHeight = maxHeight
         self.maxFrameRate = maxFrameRate
+        self.networkMaxBitrateKbps = networkMaxBitrateKbps
     }
 }
 
@@ -402,6 +405,7 @@ public enum PlaybackDecisionEngine {
             && channelsFit(source, capabilities)
             && passthroughFits(source, capabilities)
             && dimensionsFit(source, capabilities)
+            && networkFits(source, capabilities)
             && presetFits(source, quality)
             && !source.subtitlesRequireTranscoding
         if capabilities.directPlay && directCompatible { return .directPlay }
@@ -428,6 +432,7 @@ public enum PlaybackDecisionEngine {
             && channelsFit(source, capabilities)
             && passthroughFits(source, capabilities)
             && dimensionsFit(source, capabilities)
+            && networkFits(source, capabilities)
             && presetFits(source, quality)
             && !source.subtitlesRequireTranscoding
     }
@@ -445,6 +450,11 @@ public enum PlaybackDecisionEngine {
         (capabilities.maxWidth == nil || source.width == nil || source.width! <= capabilities.maxWidth!)
             && (capabilities.maxHeight == nil || source.height == nil || source.height! <= capabilities.maxHeight!)
             && (capabilities.maxFrameRate == nil || source.frameRate == nil || source.frameRate! <= capabilities.maxFrameRate!)
+    }
+
+    private static func networkFits(_ source: PlaybackSource, _ capabilities: PlaybackCapabilities) -> Bool {
+        capabilities.networkMaxBitrateKbps == nil || source.bitrateKbps == nil ||
+            source.bitrateKbps! <= capabilities.networkMaxBitrateKbps!
     }
 
     private static func presetFits(_ source: PlaybackSource, _ quality: PlaybackQuality) -> Bool {

@@ -20,7 +20,9 @@ data class PlaybackCapabilities(
     val maxAudioChannels: Int? = null,
     val maxWidth: Int? = null,
     val maxHeight: Int? = null,
-    val maxFrameRate: Double? = null
+    val maxFrameRate: Double? = null,
+    /** Optional measured/estimated sustainable network bitrate in Kbps. */
+    val networkMaxBitrateKbps: Int? = null
 )
 
 data class PlaybackSource(
@@ -81,9 +83,11 @@ object PlaybackDecisionEngine {
         val deviceLimitsOk = (capabilities.maxWidth == null || source.width == null || source.width <= capabilities.maxWidth) &&
             (capabilities.maxHeight == null || source.height == null || source.height <= capabilities.maxHeight) &&
             (capabilities.maxFrameRate == null || source.frameRate == null || source.frameRate <= capabilities.maxFrameRate)
+        val networkLimitOk = capabilities.networkMaxBitrateKbps == null || source.bitrateKbps == null ||
+            source.bitrateKbps <= capabilities.networkMaxBitrateKbps
 
         val directCompatible = codecOk && audioOk && hdrOk && containerOk &&
-            channelsOk && passthroughAudioOk && deviceLimitsOk
+            channelsOk && passthroughAudioOk && deviceLimitsOk && networkLimitOk
 
         if (capabilities.directPlay && directCompatible && dimensionsOk && !source.subtitlesRequireTranscoding) {
             return PlaybackDecision(PlaybackPath.DIRECT_PLAY, "source and device support direct play")
@@ -101,7 +105,7 @@ object PlaybackDecisionEngine {
         }
 
         return if (capabilities.directStream || capabilities.directPlay) {
-            PlaybackDecision(PlaybackPath.TRANSCODE, "source exceeds device or selected-quality capabilities")
+            PlaybackDecision(PlaybackPath.TRANSCODE, "source exceeds device, network or selected-quality capabilities")
         } else {
             PlaybackDecision(PlaybackPath.FALLBACK, "no compatible native playback path")
         }

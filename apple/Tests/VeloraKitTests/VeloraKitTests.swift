@@ -238,6 +238,12 @@ final class VeloraKitTests: XCTestCase {
         XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directPlay)
     }
 
+    func testMeasuredNetworkLimitDoesNotForceOriginalSourceThroughDirectPlay() {
+        let caps = PlaybackCapabilities(videoCodecs: ["hevc"], audioCodecs: ["eac3"], containers: ["mkv"], networkMaxBitrateKbps: 20_000)
+        let source = PlaybackSource(container: "mkv", videoCodec: "hevc", audioCodec: "eac3", bitrateKbps: 40_000)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .transcode)
+    }
+
     func testSettingsClampMusicVolumeAndKeepAppleTVStreamingOnly() {
         let settings = VeloraSettings(themeMusicVolume: 4)
         XCTAssertEqual(settings.themeMusicVolume, 1)
