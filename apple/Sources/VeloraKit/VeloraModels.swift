@@ -415,6 +415,7 @@ public enum PlaybackDecisionEngine {
             && supported(source.videoCodec, by: capabilities.videoCodecs)
             && channelsFit(source, capabilities)
             && dimensionsFit(source, capabilities)
+            && networkFits(source, capabilities)
             && presetFits(source, quality)
         { return .remux }
         return capabilities.directStream || capabilities.directPlay ? .transcode : .fallback
