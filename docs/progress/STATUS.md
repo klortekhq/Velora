@@ -4,10 +4,10 @@ Updated: 2026-09-28
 
 ## Verificación más reciente — CI remoto del último commit (2026-09-28)
 
-- El commit actual de `main` es `fa4afe5f` (`docs: record published Android QA
-  reconciliation`); la última modificación funcional auditada es `8202bd56` (`fix:
+- El commit actual de `main` es `6700a3eb` (`docs: clarify Android QA source
+  commit`); la última modificación funcional auditada es `8202bd56` (`fix:
   redact Android playback and discovery logs`). El APK publicado se compiló desde
-  `198f4c23`, el commit funcional/documental anterior a esta actualización del
+  `198f4c23`, el commit funcional/documental anterior a estas actualizaciones del
   dashboard.
 - La reconciliación Android QA del commit funcional `198f4c23` terminó correctamente en
   [GitHub Actions run 36390522361](https://github.com/klortekhq/Velora/actions/runs/36390522361)
@@ -26,6 +26,11 @@ Updated: 2026-09-28
 - La política de ramas terminó correctamente en
   [GitHub Actions run 36322626113](https://github.com/klortekhq/Velora/actions/runs/36322626113).
   La comprobación pública sigue mostrando exactamente una rama remota: `main`.
+- La validación continua del dashboard actualizado terminó correctamente en
+  [GitHub Actions run 36391796886](https://github.com/klortekhq/Velora/actions/runs/36391796886):
+  Android completó tests y compilación de móvil/TV en 5m 51s, Apple completó
+  `swift test` y sus entrypoints, y web terminó sus contratos y empaquetado
+  responsive/Smart TV. No se registraron fallos en esta ejecución.
 - La última APK Android publicada en `v1.4.0` es la build QA agrupada de Live TV
   del commit `198f4c23`; sigue siendo una build debug de QA, no un paquete firmado
   para tienda.
