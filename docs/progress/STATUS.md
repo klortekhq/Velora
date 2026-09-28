@@ -4,7 +4,7 @@ Updated: 2026-09-28
 
 ## Verificación más reciente — Android QA, motor de red y Smart TV (2026-09-28)
 
-- El commit actual de `main` es `775f70ce` (`docs: record Android network capability release`); la
+- El commit actual de `main` es `d362a55a` (`docs: record current Android QA hashes`); la
   compilación Android QA publicada procede de su antecesor funcional `f0cfb098`.
 - El motor común Android/Apple acepta ahora un límite de bitrate de red opcional: cuando la
   fuente original supera ese límite, no se elige Direct Play ni remux; se solicita una ruta que
@@ -36,7 +36,7 @@ Updated: 2026-09-28
 - La última APK Android publicada en `v1.4.0` es la build QA agrupada de Live TV
   del commit `f0cfb098`; sigue siendo una build debug de QA, no un paquete firmado
   para tienda.
-- La compilación local reproducible del `main` actual (`221b6a5a`) terminó con
+- La compilación local reproducible del `main` actual (`d362a55a`) terminó con
   `BUILD SUCCESSFUL` para móvil y TV. Sus APK debug son, respectivamente,
   `F96B1C86C7DBB247F9A58BB81C5D09C299A88D908E840ED1DEB34D69DD573A8F` y
   `52D749BB96F97A645F3D691AE6E3E7775D054A73754DE875D6CD508CB7DE5597`.
