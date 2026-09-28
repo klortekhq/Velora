@@ -4,7 +4,9 @@ Updated: 2026-09-28
 
 ## Verificación más reciente — APK Android QA reconciliada (2026-09-28)
 
-- El commit actual de `main` es `3848498f` (`docs: align dashboard with latest integration result`).
+- El commit actual de `main` es `5daa01a4` (`docs: record latest grouped Android QA release`); la
+  APK de `v1.4.0` se compiló deliberadamente desde su commit padre `3848498f`, que ya contenía
+  la implementación funcional del agrupado Live TV.
 - La reconciliación Android QA terminó correctamente en
   [GitHub Actions run 36393036265](https://github.com/klortekhq/Velora/actions/runs/36393036265).
   Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y actualizó la
