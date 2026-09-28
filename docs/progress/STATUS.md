@@ -43,6 +43,12 @@ Updated: 2026-09-28
   incluido en esa compilación agrupa canales y abre el selector de fuentes.
 - La batería completa `scripts/check-*.mjs` y `node web/scripts/test-platform.mjs`
   volvió a terminar sin fallos después de la corrección Apple.
+- Smoke de integración contra el endpoint Jellyfin de QA (2026-09-28): el
+  endpoint público responde como Jellyfin Server `12.1.0`, pero la autenticación
+  fue rechazada con HTTP 401 por las credenciales disponibles en esta sesión.
+  Por ello no se presenta como validación real de catálogo, PlaybackInfo o Live
+  TV; el smoke se conserva listo para repetirlo cuando se renueven las
+  credenciales.
 - Se corrigieron dos logs Android que aún podían imprimir una URL de subtítulos
   o una dirección de descubrimiento sin pasar por `SensitiveDataRedactor`.
   `check-android-log-privacy.mjs`, `testMobileDebugUnitTest` y
