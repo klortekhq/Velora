@@ -36,6 +36,12 @@ Updated: 2026-09-28
 - La última APK Android publicada en `v1.4.0` es la build QA agrupada de Live TV
   del commit `f0cfb098`; sigue siendo una build debug de QA, no un paquete firmado
   para tienda.
+- La compilación local reproducible del `main` actual (`221b6a5a`) terminó con
+  `BUILD SUCCESSFUL` para móvil y TV. Sus APK debug son, respectivamente,
+  `F96B1C86C7DBB247F9A58BB81C5D09C299A88D908E840ED1DEB34D69DD573A8F` y
+  `52D749BB96F97A645F3D691AE6E3E7775D054A73754DE875D6CD508CB7DE5597`.
+  Son artefactos locales de QA; no sustituyen la APK publicada ni están
+  presentados como builds firmadas de tienda.
 - Se ha recompilado localmente el estado actual con `assembleMobileDebug`,
   `assembleTvDebug`, `testMobileDebugUnitTest` y `testTvDebugUnitTest`; terminó
   en `BUILD SUCCESSFUL`. Los APK debug resultantes son móvil
