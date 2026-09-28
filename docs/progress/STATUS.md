@@ -2,9 +2,10 @@
 
 Updated: 2026-09-28
 
-## Verificación más reciente — APK Android QA y motor de red (2026-09-28)
+## Verificación más reciente — Android QA, motor de red y Smart TV (2026-09-28)
 
-- El commit actual de `main` es `f0cfb098` (`feat: feed Android network capacity into playback`).
+- El commit actual de `main` es `775f70ce` (`docs: record Android network capability release`); la
+  compilación Android QA publicada procede de su antecesor funcional `f0cfb098`.
 - El motor común Android/Apple acepta ahora un límite de bitrate de red opcional: cuando la
   fuente original supera ese límite, no se elige Direct Play ni remux; se solicita una ruta que
   pueda reducir el bitrate. Sin medición disponible, se conserva Original First.
@@ -44,6 +45,14 @@ Updated: 2026-09-28
   incluido en esa compilación agrupa canales y abre el selector de fuentes.
 - La batería completa `scripts/check-*.mjs` y `node web/scripts/test-platform.mjs`
   volvió a terminar sin fallos después de la corrección Apple.
+- La validación Smart TV en salidas aisladas terminó correctamente: Tizen preparó el
+  bundle HTML5 y dejó `installablePackage: false` porque no hay Tizen Studio/CLI ni
+  perfil de firma en este equipo; webOS generó el IPK
+  `com.klortek.velora_1.4.0_all.ipk` mediante `ares-package`, con SHA-256
+  `BF7B0BD6ED0921C14F43EF89534A30902CE169992A342C79E01E670F58AB3194`; VIDAA
+  generó el bundle HTML5 `hosted-html5` para su portal. El contrato
+  `scripts/check-tv-packaging-output.mjs` pasó. Ninguno de estos resultados se
+  presenta como firma, publicación o validación en hardware real.
 - Smoke de integración contra el endpoint Jellyfin de QA (2026-09-28): el
   endpoint público responde como Jellyfin Server `12.1.0`, pero la autenticación
   fue rechazada con HTTP 401 por las credenciales disponibles en esta sesión.
