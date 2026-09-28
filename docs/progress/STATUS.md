@@ -9,7 +9,7 @@ Updated: 2026-09-28
   redact Android playback and discovery logs`). El APK publicado se compiló desde
   `198f4c23`, el commit funcional/documental anterior a esta actualización del
   dashboard.
-- La reconciliación Android QA de este commit terminó correctamente en
+- La reconciliación Android QA del commit funcional `198f4c23` terminó correctamente en
   [GitHub Actions run 36390522361](https://github.com/klortekhq/Velora/actions/runs/36390522361)
   en 8m 23s. Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y
   publicó los APK/checksums/manifest actualizados en la pre-release `v1.4.0`.
