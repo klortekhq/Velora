@@ -1,6 +1,24 @@
 # Estado verificable de Velora
 
-Updated: 2026-09-27
+Updated: 2026-09-28
+
+## Verificación más reciente — CI remoto del último commit (2026-09-28)
+
+- El commit actual de `main` es `9222f02f` (`fix: protect Apple offline redirect credentials`).
+- La validación continua terminó correctamente en
+  [GitHub Actions run 36322626276](https://github.com/klortekhq/Velora/actions/runs/36322626276).
+- La validación Apple terminó correctamente en
+  [GitHub Actions run 36322626154](https://github.com/klortekhq/Velora/actions/runs/36322626154).
+  El runner macOS verificó la corrección de redirecciones offline autenticadas
+  en el código Swift y sus tests. Xcode/Swift no están instalados localmente
+  en Windows; esta ejecución remota es la evidencia de compilación Apple.
+- La política de ramas terminó correctamente en
+  [GitHub Actions run 36322626113](https://github.com/klortekhq/Velora/actions/runs/36322626113).
+  La comprobación pública sigue mostrando exactamente una rama remota: `main`.
+- La última APK Android publicada en `v1.4.0` sigue siendo la build QA agrupada
+  de Live TV del commit `8b9e8e9f`; el commit `9222f02f` solo modifica Apple y
+  documentación/seguridad Apple, por lo que no se ha presentado como una nueva
+  APK Android sin una nueva compilación Android.
 
 ## Verificación más reciente — agrupado Live TV y CI (2026-09-27)
 
