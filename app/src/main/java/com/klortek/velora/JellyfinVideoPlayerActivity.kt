@@ -1,0 +1,554 @@
+package com.klortek.velora
+
+import android.content.Context
+import android.content.Intent
+import android.hardware.display.DisplayManager
+import android.os.Build
+import android.os.Bundle
+import android.view.Display
+import android.view.WindowManager
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import androidx.media3.common.util.UnstableApi
+import com.klortek.velora.jellyfin.JellyfinApiService
+import com.klortek.velora.jellyfin.JellyfinConfig
+import com.klortek.velora.jellyfin.JellyfinItem
+import com.klortek.velora.jellyfin.AppSettings
+import com.klortek.velora.player.mpv.MpvTvPlayerActivity
+import com.klortek.velora.player.mpv.MpvUrlBuilder
+import com.klortek.velora.playback.PlaybackBackend
+import com.klortek.velora.playback.PlaybackBackendPreferences
+import com.klortek.velora.playback.PlaybackBackendSelector
+import com.klortek.velora.playback.shouldUseLiveTvDirectSource
+import com.klortek.velora.screens.JellyfinVideoPlayerScreen
+import com.klortek.velora.security.SensitiveDataRedactor
+import com.klortek.velora.security.MediaUrlHeaderPolicy
+import com.klortek.velora.livetv.LiveTvChannelSourceState
+import com.klortek.velora.livetv.adjacentLiveTvChannelId
+import com.klortek.velora.livetv.selectLiveTvPlaybackSource
+import com.klortek.velora.platform.PlatformCapabilities
+import `is`.xyz.mpv.MPVLib
+
+@UnstableApi
+class JellyfinVideoPlayerActivity : ComponentActivity() {
+    
+    private fun isPackageInstalled(packageName: String): Boolean {
+        return try {
+            packageManager.getPackageInfo(packageName, 0)
+            true
+        } catch (e: android.content.pm.PackageManager.NameNotFoundException) {
+            false
+        }
+    }
+    
+    companion object {
+        private const val EXTRA_ITEM_ID = "item_id"
+        private const val EXTRA_ITEM_NAME = "item_name"
+        private const val EXTRA_RESUME_POSITION_MS = "resume_position_ms"
+        private const val EXTRA_SUBTITLE_STREAM_INDEX = "subtitle_stream_index"
+        private const val EXTRA_AUDIO_STREAM_INDEX = "audio_stream_index"
+        private const val EXTRA_IS_LIVE_TV = "is_live_tv"
+        private const val EXTRA_LOCAL_PATH = "local_path"
+        private const val EXTRA_EXTERNAL_MEDIA_URL = "external_media_url"
+        private const val EXTRA_LIVE_TV_MEDIA_SOURCE_ID = "live_tv_media_source_id"
+        private const val EXTRA_LIVE_TV_CHANNEL_MEDIA_SOURCE_IDS = "live_tv_channel_media_source_ids"
+
+        fun createIntent(
+            context: Context,
+            itemId: String,
+            resumePositionMs: Long = 0L,
+            subtitleStreamIndex: Int? = null,
+            audioStreamIndex: Int? = null,
+            itemName: String? = null,
+            isLiveTv: Boolean = false,
+            localPath: String? = null,
+            externalMediaUrl: String? = null,
+            liveTvMediaSourceId: String? = null,
+            liveTvChannelIds: List<String> = emptyList(),
+            liveTvChannelNames: List<String> = emptyList(),
+            liveTvChannelMediaSourceIds: List<String?> = emptyList()
+        ): Intent {
+            return Intent(context, JellyfinVideoPlayerActivity::class.java).apply {
+                putExtra(EXTRA_ITEM_ID, itemId)
+                putExtra(EXTRA_RESUME_POSITION_MS, resumePositionMs)
+                subtitleStreamIndex?.let { putExtra(EXTRA_SUBTITLE_STREAM_INDEX, it) }
+                audioStreamIndex?.let { putExtra(EXTRA_AUDIO_STREAM_INDEX, it) }
+                itemName?.let { putExtra(EXTRA_ITEM_NAME, it) }
+                putExtra(EXTRA_IS_LIVE_TV, isLiveTv)
+                liveTvMediaSourceId?.let { putExtra(EXTRA_LIVE_TV_MEDIA_SOURCE_ID, it) }
+                if (liveTvChannelIds.isNotEmpty()) {
+                    putStringArrayListExtra("live_tv_channel_ids", ArrayList(liveTvChannelIds))
+                    putStringArrayListExtra("live_tv_channel_names", ArrayList(liveTvChannelNames))
+                    putStringArrayListExtra(
+                        EXTRA_LIVE_TV_CHANNEL_MEDIA_SOURCE_IDS,
+                        ArrayList(liveTvChannelMediaSourceIds)
+                    )
+                }
+                localPath?.let { putExtra(EXTRA_LOCAL_PATH, it) }
+                externalMediaUrl?.let { putExtra(EXTRA_EXTERNAL_MEDIA_URL, it) }
+            }
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun enableHdrMode() {
+        // Enable hardware acceleration for HDR output (CRITICAL - must be first)
+        window.addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED)
+        // Keep screen on during playback
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        android.util.Log.d("VideoPlayer", "✅ Hardware acceleration enabled for HDR support")
+        
+        // Request HDR mode on the window (Android 13+)
+        // Note: preferredHdrModes is not available in public API, but setting the Surface format
+        // to RGBA_1010102 in BaseMPVView.surfaceCreated() is what actually enables HDR output.
+        // The hardware acceleration flag above ensures the window can support HDR rendering.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            android.util.Log.d("VideoPlayer", "✅ Android 13+ detected - HDR support enabled via Surface format (RGBA_1010102)")
+        }
+        
+        // Log HDR capabilities for debugging
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                val displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+                val display = displayManager.getDisplay(0)
+                if (display != null) {
+                    val hdrCapabilities = display.hdrCapabilities
+                    if (hdrCapabilities != null) {
+                        val supportedTypes = hdrCapabilities.supportedHdrTypes
+                        android.util.Log.d("VideoPlayer", "✅ Display HDR capabilities: ${supportedTypes?.joinToString()}")
+                        if (supportedTypes != null && supportedTypes.isNotEmpty()) {
+                            android.util.Log.d("VideoPlayer", "✅ Display supports HDR types: ${supportedTypes.contentToString()}")
+                        } else {
+                            android.util.Log.w("VideoPlayer", "⚠️ Display does not support HDR")
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                android.util.Log.w("VideoPlayer", "Could not check HDR capabilities", e)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enterImmersivePlayback()
+        
+        // Enable HDR mode BEFORE creating MPVView
+        // This ensures the window is configured for HDR output
+        enableHdrMode()
+        
+        // Request focus so key events work on Android TV
+        window.decorView.requestFocus()
+
+        val itemId = intent.getStringExtra(EXTRA_ITEM_ID) ?: return
+        val itemName = intent.getStringExtra(EXTRA_ITEM_NAME) ?: ""
+        val localPath = intent.getStringExtra(EXTRA_LOCAL_PATH)
+        val externalMediaUrl = intent.getStringExtra(EXTRA_EXTERNAL_MEDIA_URL)
+        val isLiveTv = intent.getBooleanExtra(EXTRA_IS_LIVE_TV, false)
+        val liveTvChannelIds = intent.getStringArrayListExtra("live_tv_channel_ids").orEmpty()
+        val liveTvChannelNames = intent.getStringArrayListExtra("live_tv_channel_names").orEmpty()
+        val liveTvSources = LiveTvChannelSourceState(
+            channelIds = liveTvChannelIds,
+            mediaSourceIds = intent.getStringArrayListExtra(EXTRA_LIVE_TV_CHANNEL_MEDIA_SOURCE_IDS).orEmpty()
+        ).apply {
+            intent.getStringExtra(EXTRA_LIVE_TV_MEDIA_SOURCE_ID)?.let { sourceId ->
+                rememberSource(itemId, sourceId)
+            }
+        }
+        val liveTvMediaSourceId = liveTvSources.mediaSourceIdFor(itemId)
+        val liveTvChannelIndex = liveTvChannelIds.indexOf(itemId)
+        val resumePositionMs = intent.getLongExtra(EXTRA_RESUME_POSITION_MS, 0L)
+        val subtitleStreamIndex = if (intent.hasExtra(EXTRA_SUBTITLE_STREAM_INDEX)) {
+            intent.getIntExtra(EXTRA_SUBTITLE_STREAM_INDEX, -1).takeIf { it >= 0 }
+        } else null
+        val audioStreamIndex = if (intent.hasExtra(EXTRA_AUDIO_STREAM_INDEX)) {
+            intent.getIntExtra(EXTRA_AUDIO_STREAM_INDEX, -1).takeIf { it >= 0 }
+        } else null
+
+        if (!localPath.isNullOrBlank()) {
+            // Offline playback is intentionally mobile/tablet-only. Keep this
+            // guard at the player boundary as well as in the download UI so a
+            // TV deep link or stale intent cannot bypass the capability layer.
+            if (!PlatformCapabilities.supportsOfflineDownloads) {
+                finish()
+                return
+            }
+            // Offline media belongs to Velora and must use the same default
+            // Media3/ExoPlayer path as streamed media. DownloadManager may
+            // return a content:// URI, which ExoPlayer resolves through the
+            // Android content resolver; MPV cannot be assumed to access it.
+            // Keep this route server-independent so downloaded media remains
+            // playable with no network or Jellyfin session.
+            val offlineApiService = JellyfinApiService(
+                baseUrl = "http://127.0.0.1",
+                accessToken = "",
+                userId = ""
+            )
+            setContent {
+                JellyfinAppTheme {
+                    JellyfinVideoPlayerScreen(
+                        item = JellyfinItem(Id = itemId, Name = itemName),
+                        apiService = offlineApiService,
+                        onBack = { finish() },
+                        resumePositionMs = resumePositionMs,
+                        subtitleStreamIndex = subtitleStreamIndex,
+                        audioStreamIndex = audioStreamIndex,
+                        initialMediaUrl = localPath,
+                        offlineOnly = true
+                    )
+                }
+            }
+            return
+        }
+
+        // Get Jellyfin configuration and API service
+        val config = JellyfinConfig(this)
+        val settings = AppSettings(this)
+        val apiService = if (config.isConfigured()) {
+            JellyfinApiService(
+                baseUrl = config.serverUrl,
+                accessToken = config.accessToken,
+                userId = config.userId,
+                config = config
+            )
+        } else {
+            finish()
+            return
+        }
+
+        if (!externalMediaUrl.isNullOrBlank()) {
+            // External previews (for example a resolved trailer stream) still
+            // use Velora's canonical Media3/ExoPlayer surface. They must not
+            // silently jump to MPV or an external player just because the
+            // source is not a Jellyfin item.
+            setContent {
+                JellyfinAppTheme {
+                    JellyfinVideoPlayerScreen(
+                        item = JellyfinItem(Id = itemId, Name = itemName),
+                        apiService = apiService,
+                        onBack = { finish() },
+                        resumePositionMs = resumePositionMs,
+                        subtitleStreamIndex = subtitleStreamIndex,
+                        audioStreamIndex = audioStreamIndex,
+                        initialMediaUrl = externalMediaUrl,
+                        offlineOnly = true
+                    )
+                }
+            }
+            return
+        }
+
+        // ExoPlayer is the default for every playback type, including Live TV.
+        // MPV is only selected explicitly in Ajustes. ExoPlayer's existing
+        // error listener can still hand off to MPV when fallbackToMpv is enabled.
+        val initialBackend = PlaybackBackendSelector.initialBackend(
+            PlaybackBackendPreferences(mpvExplicitlyEnabled = settings.isMpvEnabled)
+        )
+        if (initialBackend == PlaybackBackend.MPV) {
+            val serverUrl = config.serverUrl.removeSuffix("/")
+            val accessToken = config.accessToken ?: ""
+            
+            android.util.Log.d("VideoPlayer", "MPV player enabled - launching embedded MpvTvPlayerActivity")
+            
+            lifecycleScope.launch {
+                var finalUrl: String
+                var extraSubtitleUrl: String? = null
+                // Keep MPV on the same canonical Jellyfin authentication contract
+                // as the rest of the app. The token stays in request headers and
+                // never needs to be appended to a playback URL.
+                val headers = MpvUrlBuilder.buildHeaders(
+                    accessToken = accessToken,
+                    deviceId = config.deviceId
+                )
+
+                // Jellyfin must open an M3U/Acestream Live TV source first so
+                // it can return the MediaSourceId and LiveStreamId required by
+                // its master HLS manifest. VOD keeps the existing source flow.
+                val playbackInfo = apiService.getPlaybackInfo(
+                    itemId = itemId,
+                    mediaSourceId = if (isLiveTv) liveTvMediaSourceId else itemId,
+                    subtitleStreamIndex = subtitleStreamIndex,
+                    // Live TV requires Jellyfin to allocate/open the tuner or
+                    // M3U/Acestream stream before returning LiveStreamId.
+                    // VOD keeps the regular non-live request semantics.
+                    autoOpenLiveStream = isLiveTv
+                )
+                
+                val mediaSource = if (isLiveTv) {
+                    selectLiveTvPlaybackSource(
+                        sources = playbackInfo?.MediaSources.orEmpty(),
+                        requestedId = liveTvMediaSourceId
+                    )
+                } else {
+                    playbackInfo?.MediaSources?.firstOrNull()
+                }
+                val videoStream = mediaSource?.MediaStreams?.firstOrNull { it.Type == "Video" }
+                val videoCodec = videoStream?.Codec?.lowercase() ?: ""
+                
+                // Check user transcoding settings
+                val enforceTranscoding = settings.serverTranscodingEnabled && (
+                    (settings.transcodeAV1 && (videoCodec.contains("av1") || videoCodec.contains("av01"))) ||
+                    (settings.transcodeHEVC && (videoCodec.contains("hevc") || videoCodec.contains("h265")))
+                )
+
+                if (isLiveTv) {
+                    val liveSource = selectLiveTvPlaybackSource(
+                        sources = playbackInfo?.MediaSources.orEmpty(),
+                        requestedId = liveTvMediaSourceId
+                    )
+                    val liveMediaSourceId = liveSource?.Id
+                    val liveStreamId = liveSource?.LiveStreamId
+                    val directSource = liveSource?.Path
+                    if (liveSource?.SupportsDirectPlay == true && !directSource.isNullOrBlank() &&
+                        MediaUrlHeaderPolicy.isServerResource(serverUrl, directSource) &&
+                        (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
+                        finalUrl = MediaUrlHeaderPolicy.stripCredentialQueryParameters(directSource)
+                        android.util.Log.d("VideoPlayer", "Live TV Direct Play source selected from Jellyfin PlaybackInfo")
+                    } else if (!liveMediaSourceId.isNullOrBlank() && !liveStreamId.isNullOrBlank()) {
+                        finalUrl = MpvUrlBuilder.buildLiveTvStreamUrl(
+                            serverUrl = serverUrl,
+                            itemId = itemId,
+                            accessToken = accessToken,
+                            mediaSourceId = liveMediaSourceId,
+                            liveStreamId = liveStreamId
+                        )
+                        android.util.Log.d("VideoPlayer", "Live TV HLS fallback selected with PlaybackInfo stream identifiers")
+                    } else {
+                        android.util.Log.e("VideoPlayer", "Live TV PlaybackInfo did not return a playable source")
+                        runOnUiThread {
+                            android.widget.Toast.makeText(
+                                this@JellyfinVideoPlayerActivity,
+                                getString(R.string.live_tv_playback_error),
+                                android.widget.Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        finish()
+                        return@launch
+                    }
+                } else if (enforceTranscoding) {
+                    android.util.Log.d("VideoPlayer", "🔄 Enforcing Transcoding (Codec: $videoCodec)")
+                    // Use the TranscodingUrl from PlaybackInfo (includes burned subs if requested)
+                    val transcodeUrl = mediaSource?.TranscodingUrl
+                    if (transcodeUrl != null) {
+                         finalUrl = MediaUrlHeaderPolicy.stripCredentialQueryParameters(
+                             if (transcodeUrl.startsWith("http")) transcodeUrl else "$serverUrl$transcodeUrl"
+                         )
+                         android.util.Log.d("VideoPlayer", "🔥 Using Transcoding URL (Burn-in active): ${SensitiveDataRedactor.url(finalUrl)}")
+                    } else {
+                         android.util.Log.w("VideoPlayer", "⚠️ Transcoding enforced but no URL. Fallback to Direct.")
+                         finalUrl = MpvUrlBuilder.buildStreamUrl(serverUrl, itemId, accessToken)
+                    }
+                } else {
+                    // Direct Play Mode (Soft Subs)
+                    finalUrl = MpvUrlBuilder.buildStreamUrl(serverUrl, itemId, accessToken)
+                    android.util.Log.d("VideoPlayer", "▶️ Direct Play (Video Copy)")
+
+                    // If subtitles selected, handle as Soft Subs (copy/extract)
+                    if (subtitleStreamIndex != null) {
+                        // Find the selected stream to get details (Codec, etc)
+                        val subStream = mediaSource?.MediaStreams?.find { it.Type == "Subtitle" && it.Index == subtitleStreamIndex }
+                        if (subStream != null) {
+                             // Build soft subtitle URL
+                             // Use standard extraction URL which MPV can stream
+                             extraSubtitleUrl = apiService.buildJellyfinSubtitleUrl(
+                                 itemId = itemId,
+                                 mediaSourceId = itemId,
+                                 streamIndex = subtitleStreamIndex,
+                                 isExternal = subStream.IsExternal == true,
+                                 codec = subStream.Codec,
+                                 path = subStream.Path
+                             )
+                             android.util.Log.d("VideoPlayer", "📝 Soft Subtitle URL: ${SensitiveDataRedactor.url(extraSubtitleUrl)}")
+                        }
+                    }
+                }
+
+                android.util.Log.d("VideoPlayer", "MPV Final URL: ${SensitiveDataRedactor.url(finalUrl)}")
+                
+                // Prioritize local cached subtitle (if any), otherwise use remote soft-sub URL
+                val cachedSubtitlePath = subtitleStreamIndex?.let { streamIndex ->
+                    com.klortek.velora.player.SubtitleDownloader.getCachedSubtitle(itemId, streamIndex)
+                }
+                
+                // Final subtitle source: Cached Local > Remote Soft Sub > None
+                val subtitleSource = cachedSubtitlePath ?: extraSubtitleUrl
+                if (subtitleSource != null) {
+                    android.util.Log.d(
+                        "VideoPlayer",
+                        "Using Subtitle Source: ${if (cachedSubtitlePath != null) "cached" else SensitiveDataRedactor.url(subtitleSource)}"
+                    )
+                }
+                
+                val intent = MpvTvPlayerActivity.createIntent(
+                    context = this@JellyfinVideoPlayerActivity,
+                    url = finalUrl,
+                    headers = headers,
+                    title = itemName,
+                    itemId = itemId,
+                    resumePositionMs = resumePositionMs
+                )
+                
+                // Pass selected streams
+                subtitleStreamIndex?.let { intent.putExtra("subtitle_stream_index", it) }
+                audioStreamIndex?.let { intent.putExtra("audio_stream_index", it) }
+                
+                // Pass the subtitle file/URL
+                if (subtitleSource != null) {
+                    intent.putExtra("subtitle_file", subtitleSource)
+                }
+
+                startActivity(intent)
+                finish()
+            }
+            return
+        }
+
+        // Live TV uses Jellyfin's resolved PlaybackInfo source. Do not force MPV
+        // here: ExoPlayer handles Jellyfin HLS/TS streams natively and keeps the
+        // same track, subtitle and aspect-ratio controls as normal playback.
+        if (isLiveTv) {
+            lifecycleScope.launch {
+                val serverUrl = config.serverUrl.removeSuffix("/")
+                val accessToken = config.accessToken ?: ""
+                val playbackInfo = apiService.getPlaybackInfo(
+                    itemId = itemId,
+                    mediaSourceId = liveTvMediaSourceId,
+                    subtitleStreamIndex = subtitleStreamIndex,
+                    // Jellyfin must allocate the live source so M3U, tuner and
+                    // Acestream channels return a usable LiveStreamId.
+                    autoOpenLiveStream = true
+                )
+                val liveSource = selectLiveTvPlaybackSource(
+                    sources = playbackInfo?.MediaSources.orEmpty(),
+                    requestedId = liveTvMediaSourceId
+                )
+                val liveMediaSourceId = liveSource?.Id
+                val liveStreamId = liveSource?.LiveStreamId
+                val directSource = liveSource?.Path
+                // Jellyfin 12 deliberately remuxes M3U tuner sources instead
+                // of advertising them as direct-play. Keep the client
+                // defensive as well: an old/plugin-provided source must not
+                // bypass the allocated LiveStreamId, otherwise playback can
+                // fail or skip the server's M3U normalization.
+                val finalUrl = if (shouldUseLiveTvDirectSource(liveSource) &&
+                    !directSource.isNullOrBlank() &&
+                    MediaUrlHeaderPolicy.isServerResource(serverUrl, directSource) &&
+                    (directSource.startsWith("http://") || directSource.startsWith("https://"))) {
+                    MediaUrlHeaderPolicy.stripCredentialQueryParameters(directSource)
+                } else if (!liveMediaSourceId.isNullOrBlank() && !liveStreamId.isNullOrBlank()) {
+                    MpvUrlBuilder.buildLiveTvStreamUrlForExoPlayer(
+                        serverUrl = serverUrl,
+                        itemId = itemId,
+                        accessToken = accessToken,
+                        mediaSourceId = liveMediaSourceId,
+                        liveStreamId = liveStreamId
+                    )
+                } else {
+                    null
+                }
+
+                if (finalUrl == null) {
+                    android.util.Log.e("VideoPlayer", "Live TV PlaybackInfo did not return a playable ExoPlayer source")
+                    runOnUiThread {
+                        android.widget.Toast.makeText(
+                            this@JellyfinVideoPlayerActivity,
+                            getString(R.string.live_tv_playback_error),
+                            android.widget.Toast.LENGTH_LONG
+                        ).show()
+                        finish()
+                    }
+                    return@launch
+                }
+
+                android.util.Log.d("VideoPlayer", "ExoPlayer Live TV source selected: ${SensitiveDataRedactor.url(finalUrl)}")
+                setContent {
+                    JellyfinAppTheme {
+                        JellyfinVideoPlayerScreen(
+                            item = JellyfinItem(Id = itemId, Name = itemName),
+                            apiService = apiService,
+                            onBack = { finish() },
+                            resumePositionMs = resumePositionMs,
+                            subtitleStreamIndex = subtitleStreamIndex,
+                            audioStreamIndex = audioStreamIndex,
+                            initialMediaUrl = finalUrl,
+                            onLiveTvChannelChange = if (isLiveTv && liveTvChannelIndex >= 0 && liveTvChannelIds.size > 1) {
+                                { next ->
+                                    adjacentLiveTvChannelId(liveTvChannelIds, itemId, next)?.let { nextId ->
+                                        val nextIndex = liveTvChannelIds.indexOf(nextId)
+                                        startActivity(
+                                            createIntent(
+                                                context = this@JellyfinVideoPlayerActivity,
+                                                itemId = nextId,
+                                                itemName = liveTvChannelNames.getOrNull(nextIndex),
+                                                isLiveTv = true,
+                                                liveTvMediaSourceId = liveTvSources.mediaSourceIdFor(nextId),
+                                                liveTvChannelIds = liveTvChannelIds,
+                                                liveTvChannelNames = liveTvChannelNames,
+                                                liveTvChannelMediaSourceIds = liveTvSources.mediaSourceIdsFor(liveTvChannelIds)
+                                            )
+                                        )
+                                        finish()
+                                    }
+                                }
+                            } else null
+                        )
+                    }
+                }
+            }
+            return
+        }
+
+        // Create a minimal item object (details will be fetched in the screen)
+        val item = JellyfinItem(
+            Id = itemId,
+            Name = itemName
+        )
+
+        setContent {
+            JellyfinAppTheme {
+                // Use ExoPlayer with FFmpeg for comprehensive codec support
+                JellyfinVideoPlayerScreen(
+                    item = item,
+                    apiService = apiService,
+                    onBack = {
+                        finish()
+                    },
+                    resumePositionMs = resumePositionMs,
+                    subtitleStreamIndex = subtitleStreamIndex,
+                    audioStreamIndex = audioStreamIndex
+                )
+            }
+        }
+    }
+
+    private fun enterImmersivePlayback() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            hide(WindowInsetsCompat.Type.systemBars())
+            systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) enterImmersivePlayback()
+    }
+
+    // Removed onBackPressed - let Compose BackHandler handle it
+    // This prevents duplicate finish() calls
+    
+    // Removed onKeyDown - let PlayerView handle key events directly
+    // The PlayerView is configured to be focusable and will handle Enter/OK keys
+    // Intercepting here prevents the PlayerView from receiving the events
+}
+
+

@@ -1,0 +1,235 @@
+name: Publicar APK de Velora
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Etiqueta existente que se quiere reconstruir y publicar (por ejemplo, v1.4.0). Vacío = QA sin release.'
+        required: false
+        type: string
+        default: ''
+  push:
+    tags:
+      # Public releases are cut only at a meaningful minor/major boundary.
+      # Patch builds can still be produced with workflow_dispatch for QA.
+      - 'v*.*.0'
+
+permissions:
+  contents: write
+
+# Android and web publish into the same tag release. A repository-wide group
+# serializes both workflows so they cannot race while creating/updating it.
+concurrency:
+  group: velora-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    name: Compilar y publicar APK (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        target: [mobile, tv]
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.release_tag || github.ref }}
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Configurar Node.js para validar versiones
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+
+      - name: Validar coherencia de versiones
+        run: node scripts/check-version-consistency.mjs
+
+      - name: Validar etiqueta de release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.0$ ]] || {
+            echo "Las releases públicas solo pueden usar etiquetas vX.Y.0; se recibió $RELEASE_TAG."
+            exit 1
+          }
+
+      - name: Validar identidad pública
+        run: node scripts/check-public-identity.mjs
+
+      - name: Validar contrato de autenticación Jellyfin
+        run: node scripts/check-jellyfin-auth-contract.mjs
+
+      - name: Validar preferencias de reproducción
+        run: node scripts/check-playback-preferences-contract.mjs
+
+      - name: Validar diseño del inicio de sesión Android
+        run: node scripts/check-android-login-layout.mjs
+
+      - name: Validar agrupado Live TV Android
+        run: node scripts/check-android-live-tv-grouping.mjs
+      - name: Validar controles reales del reproductor Android
+        run: node scripts/check-android-player-controls.mjs
+
+      - name: Validar catálogos Android
+        run: node scripts/check-android-locales.mjs
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Dar permisos al wrapper
+        run: chmod +x ./gradlew
+
+      - name: Preparar firma de distribución si está configurada
+        shell: bash
+        env:
+          VELORA_ANDROID_KEYSTORE_BASE64: ${{ secrets.VELORA_ANDROID_KEYSTORE_BASE64 }}
+          VELORA_ANDROID_STORE_PASSWORD: ${{ secrets.VELORA_ANDROID_STORE_PASSWORD }}
+          VELORA_ANDROID_KEY_ALIAS: ${{ secrets.VELORA_ANDROID_KEY_ALIAS }}
+          VELORA_ANDROID_KEY_PASSWORD: ${{ secrets.VELORA_ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "${VELORA_ANDROID_KEYSTORE_BASE64:-}" ] || \
+             [ -z "${VELORA_ANDROID_STORE_PASSWORD:-}" ] || \
+             [ -z "${VELORA_ANDROID_KEY_ALIAS:-}" ] || \
+             [ -z "${VELORA_ANDROID_KEY_PASSWORD:-}" ]; then
+            if [[ "${RELEASE_TAG:-}" == v* ]]; then
+              echo "Una release etiquetada necesita los cuatro secretos de firma Android."
+              echo "Para QA sin publicar, ejecuta el workflow sin release_tag."
+              exit 1
+            fi
+            echo "No hay secretos completos de firma; se generará un APK unsigned de QA."
+            exit 0
+          fi
+          keystore="$RUNNER_TEMP/velora-release.jks"
+          printf '%s' "$VELORA_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$keystore"
+          test -s "$keystore"
+          echo "VELORA_RELEASE_STORE_FILE=$keystore" >> "$GITHUB_ENV"
+          echo "VELORA_RELEASE_STORE_PASSWORD=$VELORA_ANDROID_STORE_PASSWORD" >> "$GITHUB_ENV"
+          echo "VELORA_RELEASE_KEY_ALIAS=$VELORA_ANDROID_KEY_ALIAS" >> "$GITHUB_ENV"
+          echo "VELORA_RELEASE_KEY_PASSWORD=$VELORA_ANDROID_KEY_PASSWORD" >> "$GITHUB_ENV"
+
+      - name: Verificar versión de la etiqueta
+        if: startsWith(env.RELEASE_TAG, 'v')
+        shell: bash
+        run: |
+          tag_version="${RELEASE_TAG#v}"
+          android_version="$(awk -F'"' '/versionName =/{print $2; exit}' app/build.gradle.kts)"
+          web_version="$(node -p "require('./web/package.json').version")"
+          echo "Tag=\${tag_version} Android=\${android_version} Web=\${web_version}"
+          test "$tag_version" = "$android_version" || { echo "Tag $tag_version != Android $android_version"; exit 1; }
+          test "$tag_version" = "$web_version" || { echo "Tag $tag_version != web $web_version"; exit 1; }
+
+      - name: Compilar APK ${{ matrix.target }} debug y release
+        run: |
+          set -o errexit
+          cleanup_gradle() {
+            pkill -TERM -P "$BASHPID" 2>/dev/null || true
+          }
+          trap cleanup_gradle EXIT
+          signing_args=()
+          if [ -n "${VELORA_RELEASE_STORE_FILE:-}" ]; then
+            signing_args+=(
+              "-PveloraReleaseStoreFile=$VELORA_RELEASE_STORE_FILE"
+              "-PveloraReleaseStorePassword=$VELORA_RELEASE_STORE_PASSWORD"
+              "-PveloraReleaseKeyAlias=$VELORA_RELEASE_KEY_ALIAS"
+              "-PveloraReleaseKeyPassword=$VELORA_RELEASE_KEY_PASSWORD"
+            )
+          fi
+          timeout --foreground --signal=TERM --kill-after=30s 20m ./gradlew \
+            :app:test${{ matrix.target == 'mobile' && 'Mobile' || 'Tv' }}DebugUnitTest \
+            :app:assemble${{ matrix.target == 'mobile' && 'Mobile' || 'Tv' }}Debug \
+            :app:assemble${{ matrix.target == 'mobile' && 'Mobile' || 'Tv' }}Release \
+            "${signing_args[@]}" \
+            --no-daemon --max-workers=1 --console=plain --stacktrace
+
+      - name: Preparar nombres de APK
+        shell: bash
+        run: |
+          mkdir -p dist
+          release_apk="$(find app/build/outputs/apk/${{ matrix.target }}/release -maxdepth 1 -type f -name 'velora-release*.apk' -print -quit)"
+          test -n "$release_apk"
+          if [[ "${RELEASE_TAG:-}" == v* && "$release_apk" == *unsigned.apk ]]; then
+            echo "Una release pública no puede contener un APK unsigned."
+            exit 1
+          fi
+          if [ "${{ matrix.target }}" = "mobile" ]; then
+            cp app/build/outputs/apk/mobile/debug/app-mobile-debug.apk dist/Velora-mobile-debug.apk
+            if [[ "$release_apk" == *unsigned.apk ]]; then
+              cp "$release_apk" dist/Velora-mobile-release-unsigned.apk
+            else
+              cp "$release_apk" dist/Velora-mobile-release.apk
+            fi
+          else
+            cp app/build/outputs/apk/tv/debug/app-tv-debug.apk dist/Velora-tv-debug.apk
+            if [[ "$release_apk" == *unsigned.apk ]]; then
+              cp "$release_apk" dist/Velora-tv-release-unsigned.apk
+            else
+              cp "$release_apk" dist/Velora-tv-release.apk
+            fi
+          fi
+          sha256sum dist/*.apk > dist/SHA256SUMS-${{ matrix.target }}.txt
+
+      - name: Preparar changelog de la release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          awk -v section="## ${version}" '
+            $0 == section { found=1; print; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md || { echo "Falta una sección ## ${version} en CHANGELOG.md"; exit 1; }
+
+      - name: Limpiar APK Android obsoletos de la release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" 2>/dev/null || true)"
+          if [ -z "$release_json" ]; then
+            exit 0
+          fi
+          stale_ids="$(printf '%s' "$release_json" | jq -r '
+            (.assets // [])[]
+            | select(.name | test("^Velora-(mobile|tv)-.*\\.apk$|^SHA256SUMS-(mobile|tv)\\.txt$"))
+            | .id')"
+          for asset_id in $stale_ids; do
+            gh api --method DELETE "repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"
+          done
+
+      - name: Crear o actualizar release con los APK
+        if: startsWith(env.RELEASE_TAG, 'v')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          generate_release_notes: false
+          body_path: release-notes.md
+          files: |
+            dist/Velora-${{ matrix.target }}-release.apk
+            dist/SHA256SUMS-${{ matrix.target }}.txt
+
+      - name: Guardar APK debug para QA
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Velora-${{ matrix.target }}-debug-${{ github.run_id }}
+          path: dist/Velora-${{ matrix.target }}-debug.apk
+          if-no-files-found: error
+          retention-days: 14

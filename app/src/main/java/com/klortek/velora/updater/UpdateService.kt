@@ -1,0 +1,284 @@
+package com.klortek.velora.updater
+
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
+import androidx.core.content.FileProvider
+import com.google.gson.Gson
+import com.klortek.velora.security.SensitiveDataRedactor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URI
+import java.util.concurrent.TimeUnit
+
+/**
+ * Service for checking GitHub releases for app updates
+ */
+object UpdateService {
+    private const val TAG = "UpdateService"
+    
+    private const val GITHUB_USERNAME = "klortekhq"
+    private const val GITHUB_REPO = "Velora"
+    
+    private val apiUrl = "https://api.github.com/repos/$GITHUB_USERNAME/$GITHUB_REPO/releases/latest"
+    
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .build()
+    
+    private val downloadClient = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(300, TimeUnit.SECONDS) // 5 minutes for large APK files
+        .build()
+    
+    private val gson = Gson()
+
+    /** Select only the APK matching this installation's form factor. */
+    fun apkAssetFor(release: GitHubRelease, isTv: Boolean): GitHubAsset? {
+        // Public releases contain signed APKs. Unsigned artifacts are kept for
+        // CI QA only and must never be offered as an in-app update because an
+        // unsigned package cannot replace the installed signed application.
+        val expected = if (isTv) "Velora-tv-release.apk" else "Velora-mobile-release.apk"
+        return release.assets.firstOrNull { it.name == expected }
+    }
+
+    /** Accept only browser download URLs belonging to Velora's public releases. */
+    fun isTrustedReleaseAssetUrl(url: String): Boolean {
+        val parsed = runCatching { URI(url) }.getOrNull() ?: return false
+        return parsed.scheme.equals("https", ignoreCase = true) &&
+            parsed.host.equals("github.com", ignoreCase = true) &&
+            parsed.rawPath?.startsWith("/klortekhq/Velora/releases/download/") == true &&
+            parsed.userInfo == null
+    }
+    
+    /**
+     * Fetches the latest release from GitHub
+     * @return GitHubRelease if successful, null otherwise
+     */
+    suspend fun getLatestRelease(): GitHubRelease? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val request = Request.Builder()
+                    .url(apiUrl)
+                    .header("Accept", "application/vnd.github+json")
+                    .build()
+                
+                val response = client.newCall(request).execute()
+                val body = response.body?.string()
+                
+                if (!response.isSuccessful || body == null) {
+                    Log.w(TAG, "Failed to fetch latest release: ${response.code}")
+                    return@withContext null
+                }
+                
+                val release = gson.fromJson(body, GitHubRelease::class.java)
+                Log.d(TAG, "Fetched latest release: ${release.name} (${release.tagName})")
+                release
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching latest release: ${SensitiveDataRedactor.message(e)}")
+                null
+            }
+        }
+    }
+    
+    /**
+     * Parses version tag (e.g., "v1.0.5") to numeric version code (e.g., 10005)
+     */
+    fun parseVersion(tag: String): Int {
+        return try {
+            tag.replace("v", "", ignoreCase = true)
+                .split(".")
+                .map { it.toInt() }
+                .let { parts ->
+                    val major = parts.getOrNull(0) ?: 0
+                    val minor = parts.getOrNull(1) ?: 0
+                    val patch = parts.getOrNull(2) ?: 0
+                    major * 10000 + minor * 100 + patch
+                }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error parsing version tag: $tag: ${SensitiveDataRedactor.message(e)}")
+            0
+        }
+    }
+    
+    /**
+     * Checks if an update is available
+     * @param remoteVersionCode Version code from GitHub release
+     * @param localVersionCode Current app version code
+     * @return true if remote version is newer
+     */
+    fun updateAvailable(remoteVersionCode: Int, localVersionCode: Int, localVersionName: String? = null): Boolean {
+        // Android versionCode is monotonic for Play Store upgrades and does not
+        // necessarily share the same numeric shape as a semantic release tag.
+        // Prefer the installed versionName when it is available so 1.3.0 is
+        // not incorrectly treated as older than a historical 1.2.x code.
+        val comparableLocal = localVersionName?.let { parseVersion(it) } ?: localVersionCode
+        return remoteVersionCode > comparableLocal
+    }
+    
+    /**
+     * Downloads the APK file from the given URL and returns a File URI for installation
+     * @param context Application context
+     * @param apkUrl URL of the APK to download
+     * @param progressCallback Optional callback for download progress (0-100) - will be called on Main dispatcher
+     * @return File URI for the downloaded APK, or null if download failed
+     */
+    suspend fun downloadApk(
+        context: Context,
+        apkUrl: String,
+        progressCallback: ((Int) -> Unit)? = null
+    ): Uri? {
+        return withContext(Dispatchers.IO) {
+            try {
+                if (!isTrustedReleaseAssetUrl(apkUrl)) {
+                    Log.w(TAG, "Refusing APK download from an untrusted release URL")
+                    return@withContext null
+                }
+                Log.d(TAG, "Starting APK download from: ${SensitiveDataRedactor.url(apkUrl)}")
+                
+                // Create download directory in app-specific external storage
+                val downloadsDir = File(context.getExternalFilesDir(null), "updates")
+                if (!downloadsDir.exists()) {
+                    downloadsDir.mkdirs()
+                }
+                
+                // Create file name from URL
+                val fileName = "velora-update.apk"
+                val apkFile = File(downloadsDir, fileName)
+                
+                // Delete old file if exists
+                if (apkFile.exists()) {
+                    apkFile.delete()
+                }
+                
+                // Download the file
+                val request = Request.Builder()
+                    .url(apkUrl)
+                    .build()
+                
+                val response = downloadClient.newCall(request).execute()
+                
+                if (!response.isSuccessful) {
+                    Log.e(TAG, "Failed to download APK: ${response.code}")
+                    return@withContext null
+                }
+                
+                val body = response.body ?: run {
+                    Log.e(TAG, "Response body is null")
+                    return@withContext null
+                }
+                
+                val contentLength = body.contentLength()
+                val input = body.byteStream()
+                val output = FileOutputStream(apkFile)
+                
+                try {
+                    val buffer = ByteArray(8192)
+                    var totalBytesRead = 0L
+                    var bytesRead: Int
+                    var lastProgress = -1
+                    
+                    while (input.read(buffer).also { bytesRead = it } != -1) {
+                        output.write(buffer, 0, bytesRead)
+                        totalBytesRead += bytesRead
+                        
+                        // Update progress if callback provided (on main thread for UI updates)
+                        // Only update every 1% to avoid excessive callbacks
+                        if (contentLength > 0 && progressCallback != null) {
+                            val progress = ((totalBytesRead * 100) / contentLength).toInt()
+                            if (progress != lastProgress) {
+                                lastProgress = progress
+                                withContext(Dispatchers.Main) {
+                                    progressCallback(progress)
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Ensure 100% is reported
+                    if (contentLength > 0 && progressCallback != null) {
+                        withContext(Dispatchers.Main) {
+                            progressCallback(100)
+                        }
+                    }
+                    
+                    output.flush()
+                    Log.d(TAG, "APK downloaded successfully to app-managed storage")
+                    
+                    // Create FileProvider URI
+                    val fileUri = FileProvider.getUriForFile(
+                        context,
+                        "com.klortek.velora.fileprovider",
+                        apkFile
+                    )
+                    
+                    Log.d(TAG, "APK URI created in app-managed storage")
+                    fileUri
+                } finally {
+                    input.close()
+                    output.close()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error downloading APK: ${SensitiveDataRedactor.message(e)}")
+                null
+            }
+        }
+    }
+    
+    /**
+     * Attempts to install an APK file. First tries Intent.ACTION_VIEW, 
+     * then falls back to PackageInstaller if needed.
+     * @param context Application context
+     * @param apkUri URI of the APK file to install
+     * @return true if installation started successfully, false otherwise
+     */
+    suspend fun installApk(context: Context, apkUri: Uri): Boolean {
+        return withContext(Dispatchers.Main) {
+            try {
+                Log.d(TAG, "Attempting to launch installer with URI: $apkUri")
+                
+                // Grant URI permissions to allow the installer to access the file
+                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                context.grantUriPermission(
+                    "android",
+                    apkUri,
+                    flags
+                )
+                
+                // Try Intent.ACTION_VIEW with the APK file
+                val installIntent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(apkUri, "application/vnd.android.package-archive")
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    addFlags(flags)
+                }
+                
+                // Try to find any activity that can handle this
+                val resolveInfo = context.packageManager.queryIntentActivities(installIntent, 0)
+                if (resolveInfo.isNotEmpty()) {
+                    try {
+                        context.startActivity(installIntent)
+                        Log.d(TAG, "Installer activity launched successfully")
+                        return@withContext true
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to start installer activity: ${SensitiveDataRedactor.message(e)}")
+                    }
+                }
+                
+                Log.e(TAG, "No installer activity found")
+                false
+            } catch (e: Exception) {
+                Log.e(TAG, "Error launching installer: ${SensitiveDataRedactor.message(e)}")
+                false
+            }
+        }
+    }
+}

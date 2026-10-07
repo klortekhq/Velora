@@ -1,0 +1,238 @@
+package com.klortek.velora.jellyfin
+
+import android.content.Context
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+import com.klortek.velora.BuildConfig
+import com.klortek.velora.security.SensitiveDataRedactor
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
+class QuickConnectService(
+    private val baseUrl: String,
+    private val context: Context? = null
+) {
+    private val deviceName = if (BuildConfig.TV_BUILD) "Android TV" else "Android"
+
+    private val client = HttpClient(Android) {
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            })
+        }
+    }
+
+    private fun getDeviceId(): String {
+        return context?.let(DeviceIdentity::get) ?: "velora-android"
+    }
+
+    /** Release the client when the Quick Connect screen is disposed. */
+    fun close() {
+        client.close()
+    }
+
+    /**
+     * Normalize the base URL for API calls.
+     * The URL should already be properly formatted by ServerDiscovery,
+     * so we just clean it up (remove trailing slash).
+     * 
+     * DO NOT add default ports - reverse proxies use standard ports (80/443).
+     */
+    private fun normalizeBaseUrl(url: String): String {
+        return url.trim().removeSuffix("/")
+    }
+
+    private fun queryValue(value: String): String =
+        URLEncoder.encode(value, StandardCharsets.UTF_8.name())
+
+    suspend fun initiateQuickConnect(): QuickConnectResult<QuickConnectInitiateResponse> {
+        return try {
+            val normalizedBaseUrl = normalizeBaseUrl(baseUrl)
+            val url = if (normalizedBaseUrl.endsWith("/")) {
+                "${normalizedBaseUrl}QuickConnect/Initiate"
+            } else {
+                "$normalizedBaseUrl/QuickConnect/Initiate"
+            }
+            
+            val deviceId = getDeviceId()
+            val clientName = "Velora"
+            val clientVersion = BuildConfig.VERSION_NAME
+            
+            val mediaBrowserAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
+            
+            android.util.Log.d("QuickConnect", "Initiating QuickConnect at: ${SensitiveDataRedactor.url(url)}")
+            android.util.Log.d("QuickConnect", "Device identity prepared")
+            android.util.Log.d("QuickConnect", "Authentication header prepared")
+            
+            val response: HttpResponse = client.post(url) {
+                header(HttpHeaders.Accept, "application/json")
+                header(HttpHeaders.ContentType, "application/json")
+                header("Authorization", mediaBrowserAuthHeader)
+            }
+            
+            android.util.Log.d("QuickConnect", "Response status: ${response.status.value} (${response.status})")
+            
+            when (response.status) {
+                HttpStatusCode.OK, HttpStatusCode.Created -> {
+                    val result = response.body<QuickConnectInitiateResponse>()
+                    android.util.Log.d("QuickConnect", "QuickConnect initiated successfully")
+                    QuickConnectResult(result, null)
+                }
+                HttpStatusCode.Unauthorized -> {
+                    android.util.Log.w("QuickConnect", "QuickConnect returned 401 - may not be enabled on server")
+                    QuickConnectResult(null, QuickConnectError.Unavailable)
+                }
+                HttpStatusCode.NotFound -> {
+                    android.util.Log.w("QuickConnect", "QuickConnect endpoint not found (404) - server may not support it")
+                    QuickConnectResult(null, QuickConnectError.Unavailable)
+                }
+                else -> {
+                    android.util.Log.e("QuickConnect", "QuickConnect initiation failed. Status: ${response.status.value}")
+                    QuickConnectResult(null, QuickConnectError.ServerError("Server returned error: ${response.status.value}"))
+                }
+            }
+        } catch (e: java.net.ConnectException) {
+            android.util.Log.e("QuickConnect", "Connection exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
+            val errorMsg = "Cannot connect to server at $baseUrl. Please check:\n• Server is running\n• IP address is correct\n• TV is on the same network"
+            QuickConnectResult(null, QuickConnectError.ConnectionError(errorMsg))
+        } catch (e: java.net.SocketTimeoutException) {
+            android.util.Log.e("QuickConnect", "Timeout exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
+            QuickConnectResult(null, QuickConnectError.ConnectionError("Connection timeout. Server at $baseUrl is not responding."))
+        } catch (e: java.net.UnknownHostException) {
+            android.util.Log.e("QuickConnect", "Unknown host exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
+            QuickConnectResult(null, QuickConnectError.ConnectionError("Cannot resolve server address. Please check the IP address or hostname."))
+        } catch (e: Exception) {
+            android.util.Log.e("QuickConnect", "Exception initiating QuickConnect: ${SensitiveDataRedactor.message(e)}")
+            QuickConnectResult(null, QuickConnectError.UnknownError("Error: ${e::class.simpleName ?: e.javaClass.simpleName}"))
+        }
+    }
+
+    suspend fun getQuickConnectState(secret: String): QuickConnectStateResponse? {
+        return try {
+            val normalizedBaseUrl = normalizeBaseUrl(baseUrl)
+            val url = if (normalizedBaseUrl.endsWith("/")) {
+                "${normalizedBaseUrl}QuickConnect/Connect?secret=${queryValue(secret)}"
+            } else {
+                "$normalizedBaseUrl/QuickConnect/Connect?secret=${queryValue(secret)}"
+            }
+            
+            val deviceId = getDeviceId()
+            val clientName = "Velora"
+            val clientVersion = BuildConfig.VERSION_NAME
+            
+            val mediaBrowserAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
+            
+            android.util.Log.d("QuickConnect", "Polling QuickConnect state")
+            
+            val response = client.get(url) {
+                header(HttpHeaders.Accept, "application/json")
+                header("Authorization", mediaBrowserAuthHeader)
+            }
+            
+            android.util.Log.d("QuickConnect", "Response status: ${response.status.value} (${response.status})")
+            
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    val state = response.body<QuickConnectStateResponse>()
+                    android.util.Log.d("QuickConnect", "State response: Authenticated=${state.Authenticated}, HasAuth=${state.Authentication != null}")
+                    if (state.Authenticated && state.Authentication != null) {
+                         android.util.Log.d("QuickConnect", "QuickConnect authentication successful")
+                    }
+                    state
+                }
+                HttpStatusCode.Unauthorized -> {
+                    android.util.Log.w("QuickConnect", "QuickConnect returned 401 Unauthorized")
+                    null
+                }
+                HttpStatusCode.NotFound -> {
+                    android.util.Log.w("QuickConnect", "QuickConnect endpoint not found (404)")
+                    null
+                }
+                else -> {
+                    android.util.Log.e("QuickConnect", "QuickConnect state check failed. Status: ${response.status.value}")
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("QuickConnect", "Exception getting QuickConnect state: ${SensitiveDataRedactor.message(e)}")
+            null
+        }
+    }
+
+    suspend fun authenticateWithQuickConnect(secret: String): QuickConnectAuthenticationResponse? {
+        return try {
+            val normalizedBaseUrl = normalizeBaseUrl(baseUrl)
+            val url = if (normalizedBaseUrl.endsWith("/")) {
+                "${normalizedBaseUrl}Users/authenticateWithQuickConnect"
+            } else {
+                "$normalizedBaseUrl/Users/authenticateWithQuickConnect"
+            }
+            
+            val deviceId = getDeviceId()
+            val clientName = "Velora"
+            val clientVersion = BuildConfig.VERSION_NAME
+            
+            val mediaBrowserAuthHeader = "MediaBrowser Client=\"$clientName\", Device=\"$deviceName\", DeviceId=\"$deviceId\", Version=\"$clientVersion\""
+            
+            android.util.Log.d("QuickConnect", "Authenticating with QuickConnect at: ${SensitiveDataRedactor.url(url)}")
+            
+            val response: HttpResponse = client.post(url) {
+                header(HttpHeaders.Accept, "application/json")
+                header(HttpHeaders.ContentType, "application/json")
+                header("Authorization", mediaBrowserAuthHeader)
+                setBody(QuickConnectAuthenticateRequest(Secret = secret))
+            }
+            
+            android.util.Log.d("QuickConnect", "Auth response status: ${response.status.value} (${response.status})")
+            
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    val result = response.body<QuickConnectAuthenticationResponse>()
+                     android.util.Log.d("QuickConnect", "QuickConnect authentication successful")
+                    result
+                }
+                HttpStatusCode.Unauthorized -> {
+                    android.util.Log.w("QuickConnect", "QuickConnect authentication returned 401 Unauthorized")
+                    null
+                }
+                HttpStatusCode.NotFound -> {
+                    android.util.Log.w("QuickConnect", "QuickConnect authentication endpoint not found (404)")
+                    null
+                }
+                else -> {
+                    android.util.Log.e("QuickConnect", "QuickConnect authentication failed. Status: ${response.status.value}")
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("QuickConnect", "Exception authenticating with QuickConnect: ${SensitiveDataRedactor.message(e)}")
+            null
+        }
+    }
+
+}
+
+sealed class QuickConnectError {
+    data class ConnectionError(val message: String) : QuickConnectError()
+    data class ServerError(val message: String) : QuickConnectError()
+    object Unavailable : QuickConnectError()
+    data class UnknownError(val message: String) : QuickConnectError()
+}
+
+data class QuickConnectResult<T>(
+    val data: T?,
+    val error: QuickConnectError?
+)
+

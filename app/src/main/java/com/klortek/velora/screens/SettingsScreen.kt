@@ -1,0 +1,3279 @@
+package com.klortek.velora.screens
+
+import coil.annotation.ExperimentalCoilApi
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
+import androidx.tv.material3.IconButton
+import androidx.tv.material3.IconButtonDefaults
+import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material.icons.filled.Subtitles
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.VideoLibrary
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.tv.material3.Icon
+import androidx.tv.material3.ListItem
+import androidx.tv.material3.ListItemDefaults
+import androidx.tv.material3.ExperimentalTvMaterial3Api
+import com.klortek.velora.jellyfin.AppSettings
+import com.klortek.velora.jellyfin.PerformanceMode
+import com.klortek.velora.BuildConfig
+import coil.ImageLoader
+import coil.imageLoader
+import coil.disk.DiskCache
+import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
+import java.io.File
+import android.widget.Toast
+import com.klortek.velora.updater.GitHubRelease
+import com.klortek.velora.updater.UpdateService
+import android.content.pm.PackageManager
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.tv.material3.Surface
+import androidx.tv.material3.SurfaceDefaults
+import com.klortek.velora.jellyfin.JellyfinConfig
+import com.klortek.velora.i18n.VeloraLocale
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
+import android.content.Intent
+import android.net.Uri
+import androidx.core.content.FileProvider
+
+// Settings categories
+enum class SettingsCategory(val title: String, val icon: ImageVector) {
+    LANGUAGE("", Icons.Default.Language),
+    PLAYBACK("", Icons.Default.PlayArrow),
+    VIDEO("", Icons.Default.Videocam),
+    SUBTITLES("", Icons.Default.Subtitles),
+    APPEARANCE("", Icons.Default.Palette),
+    PERFORMANCE("", Icons.Default.Speed),
+    LIBRARY("", Icons.Default.VideoLibrary),
+    ADVANCED("", Icons.Default.Settings),
+    UPDATES("", Icons.Default.Update),
+    JELLYSEERR("", Icons.Default.Videocam),
+    TRAILERS("", Icons.Default.Movie),
+    ACCOUNT("", Icons.Default.Person),
+    ABOUT("", Icons.Default.Info),
+}
+
+private fun SettingsCategory.localizedTitle(context: android.content.Context): String = when (this) {
+    SettingsCategory.LANGUAGE -> context.getString(com.klortek.velora.R.string.settings_language_reproduction)
+    SettingsCategory.PLAYBACK -> context.getString(com.klortek.velora.R.string.settings_category_playback)
+    SettingsCategory.VIDEO -> context.getString(com.klortek.velora.R.string.settings_category_video)
+    SettingsCategory.SUBTITLES -> context.getString(com.klortek.velora.R.string.settings_category_subtitles)
+    SettingsCategory.APPEARANCE -> context.getString(com.klortek.velora.R.string.settings_category_appearance)
+    SettingsCategory.PERFORMANCE -> context.getString(com.klortek.velora.R.string.settings_category_performance)
+    SettingsCategory.LIBRARY -> context.getString(com.klortek.velora.R.string.settings_category_library)
+    SettingsCategory.ADVANCED -> context.getString(com.klortek.velora.R.string.settings_category_advanced)
+    SettingsCategory.UPDATES -> context.getString(com.klortek.velora.R.string.settings_category_updates)
+    SettingsCategory.ACCOUNT -> context.getString(com.klortek.velora.R.string.settings_category_account)
+    SettingsCategory.ABOUT -> context.getString(com.klortek.velora.R.string.settings_category_about)
+    SettingsCategory.JELLYSEERR -> context.getString(com.klortek.velora.R.string.settings_category_jellyseerr)
+    SettingsCategory.TRAILERS -> context.getString(com.klortek.velora.R.string.settings_category_trailers)
+}
+
+// Mobile settings uses an explicit high-contrast palette. The app theme is
+// TV-first and its inherited content colors are too subtle on phone panels.
+private val MobileSettingsBackground = Color(0xFF090B10)
+private val MobileSettingsText = Color(0xFFF5F7FA)
+private val MobileSettingsSecondaryText = Color(0xFFB8C1CC)
+private val MobileSettingsAccent = Color(0xFF25B8E8)
+private val MobileSettingsDivider = Color(0xFF303846)
+private val MobileSettingsSurface = Color(0xFF151A23)
+
+@OptIn(coil.annotation.ExperimentalCoilApi::class)
+@Composable
+fun SettingsScreen(
+    onBack: () -> Unit,
+    initialCategory: SettingsCategory = SettingsCategory.PLAYBACK
+) {
+    val context = LocalContext.current
+    val settings = remember { AppSettings(context) }
+    val scope = rememberCoroutineScope()
+    
+    // Selected category
+    var selectedCategory by remember { mutableStateOf(initialCategory) }
+    
+    // All settings state
+    var mpvEnabled by remember { mutableStateOf(settings.isMpvEnabled) }
+    
+    // MPV download state
+    var isMpvInstalled by remember { mutableStateOf(false) }
+    var isMpvDownloading by remember { mutableStateOf(false) }
+    var mpvDownloadProgress by remember { mutableStateOf(0f) }
+    var mpvInstallCheckTrigger by remember { mutableStateOf(0) }
+    
+    // Check if the optional external MPV player is installed.
+    LaunchedEffect(mpvInstallCheckTrigger) {
+        isMpvInstalled = try {
+            context.packageManager.getPackageInfo("is.xyz.mpv", 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+    }
+    
+    // Periodically check for MPV installation after download is triggered
+    LaunchedEffect(isMpvDownloading) {
+        if (!isMpvDownloading && mpvInstallCheckTrigger > 0) {
+            // After download completes, periodically check if MPV was installed
+            repeat(10) { // Check for up to ~30 seconds
+                kotlinx.coroutines.delay(3000)
+                val nowInstalled = try {
+                    context.packageManager.getPackageInfo("is.xyz.mpv", 0)
+                    true
+                } catch (e: PackageManager.NameNotFoundException) {
+                    false
+                }
+                if (nowInstalled) {
+                    isMpvInstalled = true
+                    return@LaunchedEffect
+                }
+            }
+        }
+    }
+    var debugOutlinesEnabled by remember { mutableStateOf(settings.showDebugOutlines) }
+    var preloadLibraryImagesEnabled by remember { mutableStateOf(settings.preloadLibraryImages) }
+    var cacheLibraryImagesEnabled by remember { mutableStateOf(settings.cacheLibraryImages) }
+    var useGlideEnabled by remember { mutableStateOf(settings.useGlide) }
+    var reducePosterResolutionEnabled by remember { mutableStateOf(settings.reducePosterResolution) }
+    var animatedPlayButtonEnabled by remember { mutableStateOf(settings.useAnimatedPlayButton) }
+    var use24HourTimeEnabled by remember { mutableStateOf(settings.use24HourTime) }
+    var longPressDurationSeconds by remember { mutableStateOf(settings.longPressDurationSeconds) }
+    var remoteThemingEnabled by remember { mutableStateOf(settings.remoteThemingEnabled) }
+    var darkModeEnabled by remember { mutableStateOf(settings.darkModeEnabled) }
+    var autoRefreshEnabled by remember { mutableStateOf(settings.autoRefreshEnabled) }
+    var autoRefreshIntervalMinutes by remember { mutableStateOf(settings.autoRefreshIntervalMinutes) }
+    var hideShowsWithZeroEpisodesEnabled by remember { mutableStateOf(settings.hideShowsWithZeroEpisodes) }
+    var minimalBuffer4KEnabled by remember { mutableStateOf(settings.minimalBuffer4K) }
+    var transcodeAacToAc3Enabled by remember { mutableStateOf(settings.transcodeAacToAc3) }
+    var useLogoForTitleEnabled by remember { mutableStateOf(settings.useLogoForTitle) }
+    var autoplayNextEpisodeEnabled by remember { mutableStateOf(settings.autoplayNextEpisode) }
+    var autoplayCountdownSeconds by remember { mutableStateOf(settings.autoplayCountdownSeconds) }
+    var autoUpdateEnabled by remember { mutableStateOf(settings.autoUpdateEnabled) }
+    var skipIntroEnabled by remember { mutableStateOf(settings.skipIntroEnabled) }
+    var skipCreditsEnabled by remember { mutableStateOf(settings.skipCreditsEnabled) }
+    
+    // Server-side transcoding settings
+    var serverTranscodingEnabled by remember { mutableStateOf(settings.serverTranscodingEnabled) }
+    var transcodeAV1 by remember { mutableStateOf(settings.transcodeAV1) }
+    var transcodeHEVC by remember { mutableStateOf(settings.transcodeHEVC) }
+    var transcodeTargetCodec by remember { mutableStateOf(settings.transcodeTargetCodec) }
+    var transcodeMaxBitrate by remember { mutableStateOf(settings.transcodeMaxBitrateMbps) }
+    var autoTranscodeOnError by remember { mutableStateOf(settings.autoTranscodeOnError) }
+    var fallbackToMpv by remember { mutableStateOf(settings.fallbackToMpv) }
+    
+    var showUpdateDialog by remember { mutableStateOf(false) }
+    var latestRelease by remember { mutableStateOf<com.klortek.velora.updater.GitHubRelease?>(null) }
+    var checkingForUpdates by remember { mutableStateOf(false) }
+    var updateCheckMessage by remember { mutableStateOf<String?>(null) }
+
+    // ExoPlayer Subtitle customization settings
+    var exoSubtitleTextSize by remember { mutableStateOf(settings.exoSubtitleTextSize) }
+    var exoSubtitleBgTransparent by remember { mutableStateOf(settings.exoSubtitleBgTransparent) }
+    var showExoSubtitleColorDialog by remember { mutableStateOf(false) }
+    var showExoSubtitleBgColorDialog by remember { mutableStateOf(false) }
+
+    // Video Enhancement settings
+    var useGLEnhancements by remember { mutableStateOf(settings.useGLEnhancements) }
+    var enableFakeHDR by remember { mutableStateOf(settings.enableFakeHDR) }
+    var enableSharpening by remember { mutableStateOf(settings.enableSharpening) }
+    var hdrStrength by remember { mutableStateOf(settings.hdrStrength) }
+    var sharpenStrength by remember { mutableStateOf(settings.sharpenStrength) }
+    var enableFrameBlending by remember { mutableStateOf(settings.enableFrameBlending) }
+    var frameBlendStrength by remember { mutableStateOf(settings.frameBlendStrength) }
+    
+    // UI Performance settings
+    var disableUIAnimations by remember { mutableStateOf(settings.disableUIAnimations) }
+    var useSimpleCards by remember { mutableStateOf(settings.useSimpleCards) }
+    var useGoogleTvCards by remember { mutableStateOf(settings.useGoogleTvCards) }
+    var lowPowerMode by remember { mutableStateOf(settings.lowPowerMode) }
+    var use4KBackgrounds by remember { mutableStateOf(settings.use4KBackgrounds) }
+    var performanceMode by remember { mutableStateOf(settings.performanceMode) }
+    var navigationSoundsEnabled by remember { mutableStateOf(settings.navigationSoundsEnabled) }
+    var themeMusicEnabled by remember { mutableStateOf(settings.themeMusicEnabled) }
+    var themeMusicVolume by remember { mutableStateOf(settings.themeMusicVolume) }
+    
+    // Logout confirmation
+    var showLogoutConfirmation by remember { mutableStateOf(false) }
+
+    // Global language and playback preference state. These are shared by mobile,
+    // tablet, Android TV and Fire TV because they live in AppSettings.
+    var languageTag by remember { mutableStateOf(settings.languageTag) }
+    var preferredAudioLanguage by remember { mutableStateOf(settings.preferredAudioLanguage) }
+    var subtitleMode by remember { mutableStateOf(settings.subtitleMode) }
+    var preferredSubtitleLanguage by remember { mutableStateOf(settings.preferredSubtitleLanguage) }
+
+    // Jellyseerr state variables
+    var jellyseerrUrl by remember { mutableStateOf(settings.jellyseerrUrl) }
+    var showJellyseerrUrlDialog by remember { mutableStateOf(false) }
+    var jellyseerrAuthType by remember { mutableStateOf(settings.jellyseerrAuthType) }
+    var jellyseerrApiKey by remember { mutableStateOf(settings.jellyseerrApiKey) }
+    var jellyseerrUsername by remember { mutableStateOf(settings.jellyseerrUsername) }
+    var jellyseerrSessionCookie by remember { mutableStateOf(settings.jellyseerrSessionCookie) }
+    var showJellyseerrApiKeyDialog by remember { mutableStateOf(false) }
+    var showJellyseerrLoginDialog by remember { mutableStateOf(false) }
+    var isLoggingIn by remember { mutableStateOf(false) }
+    var loginError by remember { mutableStateOf<String?>(null) }
+    var jellyseerrSearchEnabled by remember { mutableStateOf(settings.jellyseerrSearchEnabled) }
+    
+    // MPV Shader Profile
+    var mpvShaderProfile by remember { mutableStateOf(settings.mpvShaderProfile) }
+
+    // OpenSubtitles state variables
+    var openSubtitlesApiKey by remember { mutableStateOf(settings.openSubtitlesApiKey) }
+    var showApiKeyDialog by remember { mutableStateOf(false) }
+    var openSubtitlesUsername by remember { mutableStateOf(settings.openSubtitlesUsername) }
+    var openSubtitlesPassword by remember { mutableStateOf(settings.openSubtitlesPassword) }
+    var showLoginDialog by remember { mutableStateOf(false) }
+    var showClearSubtitlesDialog by remember { mutableStateOf(false) }
+    var rowCardCount by remember { mutableStateOf(settings.rowCardCount) }
+    var offlineMaxStorageBytes by remember { mutableStateOf(settings.offlineMaxStorageBytes) }
+    var offlineWifiOnly by remember { mutableStateOf(settings.offlineWifiOnly) }
+    var offlineChargingOnly by remember { mutableStateOf(settings.offlineChargingOnly) }
+    var smartDownloadsEnabled by remember { mutableStateOf(settings.smartDownloadsEnabled) }
+    var smartDownloadsRemoveWatched by remember { mutableStateOf(settings.smartDownloadsRemoveWatched) }
+    var smartDownloadsKeepUnwatchedEpisodes by remember { mutableStateOf(settings.smartDownloadsKeepUnwatchedEpisodes) }
+    var downloadedSubtitlesCount by remember { mutableStateOf(0) }
+
+    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    var activeCategoryDetail by remember { mutableStateOf<SettingsCategory?>(null) }
+
+    BackHandler(enabled = !isTv && activeCategoryDetail != null) {
+        activeCategoryDetail = null
+    }
+
+    @Composable
+    fun SettingsOptions(category: SettingsCategory) {
+        when (category) {
+                        SettingsCategory.LANGUAGE -> {
+                            val languageOptions = VeloraLocale.languages
+                            val audioOptions = listOf(VeloraLocale.AUTO) + languageOptions.filter { it.tag != VeloraLocale.AUTO }.map { it.tag }
+                            val subtitleLanguageOptions = listOf(VeloraLocale.AUTO) + languageOptions.filter { it.tag != VeloraLocale.AUTO }.map { it.tag }
+                            val languageLabel = languageOptions.firstOrNull { it.tag == languageTag }?.nativeLabel ?: languageTag
+                            val audioLabel = if (preferredAudioLanguage == VeloraLocale.AUTO) {
+                                context.getString(com.klortek.velora.R.string.settings_audio_auto)
+                            } else {
+                                languageOptions.firstOrNull { it.tag == preferredAudioLanguage }?.nativeLabel ?: preferredAudioLanguage
+                            }
+                            val subtitleLanguageLabel = if (preferredSubtitleLanguage == VeloraLocale.AUTO) {
+                                context.getString(com.klortek.velora.R.string.settings_audio_auto)
+                            } else {
+                                languageOptions.firstOrNull { it.tag == preferredSubtitleLanguage }?.nativeLabel ?: preferredSubtitleLanguage
+                            }
+                            val subtitleModeLabel = when (subtitleMode) {
+                                VeloraLocale.SUBTITLES_PREFERRED -> context.getString(com.klortek.velora.R.string.settings_subtitle_preferred)
+                                VeloraLocale.SUBTITLES_FORCED -> context.getString(com.klortek.velora.R.string.settings_subtitle_forced)
+                                VeloraLocale.SUBTITLES_AUTO -> context.getString(com.klortek.velora.R.string.settings_subtitle_auto)
+                                else -> context.getString(com.klortek.velora.R.string.settings_subtitle_off)
+                            }
+
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_app_language),
+                                description = context.getString(com.klortek.velora.R.string.settings_app_language_description),
+                                currentValue = languageLabel,
+                                onCycle = {
+                                    val currentIndex = languageOptions.indexOfFirst { it.tag == languageTag }.coerceAtLeast(0)
+                                    val next = languageOptions[(currentIndex + 1) % languageOptions.size].tag
+                                    languageTag = next
+                                    settings.languageTag = next
+                                    VeloraLocale.restart(context)
+                                }
+                            )
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_audio_language),
+                                description = context.getString(com.klortek.velora.R.string.settings_audio_language_description),
+                                currentValue = audioLabel,
+                                onCycle = {
+                                    val currentIndex = audioOptions.indexOf(preferredAudioLanguage).coerceAtLeast(0)
+                                    val next = audioOptions[(currentIndex + 1) % audioOptions.size]
+                                    preferredAudioLanguage = next
+                                    settings.preferredAudioLanguage = next
+                                }
+                            )
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitle_mode),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitle_mode_description),
+                                currentValue = subtitleModeLabel,
+                                onCycle = {
+                                    val options = listOf(VeloraLocale.SUBTITLES_OFF, VeloraLocale.SUBTITLES_PREFERRED, VeloraLocale.SUBTITLES_FORCED, VeloraLocale.SUBTITLES_AUTO)
+                                    val currentIndex = options.indexOf(subtitleMode).coerceAtLeast(0)
+                                    val next = options[(currentIndex + 1) % options.size]
+                                    subtitleMode = next
+                                    settings.subtitleMode = next
+                                }
+                            )
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitle_language),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitle_language_description),
+                                currentValue = subtitleLanguageLabel,
+                                onCycle = {
+                                    val currentIndex = subtitleLanguageOptions.indexOf(preferredSubtitleLanguage).coerceAtLeast(0)
+                                    val next = subtitleLanguageOptions[(currentIndex + 1) % subtitleLanguageOptions.size]
+                                    preferredSubtitleLanguage = next
+                                    settings.preferredSubtitleLanguage = next
+                                }
+                            )
+                        }
+                        SettingsCategory.PLAYBACK -> {
+                            // MPV Player Toggle
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_playback_mpv),
+                                description = context.getString(com.klortek.velora.R.string.settings_playback_mpv_description),
+                                isEnabled = mpvEnabled,
+                                onToggle = {
+                                    mpvEnabled = !mpvEnabled
+                                    settings.isMpvEnabled = mpvEnabled
+                                }
+                            )
+                            
+                            Spacer(modifier = Modifier.height(8.dp))
+                            
+                            // Skip Intro
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_skip_intro),
+                                description = context.getString(com.klortek.velora.R.string.settings_skip_intro_description),
+                                isEnabled = skipIntroEnabled,
+                                onToggle = {
+                                    skipIntroEnabled = !skipIntroEnabled
+                                    settings.skipIntroEnabled = skipIntroEnabled
+                                }
+                            )
+                            
+                            // Skip Credits
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_skip_credits),
+                                description = context.getString(com.klortek.velora.R.string.settings_skip_credits_description),
+                                isEnabled = skipCreditsEnabled,
+                                onToggle = {
+                                    skipCreditsEnabled = !skipCreditsEnabled
+                                    settings.skipCreditsEnabled = skipCreditsEnabled
+                                }
+                            )
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            // Server-Side Transcoding Section Header
+                            Text(
+                                text = context.getString(com.klortek.velora.R.string.settings_server_transcoding),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                            )
+                            
+                            // Auto-transcode on playback error
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_transcode_on_error),
+                                description = context.getString(com.klortek.velora.R.string.settings_transcode_on_error_description),
+                                isEnabled = autoTranscodeOnError,
+                                onToggle = {
+                                    autoTranscodeOnError = !autoTranscodeOnError
+                                    settings.autoTranscodeOnError = autoTranscodeOnError
+                                }
+                            )
+                            
+                            // Fallback to MPV player
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_mpv_fallback),
+                                description = if (isMpvInstalled) {
+                                    context.getString(com.klortek.velora.R.string.settings_mpv_fallback_installed)
+                                } else {
+                                    context.getString(com.klortek.velora.R.string.settings_mpv_fallback_external)
+                                },
+                                isEnabled = fallbackToMpv,
+                                onToggle = {
+                                    fallbackToMpv = !fallbackToMpv
+                                    settings.fallbackToMpv = fallbackToMpv
+                                }
+                            )
+                            
+                            // Server Transcoding Master Toggle
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_transcode_always),
+                                description = context.getString(com.klortek.velora.R.string.settings_transcode_always_description),
+                                isEnabled = serverTranscodingEnabled,
+                                onToggle = {
+                                    serverTranscodingEnabled = !serverTranscodingEnabled
+                                    settings.serverTranscodingEnabled = serverTranscodingEnabled
+                                }
+                            )
+                            
+                            if (serverTranscodingEnabled) {
+                                // Transcode AV1
+                                SettingToggle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_transcode_av1),
+                                    description = context.getString(com.klortek.velora.R.string.settings_transcode_av1_description),
+                                    isEnabled = transcodeAV1,
+                                    onToggle = {
+                                        transcodeAV1 = !transcodeAV1
+                                        settings.transcodeAV1 = transcodeAV1
+                                    }
+                                )
+                                
+                                // Transcode HEVC
+                                SettingToggle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_transcode_hevc),
+                                    description = context.getString(com.klortek.velora.R.string.settings_transcode_hevc_description),
+                                    isEnabled = transcodeHEVC,
+                                    onToggle = {
+                                        transcodeHEVC = !transcodeHEVC
+                                        settings.transcodeHEVC = transcodeHEVC
+                                    }
+                                )
+                                
+                                // Target Codec
+                                SettingCycle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_transcode_target_codec),
+                                    description = context.getString(com.klortek.velora.R.string.settings_transcode_target_codec_description, transcodeTargetCodec.uppercase()),
+                                    currentValue = transcodeTargetCodec.uppercase(),
+                                    onCycle = {
+                                        transcodeTargetCodec = if (transcodeTargetCodec == "h264") "hevc" else "h264"
+                                        settings.transcodeTargetCodec = transcodeTargetCodec
+                                    }
+                                )
+                                
+                                // Max Bitrate
+                                SettingSlider(
+                                    title = context.getString(com.klortek.velora.R.string.settings_transcode_max_bitrate),
+                                    description = context.getString(com.klortek.velora.R.string.settings_transcode_max_bitrate_description, transcodeMaxBitrate),
+                                    onDecrease = {
+                                        transcodeMaxBitrate = (transcodeMaxBitrate - 5).coerceAtLeast(5)
+                                        settings.transcodeMaxBitrateMbps = transcodeMaxBitrate
+                                    },
+                                    onIncrease = {
+                                        transcodeMaxBitrate = (transcodeMaxBitrate + 5).coerceAtMost(120)
+                                        settings.transcodeMaxBitrateMbps = transcodeMaxBitrate
+                                    },
+                                    canDecrease = transcodeMaxBitrate > 5,
+                                    canIncrease = transcodeMaxBitrate < 120
+                                )
+                            }
+                            
+                            Spacer(modifier = Modifier.height(8.dp))
+                            
+                            // Autoplay Next Episode
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_autoplay_next),
+                                description = context.getString(com.klortek.velora.R.string.settings_autoplay_next_description),
+                                isEnabled = autoplayNextEpisodeEnabled,
+                                onToggle = {
+                                    autoplayNextEpisodeEnabled = !autoplayNextEpisodeEnabled
+                                    settings.autoplayNextEpisode = autoplayNextEpisodeEnabled
+                                }
+                            )
+                            
+                            // Autoplay Countdown Duration
+                            if (autoplayNextEpisodeEnabled) {
+                                SettingCycle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_autoplay_countdown),
+                                    description = context.getString(com.klortek.velora.R.string.settings_autoplay_countdown_description, autoplayCountdownSeconds),
+                                    currentValue = "${autoplayCountdownSeconds}s",
+                                    onCycle = {
+                                        autoplayCountdownSeconds = when (autoplayCountdownSeconds) {
+                                            10 -> 15
+                                            15 -> 30
+                                            30 -> 45
+                                            45 -> 60
+                                            60 -> 90
+                                            90 -> 120
+                                            120 -> 10
+                                            else -> 10
+                                        }
+                                        settings.autoplayCountdownSeconds = autoplayCountdownSeconds
+                                    }
+                                )
+                            }
+                        }
+                        
+                        SettingsCategory.VIDEO -> {
+                            // ExoPlayer GL Enhancements
+                            SettingToggle(
+                                title = stringResource(com.klortek.velora.R.string.settings_video_gl_title),
+                                description = stringResource(com.klortek.velora.R.string.settings_video_gl_description),
+                                isEnabled = useGLEnhancements,
+                                onToggle = {
+                                    useGLEnhancements = !useGLEnhancements
+                                    settings.useGLEnhancements = useGLEnhancements
+                                    if (!useGLEnhancements) {
+                                        enableFakeHDR = false
+                                        enableSharpening = false
+                                        enableFrameBlending = false
+                                        settings.enableFakeHDR = false
+                                        settings.enableSharpening = false
+                                        settings.enableFrameBlending = false
+                                    }
+                                }
+                            )
+
+                            // MPV Post-Processing
+                            // Show Dynamic Tone Mapping toggle if relevant, or just keep it independent
+                            
+                            // Dynamic Tone Mapping Toggle
+                            var enableDynamicToneMapping by remember { mutableStateOf(settings.enableDynamicToneMapping) }
+                            SettingToggle(
+                                title = stringResource(com.klortek.velora.R.string.settings_video_tone_mapping_title),
+                                description = stringResource(com.klortek.velora.R.string.settings_video_tone_mapping_description),
+                                isEnabled = enableDynamicToneMapping,
+                                onToggle = {
+                                    enableDynamicToneMapping = !enableDynamicToneMapping
+                                    settings.enableDynamicToneMapping = enableDynamicToneMapping
+                                }
+                            )
+
+                            SettingCycle(
+                                title = stringResource(com.klortek.velora.R.string.settings_video_mpv_postprocessing_title),
+                                description = stringResource(com.klortek.velora.R.string.settings_video_mpv_postprocessing_description),
+                                currentValue = com.klortek.velora.player.mpv.MpvShaderManager.ShaderProfile.fromString(mpvShaderProfile).displayName,
+                                onCycle = {
+                                    val currentProfile = com.klortek.velora.player.mpv.MpvShaderManager.ShaderProfile.fromString(mpvShaderProfile)
+                                    val allProfiles = com.klortek.velora.player.mpv.MpvShaderManager.ShaderProfile.entries
+                                    val nextIndex = (allProfiles.indexOf(currentProfile) + 1) % allProfiles.size
+                                    val nextProfile = allProfiles[nextIndex]
+                                    
+                                    mpvShaderProfile = nextProfile.name
+                                    settings.mpvShaderProfile = nextProfile.name
+                                }
+                            )
+                            
+                            if (useGLEnhancements) {
+                                // Fake HDR
+                                SettingToggle(
+                                    title = stringResource(com.klortek.velora.R.string.settings_video_fake_hdr_title),
+                                    description = stringResource(com.klortek.velora.R.string.settings_video_fake_hdr_description),
+                                    isEnabled = enableFakeHDR,
+                                    onToggle = {
+                                        enableFakeHDR = !enableFakeHDR
+                                        settings.enableFakeHDR = enableFakeHDR
+                                    }
+                                )
+                                
+                                if (enableFakeHDR) {
+                                    SettingSlider(
+                                        title = stringResource(com.klortek.velora.R.string.settings_video_hdr_intensity_title),
+                                        description = stringResource(com.klortek.velora.R.string.settings_video_hdr_intensity, hdrStrength),
+                                        onDecrease = {
+                                            hdrStrength = (hdrStrength - 0.1f).coerceAtLeast(1.0f)
+                                            settings.hdrStrength = hdrStrength
+                                        },
+                                        onIncrease = {
+                                            hdrStrength = (hdrStrength + 0.1f).coerceAtMost(2.0f)
+                                            settings.hdrStrength = hdrStrength
+                                        },
+                                        canDecrease = hdrStrength > 1.0f,
+                                        canIncrease = hdrStrength < 2.0f
+                                    )
+                                }
+                                
+                                // Sharpening
+                                SettingToggle(
+                                    title = stringResource(com.klortek.velora.R.string.settings_video_sharpening_title),
+                                    description = stringResource(com.klortek.velora.R.string.settings_video_sharpening_description),
+                                    isEnabled = enableSharpening,
+                                    onToggle = {
+                                        enableSharpening = !enableSharpening
+                                        settings.enableSharpening = enableSharpening
+                                    }
+                                )
+                                
+                                if (enableSharpening) {
+                                    SettingSlider(
+                                        title = stringResource(com.klortek.velora.R.string.settings_video_sharpening_intensity_title),
+                                        description = stringResource(com.klortek.velora.R.string.settings_video_sharpening_intensity, sharpenStrength),
+                                        onDecrease = {
+                                            sharpenStrength = (sharpenStrength - 0.1f).coerceAtLeast(0.0f)
+                                            settings.sharpenStrength = sharpenStrength
+                                        },
+                                        onIncrease = {
+                                            sharpenStrength = (sharpenStrength + 0.1f).coerceAtMost(1.0f)
+                                            settings.sharpenStrength = sharpenStrength
+                                        },
+                                        canDecrease = sharpenStrength > 0.0f,
+                                        canIncrease = sharpenStrength < 1.0f
+                                    )
+                                }
+                                
+                                // Frame Blending
+                                SettingToggle(
+                                    title = stringResource(com.klortek.velora.R.string.settings_video_frame_blending_title),
+                                    description = stringResource(com.klortek.velora.R.string.settings_video_frame_blending_description),
+                                    isEnabled = enableFrameBlending,
+                                    onToggle = {
+                                        enableFrameBlending = !enableFrameBlending
+                                        settings.enableFrameBlending = enableFrameBlending
+                                    }
+                                )
+                                
+                                if (enableFrameBlending) {
+                                    SettingSlider(
+                                        title = stringResource(com.klortek.velora.R.string.settings_video_frame_blending_intensity_title),
+                                        description = stringResource(com.klortek.velora.R.string.settings_video_frame_blending_intensity, frameBlendStrength),
+                                        onDecrease = {
+                                            frameBlendStrength = (frameBlendStrength - 0.1f).coerceAtLeast(0.0f)
+                                            settings.frameBlendStrength = frameBlendStrength
+                                        },
+                                        onIncrease = {
+                                            frameBlendStrength = (frameBlendStrength + 0.1f).coerceAtMost(1.0f)
+                                            settings.frameBlendStrength = frameBlendStrength
+                                        },
+                                        canDecrease = frameBlendStrength > 0.0f,
+                                        canIncrease = frameBlendStrength < 1.0f
+                                    )
+                                }
+                                
+                            }
+                        }
+                        
+                        SettingsCategory.SUBTITLES -> {
+                            // ExoPlayer Subtitle Text Size
+                            SettingSlider(
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitles_text_size),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitles_text_size_description, exoSubtitleTextSize),
+                                onDecrease = {
+                                    if (exoSubtitleTextSize > 20) {
+                                        exoSubtitleTextSize -= 5
+                                        settings.exoSubtitleTextSize = exoSubtitleTextSize
+                                    }
+                                },
+                                onIncrease = {
+                                    if (exoSubtitleTextSize < 100) {
+                                        exoSubtitleTextSize += 5
+                                        settings.exoSubtitleTextSize = exoSubtitleTextSize
+                                    }
+                                },
+                                canDecrease = exoSubtitleTextSize > 20,
+                                canIncrease = exoSubtitleTextSize < 100
+                            )
+                            
+                            // Subtitle Text Color
+                            SettingButton(
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitles_text_color),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitles_text_color_description),
+                                buttonText = context.getString(com.klortek.velora.R.string.settings_choose_color),
+                                onClick = { showExoSubtitleColorDialog = true }
+                            )
+                            
+                            // Subtitle Background Transparency
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_subtitles_transparent_background),
+                                description = context.getString(com.klortek.velora.R.string.settings_subtitles_transparent_background_description),
+                                isEnabled = exoSubtitleBgTransparent,
+                                onToggle = {
+                                    exoSubtitleBgTransparent = !exoSubtitleBgTransparent
+                                    settings.exoSubtitleBgTransparent = exoSubtitleBgTransparent
+                                },
+                                enabledText = context.getString(com.klortek.velora.R.string.settings_transparent),
+                                disabledText = context.getString(com.klortek.velora.R.string.settings_opaque)
+                            )
+                            
+                            // Subtitle Background Color
+                            if (!exoSubtitleBgTransparent) {
+                                SettingButton(
+                                    title = context.getString(com.klortek.velora.R.string.settings_subtitles_background_color),
+                                    description = context.getString(com.klortek.velora.R.string.settings_subtitles_background_color_description),
+                                    buttonText = context.getString(com.klortek.velora.R.string.settings_choose_color),
+                                    onClick = { showExoSubtitleBgColorDialog = true }
+                                )
+                            }
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            // Subtitle downloads, OpenSubtitles credentials and their
+                            // cleanup are mobile/tablet-only. TV remains streaming-only.
+                            if (com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) {
+                            // OpenSubtitles API Key
+                            SettingButton(
+                                title = context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key),
+                                description = if (openSubtitlesApiKey.isNotBlank()) 
+                                    context.getString(com.klortek.velora.R.string.settings_api_key_configured)
+                                else 
+                                    context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key_description),
+                                buttonText = if (openSubtitlesApiKey.isNotBlank()) context.getString(com.klortek.velora.R.string.settings_change) else context.getString(com.klortek.velora.R.string.settings_set_key),
+                                onClick = { showApiKeyDialog = true }
+                            )
+                            
+                            if (showApiKeyDialog) {
+                                var apiKeyInput by remember { mutableStateOf(openSubtitlesApiKey) }
+                                AlertDialog(
+                                    onDismissRequest = { showApiKeyDialog = false },
+                                            title = { Text(context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key)) },
+                                    text = {
+                                        Column {
+                                            Text(
+                                                context.getString(com.klortek.velora.R.string.settings_opensubtitles_api_key_dialog),
+                                                style = MaterialTheme.typography.bodySmall,
+                                                modifier = Modifier.padding(bottom = 16.dp)
+                                            )
+                                            OutlinedTextField(
+                                                value = apiKeyInput,
+                                                onValueChange = { apiKeyInput = it },
+                                                label = { Text(context.getString(com.klortek.velora.R.string.settings_api_key)) },
+                                                singleLine = true,
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                    },
+                                    confirmButton = {
+                                        TextButton(
+                                            onClick = {
+                                                openSubtitlesApiKey = apiKeyInput
+                                                settings.openSubtitlesApiKey = apiKeyInput
+                                                showApiKeyDialog = false
+                                            }
+                                        ) {
+                                            Text(context.getString(com.klortek.velora.R.string.settings_save))
+                                        }
+                                    },
+                                    dismissButton = {
+                                        TextButton(onClick = { showApiKeyDialog = false }) {
+                                            Text(context.getString(com.klortek.velora.R.string.settings_cancel))
+                                        }
+                                    }
+                                )
+                            }
+                            
+                            SettingButton(
+                                title = context.getString(com.klortek.velora.R.string.settings_opensubtitles_access),
+                                description = if (openSubtitlesUsername.isNotBlank()) 
+                                    context.getString(com.klortek.velora.R.string.settings_signed_in_as, openSubtitlesUsername)
+                                else 
+                                    context.getString(com.klortek.velora.R.string.settings_opensubtitles_access_description),
+                                buttonText = if (openSubtitlesUsername.isNotBlank()) context.getString(com.klortek.velora.R.string.settings_change) else context.getString(com.klortek.velora.R.string.settings_sign_in),
+                                onClick = { showLoginDialog = true }
+                            )
+                            
+                            if (showLoginDialog) {
+                                var usernameInput by remember { mutableStateOf(openSubtitlesUsername) }
+                                var passwordInput by remember { mutableStateOf(openSubtitlesPassword) }
+                                AlertDialog(
+                                    onDismissRequest = { showLoginDialog = false },
+                                            title = { Text(context.getString(com.klortek.velora.R.string.settings_opensubtitles_access)) },
+                                    text = {
+                                        Column {
+                                            Text(
+                                                context.getString(com.klortek.velora.R.string.settings_opensubtitles_login_dialog),
+                                                style = MaterialTheme.typography.bodySmall,
+                                                modifier = Modifier.padding(bottom = 16.dp)
+                                            )
+                                            OutlinedTextField(
+                                                value = usernameInput,
+                                                onValueChange = { usernameInput = it },
+                                                label = { Text(context.getString(com.klortek.velora.R.string.settings_username)) },
+                                                singleLine = true,
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            OutlinedTextField(
+                                                value = passwordInput,
+                                                onValueChange = { passwordInput = it },
+                                                label = { Text(context.getString(com.klortek.velora.R.string.settings_password)) },
+                                                singleLine = true,
+                                                visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                    },
+                                    confirmButton = {
+                                        TextButton(
+                                            onClick = {
+                                                openSubtitlesUsername = usernameInput
+                                                openSubtitlesPassword = passwordInput
+                                                settings.openSubtitlesUsername = usernameInput
+                                                settings.openSubtitlesPassword = passwordInput
+                                                showLoginDialog = false
+                                            }
+                                        ) {
+                                            Text(context.getString(com.klortek.velora.R.string.settings_save))
+                                        }
+                                    },
+                                    dismissButton = {
+                                        TextButton(onClick = { showLoginDialog = false }) {
+                                            Text(context.getString(com.klortek.velora.R.string.settings_cancel))
+                                        }
+                                    }
+                                )
+                            }
+                            
+                            // Clear Downloaded Subtitles
+                            // Count downloaded subtitles on first composition
+                            LaunchedEffect(Unit) {
+                                val subtitlesDir = java.io.File(context.filesDir, "downloaded_subtitles")
+                                downloadedSubtitlesCount = if (subtitlesDir.exists()) {
+                                    subtitlesDir.walkTopDown()
+                                        .filter { it.isFile && it.extension in listOf("srt", "vtt", "ass", "ssa", "sub") }
+                                        .count()
+                                } else 0
+                            }
+                            
+                            SettingButton(
+                                title = stringResource(com.klortek.velora.R.string.settings_subtitles_clear_title),
+                                description = if (downloadedSubtitlesCount > 0) 
+                                context.getString(com.klortek.velora.R.string.settings_subtitles_downloaded_count, downloadedSubtitlesCount)
+                                else 
+                                context.getString(com.klortek.velora.R.string.settings_subtitles_none_downloaded),
+                                buttonText = stringResource(com.klortek.velora.R.string.settings_subtitles_clear_button),
+                                onClick = { showClearSubtitlesDialog = true }
+                            )
+                            
+                            if (showClearSubtitlesDialog) {
+                                AlertDialog(
+                                    onDismissRequest = { showClearSubtitlesDialog = false },
+                                    title = { Text(stringResource(com.klortek.velora.R.string.settings_subtitles_clear_confirm)) },
+                                    text = {
+                                        Text(
+                            context.getString(com.klortek.velora.R.string.settings_subtitles_clear_description, downloadedSubtitlesCount),
+                                            style = MaterialTheme.typography.bodyMedium
+                                        )
+                                    },
+                                    confirmButton = {
+                                        TextButton(
+                                            onClick = {
+                                                // Delete all downloaded subtitles
+                                                val subtitlesDir = java.io.File(context.filesDir, "downloaded_subtitles")
+                                                if (subtitlesDir.exists()) {
+                                                    subtitlesDir.deleteRecursively()
+                                                    android.util.Log.d("Settings", "Cleared all downloaded subtitles")
+                                                }
+                                                downloadedSubtitlesCount = 0
+                                                showClearSubtitlesDialog = false
+                                                
+                                                // Show toast
+                                                android.widget.Toast.makeText(
+                                                    context,
+                                                    context.getString(com.klortek.velora.R.string.settings_subtitles_clear_done),
+                                                    android.widget.Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        ) {
+                                            Text(stringResource(com.klortek.velora.R.string.settings_subtitles_clear_button), color = MaterialTheme.colorScheme.error)
+                                        }
+                                    },
+                                    dismissButton = {
+                                        TextButton(onClick = { showClearSubtitlesDialog = false }) {
+                                            Text(stringResource(com.klortek.velora.R.string.settings_cancel))
+                                        }
+                                    }
+                                )
+                            }
+                            }
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            // Transcode AAC to AC3
+                            SettingToggle(
+                                title = stringResource(com.klortek.velora.R.string.settings_audio_transcode_aac_title),
+                                description = stringResource(com.klortek.velora.R.string.settings_audio_transcode_aac_description),
+                                isEnabled = transcodeAacToAc3Enabled,
+                                onToggle = {
+                                    transcodeAacToAc3Enabled = !transcodeAacToAc3Enabled
+                                    settings.transcodeAacToAc3 = transcodeAacToAc3Enabled
+                                }
+                            )
+                        }
+                        
+                        SettingsCategory.JELLYSEERR -> {
+                            // Jellyseerr URL
+                            SettingButton(
+                                title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_url),
+                                description = if (jellyseerrUrl.isNotBlank()) 
+                                    jellyseerrUrl
+                                else 
+                                    stringResource(com.klortek.velora.R.string.settings_jellyseerr_url_description),
+                                buttonText = if (jellyseerrUrl.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_change) else stringResource(com.klortek.velora.R.string.settings_set_url),
+                                onClick = { showJellyseerrUrlDialog = true }
+                            )
+                            
+                            if (showJellyseerrUrlDialog) {
+                                var urlInput by remember { mutableStateOf(jellyseerrUrl) }
+                                Dialog(
+                                    onDismissRequest = { showJellyseerrUrlDialog = false },
+                                    properties = DialogProperties(usePlatformDefaultWidth = false)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(Color.Black.copy(alpha = 0.7f)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        val content = @Composable {
+                                            Column(
+                                                modifier = Modifier.padding(if (isTv) 32.dp else 24.dp),
+                                                verticalArrangement = Arrangement.spacedBy(24.dp)
+                                            ) {
+                                                Text(
+                                                    text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_url),
+                                                    style = if (isTv) MaterialTheme.typography.headlineSmall else androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                                                    color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+                                                )
+                                                
+                                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                    Text(
+                                                        text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_url_dialog_description),
+                                                        style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                                                        color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                                    )
+                                                    
+                                                    OutlinedTextField(
+                                                         value = urlInput,
+                                                         onValueChange = { urlInput = it },
+                                                         label = { Text(stringResource(com.klortek.velora.R.string.settings_url)) },
+                                                         placeholder = { Text(stringResource(com.klortek.velora.R.string.settings_url_placeholder)) },
+                                                         singleLine = true,
+                                                         modifier = Modifier.fillMaxWidth(),
+                                                         colors = TextFieldDefaults.colors(
+                                                             focusedTextColor = Color.White,
+                                                             unfocusedTextColor = Color.White,
+                                                             focusedContainerColor = Color.Transparent,
+                                                             unfocusedContainerColor = Color.Transparent,
+                                                             cursorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                             focusedLabelColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                             unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
+                                                             focusedIndicatorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                             unfocusedIndicatorColor = Color.White.copy(alpha = 0.3f)
+                                                         )
+                                                     )
+                                                }
+                                                
+                                                Row(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                                ) {
+                                                    if (isTv) {
+                                                        Button(
+                                                            onClick = { showJellyseerrUrlDialog = false },
+                                                            modifier = Modifier.weight(1f),
+                                                            colors = ButtonDefaults.colors(
+                                                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                                            )
+                                                        ) {
+                                                            Text(stringResource(com.klortek.velora.R.string.settings_cancel))
+                                                        }
+                                                        
+                                                        Button(
+                                                            onClick = {
+                                                                jellyseerrUrl = urlInput
+                                                                settings.jellyseerrUrl = urlInput
+                                                                showJellyseerrUrlDialog = false
+                                                            },
+                                                            modifier = Modifier.weight(1f)
+                                                        ) {
+                                                            Text(stringResource(com.klortek.velora.R.string.settings_save))
+                                                        }
+                                                    } else {
+                                                        androidx.compose.material3.Button(
+                                                            onClick = { showJellyseerrUrlDialog = false },
+                                                            modifier = Modifier.weight(1f),
+                                                            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                                                containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
+                                                            )
+                                                        ) {
+                                                            androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel), color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                        }
+                                                        
+                                                        androidx.compose.material3.Button(
+                                                            onClick = {
+                                                                jellyseerrUrl = urlInput
+                                                                settings.jellyseerrUrl = urlInput
+                                                                showJellyseerrUrlDialog = false
+                                                            },
+                                                            modifier = Modifier.weight(1f)
+                                                        ) {
+                                                            androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_save))
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if (isTv) {
+                                            Surface(
+                                                modifier = Modifier.width(500.dp),
+                                                shape = RoundedCornerShape(16.dp),
+                                                colors = SurfaceDefaults.colors(
+                                                    containerColor = MaterialTheme.colorScheme.surface,
+                                                    contentColor = MaterialTheme.colorScheme.onSurface
+                                                ),
+                                                content = { content() }
+                                            )
+                                        } else {
+                                            androidx.compose.material3.Surface(
+                                                modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp),
+                                                shape = RoundedCornerShape(16.dp),
+                                                color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+                                                contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                                                content = { content() }
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            Spacer(modifier = Modifier.height(8.dp))
+                            
+                            // Authentication method toggle
+                            SettingCycle(
+                                title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_method),
+                                description = when (jellyseerrAuthType) {
+                                    "api_key" -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_api_description)
+                                    "credentials" -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_credentials_description)
+                                    else -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_select_description)
+                                },
+                                currentValue = when (jellyseerrAuthType) {
+                                    "api_key" -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_api)
+                                    "credentials" -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_credentials)
+                                    else -> stringResource(com.klortek.velora.R.string.settings_jellyseerr_auth_api)
+                                },
+                                onCycle = {
+                                    jellyseerrAuthType = when (jellyseerrAuthType) {
+                                        "api_key" -> "credentials"
+                                        else -> "api_key"
+                                    }
+                                    settings.jellyseerrAuthType = jellyseerrAuthType
+                                }
+                            )
+                            
+                            Spacer(modifier = Modifier.height(8.dp))
+                            
+                            // Show appropriate authentication option based on type
+                            if (jellyseerrAuthType == "api_key") {
+                                // API Key authentication
+                                SettingButton(
+                                    title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_title),
+                                    description = if (jellyseerrApiKey.isNotBlank()) 
+                                        stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_configured)
+                                    else 
+                                        stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_description),
+                                    buttonText = if (jellyseerrApiKey.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_change) else stringResource(com.klortek.velora.R.string.settings_set_key),
+                                    onClick = { showJellyseerrApiKeyDialog = true }
+                                )
+                                
+                                if (showJellyseerrApiKeyDialog) {
+                                    var apiKeyInput by remember { mutableStateOf(jellyseerrApiKey) }
+                                    Dialog(
+                                        onDismissRequest = { showJellyseerrApiKeyDialog = false },
+                                        properties = DialogProperties(usePlatformDefaultWidth = false)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .background(Color.Black.copy(alpha = 0.7f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            val content = @Composable {
+                                                Column(
+                                                    modifier = Modifier.padding(if (isTv) 32.dp else 24.dp),
+                                                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                                                ) {
+                                                    Text(
+                                                        text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_title),
+                                                        style = if (isTv) MaterialTheme.typography.headlineSmall else androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                                                        color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+                                                    )
+                                                    
+                                                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                        Text(
+                                                            text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_api_key_dialog_description),
+                                                            style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                                                            color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                                        )
+                                                        
+                                                        OutlinedTextField(
+                                                             value = apiKeyInput,
+                                                             onValueChange = { apiKeyInput = it },
+                                                             label = { Text(stringResource(com.klortek.velora.R.string.settings_api_key)) },
+                                                             singleLine = true,
+                                                             modifier = Modifier.fillMaxWidth(),
+                                                             colors = TextFieldDefaults.colors(
+                                                                 focusedTextColor = Color.White,
+                                                                 unfocusedTextColor = Color.White,
+                                                                 focusedContainerColor = Color.Transparent,
+                                                                 unfocusedContainerColor = Color.Transparent,
+                                                                 cursorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 focusedLabelColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
+                                                                 focusedIndicatorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 unfocusedIndicatorColor = Color.White.copy(alpha = 0.3f)
+                                                             )
+                                                         )
+                                                    }
+                                                    
+                                                    Row(
+                                                        modifier = Modifier.fillMaxWidth(),
+                                                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                                    ) {
+                                                        if (isTv) {
+                                                            Button(
+                                                                onClick = { showJellyseerrApiKeyDialog = false },
+                                                                modifier = Modifier.weight(1f),
+                                                                colors = ButtonDefaults.colors(
+                                                                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                                                )
+                                                            ) {
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_cancel))
+                                                            }
+                                                            
+                                                            Button(
+                                                                onClick = {
+                                                                    jellyseerrApiKey = apiKeyInput
+                                                                    settings.jellyseerrApiKey = apiKeyInput
+                                                                    showJellyseerrApiKeyDialog = false
+                                                                },
+                                                                modifier = Modifier.weight(1f)
+                                                            ) {
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_save))
+                                                            }
+                                                        } else {
+                                                            androidx.compose.material3.Button(
+                                                                onClick = { showJellyseerrApiKeyDialog = false },
+                                                                modifier = Modifier.weight(1f),
+                                                                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                                                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
+                                                                )
+                                                            ) {
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel), color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                            }
+                                                            
+                                                            androidx.compose.material3.Button(
+                                                                onClick = {
+                                                                    jellyseerrApiKey = apiKeyInput
+                                                                    settings.jellyseerrApiKey = apiKeyInput
+                                                                    showJellyseerrApiKeyDialog = false
+                                                                },
+                                                                modifier = Modifier.weight(1f)
+                                                            ) {
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_save))
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            if (isTv) {
+                                                Surface(
+                                                    modifier = Modifier.width(500.dp),
+                                                    shape = RoundedCornerShape(16.dp),
+                                                    colors = SurfaceDefaults.colors(
+                                                        containerColor = MaterialTheme.colorScheme.surface,
+                                                        contentColor = MaterialTheme.colorScheme.onSurface
+                                                    ),
+                                                    content = { content() }
+                                                )
+                                            } else {
+                                                androidx.compose.material3.Surface(
+                                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp),
+                                                    shape = RoundedCornerShape(16.dp),
+                                                    color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+                                                    contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                                                    content = { content() }
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Username/Password authentication
+                                SettingButton(
+                                    title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_access),
+                                    description = if (jellyseerrSessionCookie.isNotBlank() && jellyseerrUsername.isNotBlank()) 
+                                        stringResource(com.klortek.velora.R.string.settings_jellyseerr_logged_in_as, jellyseerrUsername)
+                                    else 
+                                        stringResource(com.klortek.velora.R.string.settings_jellyseerr_login_description),
+                                    buttonText = if (jellyseerrSessionCookie.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_jellyseerr_relogin) else stringResource(com.klortek.velora.R.string.settings_sign_in),
+                                    onClick = { 
+                                        showJellyseerrLoginDialog = true
+                                        loginError = null
+                                    }
+                                )
+                                
+                                // Logout button (only show if logged in)
+                                if (jellyseerrSessionCookie.isNotBlank()) {
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    SettingButton(
+                                        title = stringResource(com.klortek.velora.R.string.settings_logout),
+                                        description = stringResource(com.klortek.velora.R.string.settings_logout_description),
+                                        buttonText = stringResource(com.klortek.velora.R.string.settings_logout),
+                                        onClick = {
+                                            settings.clearJellyseerrCredentials()
+                                            jellyseerrSessionCookie = ""
+                                            jellyseerrUsername = ""
+                                            jellyseerrApiKey = ""
+                                            jellyseerrAuthType = "api_key"
+                                        }
+                                    )
+                                }
+                                
+                                if (showJellyseerrLoginDialog) {
+                                    var usernameInput by remember { mutableStateOf("") }
+                                    var passwordInput by remember { mutableStateOf("") }
+                                    var useJellyfinAuth by remember { mutableStateOf(true) }
+                                    
+                                    Dialog(
+                                        onDismissRequest = { 
+                                            if (!isLoggingIn) {
+                                                showJellyseerrLoginDialog = false 
+                                            }
+                                        },
+                                        properties = DialogProperties(usePlatformDefaultWidth = false)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .background(Color.Black.copy(alpha = 0.7f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            val content = @Composable {
+                                                Column(
+                                                    modifier = Modifier.padding(if (isTv) 32.dp else 24.dp),
+                                                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                                                ) {
+                                                    Text(
+                                                        text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_access),
+                                                        style = if (isTv) MaterialTheme.typography.headlineSmall else androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                                                        color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+                                                    )
+                                                    
+                                                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                                        Text(
+                                                            text = stringResource(com.klortek.velora.R.string.settings_jellyseerr_login_prompt),
+                                                            style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                                                            color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                                        )
+                                                        
+                                                        // Auth type selector
+                                                        Row(
+                                                            modifier = Modifier.fillMaxWidth(),
+                                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                                        ) {
+                                                            if (isTv) {
+                                                                Button(
+                                                                    onClick = { useJellyfinAuth = true },
+                                                                    modifier = Modifier.weight(1f),
+                                                                    colors = ButtonDefaults.colors(
+                                                                        containerColor = if (useJellyfinAuth) 
+                                                                            MaterialTheme.colorScheme.primary 
+                                                                        else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                                                    )
+                                                                ) {
+                                                                    Text("Jellyfin")
+                                                                }
+                                                                Button(
+                                                                    onClick = { useJellyfinAuth = false },
+                                                                    modifier = Modifier.weight(1f),
+                                                                    colors = ButtonDefaults.colors(
+                                                                        containerColor = if (!useJellyfinAuth) 
+                                                                            MaterialTheme.colorScheme.primary 
+                                                                        else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                                                    )
+                                                                ) {
+                                                                    Text(stringResource(com.klortek.velora.R.string.settings_local_email))
+                                                                }
+                                                            } else {
+                                                                androidx.compose.material3.Button(
+                                                                    onClick = { useJellyfinAuth = true },
+                                                                    modifier = Modifier.weight(1f),
+                                                                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                                                        containerColor = if (useJellyfinAuth) 
+                                                                            androidx.compose.material3.MaterialTheme.colorScheme.primary 
+                                                                        else androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
+                                                                    )
+                                                                ) {
+                                                                    androidx.compose.material3.Text("Jellyfin", color = if (useJellyfinAuth) Color.White else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                                }
+                                                                androidx.compose.material3.Button(
+                                                                    onClick = { useJellyfinAuth = false },
+                                                                    modifier = Modifier.weight(1f),
+                                                                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                                                        containerColor = if (!useJellyfinAuth) 
+                                                                            androidx.compose.material3.MaterialTheme.colorScheme.primary 
+                                                                        else androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
+                                                                    )
+                                                                ) {
+                                                                    androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_local_email), color = if (!useJellyfinAuth) Color.White else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                        OutlinedTextField(
+                                                             value = usernameInput,
+                                                             onValueChange = { usernameInput = it },
+                                                             label = { Text(if (useJellyfinAuth) stringResource(com.klortek.velora.R.string.settings_jellyfin_username) else stringResource(com.klortek.velora.R.string.settings_username)) },
+                                                             singleLine = true,
+                                                             enabled = !isLoggingIn,
+                                                             modifier = Modifier.fillMaxWidth(),
+                                                             colors = TextFieldDefaults.colors(
+                                                                 focusedTextColor = Color.White,
+                                                                 unfocusedTextColor = Color.White,
+                                                                 focusedContainerColor = Color.Transparent,
+                                                                 unfocusedContainerColor = Color.Transparent,
+                                                                 cursorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 focusedLabelColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
+                                                                 focusedIndicatorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 unfocusedIndicatorColor = Color.White.copy(alpha = 0.3f)
+                                                             )
+                                                         )
+                                                         
+                                                         OutlinedTextField(
+                                                             value = passwordInput,
+                                                             onValueChange = { passwordInput = it },
+                                                             label = { Text(stringResource(com.klortek.velora.R.string.settings_password)) },
+                                                             singleLine = true,
+                                                             enabled = !isLoggingIn,
+                                                             visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                                                             modifier = Modifier.fillMaxWidth(),
+                                                             colors = TextFieldDefaults.colors(
+                                                                 focusedTextColor = Color.White,
+                                                                 unfocusedTextColor = Color.White,
+                                                                 focusedContainerColor = Color.Transparent,
+                                                                 unfocusedContainerColor = Color.Transparent,
+                                                                 cursorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 focusedLabelColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
+                                                                 focusedIndicatorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                                 unfocusedIndicatorColor = Color.White.copy(alpha = 0.3f)
+                                                             )
+                                                         )
+                                                        
+                                                        if (isLoggingIn) {
+                                                            Row(
+                                                                modifier = Modifier.fillMaxWidth(),
+                                                                horizontalArrangement = Arrangement.Center,
+                                                                verticalAlignment = Alignment.CenterVertically
+                                                            ) {
+                                                                CircularProgressIndicator(
+                                                                    modifier = Modifier.size(20.dp),
+                                                                    strokeWidth = 2.dp
+                                                                )
+                                                                Spacer(modifier = Modifier.width(12.dp))
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_signing_in), style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium)
+                                                            }
+                                                        }
+                                                        
+                                                        loginError?.let { error ->
+                                                            Text(
+                                                                text = error,
+                                                                color = if (isTv) MaterialTheme.colorScheme.error else androidx.compose.material3.MaterialTheme.colorScheme.error,
+                                                                style = if (isTv) MaterialTheme.typography.bodySmall else androidx.compose.material3.MaterialTheme.typography.bodySmall
+                                                            )
+                                                        }
+                                                    }
+                                                    
+                                                    Row(
+                                                        modifier = Modifier.fillMaxWidth(),
+                                                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                                    ) {
+                                                        if (isTv) {
+                                                            Button(
+                                                                onClick = { showJellyseerrLoginDialog = false },
+                                                                enabled = !isLoggingIn,
+                                                                modifier = Modifier.weight(1f),
+                                                                colors = ButtonDefaults.colors(
+                                                                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                                                )
+                                                            ) {
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_cancel))
+                                                            }
+                                                            
+                                                            Button(
+                                                                onClick = {
+                                                                    if (jellyseerrUrl.isBlank()) {
+                                                                        loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_url_required)
+                                                                        return@Button
+                                                                    }
+                                                                    if (usernameInput.isBlank() || passwordInput.isBlank()) {
+                                                                        loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_required)
+                                                                        return@Button
+                                                                    }
+                                                                    
+                                                                    isLoggingIn = true
+                                                                    loginError = null
+                                                                    
+                                                                    scope.launch {
+                                                                        val result = if (useJellyfinAuth) {
+                                                                            com.klortek.velora.jellyseerr.JellyseerrApiService.loginWithJellyfin(
+                                                                                jellyseerrUrl,
+                                                                                usernameInput,
+                                                                                passwordInput
+                                                                            )
+                                                                        } else {
+                                                                            com.klortek.velora.jellyseerr.JellyseerrApiService.loginWithEmail(
+                                                                                jellyseerrUrl,
+                                                                                usernameInput,
+                                                                                passwordInput
+                                                                            )
+                                                                        }
+                                                                        
+                                                                        isLoggingIn = false
+                                                                        
+                                                                        result.fold(
+                                                                            onSuccess = { cookie ->
+                                                                                jellyseerrSessionCookie = cookie
+                                                                                jellyseerrUsername = usernameInput
+                                                                                settings.jellyseerrSessionCookie = cookie
+                                                                                settings.jellyseerrUsername = usernameInput
+                                                                                settings.jellyseerrAuthType = "credentials"
+                                                                                showJellyseerrLoginDialog = false
+                                                                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_success), Toast.LENGTH_SHORT).show()
+                                                                            },
+                                                                            onFailure = { error ->
+                                                                                loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_error)
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                },
+                                                                enabled = !isLoggingIn,
+                                                                modifier = Modifier.weight(1f)
+                                                            ) {
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_sign_in))
+                                                            }
+                                                        } else {
+                                                            androidx.compose.material3.Button(
+                                                                onClick = { showJellyseerrLoginDialog = false },
+                                                                enabled = !isLoggingIn,
+                                                                modifier = Modifier.weight(1f),
+                                                                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                                                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
+                                                                )
+                                                            ) {
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel), color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                                            }
+                                                            
+                                                            androidx.compose.material3.Button(
+                                                                onClick = {
+                                                                    if (jellyseerrUrl.isBlank()) {
+                                                                        loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_url_required)
+                                                                        return@Button
+                                                                    }
+                                                                    if (usernameInput.isBlank() || passwordInput.isBlank()) {
+                                                                        loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_required)
+                                                                        return@Button
+                                                                    }
+                                                                    
+                                                                    isLoggingIn = true
+                                                                    loginError = null
+                                                                    
+                                                                    scope.launch {
+                                                                        val result = if (useJellyfinAuth) {
+                                                                            com.klortek.velora.jellyseerr.JellyseerrApiService.loginWithJellyfin(
+                                                                                jellyseerrUrl,
+                                                                                usernameInput,
+                                                                                passwordInput
+                                                                            )
+                                                                        } else {
+                                                                            com.klortek.velora.jellyseerr.JellyseerrApiService.loginWithEmail(
+                                                                                jellyseerrUrl,
+                                                                                usernameInput,
+                                                                                passwordInput
+                                                                            )
+                                                                        }
+                                                                        
+                                                                        isLoggingIn = false
+                                                                        
+                                                                        result.fold(
+                                                                            onSuccess = { cookie ->
+                                                                                jellyseerrSessionCookie = cookie
+                                                                                jellyseerrUsername = usernameInput
+                                                                                settings.jellyseerrSessionCookie = cookie
+                                                                                settings.jellyseerrUsername = usernameInput
+                                                                                settings.jellyseerrAuthType = "credentials"
+                                                                                showJellyseerrLoginDialog = false
+                                                                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_success), Toast.LENGTH_SHORT).show()
+                                                                            },
+                                                                            onFailure = { error ->
+                                                                                loginError = context.getString(com.klortek.velora.R.string.settings_jellyseerr_login_error)
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                },
+                                                                enabled = !isLoggingIn,
+                                                                modifier = Modifier.weight(1f)
+                                                            ) {
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_sign_in))
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            if (isTv) {
+                                                Surface(
+                                                    modifier = Modifier.width(500.dp),
+                                                    shape = RoundedCornerShape(16.dp),
+                                                    colors = SurfaceDefaults.colors(
+                                                        containerColor = MaterialTheme.colorScheme.surface,
+                                                        contentColor = MaterialTheme.colorScheme.onSurface
+                                                    ),
+                                                    content = { content() }
+                                                )
+                                            } else {
+                                                androidx.compose.material3.Surface(
+                                                    modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp),
+                                                    shape = RoundedCornerShape(16.dp),
+                                                    color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+                                                    contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                                                    content = { content() }
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            // Discovery is deliberately not part of Velora's product
+                            // surface. Keep the optional search integration separate,
+                            // but never expose a toggle that can resurrect a Discover tab.
+                            val isJellyseerrConfigured = jellyseerrUrl.isNotBlank() && (
+                                (jellyseerrAuthType == "api_key" && jellyseerrApiKey.isNotBlank()) ||
+                                (jellyseerrAuthType == "credentials" && jellyseerrSessionCookie.isNotBlank())
+                            )
+                            
+                            if (isJellyseerrConfigured) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                
+                                SettingToggle(
+                                    title = stringResource(com.klortek.velora.R.string.settings_jellyseerr_search),
+                                    description = stringResource(com.klortek.velora.R.string.settings_jellyseerr_search_description),
+                                    isEnabled = jellyseerrSearchEnabled,
+                                    onToggle = {
+                                        jellyseerrSearchEnabled = !jellyseerrSearchEnabled
+                                        settings.jellyseerrSearchEnabled = jellyseerrSearchEnabled
+                                    }
+                                )
+                            }
+                        }
+
+                        SettingsCategory.TRAILERS -> {
+                            val tmdbApiKey = settings.tmdbApiKey
+                            var showTmdbKeyDialog by remember { mutableStateOf(false) }
+                            
+                            SettingButton(
+                                title = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key),
+                                description = if (tmdbApiKey.isNotBlank()) 
+                                    stringResource(com.klortek.velora.R.string.settings_tmdb_api_key_configured)
+                                else 
+                                    stringResource(com.klortek.velora.R.string.settings_tmdb_api_key_description),
+                                buttonText = if (tmdbApiKey.isNotBlank()) stringResource(com.klortek.velora.R.string.settings_change) else stringResource(com.klortek.velora.R.string.settings_set_key),
+                                onClick = { showTmdbKeyDialog = true }
+                            )
+                            
+                            if (showTmdbKeyDialog) {
+                                var apiKeyInput by remember { mutableStateOf(tmdbApiKey) }
+                                var isVerifying by remember { mutableStateOf(false) }
+                                var verificationError by remember { mutableStateOf<String?>(null) }
+                                val scope = rememberCoroutineScope()
+                                val context = LocalContext.current
+                                Dialog(
+                                    onDismissRequest = { showTmdbKeyDialog = false },
+                                    properties = DialogProperties(usePlatformDefaultWidth = false)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(Color.Black.copy(alpha = 0.7f)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        val content = @Composable {
+                                            Column(
+                                                modifier = Modifier.padding(if (isTv) 32.dp else 24.dp),
+                                                verticalArrangement = Arrangement.spacedBy(24.dp)
+                                            ) {
+                                                if (isTv) {
+                                                    Text(
+                                                        text = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key),
+                                                        style = MaterialTheme.typography.headlineSmall
+                                                    )
+                                                } else {
+                                                    androidx.compose.material3.Text(
+                                                        text = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key),
+                                                        style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
+                                                    )
+                                                }
+                                                
+                                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                    if (isTv) {
+                                                        Text(
+                                                            text = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key_dialog_description),
+                                                            style = MaterialTheme.typography.bodyMedium,
+                                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                                        )
+                                                    } else {
+                                                        androidx.compose.material3.Text(
+                                                            text = stringResource(com.klortek.velora.R.string.settings_tmdb_api_key_dialog_description),
+                                                            style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                                                            color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                                        )
+                                                    }
+                                                    
+                                                    OutlinedTextField(
+                                                         value = apiKeyInput,
+                                                         onValueChange = { 
+                                                             apiKeyInput = it
+                                                             verificationError = null 
+                                                         },
+                                                         label = { Text(stringResource(com.klortek.velora.R.string.settings_tmdb_api_key)) },
+                                                         singleLine = true,
+                                                         modifier = Modifier.fillMaxWidth(),
+                                                         isError = verificationError != null,
+                                                         supportingText = {
+                                                             if (verificationError != null) {
+                                                                 Text(
+                                                                     text = verificationError!!,
+                                                                     color = MaterialTheme.colorScheme.error
+                                                                 )
+                                                             }
+                                                         },
+                                                         colors = TextFieldDefaults.colors(
+                                                             focusedTextColor = Color.White,
+                                                             unfocusedTextColor = Color.White,
+                                                             focusedContainerColor = Color.Transparent,
+                                                             unfocusedContainerColor = Color.Transparent,
+                                                             cursorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                             focusedLabelColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                             unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
+                                                             focusedIndicatorColor = if (isTv) MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                                             unfocusedIndicatorColor = Color.White.copy(alpha = 0.3f),
+                                                             errorLabelColor = if (isTv) MaterialTheme.colorScheme.error else androidx.compose.material3.MaterialTheme.colorScheme.error,
+                                                             errorIndicatorColor = if (isTv) MaterialTheme.colorScheme.error else androidx.compose.material3.MaterialTheme.colorScheme.error,
+                                                             errorSupportingTextColor = if (isTv) MaterialTheme.colorScheme.error else androidx.compose.material3.MaterialTheme.colorScheme.error
+                                                         )
+                                                     )
+                                                }
+                                                
+                                                Row(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                                ) {
+                                                    if (isTv) {
+                                                        Button(
+                                                            onClick = { showTmdbKeyDialog = false },
+                                                            modifier = Modifier.weight(1f),
+                                                            enabled = !isVerifying,
+                                                            colors = ButtonDefaults.colors(
+                                                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                                            )
+                                                        ) {
+                                                            Text(stringResource(com.klortek.velora.R.string.settings_cancel))
+                                                        }
+                                                    } else {
+                                                        androidx.compose.material3.Button(
+                                                            onClick = { showTmdbKeyDialog = false },
+                                                            modifier = Modifier.weight(1f),
+                                                            enabled = !isVerifying,
+                                                            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                                                containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
+                                                            )
+                                                        ) {
+                                                            androidx.compose.material3.Text(
+                                                text = stringResource(com.klortek.velora.R.string.settings_cancel),
+                                                                color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+                                                            )
+                                                        }
+                                                    }
+                                                    
+                                                    if (isTv) {
+                                                        Button(
+                                                            onClick = {
+                                                                isVerifying = true
+                                                                verificationError = null
+                                                                scope.launch {
+                                                                    val result = com.klortek.velora.tmdb.TmdbApiService.verifyKey(apiKeyInput)
+                                                                    isVerifying = false
+                                                                    when (result) {
+                                                                        is com.klortek.velora.tmdb.TmdbApiService.VerificationResult.Success -> {
+                                                                            settings.tmdbApiKey = apiKeyInput.trim()
+                                                                            showTmdbKeyDialog = false
+Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_tmdb_key_verified), Toast.LENGTH_SHORT).show()
+                                                                        }
+                                                                        is com.klortek.velora.tmdb.TmdbApiService.VerificationResult.Error -> {
+                                                                            verificationError = result.message
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            modifier = Modifier.weight(1f),
+                                                            enabled = !isVerifying
+                                                        ) {
+                                                            if (isVerifying) {
+                                                                CircularProgressIndicator(
+                                                                    modifier = Modifier.size(24.dp),
+                                                                    color = MaterialTheme.colorScheme.onPrimary,
+                                                                    strokeWidth = 2.dp
+                                                                )
+                                                            } else {
+                                                                Text(stringResource(com.klortek.velora.R.string.settings_save))
+                                                            }
+                                                        }
+                                                    } else {
+                                                        androidx.compose.material3.Button(
+                                                            onClick = {
+                                                                isVerifying = true
+                                                                verificationError = null
+                                                                scope.launch {
+                                                                    val result = com.klortek.velora.tmdb.TmdbApiService.verifyKey(apiKeyInput)
+                                                                    isVerifying = false
+                                                                    when (result) {
+                                                                        is com.klortek.velora.tmdb.TmdbApiService.VerificationResult.Success -> {
+                                                                            settings.tmdbApiKey = apiKeyInput.trim()
+                                                                            showTmdbKeyDialog = false
+Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_tmdb_key_verified), Toast.LENGTH_SHORT).show()
+                                                                        }
+                                                                        is com.klortek.velora.tmdb.TmdbApiService.VerificationResult.Error -> {
+                                                                            verificationError = result.message
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            modifier = Modifier.weight(1f),
+                                                            enabled = !isVerifying
+                                                        ) {
+                                                            if (isVerifying) {
+                                                                androidx.compose.material3.CircularProgressIndicator(
+                                                                    modifier = Modifier.size(24.dp),
+                                                                    color = androidx.compose.material3.MaterialTheme.colorScheme.onPrimary,
+                                                                    strokeWidth = 2.dp
+                                                                )
+                                                            } else {
+                                                                androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_save))
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if (isTv) {
+                                            Surface(
+                                                modifier = Modifier.width(500.dp),
+                                                shape = RoundedCornerShape(16.dp),
+                                                colors = SurfaceDefaults.colors(
+                                                    containerColor = MaterialTheme.colorScheme.surface,
+                                                    contentColor = MaterialTheme.colorScheme.onSurface
+                                                ),
+                                                content = { content() }
+                                            )
+                                        } else {
+                                            androidx.compose.material3.Surface(
+                                                modifier = Modifier.fillMaxWidth(0.9f).padding(16.dp),
+                                                shape = RoundedCornerShape(16.dp),
+                                                color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+                                                contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                                                content = { content() }
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        
+                        SettingsCategory.APPEARANCE -> {
+                            // Dark Mode
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_dark_mode),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_dark_mode_description),
+                                isEnabled = darkModeEnabled,
+                                onToggle = {
+                                    darkModeEnabled = !darkModeEnabled
+                                    settings.darkModeEnabled = darkModeEnabled
+                                }
+                            )
+                            
+                            // Use Logo for Title
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_logo_title),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_logo_title_description),
+                                isEnabled = useLogoForTitleEnabled,
+                                onToggle = {
+                                    useLogoForTitleEnabled = !useLogoForTitleEnabled
+                                    settings.useLogoForTitle = useLogoForTitleEnabled
+                                }
+                            )
+                            
+                            // Animated Play Button
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_animated_play),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_animated_play_description),
+                                isEnabled = animatedPlayButtonEnabled,
+                                onToggle = {
+                                    animatedPlayButtonEnabled = !animatedPlayButtonEnabled
+                                    settings.useAnimatedPlayButton = animatedPlayButtonEnabled
+                                }
+                            )
+                            
+                            // 24-Hour Time Format
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_24_hour_time),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_24_hour_time_description),
+                                isEnabled = use24HourTimeEnabled,
+                                onToggle = {
+                                    use24HourTimeEnabled = !use24HourTimeEnabled
+                                    settings.use24HourTime = use24HourTimeEnabled
+                                }
+                            )
+
+                            // 4K Quality Backgrounds
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_4k_backgrounds),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_4k_backgrounds_description),
+                                isEnabled = use4KBackgrounds,
+                                onToggle = {
+                                    use4KBackgrounds = !use4KBackgrounds
+                                    settings.use4KBackgrounds = use4KBackgrounds
+                                }
+                            )
+
+                            // Navigation Sounds
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_appearance_navigation_sounds),
+                                description = context.getString(com.klortek.velora.R.string.settings_appearance_navigation_sounds_description),
+                                isEnabled = navigationSoundsEnabled,
+                                onToggle = {
+                                    navigationSoundsEnabled = !navigationSoundsEnabled
+                                    settings.navigationSoundsEnabled = navigationSoundsEnabled
+                                }
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                            if (isTv) {
+                                Text(
+                                    text = context.getString(com.klortek.velora.R.string.settings_appearance_accent_color),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = context.getString(com.klortek.velora.R.string.settings_appearance_accent_color),
+                                    style = androidx.compose.material3.MaterialTheme.typography.titleSmall,
+                                    color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                )
+                            }
+
+                            var selectedThemeColorHex by remember { mutableStateOf(settings.themeColorHex) }
+
+                            val colorPresets = listOf(
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_white), "#FFFFFF"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_yellow), "#ECC564"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_blue), "#2196F3"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_green), "#4CAF50"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_red), "#F44336"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_purple), "#9C27B0"),
+                                Pair(context.getString(com.klortek.velora.R.string.settings_color_orange), "#FF9800")
+                            )
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                colorPresets.forEach { (name, hex) ->
+                                    val color = Color(android.graphics.Color.parseColor(hex))
+                                    val isSelected = selectedThemeColorHex.equals(hex, ignoreCase = true)
+                                    if (isTv) {
+                                        val interactionSource = remember { MutableInteractionSource() }
+                                        val isFocused by interactionSource.collectIsFocusedAsState()
+                                        Box(
+                                            modifier = Modifier
+                                                .size(44.dp)
+                                                .clip(RoundedCornerShape(50.dp))
+                                                .background(color)
+                                                .border(
+                                                    width = if (isSelected || isFocused) 3.dp else 1.dp,
+                                                    color = if (isSelected) {
+                                                        Color.White
+                                                    } else if (isFocused) {
+                                                        MaterialTheme.colorScheme.primary
+                                                    } else {
+                                                        Color.White.copy(alpha = 0.3f)
+                                                    },
+                                                    shape = RoundedCornerShape(50.dp)
+                                                )
+                                                .clickable(
+                                                    interactionSource = interactionSource,
+                                                    indication = null
+                                                ) {
+                                                    selectedThemeColorHex = hex
+                                                    settings.themeColorHex = hex
+                                                    com.klortek.velora.theme.JetcasterPrimaryColorState = color
+                                                }
+                                        )
+                                    } else {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(36.dp)
+                                                .clip(RoundedCornerShape(50.dp))
+                                                .background(color)
+                                                .border(
+                                                    width = if (isSelected) 3.dp else 1.dp,
+                                                    color = if (isSelected) Color.White else Color.White.copy(alpha = 0.3f),
+                                                    shape = RoundedCornerShape(50.dp)
+                                                )
+                                                .clickable {
+                                                    selectedThemeColorHex = hex
+                                                    settings.themeColorHex = hex
+                                                    com.klortek.velora.theme.JetcasterPrimaryColorState = color
+                                                }
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        
+                        SettingsCategory.PERFORMANCE -> {
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_mode),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_mode_description),
+                                currentValue = when (performanceMode) {
+                                    PerformanceMode.AUTOMATIC -> context.getString(com.klortek.velora.R.string.settings_performance_mode_automatic)
+                                    PerformanceMode.QUALITY -> context.getString(com.klortek.velora.R.string.settings_performance_mode_quality)
+                                    PerformanceMode.BALANCED -> context.getString(com.klortek.velora.R.string.settings_performance_mode_balanced)
+                                    PerformanceMode.PERFORMANCE -> context.getString(com.klortek.velora.R.string.settings_performance_mode_performance)
+                                },
+                                onCycle = {
+                                    performanceMode = when (performanceMode) {
+                                        PerformanceMode.AUTOMATIC -> PerformanceMode.QUALITY
+                                        PerformanceMode.QUALITY -> PerformanceMode.BALANCED
+                                        PerformanceMode.BALANCED -> PerformanceMode.PERFORMANCE
+                                        PerformanceMode.PERFORMANCE -> PerformanceMode.AUTOMATIC
+                                    }
+                                    settings.applyPerformanceMode(performanceMode)
+                                    disableUIAnimations = settings.disableUIAnimations
+                                    useSimpleCards = settings.useSimpleCards
+                                    useGoogleTvCards = settings.useGoogleTvCards
+                                    lowPowerMode = settings.lowPowerMode
+                                    use4KBackgrounds = settings.use4KBackgrounds
+                                    reducePosterResolutionEnabled = settings.reducePosterResolution
+                                }
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            // Use Google TV Cards
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_google_tv_cards),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_google_tv_cards_description),
+                                isEnabled = useGoogleTvCards,
+                                onToggle = {
+                                    useGoogleTvCards = !useGoogleTvCards
+                                    settings.useGoogleTvCards = useGoogleTvCards
+                                    // Disable simple cards if Google TV cards enabled
+                                    if (useGoogleTvCards) {
+                                        useSimpleCards = false
+                                        settings.useSimpleCards = false
+                                    }
+                                }
+                            )
+                            
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = context.getString(com.klortek.velora.R.string.settings_performance_animations),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
+                            )
+                            
+                            // Disable UI Animations
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_disable_animations),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_disable_animations_description),
+                                isEnabled = disableUIAnimations,
+                                onToggle = {
+                                    disableUIAnimations = !disableUIAnimations
+                                    settings.disableUIAnimations = disableUIAnimations
+                                }
+                            )
+                            
+                            // Preload Library Images
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_preload_images),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_preload_images_description),
+                                isEnabled = preloadLibraryImagesEnabled,
+                                onToggle = {
+                                    preloadLibraryImagesEnabled = !preloadLibraryImagesEnabled
+                                    settings.preloadLibraryImages = preloadLibraryImagesEnabled
+                                }
+                            )
+                            
+                            // Cache Library Images
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_cache_images),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_cache_images_description),
+                                isEnabled = cacheLibraryImagesEnabled,
+                                onToggle = {
+                                    cacheLibraryImagesEnabled = !cacheLibraryImagesEnabled
+                                    settings.cacheLibraryImages = cacheLibraryImagesEnabled
+                                }
+                            )
+                            
+                            // Use Glide
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_glide),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_glide_description),
+                                isEnabled = useGlideEnabled,
+                                onToggle = {
+                                    useGlideEnabled = !useGlideEnabled
+                                    settings.useGlide = useGlideEnabled
+                                }
+                            )
+                            
+                            // Reduce Poster Resolution
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_performance_reduce_posters),
+                                description = context.getString(com.klortek.velora.R.string.settings_performance_reduce_posters_description),
+                                isEnabled = reducePosterResolutionEnabled,
+                                onToggle = {
+                                    reducePosterResolutionEnabled = !reducePosterResolutionEnabled
+                                    settings.reducePosterResolution = reducePosterResolutionEnabled
+                                }
+                            )
+                        }
+                        
+                        SettingsCategory.LIBRARY -> {
+                            // Auto-Refresh Media
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_library_auto_refresh),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_auto_refresh_description, autoRefreshIntervalMinutes),
+                                isEnabled = autoRefreshEnabled,
+                                onToggle = {
+                                    autoRefreshEnabled = !autoRefreshEnabled
+                                    settings.autoRefreshEnabled = autoRefreshEnabled
+                                }
+                            )
+                            
+                            // Refresh Interval
+                            if (autoRefreshEnabled) {
+                                SettingCycle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_library_refresh_interval),
+                                    description = context.getString(com.klortek.velora.R.string.settings_library_refresh_interval_description),
+                                    currentValue = "${autoRefreshIntervalMinutes}m",
+                                    onCycle = {
+                                        autoRefreshIntervalMinutes = when (autoRefreshIntervalMinutes) {
+                                            2 -> 3
+                                            3 -> 5
+                                            5 -> 10
+                                            10 -> 15
+                                            15 -> 2
+                                            else -> 5
+                                        }
+                                        settings.autoRefreshIntervalMinutes = autoRefreshIntervalMinutes
+                                    }
+                                )
+                            }
+                            
+                            // Hide Shows with Zero Episodes
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_library_hide_empty_shows),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_hide_empty_shows_description),
+                                isEnabled = hideShowsWithZeroEpisodesEnabled,
+                                onToggle = {
+                                    hideShowsWithZeroEpisodesEnabled = !hideShowsWithZeroEpisodesEnabled
+                                    settings.hideShowsWithZeroEpisodes = hideShowsWithZeroEpisodesEnabled
+                                }
+                            )
+
+                            // Row Card Count
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_library_cards_per_row),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_cards_per_row_description),
+                                currentValue = rowCardCount.toString(),
+                                onCycle = {
+                                    rowCardCount = when (rowCardCount) {
+                                        25 -> 50
+                                        50 -> 75
+                                        75 -> 100
+                                        100 -> 25
+                                        else -> 25
+                                    }
+                                    settings.rowCardCount = rowCardCount
+                                }
+                            )
+                            SettingSlider(
+                                title = context.getString(com.klortek.velora.R.string.settings_library_theme_music_volume),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_theme_music_volume_description, (themeMusicVolume * 100).toInt()),
+                                onDecrease = {
+                                    themeMusicVolume = (themeMusicVolume - 0.1f).coerceAtLeast(0f)
+                                    settings.themeMusicVolume = themeMusicVolume
+                                },
+                                onIncrease = {
+                                    themeMusicVolume = (themeMusicVolume + 0.1f).coerceAtMost(1f)
+                                    settings.themeMusicVolume = themeMusicVolume
+                                },
+                                canDecrease = themeMusicVolume > 0f,
+                                canIncrease = themeMusicVolume < 1f
+                            )
+
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_library_theme_music),
+                                description = context.getString(com.klortek.velora.R.string.settings_library_theme_music_description),
+                                isEnabled = themeMusicEnabled,
+                                onToggle = {
+                                    themeMusicEnabled = !themeMusicEnabled
+                                    settings.themeMusicEnabled = themeMusicEnabled
+                                }
+                            )
+
+                            // Offline media is intentionally a mobile/tablet
+                            // feature. TV builds do not expose this control.
+                            if (!isTv) {
+                                val gigabyte = 1024L * 1024L * 1024L
+                                val offlineLimitOptions = listOf(5L, 10L, 25L, 50L, 100L).map { it * gigabyte } + 0L
+                                val offlineLimitLabel = if (offlineMaxStorageBytes == 0L) {
+                                    context.getString(com.klortek.velora.R.string.settings_offline_storage_unlimited)
+                                } else {
+                                    "${offlineMaxStorageBytes / gigabyte} GB"
+                                }
+                                SettingCycle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_offline_storage_limit),
+                                    description = context.getString(com.klortek.velora.R.string.settings_offline_storage_limit_description),
+                                    currentValue = offlineLimitLabel,
+                                    onCycle = {
+                                        val currentIndex = offlineLimitOptions.indexOf(offlineMaxStorageBytes).coerceAtLeast(0)
+                                        val next = offlineLimitOptions[(currentIndex + 1) % offlineLimitOptions.size]
+                                        offlineMaxStorageBytes = next
+                                        settings.offlineMaxStorageBytes = next
+                                    }
+                                )
+                                SettingToggle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_offline_wifi_only),
+                                    description = context.getString(com.klortek.velora.R.string.settings_offline_wifi_only_description),
+                                    isEnabled = offlineWifiOnly,
+                                    onToggle = {
+                                        offlineWifiOnly = !offlineWifiOnly
+                                        settings.offlineWifiOnly = offlineWifiOnly
+                                    }
+                                )
+                                SettingToggle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_offline_charging_only),
+                                    description = context.getString(com.klortek.velora.R.string.settings_offline_charging_only_description),
+                                    isEnabled = offlineChargingOnly,
+                                    onToggle = {
+                                        offlineChargingOnly = !offlineChargingOnly
+                                        settings.offlineChargingOnly = offlineChargingOnly
+                                    }
+                                )
+                                SettingToggle(
+                                    title = context.getString(com.klortek.velora.R.string.settings_smart_downloads),
+                                    description = context.getString(com.klortek.velora.R.string.settings_smart_downloads_description),
+                                    isEnabled = smartDownloadsEnabled,
+                                    onToggle = {
+                                        smartDownloadsEnabled = !smartDownloadsEnabled
+                                        settings.smartDownloadsEnabled = smartDownloadsEnabled
+                                    }
+                                )
+                                if (smartDownloadsEnabled) {
+                                    SettingToggle(
+                                        title = context.getString(com.klortek.velora.R.string.settings_smart_remove_watched),
+                                        description = context.getString(com.klortek.velora.R.string.settings_smart_remove_watched_description),
+                                        isEnabled = smartDownloadsRemoveWatched,
+                                        onToggle = {
+                                            smartDownloadsRemoveWatched = !smartDownloadsRemoveWatched
+                                            settings.smartDownloadsRemoveWatched = smartDownloadsRemoveWatched
+                                        }
+                                    )
+                                    SettingCycle(
+                                        title = context.getString(com.klortek.velora.R.string.settings_smart_keep_episodes),
+                                        description = context.getString(com.klortek.velora.R.string.settings_smart_keep_episodes_description),
+                                        currentValue = smartDownloadsKeepUnwatchedEpisodes.toString(),
+                                        onCycle = {
+                                            val options = listOf(0, 1, 2, 3, 5, 10)
+                                            val next = options[(options.indexOf(smartDownloadsKeepUnwatchedEpisodes).coerceAtLeast(0) + 1) % options.size]
+                                            smartDownloadsKeepUnwatchedEpisodes = next
+                                            settings.smartDownloadsKeepUnwatchedEpisodes = next
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                        
+                        SettingsCategory.ADVANCED -> {
+                            // Debug Outlines
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_advanced_debug_outlines),
+                                description = context.getString(com.klortek.velora.R.string.settings_advanced_debug_outlines_description),
+                                isEnabled = debugOutlinesEnabled,
+                                onToggle = {
+                                    debugOutlinesEnabled = !debugOutlinesEnabled
+                                    settings.showDebugOutlines = debugOutlinesEnabled
+                                }
+                            )
+                            
+                            // Long Press Duration
+                            SettingCycle(
+                                title = context.getString(com.klortek.velora.R.string.settings_advanced_long_press),
+                                description = context.getString(com.klortek.velora.R.string.settings_advanced_long_press_description),
+                                currentValue = "${longPressDurationSeconds}s",
+                                onCycle = {
+                                    longPressDurationSeconds = when (longPressDurationSeconds) {
+                                        2 -> 3
+                                        3 -> 4
+                                        4 -> 5
+                                        5 -> 2
+                                        else -> 2
+                                    }
+                                    settings.longPressDurationSeconds = longPressDurationSeconds
+                                }
+                            )
+                            
+                            // Clear Image Cache
+                            SettingButton(
+                                title = context.getString(com.klortek.velora.R.string.settings_advanced_clear_image_cache),
+                                description = context.getString(com.klortek.velora.R.string.settings_advanced_clear_image_cache_description),
+                                buttonText = context.getString(com.klortek.velora.R.string.settings_clear),
+                                onClick = {
+                                    scope.launch {
+                                        try {
+                                            withContext(Dispatchers.IO) {
+                                                val imageLoader: coil.ImageLoader = context.imageLoader
+                                                imageLoader.diskCache?.clear()
+                                                imageLoader.memoryCache?.clear()
+                                                
+                                                val coilCacheDir = context.filesDir.resolve("image_cache")
+                                                if (coilCacheDir.exists()) {
+                                                    coilCacheDir.deleteRecursively()
+                                                }
+                                                
+                                                val glideCacheDir = File(context.cacheDir, "glide_image_cache")
+                                                if (glideCacheDir.exists()) {
+                                                    glideCacheDir.deleteRecursively()
+                                                }
+                                                
+                                                Glide.get(context).clearDiskCache()
+                                            }
+                                            
+                                            withContext(Dispatchers.Main) {
+                                                Glide.get(context).clearMemory()
+                                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.settings_cache_cleared), Toast.LENGTH_SHORT).show()
+                                            }
+                                        } catch (e: Exception) {
+                                            android.util.Log.e("SettingsScreen", "Error clearing cache", e)
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, context.getString(com.klortek.velora.R.string.error_fragment_message), Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                        
+                        SettingsCategory.UPDATES -> {
+                            // Auto-Check for Updates
+                            SettingToggle(
+                                title = context.getString(com.klortek.velora.R.string.settings_updates_auto_check),
+                                description = context.getString(com.klortek.velora.R.string.settings_updates_auto_check_description),
+                                isEnabled = autoUpdateEnabled,
+                                onToggle = {
+                                    autoUpdateEnabled = !autoUpdateEnabled
+                                    settings.autoUpdateEnabled = autoUpdateEnabled
+                                }
+                            )
+                            
+                            // Check for Updates
+                            SettingButton(
+                                title = context.getString(com.klortek.velora.R.string.settings_updates_check),
+                                description = if (checkingForUpdates) {
+                                    context.getString(com.klortek.velora.R.string.settings_updates_checking)
+                                } else if (updateCheckMessage != null) {
+                                    updateCheckMessage!!
+                                } else {
+                                    context.getString(com.klortek.velora.R.string.settings_updates_check_description)
+                                },
+                                buttonText = if (checkingForUpdates) context.getString(com.klortek.velora.R.string.settings_updates_checking_short) else context.getString(com.klortek.velora.R.string.settings_check),
+                                enabled = !checkingForUpdates,
+                                onClick = {
+                                    scope.launch {
+                                        checkingForUpdates = true
+                                        updateCheckMessage = null
+                                        
+                                        try {
+                                            val versionCode = try {
+                                                val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                                                    packageInfo.longVersionCode.toInt()
+                                                } else {
+                                                    @Suppress("DEPRECATION")
+                                                    packageInfo.versionCode
+                                                }
+                                            } catch (e: Exception) { 1 }
+                                            val versionName = runCatching {
+                                                context.packageManager.getPackageInfo(context.packageName, 0).versionName
+                                            }.getOrNull()
+                                            
+                                            val release = withContext(Dispatchers.IO) {
+                                                UpdateService.getLatestRelease()
+                                            }
+                                            
+                                            if (release != null) {
+                                                val remoteVersionCode = UpdateService.parseVersion(release.tagName)
+                                                if (UpdateService.updateAvailable(remoteVersionCode, versionCode, versionName)) {
+                                                    latestRelease = release
+                                                    showUpdateDialog = true
+                                                    updateCheckMessage = context.getString(com.klortek.velora.R.string.settings_update_available, release.name)
+                                                } else {
+                                                    updateCheckMessage = context.getString(com.klortek.velora.R.string.settings_update_latest, release.name)
+                                                }
+                                            } else {
+                                                updateCheckMessage = context.getString(com.klortek.velora.R.string.settings_update_failed)
+                                            }
+                                        } catch (e: Exception) {
+                                            android.util.Log.e("SettingsScreen", "Error checking for updates", e)
+                                            updateCheckMessage = context.getString(com.klortek.velora.R.string.settings_update_error, e::class.simpleName ?: "Unknown")
+                                        } finally {
+                                            checkingForUpdates = false
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                        
+                        SettingsCategory.ABOUT -> {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 24.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = "Velora",
+                                    style = MaterialTheme.typography.headlineMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                        text = stringResource(com.klortek.velora.R.string.settings_version, BuildConfig.VERSION_NAME),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                                )
+                                Text(
+                                        text = stringResource(com.klortek.velora.R.string.settings_by_klortek),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                                )
+                            }
+                        }
+
+                        SettingsCategory.ACCOUNT -> {
+                            // Log Out
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = stringResource(com.klortek.velora.R.string.settings_logout),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    Text(
+                                        text = stringResource(com.klortek.velora.R.string.settings_account_logout_description),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                                        modifier = Modifier.padding(top = 4.dp)
+                                    )
+                                }
+                                
+                                Button(
+                                    onClick = { showLogoutConfirmation = true },
+                                    colors = ButtonDefaults.colors(
+                                        containerColor = MaterialTheme.colorScheme.error
+                                    )
+                                ) {
+                                    Text(stringResource(com.klortek.velora.R.string.settings_logout))
+                                }
+                            }
+                        }
+
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(if (isTv) MaterialTheme.colorScheme.surface else MobileSettingsBackground)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Responsive Header
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = if (isTv) 48.dp else 16.dp,
+                        vertical = if (isTv) 24.dp else 16.dp
+                    ),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (isTv) {
+                    IconButton(
+                        onClick = onBack,
+                        colors = IconButtonDefaults.colors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f),
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(com.klortek.velora.R.string.settings_back)
+                        )
+                    }
+
+                    Text(
+                        text = stringResource(com.klortek.velora.R.string.settings_title),
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
+                } else {
+                    androidx.compose.material3.IconButton(
+                        onClick = {
+                            if (activeCategoryDetail != null) {
+                                activeCategoryDetail = null
+                            } else {
+                                onBack()
+                            }
+                        }
+                    ) {
+                        androidx.compose.material3.Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = context.getString(com.klortek.velora.R.string.action_back),
+                            tint = MobileSettingsText
+                        )
+                    }
+
+                    androidx.compose.material3.Text(
+                        text = if (activeCategoryDetail != null) activeCategoryDetail!!.localizedTitle(context)
+                        else context.getString(com.klortek.velora.R.string.nav_settings),
+                        style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MobileSettingsText,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+
+            if (!isTv && activeCategoryDetail == null) {
+                // Mobile category list
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    SettingsCategory.entries
+                        .filterNot { it == SettingsCategory.JELLYSEERR || it == SettingsCategory.TRAILERS }
+                        .forEach { category ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(MobileSettingsSurface)
+                                .border(
+                                    width = 1.dp,
+                                    color = MobileSettingsDivider,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .clickable { activeCategoryDetail = category }
+                                .padding(horizontal = 16.dp, vertical = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            androidx.compose.material3.Icon(
+                                imageVector = category.icon,
+                                contentDescription = null,
+                                tint = MobileSettingsAccent,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            androidx.compose.material3.Text(
+                                text = category.localizedTitle(context),
+                                style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
+                                color = MobileSettingsText,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+            } else {
+                val categoryToRender = if (isTv) selectedCategory else activeCategoryDetail!!
+
+                if (isTv) {
+                    // TV content
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 48.dp)
+                            .padding(bottom = 24.dp)
+                    ) {
+                        // Left column: Categories
+                        Column(
+                            modifier = Modifier
+                                .width(280.dp)
+                                .fillMaxHeight()
+                                .padding(end = 24.dp)
+                                .verticalScroll(rememberScrollState()),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            SettingsCategory.entries
+                                .filterNot { it == SettingsCategory.JELLYSEERR || it == SettingsCategory.TRAILERS }
+                                .forEach { category ->
+                                CategoryItem(
+                                    category = category,
+                                    isSelected = selectedCategory == category,
+                                    onClick = { selectedCategory = category },
+                                    onFocused = { selectedCategory = category }
+                                )
+                            }
+                        }
+                        
+                        // Vertical divider
+                        Box(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .fillMaxHeight()
+                                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                        )
+                        
+                        // Right panel: Settings for selected category
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .padding(start = 32.dp)
+                                .verticalScroll(rememberScrollState()),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            // Category title
+                            Text(
+                                text = selectedCategory.localizedTitle(context),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            
+                            SettingsOptions(categoryToRender)
+                        }
+                    }
+                } else {
+                    // Mobile content panel
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        SettingsOptions(categoryToRender)
+                        
+                        // Add some bottom padding
+                        Spacer(modifier = Modifier.height(48.dp))
+                    }
+                }
+            }
+        }
+        
+        // Dialogs
+        // Logout confirmation dialog
+        if (showLogoutConfirmation) {
+            Dialog(
+                onDismissRequest = { showLogoutConfirmation = false },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.7f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    val content = @Composable {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(if (isTv) 32.dp else 24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(24.dp)
+                        ) {
+                            Text(
+                                        text = stringResource(com.klortek.velora.R.string.settings_logout_confirm_title),
+                                style = if (isTv) MaterialTheme.typography.headlineSmall else androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                                color = if (isTv) MaterialTheme.colorScheme.onSurface else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+                            )
+                            
+                            Text(
+                                        text = stringResource(com.klortek.velora.R.string.settings_logout_confirm_message),
+                                style = if (isTv) MaterialTheme.typography.bodyMedium else androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                                color = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f) else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                            
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                if (isTv) {
+                                    Button(
+                                        onClick = { showLogoutConfirmation = false },
+                                        modifier = Modifier.weight(1f),
+                                        colors = ButtonDefaults.colors(
+                                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                        )
+                                    ) {
+                                        Text(stringResource(com.klortek.velora.R.string.settings_cancel))
+                                    }
+                                    
+                                    Button(
+                                        onClick = {
+                                            showLogoutConfirmation = false
+                                            val config = JellyfinConfig(context)
+                                            config.clearAuth()
+                                            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+                                            intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP or android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                            context.startActivity(intent)
+                                            (context as? android.app.Activity)?.finish()
+                                        },
+                                        modifier = Modifier.weight(1f),
+                                        colors = ButtonDefaults.colors(
+                                            containerColor = MaterialTheme.colorScheme.error
+                                        )
+                                    ) {
+                                    Text(stringResource(com.klortek.velora.R.string.settings_logout))
+                                    }
+                                } else {
+                                    androidx.compose.material3.Button(
+                                        onClick = { showLogoutConfirmation = false },
+                                        modifier = Modifier.weight(1f),
+                                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                            containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant
+                                        )
+                                    ) {
+                                        androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel), color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant)
+                                    }
+                                    
+                                    androidx.compose.material3.Button(
+                                        onClick = {
+                                            showLogoutConfirmation = false
+                                            val config = JellyfinConfig(context)
+                                            config.clearAuth()
+                                            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+                                            intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP or android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                            context.startActivity(intent)
+                                            (context as? android.app.Activity)?.finish()
+                                        },
+                                        modifier = Modifier.weight(1f),
+                                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                            containerColor = androidx.compose.material3.MaterialTheme.colorScheme.error
+                                        )
+                                    ) {
+                                    androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_logout), color = Color.White)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (isTv) {
+                        Surface(
+                            modifier = Modifier
+                                .width(500.dp)
+                                .heightIn(max = 300.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = SurfaceDefaults.colors(
+                                containerColor = MaterialTheme.colorScheme.surface,
+                                contentColor = MaterialTheme.colorScheme.onSurface
+                            ),
+                            content = { content() }
+                        )
+                    } else {
+                        androidx.compose.material3.Surface(
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .padding(16.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+                            contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                            content = { content() }
+                        )
+                    }
+                }
+            }
+        }
+
+        // Show update dialog if update is found
+        latestRelease?.let { release ->
+            if (showUpdateDialog) {
+                UpdateDialog(
+                    release = release,
+                    onDismiss = {
+                        showUpdateDialog = false
+                        latestRelease = null
+                    },
+                    onUpdate = {
+                        showUpdateDialog = false
+                        latestRelease = null
+                    }
+                )
+            }
+        }
+
+        // ExoPlayer subtitle text color picker dialog
+        if (showExoSubtitleColorDialog) {
+            SubtitleColorPickerDialog(
+                            title = stringResource(com.klortek.velora.R.string.settings_subtitles_text_color),
+                currentColor = settings.exoSubtitleTextColor,
+                onColorSelected = { color ->
+                    settings.exoSubtitleTextColor = color
+                    showExoSubtitleColorDialog = false
+                },
+                onDismiss = { showExoSubtitleColorDialog = false }
+            )
+        }
+
+        // ExoPlayer subtitle background color picker dialog
+        if (showExoSubtitleBgColorDialog) {
+            SubtitleColorPickerDialog(
+                            title = stringResource(com.klortek.velora.R.string.settings_subtitles_background_color),
+                currentColor = settings.exoSubtitleBgColor,
+                onColorSelected = { color ->
+                    settings.exoSubtitleBgColor = color
+                    showExoSubtitleBgColorDialog = false
+                },
+                onDismiss = { showExoSubtitleBgColorDialog = false }
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryItem(
+    category: SettingsCategory,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    onFocused: () -> Unit
+) {
+    val context = LocalContext.current
+    var isFocused by remember { mutableStateOf(false) }
+    
+    val backgroundColor = when {
+        isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+        isFocused -> MaterialTheme.colorScheme.surfaceVariant
+        else -> Color.Transparent
+    }
+    
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .onFocusChanged { 
+                isFocused = it.isFocused 
+                if (it.isFocused) {
+                    onFocused()
+                }
+            },
+        colors = ButtonDefaults.colors(
+            containerColor = backgroundColor,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
+        shape = ButtonDefaults.shape(shape = RoundedCornerShape(8.dp)),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp) // Reduced button padding by 20%
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp), // Decreased by 20% (5.1 * 0.8 ≈ 4)
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                imageVector = category.icon,
+                contentDescription = null,
+                tint = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                modifier = Modifier.size(20.dp) // Reduced icon size by ~17% (24 * 0.83 ≈ 20)
+            )
+            Text(
+                text = category.localizedTitle(context),
+                style = MaterialTheme.typography.bodyMedium, // Smaller text style
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
+private fun SettingToggle(
+    title: String,
+    description: String,
+    isEnabled: Boolean,
+    onToggle: () -> Unit,
+    enabledText: String = "ON",
+    disabledText: String = "OFF"
+) {
+    val context = LocalContext.current
+    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    val titleColor = if (isTv) MaterialTheme.colorScheme.onSurface else MobileSettingsText
+    val descriptionColor = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else MobileSettingsSecondaryText
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(!isTv) { onToggle() }
+            .padding(vertical = if (isTv) 0.dp else 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            if (isTv) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
+                Text(text = description, style = MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            } else {
+                androidx.compose.material3.Text(text = title, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge, color = titleColor)
+                androidx.compose.material3.Text(text = description, style = androidx.compose.material3.MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            }
+        }
+        
+        if (isTv) {
+            Button(
+                onClick = onToggle,
+                colors = ButtonDefaults.colors(
+                    containerColor = if (isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
+                )
+            ) {
+                Text(if (isEnabled) enabledText else disabledText)
+            }
+        } else {
+            androidx.compose.material3.Switch(
+                checked = isEnabled,
+                onCheckedChange = { onToggle() }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SettingSlider(
+    title: String,
+    description: String,
+    onDecrease: () -> Unit,
+    onIncrease: () -> Unit,
+    canDecrease: Boolean,
+    canIncrease: Boolean
+) {
+    val context = LocalContext.current
+    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    val titleColor = if (isTv) MaterialTheme.colorScheme.onSurface else MobileSettingsText
+    val descriptionColor = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else MobileSettingsSecondaryText
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            if (isTv) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
+                Text(text = description, style = MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            } else {
+                androidx.compose.material3.Text(text = title, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge, color = titleColor)
+                androidx.compose.material3.Text(text = description, style = androidx.compose.material3.MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            }
+        }
+        
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (isTv) {
+                Button(onClick = onDecrease, enabled = canDecrease) {
+                    Text("-")
+                }
+                Button(onClick = onIncrease, enabled = canIncrease) {
+                    Text("+")
+                }
+            } else {
+                androidx.compose.material3.IconButton(
+                    onClick = onDecrease,
+                    enabled = canDecrease
+                ) {
+                    androidx.compose.material3.Text(
+                        text = "-",
+                        style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = if (canDecrease) androidx.compose.material3.MaterialTheme.colorScheme.primary 
+                                else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    )
+                }
+                androidx.compose.material3.IconButton(
+                    onClick = onIncrease,
+                    enabled = canIncrease
+                ) {
+                    androidx.compose.material3.Text(
+                        text = "+",
+                        style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = if (canIncrease) androidx.compose.material3.MaterialTheme.colorScheme.primary 
+                                else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SettingCycle(
+    title: String,
+    description: String,
+    currentValue: String,
+    onCycle: () -> Unit
+) {
+    val context = LocalContext.current
+    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    val titleColor = if (isTv) MaterialTheme.colorScheme.onSurface else MobileSettingsText
+    val descriptionColor = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else MobileSettingsSecondaryText
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(!isTv) { onCycle() }
+            .padding(vertical = if (isTv) 0.dp else 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            if (isTv) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
+                Text(text = description, style = MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            } else {
+                androidx.compose.material3.Text(text = title, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge, color = titleColor)
+                androidx.compose.material3.Text(text = description, style = androidx.compose.material3.MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            }
+        }
+        
+        if (isTv) {
+            Button(
+                onClick = onCycle,
+                colors = ButtonDefaults.colors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(currentValue)
+            }
+        } else {
+            androidx.compose.material3.TextButton(onClick = onCycle) {
+                androidx.compose.material3.Text(
+                    text = currentValue,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SettingButton(
+    title: String,
+    description: String,
+    buttonText: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    val context = LocalContext.current
+    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+    val titleColor = if (isTv) MaterialTheme.colorScheme.onSurface else MobileSettingsText
+    val descriptionColor = if (isTv) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f) else MobileSettingsSecondaryText
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(!isTv && enabled) { onClick() }
+            .padding(vertical = if (isTv) 0.dp else 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            if (isTv) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
+                Text(text = description, style = MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            } else {
+                androidx.compose.material3.Text(text = title, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge, color = titleColor)
+                androidx.compose.material3.Text(text = description, style = androidx.compose.material3.MaterialTheme.typography.bodyMedium, color = descriptionColor, modifier = Modifier.padding(top = 4.dp))
+            }
+        }
+        
+        if (isTv) {
+            Button(
+                onClick = onClick,
+                enabled = enabled,
+                colors = ButtonDefaults.colors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(buttonText)
+            }
+        } else {
+            androidx.compose.material3.Button(
+                onClick = onClick,
+                enabled = enabled,
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primary
+                )
+            ) {
+                androidx.compose.material3.Text(buttonText)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun SubtitleColorPickerDialog(
+    title: String,
+    currentColor: Int,
+    onColorSelected: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+    val isTv = remember(context) { com.klortek.velora.ui.DeviceUtils.isTvDevice(context) }
+
+    val colorOptions = listOf(
+        "White" to 0xFFFFFFFF.toInt(),
+        "Black" to 0xFF000000.toInt(),
+        "Yellow" to 0xFFFFFF00.toInt(),
+        "Cyan" to 0xFF00FFFF.toInt(),
+        "Green" to 0xFF00FF00.toInt(),
+        "Red" to 0xFFFF0000.toInt(),
+        "Blue" to 0xFF0000FF.toInt(),
+        "Magenta" to 0xFFFF00FF.toInt()
+    )
+
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.7f)),
+            contentAlignment = Alignment.Center
+        ) {
+            if (isTv) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth(0.35f)
+                        .fillMaxHeight(0.7f),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = SurfaceDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(24.dp)
+                    ) {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontSize = MaterialTheme.typography.headlineMedium.fontSize * 0.7f
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+
+                        val listItemColors = ListItemDefaults.colors(
+                            containerColor = Color.Transparent,
+                            contentColor = MaterialTheme.colorScheme.onSurface,
+                            focusedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                            focusedContentColor = Color.White,
+                            selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                            selectedContentColor = Color.White
+                        )
+
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                            contentPadding = PaddingValues(vertical = 4.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            items(colorOptions) { (name, color) ->
+                                val isSelected = color == currentColor
+                                ListItem(
+                                    selected = isSelected,
+                                    onClick = { onColorSelected(color) },
+                                    headlineContent = {
+                                        Text(
+                                            text = name,
+                                            style = MaterialTheme.typography.bodyMedium.copy(
+                                                fontSize = MaterialTheme.typography.bodyMedium.fontSize * 0.9f
+                                            )
+                                        )
+                                    },
+                                    trailingContent = {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(20.dp)
+                                                .background(Color(color), RoundedCornerShape(4.dp))
+                                                .border(1.dp, Color.White.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
+                                        )
+                                    },
+                                    colors = listItemColors,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            onClick = onDismiss,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.colors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                contentColor = MaterialTheme.colorScheme.onSurface
+                            )
+                        ) {
+                            Text(stringResource(com.klortek.velora.R.string.settings_cancel))
+                        }
+                    }
+                }
+            } else {
+                androidx.compose.material3.Surface(
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .fillMaxHeight(0.6f),
+                    shape = RoundedCornerShape(16.dp),
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+                    contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp)
+                    ) {
+                        androidx.compose.material3.Text(
+                            text = title,
+                            style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                            contentPadding = PaddingValues(vertical = 4.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            items(colorOptions) { (name, color) ->
+                                val isSelected = color == currentColor
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .background(
+                                            if (isSelected) androidx.compose.material3.MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                                            else Color.Transparent
+                                        )
+                                        .clickable { onColorSelected(color) }
+                                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    androidx.compose.material3.Text(
+                                        text = name,
+                                        style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
+                                        color = if (isSelected) androidx.compose.material3.MaterialTheme.colorScheme.primary
+                                                else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .size(24.dp)
+                                            .background(Color(color), RoundedCornerShape(4.dp))
+                                            .border(1.dp, Color.White.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        androidx.compose.material3.Button(
+                            onClick = onDismiss,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            androidx.compose.material3.Text(stringResource(com.klortek.velora.R.string.settings_cancel))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

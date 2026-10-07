@@ -1,0 +1,38 @@
+name: Comprobar política de ramas
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  only-main:
+    name: Solo rama pública main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar ramas remotas
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Use the GitHub API instead of an authenticated git transport.
+          # The latter prompts for a username on some hosted runners even
+          # though GH_TOKEN is present, which made the policy report an empty
+          # branch list and fail before checking the repository.
+          mapfile -t branches < <(
+            gh api --paginate "repos/${GITHUB_REPOSITORY}/branches?per_page=100" \
+              --jq '.[].name' |
+              sort
+          )
+          if [ "${#branches[@]}" -ne 1 ] || [ "${branches[0]}" != "main" ]; then
+            printf 'Ramas públicas encontradas:\n'
+            printf ' - %s\n' "${branches[@]}"
+            echo 'La política de Velora exige que la única rama pública sea main.'
+            exit 1
+          fi
+          echo 'Política de ramas correcta: solo main.'

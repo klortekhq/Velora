@@ -1,0 +1,244 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
+    id("org.jetbrains.kotlin.kapt")
+}
+
+android {
+    namespace = "com.klortek.velora"
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = "com.klortek.velora"
+        minSdk = 21
+        targetSdk = 36
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Keep the Play-compatible code monotonic; the public release is semantic.
+        versionCode = 10400
+        versionName = "1.4.0"
+
+        ndk {
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
+        }
+    }
+
+    // Keep one shared Jellyfin/ExoPlayer core while publishing genuinely
+    // independent installs for TV/Fire TV and mobile/tablet.
+    flavorDimensions += "platform"
+    productFlavors {
+        create("tv") {
+            dimension = "platform"
+            applicationIdSuffix = ".tv"
+            versionNameSuffix = "-tv"
+            buildConfigField("boolean", "TV_BUILD", "true")
+        }
+        create("mobile") {
+            dimension = "platform"
+            applicationIdSuffix = ".mobile"
+            versionNameSuffix = "-mobile"
+            buildConfigField("boolean", "TV_BUILD", "false")
+        }
+    }
+
+    // Distribution signing is opt-in and supplied by CI/local secure properties.
+    // Without all four values the release remains explicitly unsigned for QA.
+    val releaseSigningStoreFile = providers.gradleProperty("veloraReleaseStoreFile").orNull
+    val releaseSigningStorePassword = providers.gradleProperty("veloraReleaseStorePassword").orNull
+    val releaseSigningKeyAlias = providers.gradleProperty("veloraReleaseKeyAlias").orNull
+    val releaseSigningKeyPassword = providers.gradleProperty("veloraReleaseKeyPassword").orNull
+    val hasReleaseSigning = listOf(
+        releaseSigningStoreFile,
+        releaseSigningStorePassword,
+        releaseSigningKeyAlias,
+        releaseSigningKeyPassword
+    ).all { !it.isNullOrBlank() }
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("veloraRelease") {
+                storeFile = file(releaseSigningStoreFile!!)
+                storePassword = releaseSigningStorePassword
+                keyAlias = releaseSigningKeyAlias
+                keyPassword = releaseSigningKeyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("veloraRelease")
+            }
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    androidComponents {
+        onVariants { variant ->
+            if (variant.buildType == "release") {
+                variant.outputs.forEach { output ->
+                    val out = output as com.android.build.api.variant.impl.VariantOutputImpl
+                    out.outputFileName.set(
+                        if (hasReleaseSigning) "velora-release.apk" else "velora-release-unsigned.apk"
+                    )
+                }
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    // Velora lets the user change language from Settings at runtime. Keep all
+    // translated resources in the base bundle instead of requiring Play Core
+    // language downloads that the app does not implement.
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+    // AppBundleLocaleChanges does not resolve the Kotlin DSL block above in
+    // every AGP lint version. The bundle setting is intentional and keeps all
+    // locales available for Velora's in-app language switcher.
+    lint {
+        disable += "AppBundleLocaleChanges"
+    }
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
+}
+
+dependencies {
+
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // -------------------------------------------------------------
+    // AndroidX Core + Leanback
+    // -------------------------------------------------------------
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.palette)
+    implementation(libs.androidx.leanback)
+
+    // -------------------------------------------------------------
+    // Images - Glide + Coil
+    // -------------------------------------------------------------
+    implementation(libs.glide)
+    kapt("com.github.bumptech.glide:compiler:4.11.0")
+    implementation(libs.coil.compose)
+
+    // -------------------------------------------------------------
+    // Compose BOM + UI
+    // -------------------------------------------------------------
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.foundation)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation("androidx.compose.material3:material3:1.3.0")
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // TV Compose
+    implementation(libs.tv.foundation)
+    implementation(libs.tv.material)
+
+    // -------------------------------------------------------------
+    // Navigation
+    // -------------------------------------------------------------
+    implementation(libs.navigation.compose)
+
+    // -------------------------------------------------------------
+    // JSON / Networking - Ktor + Gson
+    // -------------------------------------------------------------
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.kotlinx.serialization.json)
+    implementation("com.google.code.gson:gson:2.11.0")
+
+    // GitHub updater + YouTube trailer extraction
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation(project(":newpipe-extractor"))
+
+    // -------------------------------------------------------------
+    // Lottie
+    // -------------------------------------------------------------
+    implementation(libs.lottieCompose)
+
+    // -------------------------------------------------------------
+    // Media3 / ExoPlayer - COMPLETE JELLYFIN CLIENT EXTENSIONS
+    // -------------------------------------------------------------
+    
+    // Core ExoPlayer
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.common)
+    
+    // Adaptive Streaming (HLS, DASH, SmoothStreaming)
+    implementation(libs.media3.exoplayer.hls)
+    implementation(libs.media3.exoplayer.dash)
+    implementation(libs.media3.exoplayer.smoothstreaming)
+    
+    // UI Components
+    implementation(libs.media3.ui)
+    implementation(libs.media3.ui.compose)
+    implementation(libs.media3.ui.leanback) // Android TV optimized UI
+    
+    // Extractors (Subtitle support: SRT, ASS, VTT, TTML, MKV internal subs)
+    implementation(libs.media3.extractor)
+    
+    // MediaSession (TV remote controls, Next Episode, Media keys)
+    implementation(libs.media3.session)
+    
+    // Network DataSources
+    implementation(libs.media3.datasource.okhttp) // REQUIRED for Jellyfin API reliability
+    implementation(libs.media3.datasource.cronet) // Optional: Ultra-low latency streaming
+    
+    // Transformer (Optional: Advanced media processing)
+    implementation(libs.media3.transformer)
+    
+    // -------------------------------------------------------------
+    // FFmpeg Decoder (Jellyfin-provided)
+    // -------------------------------------------------------------
+    // Audio: DTS, DTS-HD, TrueHD, AC3, E-AC3, FLAC, ALAC, Vorbis, Opus
+    // Licensed under GPLv3 (compatible with Jellyfin ecosystem)
+    implementation(libs.jellyfin.media3.ffmpeg.decoder)
+    
+    // -------------------------------------------------------------
+    // AV1 Video Decoder (libgav1 software decoder)
+    // -------------------------------------------------------------
+    // Enables AV1 playback on devices without hardware AV1 support
+    // Uses Google's libgav1 for software decoding
+    // Shield TV and many Android TV devices need this for AV1
+    implementation(project(":decoder_av1"))
+    
+    // -------------------------------------------------------------
+    // MPV Player (Optional - can be enabled in settings)
+    // -------------------------------------------------------------
+    // Uses embedded libmpv.so and libplayer.so from jniLibs folder
+    // Requires .so files to be placed in app/src/main/jniLibs/{abi}/
+}

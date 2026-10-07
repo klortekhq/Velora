@@ -1,0 +1,181 @@
+# Velora
+
+### Cliente Jellyfin multiplataforma
+
+Versión de código: **1.4.0** · Por **Klørtek**
+
+Velora es una aplicación independiente para disfrutar de bibliotecas Jellyfin con una interfaz rápida, limpia y adaptada a cada pantalla. La experiencia móvil está pensada para tocar y deslizar; la experiencia de televisión, para mando a distancia, D-pad y pantalla grande.
+
+## Qué ofrece
+
+- Inicio tipo streaming con **Seguir viendo**, películas y series añadidas recientemente; los episodios se consultan desde la ficha de cada serie y **Seguir viendo**, sin una fila redundante de episodios recientes en el inicio.
+- Fichas completas de películas y series con temporadas, episodios, reparto, estudios, detalles técnicos y títulos relacionados.
+- Reparto interactivo: al abrir una persona se muestran sus películas y series disponibles en Jellyfin.
+- Búsqueda, ordenación y filtros con interfaz localizada.
+- Sesión persistente y reconexión automática cuando el servidor vuelve a estar disponible.
+- Televisión en directo integrada en la navegación principal cuando el usuario tiene Live TV habilitada.
+- Canales Live TV agrupados por identidad de Jellyfin: se muestra una sola fila homogénea y, cuando existen varias fuentes, se pueden elegir con un toque o con el mando.
+- EPG, programa actual, logos y progreso cuando el servidor los proporciona.
+- Descargas gestionadas dentro de la aplicación para reproducir contenido compatible sin conexión en móvil y tablet; no se muestran en TV ni en navegador.
+- Interfaz cyan, navegación redondeada y layouts específicos para móvil y televisión.
+
+## Reproducción
+
+Velora sigue una estrategia **Original First**:
+
+1. Direct Play con aceleración MediaCodec cuando el dispositivo es compatible.
+2. Remux o Direct Stream.
+3. Transcodificación del servidor únicamente cuando es necesaria.
+4. Un backend alternativo únicamente cuando la plataforma o el formato lo necesitan.
+
+En Android, Media3/ExoPlayer es el reproductor predeterminado en móvil, tablet,
+Android TV y Fire TV. El backend alternativo solo se utiliza si el usuario lo
+selecciona o si la compatibilidad del dispositivo lo requiere.
+
+No se limita preventivamente la resolución, bitrate, FPS, HDR ni códec. HDR10, HDR10+, HLG, Dolby Vision, AV1, TrueHD y DTS-HD dependen del hardware, firmware, pantalla, licencias y capacidades del servidor.
+
+Durante la reproducción se puede cambiar la calidad sin salir del reproductor:
+
+- Original — opción predeterminada
+- Automática
+- 4K / 40 Mbps
+- 1080p / 20 Mbps
+- 1080p / 10 Mbps
+- 720p / 5 Mbps
+- 480p / 2 Mbps
+
+También están disponibles los controles de aspecto, audio, subtítulos y ajustes del reproductor. Las preferencias de calidad se recuerdan por usuario y se conservan las pistas seleccionadas cuando Jellyfin lo permite.
+
+## Plataformas
+
+| Plataforma | Experiencia |
+| --- | --- |
+| Android móvil | Interfaz táctil, inicio por filas y reproducción a pantalla completa |
+| Tablet | Layout adaptable y navegación optimizada para pantallas grandes |
+| Android TV | D-pad, botón Back, foco visible y navegación horizontal |
+| Fire TV | Diseño Leanback, banner de TV y reproducción optimizada para el mando |
+| Samsung Tizen | Cliente web de TV con navegación por mando; `.wgt` al usar Tizen Studio |
+| LG webOS | Cliente web de TV con navegación por mando; `.ipk` con `ares-package` |
+| Hisense VIDAA | Bundle HTML5 para publicación en la tienda/portal VIDAA |
+
+La base nativa compartida de Apple está en [`apple/`](apple/) y se valida como
+Swift Package en macOS mediante `apple.yml` y la validación continua. Esta
+validación confirma el paquete compartido y sus tests, pero todavía no equivale
+a una IPA/APP firmada ni a certificación en hardware Apple. Las aplicaciones
+SwiftUI completas de iPhone, iPad y Apple TV todavía están en desarrollo; se
+desarrollan como clientes Apple nativos,
+no como una versión Android estirada. Los paquetes Tizen, webOS y VIDAA requieren validación en sus
+SDK, emuladores o dispositivos reales antes de considerarse certificados.
+
+La pestaña **Televisión en directo** solo aparece cuando Jellyfin informa de que el usuario tiene esa función disponible. No existe una pestaña IPTV separada y la aplicación no lee directamente la lista M3U. Las descargas, la calidad de descarga y el almacenamiento sin conexión solo aparecen en Android móvil/tablet e iPhone/iPad; nunca en TV ni navegador.
+
+## Descargar
+
+Las versiones compiladas se publican en [Releases](https://github.com/klortekhq/Velora/releases) cuando incorporan un bloque funcional o una mejora relevante. No se publica una release por cada ajuste menor; las correcciones pequeñas se agrupan en la siguiente versión significativa, salvo que sean de seguridad o críticas. Una release de distribución reúne los APK de Android firmados, el cliente web, los paquetes Smart TV disponibles y el paquete fuente Apple validado, junto con sus sumas SHA-256. Si faltan secretos de firma, la ejecución queda explícitamente como QA y no se presenta como distribución instalable. Las IPA/APP de Apple requieren firma y distribución desde Xcode/App Store Connect; Velora no publica una IPA ficticia ni presenta el paquete fuente como instalable. Los APK debug y release unsigned se reservan para QA.
+
+## Cliente web y Smart TV
+
+El cliente web común está en [`web/`](web/). Incluye conexión Jellyfin,
+biblioteca, búsqueda, Live TV y reproducción HTML5 responsive para navegador,
+móvil y tablet. Los adaptadores de empaquetado para Samsung Tizen, LG webOS y
+Hisense VIDAA están en [`web/platforms/`](web/platforms/). Tizen genera `.wgt`
+cuando Tizen Studio está instalado; webOS genera `.ipk` con `ares-package`.
+VIDAA utiliza un bundle HTML5 alojado y su publicación requiere validación,
+región y certificado del portal VIDAA, no un `.vpk` universal.
+
+## Compilar desde código fuente
+
+Requisitos:
+
+- JDK 17
+- Android SDK
+- Windows, macOS o Linux con Gradle disponible mediante el wrapper incluido
+
+```bash
+git clone https://github.com/klortekhq/Velora.git
+cd Velora
+./gradlew :app:testMobileDebugUnitTest \
+  :app:assembleMobileDebug :app:assembleTvDebug
+```
+
+Para generar los APK release unsigned de móvil/tablet y TV:
+
+```bash
+./gradlew :app:assembleMobileRelease :app:assembleTvRelease
+```
+
+Los paquetes web/Smart TV aceptan `SOURCE_DATE_EPOCH` para producir metadatos
+de empaquetado deterministas durante una build reproducible; sin esa variable
+se omite la marca temporal del bundle en vez de inventar una fecha de release.
+
+Las variantes debug son instalables para pruebas. Las variantes release
+generadas aquí no están firmadas; deben firmarse con una clave propia antes de
+distribuirse. El flujo de GitHub Actions conserva los debug como artefactos
+temporales de QA y, cuando se crea una etiqueta de versión completa `vX.Y.0`,
+publica en la Release únicamente los APK release firmados, los paquetes web y
+sus sumas SHA-256. Los builds de parche se reservan para QA, salvo correcciones
+críticas o de seguridad.
+
+Para que GitHub Actions produzca releases instalables, configura estos secretos
+del repositorio: `VELORA_ANDROID_KEYSTORE_BASE64`,
+`VELORA_ANDROID_STORE_PASSWORD`, `VELORA_ANDROID_KEY_ALIAS` y
+`VELORA_ANDROID_KEY_PASSWORD`. Si falta cualquiera, una ejecución de QA sin
+`release_tag` conserva el comportamiento seguro y genera un APK
+`release-unsigned`; una etiqueta pública falla deliberadamente hasta que la
+firma esté completa. Nunca se genera una clave ni se sube una credencial al
+repositorio.
+
+Si una ejecución de la etiqueta falla después de crearla, se puede relanzar
+desde GitHub Actions introduciendo esa misma etiqueta en el campo
+`release_tag` de los workflows de Android y web. El workflow comprueba que la
+etiqueta coincide con la versión del código antes de añadir artefactos; dejar
+el campo vacío ejecuta solo una validación de QA y no publica ninguna release.
+
+Para reconciliar manualmente los APK QA agrupados de `v1.4.0`, proporciona una
+credencial explícita y de alcance limitado en `GH_TOKEN` o `GITHUB_TOKEN` y
+ejecuta `node scripts/reconcile-android-qa.mjs` después de compilar los APK.
+El script no lee el gestor de credenciales de Git, valida que la etiqueta sea
+una pre-release y solo sustituye los dos APK agrupados y su checksum.
+
+Para ejecutar el smoke test contra un servidor Jellyfin sin guardar secretos
+en el repositorio, define `VELORA_JELLYFIN_URL`, `VELORA_JELLYFIN_USER` y
+`VELORA_JELLYFIN_PASSWORD` solo en el entorno local y ejecuta:
+
+```powershell
+pwsh -File scripts/qa/jellyfin-smoke.ps1
+```
+
+El script valida disponibilidad, autenticación y la consulta Live TV con
+`MediaSources`; nunca imprime la contraseña ni el token.
+
+## Rendimiento
+
+Velora utiliza Compose, listas perezosas con claves estables, carga diferida de imágenes, caché local y actualizaciones controladas para reducir recomposiciones, consumo de memoria y tráfico innecesario. La reproducción usa una única sesión de reproductor y evita reinicios de Activity al cambiar opciones durante la reproducción.
+
+## Referencias técnicas
+
+Las referencias externas usadas para contrastar Jellyfin, reproducción, descargas y
+comportamiento multiplataforma se documentan en
+[`docs/REFERENCES.md`](docs/REFERENCES.md). Incluye Plezy como referencia técnica
+de MediaBrowser/Jellyfin, WebSocket de sesión, playback y offline; no es una
+dependencia automática.
+
+## Estado del proyecto
+
+Velora está en desarrollo activo. El estado verificable por plataforma, las
+pruebas ejecutadas y las limitaciones conocidas se mantienen en
+[`docs/progress/STATUS.md`](docs/progress/STATUS.md). La reproducción concreta
+de HDR, Dolby Vision, audio passthrough, AV1 y Live TV puede variar según el
+dispositivo y el servidor Jellyfin.
+
+## Privacidad
+
+Velora se conecta al servidor Jellyfin que configura el usuario. No incluye patrocinadores, donaciones, publicidad ni servicios de terceros obligatorios.
+
+## Créditos
+
+Proyecto de Klørtek. Para cualquier incidencia o propuesta, utiliza [Issues](https://github.com/klortekhq/Velora/issues).
+
+## Licencia
+
+Consulta el archivo [LICENSE](LICENSE) para conocer los términos de distribución del proyecto y sus componentes.

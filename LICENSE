@@ -1,0 +1,19 @@
+Velora is licensed under the GNU General Public License, version 3 or later
+(GPL-3.0-or-later).
+
+SPDX-License-Identifier: GPL-3.0-or-later
+
+Copyright (C) 2025 Klørtek
+
+The complete, legally authoritative text of GPL-3.0-or-later is maintained by
+the Free Software Foundation at:
+
+https://www.gnu.org/licenses/gpl-3.0.html
+
+The license applies to Velora source code unless a source file or a third-party
+component carries a more specific license notice. Third-party components and
+their notices are listed in THIRD_PARTY_LICENSES.md.
+
+This project does not add any additional restriction to the GPL. The complete
+license text must accompany every distribution of Velora; the URL above is the
+canonical source for the full text.

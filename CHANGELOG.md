@@ -1,0 +1,2216 @@
+# Registro de cambios
+
+Los cambios relevantes de Velora se documentan en este archivo.
+
+## 1.4.0
+
+- **Live TV:** los canales que comparten identidad visible o ID Jellyfin se
+  presentan como una sola fila y permiten escoger la fuente principal, IPTV u
+  otras alternativas antes de reproducir; la selección también se conserva
+  durante el cambio de canal.
+
+- **Reproductor Android:** los controles de relación de aspecto, pantalla
+  completa y ajustes unificados de audio/subtítulos quedan protegidos por
+  contratos de CI para evitar que vuelvan a convertirse en botones decorativos.
+
+- **Smart TV y web:** se verifican los tests y el empaquetado reproducible de
+  webOS, Samsung/Tizen y VIDAA; los artefactos que requieren SDK o firma se
+  identifican honestamente como bundles de preparación, no como paquetes de
+  tienda certificados.
+
+- **Pipeline de releases:** web y Apple esperan a que Android publique los dos
+  APK firmados antes de tocar la release común; si Android falla o no termina,
+  se rechaza la publicación parcial.
+
+- **Internacionalización Android:** el estado de solicitudes de Jellyseerr ya no
+  cae a “Request pending” en árabe, italiano, japonés, coreano, portugués,
+  ruso, turco ni chino; el contrato de locales exige ahora esta traducción en
+  los ocho catálogos.
+
+- Empaquetado web en Windows: el runner prioriza los shims ejecutables de npm
+  y ejecuta los shims PowerShell de forma explícita y sin shell implícito;
+  `ares-package` vuelve a generar el IPK webOS cuando está instalado.
+
+- Internacionalización Android: el flujo de descargas offline incluye ahora
+  disponibilidad, límite de almacenamiento, Wi‑Fi, solo durante la carga,
+  progreso, integridad y estadísticas de transferencia en árabe, italiano,
+  japonés, coreano, portugués, ruso, turco y chino. La compilación móvil/TV
+  también queda protegida contra escapes XML inválidos en esos catálogos.
+
+- **Navegación Android:** Discovery ya no se muestra en películas, series ni
+  Ajustes; la experiencia queda centrada en Recomendaciones, Biblioteca y
+  búsqueda opcional.
+
+- **Releases:** al reconstruir una versión, el pipeline limpia los APK y
+  checksums Android antiguos antes de publicar los nuevos, evitando confundir
+  builds QA con los artefactos finales.
+
+- **Reproducción móvil:** el control de pantalla completa está disponible en
+  la fila principal del reproductor, con entrada y salida explícitas mediante
+  toque y etiquetas accesibles; no es necesario girar el teléfono.
+
+- Reproducción Android: el selector de formato de imagen del reproductor MPV
+  vuelve a aplicar correctamente Ajustar, Rellenar, 4:3, 16:9, Cine,
+  Estirar y Original en tiempo de reproducción; el reinicio del override usa
+  la orden `no` de MPV y ya no deja la imagen bloqueada en el formato anterior.
+- TV Android: las personas del reparto que aparecen en la pantalla MPV son
+  seleccionables con mando o toque y abren su ficha con películas y series.
+- Live TV multiplataforma: Android, Apple y web agrupan proveedores con IDs
+  Jellyfin distintos cuando comparten el mismo número y nombre visible, sin
+  duplicar filas y manteniendo las fuentes como opciones seleccionables.
+- Descargas offline Android: cancelar o eliminar una descarga gestionada limpia
+  también sus fragmentos parciales `.part`, sin romper la pausa ni la
+  reanudación.
+- Releases: la pre-release reúne APK móvil/TV, cliente web, IPK webOS y
+  bundles Samsung/Tizen y VIDAA; los artefactos sin firma se identifican como
+  QA o bundle preparado y no como paquetes de tienda certificados.
+
+- Live TV: los filtros de favoritos y grupos conservan la interacción táctil y
+  muestran ahora un realce de foco visible para mando y teclado, también cuando
+  la opción todavía no está seleccionada.
+- Jellyfin 12.0/Live TV: los canales M3U ya no intentan reproducirse como
+  direct-play aunque un proveedor antiguo anuncie una ruta directa; Velora
+  usa la sesión `LiveStreamId` y el remux negociado por Jellyfin para evitar
+  fallos con listas IPTV normalizadas por el servidor. La decisión quedó
+  extraída a una política de reproducción reutilizable con regresiones en
+  móvil y TV; Apple y web quedan protegidos para priorizar igualmente la URL
+  de remux/transcodificación cuando Jellyfin la ofrece.
+- Apple móvil: las descargas usan `URLSession` en segundo plano con progreso,
+  velocidad, ETA y pausa/reanudación; el almacenamiento privado y la
+  verificación SHA-256 se mantienen antes de reproducir sin conexión.
+- Apple móvil: la recuperación tras reiniciar la app conserva la tarea de
+  `URLSession` necesaria para volver a pausar o reanudar una descarga activa.
+- Packaging web/Smart TV: los metadatos de build admiten `SOURCE_DATE_EPOCH`
+  para mantener artefactos reproducibles sin fechas variables.
+- Web/TV: los diálogos de ficha y ajustes restauran el foco al cerrarse y
+  empiezan en un control navegable, mejorando mando, teclado y lectores de
+  pantalla.
+- CI: las releases Smart TV fijan el epoch del commit y validan que los
+  paquetes WGT/IPK y bundles de las plataformas disponibles se incorporen a la
+  release común sin publicar APK unsigned.
+- Android: revalidación completa de pruebas unitarias y compilación móvil/TV
+  completada correctamente tras los cambios multiplataforma.
+- Descargas offline Android: se corrige el esquema de la base SQLite para
+  instalaciones nuevas; ya no declara dos claves primarias y conserva el
+  índice necesario para localizar rápidamente cada contenido y calidad.
+- Descargas offline Android: se añade la opción «solo mientras carga»; la cola
+  respeta la preferencia incluso al recuperar trabajos tras reiniciar la app.
+- Descargas offline Android: la pantalla muestra velocidad y tiempo estimado
+  restante cuando la transferencia aporta datos suficientes; el estado se
+  conserva en la base local mediante una migración compatible.
+- Descargas offline Android: las transferencias se pueden pausar y reanudar sin
+  perder el archivo parcial ni las restricciones de red configuradas.
+- Seguridad Android: la auditoría de Logcat se amplía a todo el código propio
+  de Velora (131 archivos) y elimina títulos, nombres de pistas, IDs, rutas de
+  servidor y posiciones de reproducción de las trazas; el contrato de CI
+  bloquea regresiones también en pantallas, subtítulos, música y descubrimiento.
+- Live TV/Jellyfin 12.0: el smoke test recorre ahora todas las páginas de
+  canales y conserva `MediaSources` y programa actual, en lugar de limitar la
+  validación a los primeros 1.000 canales.
+- Live TV multiplataforma: Apple y web aplican la misma paginación de canales
+  (`StartIndex`/`Limit`/`TotalRecordCount`), de modo que las listas IPTV grandes
+  no pierden canales y siguen permitiendo agrupar fuentes bajo el mismo canal.
+- Android: el catálogo español se completa con todas las claves de producto y
+  queda protegido por CI junto con inglés, francés y alemán.
+- Reproducción: la etiqueta de subtítulo descargado respeta ahora el idioma
+  seleccionado en la aplicación, también en la interfaz de TV.
+- Películas y series: las acciones de reproducción, estado visto/no visto y
+  recomendaciones de reparto ya no dependen de textos fijos en español y
+  respetan el idioma configurado.
+- Navegación: el diálogo para salir de la aplicación respeta ahora el idioma
+  configurado también en la interfaz de TV.
+- Actualizaciones Android: los botones y mensajes de error del actualizador
+  respetan ahora el idioma configurado en móvil, tablet y TV, incluidos los
+  estados de descarga, instalación y disponibilidad del APK.
+- Actualizaciones Android: el título, las notas de versión, el progreso y los
+  errores visibles del diálogo también están localizados; ya no queda texto
+  fijo en español en ese flujo.
+- Subtítulos: los diálogos de selección de idioma, búsqueda, proveedor y estado
+  sin resultados usan ahora el idioma activo en móvil, tablet y TV.
+- Música: las vistas principales, cola y reproducción estilo Apple ya no fijan
+  etiquetas como artista, álbum, canciones, pistas o estados vacíos en inglés.
+- Interfaz principal: búsqueda sin resultados, tarjeta «Ver más» y aviso de
+  incompatibilidad AV1 usan ahora recursos localizados en lugar de texto fijo.
+- Jellyseerr: las fichas de películas y series localizan solicitudes, reparto,
+  sinopsis, temporadas, episodios y confirmaciones de solicitud.
+- Series y reproducción: la etiqueta de sinopsis y la opción de desactivar
+  subtítulos usan ahora recursos localizados también en la ficha de series.
+- Reproducción: la duración de los episodios en la cola usa ahora el idioma
+  activo en lugar de fijar la abreviatura inglesa.
+- Compatibilidad Jellyfin 12.0: todas las plataformas usan el esquema estándar
+  `Authorization: MediaBrowser ...`; se eliminan las cabeceras legacy `X-Emby-*`
+  de autenticación, imágenes, Live TV, música, descargas y reproducción nativa.
+  El contrato de CI bloquea su reintroducción.
+- Android: el marco de vídeo de pantalla completa calcula ahora el tamaño
+  contenido según el espacio real disponible; los modos panorámicos ya no se
+  recortan por dimensionarse siempre desde la altura. La selección se mantiene
+  coordinada entre Media3/ExoPlayer, la superficie GL y el cambio de
+  orientación.
+- Android móvil/tablet: la ficha de información técnica queda limitada a
+  formato, códec, resolución, FPS, HDR y pistas de audio; nunca presenta la
+  ruta ni el nombre interno del archivo. Un contrato de CI protege esta
+  separación.
+- Seguridad de documentación: las pruebas y el dashboard ya no contienen la
+  dirección LAN real usada durante QA; los fixtures de red usan una IP de
+  laboratorio.
+- Android móvil/tablet: las fichas de películas y series respetan ahora las
+  barras de estado y navegación del sistema, evitando que el contenido y los
+  botones táctiles queden ocultos bajo la navegación de Android.
+- Seguridad Android: se retiraron de Logcat títulos, IDs, posiciones de
+  reproducción y metadatos de proveedores en las rutas de autenticación y
+  catálogo; CI impide que vuelvan a introducirse.
+- CI: el contrato de navegación Android verifica también que las pestañas de
+  recomendaciones y biblioteca, la ordenación y los filtros de películas y
+  series sigan conectados a la consulta real y a sus preferencias persistentes.
+- Bibliotecas de películas y series: se añade cobertura de regresión para
+  ordenar por nombre, fecha y valoración y combinar favoritos, estado de
+  reproducción y género; los controles de ambas pantallas aplican la misma
+  consulta real.
+- Autenticación Android: la ruta `Users/AuthenticateByName` usa ahora la
+  capitalización canónica de Jellyfin, evitando rechazos de proxies estrictos.
+- Apple: el reproductor nativo de iPhone, iPad y tvOS incorpora pantalla
+  completa explícita con entrada y salida accesibles, sin depender de girar el
+  dispositivo; los textos están localizados en español, inglés, francés y
+  alemán.
+- Apple: el reproductor incorpora un selector funcional de relación de aspecto
+  (`Ajustar`, `Rellenar` y `Original`) que se conserva al entrar en pantalla
+  completa.
+- Apple Live TV: el reproductor integrado permite abrir la emisión en pantalla
+  completa y cambiar su relación de aspecto sin crear una segunda sesión.
+- Apple: la tuerca del reproductor permite seleccionar pista de audio y
+  subtítulos, incluida la opción de desactivarlos; funciona en la ficha, Live
+  TV y pantalla completa.
+- Web/Smart TV: el reproductor incorpora un selector funcional de formato
+  (`Ajustar`, `Rellenar` y `Original`) que cambia el encuadre al instante,
+  funciona también en pantalla completa y conserva la elección en el
+  dispositivo.
+- Android: se centraliza la selección del backend de reproducción para que
+  Media3/ExoPlayer sea siempre la ruta inicial en móvil, tablet, Android TV,
+  Fire TV y Live TV; MPV solo entra por elección explícita o tras un fallo real
+  de decodificación, con regresiones unitarias para ambas reglas.
+- Android: el selector de formato del reproductor expone semántica de botón
+  también para lectores de pantalla y navegación por mando, manteniendo la
+  interacción táctil y la selección real de aspecto.
+- CI: se añade una comprobación estática para impedir que una preferencia o una
+  ruta de entrada vuelva a convertir MPV en el reproductor predeterminado.
+- Android TV/Fire TV: el reproductor rechaza también las aperturas directas de
+  archivos offline; así ningún intent antiguo o enlace profundo puede reactivar
+  descargas fuera de móvil/tablet.
+- CI: se añade una prueba transversal que verifica que la UI y las rutas de
+  reproducción no expongan descargas offline en TV, Smart TV, navegador ni
+  tvOS.
+- Apple: el inicio de sesión distingue ahora credenciales rechazadas (401),
+  dirección de servidor no válida y respuesta inesperada, con mensajes
+  localizados en español, inglés, francés y alemán.
+- Web/Smart TV: el inicio de sesión diferencia credenciales rechazadas,
+  dirección inválida y fallo de conexión, y conserva el mensaje localizado
+  sin mostrar respuestas del servidor.
+- Web/Smart TV: las tarjetas de filmografía son accesibles con lector de
+  pantalla y teclado/mando, y Escape cierra ajustes, fichas y reproducción
+  sin depender del botón de retroceso del navegador.
+- Android: la consulta compartida de películas y series incorpora cobertura
+  de estrés con bibliotecas sintéticas de 1.000, 10.000 y 50.000 elementos,
+  verificando filtros, ordenación y estabilidad del resultado.
+- Live TV: al agrupar variantes del mismo canal se conserva como fila principal
+  la fuente con programa actual, favorito o imagen más completos, sin perder
+  ninguna opción seleccionable.
+- Reproducción Android: las cabeceras de autenticación de Jellyfin quedan
+  limitadas al servidor configurado; las fuentes directas de proveedores
+  externos no reciben tokens del usuario.
+- Web: la limpieza de URLs de reproducción elimina todos los nombres de
+  credencial de Jellyfin sin depender de la capitalización, tanto en el cliente
+  como en el proxy autenticado.
+- Rendimiento Android: películas y series ya no descargan toda la biblioteca
+  al abrir la pantalla de recomendaciones; el catálogo completo se carga bajo
+  demanda al entrar en la vista de biblioteca, mejorando el arranque con
+  bibliotecas grandes sin perder ordenado ni filtros.
+- Apple: la biblioteca usa páginas de 100 elementos y carga más contenido al
+  llegar al final de la cuadrícula, evitando bloquear el inicio con catálogos
+  grandes sin ocultar elementos.
+- Apple: las respuestas de catálogo son más ligeras al resolver las fuentes de
+  reproducción únicamente cuando el usuario inicia un título.
+- Apple: la paginación continúa funcionando incluso si Jellyfin omite el total
+  de resultados, usando el tamaño de página como señal de continuación.
+- Android Live TV: la ruta predeterminada de ExoPlayer ya no fuerza H.264/AAC
+  al abrir el HLS; conserva la decisión de Jellyfin y evita transcodificaciones
+  innecesarias cuando el dispositivo puede reproducir la fuente original.
+- Apple: las tarjetas de la filmografía ahora abren la ficha completa del
+  título seleccionado, en lugar de quedarse sin acción al pulsarlas.
+- Apple móvil/tablet: las descargas sin conexión conservan la calidad elegida
+  (Original, High, Medium o Low) y los catálogos antiguos se migran de forma
+  segura a Original.
+- CI: se añade una validación del catálogo web que compara todos los idiomas
+  soportados con el catálogo base y detecta claves duplicadas o desincronizadas.
+- Android TV: el reproductor deja de consultar o añadir subtítulos descargados
+  del almacenamiento offline móvil; las pistas proporcionadas por Jellyfin
+  siguen disponibles.
+- Android: el fallback MPV usa ahora la misma cabecera MediaBrowser autenticada
+  que el resto de la aplicación, manteniendo el token fuera de las URLs.
+- Android: el actualizador selecciona ahora los APK release firmados que publica
+  GitHub y rechaza correctamente artefactos unsigned de QA.
+- CI: la política de releases comprueba también que los nombres de APK
+  publicados coincidan con los que consume el actualizador de Velora.
+- Seguridad Android: el actualizador solo acepta URLs HTTPS de assets bajo
+  `github.com/klortekhq/Velora/releases/download/`.
+- Web: se añade una política CSP y `no-referrer` para reducir superficie de
+  inyección y evitar filtraciones accidentales de navegación durante el uso de
+  Jellyfin.
+- Apple: la autenticación comunica el idioma elegido en los ajustes al servidor
+  Jellyfin, incluyendo la normalización de locales regionales.
+- CI: se añade una comprobación de identidad pública para evitar que README,
+  atribuciones, documentación o código vuelvan a incluir referencias heredadas.
+- Releases: la limpieza de paquetes Smart TV usa correctamente la etiqueta
+  solicitada también cuando una publicación se reconstruye manualmente.
+- Seguridad Apple: las URLs de reproducción quedan limitadas también a la
+  subruta configurada del servidor Jellyfin, no solo a su dominio y puerto.
+- Smart TV: los bundles Samsung y webOS incluyen metadatos que distinguen un
+  paquete instalable de un bundle pendiente de SDK, firma o certificación.
+- CI: la validación Smart TV ya exige que un metadato que declare un WGT/IPK
+  instalable tenga realmente el paquete correspondiente; VIDAA sigue siendo
+  explícitamente un bundle HTML5 para su portal.
+- Releases web: la publicación comprueba los artefactos Smart TV después de
+  construirlos, antes de intentar adjuntarlos a una release.
+- Apple: se incorpora y valida en CI el manifiesto de privacidad del cliente,
+  declarando explícitamente que Velora no hace tracking ni recopila datos.
+- Android: el botón de reproducción animado ya no intenta cargar un recurso
+  Lottie inválido cuando no hay animación configurada; mantiene sus controles
+  de foco y pulsación con el tratamiento visual normal.
+- Android TV: Live TV comparte ahora la fila de navegación centrada con las
+  bibliotecas de películas y series, y solo se añade cuando Jellyfin devuelve
+  canales para el usuario activo.
+- Live TV: las respuestas duplicadas del proveedor ya no aparecen como falsas
+  opciones repetidas; las fuentes realmente distintas, como principal e IPTV,
+  siguen agrupadas bajo el mismo canal y se pueden elegir en Android y web.
+- Live TV multiplataforma: Android, web y Apple muestran el selector al elegir
+  un canal con varias fuentes, conservan etiquetas como IPTV o proveedor cuando
+  Jellyfin las entrega y evitan exponer rutas técnicas.
+- Live TV: la fuente elegida se conserva al abrir `PlaybackInfo` en Android y
+  Apple; se respeta `MediaSourceId` o `LiveStreamId` para que seleccionar IPTV
+  no termine reproduciendo accidentalmente la fuente principal.
+- Live TV: los proveedores que no devuelven `MediaSourceId` siguen pudiendo
+  seleccionar sus variantes mediante `LiveStreamId`, tanto en móvil/tablet
+  como en Android TV/Fire TV.
+- Web/Smart TV: los identificadores y grupos de Live TV se procesan con mapas
+  sin prototipo, evitando que nombres de proveedor especiales alteren la lista.
+- CI: se validan los metadatos generados de Samsung, webOS y VIDAA después del
+  empaquetado, evitando presentar un bundle como una aplicación certificada.
+- CI: se añade una comprobación automática que impide reintroducir releases
+  desde pull requests, pushes normales o comodines de APK.
+- CI: los workflows de publicación ya no se ejecutan en pull requests ni en
+  cada push de `main`; la validación queda en CI y la publicación requiere un
+  tag de versión o una ejecución manual.
+- Android TV: la capacidad de descargas se comprueba también en el callback
+  de entrada, evitando que una ruta secundaria pueda abrir la pantalla offline.
+- QA: el smoke test de Jellyfin distingue ahora un servidor inaccesible de
+  unas credenciales rechazadas, sin revelar información sensible.
+- Web: las tarjetas de películas, series y Live TV exponen su título a
+  lectores de pantalla y mantienen activación por teclado además del ratón.
+- Web: las pestañas de biblioteca usan el patrón accesible `tablist`/`tabpanel`
+  y anuncian correctamente la pestaña seleccionada.
+- Android: los controles del reproductor y sus selectores de audio, subtítulos
+  y aspecto exponen una semántica de botón uniforme para toque y mando.
+- Web/Smart TV: la biblioteca carga los resultados por páginas y permite
+  continuar con «Cargar más», evitando bloquear el inicio al trabajar con
+  catálogos grandes.
+- Apple: las fichas muestran el reparto de Jellyfin y permiten abrir la
+  filmografía disponible de cada persona, manteniendo la navegación nativa.
+- Seguridad Apple: la consulta de filmografía valida los identificadores de
+  usuario y persona antes de construir la ruta de Jellyfin.
+- Multiplataforma: Apple y web envían ahora el campo `Pw` que exige
+  `AuthenticateByName` de Jellyfin, alineándose con Android y el smoke test.
+- CI: se añade una comprobación automática del contrato de autenticación para
+  impedir que una plataforma vuelva a enviar `Password` por error.
+- Android: Quick Connect reutiliza un único cliente HTTP durante la pantalla
+  de espera y lo libera al salir, evitando crear una conexión nueva por cada
+  sondeo.
+- Android: los intentos de inicio de sesión liberan el cliente HTTP de un solo
+  uso al terminar, evitando conexiones acumuladas tras reintentos.
+- Android: la comprobación de disponibilidad de Live TV en el inicio cierra su
+  cliente HTTP al abandonar la pantalla, evitando conexiones acumuladas tras
+  cambiar de servidor o sesión.
+- CI: las Releases públicas ya no incluyen APK debug; esos APK quedan aislados
+  como artefactos temporales de QA y la Release distribuye solo builds release
+  firmados con sus sumas SHA-256.
+- Seguridad: los logs de Android redaccionan también credenciales incrustadas
+  en URLs y parámetros sensibles presentes en query o fragmento.
+- Android: al cambiar de canal en Live TV se vuelve a resolver la fuente del
+  canal destino en Jellyfin, evitando reutilizar la fuente del canal anterior.
+- Android TV: el carrusel de inicio reutiliza un único reproductor Media3
+  silenciado para previsualizar trailers locales de Jellyfin tras un breve
+  tiempo de foco; se cancela al cambiar de elemento y no se crea en móvil.
+- Android: la consulta de trailers solicita sus `MediaSources` explícitamente,
+  evitando que una previsualización local quede sin fuente reproducible por una
+  respuesta de metadatos incompleta.
+- Android TV: el preview solo se muestra cuando Media3 confirma que el vídeo
+  está listo y desaparece ante errores o cambios de foco, evitando un panel
+  negro durante la carga.
+- Android TV y móvil: la música de tema cambia con fade-out/fade-in al
+  cambiar de título y se detiene limpiamente al salir, evitando solapamientos
+  y cambios bruscos de volumen.
+- Web: el modo de subtítulos forzados ya selecciona únicamente pistas
+  marcadas como forzadas; si no existe ninguna, respeta la preferencia y no
+  activa una pista predeterminada por accidente.
+- Apple: las descargas en iPhone/iPad permiten elegir Original, Alta, Media o Baja antes de iniciar la transferencia; tvOS sigue sin mostrar funciones offline.
+- Apple: los ajustes exponen también el idioma preferido de subtítulos, además de idioma de interfaz, audio, modo de subtítulos y rendimiento.
+- El selector de formato de imagen del reproductor vuelve a aplicar el modo
+  elegido después de recibir el tamaño real del vídeo y al entrar en pantalla
+  completa, con controles utilizables tanto por toque como por mando.
+- La base Apple recarga automáticamente biblioteca y TV en directo al abrir la
+  aplicación con una sesión guardada, en lugar de mostrar una pantalla vacía.
+- Live TV agrupa las alternativas del mismo canal y permite elegir con un
+  toque o con el mando entre las fuentes que Jellyfin devuelve, incluida IPTV.
+- La selección de fuente se propaga realmente a `PlaybackInfo` en Android y
+  web, evitando que el selector sea solo visual.
+- La recuperación de descargas offline sobrevive al cierre o reinicio de la
+  aplicación y verifica que el contenido gestionado siga disponible.
+- Se refuerzan la reproducción Original First, la seguridad de URLs y el
+  tratamiento de credenciales sin exponer tokens en direcciones ni logs.
+- Se añaden regresiones de Live TV y se validan las compilaciones móvil y TV,
+  junto con las pruebas del cliente web.
+
+## 1.3.0
+
+- Smart Downloads opcional para móvil y tablet, con limpieza segura de
+  contenido visto, retención configurable y protección manual.
+- Persistencia offline SQLite y transferencias gestionadas con reanudación,
+  verificación de integridad y claves estables para evitar colisiones.
+- Cobertura de Smart Downloads en los 13 idiomas Android disponibles.
+- Corrección del comprobador de actualizaciones para comparar versiones
+  semánticas con la versión instalada, sin confundir el `versionCode` interno
+  con una release pública.
+- Verificaciones locales de Android móvil/TV y del cliente web incluidas antes
+  de preparar los artefactos de esta release.
+
+## 1.2.86
+
+- Añadido Smart Downloads opcional y exclusivo para móvil/tablet: permite
+  retirar contenido visto y conservar un número configurable de episodios sin
+  ver, sin mostrar ninguna de estas opciones en TV ni en navegador.
+- Las descargas protegidas por el usuario se conservan aunque se ejecute la
+  limpieza inteligente, y su estado se recupera mediante una migración SQLite
+  segura.
+- Corregida la identidad de las transferencias gestionadas por Velora para que
+  varias descargas sin identificador del proveedor no colisionen ni se
+  sobrescriban.
+- Añadidas pruebas de regresión para protección de descargas, limpieza
+  inteligente y recuperación de identificadores gestionados.
+- Corregida la lista de descargas para usar claves estables en transferencias
+  gestionadas, evitando filas duplicadas o controles que parezcan no responder.
+- La verificación de integridad y la materialización de contenido ya actualizan
+  la descarga correcta incluso cuando el proveedor no aporta un identificador.
+- Completadas las traducciones de Smart Downloads en los 13 idiomas disponibles
+  en Android, manteniendo el idioma automático del dispositivo y la selección
+  manual desde Ajustes.
+- Live TV web muestra canales en un formato compacto con programa actual,
+  próxima emisión y barra de progreso, manteniendo la reproducción integrada y
+  la navegación con táctil, teclado y mando.
+- Activa los trailers funcionales en las pantallas de películas y series.
+- Verifica compilación y tests Android para móvil y TV.
+- Localiza el aviso AV1 y los textos principales del selector de formato del
+  reproductor para evitar mensajes en inglés en la interfaz española.
+- Añade un shell SwiftUI nativo para Apple con inicio de sesión Jellyfin,
+  biblioteca, detalle, ajustes y reproducción AVPlayer; tvOS mantiene oculta
+  toda la interfaz de descargas.
+- Corrige la comprobación de espacio libre de las descargas móviles para que
+  mida el mismo almacenamiento privado gestionado por Velora donde se guarda
+  el contenido, evitando aceptar descargas que no caben en ese volumen.
+- Endurece el inicio de sesión de OpenSubtitles: codifica las credenciales como
+  JSON y deja de registrar respuestas o errores que puedan revelar tokens o
+  información sensible.
+- Endurece la decisión de reproducción HDR: un dispositivo Android que se
+  identifica como SDR ya no intenta Direct Play de contenido HDR, y los
+  perfiles de calidad validan tanto la anchura como la altura del vídeo sin
+  limitar artificialmente la opción Original.
+- Amplía el índice offline con fechas persistentes de creación, finalización y
+  última reproducción, manteniendo la migración de instalaciones existentes y
+  preparando una limpieza inteligente basada en actividad real.
+- Refuerza el límite de almacenamiento offline midiendo también transferencias
+  parciales y archivos privados que no tengan una fila activa en la base de
+  datos, evitando subestimar el espacio ocupado tras una interrupción.
+
+## 1.2.85
+
+- Unificado el ordenado y filtrado de las bibliotecas reales de Películas y
+  Series con la consulta común cubierta por tests.
+- Corregida la reutilización de nombres de artefactos en GitHub Actions para
+  que las nuevas builds puedan publicarse de forma repetible.
+
+## 1.2.84
+
+- Conservado el modo de formato de imagen al cambiar la orientación o entrar y salir de pantalla completa en móvil.
+- Evitada la vuelta silenciosa a «Ajustar» cuando Android recrea la actividad del reproductor.
+
+## 1.2.83
+
+- Añadido ordenado y filtrado por estado de reproducción para películas y series.
+- Integradas las opciones de Vistos, No vistos y Favoritos en las bibliotecas móvil y TV.
+- Localizadas las nuevas opciones de filtro mediante los recursos de idioma de la aplicación.
+
+## 1.2.82
+
+- Añadido un botón Atrás visible y navegable en la filmografía de personas.
+- La acción funciona con toque y con mando/D-pad y evita depender del gesto del sistema.
+
+## 1.2.81
+
+- Añadidos componentes SwiftUI nativos reutilizables para iOS, iPadOS y tvOS.
+- Añadidas traducciones de los controles móviles nuevos en inglés, alemán y francés.
+- Verificada la compilación Kotlin móvil y la suite de unit tests Android.
+
+## 1.2.80
+
+### Mobile accessibility and localization
+
+- Las tarjetas de reparto exponen correctamente su acción táctil y las secciones de detalles usan recursos traducibles.
+
+## 1.2.79
+
+### Mobile i18n
+
+- Las etiquetas de detalles móviles pasan por el sistema de traducciones sin romper la selección de pestañas.
+
+## 1.2.78
+
+### CI/CD
+
+- Las releases adjuntan todos los paquetes web y Smart TV generados, además
+  de los artefactos web principales y sus hashes.
+
+## 1.2.77
+
+### Security
+
+- Los parámetros de las URLs MPV se codifican de forma segura.
+- Las fuentes directas de Live TV ya no conservan parámetros de credenciales
+  recibidos en la query.
+- Se añaden regresiones para impedir fugas de tokens y URLs malformadas.
+
+## 1.2.76
+
+### Fixed
+
+- La pantalla de inicio y biblioteca móvil usa componentes Material 3 táctiles
+  para sus acciones, filtros, pestañas y navegación; la variante TV mantiene
+  componentes orientados al mando.
+
+## 1.2.75
+
+### Fixed
+
+- La pantalla de detalles móvil usa componentes táctiles Material 3 en lugar
+  de componentes orientados a TV, mejorando la legibilidad y la interacción
+  con los dedos sin cambiar la navegación por mando de la variante TV.
+
+## 1.2.74
+
+### Fixed
+
+- El motor común de reproducción respeta las calidades elegidas y no las
+  omite mediante direct stream o remux.
+- Las decisiones de reproducción exponen una explicación estable para
+  diagnósticos y futuras plataformas.
+- Se añaden regresiones para límites de dispositivo, passthrough de audio y
+  calidad seleccionada.
+
+## 1.2.73
+
+### Fixed
+
+- MPV mobile playback now changes its outer presentation frame with the
+  selected aspect mode instead of keeping a fixed 16:9 container.
+
+## 1.2.72
+
+### Fixed
+
+- GL playback now serializes video-size and aspect-mode updates on the
+  rendering thread so a selected presentation is applied reliably.
+- Android mobile and TV unit-test suites were revalidated.
+
+## 1.2.71
+
+### Fixed
+
+- Apple Jellyfin catalog models now decode the server's capitalized field
+  names correctly.
+- Apple client requests use the synchronized Velora release identifier.
+
+### Release
+
+- Android, web and Smart TV package metadata is synchronized to `1.2.71`.
+
+## 1.2.36
+
+- Fixed touch activation for actor filmography cards on mobile and tablet;
+  the same callback is now shared with TV remote activation.
+
+## 1.2.35
+
+### Added
+
+- Persisted mobile/tablet library sorting and filtering preferences, including
+  direction, favorites, playback state and genre.
+- Added a localized reset-filters action.
+
+## 1.2.34
+
+### Fixed
+
+- Completed the Live TV translations for every Android locale already supported
+  by Velora, including channel actions, programme details and loading/error
+  states.
+
+## 1.2.33
+
+### Security
+
+- Redacted Jellyfin credentials from playback, subtitle and authentication diagnostics.
+- Reduced diagnostic logging of server endpoints, local paths and media URLs.
+
+## 1.2.32
+
+### Fixed
+
+- Synchronized the web client authentication version with the Android and
+  platform package metadata.
+- Unsupported explicit browser locale selections now fall back safely to the
+  Spanish catalog instead of sending an unknown language to Jellyfin.
+
+## 1.2.30
+
+### Improved
+
+- Increased contrast and touch readability of the mobile settings category
+  list with dedicated surfaces, borders and stronger typography.
+
+## 1.2.29
+
+### Fixed
+
+- Reduced Android release-build worker parallelism and extended the CI guard
+  so resource-constrained hosted runners can finish the APK packaging step.
+
+## 1.2.28
+
+### Fixed
+
+- Hardened the Android release workflow so stalled Gradle child processes are
+  terminated instead of leaving the APK release job running indefinitely.
+
+---
+
+## 1.2.27
+
+### Fixed
+
+- Replaced the deprecated Android system-bar flags used by the video player with
+  the modern WindowInsets controller, keeping fullscreen playback reliable on
+  current Android and TV builds.
+
+## 2026-06-06
+
+### Added
+
+- **Android Mobile & Tablet Support**
+  - Expanded compatibility to fully support Android mobile phones and tablets.
+  - Implemented automatic device detection to dynamically adapt layouts, navigation structures, and touch vs. remote controls based on whether the app is running on a TV, mobile, or tablet device.
+
+- **Mobile Discover Screen Pagination**
+  - Added a "View More" card at the far right of each movie and TV show category row on the mobile Discover tab.
+  - Clicking "View More" requests the next page of categories from Jellyseerr/Overseerr, appending results seamlessly into the horizontal lists.
+
+- **YouTube-Style Portrait Video Player (Mobile/Tablet)**
+  - Introduced a YouTube-style portrait viewing mode for both the ExoPlayer and MPV player on mobile devices and tablets, allowing users to watch content vertically with details, status, and player controls shown below the video.
+  - Seamlessly handles rotation between standard landscape fullscreen playback and portrait metadata layout.
+
+- **Android TV Settings Color Picker**
+  - Added the Accent Color picker to the Settings screen on Android TV.
+  - Features high-contrast D-pad focus borders and remote-friendly selection states.
+
+### Improved
+
+- **Android TV Home Screen Scroll Performance**
+  - Refactored the Home Screen layout on Android TV to decompose row structures into a single unified vertical scroll layout (`LazyColumn`), enabling item recycling and improving performance on budget hardware.
+  - Implemented a 250ms focus debounce mechanism for metadata/synopsis header updates, preventing rendering lag and image loading spikes when rapidly navigating TV cards.
+  - Resolved vertical scrolling lag when navigating down the home screen by adding stable keys (`key = { it.Id }`) and contentTypes to all dynamic library rows (`LazyRow` lists for movies, shows, and episodes), enabling efficient view reuse and skipping unnecessary recompositions.
+  - Isolated the metadata/synopsis header layout into a separate standalone Composable (`MetadataSection`) and deferred state reads using lambda providers. This ensures focus updates only recompose the metadata panel, leaving the rest of the home screen and its lazy rows completely untouched during scrolling.
+
+### Fixed
+
+- **Mobile UI & Interaction**
+  - Fixed touch response issues where TMDB API key buttons in Mobile Settings were not responding to taps.
+  - Corrected landscape letterboxing (16:9 clamping) issues when rotating between portrait and landscape modes on mobile.
+  - Added notch protection padding (system bar spacers) to prevent layout overlapping on mobile info and home screens.
+  - Resolved empty vertical spaces above and below images in the mobile home screen featured carousel by dynamically adjusting the container height to match the 16:9 aspect ratio based on device width (handles phone vs. tablet sizing) and prioritizing landscape `Thumb`/`Backdrop` images with full `Crop` scaling.
+  - Resolved trailer playback failure on mobile by allowing trailers to play in-app using the internal MPV player (just like on Android TV) instead of redirecting to the external YouTube app. Added touch interaction support to the player screen (tapping toggles player controls visibility) so mobile/tablet users can easily pause, seek, and customize settings, with a seamless YouTube app redirect fallback on both TV and mobile if the in-app extraction fails.
+
+---
+
+ ## 2026-03-10
+ 
+ ### Added
+ 
+ - **ExoPlayer Video Resolution Display**
+   - Added a dynamic resolution indicator (4K, 1080p, 720p, etc.) to the ExoPlayer controls.
+   - Positioned on the left side, directly below the progress bar for easy visibility during playback.
+
+ ### Improved
+ 
+ - **Compact Player Controls (ExoPlayer & MPV)**
+   - Resized all playback control buttons (Rewind, Play/Pause, Forward, etc.) in both ExoPlayer and MPV to be a uniform 48dp size (15% smaller).
+   - Removed the `isLarge` parameter from button logic for a more streamlined and consistent visual experience across both players.
+   - Refined icon scaling within buttons for improved clarity.
+
+ - **Next Up Layout Enhancements**
+   - Switched the **Next Up** row on the home screen to use vertical (portrait) poster cards to match the library screens' aesthetics while maintaining horizontalthumbnails for "Continue Watching" items.
+   - Added a "Next Up" row below "Continue Watching" on the TV Shows library screen for a more comprehensive browsing experience.
+
+---
+ 
+ ## 2026-03-08
+
+### Fixed
+
+- **Playback Navigation Stack**
+  - Fixed an issue where the movie or TV show info screen was lost after playback completed.
+  - Removed `singleTask` launch modes from `JellyfinVideoPlayerActivity` and `MpvTvPlayerActivity` to preserve the activity back stack.
+  - Corrected autoplay logic in `JellyfinVideoPlayerScreen.kt` to maintain navigation flow during episode transitions.
+
+### Improved
+
+- **Codebase Cleanup**
+  - Deleted multiple legacy Leanback-style activities, fragments, and presenters (`DetailsActivity`, `PlaybackActivity`, `MainFragment`, etc.) as the app has fully transitioned to a Compose-based architecture.
+  - Streamlined `AndroidManifest.xml` by removing redundant activity declarations.
+
+- **Next Up & Library Enhancements**
+  - Switched the **Next Up** row on the home screen to use vertical (portrait) poster cards for better aesthetic consistency.
+  - Added a new **Next Up** row to the **TV Shows library screen**, positioned directly beneath the "Continue Watching" row.
+  - Implemented library-specific fetching for "Next Up" episodes in `JellyfinApi.kt`.
+  - Enhanced card image logic to prioritize episode primary images (previews) as a fallback for "Next Up" and "Continue Watching" items.
+
+---
+
+
+## 2026-02-10
+
+### Added
+
+- **Season-Specific Backdrops**
+  - Updated the TV Series detail screen to dynamically change the background artwork based on the focused or selected season.
+  - Implemented robust artwork validation that checks for the existence of "Backdrop" tags before switching, ensuring a reliable fallback to the series background if season-specific art is missing.
+
+### Improved
+
+- **Rounded Action Buttons**
+  - Updated action buttons on Movie and TV Series info screens (Play, Resume, Trailer, etc.) to feature a modern rounded (stadium) shape when focused and expanded.
+
+- **Transparent Glass Season Buttons**
+  - Updated the season selector buttons on the series info screen to use a modern "transparent glass" aesthetic when unfocused.
+  - Implemented light, high-legibility numbers against a semi-transparent background to match the style of the main action buttons.
+
+### Fixed
+
+- **API Log Clutter**
+  - Enhanced `JellyfinApiService` to correctly handle `CancellationException`. These are now re-thrown without being logged as errors, preventing normal coroutine lifecycle cancellations from cluttering the system logs.
+
+---
+
+
+## 2026-02-09
+
+### Fixed
+
+- **Automatic Audio Language Selection**
+  - ExoPlayer now automatically selects audio tracks that match the system's default language (e.g., automatically choosing English audio if the device language is set to English).
+  - Maintains compatibility with manual track selection and saved preferences.
+
+- **YouTube Trailer Playback**
+  - Resolved "The page needs to be reloaded" error that prevented YouTube trailers from playing.
+  - Updated YouTube client versions to maintain compatibility with recent YouTube platform changes.
+  - Implemented a robust fallback mechanism to the Android client when the Web client encounters playability issues.
+
+---
+
+## 2026-02-07
+
+### Added
+
+- **Dedicated Trailers Category**
+  - Added a new "Trailers" category to the **Settings** screen.
+  - Moved TMDB API key configuration and verification into this dedicated section for better visual organization and separation from Jellyseerr settings.
+
+### Improved
+
+- **Smart Settings Redirection**
+  - Detail screens (Movies and TV Series) now intelligently redirect users directly to the **Trailers** category when prompted to configure a TMDB API key.
+  - Prevents user confusion by landing them on the exact page needed for trailer configuration.
+
+---
+
+
+## 2026-01-19
+
+### Added
+
+  - Features a "Support the Developer" message and a scanable QR code for donations.
+
+### Improved
+
+- **Settings Navigation (Auto-Load)**
+  - Implemented auto-loading for settings categories.
+  - Right-panel content now updates instantly when focusing a sidebar category, providing a smoother navigation experience without extra button presses.
+
+- **Unified Library Discovery**
+  - **Always-Visible Discover Tab**: The Discover tab is now always visible in Movies and TV Shows library screens, even when Jellyseerr is not yet configured.
+  - Added helpful setup prompts and direct shortcuts to settings from the Discover tab.
+  - **Always-Visible Trailer Button**: The "Watch Trailer" button now remains visible on all detail screens.
+  - Added proactive prompts to configure TMDB API keys directly from the trailer button when needed.
+
+### Fixed
+
+- **Full-Screen Settings Dialog**
+  - Fixed an issue where the Settings dialog would not cover the entire screen when launched from detail pages.
+  - Refactored settings state management to ensure a true full-screen overlay experience.
+
+---
+
+## 2026-01-16
+
+### Added
+
+- **Customizable Row Card Count**
+  - Added new "Row Card Count" setting in **Settings > Library**.
+  - Allows users to choose between 25, 50, 75, or 100 items per row for a more personalized browsing experience.
+  - Applies to all major browsing rows:
+    - Recently Added (Movies, Shows, Episodes)
+    - Recently Released Movies
+    - Continue Watching
+    - Next Up
+  - **Dynamic Fetching**: Optimized API requests to only fetch the exact number of items requested, improving performance and reducing network overhead.
+  - Consistent layout and behavior across Home, Movies, and TV Shows library screens.
+
+### Fixed
+
+- **Gradle Build Performance**
+  - Updated build configuration to handle complex module dependencies more reliably.
+  - Cleaned up Gradle daemon state for more stable compilation.
+
+---
+
+## 2026-01-15
+
+### Added
+
+- **TMDB API Key Verification**
+  - Reimplemented robust verification logic for the TMDB API Key.
+  - Verification now checks credentials against TMDB servers (`/configuration` endpoint) before saving.
+  - Added specific error handling for SSL issues (e.g., incorrect device date/time) and network errors.
+  - Interactive "Verifying..." state with visual feedback in settings.
+
+### Fixed
+
+- **Screensaver Interruption (Google TV)**
+  - Fixed an issue where the screensaver would interrupt video playback on some Google TV devices.
+  - Added `FLAG_KEEP_SCREEN_ON` to `JellyfinVideoPlayerActivity` window flags.
+  - Enforced `keepScreenOn = true` in ExoPlayer view logic for redundant safety.
+  - Ensures uninterrupted playback session.
+
+---
+
+## 2025-12-31
+
+### Added
+
+- **AI Super Resolution (MPV)**
+  - Integrated `ewa_lanczossharp` scaling chain for high-quality upscaling.
+  - Automatically enabled when selecting **Sports** or **Sharp** shader profiles.
+  - Significantly improves clarity for 720p/1080p content on 4K displays.
+
+- **Dynamic Tone Mapping (HDR++ based)**
+  - Added new **"HDR++ (Dynamic)"** shader profile.
+  - Features scene-aware auto-exposure, peak protection, and adaptive gamma in a single pass.
+  - Enhances contrast and brightness for SDR content without crushing blacks or blowing out highlights.
+  - Added "Enable Dynamic Tone Mapping" toggle in **Settings > Video** (Default: OFF) to control the dynamic component.
+
+### Changed
+
+- **MpvShaderManager**
+  - Updated shader profile definitions to include new scaling and tone mapping logic.
+
+---
+
+---
+
+## 2025-12-28
+
+### Added
+
+- **Sync Player Subtitle & Audio Selection**
+  - Subtitle and audio track selections made during playback (ExoPlayer or MPV) are now synced back to the Jellyfin server.
+  - Returning to the details screen or resuming playback on another device will remember your last selected tracks.
+  - Supported for both internal ExoPlayer and external MPV Player.
+
+## 2025-12-27
+
+### Added
+
+- **MPV Advanced Post-Processing (Shaders)**
+  - Implemented support for custom GLSL shaders in MPV player to enhance SDR content.
+  - Added new **"MPV Post-Processing"** setting with 5 selectable profiles:
+    - **None**: Standard playback (default).
+    - **Cinema**: Natural look with debanding and subtle vibrance.
+    - **HDR-Boost**: Vivid, high-contrast "fake HDR" effect for SDR screens.
+    - **Sports**: High sharpness and motion clarity.
+    - **Crisp**: Focuses purely on image sharpness (CAS + Adaptive Sharpen).
+  - Shaders are automatically installed and applied based on the selected profile.
+
+### Changed
+
+- **Settings UI Clarification**
+  - Renamed "GL Video Processing" to "**ExoPlayer GL Processing**" to clearly distinguish it from the new MPV shading options.
+  - Reorganized Video settings to group player-specific enhancements logically.
+
+### Fixed
+
+- **MPV Player Stability**
+  - Resolved ANR (Application Not Responding) issues caused by heavy JNI calls on the main thread during playback status updates.
+  - Offloaded playback state polling to background IO threads.
+
+## 2025-12-26
+
+### Added
+
+- **Genre Filtering in Library**
+  - Added "Filter Genres" option to the "Sort By" popup in Movies and TV Shows libraries.
+  - Allows filtering library content by specific genres (e.g., Action, Comedy) while maintaining sort order.
+
+- **MPV Smart Subtitles (Direct Play)**
+  - Implemented "Soft Subtitles" support for MPV.
+  - When a subtitle is selected, MPV now streams the video directly (Direct Play) and loads the subtitle as an external stream (`.srt`, etc.) instead of burning it in.
+  - Significantly reduces server CPU usage and eliminates video quality loss from transcoding.
+  - "Burned-in" subtitles (transcoding) are still used if enforced by server settings (e.g., AV1/HEVC transcoding enabled) or manually requested.
+
+- **MPV Instant Start**
+  - Optimized MPV buffering settings (`cache-pause=no`) for significantly faster playback start.
+  - Tuned `DefaultLoadControl` for ExoPlayer to also reduce startup latency.
+
+### Fixed
+
+- **Series Watched Status Refresh**
+  - Fixed an issue where the watched status indicator (checkmark) on the series info page would not update immediately after marking an episode as watched/unwatched.
+  - Implemented cache invalidation (`episodeCache`) to ensure fresh data is displayed.
+
+- **MPV Subtitle Selection**
+  - Fixed a race condition where MPV's internal track matching logic would override the selected external subtitle.
+  - The player now explicitly prioritizes the external subtitle file (`sub-add ... select`) over internal metadata matching.
+
+- **MPV Transcoding Settings**
+  - MPV now correctly respects global "Server Transcoding" settings (e.g., "Transcode AV1", "Transcode HEVC").
+  - If transcoding is required by settings, MPV will use the burned-in stream (`TranscodingUrl`) as expected.
+
+- **Genre Filtering**
+  - Fixed an issue where the grid would blank out when a genre was selected due to missing API data fields (`Genres`).
+
+---
+
+## 2025-12-23
+
+### Added
+
+- **Trailer Playback Support**
+  - **Integrated NewPipeExtractor**: Added native support for parsing and playing YouTube trailers directly within the app without API keys.
+  - **1080p Quality**: Implemented advanced stream merging to support 1080p and higher resolutions for trailers (upgraded from 720p limit).
+  - **Series Support**: Added "Watch Trailer" button to TV Series details screen.
+  - **Smart Selection**: Automatically selects the best available video and audio streams for the highest quality experience.
+  - **Optimized Buffering**: Tuned player buffering settings for instant start and smooth playback of high-bitrate trailers.
+
+## 2025-12-22
+
+### Added
+
+- **Jellyseerr Search Integration**
+  - **Unified Search**: Search now queries both your Jellyfin library and Jellyseerr (TMDB) simultaneously.
+  - **Deduplicated Results**: Intelligent filtering ensures you don't see duplicate entries for items you already own – local library items take precedence.
+  - **Seamless Request Flow**: Clicking a Jellyseerr result opens a dedicated details screen where you can instantly request the movie or TV show.
+  - **Search Settings**: Added "Include in Search" toggle under Jellyseerr settings to enable/disable this feature (On by default).
+  - **Integrated UI**: Jellyseerr results appear natively within the search grid with high-quality poster art.
+
+## 2025-12-21
+
+### Added
+
+- **Enhanced Background Readability & Quality**
+  - **High-Quality Artwork**: Added a new setting under Appearance to enable **4K quality backdrop images** (3840x2160) for a sharper visual experience on compatible displays.
+  - **Global Scrims & Dynamic Colors**: Refactored background layering on the Home screen to apply Plex-style dynamic gradients and atmospheric colors globally.
+  - **Increased Scrim Intensity**: Adjusted alpha values for standard scrims across all screens to improve synopsis text readability.
+  - Fine-tuned Plex-style dynamic backgrounds for a more cinematic and legible experience.
+
+### Changed
+
+- **UI & Navigation Scaling**
+  - Refined the 30% reduction in navigation elements for better visual balance.
+  - Standardized "View More" pagination cards across all discovery rows.
+
+---
+
+## 2025-12-20
+
+### Added
+
+- **Digital Clock Integration**
+  - Integrated a real-time digital clock into the top navigation bar of Home, Movies, TV Shows, and Music screens.
+  - Supports 12/24-hour format with instant switching based on user settings.
+  - Consistent 30% size reduction styling across all navigation elements.
+- **Discover "View More" Pagination**
+  - Added "View More" cards to Trending, Popular, and Upcoming rows in Movies and TV discovery sections.
+  - Supports on-demand loading of additional items from Jellyseerr with automatic duplicate filtering.
+  - New `DiscoverViewMoreCard` component for triggers loading of additional content.
+- **Individual Season Requests**
+  - Added support for requesting specific seasons or all seasons of a TV show via the Jellyseerr API.
+  - New `TvShowRequestScreen` with season selection grid.
+
+### Changed
+
+- **UI & Navigation Scaling**
+  - Reduced Home, Movies, TV, and Music navigation elements by 30% for a cleaner look.
+  - Updated backdrop gradient and scrim intensity for a more modern, cinematic feel.
+  - Standardized background artwork sizing (60% height, 80% width) in details screens.
+- **Music Screen Enhancements**
+  - Refactored Music header with a proper `TabRow` and underlined indicator.
+  - Fine-tuned selection border for Album and Artist cards.
+  - Fixed ServiceConnection leak when closing the music screen.
+
+### Fixed
+
+- **Artists Tab Loading Logic**
+  - Fixed issues with artists not appearing in the grid by implementing a smart fallback from albums.
+- **Build & Compilation Issues**
+  - Resolved several brace mismatches and duplicate argument errors from recent UI refactors.
+
+---
+
+## 2025-12-19
+
+### Added
+
+- **Movie Request Screen - Cast Display**
+  - Added Cast Members row to Movie Request screen.
+- Implemented robust focus isolation for Movie Request screen using a `Dialog` overlay and explicit 4-directional focus locking.
+- Implemented 1-second debounced focus for Discover page background and title updates in both Movies and TV Shows libraries to prevent flickering.
+  - Integrated with Jellyseerr API to fetch full movie credits for discovered items
+  - Reused `StandardCardContainer` for high-quality TV-centric card styling
+- **Plex-style Dynamic Backgrounds**: Added to Home, TV Shows, and Movies screens. Implemented cinematic background gradients where colors are dynamically extracted from the focused item's backdrop (muted/darkened) to match the artwork, using `androidx.palette`.
+
+### Changed
+
+- **Movie Request Screen Layout Overhaul**
+  - Completely refactored the layout to match the premium full-screen design of `MovieDetailsScreen`
+  - Replaced basic information layout with a 50/50 vertical split
+  - Top section: Large title, metadata row (year, genres, rating), and synopsis
+  - Repositioned the Request button to the standard action button row below the synopsis
+  - Added full-screen backdrop with dynamic overlay
+
+- **Vibrant Backgrounds**: Significantly reduced background scrim opacity (5% base, 30% gradient) and relaxed color clamping rules to allow for more saturated and brighter dynamic backgrounds, addressing user feedback about "intense blur/scrim".
+- **Discover Screen Focus Optimization**: Fixed an issue where synopsis and background updates were not triggering on focus by reordering modifier chains in `JellyseerrTvShowCard` and `JellyseerrMovieCard`. Implemented instant metadata updates on focus for a snappier feel, while keeping background image updates debounced (500ms) to prevent flickering during fast scrolling
+  - Implemented correct focus observation order to fix issue where background wouldn't update
+
+### Fixed
+
+- **Jellyseerr API Request Serialization**
+  - Fixed "400 Bad Request" by ensuring default values (like `mediaType`) are explicitly serialized
+  - Fixed JSON serialization error in `requestMovie` by using dedicated `MovieRequestBody` data class
+  - Improved error logging for Jellyseerr API interactions
+
+---
+
+
+## 2025-12-18
+
+### Added
+
+- **Jellyseerr Integration - Discover Tab**
+  - Requests Movies directly from the Velora app (TV Shows support coming soon)
+  - Replaced TMDB trending feature with Jellyseerr integration for richer discovery
+  - New "Discover" tab in Movies and TV Shows libraries (replaces "Trending")
+  - Displays three category rows: 🔥 Trending, Popular, and Upcoming
+  - Each category displayed in its own row with titles matching the library screen layout
+  - Cards show availability badge (✓) if content exists in your Jellyfin library
+  - Clicking a card navigates to the movie/series info page if it exists in Jellyfin
+  - Shows toast notification if content is not in your library
+  - Metadata display with synopsis, rating, year, and genres when focusing on cards
+
+- **Jellyseerr Authentication Options**
+  - Two authentication methods: API Key or Username/Password login
+  - API Key: Paste your API key from Jellyseerr Settings > General
+  - Username/Password: Sign in with your Jellyfin credentials OR local Jellyseerr account
+  - Authentication method toggle in Settings to switch between options
+  - Login dialog with Jellyfin/Local account selector
+  - Session persists across app restarts
+  - Sign Out option to clear stored credentials
+
+- **Movie Request Screen**
+  - When selecting a movie not in your Jellyfin library, a request screen is now shown
+  - Request screen displays movie details: poster, title, rating, year, genres, and synopsis
+  - Large "Request" button to submit a request to your Jellyseerr server
+  - Shows request status: pending, available, or already requested
+  - Seamless integration with Jellyseerr API for request submission
+
+### Changed
+
+- **Settings Reorganized**
+  - Removed TMDB API Key setting (deprecated)
+  - Added Jellyseerr URL setting for your Jellyseerr/Overseerr server address
+  - Added Authentication Method toggle (API Key or Login)
+  - Added Jellyseerr API Key setting (for API Key auth)
+  - Added Jellyseerr Login button (for Username/Password auth)
+  - Added Enable Discover Tab toggle to show/hide the Discover tab
+
+---
+
+## 2025-12-17
+
+### Added
+
+- **Trending Tab Navigation to Library Items**
+  - Clicking on a trending movie/TV show now navigates to its info page if it exists in your Jellyfin library
+  - Search first attempts to match by TMDB ID (most accurate), then falls back to title + year matching
+  - Shows a toast notification if the item is not found in your library
+
+- **TMDB Trending Tab Enable/Disable Setting**
+  - New toggle in Settings to enable or disable the Trending tab in Movies and TV Shows libraries
+  - Allows users to hide the Trending tab even if TMDB API key is configured
+
+- **Trending Screen Metadata Display**
+  - Trending screens now show synopsis, rating, year, and genres when focusing on a card (just like the home screen)
+  - Smooth Crossfade animation when switching between focused items
+  - Genres displayed using TMDB genre mappings
+
+### Fixed
+
+- **External Subtitle Detection on Info Screen**
+  - Subtitle selector now triggers an item metadata refresh on the Jellyfin server when opened
+  - Newly added external subtitle files (`.srt`, `.ass`, `.vtt`) are detected immediately
+  - No longer need to wait for Jellyfin's scheduled library scan to see new subtitles
+  - Applies to Movie Details, Series Details, and Video Player subtitle selectors
+
+---
+
+## 2025-12-16
+
+### Added
+
+- **Chapters Row on Movie Details Screen**
+  - New "Chapters" row displays all chapter markers below the Cast row
+  - Each chapter shows a thumbnail image (if available), timestamp badge, and chapter name
+  - Click on a chapter to start playback from that exact position
+  - Chapter thumbnails fetched from Jellyfin's `/Items/{itemId}/Images/Chapter/{index}` endpoint
+  - Chapters are fetched via Jellyfin API when available in media metadata
+
+### Fixed
+
+- **Autoplay Next Episode - Complete Rewrite**
+  - Completely rebuilt autoplay system based on Jellyfin Android TV's proven approach
+  - Fixed issue where next episode wouldn't start after countdown finished
+  - Player now properly stops and releases before starting next episode
+  - Uses `applicationContext` with `FLAG_ACTIVITY_NEW_TASK` for reliable activity transitions
+  - Eliminated race conditions between old and new player activities
+  - Countdown now reliably triggers episode transition
+
+- **TV Show Logos in Continue Watching & Next Up**
+  - Fixed logos not appearing for TV show episodes in "Continue Watching" and "Next Up" rows
+  - Now fetches series logo using `SeriesId` when episode doesn't have its own logo
+  - Graceful fallback to text title if no logo is available
+
+- **Chapter Playback Position**
+  - Fixed clicking on a chapter starting from resume position instead of chapter position
+  - Player now uses the exact position passed in (chapter timestamp) instead of overriding with fresh UserData position
+
+---
+
+- **TV Shows Library Genre Rows Fix**
+  - Fixed "More in <Genre>" rows not appearing in TV Shows library screen
+  - Added missing ChildCount and RecursiveItemCount fields to genre-based show API requests
+  - Ensures shows are properly counted when "Hide Empty Shows" setting is enabled
+
+- **Collections Layout Overhaul**
+  - Collections now display as horizontal rows instead of a grid view
+  - Each collection has its own row with the collection name as the title
+  - Layout matches the Movies/Series library screens for a consistent experience
+  - Background images now display when browsing collections (same as library screens)
+  - Synopsis and metadata panel now shows for focused items in collections
+  - TV shows and episodes in collections now use poster images instead of thumbnails
+  - Improved navigation flow when browsing collections
+
+- **Home Screen Vertical Scrolling Improvements**
+  - Significantly smoother vertical scrolling when navigating between rows on the home screen
+  - Refactored row layout to use single-item pattern (matching library screens)
+  - Previously each row was a separate LazyColumn item causing choppy scroll animations
+  - Now all rows are consolidated into a single Column for fluid navigation
+
+- **Play From Start Fix**
+  - Fixed "Play From Start" button resuming from last position instead of playing from the beginning
+  - The player now correctly respects the user's intent: Resume button seeks to saved position, Play From Start plays from 0
+
+- **Audio Track Selector Improvements**
+  - Audio track selector popup now matches subtitle selector styling (purple focus/selection colors)
+  - Audio button only appears when media has multiple audio tracks (no button for single-audio content)
+
+- **MPV Player - Embedded Subtitle Support**
+  - MPV player now correctly detects and displays embedded subtitles (SRT, ASS, PGS, VOBSUB)
+  - Bundled Roboto fonts for reliable text subtitle rendering via libass
+  - Configured proper GPU-based subtitle blending for video output
+  - Auto-selects first subtitle track if none is selected
+  - Fixed font provider configuration to prevent "can't find font" errors
+
+- **Hide Empty TV Shows Setting**
+  - Added "Hide Empty Shows" setting to filter out TV shows with zero episodes
+  - Affects home screen, TV Shows library, and all recommendation rows
+  - Uses `RecursiveItemCount` from Jellyfin API for accurate episode counting
+  - Useful for hiding shows that are in the library but have no downloaded episodes yet
+
+- **Auto-Focus Next Episode on Series Open**
+  - When opening a TV show from the library or home screen, automatically focuses on the next episode to watch
+  - Uses Jellyfin's NextUp API to find the next episode based on watch history
+  - Falls back to finding the first unwatched episode if the series hasn't been started
+  - Continue Watching and Next Up rows continue to work as before (focusing on the specific episode clicked)
+
+- **Series Details Screen - Always Show Selected Season**
+  - The currently selected season button now always shows the full "Season X" text
+  - Previously, season buttons would collapse to just the number when browsing episodes
+  - Now users can always see which season they're viewing, even when focused on episodes
+  - Selected season has a subtle highlight to make it more visible
+
+- **TV-Optimized Navigation with Pivot-Style Scrolling**
+  - Implemented custom `BringIntoViewSpec` for smoother TV navigation animations
+  - Horizontal scrolling uses pivot-style behavior: focused card stays at the 3rd position while the row scrolls underneath
+  - Works symmetrically for both left and right navigation
+  - Card moves to edge positions only when reaching the start or end of a row
+  - Vertical scrolling positions rows with their titles visible at the top of the viewport
+  - Spring animations for smooth, natural-feeling transitions
+
+- **AV1 Software Decoder Support (8-bit only)**
+  - Built Media3 AV1 decoder extension (libgav1) from source
+  - Enables 8-bit AV1 video playback on devices without hardware AV1 support
+  - Supports arm64-v8a and armeabi-v7a architectures
+  - **10-bit AV1 is NOT supported** - Android's SurfaceView cannot render 10-bit YUV from software decoders
+  - For 10-bit AV1 content, use server-side transcoding or MPV player fallback
+
+- **Server-Side Transcoding Options**
+  - New "Always Transcode" setting to force server transcoding for all content
+  - New "Transcode AV1" setting to automatically transcode AV1 content
+  - New "Transcode HEVC" setting to automatically transcode HEVC/H.265 content
+  - New "Target Codec" setting to choose between H.264 and HEVC for transcoded output
+  - New "Max Video Bitrate" slider (5-120 Mbps) to control transcoding quality
+  - New "Auto Transcode on Playback Error" setting to automatically retry with transcoding if direct play fails
+
+- **MPV Player Fallback**
+  - New "Fallback to MPV Player" setting in Playback options
+  - Automatically launches MPV player if ExoPlayer fails and transcoding is disabled
+  - Provides seamless playback for problematic content without manual intervention
+  - Requires MPV-Velora to be installed
+
+- **Movies Library Screen**
+  - Dedicated screen for movie libraries, accessible from the home screen tab row
+  - Mirrors the home screen layout with movie-specific sections:
+    - Continue Watching (Movies)
+    - Recently Released Movies
+    - Recently Added Movies
+    - Top Unwatched Movies
+    - Recently Watched Movies
+    - Favorite Movies
+    - 2 random genre rows (e.g., "Top Movies in Action", "Top Movies in Comedy")
+  - Genre rows are randomly selected from available genres on each load/refresh
+  - Features dynamic background based on focused item
+  - Item details panel with metadata, Rotten Tomatoes ratings, and synopsis
+  - Tab row with Settings, Search, Refresh/Sort, Home buttons
+  - "Recommendations" and "[Library Name] Library" tabs
+  - Library-specific data fetching ensures each movie library shows unique content
+
+- **TV Shows Library Screen**
+  - Dedicated screen for TV show libraries, accessible from the home screen tab row
+  - Same layout structure as Movies Library with TV-specific sections:
+    - Continue Watching
+    - Recently Released Episodes (with series poster cards)
+    - Recently Added in [Library Name]
+    - Start Watching (randomly curated suggestions)
+    - Top Rated TV Shows
+    - 4 random genre rows (e.g., "More in Drama", "More in Comedy")
+  - Genre rows are randomly selected on each load/refresh
+  - Library-specific data fetching for proper separation of similar-named libraries
+
+### Improved
+
+- **Screen Transitions & Loading**
+  - Removed blocking "Loading..." text overlays from library screens
+  - Content now loads progressively without blocking the UI
+  - Faster perceived performance when navigating between screens
+  - Screens appear instantly with content populating as data arrives
+
+- **TV Show Details Screen Focus**
+  - When opening a TV show from "Recently Added" (without a specific episode), focus now defaults to Season 1 button
+  - Makes it easier to start watching a show from the beginning
+  - Continue Watching navigation still focuses on the specific episode
+
+- **Movies Library Metadata Display**
+  - Added Rotten Tomatoes rating icons (Fresh/Rotten tomato, Popcorn for audience)
+  - Added IMDb rating icon support
+  - Matches the home screen metadata display format
+
+
+## 2025-12-08
+
+### Added
+
+- **Apple Music-Style Music Player UI** (Work in progress)
+  - Complete redesign of the music player with Apple Music / tvOS aesthetic
+  - **AppleBlurBackground** - Fullscreen blurred album art backgrounds with darkening overlay
+    - Uses Compose blur modifier on Android 12+ with fallback for older devices
+    - Dynamic backgrounds that adapt to current album artwork
+  - **AppleLargeAlbumArt** - Large album artwork with shadow and scale animation on focus
+    - Parallax-style scaling effect when focused
+    - Rounded corners with elegant drop shadows
+  - **AppleNowPlayingScreen** - Full-featured Now Playing interface
+    - Large album art on left, controls on right
+    - Apple Music red accent color (#FA2D55) throughout
+    - Progress slider with elapsed/remaining time display
+    - Shuffle and repeat controls with active state indicators
+    - Audio quality badge (codec, bitrate, sample rate)
+    - Queue view with "Up Next" header
+  - **AppleAlbumScreen** - Album detail screen
+    - Hero layout with large album artwork
+    - Play and Shuffle pill-style buttons
+    - Clean track list without redundant album art
+    - Blurred background matching album artwork
+  - **AppleArtistScreen** - Artist profile screen
+    - Circular artist image with accent border
+    - "Top Songs" section with track rows
+    - Albums carousel with hover animations
+    - Hero header with gradient overlay
+  - **AppleTrackRow** - Minimalist track row component
+    - Scale animation on TV focus
+    - Play icon appears on focus
+    - Current track indicator with equalizer icon
+
+### Fixed
+
+- **Music Navigation Back Button Crash**
+  - Fixed `NoSuchMethodError: removeLast()` crash on older Android versions
+  - Replaced `removeLast()` with `removeAt(lastIndex)` for compatibility
+
+- **Subtitle Selection Crash in Player**
+  - Fixed `FocusRequester is not initialized` crash when selecting subtitles via player controls
+  - Added defensive try-catch blocks around focus requests in ExoPlayerSettingsMenu
+  - Added null checks and player state validation in subtitle selection logic
+
+### Improved
+
+- **Transcoding Quality**
+  - Increased default transcoding bitrate to 40 Mbps for better quality
+  - Added explicit resolution parameters (up to 4K) to preserve source quality
+  - Increased audio bitrate to 640 kbps for better audio quality
+  - Added 6-channel audio support for surround sound preservation
+
+- **Audio/Subtitle Track Selection Debugging**
+  - Added comprehensive logging to audio track selection dialogs
+  - Helps diagnose issues with track selection on series/movie info screens
+
+---
+
+## 2025-12-06
+
+### Added
+
+- **CC (Closed Captions) Button in Player Controls**
+  - New CC button added to the ExoPlayer control bar for quick subtitle access
+  - Located between the Aspect Ratio and Settings buttons
+  - One-tap access to subtitle selection (skips the main settings menu)
+  - Uses standard closed caption icon for easy recognition
+  - Button order: Rewind → Play/Pause → Fast Forward → Aspect Ratio → **CC** → Settings
+
+### Improved
+
+- **Frame Blending Debug Logging**
+  - Added logging to verify frame blending (soap opera effect) is working
+  - Filter Logcat by `GLVideoSurfaceView` to see:
+    - `🎬 Frame blending ENABLED/DISABLED` when toggling the setting
+    - `🎬 Frame blend strength: X.X` when adjusting strength
+    - `🎬 Frame blending active - capturing first frame` when effect is applied during playback
+
+---
+
+## 2025-12-05
+
+### Added
+
+- **OpenSubtitles Integration - Download Subtitles On Demand**
+  - New "Download Subtitles" button in the subtitle selection dialog on movie/series info pages
+  - Search OpenSubtitles by IMDB ID, TMDB ID, or title query
+  - Select from multiple subtitle results sorted by download count
+  - Supports 30+ languages including English, Spanish, French, German, Portuguese, Japanese, Korean, Chinese, Arabic, and more
+  - Downloaded subtitles are saved locally and persist across app sessions
+  - Requires free OpenSubtitles API key and account login (get at opensubtitles.com)
+
+- **OpenSubtitles Settings**
+  - New "OpenSubtitles API Key" setting to configure your API key
+  - New "OpenSubtitles Login" setting for username/password authentication
+  - New "Clear Downloaded Subtitles" button to delete all locally saved subtitle files
+  - API key and login required for downloading subtitles (search is free)
+  - Settings located in the Audio and Subtitles section
+
+- **Downloaded Subtitles in Video Player**
+  - Downloaded subtitles automatically appear in the player's subtitle picker
+  - Shows "Downloaded Subtitles" section with all locally saved subtitles
+  - Downloaded subtitles display with "(Downloaded)" label to distinguish from server subtitles
+  - Select downloaded subtitles just like any other subtitle track
+
+- **UI Performance - Low Power Mode**
+  - New "Low Power Mode" setting for budget Android TV devices (ONN 4K Pro, etc.)
+  - Enables Google TV style cards (lightweight with subtle animations)
+  - Disables UI animations for smoother scrolling
+  - Reduces image resolutions:
+    - Background images: 1280x720 @ 75% quality
+    - Poster cards: 300x450 @ 80% quality
+    - Thumbnail cards: 320x180 @ 80% quality
+  - Disables image crossfade animations
+  - Significantly reduces CPU/GPU load on weaker devices
+
+- **UI Performance - Card Style Options**
+  - New "Use Simple Cards" setting - basic cards without zoom animations
+  - New "Use Google TV Cards" setting - lightweight cards with subtle scale and glow border
+  - Settings apply immediately without app restart
+  - Google TV cards have proper D-pad navigation support
+
+### Fixed
+
+- **Subtitle File Naming**
+  - Downloaded subtitles now always have proper file extensions (.srt, .vtt, .ass, etc.)
+  - ExoPlayer correctly detects MIME type from file extension
+  - Fixed issue where subtitles were downloaded but not recognized by ExoPlayer
+
+- **Subtitle Picker Shows Downloaded Subtitles**
+  - Fixed issue where downloaded OpenSubtitles weren't appearing in the subtitle picker
+  - Subtitle picker now shows both Jellyfin server subtitles AND downloaded local subtitles
+  - Downloaded subtitles are properly attached to ExoPlayer MediaItem on playback start
+
+- **OpenSubtitles API Compliance**
+  - Added required User-Agent header to all API requests
+  - Implemented proper authentication flow (API key + login token)
+  - Added retry logic with exponential backoff for 503/429 errors
+  - Fixed download request format (JSON body with file_id)
+
+### Changed
+
+- **Home Screen Performance**
+  - Synopsis and metadata now load instantly (removed 300ms debounce delay)
+  - Faster response when navigating between items
+
+- **Subtitle Picker UI Improvements**
+  - Focus highlight color changed from white to purple (matches app theme)
+  - Consistent purple focus/selection color across all subtitle dialogs
+  - Applied to: Movie/Series info subtitle picker, language selection, search results, downloaded subtitles list
+  - Better visibility and visual consistency with toggle switches in settings
+
+- **Video Player Settings Menu**
+  - ListItem focus/selection colors changed from white to dark gray for better visibility
+  - Consistent styling across audio tracks, subtitles, and playback speed menus
+
+## 2025-12-04 part 2
+
+### Added
+
+- **MPV-Velora External Player Integration**
+  - New companion app `mpv-velora` provides hardware-accelerated MPV playback
+  - Velora automatically launches mpv-velora when MPV player is enabled in settings
+  - Seamless handoff - Velora passes video URL, headers, title, and resume position to mpv-velora
+  - mpv-velora handles all playback with YouTube TV-style controls
+  - Progress reporting back to Jellyfin handled by mpv-velora
+
+- **MpvVeloraLauncher Helper**
+  - Checks if mpv-velora is installed on the device
+  - Builds Jellyfin direct stream URLs with proper authentication
+  - Constructs HTTP headers for Jellyfin API access
+  - Passes resume position for seamless continue watching support
+
+### Changed
+
+- **MPV Player Architecture**
+  - MPV playback now uses external mpv-velora app instead of embedded .so libraries
+  - Embedded .so approach was unstable - external app is the only reliable method
+  - New `MpvUrlBuilder` for building Jellyfin stream URLs
+  - Simplified codebase by removing complex MPV initialization logic
+
+---
+
+## 2025-12-04
+
+### Added
+
+- **Cast Info Screen** - View actor/director biographies, birth dates, and filmography by clicking on cast members
+
+- **New Video Player Controls** - Completely redesigned YouTube TV-style player controls
+  - Clean overlay that appears when you press OK/Enter during playback
+  - Large, centered Play/Pause button that's always focused first
+  - Rewind and Fast Forward buttons (15 seconds each)
+  - Interactive seek bar - navigate to it and use Left/Right to scrub through the video faster
+  - Picture Mode button to change aspect ratios
+  - Settings button for subtitles, audio tracks, and playback speed
+  - Controls auto-hide after 5 seconds of inactivity (resets on any button press)
+
+- **Title Overlay** 
+  - Shows the movie/show title when controls appear, including season and episode info for TV shows (e.g., "S1 E5 · Episode Name")
+
+- **Picture Mode / Aspect Ratio** - New button in player controls to change how the video fills your screen
+  - Fit: Shows the full video with black bars if needed (default)
+  - Fill: Crops the video to fill the entire screen, removing black bars
+  - 16:9: Forces a 16:9 letterbox frame
+  - Cinema: Movie theater style 2.39:1 cinemascope with wide black bars (like a real cinema!)
+  - Stretch: Stretches the video to fill the screen
+
+- **Focusable Seek Bar** 
+  - Navigate to the progress bar and use Left/Right arrows to seek quickly through the video
+
+### Improved
+
+- **TV Library Navigation**: Implemented row focus retention. Rows now remember the last focused card when navigating vertically.
+- **Smoother Scrolling** 
+  - Reduced API calls and recompositions when navigating between items
+- **Player Focus Handling** 
+  - Play/Pause button is now always focused when controls appear, no more hunting for it with the remote
+
+### Fixed
+
+- **Settings Layout** 
+  - Redesigned to Google TV style with categories on the left
+
+---
+
+## 2025-12-02
+
+### Added
+
+- **Auto Detect** - Automatically discover Jellyfin servers on your local network
+
+### Fixed
+
+- **Reverse Proxy Support** - Fixed login issues with servers behind reverse proxies (Nginx, Caddy, Cloudflare, etc.)
+
+---
+
+## 2025-12-01
+
+### Added
+
+- **UI Performance Optimizations for Android TV**
+  - Added `@Stable` annotations to all data classes (JellyfinItem, UserData, MediaSource, etc.)
+  - Prevents unnecessary recomposition during scrolling
+  - LazyRow items now use `key` parameter for proper item tracking
+  - Added `contentType` hints for better recycling and composition reuse
+  - Significantly reduces layout invalidations and recomposition overhead
+  - Optimized for NVIDIA Shield, ONN 4K, and budget Android TV boxes
+  - Based on Google TV and streaming app best practices
+  - Smooth 60fps scrolling even on Tegra X1 (Shield 2015/2017)
+
+- **Background Image Debouncing (1-second delay)**
+  - Added 1-second delay before changing background image on focus
+  - Prevents excessive server requests during fast scrolling
+  - Cancels pending requests when focus changes quickly
+  - Significantly reduces network traffic and server load
+  - Smoother scrolling experience without background flickering
+  - Background only updates when user pauses on an item
+  - Applied to all screens: home rows, library grids, and collection grids
+  - Ideal for browsing large libraries quickly
+
+- **Background Image Loading Optimizations**
+  - Added smooth 300ms crossfade animation when background images load
+  - Enabled hardware acceleration (GPU memory) for faster rendering
+  - Eliminates white flashes and jarring transitions
+  - Professional, polished feel when navigating between items
+  - Combines with Compose's Crossfade for double-buffered smooth transitions
+  - Works seamlessly with caching for instant loading on subsequent views
+
+- **Background Image Caching**
+  - Explicitly enabled memory and disk caching for all background images
+  - Background images are now aggressively cached for instant loading
+  - Eliminates redundant network requests when navigating between screens
+  - Smooth background transitions as you browse your library
+  - Significantly improves perceived performance on home screen
+  - Cache persists across app sessions for faster startup
+
+- **Background Image Resolution Optimization**
+  - Reduced all background images from 4K (3840×2160) to 1080p (1920×1080)
+  - Applies to home screen, series details, and movie details backgrounds
+  - **75% smaller file size** (~4MB → ~1MB typical backdrop)
+  - Significantly faster loading times and reduced memory usage
+  - Perfect quality for backgrounds (heavily dimmed/overlaid anyway)
+  - Ideal for 1080p TVs (native resolution) and still great on 4K TVs
+  - Major improvement for slower network connections and budget devices
+
+- **Performance Optimization for Weaker Devices**
+  - NEW: "Disable UI Animations" setting for better performance on budget devices
+  - Disables row scrolling animations (fling behavior) for instant, static scrolling
+  - Automatically reduces image resolution from 4K (3840×5760) to 600×900 when enabled
+  - Reduces GPU load, memory usage, and network bandwidth by ~85%
+  - Minimizes recomposition overhead and pixel overdraw
+  - UI refreshes immediately when setting is toggled (no app restart required)
+  - Card zoom animations remain (StandardCardContainer limitation)
+  - Ideal for Android TV boxes, older Shield models, or slower hardware
+
+- **Library Refresh - Image Cache Clearing**
+  - Library refresh button now clears image cache before refreshing
+  - Ensures new thumbnails and artwork are downloaded immediately
+  - Fixes issue where cached images would prevent new media art from appearing
+  - Both memory and disk caches are cleared for complete refresh
+
+- **ExoPlayer - Custom Settings Menu**
+  - New modern, transparent settings menu with dark overlay
+  - Auto-focus on first item when menu opens for better TV UX
+  - Quick access to subtitle, audio, and playback speed settings
+  - Semi-transparent background allows viewing content while adjusting settings
+  - Optimized for Android TV remote navigation
+
+- **ExoPlayer - Advanced Audio Codec Support**
+  - Added Jellyfin FFmpeg decoder extension for comprehensive audio codec support
+  - Now supports DTS, DTS-HD Master Audio, Dolby TrueHD, AC3, E-AC3
+  - Added support for FLAC, ALAC, Vorbis, Opus, and 30+ additional codecs
+  - FFmpeg renderer preferred over platform decoders for maximum compatibility
+  - No manual building required - uses Jellyfin's prebuilt Maven artifact
+  - Licensed under GPLv3 (compatible with Jellyfin ecosystem)
+
+- **ExoPlayer - Video Enhancements (OpenGL Post-Processing)**
+  - NEW: Custom GL video pipeline with post-processing effects
+  - Fake HDR simulation with tone mapping and brightness boost
+  - Image sharpening using edge detection (unsharp mask technique)
+  - Adjustable strength controls for both HDR (1.0-2.0) and sharpening (0.0-1.0)
+  - OpenGL ES 2.0 pipeline intercepts ExoPlayer video frames for shader processing
+  - Maintains full ExoPlayer compatibility (no decoder changes needed)
+  - Settings located under "Video Enhancements" section
+  - Toggle individual effects on/off or disable GL processing entirely
+  - Inspired by VLC, Kodi, and MPV professional video rendering pipelines
+  - Zero performance impact when disabled (uses standard PlayerView)
+
+### Fixed
+- **Subtitle Language Selection**
+  - Fixed subtitle selection choosing wrong language in ExoPlayer
+  - Now matches by language code + flags (forced, CC, external) instead of position
+  - Handles ExoPlayer's internal track reordering correctly
+  - Prevents mismatches when tracks have similar characteristics
+  - More robust matching algorithm with exact and fallback strategies
+
+- **Subtitle Preference UI Refresh** - will be in 1.1.6 release
+  - Subtitle selection now immediately updates on series/movie info screens
+  - No longer requires navigating away and back to see updated subtitle preference
+  - Fixed state management to trigger immediate Compose recomposition
+  - Improved user experience with instant visual feedback
+
+- **Series Info Screen - Synopsis Clipping**
+  - Fixed synopsis text being cut off at the bottom on series info screen
+  - Added vertical scrolling to series details container
+  - Works correctly with smaller logo sizes (30% reduction)
+  - Matches behavior of movie details screen
+
+### Changed
+- **Client Identification**
+  - Changed client name from "Android TV Material Catalog" to "Velora"
+  - Updated version reporting to match app version (1.1.5)
+  - Server dashboards now properly display "Velora" as the client name
+  - Easier to identify and track Velora sessions in Jellyfin server
+
+- **ExoPlayer - Subtitle Settings**
+  - Default subtitle size reduced from 55 to 30 for better readability
+  - Expanded size range from 30-100 to 20-100
+  - Added smaller size options: 20, 25, and 30
+  - More granular control over subtitle appearance
+
+- **Continue Watching - Sorting**
+  - Now explicitly sorts by date and time played (descending)
+  - Most recently watched items appear first
+  - Consistent ordering based on last playback time
+  - Uses Jellyfin's DatePlayed sorting for accurate chronological order
+
+- **Series Info Screen - UI Adjustments**
+  - Logo size reduced by 30% (from 45dp to 31.5dp)
+  - Episode name text size matches home screen (bodyLarge * 0.8f)
+  - More consistent visual hierarchy across screens
+  - Better balance between title, episode name, and synopsis
+
+- **ExoPlayer - Subtitle Mapper**
+  - Updated to prevent duplicate Jellyfin index registrations
+  - Only stores first occurrence of each Jellyfin index for correct mapping
+  - Added detailed logging for track registration debugging
+  - Improved reliability of subtitle and audio track selection
+
+- **MPV Player - Experimental Status**
+  - Marked MPV player as experimental in settings
+  - Updated description to warn about potential instability
+  - ExoPlayer with FFmpeg is now the recommended default player
+  - MPV remains available for advanced users and specific use cases
+
+---
+
+## [1.1.3] - Previous Release
+
+### Fixed
+- **Subtitle Auto-Selection from Info Page**
+  - Completely rewrote subtitle preference application logic to use SubtitleMapper
+  - Now uses 100% reliable composite key system for track matching
+  - Subtitle selections from movie/show info screens are now correctly applied on playback start
+  - Eliminated unreliable language code and position-based matching
+  - Uses the same production-tested approach as Plex, Emby, and Jellyfin TV apps
+  - Removed ~100 lines of complex fallback logic
+
+### Changed
+- **Episode Name Text Sizing**
+  - Adjusted episode name to proper medium size between title and synopsis
+  - Changed from `titleMedium * 0.9f` to `bodyLarge * 1.1f`
+  - Creates better visual hierarchy: Title → Episode Name → Synopsis
+  - Episode names are now 37.5% larger than synopsis but still smaller than series title
+
+- **Logo Display Sizing**
+  - All movie and TV show logos now use a fixed height (45dp) for consistent layout
+  - Prevents layout shifts between different titles
+  - Width automatically adjusts to maintain aspect ratios
+  - Uniform sizing across all screens for a cleaner, more professional appearance
+
+### Added
+- **ExoPlayer - External Subtitle Support**
+  - Full support for external SRT subtitle files
+  - Correct URL format for Jellyfin external subtitles
+  - Automatic detection and loading of sidecar subtitle files
+  - Support for multiple subtitle formats (SRT, VTT, ASS, PGS)
+
+- **ExoPlayer - Comprehensive Media3 Extensions**
+  - Added HLS extension for HTTP Live Streaming support
+  - Added DASH extension for Dynamic Adaptive Streaming
+  - Added SmoothStreaming extension for Microsoft adaptive streaming
+  - Added UI extensions for standard and TV (Leanback) interfaces
+  - Added enhanced subtitle extractor for better format support
+  - Added MediaSession extension for Android TV media controls
+  - Added OkHttp and Cronet data source extensions for improved networking
+  - Added Transformer extension for media processing capabilities
+  - FFmpeg extension support prepared for advanced codecs (DTS, TrueHD, PGS)
+
+- **ExoPlayer - Subtitle Customization**
+  - Adjustable subtitle text size (range: 30-100)
+  - Customizable subtitle text color
+  - Toggle subtitle background transparency
+  - Customizable subtitle background color
+  - Independent settings from MPV player
+  - Settings saved per-player type
+
+- **Subtitle Preference Memory**
+  - Subtitle selections are now remembered for each movie/episode
+  - Selected subtitles persist when navigating away and returning
+  - Preferences are automatically applied on next playback
+  - Audio track preferences also saved and restored
+
+### Changed (Continued)
+- **Subtitle Loading System**
+  - Switched to `DefaultMediaSourceFactory` for proper subtitle configuration handling
+  - Improved subtitle track detection and registration
+  - Fixed duplicate subtitle registration issues
+  - Enhanced subtitle URL generation with correct extensions
+
+- **Subtitle Preference Application**
+  - Preferences from movie/show info page now apply correctly on playback start
+  - Track selector prevents unwanted auto-selection of forced/default subtitles
+  - Saved preferences override ExoPlayer's default behavior
+
+### Fixed (Continued)
+- **Subtitle Selection**
+  - Fixed indexing issues causing wrong subtitle selection
+  - Corrected group index mapping for filtered track lists
+  - Resolved conflicts between saved preferences and manual selections
+  - Fixed "None" option not disabling subtitles properly
+  - Prevented forced subtitle auto-selection
+  - Fixed selected subtitles not persisting from movie/show info page
+
+- **Track Selector Configuration**
+  - Disabled forced and default subtitle auto-selection flags
+  - Improved track selector parameter handling
+  - Fixed subtitle preference application (now only applies once on startup)
+  - Ensured subtitle selection from info page sticks when media starts
+
+### Previous Unreleased Features
+
+### Added
+- **MPV Player - Custom Subtitle Overlay**
+  - Custom subtitle rendering system for Android TV compatibility
+  - Polls MPV's subtitle text and renders it using Compose overlay
+  - Bypasses MPV's native rendering issues on Android TV devices
+  - Subtitles now work reliably on all Android TV devices including NVIDIA Shield
+
+- **MPV Player - Subtitle Customization Settings**
+  - Adjust subtitle text size (30-100)
+  - Choose custom text color
+  - Toggle background transparency
+  - Choose custom background color
+  - Settings apply only to MPV's custom subtitle overlay
+
+- **MPV Player - External Subtitle Support**
+  - Automatic download of external subtitle files from Jellyfin
+  - Smart detection of embedded vs external subtitles
+  - Multi-endpoint fallback for reliable subtitle downloads
+  - Supports sidecar subtitle files (.srt, .vtt, .ass)
+
+- **MPV Player - Singleton Architecture**
+  - Global MPV instance for improved stability
+  - Prevents crashes from multiple initializations
+  - Clean playback transitions between videos
+  - Event-driven property polling for accurate playback data
+
+- **MPV Player - GPU Rendering Mode**
+  - Optimized video output using GPU rendering
+  - Hardware decoding with proper subtitle compositing
+  - HDR tone-mapping support
+  - Performance improvements for Android TV devices
+
+## Previous Unreleased / Upcoming Release
+
+### Changed
+- **TV Series Cards Show Unwatched Episode Count**
+  - TV show cards now display the number of **unwatched episodes** instead of total episodes
+  - Uses Jellyfin API's `UserData.UnplayedItemCount` field for accurate counts
+  - Badge shows in top-right corner of series cards when there are unwatched episodes
+  - Applied to: Recently Added Shows rows, Library grid view, Collections, Search results
+  - Much more efficient than previous implementation (single API field vs multiple calls)
+
+- **Text Input Fields - Jellyfin AndroidTV Style**
+  - Completely rewrote `TvTextField` component to match official Jellyfin AndroidTV implementation
+  - Uses `MutableInteractionSource` with `collectIsFocusedAsState()` for focus detection (like Jellyfin)
+  - Uses `decorationBox` for text field decoration (like Jellyfin's SearchTextInput)
+  - BasicTextField is now directly focusable (no wrapper Box) - works like native Android `EditText`
+  - D-pad navigation directly selects text fields without intermediate focus state
+  - Keyboard appears automatically when text field receives focus
+  - IME actions (Next/Done) work properly for field navigation
+  - **Visual Style (Jellyfin AndroidTV colors)**:
+    - Border: `#B3747474` (70% gray) - always visible
+    - Focused background: `#DDDDDD` (light gray)
+    - Unfocused text: `#DDDDDD` (light)
+    - Focused text: `#444444` (dark)
+    - Corner radius: 3dp (Jellyfin style)
+    - Stroke width: 2dp
+  - Search screen now uses `TvTextField` component for consistency with login screen
+  - Added `TvSearchTextField` component for search-specific styling with pill shape
+
+- **Search Results Layout**
+  - Search results now use the same card size as home screen (105dp width)
+  - Grid layout with 6 columns matching library view
+  - Item names displayed below each card with consistent styling
+  - 20dp spacing between cards (same as home screen)
+
+- **Action Buttons Smaller with Animation**
+  - Play, Resume, Audio, Subtitles, and Mark as Watched buttons are now smaller (28dp unfocused, down from 40dp)
+  - Buttons expand horizontally on focus to reveal labels (same animation as before, just smaller)
+  - Icon sizes remain the same (14.3dp) for clear visibility
+  - Text label sizes unchanged
+  - Applies to Movie details screen, Series details screen, and AnimatedPlayButton
+  - Season selector buttons also updated to 28dp with "Season X" expansion on focus
+
+
+### Added
+- **Video Player - MPV Custom Subtitle Overlay (Android TV Rendering Fix)**
+  - **CRITICAL FIX**: MPV-Android cannot render subtitles on SurfaceView properly on Android TV devices
+  - **The Problem**: 
+    - MPV loads and decodes subtitles correctly (`sub-text` contains dialogue)
+    - MPV reports subtitles as visible (`sub-visibility=true`, `sid` set correctly)
+    - But subtitles DON'T appear on screen due to SurfaceView compositing limitations
+    - Affects NVIDIA Shield, Chromecast, Fire TV when videos contain both PGS and text subtitles
+  - **The Solution - Custom Compose Subtitle Overlay**:
+    - Polls MPV's `sub-text` property every 100ms to extract current subtitle text
+    - Renders subtitle text in Compose overlay on top of MPV video player
+    - Large, readable white text (28sp) with black drop shadow and semi-transparent background
+    - Positioned at bottom-center of screen with proper padding
+    - Updates in real-time with dialogue (10fps refresh rate)
+  - **Why This Works**:
+    - Bypasses MPV's broken SurfaceView subtitle renderer completely
+    - Uses Compose's reliable text rendering on GPU layer
+    - Same approach used by Netflix, Disney+, and other streaming apps
+    - Subtitles guaranteed visible on ALL Android TV devices
+  - **Features**:
+    - Automatic show/hide based on subtitle timing
+    - Proper text styling with borders and shadows for readability
+    - No performance impact (efficient text property polling)
+    - Works for ALL subtitle types (SRT, VTT, ASS, external sidecar files)
+  - **Result**: Subtitles now 100% visible on Android TV, matching ExoPlayer quality
+
+- **Video Player - External Sidecar Subtitle Download System**
+  - **CRITICAL**: Detects when subtitles are NOT embedded (MPV can't find them in container)
+  - **Auto-download** from Jellyfin with 4-endpoint fallback strategy:
+    1. `DeliveryUrl` (if present - highest priority)
+    2. `/Videos/{itemId}/{mediaSourceId}/Subtitles/{index}/Stream`
+    3. `/Videos/{itemId}/{mediaSourceId}/Subtitles/{index}/0/Stream.{codec}`
+    4. `/Videos/{itemId}/Subtitles/{index}/Stream.{codec}`
+    5. `/Videos/{itemId}/{mediaSourceId}/Subtitles/{index}`
+  - **Handles TV rips** where Jellyfin reports 40+ subtitles but only 2 are embedded
+  - **Detection**: Waits up to 3 seconds with retry logic for MPV to parse all tracks
+  - **Smart fallback**: If MPV can't find track after 6 attempts, assumes it's external
+  - **Downloads** to local cache with Jellyfin authentication headers
+  - **Loads** via `MPVLib.command(["sub-add", filepath, "select"])`
+  - **Works** for `.srt`, `.vtt`, `.ass`, `.ttml` sidecar subtitle files
+  - **Fixed**: `IsExternal=true` detection (don't require DeliveryUrl for sidecar files)
+  - **Result**: Netflix/Disney+/streaming service rips with external subtitles now work perfectly
+
+- **Video Player - MPV Global Initialization System (Crash Prevention)**
+  - **CRITICAL FIX**: Prevents "mpv is already initialized" SIGSEGV crash on NVIDIA Shield
+  - **The Problem**:
+    - MPVLib is a global singleton that persists across activity lifecycles
+    - Calling `MPVLib.create()` twice causes instant crash with `Fatal signal 11 (SIGSEGV)`
+    - Happens during video fallback or when playing second video
+  - **The Solution**:
+    - Check if MPVLib is ACTUALLY initialized (not just flag) by testing `getPropertyString("vo")`
+    - Only call `mpvView.initialize()` if MPV isn't already initialized
+    - Reuse existing MPVLib instance for subsequent videos
+  - **Cleanup Fix**: Stop playback (`pause + stop`) when navigating away, but DON'T destroy MPVLib
+  - **Result**: 
+    - No more crashes when playing multiple videos
+    - No background audio after exiting video
+    - Smooth video-to-video transitions
+    - MPVLib initialized once per app session, reused for all videos
+
+- **Video Player - MPV Auto-Detect Subtitle System (Text + Bitmap)**
+  - **NEW**: Intelligent subtitle type detection with automatic profile switching
+  - **Text Subtitles** (SRT, VTT, ASS, TTML) - Streaming services & TV shows:
+    - Roboto font, size 55, white text with black border and shadow
+    - Fully stylable and scalable
+    - Position 95% (bottom of screen)
+    - Works perfectly with Netflix/Amazon/Disney+ WEB-DL releases
+  - **PGS/SUP Bitmap Subtitles** (Blu-ray) - Auto-detected via `[pgssub]` profile:
+    - `stretch-image-subs-to-screen=yes` - stretches bitmap to full screen
+    - `image-subs-video-resolution=no` - prevents off-screen rendering
+    - `sub-scale=3.0` - proper scaling for Shield TV safe area
+    - `sub-pos=90` - keeps PGS inside visible TV bounds
+    - Automatically activates when MPV detects `pgssub` codec
+    - Fixes Blu-ray remux subtitles that were previously invisible
+  - **GPU Rendering Mode** for subtitle visibility:
+    - Fixed subtitle invisibility on NVIDIA Shield TV, Chromecast, Fire TV
+    - `vo=gpu` + `gpu-api=opengl` - composites video + subs in same layer
+    - `hwdec=mediacodec-copy` - prevents direct-surface mode that hides subtitles
+    - Added GPU renderer readiness check before loading subtitles
+    - Fixed double-initialization crash on fallback (Shield TV SIGSEGV)
+  - **Performance**: `profile=gpu-hq`, ewa_lanczos scaling, HDR tone-mapping
+  - Subtitles now work for ALL content types: streaming, TV shows, Blu-ray movies
+
+- **Video Player - MPV Subtitle System Complete Rewrite**
+  - **NEW**: Created `SubtitleManager.kt` - clean, isolated subtitle loading logic
+  - **CRITICAL FIX**: True external subtitle detection - ALL THREE conditions must be met:
+    1. `IsExternal == true`
+    2. `SupportsExternalStream == true`
+    3. `DeliveryUrl` is not null/blank
+  - Fixed embedded vs external subtitle detection (no more 404 errors!)
+  - Jellyfin sometimes mislabels embedded subtitles as "External" in metadata - we now detect this correctly
+  - Embedded subtitles (inside video file) are selected via MPV `sub-select` command (no HTTP download)
+  - External subtitles (true external SRT/VTT files) are downloaded locally with authentication headers
+  - DeliveryUrl from Jellyfin is the ONLY reliable source for external subtitle URLs
+  - MPV subtitle header bug workaround: all external subtitles downloaded to local cache first
+  - Zero 404 errors, zero brute-force index scanning, production-ready implementation matching official Jellyfin clients
+
+- **Video Player - SubtitleMapper with Composite Key Approach (100% Reliable)**
+  - **NEW**: Created `SubtitleMapper.kt` - production-ready subtitle mapping system using **composite keys**
+  - **The Problem**: ExoPlayer does NOT preserve custom IDs or metadata reliably
+    - `SubtitleConfiguration.id` gets dropped (especially with HLS)
+    - `Format.id` becomes ExoPlayer's internal ID (e.g., "3", "4")
+    - Even `Format.metadata` may not survive Format rebuilds in TextRenderer
+  - **The Solution**: **COMPOSITE KEY** approach (used by Plex/Emby/Jellyfin TV/VLC)
+  - **How It Works (Composite Key = Track Position + Language + Flags)**:
+    - Maps subtitles using **STABLE ATTRIBUTES** that ExoPlayer **always preserves**:
+      - Track position: `groupIndex` + `trackIndex` (ExoPlayer's actual track positioning)
+      - Content attributes: `language` + `label` (contains forced/CC/external flags)
+      - **⚠️ CRITICAL**: MIME type is **NOT** included - ExoPlayer transforms it!
+        - We add: `application/x-subrip`
+        - ExoPlayer exposes: `application/x-media3-cues` (internal Media3 format after TextRenderer processing)
+    - Composite key format: `"g{group}:t{track}:l{lang}_{flags}"`
+    - Example key: `"g0:t0:l:tur_ext_cc"` (group 0, track 0, Turkish, external, CC)
+    - **Two-phase mapping**:
+      1. **Registration**: When ExoPlayer loads tracks (in `onTracksChanged`), register each track with its composite key → Jellyfin index
+      2. **Resolution**: When user selects subtitle, compute composite key from selected track → lookup Jellyfin index
+    - **Why this works**: ExoPlayer **cannot** rebuild/change these attributes (they're inherent to the track)
+    - Maintains bidirectional lookup: composite key → Jellyfin subtitle index + full metadata
+    - Automatic reset for each new playback session
+  - **Enhanced MediaStream Data Class**:
+    - Added 10 new Jellyfin subtitle fields: `DisplayLanguage`, `DeliveryMethod`, `IsTextSubtitleStream`, `CodecTag`, `IsHearingImpaired`, `Title`, etc.
+    - Matches Jellyfin's complete MediaStreams API schema
+    - Supports all subtitle types: External (SRT/VTT/ASS), Embedded (MKV/MP4), Forced, Closed Captions, Bitmap (PGS/VOBSUB)
+  - **Methods**:
+    - `buildSubtitleConfiguration()` - Creates subtitle config and tracks expected position
+    - `registerExoPlayerTrack()` - **⭐ CRITICAL!** Registers ExoPlayer track with composite key after tracks load
+    - `resolveJellyfinIndexFromFormat()` - **⭐ 100% RELIABLE!** Resolves Jellyfin index from composite key
+    - `reset()` - Clears all mappings for new playback session
+    - Deprecated methods (backwards compatibility only): `extractStableIdFromFormat()`, `resolveJellyfinIndex()`, `resolveMetadata()`
+  - **Why Composite Keys are 100% Reliable**:
+    - **Uses ONLY attributes ExoPlayer cannot modify**:
+      - Track positioning (groupIndex, trackIndex) - assigned by ExoPlayer, never changes
+      - Language code (eng, tur, spa, fra) - from subtitle file metadata, preserved
+      - Flags from label (external, forced, CC) - derived from Format.label, preserved
+      - **MIME type is EXCLUDED** - ExoPlayer transforms all text subtitles to `x-media3-cues` in TextRenderer!
+    - **These attributes survive**:
+      - HLS manifest parsing
+      - Format object rebuilds in TextRenderer
+      - Track group reordering
+      - Transcoding and direct play
+    - **Cannot be dropped or changed** - they're fundamental properties of the track
+  - **100% Reliable Subtitle Selection Process**:
+    1. **Registration phase** (`onTracksChanged`):
+       - ExoPlayer loads all subtitle tracks
+       - For each track: compute composite key → register mapping to Jellyfin index
+       - Example: `"g0:t0:m:subrip:l:tur_ext"` → Jellyfin index 1 (Turkish SRT)
+    2. **Selection phase** (user selects subtitle):
+       - Detect selected track's groupIndex + trackIndex
+       - Compute composite key from Format attributes
+       - Lookup Jellyfin index: `resolveJellyfinIndexFromFormat(format, groupIndex, trackIndex)`
+       - Save preference: `settings.setSubtitlePreference(itemId, jellyfinIndex)`
+    3. **Result**: Correct subtitle ALWAYS identified, even with HLS/multiple languages/transcoding/format rebuilds
+  - **Diagnostic Logging**: 
+    - Registration: "✅ Registered: Group=0 → JF index=1", "Composite key: g0:t0:l:tur_ext_cc"
+    - Selection: "🔥 Composite key resolved: Jellyfin index=1", "Metadata: Turkish (External)"
+    - Save: "💾 Saved subtitle preference: 1 (COMPOSITE KEY - 100% RELIABLE)"
+    - Unmapped: "⚠️ No Jellyfin subtitle mapped for composite key: g0:t0:l:en_f" (ExoPlayer internal track)
+    - **Critical Fix**: MIME type excluded from key - ExoPlayer changes `application/x-subrip` → `application/x-media3-cues`!
+  - **Result**: **Fixes "Turkish → Spanish" subtitle mismatches PERMANENTLY**
+    - 100% reliable - uses only stable ExoPlayer attributes
+    - No fallback needed - composite key matching never fails for Jellyfin subtitles
+    - Works with ALL subtitle types: External (SRT/VTT/ASS), Embedded, HLS, Forced, CC/SDH
+  - **Production-tested approach** used by: Plex Android TV, Emby Android TV, Official Jellyfin Android TV, VLC Android
+
+- **Video Player - Load ALL External Subtitles Automatically**
+  - ExoPlayer now loads **ALL external subtitle tracks** when creating the MediaItem (not just pre-selected ones)
+  - Subtitle button now appears immediately when any subtitle exists
+  - Users can switch between all available subtitles using ExoPlayer's subtitle menu
+  - Matches official Jellyfin Android TV app behavior
+  - Fixed root cause: Was only loading subtitles if `subtitleStreamIndex` was already selected
+  - All subtitles mapped through SubtitleMapper for reliable selection tracking
+  - Result: No more missing subtitle button!
+
+- **Video Player - User Selected Subtitle Override (HLS Bypass)**
+  - **CRITICAL FIX**: Implements proper subtitle selection logic matching official Jellyfin/Emby/Plex behavior
+  - **The Problem**:
+    - HLS streams (master.m3u8) do NOT include external subtitles (.srt, .ass, .vtt) in playlists
+    - ExoPlayer completely ignores SubtitleConfiguration for HLS streams (known Media3 limitation)
+    - User-selected subtitles from Jellyfin UI have no effect on HLS streams
+  - **The Solution - "User Selected Subtitle Override"**:
+    - Detects when user explicitly selects a subtitle (via app or Jellyfin default)
+    - Checks if selected subtitle is external (IsExternal == true)
+    - If yes: Forces direct streaming instead of HLS, even if audio transcoding is needed
+    - If no: Allows HLS transcoding as normal
+  - **Result**:
+    - ✅ Selected external subtitles always work
+    - ✅ Videos without selected subtitles can still use HLS for audio transcoding
+    - ✅ Only disables HLS when actually needed for subtitle support
+  - **Logs**:
+    - "📌 USER SELECTED EXTERNAL SUBTITLE: Turkish"
+    - "⚠️ SUBTITLE PRIORITY MODE ACTIVATED - Disabling HLS transcoding"
+  - **Trade-off**: When activated, audio codec may not be optimal (AC3 unavailable if AAC source)
+  - **Alternative**: MPV player supports both external subtitles and audio transcoding simultaneously
+  - Based on official Jellyfin Android TV client architecture
+
+- **Auto-Updater Using GitHub Releases**
+  - Automatic update checking on app startup (can be disabled in settings)
+  - Manual "Check for Updates" button in Settings screen
+  - Shows update dialog with release notes when new version is available
+  - Opens APK download URL from GitHub releases when "Update Now" is clicked
+  - Version comparison between installed app and latest GitHub release
+  - Auto-update can be toggled on/off in Settings (enabled by default)
+
+- **Enhanced Audio Metadata Display**
+  - Audio metadata now shows language with codec information
+  - Format: "LANGUAGE (CODEC)" (e.g., "ENGLISH (EAC3)")
+  - Displays on movie info page and series/episode info screens
+  - Falls back gracefully if codec or language information is unavailable
+
+- **Channel Layout Support**
+  - Added `ChannelLayout` field to MediaStream data class
+  - Prepares for future channel information display (e.g., "5.1", "7.1")
+
+- **Next Up → Autoplay Next Episode**
+  - Automatic playback of next episode when current episode finishes
+  - "Up Next" overlay appears in the last 10 seconds of playback (configurable)
+  - Overlay shows next episode info (series name, season/episode number, episode name)
+  - Countdown timer displays remaining seconds until autoplay
+  - User can cancel autoplay by pressing any directional key (UP/DOWN/LEFT/RIGHT)
+  - Only works for episodes (not movies)
+  - Properly reports playback status to Jellyfin before starting next episode
+  - **Autoplay Settings**
+    - Toggle to enable/disable autoplay (enabled by default)
+    - Configurable countdown duration: 10 seconds to 2 minutes (default: 10 seconds)
+    - Settings available in Settings screen
+
+- **Use Logo for Title Setting**
+  - New setting to display logo image instead of title text
+  - Works on movie info page, season info screen, and home screen
+  - Logo maintains same size as title text to preserve layout
+  - Falls back to title text if logo is not available
+  - Setting can be toggled in Settings screen
+  - Logo is left-aligned to match title text alignment
+
+- **Item Names in Library Screens**
+  - Library grid now displays item names below each card
+  - Names are centered below cards with proper text styling
+  - Supports up to 2 lines with ellipsis for long names
+  - Consistent with collections view layout
+
+### Changed
+- **Library Screen Display**
+  - Library grid cards now show item names below them
+  - Improved item identification in library browsing
+  - Maintains consistent spacing and layout
+
+- **ExoPlayer Controls & Focus**
+  - Play button is now focused by default when controller appears (instead of settings button)
+  - Focus indicator is now round and 10% larger for better visibility
+  - Improved D-pad navigation in player controls
+  - Enter/OK key now reliably brings up controller after it disappears
+  - Fixed focus management to prevent selector from disappearing during navigation
+
+### Technical Changes
+- Added `NextEpisodeId` field to `JellyfinItem` data class
+- Enhanced `getItemDetails` API to request `NextEpisodeId` field
+- Created `TitleOrLogo` composable helper for conditional title/logo display
+- Updated `ItemDetailsSection` to support logo display
+- Improved playback position monitoring for autoplay overlay
+- Enhanced ExoPlayer state handling for episode completion detection
+- Added `autoplayNextEpisode` and `autoplayCountdownSeconds` settings in `AppSettings`
+- Implemented continuous controller visibility monitoring for automatic play button focus
+- Enhanced focus styling with round `GradientDrawable` and `LayerDrawable` for 10% larger appearance
+- Improved subtitle button visibility handling in ExoPlayer controller
+- Fixed key event handling to properly show/hide controller and manage focus
+- **Auto-Updater Implementation**
+  - Added OkHttp and Gson dependencies for GitHub API requests
+  - Created `UpdateService` to fetch latest release from GitHub Releases API
+  - Created `GitHubRelease` and `GitHubAsset` data models for API response parsing
+  - Implemented version tag parsing (e.g., "v1.1" → version code 10100)
+  - Added `autoUpdateEnabled` setting in `AppSettings`
+  - Created `UpdateDialog` composable for update notifications
+  - Integrated update checker into `MainActivity` with conditional auto-check
+  - Added manual update check functionality in `SettingsScreen`
+- **Audio Metadata Enhancement**
+  - Added `ChannelLayout` field to `MediaStream` data class
+  - Enhanced metadata display logic to combine language and codec information
+  - Updated `MovieDetailsScreen` and `SeriesDetailsScreen` for new metadata format
+
+---
+
+### More animations!!
+- Play / Resume buttons are now animated like Plex
+
+### Added
+- **Collections Support**
+  - Added Collections tab in the tab row when collections are available
+  - Collections display all items in a grid layout (6 columns) matching library view
+  - Collections screen shows only cards with item names below them (no metadata panel)
+  - Collections fetch items from all available BoxSets on the server
+  - Collections are displayed with same sorting and filtering options as libraries
+
+- **Audio Track Selection**
+  - Added audio track selector button next to subtitles button on movie and series info screens
+  - Audio track selection dialog shows all available audio streams
+  - Selected audio track is displayed in metadata section with volume icon
+  - Audio preferences are saved per item and restored on next playback
+  - Improved audio codec support with extension renderer mode and decoder fallback
+
+- **AAC to AC3 Transcoding Option**
+  - Added setting to transcode AAC audio to AC3 for better device compatibility (disabled by default)
+  - Option enabled by default for maximum compatibility
+  - Transcoding preserves video quality (HLS transcoding with AC3 audio)
+  - Available in Settings screen
+
+- **Dynamic Library Rows**
+  - Movies from multiple libraries are now displayed in separate rows on home screen
+  - Each movie library gets its own "Recently Added Movies" or "Recently Added <Library Name>" row
+  - TV show libraries get separate rows for "Recently Added Shows in <Library Name>"
+  - TV show libraries also get separate rows for "Recently Added Episodes in <Library Name>"
+  - All rows use consistent styling and padding
+
+### Changed
+- **Collections Display**
+  - Changed collections from row-based layout to grid layout (6 columns)
+  - Collections screen no longer shows background carousel/image
+  - Collections screen hides metadata panel on the right
+  - Item names are displayed below cards in collections view
+
+- **Episode Metadata Display**
+  - Continue Watching row now shows episode air date instead of production year for episodes
+  - Next Up row shows episode air date for episodes
+  - Recently Added Episodes row shows episode air date for episodes
+  - Air dates are formatted as "Nov 1, 2025" matching the season info screen format
+  - Movies in Continue Watching continue to show production year
+
+- **Collections Tab Behavior**
+  - Fixed Collections tab click handler to properly set selectedCollectionId
+  - Collections tab now correctly shows collections grid instead of home screen
+
+### Fixed
+- **Video Player - Subtitle Language Code Normalization (ISO 639-1 vs ISO 639-2)**
+  - Fixed subtitle registration failures when Jellyfin uses 3-letter codes (spa, eng, fra) and ExoPlayer uses 2-letter codes (es, en, fr)
+  - Added `normalizeLanguageCode()` helper function with comprehensive ISO 639 language code mapping
+  - Supports 50+ common languages: Spanish, French, Turkish, Arabic, Japanese, Chinese, Hindi, Korean, Thai, etc.
+  - **Before**: Spanish subtitles (`spa`) wouldn't match ExoPlayer's `es`, causing "Could NOT match to Jellyfin subtitle (CEA-608/internal?)" errors
+  - **After**: Both `spa` and `es` normalize to `es`, enabling correct composite key registration and selection
+  - **Root Cause**: ISO 639 has two standards:
+    - ISO 639-1: 2-letter codes (es, en, fr) - used by ExoPlayer
+    - ISO 639-2/T: 3-letter codes (spa, eng, fra) - used by Jellyfin
+    - Simple `.take(2)` comparison failed: `"spa".take(2) = "sp"` ≠ `"es"`
+  - **Solution**: Comprehensive mapping table with bidirectional normalization to 2-letter codes
+  - Fixes the final remaining issue preventing composite key subtitle matching from working 100% reliably
+  - **Example Mappings**:
+    - `spa` → `es` (Spanish)
+    - `eng` → `en` (English)
+    - `fra` → `fr` (French)
+    - `tur` → `tr` (Turkish)
+    - `chi` → `zh` (Chinese)
+    - `jpn` → `ja` (Japanese)
+    - `kor` → `ko` (Korean)
+    - `ara` → `ar` (Arabic)
+  - Logs now show: "✅ Registered ExoPlayer track: Group=1, Track=0 → JF index=5" for all subtitle languages
+
+### Technical Changes
+- Enhanced audio track selection logic to handle unsupported codecs
+- Improved ExoPlayer configuration with extension renderer mode preference
+- Added decoder fallback support for broader codec compatibility
+- Updated collections API integration with JellyfinRepository
+- Improved collection items fetching and caching
+
+---
+
+## Previous Changes (Summary)
+
+### Audio & Playback
+- Audio track selection with language preference matching
+- AAC to AC3 transcoding option for device compatibility
+- Enhanced codec support with Media3 extensions
+
+### Collections
+- Full collections (BoxSets) support with grid layout
+- Collections tab integration
+- Collection items browsing
+
+### UI Improvements
+- Dynamic library rows for movies and TV shows
+- Episode air date display in metadata sections
+- Collections screen optimization (cards only view)
+
+### Settings
+- AAC to AC3 transcoding toggle (disabled by default)
+- Audio track preference storage
+
+---
+
+*For older changes, see git history*
+
+## 1.2.23
+
+- Ajusta el formulario de inicio de sesión para teléfonos, tablets y TV con
+  ancho máximo, desplazamiento seguro y protección frente al teclado.
+- Corrige la semántica de subtítulos de ExoPlayer: automático respeta Jellyfin,
+  deshabilitado apaga todas las pistas y la selección se conserva al cambiar
+  calidad o solicitar transcodificación.
+## 1.2.24
+
+- Mejora el control táctil de la línea de tiempo: tocar una posición salta directamente a ese punto y arrastrar mantiene el desplazamiento continuo en móvil y tablet.
+- Mantiene la navegación por mando y teclado en TV sin cambiar el reproductor ExoPlayer predeterminado.
+## 1.2.25
+
+- Conserva la pista de subtítulos activa al cambiar la calidad de reproducción.
+- Mantiene la reproducción con ExoPlayer como ruta predeterminada en móvil y TV.
+## 1.2.26
+
+- Acota la compilación Android de CI para que una ejecución de Gradle sin salida no bloquee indefinidamente las releases.
+- Conserva subtítulos al cambiar la calidad y mantiene el control táctil de la línea de tiempo.

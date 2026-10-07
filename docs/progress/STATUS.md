@@ -1,0 +1,2083 @@
+# Estado verificable de Velora
+
+Updated: 2026-09-28
+
+## Verificación más reciente — Android QA, motor de red y Smart TV (2026-09-28)
+
+- El commit actual de `main` es `d362a55a` (`docs: record current Android QA hashes`); la
+  compilación Android QA publicada procede de su antecesor funcional `f0cfb098`.
+- El motor común Android/Apple acepta ahora un límite de bitrate de red opcional: cuando la
+  fuente original supera ese límite, no se elige Direct Play ni remux; se solicita una ruta que
+  pueda reducir el bitrate. Sin medición disponible, se conserva Original First.
+- La reconciliación Android QA terminó correctamente en
+  [GitHub Actions run 36397646074](https://github.com/klortekhq/Velora/actions/runs/36397646074).
+  Compiló `mobileDebug` y `tvDebug`, ejecutó los contratos Android y actualizó la
+  pre-release `v1.4.0` desde `f0cfb098`.
+- El manifiesto publicado confirma el agrupado Live TV en el APK actual:
+  [manifest](https://github.com/klortekhq/Velora/releases/download/v1.4.0/android-qa-manifest-v1.4.0.json).
+  Hashes verificados desde GitHub: móvil
+  `BCA6683FF0640CB50CC6830542AD1E79595464FF6B8125306FE40688A1AD1452`; TV/Fire TV
+  `20CB6E09BE4E1F71F98286E41D3EE3D9E79C729A38D014BB536BFA54F60983AA`.
+- La validación continua terminó correctamente en
+  [GitHub Actions run 36322626276](https://github.com/klortekhq/Velora/actions/runs/36322626276).
+- La validación Apple terminó correctamente en
+  [GitHub Actions run 36322626154](https://github.com/klortekhq/Velora/actions/runs/36322626154).
+  El runner macOS verificó la corrección de redirecciones offline autenticadas
+  en el código Swift y sus tests. Xcode/Swift no están instalados localmente
+  en Windows; esta ejecución remota es la evidencia de compilación Apple.
+- La política de ramas terminó correctamente en
+  [GitHub Actions run 36322626113](https://github.com/klortekhq/Velora/actions/runs/36322626113).
+  La comprobación pública sigue mostrando exactamente una rama remota: `main`.
+- La validación continua del dashboard actualizado terminó correctamente en
+  [GitHub Actions run 36391796886](https://github.com/klortekhq/Velora/actions/runs/36391796886):
+  Android completó tests y compilación de móvil/TV en 5m 51s, Apple completó
+  `swift test` y sus entrypoints, y web terminó sus contratos y empaquetado
+  responsive/Smart TV. No se registraron fallos en esta ejecución.
+- La última APK Android publicada en `v1.4.0` es la build QA agrupada de Live TV
+  del commit `f0cfb098`; sigue siendo una build debug de QA, no un paquete firmado
+  para tienda.
+- La compilación local reproducible del `main` actual (`d362a55a`) terminó con
+  `BUILD SUCCESSFUL` para móvil y TV. Sus APK debug son, respectivamente,
+  `F96B1C86C7DBB247F9A58BB81C5D09C299A88D908E840ED1DEB34D69DD573A8F` y
+  `52D749BB96F97A645F3D691AE6E3E7775D054A73754DE875D6CD508CB7DE5597`.
+  Son artefactos locales de QA; no sustituyen la APK publicada ni están
+  presentados como builds firmadas de tienda.
+- Se ha recompilado localmente el estado actual con `assembleMobileDebug`,
+  `assembleTvDebug`, `testMobileDebugUnitTest` y `testTvDebugUnitTest`; terminó
+  en `BUILD SUCCESSFUL`. Los APK debug resultantes son móvil
+  `0E410BB968C1D89E7B7FF91B17E2391AA8F36DCFAEEFF6D2918239DB93B88280` y TV
+  `BEC7F1357575C98E98A760325799C11368DFB2F989391B7319B035DEBF16B210`.
+  El contrato `check-android-live-tv-grouping.mjs` confirma que el código
+  incluido en esa compilación agrupa canales y abre el selector de fuentes.
+- La batería completa `scripts/check-*.mjs` y `node web/scripts/test-platform.mjs`
+  volvió a terminar sin fallos después de la corrección Apple.
+- La validación Smart TV en salidas aisladas terminó correctamente: Tizen preparó el
+  bundle HTML5 y dejó `installablePackage: false` porque no hay Tizen Studio/CLI ni
+  perfil de firma en este equipo; webOS generó el IPK
+  `com.klortek.velora_1.4.0_all.ipk` mediante `ares-package`, con SHA-256
+  `BF7B0BD6ED0921C14F43EF89534A30902CE169992A342C79E01E670F58AB3194`; VIDAA
+  generó el bundle HTML5 `hosted-html5` para su portal. El contrato
+  `scripts/check-tv-packaging-output.mjs` pasó. Ninguno de estos resultados se
+  presenta como firma, publicación o validación en hardware real.
+- Smoke de integración contra el endpoint Jellyfin de QA (2026-09-28): el
+  endpoint público responde como Jellyfin Server `12.1.0`, pero la autenticación
+  fue rechazada con HTTP 401 por las credenciales disponibles en esta sesión.
+  Por ello no se presenta como validación real de catálogo, PlaybackInfo o Live
+  TV; el smoke se conserva listo para repetirlo cuando se renueven las
+  credenciales.
+- Se corrigieron dos logs Android que aún podían imprimir una URL de subtítulos
+  o una dirección de descubrimiento sin pasar por `SensitiveDataRedactor`.
+  `check-android-log-privacy.mjs`, `testMobileDebugUnitTest` y
+  `testTvDebugUnitTest` vuelven a pasar tras ese cambio. La compilación mostró
+  solo avisos de SDK/deprecaciones ya conocidos, no errores.
+
+## Verificación más reciente — agrupado Live TV y CI (2026-09-27)
+
+- El workflow Android QA del commit `8b9e8e9f` terminó correctamente en
+  [GitHub Actions run 36319933530](https://github.com/klortekhq/Velora/actions/runs/36319933530)
+  en 13m 58s. Esa ejecución compiló y sincronizó la pre-release pública
+  `v1.4.0` desde un commit que ya contiene el agrupado Live TV.
+- La pre-release `v1.4.0` fue reconciliada con los assets QA actuales:
+  [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-grouped-live-tv-20260910.apk),
+  [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-grouped-live-tv-20260910.apk) y
+  [manifest](https://github.com/klortekhq/Velora/releases/download/v1.4.0/android-qa-manifest-v1.4.0.json).
+  Siguen siendo APK debug de QA, no paquetes firmados de tienda.
+- El commit `46175dfe` moderniza las acciones de CI (`checkout` v6,
+  `setup-node` v5, `setup-java` v5 y `setup-gradle` v6) y registra `gradlew`
+  como ejecutable. Los contratos estáticos pasan; su workflow remoto queda
+  pendiente de completar en este commit.
+- La auditoría remota sigue confirmando exactamente una rama: `main`.
+- El commit `8b9e8e9f` elimina el último placeholder hardcodeado detectado en
+  Ajustes Android (`settings_url_placeholder`); el catálogo Android vuelve a
+  pasar con 560 claves y la suite de contratos/web permanece en verde.
+- La ejecución local posterior generó 62 informes JUnit Android (móvil y TV),
+  con 280 tests y 0 fallos/errores. La compilación actual de `main` también
+  terminó correctamente con `assembleMobileDebug` y `assembleTvDebug`; las
+  APK locales resultantes tienen SHA-256 `6B2594C9867A4EC28F6DF3DFBCB6F528350662E2C2CC72DCF60AB7FA9FCD0A0B`
+  (móvil) y `0F83A7E1B47088DF65F88AB2DCC262AEC1622B572639D24AC8D1F314B5AE9E96`
+  (TV). El SDK local mostró avisos de compatibilidad XML/ruta; no se interpreta
+  esa ejecución como certificación de hardware.
+- Revisión ADB posterior: se encontró `adb.exe` en el SDK local, pero no hay
+  dispositivos enumerados por USB y el endpoint Wi‑Fi histórico
+  `192.168.31.251:40655` rechazó la conexión. No se presenta, por tanto, una
+  prueba física del Fire TV ni una instalación automática en este entorno.
+- Seguridad offline (commit `a97e1c24`): el worker ya no sigue redirecciones
+  autenticadas automáticamente; limita los saltos y exige mismo protocolo,
+  host y puerto. `OfflineDownloadRedirectTest` pasa en las variantes móvil y
+  TV; también se revalidó el contrato de privacidad de logs.
+
+## Resumen operativo actual
+
+| Área | Estado verificable |
+| --- | --- |
+| Ola actual | 27 — QA de release candidata y cierre de contratos; el producto no se declara terminado |
+| Android móvil/tablet | Compila, tests unitarios y contratos estáticos pasan; falta repetir E2E con dispositivo y Jellyfin real |
+| Android TV / Fire TV | Compila y tiene navegación por mando; falta certificación física y smoke autenticado completo |
+| Web | Cliente responsive, i18n, reproducción HTML5 y Live TV verificadas por tests y build |
+| Samsung/Tizen | Bundle generado; firma y validación en Tizen Studio/dispositivo pendientes |
+| LG/webOS | IPK generado; validación en dispositivo y publicación pendientes |
+| Hisense/VIDAA | Bundle HTML5 generado; validación/publicación mediante portal VIDAA pendientes |
+| Apple iOS/iPadOS/tvOS | Swift Package, shell y tests/contratos preparados; faltan build Xcode, apps firmadas y hardware |
+| Releases | Workflow preparado para una release común; web y Apple esperan los dos APK Android firmados y rechazan releases parciales; firma pública y credenciales de publicación no disponibles en este entorno |
+| Ramas | Solo `main` en el remoto |
+
+La tabla distingue compilación de certificación: ningún paquete sin prueba de
+hardware o firma se presenta como listo para una tienda.
+
+El pipeline de publicación quedó protegido contra releases incompletas: Android
+es la puerta de publicación de los APK firmados (`Velora-mobile-release.apk` y
+`Velora-tv-release.apk`). Los workflows de web y Apple esperan esos artefactos
+antes de publicar y terminan con error si la ejecución Android falla o agota el
+tiempo de espera. `node scripts/check-release-workflows.mjs` pasa con esta
+política.
+
+La comprobación Android del 26 de septiembre volvió a ejecutar `testMobileDebugUnitTest`,
+`testTvDebugUnitTest`, `assembleMobileRelease` y `assembleTvRelease`: todos
+terminaron con `BUILD SUCCESSFUL`. Las APK de QA generadas sin credenciales de
+firma pública son `velora-release-unsigned.apk` móvil (`066D32A9838283893A4D4BE6AB03DF76413F4AF0A3821E2E338BAE48D7330BBA`)
+y TV (`E73CFA1E195BA8715A1115110E8CFC19ABAA2FB4F1EEE2543CF0546542EEA9A9`).
+No se presentan como artefactos de release: la firma pública sigue siendo un
+requisito del workflow.
+
+En la misma auditoría se ejecutaron todos los contratos `scripts/check-*.mjs`
+sin fallos, incluidos `check-android-live-tv-grouping.mjs`, `check-android-player-controls.mjs`,
+`check-offline-surface-policy.mjs`, `check-release-workflows.mjs` y los contratos
+de identidad, seguridad, API Jellyfin y locales. `node web/scripts/test-platform.mjs`
+y `node web/scripts/build-web.mjs all` también terminaron correctamente: web,
+bundle Samsung y VIDAA quedaron preparados, y se generó el IPK de webOS.
+La firma Tizen y la validación física de Smart TV siguen siendo pendientes
+reales, no se presentan como certificadas.
+
+Auditoría pública de GitHub (26 de septiembre): el repositorio expone una sola
+rama (`main`). La release `v1.4.0` existe como prerelease y contiene los
+paquetes web/Smart TV y los APK agrupados de Live TV, pero su descripción los
+identifica como builds debug de QA; no es una release final firmada. `v1.3.0`
+también permanece como prerelease QA y `v1.2.85` es la única release estable
+anterior. El pipeline actual solo puede publicar una release versionada cuando
+dispone de `Velora-mobile-release.apk` y `Velora-tv-release.apk` firmados.
+
+CI remoto del commit `49c17233` (26 de septiembre) terminó en verde: política
+de ramas, `Android unit tests and Kotlin compilation`, `Web platform checks`,
+`Apple shared package tests and builds` y la validación continua. La ejecución
+continua verificable es [GitHub Actions run 36218786297](https://github.com/klortekhq/Velora/actions/runs/36218786297).
+
+## Última verificación reproducible — build Android del `main` (2026-09-26)
+
+El agrupado de Live TV está incluido en el `main` actual: los canales con la
+misma identidad se muestran como una sola fila y el selector conserva las
+fuentes disponibles (principal, IPTV u otras). Se verificó que el commit que
+lo introdujo (`19a324f2`) es antecesor del `main` remoto actual (`9c999faf`).
+En GitHub solo existe la rama `main`.
+
+Se generaron desde ese `main` las dos variantes Android con `BUILD SUCCESSFUL`:
+`app-mobile-debug.apk` y `app-tv-debug.apk`. Los tests unitarios móvil y TV
+también terminaron correctamente. La APK móvil actual se instaló después de
+reiniciar ADB y quedó ejecutándose en el emulador Android 15 con
+`com.klortek.velora.mobile/com.klortek.velora.MainActivity`; no aparecieron
+`ANR in`, excepciones fatales ni errores de WorkManager en el arranque.
+
+Artefactos locales verificables de esta compilación:
+
+- móvil: `351265035F1360785E72045CF7CE548E5854DB9BE12C2A415B814C35DBBC226E`
+- TV: `FCB42838199AD24FDBC9DFA07928BF6FC267D1B90EC191C4A0CB8C5C5FBA6366`
+
+Después se corrigió la pantalla móvil de entrada del servidor: el contenido
+respeta las barras del sistema, deja de quedar bajo el estado y permite
+desplazamiento cuando el teclado ocupa la parte inferior. El contrato
+`scripts/check-server-entry-layout.mjs` pasa y la APK móvil recompilada se
+instaló y mostró el formulario completo en el emulador sin ANR.
+
+La prueba visual confirma la pantalla real de entrada de servidor. La sesión
+de Jellyfin no se configuró en el emulador en esta comprobación, por lo que el
+selector de fuentes agrupadas requiere todavía un servidor accesible y una
+sesión autenticada para su validación E2E.
+
+Se optimizó el arranque Android: el extractor NewPipe para tráileres ya no se
+inicializa en `Application.onCreate`; se prepara una sola vez y de forma
+segura únicamente cuando se solicita un tráiler externo. Las dos variantes
+vuelven a compilar con `BUILD SUCCESSFUL` después del cambio y la batería de
+contratos estáticos/web permanece en verde.
+
+La inicialización automática de WorkManager también se retiró del proveedor de
+arranque de AndroidX. El gestor de descargas lo inicializa bajo demanda solo en
+el primer uso de una descarga; así la variante TV no abre su base de datos en la
+ruta crítica de lanzamiento. La APK TV limpia se instaló en el emulador y la
+actividad quedó enfocada sin `ANR in` ni `WM-WrkMgrInitializer`; la primera
+composición del emulador sigue tardando aproximadamente 51 segundos, por lo
+que el tiempo de arranque de ese entorno permanece como regresión de rendimiento
+abierta. La suite instrumentada TV lanzada después no terminó y no se certifica.
+
+El 24 de septiembre se lanzó también la suite instrumentada móvil contra los
+APK actuales. El runner quedó esperando después de que el proceso de aplicación
+saliera del primer plano, sin resultado JUnit concluyente; esta ejecución no se
+marca como aprobada. La evidencia móvil anterior de `OK (6 tests)` sigue siendo
+la referencia válida para el selector agrupado de fuentes.
+
+El 25 de septiembre se protegió además el handoff del splash en `MainActivity`
+y se validó con `scripts/check-android-splash-handoff.mjs`. En una instalación
+móvil limpia el emulador sigue registrando `Displayed ... +51s460ms` y hasta
+1515 frames omitidos antes del primer frame; el proceso permanece vivo y no
+registra ANR ni excepción fatal. Esto queda como regresión de rendimiento del
+entorno emulado, no como una certificación de fluidez de producción.
+
+También se compiló `app:assembleMobileRelease` con `BUILD SUCCESSFUL` y se
+instaló una copia release firmada localmente para separar el comportamiento del
+APK distribuible del debug. En el emulador la actividad llegó a primer plano en
+`+20s661ms`, con 32–128 frames omitidos durante la composición y sin `ANR in`,
+`FATAL EXCEPTION` ni error de WorkManager. Es una mejora frente a la medición
+debug, pero sigue siendo demasiado lenta para certificar la fluidez objetivo;
+la optimización del arranque permanece abierta. La build móvil release de QA
+recién regenerada desde el `main` actual (`9c999faf`) tiene la huella
+`394F74C1C736DBB92B89985D4BDE8B0F6AEB3F4AA69E65AB80D090F16FFD2D92`.
+La variante TV release del mismo estado también compila correctamente; su
+artefacto QA tiene la huella
+`9A7BBF723558C3AF90CF987C8A1ABB5A9D5A6C05D82FE6127EE025A16C22A02F`.
+Ambas APK se firmaron localmente con el keystore de depuración únicamente para
+QA; no se presentan como firma de distribución ni como release pública.
+
+La prueba unitaria específica `*LiveTvChannelQueryTest` volvió a pasar y el
+agrupado de fuentes por identidad (principal/IPTV/alternativas) está incluido
+en la compilación Android actual y conserva la selección de fuente desde la
+fila agrupada. Falta únicamente validarlo contra un Jellyfin accesible con
+datos reales; no se presenta la build como validación E2E del servidor. Desde
+este commit, `scripts/check-android-live-tv-grouping.mjs` también se ejecuta en
+CI y protege explícitamente la fila agrupada, el selector y la reproducción de
+la fuente seleccionada.
+
+El intento de smoke contra el Jellyfin LAN configurado para QA expiró por
+`TaskCanceledException` a los 15 segundos. Por tanto, no se certifican en esta
+ejecución autenticación, catálogo ni reproducción de Live TV; no se guardaron
+credenciales, tokens ni cabeceras en el repositorio.
+
+## Verificación de producto y contratos
+
+La filmografía de personas queda alineada en Android, web y Apple: el cliente
+Apple pagina `Items` por `StartIndex`/`TotalRecordCount`, limita la respuesta a
+500 obras y conserva la navegación a películas y series. Se añadió una prueba
+XCTest con dos páginas y el contrato `check-apple-filmography.mjs` protege la
+regresión. El contrato se ejecuta tanto en la validación continua como en el
+workflow específico de Apple; la ejecución nativa queda pendiente del runner
+macOS/Xcode, que no está disponible en este host.
+
+El cliente web ya pagina también la filmografía de personas usando `StartIndex`
+y `TotalRecordCount`, con el mismo límite de 500 resultados que Android. La
+prueba de plataforma confirma la ruta de paginación y la compilación web
+reproducible genera el bundle VIDAA, el paquete webOS `.ipk` y el bundle Tizen
+cuando no están disponibles Tizen Studio o el certificado de firma.
+
+`node web/scripts/test-platform.mjs`, `node scripts/check-release-workflows.mjs`
+y `node web/scripts/build-web.mjs all` (salida aislada de QA) pasan. El paquete
+webOS se generó correctamente; Tizen queda como bundle sin firmar y VIDAA como
+HTML5 para su portal oficial.
+
+El 21 de septiembre se volvió a ejecutar la batería completa `scripts/check-*.mjs`:
+todos los contratos pasan, incluidos locales Android/Apple/web, Media3 por
+defecto, AVPlayer, autenticación Jellyfin, privacidad de logs, navegación de
+contenido, política de descargas solo móvil/tablet y metadatos Smart TV.
+
+El 26 de septiembre se repitió esa batería completa contra `main` y pasó sin
+fallos (`ALL_STATIC_CONTRACTS_PASSED`), incluyendo el nuevo contrato explícito
+`check-android-live-tv-grouping.mjs`. Este contrato comprueba la fila agrupada,
+el diálogo de fuentes y la reproducción de la fuente seleccionada.
+
+También se añadió `check-android-player-controls.mjs` a CI y al workflow de
+release. Comprueba que el selector de aspecto escribe el modo elegido y lo
+aplica al `PlayerView`, que los botones móvil de entrar/salir de pantalla
+completa cambian la orientación y que la tuerca abre el menú unificado de
+audio y subtítulos. El contrato y `*AspectPresentationTest` pasan en la
+compilación móvil actual; la prueba física en un teléfono/TV sigue pendiente
+porque ADB no expone ningún dispositivo en este entorno.
+
+También se adelantó la puerta de servidor/login en `JellyfinHomeScreen`: en
+una instalación sin sesión ya no se crean repositorios, cliente Live TV ni el
+resto del grafo de inicio antes de mostrar el formulario. Las variantes
+`compileMobileDebugKotlin` y `compileTvDebugKotlin` pasan después del cambio;
+la mejora de tiempo debe volver a medirse cuando haya un emulador o dispositivo
+conectado.
+
+En esta continuación, `node web/scripts/test-platform.mjs` y
+`node web/scripts/build-web.mjs all` volvieron a pasar. El empaquetado produjo
+el IPK webOS `com.klortek.velora_1.4.0_all.ipk` y los bundles Samsung/Tizen y
+VIDAA; Tizen sigue siendo un bundle sin firma por falta de Tizen Studio y
+certificado, y VIDAA sigue requiriendo la publicación en su portal oficial.
+
+La prueba instrumentada se repitió en el emulador Android 15 el 22 de
+septiembre: perfil móvil `OK (6 tests)` y perfil TV `OK (6 tests)`, incluyendo
+la apertura táctil del selector de fuentes en móvil y la navegación por mando
+en TV. Las modalidades que no corresponden a cada perfil se omiten
+explícitamente por diseño.
+
+En la recompilación del 23 de septiembre, la variante móvil volvió a ejecutar
+`OK (6 tests)` desde los APK recién generados; el perfil TV no queda certificado
+en esta pasada porque el emulador produjo un ANR de arranque de
+`com.klortek.velora.tv` antes de instrumentar. La ejecución anterior de TV
+continúa siendo válida como evidencia histórica, pero se mantiene esta
+regresión de entorno abierta y no se presenta como prueba nueva superada.
+
+La ficha de personas ahora pagina la filmografía mediante `StartIndex` y
+`TotalRecordCount` de Jellyfin, con páginas de 1–100 elementos y un máximo de
+500 resultados por apertura. Así, tocar un actor/director muestra sus películas
+y series disponibles sin cargar una respuesta ilimitada en memoria. Las
+variantes Android móvil y TV terminan `BUILD SUCCESSFUL` con las pruebas
+`PersonFilmographyPaginationTest` incluidas.
+
+La única rama remota sigue siendo `main`; no se han creado ramas adicionales.
+Las cuatro ejecuciones de GitHub Actions del commit Android anterior terminaron correctamente:
+política de ramas, validación continua, Apple y sincronización de APK Android.
+
+La pre-release pública `v1.4.0` fue reconciliada por el workflow Android y contiene
+los APK generados desde el commit Android anterior; todavía no debe presentarse
+como una APK que incluya el cambio web de esta revisión. El manifiesto publicado confirma:
+
+- móvil `mobileDebug`: 80,012,781 bytes, SHA-256
+  `9db8a9b61383c2069037cbba8f1fa0cda5e5ea521ec52b4fb0887004365c8dae`;
+- TV `tvDebug`: 80,012,885 bytes, SHA-256
+  `b2d40f1adaf3f5810bb9c27457a2d92082fd73ba5a6ec6b7970a264ae6510af1`.
+
+El checksum descargado de GitHub coincide con el manifiesto. En el emulador
+Android 15, la suite instrumentada de Live TV móvil terminó en `OK (6 tests)`;
+el caso DPAD se omite intencionadamente en la variante táctil. Esto valida el
+agrupado y selector de fuentes sintético, no una emisión real contra un servidor
+con canales disponibles.
+
+Siguen abiertas las certificaciones que requieren hardware o servicios no
+disponibles en este entorno: reproducción real con Jellyfin y canales, Fire TV
+físico, Tizen firmado, webOS/VIDAA físicos, y validación nativa Apple en hardware.
+
+## Histórico — agrupado y controles Android (2026-09-16)
+
+La revisión independiente encontró una pérdida real de alternativas: dos
+filas con distinto ID Jellyfin, pero el mismo nombre/número y sin
+`MediaSources`, se deduplicaban como si fueran la misma fuente. También
+ocurría si dos canales reutilizaban un ID de fuente. La corrección conserva
+la identidad `(ID de canal, fuente)` dentro de una única fila visible.
+
+Se están verificando además controles táctiles específicos para móvil/tablet,
+un selector de fuentes largo con desplazamiento y cancelación visible, y foco
+de mando sin solicitar nodos fuera de composición. El emulador Android 15
+arrancó y respondió `sys.boot_completed=1`; no equivale a probar un Fire TV o
+un teléfono físico. Las pruebas instrumentadas y la publicación de esta
+revisión siguen pendientes hasta registrar sus resultados aquí.
+
+Compilación revalidada el 19 de septiembre: `assembleMobileDebug`,
+`assembleTvDebug` y ambos APK de instrumentación terminan correctamente;
+138 pruebas unitarias por variante, sin fallos. El publicador QA pasa 43
+pruebas de staging, hashes y recuperación ante fallos. Se rechazó la primera
+captura visual porque estaba tapada por un ANR de Android System UI; las
+después el runner `scripts/qa/android-live-tv.ps1` se ejecutó correctamente en
+perfiles móvil, tablet y TV. Móvil/tablet ejecutaron las interacciones de toque
+(abrir fila, abrir contador, desplazarse hasta la fuente 30 y cancelar); TV
+ejecutó la navegación DPAD y selección de la segunda fuente. Los casos que no
+corresponden a cada modalidad aparecen como omitidos intencionadamente.
+
+La APK publicada en ese momento fue generada por el workflow de `b2a2d1bd`;
+la verificación posterior de `4e84dab1` la reemplazó en la pre-release QA.
+En remoto solo existe `main`. Se conserva trazabilidad de cada APK QA por
+commit, variante, tamaño y SHA-256, sin presentarlas como builds firmadas de
+tienda.
+
+Motivo principal de falta de pulido en esta revisión: controles de TV usados
+en pantallas táctiles y alternativas descartadas antes de mostrar el selector.
+Riesgo técnico prioritario: que la reproducción no conserve la fuente elegida.
+Ambos requieren pruebas de comportamiento, no únicamente contratos por texto.
+
+La validación completa de reproducción contra Jellyfin real, tiendas y el
+resto de plataformas sigue pendiente; el historial de abajo no es una
+certificación de todas las funciones ni de los APK actuales.
+
+El 16 de septiembre el endpoint proporcionado devolvió versión `12.1.0`;
+se validaron token y usuario de la sesión, con permiso Live TV, pero
+`/LiveTv/Channels` devolvió `Items=[]`, `TotalRecordCount=0`. Se cerraron las
+sesiones QA. Por ello no se certifica una emisión real ni PlaybackInfo con
+alternativas en ese servidor. La revisión también evita ofrecer varias
+opciones indistinguibles cuando Jellyfin da solo nombres de fuente para un
+mismo ID de canal, sin ID de fuente/stream seleccionable. Los IDs de canal
+distintos se conservan aunque no tengan MediaSources.
+
+## Live TV agrupada — selector verificable (2026-09-14)
+
+El commit `b2a2d1bd` mantiene el agrupado de canales en las variantes Android
+móvil/tablet y TV/Fire TV, y convierte el contador de fuentes de cada fila en
+un control real de toque y mando. Al pulsar `N fuentes` se abre el selector de
+`Opción 1`, `Opción 2`, etc.; la fuente elegida se conserva también para la
+navegación entre canales. El contrato `check-android-content-navigation.mjs`,
+los tests `LiveTvChannelQueryTest` y las compilaciones `assembleMobileDebug` y
+`assembleTvDebug` han pasado. La publicación de QA queda delegada al workflow
+automático de `main`; no se afirma instalación física mientras ADB no detecte
+un dispositivo.
+
+## Auditoría de publicación (2026-09-10)
+
+La API pública de GitHub confirma que el repositorio es público, que `v1.4.0`
+existe y conserva 9 assets, incluidos los APK agrupados. También confirma que
+solo existe la rama `main`. Los APK publicados son artefactos de release y los
+APK locales son builds debug; por tanto, sus hashes no son comparables como si
+fueran el mismo binario. Los hashes publicados son móvil
+`6E2F2A…673B52` y TV `028BF2…AAC3C`; los hashes debug locales verificados en
+esta revisión aparecen más abajo. No se afirma equivalencia binaria entre
+ambas variantes sin reproducir la build de release con la misma configuración.
+
+## Smoke autenticado Jellyfin (2026-09-10)
+
+El servidor configurado respondió en red, pero el smoke test real fue rechazado
+durante la autenticación con HTTP 401. Por ello no se presenta como validada la
+consulta Live TV ni `PlaybackInfo` contra esa instancia concreta; los contratos
+locales y los tests sintéticos siguen pasando. No se almacenan ni se escriben
+credenciales en este dashboard.
+
+- Higiene de releases revisada el 2026-09-10: se retiraron las publicaciones
+  antiguas y quedaron únicamente `v1.2.85`, `v1.3.0` y `v1.4.0`. La release
+  `v1.3.0` se publicó como QA/prerelease con dos APK debug reproducibles y sus
+  hashes; no se presenta como distribución firmada.
+
+- Automatización de APK QA (2026-09-10): se añadió el workflow manual
+  `android-qa-reconcile.yml`. Compila y prueba las variantes móvil/TV y puede
+  reemplazar los APK QA y sus checksums en una pre-release existente usando el
+  token integrado de GitHub; ahora también se activa automáticamente en cambios
+  Android relevantes de `main`. No publica APK unsigned como distribución estable.
+
+Revisión funcional actual: el estado de `main` que contiene este dashboard.
+
+- Localización Android adicional (2026-09-10): el componente de búsqueda para
+  TV ya no incrusta un placeholder fijo; usa el catálogo activo cuando no se
+  proporciona uno explícitamente. Las variantes móvil y TV compilan después
+  del cambio.
+
+- Playback Original-First (2026-09-10): se ampliaron las equivalencias del
+  normalizador para alias habituales de Jellyfin (`AVC`, `AC-3`, `MPEG-2`,
+  `VC-1` y `HDR10Plus`). Se añadieron pruebas para confirmar que esos metadatos
+  siguen la ruta Direct Play y que, al desactivar Direct Play, se conserva la
+  prioridad Direct Stream → Remux → Transcode. `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` pasan.
+
+- Audio multicanal (2026-09-10): el mapper Jellyfin conserva ahora todos los
+  canales de distribuciones inmersivas como `7.1.4` (12 canales), además de
+  mantener el cálculo tradicional de `5.1`. Esto evita declarar por error una
+  ruta directa cuando el receptor/dispositivo no soporta la configuración real;
+  ambos tests Android vuelven a terminar en `BUILD SUCCESSFUL`.
+
+- Seguridad de rutas Android (2026-09-10): las rutas de imágenes, detalles,
+  reproducción, subtítulos y control remoto validan ahora sus segmentos antes
+  de construir URLs o cuerpos de petición Jellyfin; también se rechazan
+  índices y posiciones negativos. El contrato de API y los tests unitarios de
+  móvil y TV pasan. No se presenta esto como certificación de hardware.
+
+- Seguridad de rutas Android ampliada (2026-09-10): también se validan
+  `PlaybackInfo`, segmentos, bibliotecas, temporadas, episodios y paginación,
+  incluyendo límites e índices negativos. El contrato Jellyfin y las suites
+  unitarias móvil/TV pasan después del cambio.
+
+- Seguridad de rutas Android finalizada en esta tanda (2026-09-10): se cubren
+  además URLs de música temática, subtítulos externos, marcar visto/no visto y
+  refresco de metadatos. Los APK QA se regeneraron después de la compilación y
+  sus hashes se actualizan abajo.
+
+- Agrupado Live TV Android (2026-09-10): la compilación móvil y la de TV
+  incluyen la reducción de duplicados por identidad visible/ID Jellyfin, las
+  opciones `MediaSources` de un mismo canal y el selector de fuente antes de
+  reproducir. Los tests cubren filas repetidas, fuentes principal/IPTV,
+  selección para zapping y deduplicación; los dos APK se recompilaron después
+  de esa verificación. La instalación física queda sin certificar porque ADB
+  no está disponible en este entorno.
+
+- Selector de fuentes Live TV (2026-09-10): si varios proveedores exponen la
+  misma etiqueta, el selector añade un sufijo estable (`Opción 1`, `Opción 2`)
+  para que ninguna fuente parezca un botón duplicado. El texto procede ahora
+  del recurso de idioma activo en Android; la prueba unitaria y las suites
+  móvil/TV pasan.
+
+- Verificación de binarios Android (2026-09-10):
+  `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
+  `assembleMobileDebug` y `assembleTvDebug` terminan correctamente. Las APK
+  QA actuales que contienen el agrupado son `app-mobile-debug.apk`
+  (SHA-256 `5EBEBCB100CCA7D36F2BFAD16F6F9B0136C425BA86D99EA597959FE0EA484A0B`)
+  y `app-tv-debug.apk`
+  (SHA-256 `D0624AC7BFA7C5D3E9DB6F3083FD6B27CB816208AA5BAE6BDAE9254D27B4FE7B`).
+  La compilación fue limpia; son builds debug locales, no una release firmada.
+
+- Live TV web (2026-09-10): se eliminó una carrera de arranque en la que la
+  carga de canales podía ejecutarse antes de resolver `/Users/Me` cuando el
+  identificador de usuario aún no estaba en sesión. `loadItemsPage` y
+  `loadLiveTvChannels` comparten ahora `ensureUserId`; el test de plataforma y
+  la generación de los bundles web, webOS, Samsung y VIDAA pasan.
+
+- Selector de fuentes Live TV web (2026-09-10): si dos fuentes tienen la misma
+  etiqueta, el selector añade sufijos traducibles de opción para diferenciarlas,
+  igual que Android. Los tests web y la generación de webOS, Samsung y VIDAA
+  pasan; Samsung/VIDAA siguen sin certificación física en este entorno.
+
+- Seguridad web (2026-09-10): la ruta de biblioteca ahora codifica también el
+  identificador de usuario antes de construir la URL Jellyfin. El test web de
+  seguridad/interacción y la comprobación Jellyfin pasan; la corrección queda
+  publicada en `main`.
+
+- Smoke Live TV (2026-09-10): `scripts/qa/jellyfin-smoke.ps1` conserva la
+  autenticación sin secretos en el repositorio y ahora informa también de
+  grupos visibles, alternativas por identidad y fuentes `MediaSources`, además
+  de recorrer todas las páginas y validar `PlaybackInfo`. El parser PowerShell
+  y el contrato de autenticación pasan; la ejecución autenticada depende de
+  credenciales QA suministradas en el entorno.
+
+- Verificación de Apple (2026-09-10): en este Windows no está instalado Swift,
+  por lo que no se presenta una compilación Apple falsa. El código actual sí
+  contiene AVPlayer/AVFoundation, URLSession de fondo para iOS/iPadOS y la
+  superficie de reproducción streaming-only de tvOS; la prueba ejecutable
+  queda pendiente de un runner macOS/Xcode.
+
+- Artefactos QA Android recompilados desde el estado actual de `main`
+  (2026-09-10): `:app:testMobileDebugUnitTest`,
+  `:app:testTvDebugUnitTest`, `assembleMobileDebug` y `assembleTvDebug` pasan.
+  APK móvil: SHA-256
+  `5EBEBCB100CCA7D36F2BFAD16F6F9B0136C425BA86D99EA597959FE0EA484A0B`.
+  APK TV: SHA-256
+  `D0624AC7BFA7C5D3E9DB6F3083FD6B27CB816208AA5BAE6BDAE9254D27B4FE7B`.
+  Son builds debug sin firma de distribución; no se presentan como release
+  pública ni como prueba de instalación física.
+
+- Regresión web/Smart TV revalidada tras la compilación Android: `node
+  web/scripts/test-platform.mjs`, `node web/scripts/build-web.mjs all` y
+  `check-tv-packaging-output.mjs` pasan. Se regeneraron el bundle web, el IPK
+  webOS y los bundles HTML5 de Samsung/Tizen y VIDAA; Tizen/VIDAA siguen sin
+  firma ni certificación de fabricante.
+
+- Parser de audio endurecido (2026-09-10): layouts numéricos con etiquetas
+  posteriores, como `7.1.4 (Dolby Atmos)`, conservan sus 12 canales; los tests
+  móvil y TV pasan tras el cambio (`BUILD SUCCESSFUL`).
+
+- Último cambio de código: `7e4a420` endurece el parser de layouts de audio
+  Jellyfin. La línea de seguridad Apple que comenzó en `9c08d13` permanece
+  integrada en `main`; las validaciones de rutas, reproducción y contratos se
+  conservan en el historial. La CI pública del último commit queda pendiente
+  de consulta cuando GitHub vuelva a estar accesible desde este entorno.
+
+- Regresión local posterior (2026-09-10): todos los contratos `scripts/check-*.mjs`
+  y `web/scripts/test-platform.mjs` pasan. `node web/scripts/build-web.mjs all`
+  vuelve a generar el bundle web, el IPK webOS y los bundles HTML5 de
+  Samsung/Tizen y VIDAA; estos últimos siguen marcados como artefactos sin
+  firma/certificación de fabricante.
+
+- Endurecimiento Android posterior (2026-09-10): las rutas secundarias de
+  personas, tráilers y música temática validan ahora los IDs antes de crear
+  URLs Jellyfin. El contrato de navegación se amplió para cubrir estas
+  entradas y `:app:testMobileDebugUnitTest` junto con
+  `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`.
+
+Este documento registra únicamente comprobaciones reproducibles. La ausencia de
+una comprobación no se interpreta como soporte certificado.
+
+- Comprobación de entorno del 2026-09-10: el endpoint LAN de Jellyfin responde.
+  Se instaló Android SDK Platform-Tools 37.0.1, pero `adb devices` no muestra
+  ningún dispositivo; el intento de emparejamiento autorizado terminó con
+  fallo de protocolo/rechazo. Por tanto no
+  se afirma una prueba física en Fire TV o móvil en esta sesión; queda
+  pendiente que el dispositivo exponga de nuevo ADB o aparezca por USB.
+
+- Smoke autenticado repetido el 2026-09-10 contra el endpoint LAN de QA:
+  `/System/Info/Public` respondió correctamente e identificó Jellyfin
+  `12.0.0`, pero `Users/AuthenticateByName` rechazó tanto el contrato
+  estándar `{Username,Pw}` como el alternativo `{Username,Password}` con
+  `HTTP 400`. No se guardaron credenciales ni tokens; siguen sin certificarse
+  catálogo, Live TV, `PlaybackInfo` o reproducción real hasta que el servidor
+  acepte las credenciales.
+
+- GitHub Actions sigue fallando antes de ejecutar pasos: en las ejecuciones
+  `34425484079` (política de ramas), `34425484061` (Apple) y `34425484029`
+  (validación continua), los jobs terminan en `failure` con `steps: null` y
+  entre 2 y 8 segundos de duración. La causa observada es de infraestructura
+  de Actions; las pruebas locales reproducibles siguen siendo la evidencia
+  válida hasta que GitHub vuelva a proporcionar runners ejecutables.
+
+- Reintento remoto verificado el 2026-09-10: `34425888911` (ramas),
+  `34425888890` (validación continua) y `34425888871` (Apple) vuelven a
+  terminar en 2–6 segundos con `runner` vacío y `stepsCount: 0`. Esto confirma
+  que el bloqueo persiste antes de reservar un runner y no corresponde a un
+  fallo de código o de una prueba concreta.
+
+- Estado CI actualizado tras los últimos fixes: la política de ramas pasó en
+  `34432447186`; la validación Apple pasó en `34432447185`, incluyendo build y
+  42 tests de `VeloraKit`. La validación continua `34432447149` seguía en curso
+  al actualizar este documento; Android y Web ya habían pasado sus jobs en el
+  ciclo anterior, y el fallo Apple restante era únicamente el empaquetado macOS,
+  corregido en `main` mediante la superficie nativa `AVPlayerView`.
+
+- Cierre de la validación continua del mismo estado: `34432667895` terminó en
+  `success`; sus jobs Android móvil/TV, Apple compartido y Web terminaron en
+  verde. La batería local posterior también terminó correctamente: 23 contratos
+  `check-*.mjs`, tests Web y empaquetado `web/scripts/build-web.mjs all`.
+
+- Cierre posterior verificado para el commit `af4c037`: política de ramas
+  `34434779361`, Apple `34434779337` y validación continua
+  `34434779440` terminaron correctamente. La validación continua incluyó los
+  jobs Android móvil/TV, Apple compartido y Web.
+
+- Revalidación local posterior al último estado de `main` (2026-09-10): los 23
+  contratos `scripts/check-*.mjs`, `web/scripts/test-platform.mjs` y el
+  empaquetado `node web/scripts/build-web.mjs all` terminan correctamente. Se
+  regeneró el IPK webOS; Samsung/Tizen queda como bundle pendiente de Tizen
+  Studio/firma y VIDAA como bundle HTML5 para su portal, sin afirmar una
+  certificación inexistente.
+
+Oleada actual: 25–26 (empaquetado multiplataforma y QA cruzada). Las oleadas
+de certificación de Apple, Tizen, VIDAA y hardware real siguen abiertas.
+
+- Tizen Studio 6.0 Web CLI: el instalador oficial descargado coincide con el
+  MD5 publicado, pero en este Windows no llega a iniciar y devuelve
+  `0xc0000142`. No se afirma instalación, firma `.wgt` ni validación Tizen;
+  el bundle HTML5 de Samsung sigue siendo el único artefacto reproducible.
+
+- APK Android actual recompilado desde `main` (2026-09-10) tras verificar la
+  agrupación de Live TV: móvil SHA-256
+  `6E2F2AB551DC19424F4CB56ADB3F40FE2DC790E7B7FF8185062E07F6DD673B52` y TV
+  SHA-256 `028BF2D7A82C64F02FACDD7D60108B0B332DD867DD7DF0DA7C696E78850AAC3C`.
+  Ambos se publicaron en la pre-release `v1.4.0` sustituyendo los APK r3
+  obsoletos: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-grouped-live-tv-20260910.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-grouped-live-tv-20260910.apk).
+
+- Validación CI del commit `781bf69` (2026-09-10): política de ramas
+  `34436122110`, Apple `34436122123` y validación continua `34436122131`
+  terminaron en `success`. La validación continua incluyó Android móvil/TV,
+  Apple compartido y Web.
+
+- Endurecimiento de navegación de personas: los IDs de persona y el tipo de
+  imagen se validan como segmentos únicos antes de interpolarse en rutas o
+  URLs de Jellyfin; el contrato Android correspondiente queda cubierto por
+  `check-android-content-navigation.mjs`. Esto evita rutas manipuladas sin
+  alterar IDs normales de Jellyfin.
+  La release incluye además
+  [SHA256SUMS-android-v1.4.0.txt](https://github.com/klortekhq/Velora/releases/download/v1.4.0/SHA256SUMS-android-v1.4.0.txt)
+  y conserva únicamente la rama remota `main`.
+
+- Higiene de release verificada el 2026-09-10 mediante la API autenticada de
+  GitHub: la pre-release pública `v1.4.0` conserva únicamente 9 assets de
+  referencia (APK móvil/TV agrupadas, checksums, paquetes web/Smart TV y
+  fuentes). Se retiraron las APKs QA intermedias para evitar que se instalen
+  builds obsoletas; la rama remota sigue siendo solo `main`.
+
+- Revalidación completa del 2026-09-10: los 23 contratos `scripts/check-*.mjs`
+  terminan correctamente y las suites unitarias Android móvil/TV terminan en
+  `BUILD SUCCESSFUL` (`:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest`). Se mantienen únicamente avisos de APIs
+  obsoletas ya conocidos; no hay fallos de prueba.
+- Corrección i18n del 2026-09-10: `jellyseerr_request_pending` ya no muestra
+  texto inglés en los catálogos árabe, italiano, japonés, coreano, portugués,
+  ruso, turco y chino. `check-android-locales.mjs` lo exige como cadena
+  traducida y la compilación móvil/TV vuelve a terminar correctamente.
+- Live TV web: el selector de fuentes conserva el foco del canal que lo abrió,
+  puede cerrarse con Atrás/Escape y devuelve el foco al cerrar o elegir una
+  fuente. `web/scripts/test-platform.mjs` pasa y `node web/scripts/build-web.mjs
+  all` regenera correctamente el bundle web y el IPK webOS; Samsung queda como
+  bundle preparado y VIDAA como HTML5 sin afirmar firma ni certificación.
+- Revalidación web/Smart TV del 2026-09-10: `web/scripts/test-platform.mjs`
+  pasa con seguridad, interacción de biblioteca y preferencias de subtítulos;
+  `node web/scripts/build-web.mjs all` vuelve a generar el bundle web, el IPK
+  webOS y los bundles HTML5 de Samsung/Tizen y VIDAA. Samsung sigue necesitando
+  Tizen Studio/perfil de firma y VIDAA su portal/SDK: no se presentan como
+  paquetes certificados.
+- Seguridad del empaquetador web del 2026-09-10: los CLIs externos ya no se
+  ejecutan con `shell: true`; los shims Windows `.cmd` se resuelven y escapan
+  explícitamente. La regresión está cubierta por `test-platform.mjs`, y el
+  empaquetado estricto vuelve a generar el IPK webOS cuando `ares-package` está
+  disponible.
+- Apple: el shell SwiftUI incorpora navegación real por Inicio, Películas y
+  Series, con Live TV condicionado a los canales devueltos por Jellyfin y
+  Ajustes accesibles desde cada pestaña. `check-apple-navigation.mjs` y los
+  contratos Apple de localización, lifecycle, playback y privacidad pasan; la
+  compilación nativa sigue pendiente de macOS/Xcode.
+- Release Android: el workflow elimina antes los APK y checksums Android
+  antiguos de la release etiquetada, evitando que una reconstrucción deje
+  varios artefactos de la misma variante que puedan confundirse al instalar.
+- Revalidación posterior al cambio de reparto TV (2026-09-09): los 20
+  contratos `scripts/check-*.mjs` terminan correctamente, incluidos
+  `check-android-content-navigation.mjs`, seguridad, reproducción, offline,
+  Apple, web y packaging.
+- El contrato `check-android-content-navigation.mjs` también verifica ahora la
+  integración de agrupación Live TV de Android: construcción de grupos,
+  apertura del selector multifuente y conservación de la variante elegida en
+  el zapping.
+- Revalidación Android del 2026-09-10: la superficie Discovery se ha retirado
+  de las pantallas de películas, series y Ajustes; permanecen Recomendaciones,
+  Biblioteca y la búsqueda Jellyseerr opcional. `check-no-discover-surface.mjs`
+  protege que ninguna pestaña o interruptor pueda volver a exponer Discovery.
+- APKs debug regenerados después de la agrupación Live TV y la retirada de
+  Discovery (2026-09-10): móvil SHA-256
+  `7E9AFD2C3CF0AAC6C7AC42B24A62B35C0DBC3218C4D65520F2A881D219D7438D` y TV
+  SHA-256 `FB7A592AF7CA76CEC223B9DC9937C3EB5BBC989D1E2D249A2A77648B2F75CBFD`.
+  La sesión autenticada del navegador adjuntó ambos artefactos a la pre-release
+  pública `v1.4.0`: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-20260910.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-20260910.apk).
+  Son APK debug de QA, no paquetes firmados de tienda; la publicación está
+  verificada en la lista pública de assets de GitHub.
+- Android i18n: el flujo de descargas de temporadas y selección de episodios
+  ya no cae al inglés en árabe, italiano, japonés, coreano, portugués, ruso,
+  turco ni chino. El contrato de catálogos valida que estas acciones tengan
+  traducción propia; la suite móvil/TV termina en `BUILD SUCCESSFUL`.
+- Android i18n: también se eliminaron restos visibles en inglés de los controles
+  de Series, reparto y errores del reproductor en esos ocho catálogos extra; el
+  contrato de locales los protege junto con el flujo de descargas.
+- Android i18n offline del 2026-09-10: los catálogos extra ya incluyen también
+  disponibilidad sin conexión, límite de almacenamiento, Wi‑Fi, solo durante
+  la carga, progreso, integridad y estado de transferencia en árabe, italiano,
+  japonés, coreano, portugués, ruso, turco y chino. Se corrigió además el
+  escape XML del turco y la compilación AAPT quedó verificada en móvil y TV.
+- El contrato `check-android-locales.mjs` ahora exige que cada una de esas
+  cadenas offline exista en los ocho catálogos extra y no permita una caída
+  silenciosa al texto inglés; la comprobación de workflows, empaquetado Smart
+  TV y plataforma web también vuelve a pasar.
+- APKs QA de internacionalización regeneradas el 2026-09-10 desde `main`:
+  móvil SHA-256
+  `A7194207C132AA4AD4AD6EB4CD1172FCD89EBA2081C6DC11C2930ABB072E9721` y TV
+  SHA-256 `93ED50BFA7744AD6350AD73A3CC3D9FE96F8313DDF591BCEC0DFA9FFFC11F973`.
+  Ambos están visibles en la pre-release pública `v1.4.0`: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-i18n-20260910.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-i18n-20260910.apk).
+  Son APK debug de QA, no builds release firmadas para tienda.
+- APKs QA más recientes, recompiladas tras esa corrección y subidas a la misma
+  pre-release pública `v1.4.0`: móvil SHA-256
+  `604E92EEF1C0169B9755D2BDF26648F1828559FF673A05C5A8099FF825A53438` y TV
+  SHA-256 `0615ABA13490E424776353DD7DED91A2D0514CD519022346266B40DCA499E4D7`.
+  [Móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-i18n-20260910-r2.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-i18n-20260910-r2.apk).
+- APKs QA regeneradas tras completar las cadenas offline (2026-09-10): móvil
+  SHA-256 `BD3B1CFD27346E191C984BCE44F332274268094B29D35913FB1655EB4297B2D2`
+  y TV SHA-256
+  `1CE33C0D96752633E6967C9C234B245D92A90178B7F432CBA66809DCF545FC30`.
+  La revisión r3 ya está publicada en la misma pre-release pública: [móvil](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-i18n-20260910-r3.apk)
+  y [TV/Fire TV](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-i18n-20260910-r3.apk). Son APK debug de QA, no builds firmadas de tienda.
+- Pantalla de inicio de sesión Android: el contrato
+  `check-android-login-layout.mjs` protege safe area, desplazamiento vertical,
+  tamaños adaptativos de los campos y foco de mando en el botón TV. La
+  comprobación confirma que el formulario no depende de una altura fija que
+  recorte el texto o la acción en pantallas con otra relación de aspecto.
+
+## Estado del repositorio
+
+- Rama de trabajo: `main`; la política del repositorio exige que sea la única
+  rama pública.
+- La consulta independiente a `origin` confirma únicamente `refs/heads/main`
+  en GitHub. No se presenta ninguna otra rama pública.
+- GitHub Actions (2026-09-09): los workflows `branch-policy`, `ci` y `apple`
+  aparecen como no iniciados con el mismo mensaje de GitHub sobre pagos de la
+  cuenta/límite de gasto. No es un fallo de código reproducido por los jobs;
+  queda pendiente reactivar la facturación o el límite de Actions y relanzar
+  la validación. Las comprobaciones locales siguen siendo la referencia hasta
+  que GitHub vuelva a ejecutar los runners.
+- Comprobación directa de GitHub Actions del 2026-09-10: los runs
+  `34421855536` (CI), `34421855522` (ramas) y `34421855482` (Apple) fallan
+  entre 1 y 7 segundos antes de ejecutar pasos; sus jobs aparecen como
+  `failure` sin pasos iniciados y el endpoint de logs devuelve un ZIP vacío.
+  Esto confirma un bloqueo de infraestructura/cuenta, no un fallo reproducido
+  por el código. No se certifica aquí ninguna compilación nativa Apple hasta
+  que GitHub reactive los runners.
+- Empaquetado local Windows revalidado el 2026-09-10 con permisos completos:
+  `esbuild` transpila los bundles y `ares-package` genera correctamente el
+  IPK webOS. El runner ahora prioriza `.cmd/.exe` sobre shims `.ps1` y, si
+  solo existe un shim PowerShell, lo invoca explícitamente sin `shell:true`.
+  Samsung continúa honestamente como bundle sin Tizen Studio/firma y VIDAA
+  como HTML5 para su portal oficial.
+- Revalidación local del 2026-09-09: `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`; los APK debug
+  regenerados conservan los hashes publicados en la release QA v1.4.0.
+  `node web/scripts/build-web.mjs all` también terminó correctamente en una
+  salida temporal aislada: generó el IPK webOS con `ares-package`, dejó el
+  bundle Samsung listo a falta de Tizen Studio/firma y preparó el bundle HTML5
+  de VIDAA. No se presenta Tizen ni VIDAA como paquete firmado.
+- Último cambio funcional documentado: la ficha de información técnica móvil
+  queda protegida para mostrar solo formato de vídeo/audio, códec, resolución,
+  FPS y HDR; el contrato `check-mobile-file-info.mjs` impide que se vuelvan a
+  mostrar nombres o rutas internas. La regresión Android móvil/TV terminó en
+  `BUILD SUCCESSFUL` el 2026-09-09.
+- Integridad de descargas offline: cancelar o borrar una descarga gestionada
+  elimina también cualquier fragmento `.part` estable o heredado, mientras que
+  las rutas de pausa/reintento conservan el fragmento para poder reanudarlo.
+  `OfflineStoragePolicyTest` cubre los nombres de limpieza y las suites
+  unitarias móvil/TV más la compilación Kotlin de ambos perfiles terminan en
+  `BUILD SUCCESSFUL` el 2026-09-09.
+- Las APK QA de esta corrección quedaron adjuntas a la pre-release `v1.4.0`:
+  [`Velora-mobile-qa-offline-cleanup.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-offline-cleanup.apk), SHA-256
+  `59015EB79594B20CD0CEAA18861992A4969D00BCED53789686EE88A29D49F7FE`, y
+  [`Velora-tv-qa-offline-cleanup.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-offline-cleanup.apk), SHA-256
+  `0B4EDF9224F6FBDA83DA04F2825F91E05B6297249A926D9872B04D27FC51F9C6`.
+- Última mejora publicada: la superficie musical estilo Apple de Android usa
+  ahora recursos localizados para botones y etiquetas de accesibilidad (volver,
+  reproducir, aleatorio, cola, transporte y estado actual), en vez de textos
+  codificados en duro. El cambio está en `1719ca9`; la compilación móvil/TV y
+  `check-android-locales.mjs` pasan.
+- Jellyfin 12.0/Live TV: el reproductor Android identifica explícitamente las
+  fuentes M3U y evita el atajo direct-play aunque llegue una ruta directa de
+  un plugin antiguo; se conserva la apertura automática del `LiveStreamId` y
+  el remux negociado por Jellyfin. La decisión vive en una política de
+  reproducción reutilizable y `LiveTvPlaybackPolicyTest` la cubre en móvil y
+  TV. Apple y web priorizan también la URL de remux/transcodificación; el
+  contrato API protege el comportamiento en las tres superficies.
+- Agrupación Live TV Android del 2026-09-09: el selector de fuentes ya no
+  depende únicamente de que Jellyfin repita la misma ID literal; si dos
+  proveedores entregan IDs distintas pero comparten número y nombre visible,
+  se muestran en una sola fila y sus fuentes siguen siendo seleccionables.
+  `LiveTvChannelQueryTest` cubre ambos formatos y las suites Android móvil/TV
+  terminan en `BUILD SUCCESSFUL`.
+- Navegación Live TV tras seleccionar una fuente alternativa: la fuente
+  elegida reemplaza ahora a la principal dentro de la lista de zapping, aunque
+  el proveedor use otra ID Jellyfin. Así los botones de canal anterior/siguiente
+  conservan la variante seleccionada; `selectedAlternateSourceReplacesPrimaryForChannelNavigation`
+  cubre la regresión en móvil y TV.
+- Rendimiento de filtros Live TV: la tira de favoritos y grupos usa ahora
+  `LazyRow`, evitando que una lista grande de grupos desborde la pantalla o
+  fuerce a Compose a medir todos los controles como un `Row` estático.
+- Accesibilidad de filtros Live TV: cada pastilla conserva el estado táctil y
+  ahora dibuja un realce de foco visible cuando recibe el mando/teclado sin
+  estar seleccionada; esto evita que el foco de TV parezca perdido. La
+  compilación y las pruebas Android móvil/TV del cambio terminan correctamente.
+- Paridad de agrupación Live TV web del 2026-09-09: el navegador ahora combina
+  también filas de proveedores con IDs Jellyfin distintos cuando comparten
+  número y nombre visible normalizados; las fuentes siguen apareciendo como
+  opciones seleccionables y no se fusionan canales sin identidad suficiente.
+  También queda cubierta la colisión de alias sin duplicar una fila absorbida.
+  `test-platform.mjs` ejecuta ambos casos reales y `build-web.mjs all` genera
+  el bundle web, el IPK webOS y los bundles Samsung/VIDAA correctamente.
+- Paridad Live TV Apple del 2026-09-09: el modelo Swift agrupa proveedores con
+  IDs Jellyfin distintos cuando comparten número y nombre visibles, conserva
+  todas las fuentes para el selector AVPlayer y cubre la regresión en
+  `VeloraKitTests`. Los contratos Apple pasan; el XCTest nativo sigue pendiente
+  de ejecución en macOS/Xcode, que no está disponible en este host Windows.
+- Release multiplataforma v1.4.0: se añadieron los paquetes web y Smart TV a
+  la misma pre-release que las APK: [Web ZIP](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-Web-all.zip), [Web tar.gz](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-Web-all.tar.gz), [webOS IPK](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-webos-1.4.0.ipk), [Samsung/Tizen bundle](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-samsung-bundle-1.4.0.zip) y [VIDAA bundle](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-vidaa-bundle-1.4.0.zip). Los hashes reproducibles están en [SHA256SUMS-web.txt](https://github.com/klortekhq/Velora/releases/download/v1.4.0/SHA256SUMS-web.txt). El bundle Samsung no se presenta como WGT firmado al faltar Tizen Studio/perfil.
+- Los paquetes web de `v1.4.0` se regeneraron después de `666bddc` para que
+  incluyan la corrección de alias Live TV: Samsung
+  `1A4D5E69723C8C6EF64C1C74014C1EC6E947E7607350C74FDC1E85A0F42A2CF0`, VIDAA
+  `76C3E8A6DADEFDB9C510248EEC86BB1E7E17A5EC8445ABADB4522AEE4BE1E597`, Web
+  ZIP `7C2923DB0E3328B1B346362C76BBDA5EE697BAE812DA958B0EC5DF014F393E8F`,
+  Web tar.gz `0A8E0875639C6F7878C8A048AA1D857A732E8C77B636D1D413BA5F8BDBB9F0F0`
+  e IPK webOS `E5044558742D3836208F3CFF4EA444AF0985568C304E01E686367AAB5E6F5603`.
+- Las APK QA del cambio `362b939` quedaron adjuntas a `v1.4.0`: [`Velora-mobile-qa-live-tv-focus.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-focus.apk), SHA-256 `C8EE5996303F0E33D6744F20F3FA91DF419BBC99D3F9D6BE135F87CF5700097F`, y [`Velora-tv-qa-live-tv-focus.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-focus.apk), SHA-256 `3CB9EF0F9B5BFCBD9114D798A2F010C0DAD70B28099CE4CF883CEF1CA338DF6A`.
+- Las APK generadas desde `0ce17b7` incorporan esta mejora y quedaron
+  publicadas en `v1.4.0` como [`Velora-mobile-qa-live-tv-filters.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-filters.apk),
+  SHA-256 `E2CC05760E3C1539FEA29321A6F93A4522FB36F956EE947620F839111EA84BF8`,
+  y [`Velora-tv-qa-live-tv-filters.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-filters.apk),
+  SHA-256 `A29B588D4FAABF3B73FE2A49D9FDC0E36129DA6652134400D2AD3CAD678E179C`.
+- Motor de decisión original-first del 2026-09-09: la comparación de
+  capacidades normaliza alias equivalentes de códec, HDR y contenedor (por
+  ejemplo `H265`/`HEVC`, `EC-3`/`EAC3`, `matroska`/`MKV` y Dolby Vision),
+  evitando transcodificaciones falsas cuando Jellyfin y Android usan nombres
+  distintos. La regresión está cubierta en `PlaybackDecisionEngineTest` y las
+  pruebas unitarias móvil/TV terminan en `BUILD SUCCESSFUL`.
+- Paridad Apple del motor original-first: `VeloraKit` aplica ahora la misma
+  canonicalización a capacidades y fuentes antes de decidir Direct Play,
+  Direct Stream o remux; la regresión cubre `H265`, `EC-3`, `matroska` y Dolby
+  Vision. El test Swift queda pendiente de un runner macOS/Xcode, ausente en
+  este host Windows; no se presenta como ejecutado.
+- El contrato estático `check-apple-playback-policy.mjs` queda conectado tanto
+  al CI común como al workflow Apple para conservar esta paridad aunque el
+  runner macOS esté temporalmente bloqueado.
+- Actualizador Android: los botones y errores visibles de descarga/instalación
+  están localizados para móvil, tablet y TV en los cuatro catálogos garantizados;
+  la compilación de ambos perfiles y sus pruebas unitarias pasan.
+- El mismo diálogo localiza también título, notas de versión, progreso y error
+  visible; `check-android-locales.mjs` valida 534 claves y las suites móvil/TV
+  terminan en `BUILD SUCCESSFUL`.
+- Localización Android del 2026-09-09: los avisos al iniciar una descarga de
+  película o episodio, incluido el error de espacio insuficiente, usan ahora
+  recursos localizados en español, inglés, francés y alemán; no quedan esos
+  textos hardcodeados en las fichas móvil/tablet.
+- Corrección offline Android del 2026-09-09: una instalación nueva ya no
+  intenta crear una tabla SQLite con dos claves primarias, lo que podía dejar
+  inutilizable la base de descargas antes de la primera migración. El esquema
+  limpio ahora coincide con la migración v11 y conserva el índice por elemento
+  y calidad; el contrato `check-offline-identity.mjs` bloquea la regresión.
+- Descargas offline Android del 2026-09-09: se añade la política opcional
+  «solo mientras carga». La preferencia queda persistida por dispositivo y
+  WorkManager la aplica al encolar y recuperar trabajos tras reinicio; solo se
+  muestra en móvil/tablet y la compilación y las suites móvil/TV pasan.
+- Descargas offline Android del 2026-09-09: el estado durable incorpora
+  velocidad y tiempo estimado restante durante la transferencia; la pantalla
+  de descargas muestra esos datos cuando están disponibles. La base migra a la
+  versión 12 sin perder trabajos existentes y las suites móvil/TV pasan.
+- Descargas offline Android del 2026-09-09: ahora se puede pausar y reanudar
+  una transferencia conservando el archivo parcial; la recuperación automática
+  no relanza una descarga que el usuario pausó y la reanudación vuelve a usar
+  sus restricciones de red y carga.
+- Offline Apple del 2026-09-09: iPhone/iPad usan la transferencia de
+  `URLSession` en segundo plano con progreso, velocidad y ETA, y exponen pausa
+  y reanudación mediante los datos opacos de `URLSession`. El almacenamiento
+  sigue siendo privado y verificado por SHA-256; tvOS conserva la política sin
+  descargas. El contrato estático pasa, pero la compilación Swift y la prueba
+  en hardware Apple siguen pendientes por falta de macOS/Xcode en este entorno.
+- Recuperación Apple del 2026-09-09: al reabrir la app se recuperan también
+  el identificador de tarea y los metadatos opacos de cada descarga activa;
+  por tanto el control de pausa/reanudación no se pierde tras matar el proceso.
+- Packaging web/Smart TV del 2026-09-09: el metadato `velora-build.json` acepta
+  `SOURCE_DATE_EPOCH` y deja fuera fechas variables cuando no se proporciona;
+  dos builds consecutivas con el mismo epoch produjeron metadatos idénticos.
+- Accesibilidad web/TV del 2026-09-09: las fichas y ajustes devuelven el foco
+  al control que abrió el diálogo y enfocan de forma determinista el botón de
+  volver al abrirlo; el contrato web protege esta navegación con teclado y
+  mando.
+- Releases web/Smart TV del 2026-09-09: el workflow fija `SOURCE_DATE_EPOCH`
+  al commit etiquetado y el contrato comprueba que la release común contempla
+  WGT, IPK, bundles Samsung/webOS y bundle VIDAA, sin alterar la regla de no
+  publicar APK unsigned.
+- Revalidación Android del 2026-09-09: `testMobileDebugUnitTest`,
+  `testTvDebugUnitTest`, `compileMobileDebugKotlin` y
+  `compileTvDebugKotlin` terminaron en `BUILD SUCCESSFUL` (82 tareas; 1:18).
+  El SDK local emitió avisos de metadatos XML/Android 36, sin convertirlos en
+  errores de compilación.
+- Auditoría completa de contratos del 2026-09-09: los 22 scripts
+  `scripts/check-*.mjs` terminan correctamente, incluidos navegación, los
+  cuatro catálogos Android, ciclo de vida/localización/privacidad Apple,
+  autenticación y API Jellyfin 12, reproducción, offline, identidad,
+  releases, packaging Smart TV, versión y los 12 catálogos web.
+- Revalidación web/Smart TV del 2026-09-09: `node web/scripts/build-web.mjs all`
+  terminó correctamente usando un directorio de salida aislado y
+  `SOURCE_DATE_EPOCH`; se generaron bundles reproducibles para Samsung/Tizen,
+  webOS y VIDAA. Tizen sigue sin WGT porque este entorno no tiene Tizen Studio
+  ni perfil de firma; webOS y VIDAA conservan la misma limitación de certificado
+  o portal oficial.
+- Localización Apple del 2026-09-09: el selector de idioma ya usa claves del
+  catálogo en lugar de nombres codificados; los cuatro catálogos mantienen
+  ahora 70 claves coherentes y `check-apple-locales.mjs` pasa.
+- APK de QA regeneradas el 2026-09-09 desde `main` tras la validación Apple:
+  `app-mobile-debug.apk` terminó con SHA-256
+  `B5364EA8541AE39FD3727F23159912795AB2BD5888BC55B79CC830AA21C492BF` y
+  `app-tv-debug.apk` con SHA-256
+  `51B543AC43F85F14C2B0898278319E64AB8747BF83409C62C4788B3260C4FDF7`.
+  La tarea conjunta `assembleMobileDebug assembleTvDebug` terminó en
+  `BUILD SUCCESSFUL`; son builds instalables de QA, no una release firmada.
+- Variantes `release-unsigned` regeneradas por separado el 2026-09-09 desde
+  el mismo `main`, con `GRADLE_OPTS=-Xmx4096m`: móvil
+  `velora-release-unsigned.apk`, SHA-256
+  `437DA37AD3B869C42C12CBCD77A3EB45D6CC97218AFE68C87F5FA3C17847A208`, y TV
+  `255AF83167910785BEA7931A415341B9F743BB2D6B70CFC01DE711501CFE4ECD`.
+  Ambas tareas terminaron en `BUILD SUCCESSFUL`; siguen sin firma y no se
+  publican como releases.
+- APK móvil de QA subida el 2026-09-09 a la pre-release `v1.4.0` de GitHub:
+  [Velora-mobile-qa-v1.4.0.apk](https://github.com/klortekhq/Velora/releases/tag/v1.4.0),
+  SHA-256 `e51b392d545164faafafa72fd6de9d048609870f22228cd6581a3c758174c432`.
+  Está marcada como pre-release y QA; no se presenta como distribución firmada.
+- APK Android TV/Fire TV de QA añadida a la misma pre-release:
+  `Velora-tv-qa-v1.4.0.apk`, SHA-256
+  `d5328d498c6d4cadf5ca891b3df15395af8092b0b354db05dd1fac65d6ea4aad`.
+- APKs QA locales regeneradas desde `8bd2777` el 2026-09-09 después de
+  corregir la agrupación de fuentes Live TV: móvil
+  `app-mobile-debug.apk`, SHA-256
+  `1125BFEB6B6390451D4278716E2650A4BBC5CA3108AFECD11885565DAC848CB2`, y TV
+  `app-tv-debug.apk`, SHA-256
+  `65FBD17F6099BCFFB27A2ABCC83D5E4D5A09744A6835BA05EBED67D3CA8A1D55`.
+  Ambas suites Android y las tareas de ensamblado terminaron correctamente.
+  Se publicaron como assets adicionales en la pre-release pública `v1.4.0`
+  (`Velora-mobile-qa-8bd2777.apk` y `Velora-tv-qa-8bd2777.apk`); los assets
+  históricos se conservaron y las nuevas siguen siendo builds de QA sin firma.
+- Verificación reproducida el 2026-09-09: las APK recién ensambladas desde
+  `main` se publicaron además con nombres inequívocos para esta corrección:
+  [`Velora-mobile-qa-live-tv-grouping.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-mobile-qa-live-tv-grouping.apk)
+  (SHA-256 `4F9B00664BE607BC1B1D75ADC250165723D8EC9E2119C68DEDBF2DCEFA99EC95`)
+  y [`Velora-tv-qa-live-tv-grouping.apk`](https://github.com/klortekhq/Velora/releases/download/v1.4.0/Velora-tv-qa-live-tv-grouping.apk)
+  (SHA-256 `6BBAC6EADE8EA4B3DC3C2B3732FEFCB201CF9AE4B803722C76B43FFC10A93272`).
+  La suite `LiveTvChannelQueryTest` pasa en móvil y TV. Estas son builds QA sin
+  firma para comprobar el comportamiento, no releases de tienda.
+- Corrección de aspecto MPV: el selector usa ahora el valor de reinicio
+  documentado `video-aspect-override=no` en lugar de `0.0`, y envía todos los
+  cambios como propiedades de runtime de MPV. Esto evita que la interfaz cambie
+  de etiqueta mientras el vídeo conserva el formato anterior; la regresión
+  queda cubierta por `MpvAspectContainerTest`.
+- Reparto en la vista MPV de TV: las tarjetas de actores dejaron de ser
+  decorativas; ahora tienen acción `Card` con foco de mando/toque y abren
+  `CastInfoActivity`, que carga la filmografía de películas y series. El
+  contrato `check-android-content-navigation.mjs` protege esta ruta.
+- Reproductor móvil: el control de pantalla completa también está en la fila
+  principal de controles, alterna entrada/salida con la misma acción real de
+  orientación y está cubierto por `check-android-content-navigation.mjs`.
+  La compilación Kotlin y las pruebas `AspectPresentationTest` de móvil y TV
+  pasan; queda pendiente la validación física porque no hay un dispositivo ADB
+  conectado en este entorno.
+- APKs QA regeneradas desde `4326f03` el 2026-09-09: móvil
+  `app-mobile-debug.apk`, SHA-256
+  `0F64FE5E628D9C027621704B3FA165EC9C58BFC68FCDAA1A1F97C0D6A13035A4`, y TV
+  `app-tv-debug.apk`, SHA-256
+  `62F15E4B7B118B25C2358252DAD094D5E0EB9116353962E1F8FA3D06C1845B4D`.
+  La compilación terminó correctamente. La sustitución de los assets en
+  La sustitución de los assets queda reconciliada con la release autenticada
+  `v1.4.0`; la auditoría posterior verificó `state=uploaded` y los hashes de
+  los APK publicados.
+- Diálogos de subtítulos: selección de idioma, búsqueda, OpenSubtitles y estado
+  sin resultados usan recursos localizados; el catálogo garantizado queda en
+  534 claves y las suites móvil/TV pasan.
+- Música Android: artista, álbum, recuentos, estados vacíos, cola y reproducción
+  estilo Apple usan recursos localizados; el catálogo garantizado queda en 543
+  claves y `compileMobileDebugKotlin`/`compileTvDebugKotlin` pasan.
+- Interfaz principal y reproducción: búsqueda vacía, descubrimiento y descripción
+  del aviso AV1 están localizados; el catálogo garantizado queda en 546 claves y
+  ambas compilaciones Kotlin pasan.
+- Jellyseerr Android: las fichas de solicitudes de películas y series localizan
+  sus etiquetas, temporadas, episodios y confirmaciones; el catálogo queda en
+  552 claves y ambas variantes compilan correctamente.
+- Ficha de series/reproductor: sinopsis y opción de subtítulos desactivados usan
+  recursos localizados; `compileMobileDebugKotlin` y `compileTvDebugKotlin`
+  terminan en `BUILD SUCCESSFUL`.
+- Reproductor: la duración de episodios mostrada en la cola usa recursos
+  localizados; el catálogo garantizado queda en 553 claves y ambas compilaciones
+  Kotlin pasan.
+- Revisión Jellyfin 12 del 2026-09-09: los nombres internos heredados de
+  cabeceras y comentarios de otros clientes se sustituyeron por terminología
+  propia de Velora; no se alteraron namespaces ni identificadores de paquete.
+  La compilación y las suites móvil/TV terminaron en `BUILD SUCCESSFUL`.
+- Último cambio funcional documentado anteriormente: el selector de formato de imagen del
+  reproductor Android ya no puede ser sobrescrito por el bucle de actualización
+  de dimensiones de Media3; el modo elegido se conserva al cambiar de stream y
+  al entrar en pantalla completa. El cambio está en `123eef9`.
+- Los menús de audio y subtítulos del reproductor Android usan el catálogo
+  localizado también durante la carga, selección de pista y estados de pista;
+  quedó en `f8c9e89`.
+- `PlaybackInfo` usa la identidad real de la variante Android (móvil o TV) y
+  el `deviceId` persistido, en lugar de identificarse siempre como Android TV
+  con un identificador vacío.
+- Identidad pública: Velora por Klørtek. Los identificadores de paquete se
+  conservan únicamente donde los exige el sistema de distribución de cada
+  plataforma y no forman parte de la identidad visible del producto.
+- CI comprueba que README, atribuciones, documentación y código público no
+  reintroduzcan referencias heredadas a otros clientes o identidades antiguas.
+- La auditoría de seguridad del 2026-09-09 no encontró credenciales ni tokens
+  del servidor de QA en el código/documentación; los fixtures de descubrimiento
+  usan ahora una dirección LAN genérica de laboratorio y la suite móvil pasa.
+- Compatibilidad Jellyfin 12.0: Android, Apple, web, Live TV, música, MPV,
+  descargas y smoke test usan ya la cabecera estándar `Authorization:
+  MediaBrowser ...`; el contrato `check-jellyfin-auth-contract.mjs` falla si
+  reaparece cualquier `X-Emby-Authorization` o `X-Emby-Token`. Las rutas de
+  música ya consultaban `Users/{userId}/Items`, evitando los endpoints legacy
+  retirados. Validado con los contratos web/release y las suites Android móvil
+  y TV el 2026-09-09.
+- Revalidación del 2026-09-09: las suites Android móvil/TV terminaron en
+  `BUILD SUCCESSFUL`, la suite web pasó y los 19 verificadores de contrato
+  (`locales`, navegación, logs, playback, Apple, Jellyfin, offline, identidad,
+  releases, packaging y versiones) terminaron correctamente sobre `main`.
+- Estrés de bibliotecas del 2026-09-09: `LibraryContentQueryTest` ejecuta
+  ordenación, filtros combinados y desempates estables con 1.000, 10.000 y
+  50.000 elementos sintéticos en las variantes móvil y TV; ambas suites
+  terminaron en `BUILD SUCCESSFUL`. Es una regresión del núcleo de consulta,
+  no una certificación de memoria/FPS en hardware.
+- Smoke Live TV del 2026-09-09: la validación de Jellyfin se alineó con el
+  cliente Android y pagina `/LiveTv/Channels` mediante `StartIndex`,
+  `TotalRecordCount`, `MediaSources` y `AddCurrentProgram`; el contrato API y
+  la sintaxis PowerShell pasan. El endpoint público LAN sigue identificando
+  Jellyfin `12.0.0`; el tramo autenticado requiere credenciales disponibles en
+  el entorno de ejecución.
+- Paridad Live TV del 2026-09-09: Apple y web ahora recorren también todas las
+  páginas de `/LiveTv/Channels` con `StartIndex`/`Limit` y respetan
+  `TotalRecordCount`; se añadieron una prueba de paginación Apple y contratos
+  web/API. Esto protege bibliotecas IPTV grandes sin alterar la agrupación por
+  ID ni el selector de fuentes. La compilación Swift y la prueba en dispositivos
+  Apple siguen pendientes por falta de macOS/Xcode y hardware Apple.
+- Internacionalización Android del 2026-09-09: el catálogo español ya contiene
+  las 508 claves base y queda incluido en el verificador de catálogos completos;
+  los idiomas adicionales siguen usando fallback seguro mientras se completa
+  su traducción.
+- Accesibilidad/localización Android del 2026-09-09: la etiqueta visible de
+  subtítulos descargados dejó de estar fija en español y usa el catálogo activo
+  en móvil y TV; contratos, compilación y tests de ambas variantes pasan.
+- Accesibilidad/localización Android del 2026-09-09: las acciones visibles de
+  películas y series para continuar, reproducir desde el principio, marcar
+  como visto/no visto y recomendaciones de reparto usan ya recursos localizados
+  y etiquetas accesibles en las cuatro variantes garantizadas.
+- Accesibilidad/localización Android del 2026-09-09: el diálogo de salida del
+  inicio también usa recursos localizados en móvil y TV; contratos, compilación
+  y suites unitarias vuelven a pasar.
+- Compatibilidad Jellyfin 12 del 2026-09-09: Apple y web dejan de construir
+  peticiones autenticadas token-only; artwork, catálogo, AVPlayer, Live TV,
+  proxy del navegador y peticiones de vídeo usan ahora identidad completa de
+  cliente/dispositivo. Las pruebas web y los contratos estáticos pasan; la
+  compilación Swift sigue pendiente del runner macOS/Xcode.
+- Preferencias de reproducción del 2026-09-09: idioma de audio y política/idioma
+  de subtítulos ya no son solo controles de ajustes; Android los aplica al
+  selector de pistas de Media3, Apple a las selecciones nativas de AVPlayer y
+  web a los índices de stream enviados a Jellyfin. El contrato
+  `check-playback-preferences-contract.mjs` y las pruebas web pasan.
+- Jellyfin 12.0: el resolver de trailers Android ya no intenta las rutas
+  retiradas `LocalTrailers`/`RemoteTrailers` después de consultar `GetItems`;
+  así se evita una segunda petición 404 en servidores 12.0. El contrato de
+  API y las regresiones de presentación/autenticación móvil y TV pasan.
+- Regresión Android del 2026-09-09: `JellyfinAuthServiceTest` verifica en móvil
+  y TV que la cabecera completa conserva cliente, dispositivo, `deviceId`,
+  versión y token, y que no reintroduce `X-Emby-*`; ambos tests terminan en
+  `BUILD SUCCESSFUL`.
+- Seguridad de reproducción Jellyfin 12 del 2026-09-09: las URLs de medios
+  devueltas por `PlaybackInfo` se limpian de parámetros de credenciales antes
+  de pasar a ExoPlayer o MPV; `MediaUrlSecurityTest` lo verifica en móvil y TV.
+- Apple SwiftUI: los entrypoints móvil y tvOS conservan ahora una única
+  instancia de `VeloraAppShell` en `@State`; ya no reconstruyen el cliente,
+  la sesión ni el estado de navegación durante cada recomposición. El contrato
+  `check-apple-lifecycle.mjs` queda conectado a CI y al workflow Apple; la
+  compilación nativa sigue pendiente del runner macOS con Xcode.
+- Trailers Android: películas, series y la pantalla de inicio usan ahora un
+  resolver único basado en `GetItems` con `IncludeItemTypes=Trailer`, la ruta
+  recomendada por Jellyfin 12.0, sin llamadas legacy adicionales. El contrato
+  `check-jellyfin-api-contract.mjs` lo protege y las suites móvil/TV pasaron
+  el 2026-09-09.
+- Trailers Apple: iPhone, iPad y tvOS resuelven el tráiler de la ficha mediante
+  el mismo catálogo `GetItems`/`IncludeItemTypes=Trailer` y lo exponen como
+  acción reproducible localizada; el contrato de API y los cuatro catálogos
+  Apple pasan. La compilación nativa queda pendiente del runner macOS con
+  Xcode, no se presenta como validada en hardware Apple.
+- Los layouts de detalle móvil de películas y series incorporan `statusBarsPadding`
+  y `navigationBarsPadding`; el contrato `check-mobile-layout-insets.mjs` lo
+  protege. La regresión móvil/TV posterior terminó en `BUILD SUCCESSFUL` el
+  2026-09-09.
+- Autenticación Android: la ruta de `AuthenticateByName` quedó alineada con
+  Apple, web y el smoke test (`Users/AuthenticateByName`) para evitar que un
+  proxy sensible a mayúsculas rechace la petición antes de llegar a Jellyfin;
+  `JellyfinAuthServiceTest` y las suites móvil/TV siguen pasando.
+- Bibliotecas móvil/tablet y TV: `LibraryContentQueryTest` cubre la consulta
+  compartida de películas y series (ordenación ascendente/descendente,
+  favoritos, visto/no visto, género y estabilidad); las variantes móvil y TV
+  terminaron con `BUILD SUCCESSFUL` el 2026-09-09.
+- Contrato de navegación Android: además de la filmografía de actores, CI
+  comprueba que recomendaciones y biblioteca de películas/series aplican la
+  consulta real, que TV conecta ordenación/género/estado de reproducción y que
+  móvil persiste las preferencias de esos filtros; verificado el 2026-09-09.
+- Privacidad de logs Android: se eliminaron títulos, IDs, posiciones de
+  reproducción y metadatos de proveedores de las trazas de autenticación y
+  catálogo y pantallas; `check-android-log-privacy.mjs` recorre 131 archivos
+  fuente Android de Velora, y la suite móvil/TV terminó en `BUILD SUCCESSFUL` el
+  2026-09-09.
+- Build QA regenerada el 2026-09-09 tras ocultar el control CC independiente
+  y dejar la tuerca como punto único para audio y subtítulos: móvil
+  `app-mobile-debug.apk`, SHA-256
+  `0DB60A677F8403FABABBC998BD667DF80F9E0EFD4EB16ED5F5C6EC021124626D`;
+  TV `app-tv-debug.apk`, SHA-256
+  `8A8CEED8AD48BF683747B5619F699DF4581383147F356C8EC596848D7E8A0B24`.
+  Ambas compilaciones terminaron correctamente y siguen siendo artefactos de
+  QA sin firma; no se publican como release.
+- Regresión completa reproducida tras el guardia de filtros (2026-09-09):
+  `node web/scripts/test-platform.mjs` pasó en capacidades, seguridad,
+  interacción de biblioteca y subtítulos; las suites
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest` terminaron en
+  `BUILD SUCCESSFUL` (82 tareas). Los APK debug actuales también se generaron
+  correctamente: móvil SHA-256
+  `F0B739610E9D9D5B7D3F3414AC09E9BA1EE77868966036083374AB01DEAFF969` y TV
+  `FBA3388B6215A0A1421FC2C01C9C560E9F95F0DC9F676B678630ACD38A01C2AD`;
+  siguen siendo artefactos locales de QA sin firma.
+- Build QA regenerada el 2026-09-08 tras la protección de espacio en descargas:
+  móvil `velora-release-unsigned.apk`, SHA-256
+  `493E6D634B5F1798767637B2052395CF111ABE57242E8B66825EBC87A80D3780`; TV
+  `velora-release-unsigned.apk`, SHA-256
+  `31D8F0EEC731A224518C0FC6251CC066EBE6AB35D8F591BE7ADE814F922C9736`.
+  Siguen siendo artefactos de QA sin firma y no se publican como release.
+- Auditoría de seguridad del 2026-09-08: no se encontraron valores de tokens,
+  contraseñas ni cabeceras de autorización en mensajes de log del runtime; las
+  comprobaciones de identidad pública y de redacción de datos sensibles siguen
+  pasando. Las coincidencias de credenciales del smoke test permanecen aisladas
+  en el script de prueba y no se imprimen.
+- Auditoría pública de GitHub del 2026-09-06: no hay ninguna Release publicada
+  actualmente; solo permanecen etiquetas históricas. No se presenta ningún APK
+  unsigned como descarga pública.
+
+## Funcionalidad implementada
+
+- Android móvil/tablet y Android TV/Fire TV comparten dominio Jellyfin, pero
+  mantienen layouts táctil y de mando separados.
+- Android incorpora perfiles de rendimiento persistentes (Automático, Calidad,
+  Equilibrado y Rendimiento) que aplican de forma conjunta las optimizaciones
+  de animación, tarjetas, fondos y resolución; el mapeo de claves tiene prueba
+  unitaria para evitar perder la preferencia al actualizar.
+- El cliente web expone los mismos cuatro perfiles, guarda la elección por
+  dispositivo y aplica el modo Rendimiento reduciendo transiciones y animaciones
+  y solicitando artwork de menor resolución; Calidad solicita artwork de mayor
+  resolución, sin ofrecer descargas offline en navegador.
+- Web: la música de tema de Jellyfin usa un único elemento de audio persistente,
+  espera 700 ms de foco antes de consultar `ThemeSongs`, cancela solicitudes
+  obsoletas y hace fade-in/fade-out. El proxy del navegador autoriza únicamente
+  la ruta de audio de tema además de las rutas multimedia existentes; el token
+  sigue viajando solo en la cabecera del proxy. La función está desactivada por
+  defecto y se controla desde Ajustes con volumen persistente.
+- Media3/ExoPlayer es el backend Android predeterminado; MPV solo se usa si el
+  usuario lo selecciona o si el fallback configurado resulta necesario.
+- La identidad de cliente para `PlaybackInfo` está cubierta por prueba
+  unitaria en las variantes móvil y TV, evitando que Jellyfin aplique un perfil
+  de capacidades de reproducción equivocado en móvil.
+- La misma identidad dinámica y el `deviceId` persistido se aplican también al
+  resto de peticiones autenticadas de `JellyfinApi`, incluidas imágenes y
+  metadatos; la comprobación de contrato de autenticación sigue pasando.
+- La carga de tema remoto y el servicio de música en segundo plano reutilizan
+  ahora esa misma identidad por variante, evitando que las sesiones auxiliares
+  se anuncien erróneamente como Android TV o sin `deviceId`.
+- Android Live TV: la ruta predeterminada de ExoPlayer conserva ahora los
+  códecs y la decisión de copia de Jellyfin; la ruta MPV explícita mantiene sus
+  parámetros propios sin alterar el backend predeterminado.
+- Las cabeceras de autenticación y reproducción distinguen Android móvil de
+  Android TV/Fire TV sin registrar credenciales, tokens ni cabeceras sensibles.
+- Android difiere la creación de los clientes HTTP principal y Live TV hasta la
+  primera petición, evitando inicializar el motor de red durante la primera
+  composición de la pantalla de inicio; la mejora está cubierta por compilación
+  y tests, pero la medición final de arranque en Fire TV queda pendiente de una
+  reconexión ADB estable.
+- Android presenta como credenciales inválidas las respuestas `400`, `401` y
+  `403` de `AuthenticateByName`; el contrato está cubierto por prueba unitaria.
+- Las peticiones de catálogo, personas y “seguir viendo” usan ahora el nombre
+  de dispositivo de la variante Android activa (móvil o TV), sin etiquetar el
+  cliente móvil como Android TV.
+- El cliente Android de Live TV aplica la misma identidad: Android en móvil y
+  Android TV en la variante de televisión, incluida la selección de fuentes.
+- Live TV amplía sus límites de conexión y socket a 45 segundos para permitir
+  la asignación lenta de sintonizadores/proveedores sin abandonar fuentes
+  válidas durante el arranque o el cambio de canal; la paginación y agrupación
+  siguen pasando sus pruebas focalizadas.
+- La ficha de personas formatea nacimiento y fallecimiento con el idioma activo
+  del dispositivo en vez de forzar meses en inglés; los valores ISO inválidos
+  conservan un fallback legible y tienen cobertura unitaria.
+- Verificación del 2026-09-08: `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` pasan; `node web/scripts/test-platform.mjs` también
+  pasa, incluyendo agrupación de canales Live TV, selección de fuentes,
+  seguridad web y preferencias de subtítulos.
+- Revalidación del 2026-09-08: las pantallas Android de biblioteca de películas
+  y series ya usan recursos localizados para navegación, recomendaciones,
+  filtros, acciones y estados de Jellyseerr; la compilación de móvil y TV pasó
+  y las pruebas focalizadas de ordenación/filtros y agrupación Live TV pasaron.
+- Revalidación del 2026-09-08: las pantallas Android de música ya usan recursos
+  localizados para navegación, cola, transporte, álbumes y artistas; la
+  compilación Kotlin de móvil y TV pasó con estas claves nuevas.
+- Revalidación del 2026-09-09: los controles de transporte de las superficies
+  musicales Android (reproducir/pausar y siguiente) ya exponen etiquetas
+  accesibles localizadas también en la vista compacta y en reproducción; la
+  compilación móvil/TV terminó correctamente y el catálogo conserva 508 claves.
+- Revalidación del 2026-09-08: los controles de detalle Android que aún tenían
+  etiquetas directas para volver y descargar ahora usan el catálogo localizado;
+  `:app:compileMobileDebugKotlin :app:compileTvDebugKotlin` terminó correctamente.
+- Revalidación del 2026-09-08: la ficha de series Android también localiza
+  temporadas, reanudación, audio, subtítulos y descarga de subtítulos; ambas
+  variantes Android vuelven a compilar correctamente.
+- Revalidación del 2026-09-08: la reproducción remota y las etiquetas de
+  episodio de la superficie móvil ya usan recursos localizados; el catálogo
+  Android queda en 503 claves y móvil/TV compilan correctamente.
+- Revalidación del 2026-09-09: el aviso de incompatibilidad AV1 de 10 bits
+  dejó de caer al inglés en árabe, italiano, japonés, coreano, portugués,
+  ruso, turco y chino. `node scripts/check-android-locales.mjs`, las dos
+  suites unitarias Android y la compilación Kotlin móvil/TV terminaron en
+  `BUILD SUCCESSFUL` (82 tareas).
+- Revalidación del 2026-09-09: los menús de selección de audio y subtítulos,
+  incluido el menú de pulsación prolongada en TV, quedaron sin textos
+  hardcodeados en español; el catálogo, la compilación móvil/TV y las suites
+  unitarias de ambas variantes pasan.
+- Revalidación del 2026-09-09: las secciones de reparto de las fichas de
+  películas, series y episodios dejan de reutilizar la etiqueta de transmisión
+  y muestran el recurso localizado de reparto; móvil y TV compilan correctamente.
+- Revalidación del 2026-09-09: el contrato CI de navegación de contenido
+  confirma que las tarjetas móviles de actores abren su filmografía y que la
+  consulta incluye películas y series, con navegación posterior a ambas fichas.
+- Revalidación del 2026-09-09: el guardia de política de reproducción exige
+  que el efecto de refresco de dimensiones incluya el modo de aspecto como
+  dependencia; las suites unitarias móvil/TV terminan correctamente tras el
+  arreglo del selector.
+- Revalidación web/Smart TV del 2026-09-09 en salida QA aislada:
+  `node web/scripts/test-platform.mjs` y los contratos de versión, identidad,
+  releases y superficies offline pasaron. `node web/scripts/build-web.mjs all`
+  generó el bundle de navegador, Samsung/Tizen y VIDAA, y un IPK de webOS de
+  86.676 bytes; Tizen sigue correctamente marcado como bundle porque este
+  host no tiene Tizen Studio/CLI ni firma de dispositivo.
+- Revalidación móvil del 2026-09-09: `LiveTvChannelQueryTest` pasa con la
+  variante móvil. Confirma que los canales con la misma identidad Jellyfin se
+  muestran como una sola tarjeta y que sus MediaSources quedan disponibles
+  como opciones seleccionables; la misma lógica se comparte con TV.
+- Revalidación Android del 2026-09-09: el agrupado de Live TV y la lista de
+  filtros ahora se derivan con `remember` a partir del snapshot de canales.
+  Se evita reconstruir todas las opciones de fuente durante cada movimiento
+  de foco o recomposición, sin cambiar el orden, el filtrado ni el zapping.
+  La compilación y las suites unitarias móvil/TV terminan correctamente.
+- Corrección Apple del 2026-09-09: el agrupado de Live TV conserva ahora
+  fuentes con nombres distintos aunque Jellyfin no proporcione ID, stream ID
+  ni URL. Se añadió una prueba específica para Principal/IPTV; la compilación
+  Swift queda pendiente de la ejecución macOS de CI porque este host no tiene
+  Swift/Xcode.
+- Corrección Apple del 2026-09-09: al elegir una fuente alternativa de Live TV,
+  `PlaybackInfo` ya no usa siempre la primera fuente devuelta por Jellyfin.
+  Velora conserva la opción elegida por `MediaSourceId` o `LiveStreamId` y solo
+  hace fallback a la primera cuando el servidor no devuelve identificadores;
+  queda cubierta por prueba unitaria.
+- Mejora offline Android del 2026-09-09: el índice SQLite sube a la versión
+  11 y usa una clave durable compuesta por servidor, usuario, contenido y
+  calidad. La migración desde versiones anteriores y desde el índice JSON
+  mantiene los registros existentes; móvil y TV compilan y sus suites unitarias
+  pasan.
+- Revalidación offline Android del 2026-09-09: WorkManager, el índice SQLite y
+  las comparaciones en memoria ya no pueden colisionar cuando el mismo ID de
+  Jellyfin/calidad existe en dos servidores o cuentas. `check-offline-identity.mjs`
+  queda conectado a CI junto a la política de descargas solo móvil/tablet.
+- Revalidación offline Android del 2026-09-09: la pantalla de descargas filtra
+  registros asociados al servidor y usuario activos; las entradas legacy sin
+  asociación siguen visibles para poder reproducirlas o migrarlas. La lógica
+  comparte el refresco durable y las suites móvil/TV terminan correctamente.
+- Corrección Apple del 2026-09-09: el catálogo offline ahora conserva el
+  `userID` y deduplica por servidor normalizado, usuario, contenido y calidad;
+  el JSON antiguo sigue pudiendo decodificarse con usuario vacío, pero no se
+  muestra automáticamente a otra cuenta. Las transferencias en segundo plano
+  transportan la misma identidad para completar el registro correcto. Se
+  añadió prueba de aislamiento entre cuentas/calidades; las validaciones
+  estáticas pasan. La compilación Swift queda pendiente de macOS/Xcode, que no
+  están instalados en este entorno.
+- Compatibilidad Jellyfin 12 del 2026-09-09: las llamadas Android de inicio,
+  progreso, parada y reproducción remota usan ahora una única cabecera
+  `Authorization: MediaBrowser` con cliente, dispositivo, dispositivo estable,
+  versión y token. Antes esas rutas construían identidad de cliente pero
+  terminaban enviando solo el token. Compilación Kotlin y suites unitarias
+  móvil/TV pasan (`BUILD SUCCESSFUL`, 82 tareas).
+- Compatibilidad Jellyfin 12 del 2026-09-09: se extendió la cabecera
+  `MediaBrowser` completa a Live TV (incluidas imágenes), música y el trabajador
+  de descargas offline. Así esas superficies ya no dependen de la variante
+  token-only; la compilación y las suites móvil/TV vuelven a pasar.
+- Compatibilidad Jellyfin 12 del 2026-09-09: `ThemeLoader` usa también la
+  cabecera `MediaBrowser` completa al cargar `Branding/CustomCss.css`, por lo
+  que la identidad cliente/dispositivo se conserva en la personalización de
+  tema. Las variantes Kotlin móvil/TV compilan correctamente.
+- Compatibilidad Jellyfin 12 del 2026-09-09: las 54 rutas token-only que aún
+  quedaban en `JellyfinApi` (catálogo, búsqueda, imágenes, personas, estados y
+  mantenimiento) usan ahora la misma cabecera completa. El contrato estático
+  impide que vuelvan a introducirse y la compilación móvil/TV pasa.
+- Revalidación Android del 2026-09-09: tras reforzar la deduplicación de
+  fuentes sin ID, `LiveTvChannelQueryTest` pasa en móvil y TV; también se
+  confirmó que dos fuentes con nombre, `LiveStreamId` y protocolo distintos
+  no se colapsan en una sola opción.
+- Corrección Android del 2026-09-09: la reproducción Live TV de ExoPlayer y
+  del fallback MPV conserva ahora la fuente elegida por el usuario al procesar
+  `PlaybackInfo`, buscando por `MediaSourceId` o `LiveStreamId` y usando la
+  primera solo como fallback de servidores incompletos. La prueba se ejecutó
+  en las variantes móvil y TV.
+- Corrección Android del 2026-09-09: el selector de fuentes Live TV usa ahora
+  también `LiveStreamId` cuando un proveedor IPTV no devuelve `MediaSourceId`,
+  evitando que la opción aparezca como seleccionable pero se pierda al iniciar
+  la reproducción.
+- Corrección web/Smart TV del 2026-09-09: la resolución Live TV conserva la
+  fuente seleccionada por `Id` o `LiveStreamId`, también cuando el proveedor
+  no entrega un `MediaSourceId`; queda cubierta por `test-platform.mjs`.
+- Corrección web/Smart TV del 2026-09-09: la agrupación conserva como opciones
+  separadas las fuentes sin `Id` pero con nombre, protocolo o `LiveStreamId`
+  diferentes, evitando colapsar Principal e IPTV en una sola entrada.
+- Regresión completa del 2026-09-09 sobre ese cambio: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` (82 tareas);
+  también pasaron versión, identidad pública, contrato de autenticación,
+  política offline, catálogos Android y la suite web de capacidades,
+  seguridad, Live TV y subtítulos.
+- Apple Live TV ahora carga la biblioteca sin esperar la EPG, solicita después
+  una ventana de seis horas y muestra hasta tres programas próximos por canal;
+  las cargas obsoletas se cancelan al cambiar de sesión. El cambio queda
+  pendiente de la compilación/test de Swift en macOS CI; Swift/Xcode no está
+  instalado en este host Windows.
+- Apple aplica ahora el comportamiento de música temática previsto: espera de
+  700 ms, fade-in por pasos, cancelación al cambiar rápidamente de ficha y
+  fade-out al salir. La verificación de compilación Swift queda pendiente de
+  macOS CI por la misma limitación de este host.
+- Regresión completa del 2026-09-09 sobre `main` tras la optimización EPG:
+  contratos de versión, identidad, autenticación, superficies offline y
+  localización Android pasaron; `node web/scripts/test-platform.mjs` pasó en
+  capacidades, seguridad, interacción Live TV y preferencias de subtítulos;
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest` terminaron en
+  `BUILD SUCCESSFUL` (82 tareas, todas al día).
+- Revalidación del 2026-09-08: la ruta opcional MPV también usa recursos
+  localizados para ajustes, audio, subtítulos, velocidad y estados de pista;
+  el catálogo queda en 506 claves y las variantes móvil/TV compilan.
+- Suite Android completa reejecutada tras el cambio MPV: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminan en `BUILD SUCCESSFUL` (82 tareas); solo
+  permanecen avisos de APIs obsoletas y del SDK local.
+- Revalidación web del 2026-09-08: `npm run test` pasa en seguridad, capacidades,
+  preferencias de subtítulos y agrupación/interacción de Live TV; `npm run
+  build:all` genera los bundles web, Samsung y VIDAA y el IPK de webOS. Tizen
+  Studio/CLI no está instalado en este host, por lo que no se afirma un WGT
+  firmado ni validación en hardware Tizen.
+- El empaquetador web detecta ahora de forma silenciosa la ausencia de CLIs
+  opcionales de fabricante: deja metadatos `bundle` honestos para Tizen en QA
+  en vez de emitir un error de shell, y conserva el fallo explícito cuando se
+  solicita `VELORA_REQUIRE_INSTALLABLE_PACKAGES=1`.
+- Revalidación del 2026-09-08: la ficha de películas Android comparte ahora
+  recursos localizados para estado visto, acciones de reproducción, audio,
+  subtítulos, tráiler y contenido similar; la compilación móvil/TV pasó después
+  de corregir una referencia nullable del reparto.
+- Revalidación del 2026-09-08: se añadieron recursos localizados para capítulos,
+  estados vacíos de subtítulos/episodios y carga de pistas de audio, usados por
+  los diálogos de películas y series; el catálogo pasó con 500 claves y ambas
+  variantes Android compilaron correctamente.
+- Auditoría funcional del 2026-09-08: las tarjetas de reparto de móvil y TV
+  mantienen navegación activa hacia `CastInfoActivity`; desde allí se cargan
+  detalles y filmografía mediante los endpoints de personas de Jellyfin. No se
+  ha encontrado una ruta de reparto que sea únicamente decorativa.
+- Auditoría de contratos del 2026-09-08: catálogos Android (500 claves),
+  política de releases, superficies offline, identidad pública, consistencia de
+  versión (`1.4.0`) y pruebas web terminaron correctamente en el estado actual.
+- Suite Android completa reejecutada el 2026-09-08 sobre el estado actual:
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest` terminaron en
+  `BUILD SUCCESSFUL` (82 tareas); solo permanecen avisos de APIs obsoletas.
+- El smoke test autenticado contra el Jellyfin LAN respondió correctamente a
+  `/System/Info/Public` (HTTP 200), pero `AuthenticateByName` devolvió HTTP 400;
+  el test lo clasifica ahora como credenciales rechazadas sin imprimir el cuerpo
+  de la respuesta. La prueba de canales y `PlaybackInfo` queda pendiente hasta
+  que exista una credencial válida.
+- Reintento de integración del 2026-09-09 con el servidor LAN y las credenciales
+  proporcionadas: el servidor vuelve a responder HTTP 200 en su endpoint
+  público, pero `AuthenticateByName` continúa devolviendo HTTP 400 incluso con
+  la cabecera estándar de Jellyfin. No se ha ejecutado una prueba autenticada
+  de canales o reproducción ni se presenta como pasada.
+- La reproducción sigue la estrategia Original First: Direct Play, Direct
+  Stream/Remux y transcodificación solo cuando las capacidades lo requieren.
+- El selector de aspecto de Media3/ExoPlayer y de la superficie GL reaplica el
+  modo seleccionado después de cambios de tamaño, orientación y fullscreen;
+  las reaplicaciones retrasadas obsoletas ya no pueden sobrescribir una
+  selección nueva.
+- Corrección adicional del 2026-09-09: el contenedor de vídeo en fullscreen
+  calcula si debe ajustarse por ancho o por altura según la relación real de la
+  pantalla. Esto evita que `Cinema` y otros formatos anchos desborden el marco
+  y parezcan no cambiar. La suite móvil/TV y el contrato de insets pasan.
+- Auditoría de continuidad del 2026-09-09: el remoto contiene únicamente
+  `main`; identidad pública, política de releases, límite offline,
+  consistencia de versiones, metadatos Smart TV y suite web vuelven a pasar.
+  No se declara validación de hardware TV ni release firmada por la ausencia
+  de ADB/Tizen Studio y secretos de firma en este entorno.
+- Live TV usa exclusivamente fuentes devueltas por Jellyfin. No hay ingestión
+  M3U arbitraria en Velora.
+- Live TV solicita `MediaSources`, agrupa filas con el mismo ID de Jellyfin y
+  permite seleccionar las variantes bajo un único canal. El cambio de canal
+  no reutiliza la fuente del canal anterior.
+- Android conserva también `ChannelType` y `ServiceName` de Jellyfin para que
+  el selector pueda rotular variantes como `IPTV` o por proveedor; solo cae a
+  `Opción N` cuando no existe ningún nombre legible.
+- Web/Smart TV abre ahora ese selector al pulsar o confirmar con teclado una
+  fila agrupada; los canales sin variantes siguen entrando directamente.
+- Web/Smart TV también prioriza el nombre de `MediaSources` al rotular cada
+  variante; la prueba de interacción y seguridad web volvió a pasar tras
+  este ajuste (`c15ae02`). El bundle web se generó correctamente en un
+  directorio QA aislado.
+- Las variantes sin nombre legible ya no muestran IDs técnicos en el selector
+  de Live TV: se presentan como opciones numeradas, conservando el ID solo
+  para solicitar la fuente correcta a Jellyfin.
+- Web/Smart TV: el reproductor permite cambiar de forma real entre Ajustar,
+  Rellenar y Original, también en pantalla completa, con la preferencia
+  guardada localmente y textos traducidos en los 12 idiomas web.
+- La comprobación de disponibilidad de Live TV en el inicio libera su cliente
+  HTTP al cambiar de sesión o salir de la pantalla.
+- El descubrimiento de Jellyfin prioriza ahora HTTP para IPs locales con puerto
+  explícito (como el endpoint LAN habitual 8096), evitando consumir primero el
+  timeout TLS sobre un puerto HTTP; HTTPS sigue disponible como fallback.
+- La pantalla de conexión usa recursos localizados para título, dirección,
+  descubrimiento, detección automática, selección de servidor y errores; los
+  catálogos garantizados español, inglés, francés y alemán mantienen las 508
+  claves sincronizadas.
+- Los avisos de trailers que aparecen en las fichas de películas y series
+  también usan recursos localizados; la cobertura Android garantizada queda en
+  508 claves.
+- Películas y series tienen búsqueda, ordenación, filtros, favoritos y estado
+  de reproducción persistente. El cliente web carga la biblioteca por páginas
+  y permite ampliar los resultados sin bloquear el inicio.
+- El reparto abre la filmografía disponible en Jellyfin.
+- En Apple, las fichas también solicitan el reparto y permiten abrir su
+  filmografía en una vista nativa; las tarjetas de esa filmografía abren ahora
+  la ficha completa del título seleccionado. La compilación Swift queda
+  pendiente de la ejecución CI en macOS.
+- Las descargas gestionadas, su base SQLite, reanudación, integridad y Smart
+  Downloads están limitadas a móvil/tablet. No aparecen en TV, Smart TV ni web.
+- Apple móvil/tablet conserva la calidad elegida en cada descarga offline y
+  migra catálogos anteriores sin ese campo a Original; la suite Swift sigue
+  pendiente de ejecución en macOS porque este host no tiene Xcode.
+- Apple: las fichas nativas consumen `UserData.PlaybackPositionTicks`, ofrecen
+  Reanudar/Empezar desde el principio desde 30 segundos y notifican la
+  posición al salir; la cobertura de decodificación está añadida, pero la
+  compilación y prueba real siguen pendientes de macOS/Xcode.
+- Apple: la biblioteca inicial se solicita en páginas de 100 elementos y la
+  cuadrícula pide la siguiente página al alcanzar el final, sin imponer un
+  límite artificial al catálogo.
+- Apple: las páginas de catálogo ya no solicitan `MediaSources` completos por
+  tarjeta; la decisión de reproducción se resuelve al iniciar la reproducción.
+- Apple: la carga incremental también funciona con respuestas Jellyfin que no
+  incluyen `TotalRecordCount`, sin truncar el catálogo a la primera página.
+- La migración Android desde el índice JSON antiguo conserva también checksum,
+  fuente, trabajo, progreso, fechas, estado de visto y protección de descarga
+  antes de pasar a SQLite.
+- El trabajador offline comprueba también el espacio libre y el límite de
+  almacenamiento mientras escribe cada bloque, no solo al poner la descarga
+  en cola. Si el archivo real crece más de lo estimado, conserva el `.part`
+  reanudable, registra el fallo por falta de espacio y evita consumir la
+  reserva mínima del dispositivo.
+- El reproductor Android mantiene oculto el control CC independiente: los
+  callbacks de Media3 ya no lo vuelven a mostrar después de cargar pistas.
+  Audio y subtítulos quedan concentrados en la tuerca de ajustes. La
+  compilación y las suites unitarias móvil/TV vuelven a pasar tras el cambio.
+- Los textos visibles del reproductor para saltar intro/créditos, reparto,
+  temporadas, siguiente episodio y cuenta atrás usan recursos localizados;
+  los catálogos garantizados pasan ahora a 508 claves.
+- Auditoría multiplataforma de offline: Android TV/Fire TV bloquea tanto la
+  navegación como la apertura directa de descargas; Apple TV no renderiza las
+  acciones ni inicializa la transferencia; web, Tizen, webOS y VIDAA mantienen
+  `supportsOfflineDownloads: false`. La regla queda cubierta por tests de
+  capacidades Android/Apple/web y por un guardia adicional en el reproductor
+  Android que rechaza intents locales en builds de TV.
+- Las descargas de subtítulos externos siguen la misma regla: sus resultados,
+  almacenamiento y ajustes de OpenSubtitles solo se muestran en móvil/tablet;
+  las superficies de TV conservan únicamente las pistas que ya entrega
+  Jellyfin.
+- Android migra credenciales a Keystore; Apple usa Keychain; el cliente web
+  usa su proxy autenticado sin poner tokens en la URL del vídeo.
+- El proxy multimedia web aplica una segunda limpieza de parámetros sensibles
+  (`api_key`, `access_token`, `token` y equivalentes), sin depender de la
+  capitalización, antes de reenviar la reproducción al servidor; el cliente
+  aplica la misma defensa antes de entregar el destino al proxy.
+- El fallback MPV Android comparte el constructor de cabeceras MediaBrowser
+  con la ruta de reproducción y sus pruebas de seguridad siguen pasando.
+- Android: Media3/ExoPlayer y MPV solo envían cabeceras Jellyfin a recursos
+  del servidor configurado; una URL directa externa de Live TV o tráiler no
+  recibe el token y Live TV vuelve al endpoint HLS del servidor cuando existe.
+- El verificador de empaquetado Smart TV no permite declarar un WGT/IPK
+  instalable si el artefacto no existe; tampoco confunde el bundle HTML5 de
+  VIDAA con un paquete firmado.
+- El workflow de releases web ejecuta esa verificación después del build y
+  antes de publicar los assets.
+- Los workflows de release vuelven a validar identidad pública y contrato de
+  autenticación Jellyfin antes de producir o publicar cualquier artefacto.
+- Apple: `PrivacyInfo.xcprivacy` está incluido en los recursos compartidos y
+  el CI comprueba sus claves y la declaración de no-tracking; la firma y la
+  validación final del bundle siguen requiriendo Xcode/macOS.
+- Android: el botón de reproducción opcional no construye ya una referencia
+  `RawRes(0)`; el modo sin Lottie queda cubierto por la ruta normal de foco,
+  toque y mando.
+- Android: el selector de formato del reproductor declara explícitamente el
+  rol de botón, igual que el resto de controles, para que tacto, mando y
+  tecnologías de asistencia reciban la misma interacción.
+- Android MPV: los modos 4:3, 16:9 y Cine constriñen también el contenedor
+  visual en pantalla completa; Ajustar, Rellenar, Estirar y Original dejan
+  que MPV gestione la superficie completa. Así el selector no queda anulado
+  por un padre 16:9 fijo. La política tiene prueba unitaria dedicada.
+- Android MPV: las etiquetas y descripciones accesibles de reproducción,
+  aspecto, avance, retroceso, ajustes y navegación ya respetan el idioma
+  activo en vez de mezclar textos fijos en español/inglés.
+- Android TV: Live TV se integra en la misma fila centrada de navegación que
+  las bibliotecas de películas y series; la pestaña sigue siendo condicional a
+  los canales visibles para el usuario.
+- Android móvil/tablet: la navegación inferior mantiene destinos condicionales
+  y ahora expone foco, rol de botón y estado visual para toque, teclado, mando
+  y tecnologías de asistencia.
+- Live TV: la normalización Android y web descarta duplicados idénticos sin
+  `MediaSource`, pero conserva cada fuente identificada como una opción
+  seleccionable.
+- Live TV: Android y web eligen como fila principal la variante del canal con
+  metadatos más completos (programa actual, favorito, imagen o número), para
+  que una fuente alternativa no oculte el estado visible del canal.
+- Web/Smart TV: la agrupación usa mapas sin prototipo y está cubierta frente a
+  identificadores de proveedor con nombres especiales.
+- Hay catálogos localizados Android, Apple y web con selección manual y locale
+  del sistema como valor inicial.
+- Apple: el reproductor nativo de la ficha ofrece ahora un control explícito
+  de pantalla completa y una vista AVPlayer inmersiva para iPhone/iPad/tvOS;
+  los textos de entrada y salida están presentes en los cuatro catálogos.
+  La compilación Swift sigue pendiente de macOS/Xcode, por lo que esta mejora
+  queda documentada como código validado estáticamente, no como prueba de
+  hardware Apple.
+- Apple: el reproductor nativo añade un selector funcional de relación de
+  aspecto (`Ajustar`, `Rellenar` y `Original`) tanto en la ficha como en la
+  vista de pantalla completa; sus cuatro etiquetas están localizadas.
+- Apple Live TV: el reproductor incrustado comparte ahora la pantalla completa
+  y el selector de aspecto con las fichas, conservando la misma sesión AVPlayer
+  y evitando iniciar una segunda emisión.
+- Apple: la tuerca del reproductor ya expone selección real de audio y
+  subtítulos sobre el `AVPlayerItem`, incluida la desactivación de subtítulos,
+  en fichas, Live TV y pantalla completa; las etiquetas están localizadas.
+- Apple: las fichas pueden resolver la primera música de tema gestionada por
+  Jellyfin cuando el ajuste está activado y reproducirla con un `AVPlayer`
+  autenticado mediante cabeceras, sin incluir el token en la URL. El ciclo de
+  vida se detiene al salir de la ficha; la compilación y prueba de AVPlayer
+  siguen pendientes de macOS/Xcode.
+
+## Pruebas locales pasadas
+
+- Corrección de filtrado Live TV validada el 2026-09-08: Android móvil y TV
+  agrupan primero y filtran después, por lo que favoritos o grupos no eliminan
+  fuentes alternativas del mismo canal. `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL`; el cliente web
+  también cubre este caso en `web/scripts/test-platform.mjs`.
+
+- La semántica de grupos Live TV quedó alineada entre Android y web: además de
+  etiquetas, los filtros reconocen `ChannelType` y `ServiceName` (incluidos
+  proveedores IPTV). La prueba focalizada Android y la suite web terminaron
+  correctamente tras este ajuste.
+
+- Revalidación del ajuste de inicialización lazy HTTP del 2026-09-08:
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest` terminaron en
+  `BUILD SUCCESSFUL`; la instalación del APK TV de QA terminó correctamente,
+  pero el dispositivo Fire TV quedó offline durante la medición comparativa,
+  por lo que no se declara una mejora de tiempo en hardware.
+
+- Comprobación Fire TV del 2026-09-08: el dispositivo de la red local dejó de
+  responder por ADB y la reconexión terminó en timeout 10060; no se declara
+  validación de reproducción o Live TV en hardware en esta sesión.
+
+- Revalidación completa posterior a esa alineación: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` el 2026-09-08
+  (`1m05s`, 82 tareas; 7 ejecutadas, 75 en caché).
+
+- Corrección de aspecto MPV validada el 2026-09-08: las pruebas focalizadas de
+  `MpvAspectContainerTest` y `AspectPresentationTest` terminaron en
+  `BUILD SUCCESSFUL`; la batería móvil y TV completa volvió a terminar en
+  `BUILD SUCCESSFUL` (`3m30s`, 82 tareas; 11 ejecutadas, 71 en caché).
+
+- Build de QA reproducida desde `65e5493` el 2026-09-08: `:app:assembleMobileDebug`
+  y `:app:assembleTvDebug` terminaron en `BUILD SUCCESSFUL`. Los APK quedan
+  identificados como artefactos debug/QA y no como releases públicas firmadas.
+  También pasaron `check-public-identity`, `check-offline-surface-policy`,
+  `check-release-workflows`, `check-version-consistency` y la suite web.
+
+- Revalidación de i18n MPV el 2026-09-08: `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` (`7m17s`, 82
+  tareas); catálogos Android (458 claves), suite web y `git diff --check`
+  también pasaron.
+
+- La deduplicación Live TV conserva ahora la fila con guía, favorito y artwork
+  más completos cuando Jellyfin repite el mismo `MediaSource`; Android y web
+  tienen cobertura específica y la prueba focalizada Android (`3m30s`) y la
+  suite web terminaron correctamente.
+
+- Apple comparte también esa regla de deduplicación: al repetir una fuente,
+  conserva la fila con metadatos Live TV más completos y mantiene una sola
+  opción de reproducción. Se añadió prueba Swift; la ejecución queda
+  pendiente de macOS/Xcode, que no está disponible en este host.
+
+- Se añadió una prueba Swift con `URLProtocol` para la música de tema: verifica
+  que Jellyfin recibe el token por cabecera, que la URL final apunta a
+  `Audio/<id>/universal` y que no contiene credenciales. Su ejecución queda
+  pendiente de macOS/Xcode junto con el resto de la suite Apple.
+
+- Revalidación estática del 2026-09-08 sobre `main` (`e107ef7`): identidad
+  pública, coherencia de versión, política offline mobile/tablet-only,
+  contrato de autenticación `Pw`, workflows de releases, catálogos Android,
+  Apple y web, y `web/scripts/test-platform.mjs` terminaron correctamente.
+
+- Revalidación fresca posterior al commit `d6a7710`: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m10s.
+  También pasaron `check-apple-locales`, `check-public-identity`,
+  `check-offline-surface-policy`, `check-android-playback-policy` y
+  `web/scripts/test-platform.mjs`.
+
+- `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL`.
+- `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- Revalidación web posterior a la música de tema: `node --check` para la
+  aplicación y el service worker, `web/scripts/test-platform.mjs`,
+  `check-offline-surface-policy` y `git diff --check` terminaron correctamente.
+- Las suites móvil y TV vuelven a terminar correctamente tras hacer enfocables
+  y accesibles los destinos de navegación inferior móvil/tablet.
+- La suite móvil pasa 85 pruebas tras cubrir la migración completa del índice
+  offline; la suite TV también vuelve a terminar correctamente.
+- `:app:compileMobileDebugKotlin`, `:app:compileTvDebugKotlin`,
+  `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest`: `BUILD
+  SUCCESSFUL` tras corregir la carga opcional de Lottie.
+- Ejecución fresca sobre el estado actual: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 3m49s.
+- Las suites móvil y TV vuelven a terminar correctamente tras ocultar el
+  almacenamiento y la gestión de subtítulos externos en TV.
+- La compilación y los tests móvil/TV vuelven a terminar correctamente tras
+  el ajuste de los textos de información técnica.
+- Los controles Android del reproductor se recompilaron con semántica de botón
+  para mando, toque y tecnologías de asistencia; las suites móvil y TV vuelven
+  a terminar correctamente.
+- `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` tras el ajuste del cierre
+  del cliente HTTP de autenticación.
+- `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL` en 11m49s tras corregir el
+  orden HTTP/HTTPS del descubrimiento local; se añadieron pruebas unitarias
+  para IP local con puerto explícito y URL HTTP completa.
+- `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL` en 4m42s tras localizar los
+  mensajes de la pantalla de conexión y pasar el catálogo Android a 450 claves.
+- `:app:testMobileDebugUnitTest`: `BUILD SUCCESSFUL` en 3m28s después del
+  ajuste compartido del selector de fuentes Live TV.
+- `:app:testMobileDebugUnitTest` y `:app:testTvDebugUnitTest`: `BUILD
+  SUCCESSFUL` en 5m52s tras localizar el aviso de configuración de trailers.
+- Verificación fresca sobre `main` (`56be881`): `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 6m07s;
+  la caché aislada de Gradle se creó correctamente.
+- Verificación posterior al ajuste de accesibilidad: ambas suites terminaron
+  en `BUILD SUCCESSFUL` en 11m30s.
+- El empaquetado web se verificó en una salida aislada: el bundle Samsung se
+  preparó sin declarar un WGT al no estar instalado Tizen Studio, webOS generó
+  un IPK y VIDAA generó el bundle HTML5; el script acepta ahora una carpeta de
+  salida explícita para evitar que artefactos bloqueados contaminen otro build.
+- Se eliminaron del código de ejemplo y del dashboard las direcciones privadas
+  y credenciales usadas durante pruebas locales; los ejemplos usan ahora
+  dominios reservados para documentación. `ServerUrlValidatorTest` y
+  `VeloraLocaleTest` terminaron en `BUILD SUCCESSFUL`.
+- La validación de login cubre también el ciclo de vida de Quick Connect; el
+  test móvil volvió a terminar correctamente después del cambio.
+- `:app:compileMobileDebugKotlin`: `BUILD SUCCESSFUL` tras el ajuste del ciclo
+  de vida del cliente Live TV.
+- `:app:compileTvDebugKotlin`: `BUILD SUCCESSFUL` tras el mismo ajuste.
+- `:app:testTvDebugUnitTest`: `BUILD SUCCESSFUL`.
+- `node scripts/test-platform.mjs` desde `web/`: correcto para capacidades,
+  seguridad, autenticación, biblioteca paginada, subtítulos, agrupación Live
+  TV, etiquetas accesibles de tarjetas y pestañas con selección anunciada.
+- `node web/scripts/build-web.mjs all`: genera correctamente el bundle web,
+  el bundle Samsung, el IPK webOS y el bundle HTML5 VIDAA; Tizen sigue
+  pendiente de Tizen Studio/CLI y firma.
+- Los artefactos Samsung y webOS incluyen `velora-build.json` con su estado
+  real (`installablePackage`, tipo de empaquetado y requisito de SDK/firma).
+- `node scripts/check-tv-packaging-output.mjs`: correcto; valida Samsung,
+  webOS y VIDAA tras generar sus bundles y paquetes.
+- `:app:assembleMobileRelease` y `:app:assembleTvRelease`: `BUILD SUCCESSFUL`.
+- Compilación Android release focalizada del 2026-09-06: `:app:assembleMobileRelease`
+  y `:app:assembleTvRelease` terminaron en `BUILD SUCCESSFUL`; la firma no se
+  declara verificada en este host y, por tanto, no se publica ningún APK como
+  release de distribución desde esta ejecución.
+- `apksigner verify` confirmó explícitamente que ambos artefactos actuales son
+  unsigned (`DOES NOT VERIFY`); quedan correctamente restringidos a QA.
+- `git diff --check`: sin errores en los cambios publicados.
+- `node scripts/check-version-consistency.mjs`: versiones coherentes en `1.4.0`.
+- `node scripts/check-jellyfin-auth-contract.mjs`: contrato `Pw` coherente en
+  Android, Apple, web y smoke test.
+- `node scripts/check-android-locales.mjs`: 452 claves en los catálogos Android.
+- `node scripts/check-apple-locales.mjs`: 58 claves coherentes en `en`, `es`,
+  `fr` y `de`.
+- `node scripts/check-web-locales.mjs`: 69 claves efectivas coherentes en los
+  12 idiomas de la web, incluyendo los fallbacks y overrides traducidos.
+- `:app:testMobileDebugUnitTest`, `:app:testTvDebugUnitTest`,
+  `:app:compileMobileDebugKotlin` y `:app:compileTvDebugKotlin`: correctos tras
+  blindar la ruta de subtítulos offline para superficies TV.
+- Ejecución focalizada del 2026-09-06: `AspectPresentationTest` y
+  `LiveTvChannelQueryTest` terminaron en `BUILD SUCCESSFUL`; cubren la
+  presentación de aspecto en los distintos contenedores y la agrupación de
+  variantes de un canal bajo un único elemento seleccionable.
+- Ejecución fresca del estado actual `b35f482` el 2026-09-06:
+  `:app:testMobileDebugUnitTest :app:testTvDebugUnitTest` terminó en `BUILD
+  SUCCESSFUL` en 6m35s.
+- Las pruebas de `UpdateService` cubren la selección de APK firmado por formato
+  y la exclusión de un artefacto unsigned como actualización instalable.
+- `node scripts/check-release-workflows.mjs`: correcto; verifica además el
+  contrato entre los nombres de APK firmados publicados y el actualizador.
+- `UpdateServiceTest`: correcto; cubre URLs de assets oficiales y rechaza
+  hosts, rutas, esquemas o credenciales incrustadas no confiables.
+- `node web/scripts/test-platform.mjs`: correcto; valida también CSP,
+  `frame-ancestors`, `object-src` y la política `no-referrer` del cliente web.
+- Web: la sesión y las preferencias toleran navegadores TV/modos privados que
+  bloquean `localStorage`; los tokens solo se mantienen en `sessionStorage` y
+  la prueba web cubre el fallo de almacenamiento sin impedir el arranque.
+- Batería estática completa del 2026-09-06: identidad pública, versiones,
+  locales Android/Apple, privacidad Apple, política offline, contrato de
+  autenticación Jellyfin, releases y pruebas web terminaron correctamente.
+- `node web/scripts/build-web.mjs all` y `node scripts/check-tv-packaging-output.mjs`
+  terminaron correctamente; se generó el IPK webOS y los bundles Samsung y
+  VIDAA. Tizen sigue marcado como no instalable hasta disponer de Tizen
+  Studio/CLI y firma, sin presentarlo como paquete certificado.
+- Apple: la cabecera de autenticación usa ahora el idioma seleccionado por el
+  usuario; la compilación Swift queda pendiente de la ejecución macOS de CI.
+- Apple: el inicio de sesión distingue y localiza credenciales rechazadas,
+  servidor no válido y respuesta inesperada, sin exponer detalles de red ni
+  secretos.
+- Web/Smart TV: el inicio de sesión clasifica `401/403` como credenciales
+  inválidas y separa dirección inválida de fallo de conexión; la prueba web
+  cubre explícitamente esas ramas sin imprimir la respuesta del servidor.
+- Apple: la carga incremental de bibliotecas grandes queda implementada en el
+  cliente Swift; falta confirmar la compilación y las pruebas en macOS.
+- Apple: se añadió una prueba de regresión para impedir que el token se aplique
+  a rutas fuera del prefijo del servidor configurado; requiere la ejecución
+  Swift en macOS para quedar verificada.
+- `SensitiveDataRedactorTest`: cubre también credenciales incrustadas en el
+  usuario de una URL y parámetros sensibles en query/fragmento.
+- El workflow de Android fue revisado sintácticamente: los APK debug se guardan
+  como artefactos de QA y no se incluyen en las Releases públicas.
+- Los workflows de publicación solo se activan con tags de versión o ejecución
+  manual; los pull requests y los pushes normales quedan en el workflow de CI.
+- `node scripts/check-release-workflows.mjs`: correcto; protege esa política y
+  evita publicar APKs por comodín. La ejecución manual queda limitada también a
+  etiquetas públicas `vX.Y.0`, igual que el disparador automático.
+- Smoke real contra el servidor Jellyfin local proporcionado el 2026-09-06: la
+  información pública del servidor responde, pero la cuenta proporcionada
+  devuelve `401` en autenticación; quedan sin certificar con ese servidor el
+  catálogo, Live TV y `PlaybackInfo` hasta disponer de credenciales válidas.
+- `node scripts/check-offline-surface-policy.mjs`: correcto; verifica el límite
+  mobile/tablet-only en Android, Apple, navegador y Smart TV, incluida la
+  frontera del reproductor Android.
+- La validación de releases cubre también la limpieza correcta de artefactos
+  obsoletos cuando se reconstruye una etiqueta mediante ejecución manual.
+- `node scripts/check-public-identity.mjs`: correcto; no hay referencias
+  heredadas de identidad en el contenido público revisado.
+- `node web/scripts/test-platform.mjs` y `node web/scripts/build-web.mjs all`:
+  correctos; el bundle web y el IPK de webOS se regeneraron. Tizen sigue
+  pendiente por falta de Tizen Studio/CLI y firma.
+- Revalidación del estado actual: `node web/scripts/build-web.mjs all` y
+  `node scripts/check-tv-packaging-output.mjs` correctos; se regeneraron los
+  metadatos de Samsung, webOS y VIDAA. La ausencia de Tizen Studio/CLI se
+  mantiene como limitación explícita, no como paquete instalable simulado.
+- Revalidación adicional del 2026-09-06: el bundle Samsung quedó marcado como
+  `packaging: bundle`, webOS generó un IPK real con `installablePackage: true`
+  y VIDAA quedó marcado como `hosted-html5`; ninguno se presenta como paquete
+  firmado o certificado de tienda.
+- Batería completa reejecutada en el estado publicado `514261e`: versiones,
+  identidad, contrato Jellyfin, catálogos Android/Apple/web, privacidad Apple,
+  workflows de release, política offline, seguridad web, tests de interacción
+  y metadatos Smart TV correctos. El IPK webOS se regeneró; Tizen continúa
+  pendiente de su SDK y firma.
+
+- Tests Android reejecutados en `main`: `testMobileDebugUnitTest` y
+  `testTvDebugUnitTest` correctos. El bundle web y el IPK webOS también se
+  regeneraron correctamente; Samsung queda como bundle porque este host no
+  tiene Tizen Studio/CLI.
+- La prueba `LibraryContentQueryTest` cubre ahora bibliotecas sintéticas de
+  1.000, 10.000 y 50.000 elementos en las variantes móvil y TV; valida que
+  el filtrado de reproducción/género y el ordenado sigan siendo deterministas.
+- `LiveTvChannelQueryTest` y `node web/scripts/test-platform.mjs` cubren que
+  una variante con programa actual/favorito sea la fila principal sin perder
+  las fuentes restantes.
+- `MediaUrlSecurityTest` cubre el alcance por esquema, host, puerto y prefijo
+  de ruta para impedir que una fuente externa reciba cabeceras Jellyfin.
+- `PlaybackBackendTest` cubre la regla de reproductor: Media3/ExoPlayer es el
+  backend inicial, MPV requiere elección explícita y el fallback solo se activa
+  después de un error real de decodificación. Las suites móvil y TV volvieron a
+  pasar el 2026-09-06.
+- `node scripts/check-android-playback-policy.mjs` protege además por CI que la
+  preferencia nueva no cambie accidentalmente el backend inicial.
+- Revalidación de continuación del 2026-09-06: `:app:testMobileDebugUnitTest`
+  y `:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 49 s;
+  las comprobaciones web, identidad, versiones, locales, privacidad Apple,
+  política offline, autenticación Jellyfin y workflows de release también
+  terminaron correctamente.
+
+## Artefactos Android locales
+
+Son builds `unsigned` para QA, no releases de distribución:
+
+Builds debug regeneradas tras la validación de entrega (QA, 2026-09-06):
+
+- Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`,
+  SHA-256 `50D0DA51C614A42BAB37DB5D35866AACA6EBB4A65771A0CF57B621596FFACB47`.
+- TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`,
+  SHA-256 `79679AF438E098176F1A44936A5E9FD348B8583376A99862618E2F7CCDDD510A`.
+
+Regeneración posterior al ajuste de accesibilidad del reproductor (QA,
+commit `adc1a5f`):
+
+- Móvil: `app/build/outputs/apk/mobile/debug/app-mobile-debug.apk`,
+  SHA-256 `535933CBBBBB9217FBEAEB450280E0415481E09C45FED2B2283FB070F5394E1C`.
+- TV: `app/build/outputs/apk/tv/debug/app-tv-debug.apk`,
+  SHA-256 `1529907A1ABF0A0EF1E06F2F6C42CE822EDBE71B9D279D609BFC44C61431564C`.
+
+Build TV de QA posterior al ajuste de descubrimiento local (commit `74f70e7`):
+`app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+`722D77BC445FF1232737CCCFD550BFFBAFA946577BE5795B59FD892252A02EA9`.
+
+Build TV de QA posterior al ajuste de etiquetas de fuentes Live TV:
+`app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+`409FCF24B6C218F67808D964483EA39340A23E5306D7847F30CCEF02C6CAE8C9`.
+Se instaló correctamente en el mismo Fire TV AFTSS y la actividad principal
+permaneció activa tras el arranque explícito.
+
+Build TV de QA posterior a la localización del aviso de trailers:
+`app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+`ECEF2930F02CD4AADF194C5D41B4CA726567ACBDC9BE89CD9DB2BC3ACBDAC714`.
+Se instaló correctamente y el proceso de la actividad quedó activo; no se
+detectaron excepciones fatales en el logcat de arranque.
+
+La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
+terminó en `BUILD SUCCESSFUL` en 9m24s. Siguen siendo APK unsigned de QA.
+
+Ambas variantes se generaron correctamente en QA el 2026-09-06. La variante TV
+se instaló correctamente mediante ADB en un Fire TV AFTSS (1920×1080) y la
+actividad principal arrancó; la pantalla de conexión, el campo de dirección y
+los botones se verificaron visualmente. No se considera una certificación de
+reproducción ni de Live TV hasta completar una sesión Jellyfin autenticada.
+
+La compilación conjunta `:app:assembleMobileDebug :app:assembleTvDebug`
+terminó en `BUILD SUCCESSFUL` el 2026-09-06. La regeneración web conjunta y
+`check-tv-packaging-output.mjs` también terminaron correctamente: Samsung se
+mantiene como bundle sin Tizen Studio, webOS genera un IPK y VIDAA un bundle
+HTML5.
+
+Comprobación adicional en el Fire TV AFTSS del 2026-09-06: el cliente
+descubrió desde el dispositivo el endpoint HTTP local de Jellyfin
+el servidor Jellyfin de la red local y llegó correctamente a la pantalla de inicio de
+sesión. La llamada posterior a `Users/AuthenticateByName` terminó en
+`HttpRequestTimeoutException` tras 30 segundos; por ello esta ejecución no
+certifica catálogo, Live TV ni reproducción autenticada. El proceso de Velora
+permaneció activo y no hubo excepción fatal.
+
+La carga inicial de las pantallas de películas y series ya no recorre la
+biblioteca completa mientras se muestran las recomendaciones. Se carga una
+primera página para que la transición sea inmediata y el catálogo completo se
+solicita solo al abrir la pestaña de biblioteca, manteniendo disponibles el
+ordenado y los filtros completos.
+
+La accesibilidad web/Smart TV también se ha reforzado: las tarjetas de
+filmografía exponen su título a lectores de pantalla, conservan activación por
+teclado/mando y Escape cierra los paneles modales o el reproductor activo.
+
+Revalidación fresca posterior a la localización del error de descarga de
+subtítulos (2026-09-06): `:app:testMobileDebugUnitTest` y
+`:app:testTvDebugUnitTest` terminaron en `BUILD SUCCESSFUL` en 7m17s. El
+mensaje de reserva ya no está escrito en inglés en las pantallas de películas
+y episodios; queda cubierto por los cuatro catálogos Android garantizados, con
+452 claves cada uno. La compilación emitió únicamente avisos de APIs
+deprecadas, sin errores.
+
+Build TV de QA posterior a esa corrección: `:app:assembleTvDebug` terminó en
+`BUILD SUCCESSFUL` el 2026-09-06. APK
+`app/build/outputs/apk/tv/debug/app-tv-debug.apk`, SHA-256
+`183A45E568BBB3322C870698E8CB59D81F0E18D4A6B9382A4B02E49E791CE3CA`.
+Se instaló correctamente por ADB en el Fire TV AFTSS y la actividad principal
+quedó activa; el log de arranque no mostró `FATAL EXCEPTION` ni
+`AndroidRuntime`.
+
+- Móvil: `app/build/outputs/apk/mobile/release/velora-release-unsigned.apk`
+  SHA-256 `06EF392D2A0FD6C09868D4E934BBF2B46672125235B5347A147FC052B93CB1EA`.
+- TV: `app/build/outputs/apk/tv/release/velora-release-unsigned.apk`
+  SHA-256 `AD1C8525CA7A867B2D71AEF1678D3176128C2F7F461B79B4B743AE69976FE857`.
+
+Las variantes release se regeneraron correctamente después del selector
+centralizado de backend el 2026-09-06. Siguen sin firma: `apksigner` las rechaza
+con `Missing META-INF/MANIFEST.MF`, por lo que no se publican como release.
+
+Las releases etiquetadas `vX.Y.0` exigen secretos de firma Android. Sin ellos,
+el workflow falla deliberadamente en vez de publicar un APK no instalable como
+release pública. El changelog de release está en castellano y agrupa cambios
+relevantes.
+
+## Plataformas
+
+| Plataforma | Estado verificable |
+| --- | --- |
+| Android móvil/tablet | Compila y pasa tests unitarios locales |
+| Android TV / Fire TV | Compila y pasa tests unitarios; pantalla de acceso y transporte de autenticación validados en Fire TV AFTSS; sesión Jellyfin válida, reproducción y Live TV aún pendientes |
+| Web | Bundle y tests locales correctos |
+| Samsung Tizen | Bundle preparado; falta Tizen Studio, firma y dispositivo/emulador |
+| LG webOS | IPK generado con `ares-package` 3.2.5; el emulador configurado no está accesible |
+| Hisense VIDAA | Bundle HTML5 y metadatos preparados; falta portal/certificación |
+| iPhone/iPad/tvOS | Base Swift Package y CI macOS configuradas; no hay Xcode en este host |
+
+La validación Apple se ejecuta en `macos-14` mediante GitHub Actions. No se
+declara certificación de tienda ni de hardware sin esa ejecución o dispositivo.
+
+## Jellyfin y hardware conectado
+
+- En la revalidación del 2026-09-06, la raíz del servidor configurado respondió
+  la WebGUI de Unraid; el endpoint Jellyfin correcto quedó localizado en el
+  puerto HTTP configurado y su información pública devuelve Jellyfin `10.11.11`.
+  La autenticación en ese endpoint devuelve `HTTP 401` con las credenciales
+  probadas, por lo que todavía no se certifican catálogo, Live TV,
+  `PlaybackInfo` ni reproducción real. No se publica aquí la dirección privada.
+- El smoke test identifica la etapa (`información pública`, `autenticación`,
+  `listado Live TV` o `PlaybackInfo`), exige JSON Jellyfin en
+  `/System/Info/Public`, elimina espacios accidentales de la URL y no registra
+  credenciales ni tokens.
+- El smoke test valida que `/System/Info/Public` sea JSON Jellyfin, elimina
+  espacios accidentales de la URL y conserva el diagnóstico de respuestas sin
+  código HTTP, sin registrar credenciales ni tokens.
+- Comprobación ADB del 2026-09-06: Fire TV AFTSS conectado por ADB; instalación
+  del APK TV de QA correcta, arranque explícito de `MainActivity` correcto y
+  captura/UIAutomator confirmaron la pantalla de conexión a 1920×1080.
+- En la misma sesión, el servidor indicado fue alcanzable por red y por el
+  puerto configurado, pero la validación de `System/Info/Public` no devolvió un
+  servidor Jellyfin aceptable para Velora. La app mostró el error de conexión
+  sin cerrarse; no se continúa con credenciales ni se certifican catálogo,
+  Live TV, `PlaybackInfo` o reproducción.
+- Intento autenticado adicional del 2026-09-06 contra el servidor indicado:
+  la primera llamada de login respondió `400` y el reintento con la cabecera
+  oficial de cliente terminó por timeout; no se marca como válida ninguna
+  prueba de catálogo, Live TV, `PlaybackInfo` o reproducción y no se guardaron
+  credenciales ni tokens.
+- Revalidación del endpoint LAN indicado en la misma fecha: la información
+  pública de Jellyfin respondió correctamente y el puerto HTTP estaba abierto,
+  pero la petición de autenticación volvió a agotar el tiempo de espera desde
+  el host de QA. Por ello siguen sin certificarse catálogo, Live TV,
+  `PlaybackInfo` o reproducción real.
+- Smoke test autenticado repetido el 2026-09-09 contra el endpoint LAN
+  configurado por el usuario: `/System/Info/Public` respondió como Jellyfin, pero
+  `Users/AuthenticateByName` devolvió `HTTP 401` en la revalidación posterior.
+  No se guardaron credenciales ni tokens y no se certifican catálogo,
+  agrupación de canales, Live TV, `PlaybackInfo` ni reproducción real. El host
+  de QA tampoco dispone de `adb` en esta sesión, por lo que no se ejecutó una
+  comprobación adicional en Fire TV.
+- Prueba limpia en Fire TV AFTSS del 2026-09-08 con la build de QA
+  `1C4B8469341E85A9B9181754D4EBFAFD687E1BD95A7ECCAC2CE910AB5327E3DD`:
+  tras borrar los datos locales, descubrir el servidor y enviar el formulario
+  de contraseña, el cliente recibió inmediatamente `HTTP 401` y mostró el
+  error de credenciales en español. El cambio de autenticación a OkHttp evita
+  el bloqueo/timeout observado con el transporte Android anterior; la sesión
+  no fue aceptada por el servidor y por tanto siguen sin certificarse catálogo,
+  Live TV, `PlaybackInfo` o reproducción. No se registraron credenciales ni
+  tokens.
+- Tras el ajuste de identidad de cliente de reproducción (`bf6db85`), la suite
+  de compilación de las variantes móvil y TV y sus tests unitarios vuelven a
+  pasar. Esto valida el contrato de código, pero no sustituye la prueba de
+  reproducción con una sesión Jellyfin autenticada.
+- La suite Android móvil y TV volvió a pasar después de esta mejora del
+  selector Live TV: `:app:testMobileDebugUnitTest` y
+  `:app:testTvDebugUnitTest` terminaron con `BUILD SUCCESSFUL` el 2026-09-08.
+- La suite web/Smart TV terminó correctamente el 2026-09-09 (`node
+  web/scripts/test-platform.mjs`): sus contratos verifican que Live TV agrupa
+  variantes por la ID del canal, conserva cada `MediaSource`, abre el selector
+  cuando hay varias fuentes y mantiene la reproducción directa cuando solo
+  existe una.
+- Contratos transversales revalidados el 2026-09-09: política de releases,
+  superficie offline móvil/tablet, identidad pública, autenticación Jellyfin,
+  metadatos de empaquetado Smart TV y coherencia de versión `1.4.0` pasaron.
+- Empaquetado web multiplataforma en QA aislado: el bundle Samsung/Tizen y el
+  bundle VIDAA se generan correctamente, pero Tizen Studio/CLI no está
+  instalado y por eso no se presenta un `.wgt`; `ares-package` sí generó el
+  `.ipk` webOS `com.klortek.velora_1.4.0_all.ipk`. Ninguno de estos resultados
+  certifica firma, tienda ni ejecución en hardware real.
+- Comprobación adicional del 2026-09-09: `ares-package` y `ares-install` están
+  disponibles en versión 3.2.5; el perfil `emulator` apunta a
+  `127.0.0.1:6622`, pero `ares-device -i -d emulator` devuelve
+  `ECONNREFUSED`. El IPK se regeneró y `check-tv-packaging-output.mjs` confirmó
+  metadatos coherentes; la ejecución en webOS sigue sin estar certificada.
+- Apple Live TV conserva ahora `ChannelType`, `ServiceName` y `MediaSource.Name`
+  para rotular el selector de variantes sin inspeccionar ni mostrar rutas de
+  reproducción. Se añadió cobertura de decodificación; la ejecución Swift
+  sigue pendiente de macOS/Xcode en CI.
+- En Apple, tocar una fila con varias fuentes abre ahora directamente el
+  selector; los canales de una sola fuente reproducen al instante. El selector
+  usa un diálogo nativo con foco/remote y textos localizados, sin depender de
+  un icono secundario.
+- Build TV de QA instalada en Fire TV AFTSS el 2026-09-08 desde el estado
+  `6ff83ef`, SHA-256 `5CACDBD89C02A94B4E854FF762CD9458EA13929836917E680C62388C573A72EE`.
+  La actividad principal arrancó y el logcat no mostró `FATAL EXCEPTION`,
+  `AndroidRuntime` ni `ANR`; no se interpreta como certificación de catálogo,
+  Live TV o reproducción autenticada.
+- La APK TV del commit `6c512be` se recompiló e instaló después con SHA-256
+  `9F7E55ED62F3C9D334A56E0301CA4D483EAAC8F7ABF75D78DACA0DB396959050` y volvió
+  a arrancar en `MainActivity` sin `FATAL EXCEPTION`, `AndroidRuntime` ni `ANR`.
+- Revalidación autenticada del 2026-09-08 contra el endpoint Jellyfin activo:
+  la información pública responde, pero el contrato `Pw` usado por Velora
+  recibe `HTTP 400 Error processing request` desde el servidor. La APK TV
+  instalada queda enfocada en `MainActivity` sin excepciones fatales; no se
+  marca como válida ninguna prueba posterior de catálogo, Live TV o
+  reproducción hasta que la autenticación sea aceptada.
+- Diagnóstico adicional del mismo endpoint: las solicitudes controladas con el
+  contrato estándar `Pw` y con el campo alternativo `Password` reciben ambas
+  `HTTP 400`. Esto descarta un simple desajuste de nombre de campo en Velora;
+  el rechazo queda atribuido al endpoint/proxy/configuración del servidor sin
+  registrar credenciales, tokens ni cuerpos de respuesta.
+- Build TV de QA del commit `2f6184f` instalada en el Fire TV AFTSS el
+  2026-09-08: `app-tv-debug.apk`, SHA-256
+  `CD2E8482B4817D91213987576A8A820EC216F75190A1D7E2C607AD4DB93608E8`.
+  `MainActivity` quedó reanudada y los logs no muestran `FATAL EXCEPTION`,
+  `AndroidRuntime` ni `ANR`; esto valida el arranque, no una sesión Jellyfin
+  autenticada.
+
+## Pendiente verificable
+
+- Comprobación de entorno del 2026-09-09: el endpoint LAN de QA está accesible
+  y `/System/Info/Public` identifica Jellyfin `12.0.0`. Esta prueba no
+  autentica ni modifica el servidor; el smoke completo sigue separado para no
+  registrar credenciales ni direcciones privadas en el entorno de trabajo.
+- Smoke autenticado reintentado durante esta sesión: el servidor respondió,
+  pero rechazó las credenciales disponibles con HTTP 401. No se guarda ni se
+  imprime ninguna credencial; queda pendiente repetirlo cuando el acceso de QA
+  esté actualizado.
+- Obtener una ejecución autenticada completa contra Jellyfin para probar
+  biblioteca, Live TV, reproducción ExoPlayer, audio, subtítulos y zapping.
+- Ejecutar la suite Swift en macOS y validar iOS/iPadOS/tvOS en simulador o
+  hardware.
+- Instalar Tizen Studio y validar `.wgt` firmado en runtime real.
+- Validar webOS, VIDAA y Fire TV en sus dispositivos reales.
+- Configurar firma Android y credenciales de publicación antes de crear una
+  release pública.
+- Auditoría pública del 2026-09-09: GitHub sí devuelve la pre-release QA
+  `v1.4.0`, que contiene los artefactos unsigned identificados en este
+  dashboard, incluidas las APK de agrupación y zapping Live TV. No se presenta
+  como distribución de tienda ni como build firmada.
+- Reconciliar el tag/release `v1.4.0` con una build firmada del estado que se
+  quiera distribuir; no se mueve ni sobrescribe el tag existente
+  automáticamente. Hasta entonces, las descargas QA siguen separadas de una
+  release de producción.
+- Completar pruebas de rendimiento visual, memoria y FPS con bibliotecas de
+  1.000, 10.000 y 50.000 elementos en dispositivos reales; el núcleo de
+  ordenación/filtrado ya tiene cobertura sintética en Android móvil y TV.
+
+## Regla de publicación
+
+Solo se publica una release cuando el cambio sea un bloque funcional o una
+corrección crítica/seguridad, el changelog esté actualizado, los artefactos
+estén firmados y las sumas SHA-256 coincidan. Las builds unsigned permanecen
+en QA y no se presentan como releases públicas.

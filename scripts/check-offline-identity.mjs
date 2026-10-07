@@ -1,0 +1,44 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+
+const database = fs.readFileSync('app/src/main/java/com/klortek/velora/offline/OfflineDatabase.kt', 'utf8');
+const manager = fs.readFileSync('app/src/main/java/com/klortek/velora/offline/OfflineDownloadManager.kt', 'utf8');
+const settings = fs.readFileSync('app/src/main/java/com/klortek/velora/jellyfin/AppSettings.kt', 'utf8');
+const identity = fs.readFileSync('app/src/main/java/com/klortek/velora/offline/OfflineIdentity.kt', 'utf8');
+
+assert.match(database, /\n    12\n\)\s*\{/,
+  'offline database must have a migration version for account-scoped identity and transfer telemetry');
+assert.match(database, /entry_key TEXT NOT NULL PRIMARY KEY/,
+  'offline database must key rows by a durable identity, not item ID alone');
+const createTable = database.match(/override fun onCreate\(db: SQLiteDatabase\) \{([\s\S]*?)\n    \}/)?.[1] ?? '';
+assert.ok(createTable, 'offline database must expose a readable onCreate schema');
+assert.equal((createTable.match(/PRIMARY KEY/g) ?? []).length, 1,
+  'fresh offline database schema must declare exactly one primary key');
+assert.match(createTable, /CREATE INDEX downloads_item_quality/,
+  'fresh offline database schema must index item and quality lookups');
+assert.match(database, /downloads_v11/,
+  'offline database must rebuild legacy rows when introducing the identity key');
+assert.match(database, /offlineEntryKey\(this@values\)/,
+  'offline writes must persist the account-scoped identity key');
+assert.match(identity, /serverUrl.*userId.*itemId.*quality/s,
+  'offline identity must include server, user, item and quality');
+assert.match(manager, /workNameFor\(itemId, quality, serverUrl, userId\)/,
+  'WorkManager names must be scoped to the account as well');
+assert.match(manager, /offlineAccountMatches\(first, second\)/,
+  'in-memory identity comparisons must include account ownership');
+assert.match(settings, /offlineChargingOnly/,
+  'offline settings must expose an optional charging-only policy');
+assert.match(manager, /setRequiresCharging\(requiresCharging\)/,
+  'offline WorkManager requests must enforce the charging-only policy');
+assert.match(manager, /fun pause\(context: Context, entry: OfflineDownload\)/,
+  'offline downloads must support reversible pause');
+assert.match(manager, /fun resume\(context: Context, entry: OfflineDownload\)/,
+  'offline downloads must support durable resume');
+assert.match(manager, /entry.state != OfflineDownloadState.PAUSED/,
+  'paused downloads must not be silently re-enqueued during refresh');
+assert.match(database, /speed_bps INTEGER NOT NULL DEFAULT 0/,
+  'offline database must persist transfer speed');
+assert.match(database, /eta_seconds INTEGER/,
+  'offline database must persist transfer ETA');
+
+console.log('Offline identity contract passed: server/user scoped SQLite and WorkManager keys are protected.');

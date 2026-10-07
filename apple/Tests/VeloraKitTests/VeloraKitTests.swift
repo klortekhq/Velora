@@ -1,0 +1,624 @@
+import XCTest
+@testable import VeloraKit
+
+final class VeloraKitTests: XCTestCase {
+
+    func testOfflineRedirectRequiresSameOrigin() {
+        let original = URL(string: "https://jellyfin.example/Items/a/Download")!
+        XCTAssertTrue(VeloraOfflineTransferCoordinator.isSafeOfflineRedirect(
+            from: original,
+            to: URL(string: "https://JELLYFIN.example/Items/a/Download?redirected=1")!
+        ))
+        XCTAssertFalse(VeloraOfflineTransferCoordinator.isSafeOfflineRedirect(
+            from: original,
+            to: URL(string: "https://attacker.example/file")!
+        ))
+        XCTAssertFalse(VeloraOfflineTransferCoordinator.isSafeOfflineRedirect(
+            from: original,
+            to: URL(string: "http://jellyfin.example/file")!
+        ))
+        XCTAssertFalse(VeloraOfflineTransferCoordinator.isSafeOfflineRedirect(
+            from: original,
+            to: URL(string: "https://jellyfin.example:8443/file")!
+        ))
+    }
+    func testExecutableFallbackUsesSharedKitLocalization() {
+        XCTAssertFalse(VeloraLocalized.connectToJellyfin.isEmpty)
+    }
+
+    func testOfflineIsMobileOnly() {
+        XCTAssertTrue(VeloraPlatform.iPhone.supportsOfflineDownloads)
+        XCTAssertTrue(VeloraPlatform.iPad.supportsOfflineDownloads)
+        XCTAssertFalse(VeloraPlatform.tvOS.supportsOfflineDownloads)
+    }
+
+    func testDownloadQualityProducesBoundedRequests() {
+        XCTAssertNil(VeloraDownloadQuality.original.maxWidth)
+        XCTAssertEqual(VeloraDownloadQuality.high.maxWidth, 1920)
+        XCTAssertEqual(VeloraDownloadQuality.medium.videoBitrate, 5_000_000)
+        XCTAssertEqual(VeloraDownloadQuality.low.videoBitrate, 2_000_000)
+    }
+
+    func testOfflineStoreKeepsAnOperatingSystemStorageReserve() {
+        let store = VeloraOfflineStore(rootURL: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        XCTAssertEqual(store.minimumFreeBytes, 512 * 1024 * 1024)
+        XCTAssertTrue(store.hasCapacity(forAdditionalBytes: 0))
+    }
+
+    func testBackgroundTransferMetadataNeverContainsCredentials() throws {
+        let metadata = VeloraOfflineTransferMetadata(
+            itemID: "item-1",
+            title: "Movie",
+            serverURL: "https://jellyfin.example",
+            quality: .medium
+        )
+        let data = try JSONEncoder().encode(metadata)
+        let text = String(decoding: data, as: UTF8.self)
+        XCTAssertFalse(text.localizedCaseInsensitiveContains("token"))
+        XCTAssertFalse(text.localizedCaseInsensitiveContains("password"))
+        XCTAssertTrue(text.contains("medium"))
+    }
+
+    func testServerURLValidationRejectsEmbeddedCredentialsAndParameters() throws {
+        XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "http://192.0.2.10:8096")!))
+        XCTAssertNoThrow(try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test/base")!))
+        XCTAssertThrowsError(try JellyfinClient(serverURL: URL(string: "https://user:pass@jellyfin.example.test")!))
+        XCTAssertThrowsError(try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test?token=secret")!))
+        XCTAssertThrowsError(try JellyfinClient(serverURL: URL(string: "ftp://jellyfin.example.test")!))
+    }
+
+    func testJellyfinPathSegmentsRejectRouteDelimitersAndDotSegments() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.example.test:8096")!)
+
+        let invalidVideoURL = await client.videoURL(itemID: "movie?escape")
+        let invalidImageURL = await client.imageURL(itemID: "movie-1", kind: "Primary/../System")
+        let invalidDotSegment = try await client.liveTvPlaybackURL(userID: "user-1", channelID: "../escape")
+        let invalidFragment = try await client.liveTvPlaybackURL(userID: "user-1", channelID: "channel#1")
+        let invalidPersonItems = try await client.items(userID: "user%2F1", forPerson: "person-1")
+
+        XCTAssertNil(invalidVideoURL)
+        XCTAssertNil(invalidImageURL)
+        XCTAssertNil(invalidDotSegment)
+        XCTAssertNil(invalidFragment)
+        XCTAssertTrue(invalidPersonItems.isEmpty)
+    }
+
+    func testThemeSongURLUsesAuthenticatedServerPathWithoutTokenQuery() async throws {
+        MockURLProtocol.handler = { request in
+            XCTAssertEqual(request.url?.path, "/Items/title-1/ThemeSongs")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"1.4.0\", Token=\"session-secret\"")
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(#"{"Items":[{"Id":"theme-1"}]}"#.utf8))
+        }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let client = try JellyfinClient(
+            serverURL: URL(string: "http://jellyfin.example.test:8096")!,
+            session: URLSession(configuration: configuration)
+        )
+        await client.setAccessToken("session-secret")
+
+        let url = await client.themeSongURL(itemID: "title-1", userID: "user-1")
+        XCTAssertEqual(url?.path, "/Audio/theme-1/universal")
+        let query = URLComponents(url: try XCTUnwrap(url), resolvingAgainstBaseURL: false)?.queryItems ?? []
+        XCTAssertEqual(query.first(where: { $0.name == "UserId" })?.value, "user-1")
+        XCTAssertEqual(query.first(where: { $0.name == "TranscodingProtocol" })?.value, "hls")
+        XCTAssertFalse(url?.absoluteString.localizedCaseInsensitiveContains("token") ?? true)
+        MockURLProtocol.handler = nil
+    }
+
+    func testTrailersUseJellyfin12ItemsCatalogContract() async throws {
+        MockURLProtocol.handler = { request in
+            guard let requestURL = request.url else {
+                XCTFail("Expected a trailer catalog URL")
+                fatalError("Missing trailer catalog URL")
+            }
+            let components = URLComponents(url: requestURL, resolvingAgainstBaseURL: false)
+            XCTAssertEqual(request.url?.path, "/Items")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "ParentId" })?.value, "movie-1")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "IncludeItemTypes" })?.value, "Trailer")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"1.4.0\", Token=\"session-secret\"")
+            let response = HTTPURLResponse(url: requestURL, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+            return (response, Data(#"{"Items":[{"Id":"trailer-1","Name":"Trailer","Type":"Trailer"}],"TotalRecordCount":1}"#.utf8))
+        }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.example.test:8096")!, session: URLSession(configuration: configuration))
+        await client.setAccessToken("session-secret")
+        let trailers = try await client.trailers(for: "movie-1", userID: "user-1")
+        XCTAssertEqual(trailers.map(\.id), ["trailer-1"])
+        MockURLProtocol.handler = nil
+    }
+
+    func testLiveTvChannelsFollowJellyfinPagination() async throws {
+        MockURLProtocol.handler = { request in
+            let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)
+            let startIndex = Int(components?.queryItems?.first(where: { $0.name == "StartIndex" })?.value ?? "-1")!
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "Limit" })?.value, "100")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "AddCurrentProgram" })?.value, "true")
+            let body: String
+            if startIndex == 0 {
+                body = #"{"Items":[{"Id":"channel-1","Name":"Canal 1"}],"TotalRecordCount":2}"#
+            } else {
+                XCTAssertEqual(startIndex, 1)
+                body = #"{"Items":[{"Id":"channel-2","Name":"Canal 2"}],"TotalRecordCount":2}"#
+            }
+            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+            return (response, Data(body.utf8))
+        }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.example.test:8096")!, session: URLSession(configuration: configuration))
+        await client.setAccessToken("session-secret")
+
+        let channels = try await client.liveTvChannels(userID: "user-1")
+        XCTAssertEqual(channels.map(\.id), ["channel-1", "channel-2"])
+        MockURLProtocol.handler = nil
+    }
+
+    func testPersonFilmographyFollowsJellyfinPagination() async throws {
+        MockURLProtocol.handler = { request in
+            let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)
+            XCTAssertEqual(request.url?.path, "/Users/user-1/Items")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "PersonIds" })?.value, "person-1")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "IncludeItemTypes" })?.value, "Movie,Series")
+            XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "Limit" })?.value, "100")
+            let startIndex = Int(components?.queryItems?.first(where: { $0.name == "StartIndex" })?.value ?? "-1")!
+            let body: String
+            if startIndex == 0 {
+                body = #"{"Items":[{"Id":"movie-1","Name":"Primera","Type":"Movie"}],"TotalRecordCount":2}"#
+            } else {
+                XCTAssertEqual(startIndex, 1)
+                body = #"{"Items":[{"Id":"series-1","Name":"Segunda","Type":"Series"}],"TotalRecordCount":2}"#
+            }
+            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+            return (response, Data(body.utf8))
+        }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.example.test:8096")!, session: URLSession(configuration: configuration))
+        await client.setAccessToken("session-secret")
+
+        let works = try await client.items(userID: "user-1", forPerson: "person-1")
+        XCTAssertEqual(works.map(\.id), ["movie-1", "series-1"])
+        MockURLProtocol.handler = nil
+    }
+
+    func testPlaybackPrefersDirectPlay() {
+        let caps = PlaybackCapabilities(videoCodecs: ["H264"], audioCodecs: ["AAC"], containers: ["MP4"])
+        let source = PlaybackSource(container: "MP4", videoCodec: "H264", audioCodec: "AAC")
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directPlay)
+    }
+
+    func testPlaybackNormalizesJellyfinCapabilityAliases() {
+        let caps = PlaybackCapabilities(
+            videoCodecs: ["HEVC"],
+            audioCodecs: ["EAC3"],
+            containers: ["MKV"],
+            hdrFormats: ["dolby-vision"]
+        )
+        let source = PlaybackSource(
+            container: "matroska",
+            videoCodec: "H265",
+            audioCodec: "EC-3",
+            hdrFormat: "Dolby Vision"
+        )
+
+        XCTAssertEqual(PlaybackDecisionEngine.canonicalCapability("x265"), "hevc")
+        XCTAssertEqual(PlaybackDecisionEngine.canonicalCapability("mpeg transport stream"), "ts")
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directPlay)
+    }
+
+    func testPlaybackFallsBackWhenActualDeviceLimitsAreExceeded() {
+        let caps = PlaybackCapabilities(videoCodecs: ["h264"], audioCodecs: ["aac"], containers: ["mp4"], maxAudioChannels: 2, maxWidth: 1920)
+        let source = PlaybackSource(container: "mp4", videoCodec: "h264", audioCodec: "aac", audioChannels: 6, width: 3840, height: 2160)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .transcode)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps, quality: .fullHD10), .transcode)
+    }
+
+    func testQualityPresetChecksHeightAsWellAsWidth() {
+        let caps = PlaybackCapabilities(videoCodecs: ["h264"], audioCodecs: ["aac"], containers: ["mp4"])
+        let source = PlaybackSource(container: "mp4", videoCodec: "h264", audioCodec: "aac", width: 1920, height: 2160, bitrateKbps: 8_000)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps, quality: .fullHD10), .transcode)
+    }
+
+    func testDirectStreamCannotBypassDeviceOrQualityLimits() {
+        let caps = PlaybackCapabilities(videoCodecs: ["h264"], audioCodecs: ["aac"], containers: ["mp4"], maxWidth: 1920, maxHeight: 1080)
+        let source = PlaybackSource(container: "mp4", videoCodec: "h264", audioCodec: "aac", width: 3840, height: 2160, bitrateKbps: 50_000)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .transcode)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps, quality: .fullHD20), .transcode)
+    }
+
+    func testQualityPresetDoesNotAddCapsToOriginal() {
+        let caps = PlaybackCapabilities(videoCodecs: ["hevc"], audioCodecs: ["eac3"], containers: ["mkv"])
+        let source = PlaybackSource(container: "mkv", videoCodec: "hevc", audioCodec: "eac3", width: 7680, height: 4320, bitrateKbps: 100_000)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .directPlay)
+    }
+
+    func testMeasuredNetworkLimitDoesNotForceOriginalSourceThroughDirectPlay() {
+        let caps = PlaybackCapabilities(videoCodecs: ["hevc"], audioCodecs: ["eac3"], containers: ["mkv"], networkMaxBitrateKbps: 20_000)
+        let source = PlaybackSource(container: "mkv", videoCodec: "hevc", audioCodec: "eac3", bitrateKbps: 40_000)
+        XCTAssertEqual(PlaybackDecisionEngine.decide(source: source, capabilities: caps), .transcode)
+    }
+
+    func testSettingsClampMusicVolumeAndKeepAppleTVStreamingOnly() {
+        let settings = VeloraSettings(themeMusicVolume: 4)
+        XCTAssertEqual(settings.themeMusicVolume, 1)
+        XCTAssertFalse(VeloraPlatform.tvOS.supportsOfflineDownloads)
+    }
+
+    func testSubtitlePreferenceIsCodable() throws {
+        let settings = VeloraSettings(subtitlePreference: .preferred, preferredSubtitleLanguage: "es")
+        let data = try JSONEncoder().encode(settings)
+        let restored = try JSONDecoder().decode(VeloraSettings.self, from: data)
+        XCTAssertEqual(restored, settings)
+    }
+
+    func testSettingsStoreRoundTripsDeviceLocalPreferences() {
+        let suiteName = "velora.settings.tests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer {
+            defaults.removePersistentDomain(forName: suiteName)
+        }
+
+        let store = VeloraSettingsStore(defaults: defaults, key: "settings")
+        let expected = VeloraSettings(
+            languageIdentifier: VeloraLanguage.french.rawValue,
+            preferredAudioLanguage: "fr",
+            subtitlePreference: .preferred,
+            preferredSubtitleLanguage: "fr",
+            performanceMode: .balanced,
+            themeMusicEnabled: true,
+            themeMusicVolume: 0.42
+        )
+
+        XCTAssertNil(store.load())
+        store.save(expected)
+        XCTAssertEqual(store.load(), expected)
+        store.remove()
+        XCTAssertNil(store.load())
+    }
+
+    func testOfflineStorePersistsAndRemovesManagedMedia() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let store = VeloraOfflineStore(rootURL: root)
+        let temporary = root.appendingPathComponent("incoming.bin")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        try Data("media".utf8).write(to: temporary)
+
+        let entry = try store.add(mediaAt: temporary, itemID: "item-1", title: "Example", serverURL: "https://jellyfin.example")
+        XCTAssertEqual(store.load(), [entry])
+        XCTAssertEqual(entry.byteCount, 5)
+        XCTAssertEqual(entry.checksumSha256, "721c9525ade2ea8903d343ef25cf68b9bf4ab0aad56bb7b01fbe48d09bc7fcf4")
+        XCTAssertEqual(store.verifyIntegrity(entry)?.checksumSha256, entry.checksumSha256)
+        XCTAssertEqual(try Data(contentsOf: store.mediaURL(for: entry)), Data("media".utf8))
+        try Data("tampered".utf8).write(to: store.mediaURL(for: entry), options: .atomic)
+        XCTAssertNil(store.verifyIntegrity(entry))
+
+        try store.remove(entry)
+        XCTAssertTrue(store.load().isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: store.mediaURL(for: entry).path))
+        try? FileManager.default.removeItem(at: root)
+    }
+
+    func testOfflineStorePersistsSelectedDownloadQuality() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let store = VeloraOfflineStore(rootURL: root)
+        let temporary = root.appendingPathComponent("medium.bin")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        try Data("medium-media".utf8).write(to: temporary)
+
+        let entry = try store.add(
+            mediaAt: temporary,
+            itemID: "item-medium",
+            title: "Example",
+            serverURL: "https://jellyfin.example",
+            quality: .medium
+        )
+
+        XCTAssertEqual(entry.quality, .medium)
+        XCTAssertEqual(store.load().first?.quality, .medium)
+        try? FileManager.default.removeItem(at: root)
+    }
+
+    func testOfflineStoreScopesSameItemByAccountAndQuality() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let store = VeloraOfflineStore(rootURL: root)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        for (name, contents) in [("one.bin", "one"), ("two.bin", "two"), ("three.bin", "three")] {
+            try Data(contents.utf8).write(to: root.appendingPathComponent(name))
+        }
+
+        let first = try store.add(mediaAt: root.appendingPathComponent("one.bin"), itemID: "same", title: "Example", serverURL: "https://jellyfin.example/", userID: "user-a")
+        let second = try store.add(mediaAt: root.appendingPathComponent("two.bin"), itemID: "same", title: "Example", serverURL: "https://jellyfin.example", userID: "user-b")
+        let third = try store.add(mediaAt: root.appendingPathComponent("three.bin"), itemID: "same", title: "Example", serverURL: "https://jellyfin.example", userID: "user-a", quality: .medium)
+
+        XCTAssertEqual(Set(store.load().map(\.id)), Set([first.id, second.id, third.id]))
+        XCTAssertEqual(store.load().count, 3)
+        try? FileManager.default.removeItem(at: root)
+    }
+
+    func testOfflineCatalogDefaultsLegacyEntriesToOriginalQuality() throws {
+        let legacy = """
+        {"id":"legacy","itemID":"item-legacy","title":"Legacy","serverURL":"https://jellyfin.example","fileName":"media.bin","createdAt":0,"byteCount":4,"checksumSha256":null}
+        """.data(using: .utf8)!
+
+        let entry = try JSONDecoder().decode(VeloraOfflineDownload.self, from: legacy)
+        XCTAssertEqual(entry.quality, .original)
+    }
+
+    func testOfflineDownloadDecodesLegacyMetadataWithoutIntegrityFields() throws {
+        let legacy = #"{"id":"legacy-1","itemID":"item-legacy","title":"Legacy","serverURL":"https://jellyfin.example","fileName":"media.bin","createdAt":"2026-01-01T00:00:00Z"}"#.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let entry = try decoder.decode(VeloraOfflineDownload.self, from: legacy)
+        XCTAssertNil(entry.byteCount)
+        XCTAssertNil(entry.checksumSha256)
+    }
+
+    func testCredentialStoreRoundTripsAndRemovesSession() {
+        let suiteName = "velora.credentials.tests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let store = VeloraCredentialStore(
+            service: "test.service",
+            account: "test.account",
+            defaults: defaults,
+            defaultsKey: "session"
+        )
+        let expected = JellyfinSession(accessToken: "secret-token", userID: "user-1", username: "demo-user", serverURL: "http://jellyfin.local:8096")
+        XCTAssertNil(store.load())
+        XCTAssertTrue(store.save(expected))
+        XCTAssertEqual(store.load(), expected)
+        XCTAssertTrue(store.remove())
+        XCTAssertNil(store.load())
+    }
+
+    func testLanguageSelectionUsesDeviceLocaleByDefaultAndSupportsSupportedLocales() {
+        let automatic = VeloraSettings()
+        XCTAssertFalse(automatic.appLocale.identifier.isEmpty)
+        XCTAssertNil(automatic.languageIdentifier)
+        XCTAssertEqual(Set(VeloraLanguage.allCases.map(\.rawValue)), Set(["es", "en", "fr", "de"]))
+
+        let settings = VeloraSettings(languageIdentifier: VeloraLanguage.spanish.rawValue)
+        XCTAssertEqual(settings.appLocale.identifier, "es")
+    }
+
+    func testJellyfinItemDecodesServerFieldNames() throws {
+        let data = #"{"Id":"movie-1","Name":"Una película","Type":"Movie","Overview":"Descripción","ImageTags":{"Primary":"abc"},"ProductionYear":2025,"UserData":{"PlaybackPositionTicks":450000000,"Played":false},"People":[{"Id":"person-1","Name":"Actriz","Type":"Actor","Role":"Protagonista","PrimaryImageTag":"person-art"}]}"#.data(using: .utf8)!
+        let item = try JSONDecoder().decode(JellyfinItem.self, from: data)
+        XCTAssertEqual(item.id, "movie-1")
+        XCTAssertEqual(item.name, "Una película")
+        XCTAssertEqual(item.type, "Movie")
+        XCTAssertEqual(item.overview, "Descripción")
+        XCTAssertEqual(item.imageTags?["Primary"], "abc")
+        XCTAssertEqual(item.productionYear, 2025)
+        XCTAssertEqual(item.people?.first?.id, "person-1")
+        XCTAssertEqual(item.people?.first?.role, "Protagonista")
+        XCTAssertEqual(item.userData?.playbackPositionTicks, 450000000)
+        XCTAssertEqual(item.userData?.played, false)
+    }
+
+    func testLiveTvModelsDecodeServerFieldNames() throws {
+        let json = #"{"Id":"channel-1","Name":"Noticias","ChannelNumber":"24","ChannelType":"IPTV","ServiceName":"Lista local","MediaSources":[{"Id":"source-1","Name":"Fuente IPTV","LiveStreamId":"live-1"}],"CurrentProgram":{"Id":"program-1","Name":"Informativo","ChannelId":"channel-1","StartDate":"2026-09-01T10:00:00Z","EndDate":"2026-09-01T11:00:00Z","Overview":"Actualidad"}}"#
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let channel = try decoder.decode(JellyfinLiveTvChannel.self, from: json.data(using: .utf8)!)
+        XCTAssertEqual(channel.id, "channel-1")
+        XCTAssertEqual(channel.number, "24")
+        XCTAssertEqual(channel.currentProgram?.name, "Informativo")
+        XCTAssertEqual(channel.currentProgram?.channelID, "channel-1")
+        XCTAssertEqual(channel.mediaSources.first?.id, "source-1")
+        XCTAssertEqual(channel.channelType, "IPTV")
+        XCTAssertEqual(channel.serviceName, "Lista local")
+        XCTAssertEqual(channel.mediaSources.first?.name, "Fuente IPTV")
+    }
+
+    func testLiveTvChannelsGroupDuplicateRowsAndKeepSources() {
+        let first = JellyfinLiveTvChannel(
+            id: "channel-1", name: "Noticias", number: "24",
+            mediaSources: [JellyfinLiveTvMediaSource(id: "source-1", liveStreamID: "live-1", transcodingURL: nil, directStreamURL: nil, protocolName: nil)]
+        )
+        let second = JellyfinLiveTvChannel(
+            id: "channel-1", name: "Noticias IPTV", number: nil,
+            mediaSources: [JellyfinLiveTvMediaSource(id: "source-2", liveStreamID: "live-2", transcodingURL: nil, directStreamURL: nil, protocolName: nil)]
+        )
+        let grouped = JellyfinLiveTvChannel.grouped([first, second])
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.number, "24")
+        XCTAssertEqual(grouped.first?.mediaSources.compactMap(\.id), ["source-1", "source-2"])
+    }
+
+    func testLiveTvGroupingMergesDifferentProviderIDsByVisibleIdentity() {
+        let grouped = JellyfinLiveTvChannel.grouped([
+            JellyfinLiveTvChannel(
+                id: "tuner-channel", name: "DAZN F1", number: "42",
+                mediaSources: [JellyfinLiveTvMediaSource(id: "source-tuner")]
+            ),
+            JellyfinLiveTvChannel(
+                id: "iptv-channel", name: "  DAZN   F1 ", number: "42",
+                mediaSources: [JellyfinLiveTvMediaSource(id: "source-iptv")]
+            )
+        ])
+
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.id, "tuner-channel")
+        XCTAssertEqual(grouped.first?.mediaSources.compactMap(\.id), ["source-tuner", "source-iptv"])
+    }
+
+    func testLiveTvGroupingIsStableWhenProviderOmitsSourceIdentifiers() {
+        let emptySource = JellyfinLiveTvMediaSource(
+            id: nil, liveStreamID: nil, transcodingURL: nil,
+            directStreamURL: nil, protocolName: nil
+        )
+        let grouped = JellyfinLiveTvChannel.grouped([
+            JellyfinLiveTvChannel(id: "channel-1", name: "Noticias", mediaSources: [emptySource]),
+            JellyfinLiveTvChannel(id: "channel-1", name: "Noticias IPTV", mediaSources: [emptySource])
+        ])
+
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.mediaSources.count, 1)
+    }
+
+    func testLiveTvGroupingKeepsNamedSourcesWithoutIdentifiers() {
+        let grouped = JellyfinLiveTvChannel.grouped([
+            JellyfinLiveTvChannel(
+                id: "channel-1",
+                name: "Noticias",
+                mediaSources: [
+                    JellyfinLiveTvMediaSource(name: "Principal", protocolName: "hls"),
+                    JellyfinLiveTvMediaSource(name: "IPTV", protocolName: "hls")
+                ]
+            )
+        ])
+
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.mediaSources.compactMap(\.name), ["Principal", "IPTV"])
+    }
+
+    func testLiveTvGroupingPrefersRicherMetadataForRepeatedSource() {
+        let source = JellyfinLiveTvMediaSource(
+            id: "source-1", liveStreamID: "live-1", transcodingURL: nil,
+            directStreamURL: nil, protocolName: nil
+        )
+        let stale = JellyfinLiveTvChannel(id: "channel-1", name: "Noticias", mediaSources: [source])
+        let enriched = JellyfinLiveTvChannel(
+            id: "channel-1", name: "Noticias IPTV", number: "24", channelType: "IPTV",
+            currentProgram: JellyfinLiveTvProgram(id: "program-1", name: "Ahora"),
+            mediaSources: [source]
+        )
+
+        let grouped = JellyfinLiveTvChannel.grouped([stale, enriched])
+
+        XCTAssertEqual(grouped.count, 1)
+        XCTAssertEqual(grouped.first?.mediaSources.count, 1)
+        XCTAssertEqual(grouped.first?.name, "Noticias IPTV")
+        XCTAssertEqual(grouped.first?.currentProgram?.name, "Ahora")
+        XCTAssertEqual(grouped.first?.channelType, "IPTV")
+    }
+
+    func testLiveTvPlaybackInfoDecodesSelectedStreamURL() throws {
+        let json = #"{"MediaSources":[{"Id":"source-1","LiveStreamId":"live-1","TranscodingUrl":"http://jellyfin.local:8096/Videos/channel-1/stream.m3u8","Protocol":"hls"}]}"#
+        let info = try JSONDecoder().decode(JellyfinLiveTvPlaybackInfo.self, from: json.data(using: .utf8)!)
+        XCTAssertEqual(info.mediaSources.first?.liveStreamID, "live-1")
+        XCTAssertEqual(info.mediaSources.first?.transcodingURL?.path, "/Videos/channel-1/stream.m3u8")
+    }
+
+    func testLiveTvPlaybackSelectsRequestedSourceInsteadOfAlwaysUsingFirst() {
+        let primary = JellyfinLiveTvMediaSource(
+            id: "source-primary",
+            liveStreamID: "live-primary",
+            directStreamURL: URL(string: "http://jellyfin.local/primary.m3u8")
+        )
+        let iptv = JellyfinLiveTvMediaSource(
+            id: "source-iptv",
+            liveStreamID: "live-iptv",
+            directStreamURL: URL(string: "http://jellyfin.local/iptv.m3u8")
+        )
+
+        XCTAssertEqual(
+            JellyfinClient.selectLiveTvMediaSource([primary, iptv], requestedID: "source-iptv")?.id,
+            "source-iptv"
+        )
+        XCTAssertEqual(
+            JellyfinClient.selectLiveTvMediaSource([primary, iptv], requestedID: "live-iptv")?.id,
+            "source-iptv"
+        )
+        XCTAssertEqual(
+            JellyfinClient.selectLiveTvMediaSource([primary, iptv], requestedID: "unknown")?.id,
+            "source-primary"
+        )
+    }
+
+    func testPlaybackStoppedRequestUsesJellyfinFieldNamesAndClampsPosition() throws {
+        let request = JellyfinPlaybackStoppedRequest(itemID: "channel-1", positionTicks: 0)
+        let json = try JSONSerialization.jsonObject(with: JSONEncoder().encode(request)) as? [String: Any]
+        XCTAssertEqual(json?["ItemId"] as? String, "channel-1")
+        XCTAssertEqual(json?["PositionTicks"] as? Int64, 0)
+    }
+
+    func testVideoRequestUsesStreamEndpointWithoutCredentialQuery() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        let url = await client.videoURL(itemID: "movie-one")
+        XCTAssertEqual(url?.path, "/Videos/movie-one/stream")
+        XCTAssertEqual(url?.query, "static=true")
+        XCTAssertFalse(url?.absoluteString.contains("api_key") ?? true)
+    }
+
+    func testAuthorizedMediaRequestStripsCredentialQueryAndKeepsServerScope() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        await client.setAccessToken("session-secret")
+        let credentialed = URL(string: "http://jellyfin.local:8096/Videos/movie-one/stream?api_key=secret&quality=original")!
+        let request = await client.authorizedRequest(for: credentialed)
+        XCTAssertEqual(request.url?.query, "quality=original")
+        XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "MediaBrowser Client=\"Velora\", Device=\"Apple\", DeviceId=\"velora-apple\", Version=\"1.4.0\", Token=\"session-secret\"")
+    }
+
+    func testAuthorizedRequestDoesNotSendTokenToAnotherHost() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        await client.setAccessToken("session-secret")
+        let external = URL(string: "https://example.com/video.m3u8?api_key=secret")!
+        let request = await client.authorizedRequest(for: external)
+        XCTAssertEqual(request.url, external)
+        XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
+    }
+
+    func testAuthorizedRequestDoesNotSendTokenOutsideConfiguredServerPrefix() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "https://jellyfin.example.test/jellyfin")!)
+        await client.setAccessToken("session-secret")
+
+        let outside = URL(string: "https://jellyfin.example.test/admin/video.m3u8")!
+        let request = await client.authorizedRequest(for: outside)
+
+        XCTAssertEqual(request.url, outside)
+        XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
+    }
+
+    func testAuthenticationPayloadUsesJellyfinPasswordField() throws {
+        let payload = try JSONEncoder().encode(["Username": "demo-user", "Pw": "secret"])
+        let json = try JSONSerialization.jsonObject(with: payload) as? [String: String]
+        XCTAssertEqual(json?["Username"], "demo-user")
+        XCTAssertEqual(json?["Pw"], "secret")
+        XCTAssertNil(json?["Password"])
+    }
+
+    func testMediaIdentifiersAreEncodedAsPathComponents() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        let url = await client.videoURL(itemID: "movie with spaces")
+        XCTAssertTrue(url?.absoluteString.contains("/Videos/movie%20with%20spaces/stream") == true)
+        let slashURL = await client.videoURL(itemID: "movie/with-slash")
+        let traversalURL = await client.imageURL(itemID: "../escape")
+        XCTAssertNil(slashURL)
+        XCTAssertNil(traversalURL)
+    }
+
+    func testPersonFilmographyRejectsPathTraversalIdentifiers() async throws {
+        let client = try JellyfinClient(serverURL: URL(string: "http://jellyfin.local:8096")!)
+        let invalidUser = try await client.items(userID: "../escape", forPerson: "person-1")
+        let invalidPerson = try await client.items(userID: "user-1", forPerson: "../escape")
+        XCTAssertTrue(invalidUser.isEmpty)
+        XCTAssertTrue(invalidPerson.isEmpty)
+    }
+}
+
+private final class MockURLProtocol: URLProtocol {
+    static var handler: ((URLRequest) -> (HTTPURLResponse, Data))?
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func startLoading() {
+        guard let handler = Self.handler else {
+            client?.urlProtocol(self, didFailWithError: URLError(.badServerResponse))
+            return
+        }
+        let (response, data) = handler(request)
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: data)
+        client?.urlProtocolDidFinishLoading(self)
+    }
+    override func stopLoading() {}
+}

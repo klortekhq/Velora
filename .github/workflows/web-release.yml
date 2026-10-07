@@ -1,0 +1,145 @@
+name: Velora web packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Platform package to prepare
+        required: true
+        default: all
+        type: choice
+        options: [all, samsung, tizen, webos, vidaa]
+      release_tag:
+        description: 'Etiqueta existente que se quiere reconstruir y publicar (por ejemplo, v1.4.0). Vacío = QA sin release.'
+        required: false
+        type: string
+        default: ''
+  push:
+    tags:
+      # Keep public releases focused on meaningful product milestones.
+      - 'v*.*.0'
+
+permissions:
+  contents: write
+
+# Keep web validation independent from Android. Android runs concurrently and
+# is the publication gate for the signed APKs used by the common release.
+concurrency:
+  # Android must be able to run concurrently; publication waits for its signed
+  # APKs before this workflow touches the common release.
+  group: velora-release-web-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.release_tag || github.ref }}
+      - name: Configurar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+      - name: Validar coherencia de versiones
+        run: node scripts/check-version-consistency.mjs
+
+      - name: Validar etiqueta de release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.0$ ]] || {
+            echo "Las releases públicas solo pueden usar etiquetas vX.Y.0; se recibió $RELEASE_TAG."
+            exit 1
+          }
+
+      - name: Validar identidad pública
+        run: node scripts/check-public-identity.mjs
+
+      - name: Validar contrato de autenticación Jellyfin
+        run: node scripts/check-jellyfin-auth-contract.mjs
+
+      - name: Validar preferencias de reproducción
+        run: node scripts/check-playback-preferences-contract.mjs
+
+      - name: Prepare common web client
+        run: |
+          echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+          node web/scripts/test-platform.mjs
+          node web/scripts/build-web.mjs "${{ inputs.platform || 'all' }}"
+          node scripts/check-tv-packaging-output.mjs
+      - name: Package source
+        run: |
+          mkdir -p dist
+          package="${{ inputs.platform || 'all' }}"
+          version="$(node -p "require('./web/package.json').version")"
+
+          # Publish the browser client and the complete platform bundle
+          # together. The Android workflow contributes the mobile and TV APKs
+          # to the same tag release.
+          tar -czf "dist/Velora-Web-${package}.tar.gz" -C outputs/web .
+          (cd outputs/web && zip -qr "../../dist/Velora-Web-${package}.zip" .)
+
+          if compgen -G 'outputs/web/samsung/*.wgt' > /dev/null; then
+            cp "$(compgen -G 'outputs/web/samsung/*.wgt' | head -n 1)" "dist/Velora-tizen-${version}.wgt"
+          elif [ -d outputs/web/samsung ]; then
+            (cd outputs/web/samsung && zip -qr "../../../dist/Velora-samsung-bundle-${version}.zip" .)
+          fi
+          if [ -d outputs/web/vidaa ]; then
+            (cd outputs/web/vidaa && zip -qr "../../../dist/Velora-vidaa-bundle-${version}.zip" .)
+          fi
+          if compgen -G 'outputs/web/webos/*.ipk' > /dev/null; then
+            cp "$(compgen -G 'outputs/web/webos/*.ipk' | head -n 1)" "dist/Velora-webos-${version}.ipk"
+          elif [ -d outputs/web/webos ]; then
+            (cd outputs/web/webos && zip -qr "../../../dist/Velora-webos-bundle-${version}.zip" .)
+          fi
+          sha256sum dist/* > dist/SHA256SUMS-web.txt
+      - name: Preparar changelog de la release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          awk -v section="## ${version}" '
+            $0 == section { found=1; print; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md || { echo "Falta una sección ## ${version} en CHANGELOG.md"; exit 1; }
+      - name: Limpiar bundles Smart TV obsoletos de la release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./web/package.json').version")"
+          release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" 2>/dev/null || true)"
+          if [ -z "$release_json" ]; then
+            exit 0
+          fi
+          stale_ids="$(printf '%s' "$release_json" | jq -r --arg version "$version" '
+            (.assets // [])[]
+            | select(.name | test("^Velora-(samsung|tizen|vidaa)-bundle-|^Velora-webos-(bundle-)?|^Velora-tizen-"))
+            | select(.name | test("-" + $version + "\\.(zip|ipk|wgt)$") | not)
+            | .id')"
+          for asset_id in $stale_ids; do
+            gh api --method DELETE "repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"
+          done
+      - name: Esperar a los APK Android firmados
+        if: startsWith(env.RELEASE_TAG, 'v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: bash scripts/ci/wait-for-android-release-assets.sh
+      - name: Publicar paquetes web en la release
+        if: startsWith(env.RELEASE_TAG, 'v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Velora ${{ env.RELEASE_TAG }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          generate_release_notes: false
+          body_path: release-notes.md
+          files: dist/*

@@ -1,0 +1,221 @@
+package com.klortek.velora.offline
+
+import android.app.DownloadManager
+import android.content.Context
+import android.os.StatFs
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
+import com.klortek.velora.jellyfin.AppSettings
+import com.klortek.velora.jellyfin.JellyfinConfig
+import com.klortek.velora.jellyfin.veloraClientDeviceId
+import com.klortek.velora.jellyfin.veloraClientDeviceName
+import com.klortek.velora.jellyfin.veloraMediaBrowserAuthorization
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import java.security.MessageDigest
+
+/** App-owned transfer worker. Credentials are read from the Keystore-backed config. */
+class OfflineDownloadWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        if (!com.klortek.velora.platform.PlatformCapabilities.supportsOfflineDownloads) return@withContext Result.failure()
+        val itemId = inputData.getString(KEY_ITEM_ID) ?: return@withContext Result.failure()
+        val sourceId = inputData.getString(KEY_MEDIA_SOURCE_ID)
+        val quality = OfflineDownloadQuality.fromStorageKey(inputData.getString(KEY_QUALITY) ?: OfflineDownloadQuality.ORIGINAL.storageKey)
+        val workName = inputData.getString(KEY_WORK_NAME) ?: return@withContext Result.failure()
+        val config = JellyfinConfig(applicationContext)
+        if (config.serverUrl.isBlank() || config.accessToken.isBlank()) return@withContext Result.failure()
+
+        val destinationRoot = File(applicationContext.filesDir, "offline/media").apply { mkdirs() }
+        val fileKey = stableFileKey(workName)
+        val temporary = File(destinationRoot, "$fileKey.part")
+        val destination = File(destinationRoot, "$fileKey.media")
+        // v1.2.55 used Kotlin hashCode() for these paths. Adopt the stable
+        // key without abandoning an interrupted transfer during migration.
+        val legacyTemporary = File(destinationRoot, "${workName.hashCode()}.part")
+        val legacyDestination = File(destinationRoot, "${workName.hashCode()}.media")
+        if (!temporary.exists() && legacyTemporary.exists()) legacyTemporary.renameTo(temporary)
+        if (!destination.exists() && legacyDestination.exists()) legacyDestination.renameTo(destination)
+        val existingBytes = temporary.length().coerceAtLeast(0L)
+        // The current .part file is already included in managedBytes. Keep a
+        // stable baseline for the rest of Velora's offline media so the
+        // per-chunk gate does not double-count the resumed prefix.
+        val managedBaselineBytes = (OfflineStorageEngine.managedBytes(applicationContext) - existingBytes)
+            .coerceAtLeast(0L)
+        val maxOfflineBytes = AppSettings(applicationContext).offlineMaxStorageBytes.takeIf { it > 0L }
+        val requestUrl = OfflineDownloadRequest.url(config.serverUrl, itemId, sourceId, quality)
+        var connection: HttpURLConnection? = null
+        try {
+            var currentUrl = URL(requestUrl)
+            var redirects = 0
+            while (true) {
+                connection?.disconnect()
+                connection = (currentUrl.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "GET"
+                    setRequestProperty(
+                        "Authorization",
+                        veloraMediaBrowserAuthorization(
+                            accessToken = config.accessToken,
+                            deviceName = veloraClientDeviceName(tvBuild = false),
+                            deviceId = veloraClientDeviceId(config.deviceId)
+                        )
+                    )
+                    if (existingBytes > 0L) setRequestProperty("Range", "bytes=$existingBytes-")
+                    connectTimeout = 20_000
+                    readTimeout = 60_000
+                    // Never forward Jellyfin credentials to an arbitrary redirect target.
+                    instanceFollowRedirects = false
+                }
+                connection!!.connect()
+                val responseCode = connection!!.responseCode
+                if (responseCode !in REDIRECT_CODES) break
+                val location = connection!!.getHeaderField("Location") ?: break
+                val nextUrl = runCatching { URL(currentUrl, location) }.getOrNull() ?: break
+                if (!isSafeRedirect(currentUrl, nextUrl) || redirects++ >= MAX_REDIRECTS) {
+                    return@withContext Result.failure(androidx.work.workDataOf(KEY_ERROR to KEY_UNSAFE_REDIRECT))
+                }
+                currentUrl = nextUrl
+            }
+            val activeConnection = connection ?: return@withContext Result.failure()
+            if (activeConnection.responseCode == 401 || activeConnection.responseCode == 403) return@withContext Result.failure()
+            if (activeConnection.responseCode == 416) {
+                temporary.delete()
+                return@withContext Result.retry()
+            }
+            if (activeConnection.responseCode !in 200..299) {
+                return@withContext if (isRetryableResponse(activeConnection.responseCode)) {
+                    Result.retry()
+                } else {
+                    Result.failure()
+                }
+            }
+            val resumed = existingBytes > 0L && activeConnection.responseCode == HttpURLConnection.HTTP_PARTIAL
+            if (!resumed && existingBytes > 0L) temporary.delete()
+            val startingBytes = if (resumed) existingBytes else 0L
+            val contentLength = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                activeConnection.contentLengthLong
+            } else {
+                @Suppress("DEPRECATION")
+                activeConnection.contentLength.toLong()
+            }
+            val total = if (resumed) {
+                contentLength.takeIf { it >= 0L }?.plus(startingBytes) ?: -1L
+            } else contentLength
+            var copied = startingBytes
+            val startedAtNanos = System.nanoTime()
+            setProgress(androidx.work.workDataOf(KEY_TOTAL_BYTES to total))
+            activeConnection.inputStream.use { input ->
+                FileOutputStream(temporary, resumed).use { output ->
+                    val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                    while (true) {
+                        // Keep the .part file intact when WorkManager stops
+                        // this attempt for a temporary lifecycle/constraint
+                        // change; the next run can resume with Range.
+                        if (isStopped) return@withContext Result.retry()
+                        val count = input.read(buffer)
+                        if (count < 0) break
+                        val storageRoot = File(applicationContext.filesDir, "offline/media")
+                        val storageDecision = OfflineStoragePolicy.evaluate(
+                            snapshot = OfflineStorageSnapshot(
+                                availableBytes = StatFs(storageRoot.path).availableBytes,
+                                managedBytes = managedBaselineBytes + copied
+                            ),
+                            limits = OfflineStorageLimits(maximumBytes = maxOfflineBytes),
+                            incomingBytes = count.toLong()
+                        )
+                        if (!storageDecision.allowed) {
+                            // Preserve the verified prefix. A later retry
+                            // after the user frees space can continue with
+                            // Range instead of restarting the transfer.
+                            val current = OfflineDownloadManager.load(applicationContext)
+                                .firstOrNull { it.workName == workName }
+                            if (current != null) {
+                                OfflineDownloadManager.persist(applicationContext, current.copy(
+                                    status = DownloadManager.STATUS_FAILED,
+                                    reason = DownloadManager.ERROR_INSUFFICIENT_SPACE,
+                                    bytesDownloaded = copied,
+                                    totalBytes = total
+                                ))
+                            }
+                            return@withContext Result.failure(androidx.work.workDataOf(
+                                KEY_ERROR to OfflineStorageRejection.INSUFFICIENT_FREE_SPACE.name
+                            ))
+                        }
+                        output.write(buffer, 0, count)
+                        copied += count
+                        val elapsedSeconds = ((System.nanoTime() - startedAtNanos) / 1_000_000_000L).coerceAtLeast(1L)
+                        val speed = (copied - startingBytes).coerceAtLeast(0L) / elapsedSeconds
+                        val eta = if (speed > 0L && total > copied) (total - copied + speed - 1L) / speed else -1L
+                        setProgress(androidx.work.workDataOf(
+                            KEY_BYTES to copied,
+                            KEY_TOTAL_BYTES to total,
+                            KEY_SPEED_BPS to speed,
+                            KEY_ETA_SECONDS to eta
+                        ))
+                    }
+                    output.fd.sync()
+                }
+            }
+            val digest = java.io.FileInputStream(temporary).use { OfflineIntegrityVerifier.sha256(it) }
+            if (destination.exists()) destination.delete()
+            check(temporary.renameTo(destination))
+            val existing = OfflineDownloadManager.load(applicationContext).firstOrNull { it.workName == workName }
+            if (existing != null) {
+                OfflineDownloadManager.persist(applicationContext, existing.copy(
+                    status = DownloadManager.STATUS_SUCCESSFUL,
+                    bytesDownloaded = copied,
+                    totalBytes = total,
+                    speedBytesPerSecond = 0L,
+                    etaSeconds = null,
+                    localPath = android.net.Uri.fromFile(destination).toString(),
+                    checksumSha256 = digest,
+                    completedAtEpochMs = System.currentTimeMillis()
+                ))
+            }
+            Result.success(androidx.work.workDataOf(KEY_LOCAL_PATH to android.net.Uri.fromFile(destination).toString(), KEY_BYTES to copied, KEY_TOTAL_BYTES to total))
+        } catch (_: java.io.IOException) {
+            // Keep the verified prefix. WorkManager's retry will send a Range
+            // request and continue instead of starting the transfer again.
+            Result.retry()
+        } catch (_: Exception) {
+            temporary.delete()
+            Result.failure()
+        } finally {
+            connection?.disconnect()
+        }
+    }
+
+    companion object {
+        const val TAG = "velora-offline-download"
+        const val KEY_ITEM_ID = "item_id"
+        const val KEY_MEDIA_SOURCE_ID = "media_source_id"
+        const val KEY_QUALITY = "quality"
+        const val KEY_WORK_NAME = "work_name"
+        const val KEY_LOCAL_PATH = "local_path"
+        const val KEY_BYTES = "bytes"
+        const val KEY_TOTAL_BYTES = "total_bytes"
+        const val KEY_SPEED_BPS = "speed_bps"
+        const val KEY_ETA_SECONDS = "eta_seconds"
+        const val KEY_ERROR = "error"
+        const val KEY_UNSAFE_REDIRECT = "unsafe_redirect"
+        private const val MAX_REDIRECTS = 3
+        private val REDIRECT_CODES = setOf(301, 302, 303, 307, 308)
+        internal fun isRetryableResponse(code: Int): Boolean = code == 408 || code == 429 || code >= 500
+
+        internal fun isSafeRedirect(first: URL, second: URL): Boolean =
+            first.protocol.equals(second.protocol, ignoreCase = true) &&
+                first.host.equals(second.host, ignoreCase = true) &&
+                first.portOrDefault() == second.portOrDefault()
+
+        private fun URL.portOrDefault(): Int = if (port != -1) port else defaultPort
+    }
+
+    private fun stableFileKey(value: String): String = MessageDigest.getInstance("SHA-256")
+        .digest(value.toByteArray(Charsets.UTF_8))
+        .joinToString("") { byte -> "%02x".format(byte) }
+        .take(32)
+
+}

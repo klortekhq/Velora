@@ -1,0 +1,163 @@
+name: Velora continuous validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'web/**'
+      - 'apple/**'
+      - 'scripts/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: velora-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Web platform checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+      - name: Validate platform versions
+        run: node scripts/check-version-consistency.mjs
+      - name: Validate Jellyfin authentication contract
+        run: node scripts/check-jellyfin-auth-contract.mjs
+      - name: Validate Jellyfin API contract
+        run: node scripts/check-jellyfin-api-contract.mjs
+      - name: Validate playback language preferences
+        run: node scripts/check-playback-preferences-contract.mjs
+      - name: Validate public identity
+        run: node scripts/check-public-identity.mjs
+      - name: Validate release workflow policy
+        run: node scripts/check-release-workflows.mjs
+      - name: Validate offline surface policy
+        run: node scripts/check-offline-surface-policy.mjs
+      - name: Validate offline identity policy
+        run: node scripts/check-offline-identity.mjs
+      - name: Validate web interactions and security
+        run: node web/scripts/test-platform.mjs
+      - name: Build browser and Smart TV bundles
+        run: node web/scripts/build-web.mjs all
+      - name: Validate Smart TV packaging metadata
+        run: node scripts/check-tv-packaging-output.mjs
+
+  android:
+    name: Android unit tests and Kotlin compilation
+    runs-on: ubuntu-latest
+    # The AV1 native module can make a cold runner substantially slower than
+    # an incremental local build. Keep the job limit above the guarded Gradle
+    # timeout so failures are reported by the command instead of GitHub
+    # terminating the runner without its diagnostic output.
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Setup Android SDK
+        shell: bash
+        run: |
+          sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          test -x "$sdk_root/cmdline-tools/latest/bin/sdkmanager" || {
+            echo "sdkmanager was not found at $sdk_root" >&2
+            exit 1
+          }
+          {
+            echo "ANDROID_HOME=$sdk_root"
+            echo "ANDROID_SDK_ROOT=$sdk_root"
+          } >> "$GITHUB_ENV"
+          {
+            echo "$sdk_root/cmdline-tools/latest/bin"
+            echo "$sdk_root/platform-tools"
+          } >> "$GITHUB_PATH"
+          yes | "$sdk_root/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+      - name: Install Android SDK platform
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Validate Android locale catalogues
+        run: node scripts/check-android-locales.mjs
+      - name: Validate Android playback backend policy
+        run: node scripts/check-android-playback-policy.mjs
+      - name: Validate Android player controls
+        run: node scripts/check-android-player-controls.mjs
+      - name: Validate Android content navigation
+        run: node scripts/check-android-content-navigation.mjs
+      - name: Validate Android Live TV grouping
+        run: node scripts/check-android-live-tv-grouping.mjs
+      - name: Validate Android login layout
+        run: node scripts/check-android-login-layout.mjs
+      - name: Validate Android log privacy
+        run: node scripts/check-android-log-privacy.mjs
+      - name: Validate mobile technical media information
+        run: node scripts/check-mobile-file-info.mjs
+      - name: Validate mobile system-bar insets
+        run: node scripts/check-mobile-layout-insets.mjs
+      - name: Validate web locale catalogues
+        run: node scripts/check-web-locales.mjs
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+      - name: Make wrapper executable
+        run: chmod +x ./gradlew
+      - name: Test and compile mobile and TV variants
+        run: >-
+          timeout --foreground --signal=TERM --kill-after=30s 35m ./gradlew
+          :app:testMobileDebugUnitTest
+          :app:testTvDebugUnitTest
+          :app:compileMobileDebugKotlin
+          :app:compileTvDebugKotlin
+          --no-daemon --max-workers=1 --console=plain
+
+  apple:
+    name: Apple shared package tests and builds
+    runs-on: macos-14
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Select Swift toolchain
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '5.9'
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+      - name: Validate Apple localization catalogues
+        run: node scripts/check-apple-locales.mjs
+      - name: Validate Apple privacy manifest
+        run: node scripts/check-apple-privacy-manifest.mjs
+      - name: Validate Apple SwiftUI lifecycle
+        run: node scripts/check-apple-lifecycle.mjs
+      - name: Validate Apple navigation
+        run: node scripts/check-apple-navigation.mjs
+      - name: Validate Apple playback capability policy
+        run: node scripts/check-apple-playback-policy.mjs
+      - name: Validate Apple filmography pagination
+        run: node scripts/check-apple-filmography.mjs
+      - name: Test VeloraKit
+        run: swift test --package-path apple --parallel
+      - name: Build native package entrypoints
+        run: |
+          swift build --package-path apple --product VeloraMobile
+          swift build --package-path apple --product VeloraTV
