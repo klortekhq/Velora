@@ -152,14 +152,6 @@ El script valida disponibilidad, autenticación y la consulta Live TV con
 
 Velora utiliza Compose, listas perezosas con claves estables, carga diferida de imágenes, caché local y actualizaciones controladas para reducir recomposiciones, consumo de memoria y tráfico innecesario. La reproducción usa una única sesión de reproductor y evita reinicios de Activity al cambiar opciones durante la reproducción.
 
-## Referencias técnicas
-
-Las referencias externas usadas para contrastar Jellyfin, reproducción, descargas y
-comportamiento multiplataforma se documentan en
-[`docs/REFERENCES.md`](docs/REFERENCES.md). Incluye Plezy como referencia técnica
-de MediaBrowser/Jellyfin, WebSocket de sesión, playback y offline; no es una
-dependencia automática.
-
 ## Estado del proyecto
 
 Velora está en desarrollo activo. El estado verificable por plataforma, las
@@ -179,17 +171,3 @@ Proyecto de Klørtek. Para cualquier incidencia o propuesta, utiliza [Issues](ht
 ## Licencia
 
 Consulta el archivo [LICENSE](LICENSE) para conocer los términos de distribución del proyecto y sus componentes.
-
-<!-- KLORTEK-MANAGER:START -->
-## Managed development status
-
-This project follows the current Klortek PROMPTMASTER and its project-specific instructions. Approved user directions take precedence; implementation, tests and recorded evidence drive the next task.
-
-**Verified milestone: 5%** — Scope registered; next milestone awaits verification.
-
-This conservative milestone index is not a measure of all planned features or a promise of release readiness. Existing verified prototypes remain evidence even when a newer experimental build is blocked. Projects shown at 5% have registered scope; additional implementation is not credited until its results are reviewed. Last review: 2026-10-07.
-
-Work on owned repositories uses `main` and the `klortekhq` identity. Preserve active work, validate changes before publication, and keep proprietary assets, dumps, private SDKs and secrets out of GitHub. External references retain their licenses and attribution. Update project state and public progress only from actual results.
-
-[Ecosystem progress](https://klortekhq.github.io/#ps5-projects)
-<!-- KLORTEK-MANAGER:END -->
